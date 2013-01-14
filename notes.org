@@ -1,0 +1,3 @@
+* species as basis of programming language
+* species on infinite sets/in terms of lattices/domains etc.?
+* L-species
