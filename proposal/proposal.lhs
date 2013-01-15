@@ -309,11 +309,12 @@ though you'll have to wait to find out which ones!
 \subsection{Equipotence, Isomorphism, and Unlabeled Species}
 \label{sec:unlabeled}
 
-We say that two species are \term{equipotent} when there exists a
-family of bijections $\phi_U : F[U] \bij G[U]$, that is, there are the
-same number of $F$- and $G$-structures of each size.  Although this
-notion is occasionally useful, it is rather weak.  More useful is the
-notion of species \term{isomorphism}: two species are isomorphic
+We say that two species $F$ and $G$ are \term{equipotent}, denoted $F
+\equiv G$, when there exists a family of bijections $\phi_U : F[U]
+\bij G[U]$, that is, there are the same number of $F$- and
+$G$-structures of each size.  Although this notion is occasionally
+useful, it is rather weak.  More useful is the notion of species
+\term{isomorphism}: $F$ and $G$ are isomorphic, denoted $F \cong G$,
 precisely when they are \term{naturally isomorphic} as functors; that
 is, when there exists a family of bijections \[ \phi_U : F[U] \bij
 G[U] \] which moreover commute with relabeling. By ``commute with
@@ -330,8 +331,12 @@ F[V] \ar[r]_{\phi_V} & G[V]
   \caption{Natural isomorphism between species}
   \label{fig:nat-iso}
 \end{figure}
-For example, the species $X + X$ and $2X$ are isomorphic,
-\todo{explain why}.  As an example of species which are equipotent but
+For example, $X + (X + X)$ and $3X$ are isomorphic,
+\todo{explain why}.  
+
+\todo{write about other algebraic laws that hold up to isomorphism}
+
+As an example of species which are equipotent but
 not isomorphic, consider the species $\L$ of linear orderings (\ie\
 lists) and the species $\S$ of permutations.  It is well-known that
 the number of linear orderings and the number of permutations of $n$
