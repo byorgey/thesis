@@ -1,4 +1,4 @@
-% -*- mode: LaTeX; compile-command: "lhs2tex proposal.lhs > proposal.tex && pdflatex --enable-write18 proposal.tex" -*-
+% -*- mode: LaTeX; compile-command: "mk" -*-
 
 \documentclass{article}
 

@@ -122,3 +122,5 @@
 \.tex$
 (^|/)diagrams(/|$)
 .diagrams_cache
+Shake$
+.shake.database
