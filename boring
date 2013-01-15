@@ -120,5 +120,5 @@
 (^|/)\.DS_Store$
 
 \.tex$
-^diagrams(/|$)
+(^|/)diagrams(/|$)
 .diagrams_cache
