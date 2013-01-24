@@ -68,6 +68,10 @@ juice'' from the theory of species \todo{finish}
 \section{Combinatorial Species}
 \label{sec:species}
 
+\todo{Explain that I see myself as a teacher, hence one of my major
+  goals is to explain in a way that makes this theory accessible to
+  people in PL community.}
+
 \todo{Background on combinatorial species.}
 
 \todo{This isn't really the goal, at least it wasn't the original goal!}
@@ -306,6 +310,9 @@ though you'll have to wait to find out which ones!
 \subsubsection{Operations}
 \label{sec:operations}
 
+\subsubsection{Recursion}
+\label{sec:recursion}
+
 \subsection{Equipotence, Isomorphism, and Unlabeled Species}
 \label{sec:unlabeled}
 
@@ -423,22 +430,106 @@ To each species we can also associate an \term{ordinary generating
   function} (ogf), \[ \unl{F}(x) = \sum_{n \geq 0} \unl{f}_n x^n, \]
 where $\unl{f}_n$ denotes the number of \emph{unlabeled}
 $F$-structures (that is, the number of equivalence classes of
-isomorphic $F$-structures).
+isomorphic $F$-structures).  The mapping from species to ogfs
+preserves addition, multiplication, and derivative, just as for egfs,
+but does \emph{not} preserve composition.  To compute the ogf for a
+composed species we can use yet a third type of generating function,
+the \term{cycle index series}, which tracks not just sizes of
+structures but also information about their symmetry.  The details are
+beyond the scope of this proposal, but \todo{finish}
 
 \section{Species as Data Types}
 \label{sec:species-types}
 
+Although it seems ``obvious'' that there is a deep connection between
+the theory of species and the theory of algebraic data types, care
+must be taken to state the precise nature of the relationship.
+
+Let's begin with the very simple universe of species expressions shown
+in~\pref{fig:universe}.  For now we have only regular species and no
+recursion.
+
+\begin{figure}
+  \centering
+  \begin{align*}
+    S & ::= \Zero \\
+      & \mid \One \\
+    & \mid \X \\
+    & \mid S + S \\
+    & \mid S \sprod S \\
+    & \mid S \comp S
+  \end{align*}
+  \caption{A simple universe of species expressions}
+  \label{fig:universe}
+\end{figure}
+
+\newcommand{\spe}[1]{\ensuremath{\langle #1 \rangle}}
+
+We can interpret these expressions as species, that is, as functors
+$\B \to \E$ as described in previous sections.  We will write
+$\spe{S}$ to denote the functor $\B \to \E$ corresponding to the
+species expression $S$.  But we can also straightforwardly interpret
+them as type constructors, as shown in \pref{fig:type-constructors}.
+
+\newcommand{\ty}[2]{\ensuremath{\llbracket #1 \rrbracket}\ #2}
+
+\begin{figure}
+  \centering
+  \begin{align*}    
+  \ty{\Zero} A &= 0 \\
+  \ty{\One} A &= 1 \\
+  \ty{\X} A &= A \\
+  \ty{F+G} A &= \ty{F} A + \ty{G} A \\
+  \ty{F \sprod G} A &= \ty F A \times \ty G A \\
+  \ty{F \comp G} A &= \ty F {(\ty G A)}
+  \end{align*}
+  \caption{Interpreting species expressions as type constructors}
+  \label{fig:type-constructors}
+\end{figure}
+
+What is the precise relationship between $\spe{S}$ and $\ty{S}{}$ for
+a given expression $S$?
+
+\todo{more explanation leading up to this}
+
+\todo{define $\sim_S$}
+
+\begin{thm} 
+  For all species expressions $S$,
+  \[ \ty{S} A \cong \left( \sum_U \spe{S}[U] \times (U \to A) \right)
+  / \sim_S. \]
+\end{thm}
+
+\begin{proof}
+  \todo{write me}
+\end{proof}
+
+\todo{who cares? Why is this relevant?}
+\todo{write about next directions to take this.}
+
 \section{The \pkg{species} library}
 \label{sec:species-library}
 
-\section{Enumerating Unlabeled Structures}
-\label{sec:enumerating}
+In previous work, I created a Haskell library\footnote{Available from
+  Hackage at \url{http://hackage.haskell.org/package/species}} for working with
+combinatorial species~\cite{yorgey}.  Its features include
+\begin{itemize}
+\item computing egf, ogf, and cycle index series for arbitrary species
+\item enumerating all structures of a given species ordered by size
+\item automatically derive species corresponding to user-defined data types
+\end{itemize}
 
-\section{Doing Other Stuff}
+However, there are many features that could yet be added. \todo{talk
+  about what some of these features are.}
 
-\todo{Need to figure out what other stuff to propose!  Views? Sharing?
-  L-species? Virtual species? Species + infinity?  Enumerating
-  unlabeled structures?  See NSF proposal for ideas, of course.}
+% \section{Enumerating Unlabeled Structures}
+% \label{sec:enumerating}
+
+% \section{Doing Other Stuff}
+% 
+% \todo{Need to figure out what other stuff to propose!  Views? Sharing?
+%   L-species? Virtual species? Species + infinity?  Enumerating
+%   unlabeled structures?  See NSF proposal for ideas, of course.}
 
 \section{Related Work}
 \label{sec:related}
