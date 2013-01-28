@@ -54,25 +54,50 @@ has been explored and extended by many other mathematicians. Like the
 theory of algebraic data types, it is also concerned with describing
 structures compositionally, but is much more general.
 
-The overarching goal of the proposed research is to ``extract the
-juice'' from the theory of species \todo{finish}
+The overarching goal of the proposed research is to begin answering
+the question:
+\begin{quote}
+  \textbf{What benefits can be derived from using the mathematical
+    theory of species as a foundational theory of data structures in
+    programming languages?}
+\end{quote}
+Answers to this question can take many forms.  What would a
+programming language with ``species types'' look like?  Can we use
+species theory as a tool for working with existing algebraic data
+types?  More specifically, the concrete goals of the proposed research
+are threefold:
+\begin{enumerate}
+\item I see myself primarily as a \emph{teacher} and secondarily as a
+  researcher.  For this reason, a significant part of the proposed
+  work will consist in presenting relevant parts of the theory of
+  species in a way that is accessible to others in the programming
+  languages community. The existing literature on species and recent
+  related developments~\cite{BLL,keck} are relatively inaccessible to
+  PL researchers, since they assume an extensive mathematical
+  background and motivations that many PL researchers do not have.
 
-% In particular, we want to extend the theory of algebraic data types to
-% a theory of \emph{species data types}. A programming language with
-% support for species would raise the level of abstraction available to
-% programmers, making it easier for them to express programs that are
-% closer to what they really \emph{mean}, instead of being forced to
-% ``encode'' their intended meaning using the constructs available to
-% them.
+  For example, \todo{labeled vs unlabeled}.  I have begun a series of
+  blog posts \cite{blog posts} which will form the basis for this
+  presentation; \pref{sec:species} contains an abridged version.
+
+\item The second goal is to lay the theoretical groundwork for
+  understanding species as a foundation for data types.  That is, if
+  one wanted to design a programming language with ``species types''
+  from the ground up, upon what theory could it be based?
+  \pref{sec:species-types} presents some preliminary results in this
+  direction and lays out a roadmap for the remaining theory to be
+  developed.
+
+\item Third, the theory of species can be used to build practical
+  tools for working with existing algebraic data types.  Towards this
+  end I have developed XXX.  \pref{sec:species-library} explains the
+  current features of the library and proposes features to be added.
+  \todo{more detail here?}
+
+\end{enumerate}
 
 \section{Combinatorial Species}
 \label{sec:species}
-
-\todo{Explain that I see myself as a teacher, hence one of my major
-  goals is to explain in a way that makes this theory accessible to
-  people in PL community.}
-
-\todo{Background on combinatorial species.}
 
 \todo{This isn't really the goal, at least it wasn't the original goal!}
 The goal of species is to have a unified theory of \emph{structures}, or
@@ -91,14 +116,16 @@ dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
 \caption{Example structures} \label{fig:example-structures}
 \end{figure}
 
-One thing that's important to get straight from the beginning is that we
-are talking about structures with \emph{labeled locations}. The
-\textbf{numbers in the picture above are \emph{not} data} being stored
-in the structures, but \emph{names} or \emph{labels} for the locations.
-To talk about a \emph{data structure} (\emph{i.e.} a structure filled
-with data), we would have to also specify a mapping from locations to
-data, like
-$\{ 0 \mapsto \texttt{'s'}, 1 \mapsto \texttt{'p'}, 2 \mapsto \texttt{'e'} \dots \}$.
+One thing that's important to get straight from the beginning is that
+we are talking about structures with \emph{labeled locations}. The
+\textbf{numbers in \pref{fig:example-structures} are \emph{not} data}
+being stored in the structures, but \emph{names} or \emph{labels} for
+the locations.  To talk about a \emph{data structure} (\emph{i.e.} a
+structure filled with data), we must also specify a mapping from
+locations to data, like $\{ 0 \mapsto \texttt{'s'}, 1 \mapsto
+\texttt{'p'}, 2 \mapsto \texttt{'e'} \dots \}$, as shown
+in~\pref{fig:shape-data}.  This will be made more precise
+in~\pref{sec:species-types}.
 
 \begin{figure}
 \centering
@@ -107,8 +134,8 @@ import Diagrams
 dia = shapePlusData # centerXY # pad 1.1
 
 shapePlusData = octo [0..7]
-  |||||| strutX 2 
-  |||||| (text "+" # fontSize 3 <> phantom (square 1 :: D R2)) 
+  |||||| strutX 2
+  |||||| (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
   |||||| strutX 2
   |||||| mapping
   |||||| strutX 2
@@ -124,19 +151,19 @@ arrow = (hrule 3 # alignR # lw 0.03)
 \end{figure}
 
 One useful intuition is to think of the labels as \emph{memory
-addresses}, which point off to some location where a data value is
+  addresses}, which point off to some location where a data value is
 stored. This intuition has some particularly interesting consequences
-when we get to talking about operations like Cartesian product and
-functor composition, since it gives us a way to model sharing (albeit
-only in limited ways).
+when it comes to operations like Cartesian product and functor
+composition---explained in~\pref{sec:XXX}---since it gives us a way to
+model sharing (albeit only in limited ways).
 
-Why have labels at all? In the tree shown above, we can uniquely
-identify each location by a path from the root of the tree, without
-referencing their labels at all. However, the other structure
-illustrates one reason why labels are needed. The circle is supposed to
-indicate that the structure has \emph{rotational symmetry}, so there
-would be no way to uniquely refer to any location other than by giving
-them labels.
+Why have labels at all? In the tree shown
+in~\pref{fig:example-structures}, we can uniquely identify each
+location by a path from the root of the tree, without referencing
+labels at all. However, the other structure illustrates one reason why
+labels are needed. The circle is supposed to indicate that the
+structure has \emph{rotational symmetry}, so there would be no way to
+uniquely refer to any location other than by giving them labels.
 
 \subsection{Definition}
 \label{sec:species-definition}
@@ -169,8 +196,23 @@ labels drawn from $U$'', or simply ``$F$-structures on $U$'', or even
 is called the ``transport of $\sigma$ along $F$'', or sometimes the
 ``relabeling of $F$-structures by $\sigma$''.
 
-\todo{explain about using $[n]$ as canonical set of labels, etc.; size
-is all that matters.}
+The functoriality of relabeling means that the actual labels used
+don't matter; we get ``the same structures'', up to relabeling, for
+any label sets of the same size.  We might say that species are
+\term{parametric} in the label sets of a given size. In particular,
+$F$'s action on all label sets of size $n$ is determined by its action
+on any particular such set: if $||U_1|| = ||U_2||$ and we know
+$F[U_1]$, we can determine $F[U_2]$ by lifting an arbitrary
+bijection between $U_1$ and $U_2$.  So we often take the finite set of
+natural numbers $\{0, \dots, n-1\}$ (also written $[n]$) as \emph{the}
+canonical label set of size $n$, and write $F[n]$ (instead of
+$F[[n]]$) for the set of $F$-structures built from this set.
+
+It's not hard to show that functors preserve isomorphisms, so although
+the definition only says that a species $F$ sends a bijection $\sigma
+: U \bij V$ to a \emph{function} $F[\sigma] : F[U] \to F[V]$, in fact,
+by functoriality every such function must be a bijection. \todo{is
+  this really important to say?}
 
 \subsection{Building Species Algebraically}
 \label{sec:building-species}
@@ -178,10 +220,10 @@ is all that matters.}
 The formal definition of species is wonderfully simple, but working
 directly with the definition in practice does not get one very far.
 Instead, we use an algebraic theory that lets us compositionally build
-up certain species from a collection of primitive species and species
-operations. (It's important to note that it does \emph{not} allow us
-to build \emph{all} species, but it does allow us to build many of the
-ones we care about.)
+a wide variety of species from a collection of primitive species and
+operations on species. (It's important to note that it does \emph{not}
+allow us to build \emph{all} species, but it does allow us to build
+many of the ones we care about.)
 
 \subsubsection{Primitives}
 \label{sec:primitives}
@@ -192,65 +234,61 @@ We begin with a few primitive species:
 \item
   The \emph{zero} or \emph{empty} species, denoted $\mathbf{0}$, is the
   unique species with no structures whatsoever; that is,
+  \begin{align*}
+  \Zero[U] &= \varnothing \\
+  \Zero[\sigma : U \bij V] &= id_{\varnothing} : \Zero[U] \to \Zero[V].
+  \end{align*}
+  Of course, $\Zero$ is the identity element for
+  the sum operation on species (defined in~\pref{sec:sum}).
 
-  $\mathbf{0}[U] = \emptyset$
-
-  and
-
-  $\mathbf{0}[\sigma : U \leftrightarrow V] = id_{\emptyset} : \mathbf{0}[U] \to \mathbf{0}[V]$.
-
-  Of course, $\mathbf{0}$ will turn out to be the identity element for
-  species sum (which I'll define in my next post, though it's not hard
-  to figure out what it should mean).
 \item
-  The \emph{unit} species, denoted $\mathbf{1}$, is defined by
-
-  $\begin{array}{lcl}\mathbf{1}[\emptyset] &=& \{\star\} \\ \mathbf{1}[U] &=& \emptyset \qquad (U \neq \emptyset)\end{array}$
-
-  That is, there is a unique $\mathbf{1}$-structure indexed by the empty
-  set of labels, and no $\mathbf{1}$-structures with any positive number
-  of labels. $\mathbf{1}$ lifts bijections in the obvious way, sending
+  The \emph{unit} species, denoted $\One$, is defined by
+  \[ \One[U] =
+  \begin{cases}
+    \{\star\} & ||U|| = 0 \\
+    \varnothing & \text{otherwise}
+  \end{cases}
+  \]
+  That is, there is a unique $\One$-structure indexed by the empty
+  set of labels, and no $\One$-structures with any positive number
+  of labels. $\One$ lifts bijections in the obvious way, sending
   every bijection to the appropriate identity function.
 
   Some people initially find this definition surprising, expecting
-  something like $\mathbf{1}[U] = \{ \star \}$ for all $U$ instead. That
+  something like $\One[U] = \{ \star \}$ for all $U$ instead. That
   is indeed a valid species, and we will meet it below; but as I hope
-  you will come to see, it doesn't deserve the name $\mathbf{1}$.
+  you will come to see, it doesn't deserve the name $\One$.
 
-  Of course we should also verify that this definition satisfies the
+  Of course, one should also verify that this definition satisfies the
   requisite functoriality properties, which is not difficult.
 
-  More abstractly, for those who know some category theory, it's worth
-  mentioning that $\mathbf{1}$ can be defined as
+  More abstractly, it's worth mentioning that $\One$ can be defined as
   $\mathbb{B}(\emptyset, -) : \mathbb{B} \to \mathbb{E}$, that is, the
   covariant hom-functor sending each finite set $U \in \mathbb{B}$ to
-  the (finite) set of bijections $\emptyset \leftrightarrow U$. (This
-  is why I wanted to think of species as functors $\mathbb{B} \to
-  \mathbb{E}$. I learned this fact from Yeh~\citet{yeh}.) There is, of
-  course, a unique bijection $\emptyset \leftrightarrow \emptyset$ and
-  no bijections $\emptyset \leftrightarrow U$ for nonempty $U$, thus
-  giving rise to the definition above.
+  the (finite) set of bijections $\emptyset \leftrightarrow U$
+  \cite{yeh}. There is, of course, a unique bijection $\emptyset
+  \leftrightarrow \emptyset$ and no bijections $\emptyset
+  \leftrightarrow U$ for nonempty $U$, thus giving rise to the
+  definition above.
 
-  As you might expect, $\mathbf{1}$ will be the identity element for
-  species product. Like $\mathbf{1}$ itself, species product isn't
-  defined quite as most people would initially guess. If you haven't
-  seen it before, you might like to try working out how product can be
-  defined in order to make $\mathbf{1}$ an identity element.
+  As expected, $\One$ is the identity element for the operation of
+  species product, defined in~\pref{sec:product}.
+
 \item
-  The \emph{singleton} species, denoted $\mathbf{X}$, is defined by
+  The \emph{singleton} species, denoted $\X$, is defined by
 
-  $\mathbf{X}[U] = \begin{cases} U & |U| = 1 \\ \emptyset & \text{otherwise} \end{cases}$
+  $\X[U] = \begin{cases} U & ||U|| = 1 \\ \emptyset & \text{otherwise} \end{cases}$
 
   with lifting of bijections defined in the evident manner. That is,
-  there is a single $\mathbf{X}$-structure on a label set of size $1$
+  there is a single $\X$-structure on a label set of size $1$
   (which we identify with the label itself, though we could have also
-  defined $\mathbf{X}[U] = \{\star\}$ when $|U| = 1$), and no
-  $\mathbf{X}$-structures indexed by any other number of labels.
+  defined $\X[U] = \{\star\}$ when $||U|| = 1$), and no
+  $\X$-structures indexed by any other number of labels.
 
-  As with $\mathbf{1}$, we may equivalently define $\mathbf{X}$ as a
-  hom-functor, namely $\mathbf{X} = \mathbb{B}(\{\star\}, -)$.
+  As with $\One$, we may equivalently define $\X$ as a
+  hom-functor, namely $\X = \mathbb{B}(\{\star\}, -)$.
 
-  It's worth noting again that although $\mathbf{1}$ and $\mathbf{X}$ do
+  It's worth noting again that although $\One$ and $\X$ do
   ``case analysis'' on the label set $U$, they actually only depend on
   the \emph{size} of $U$; indeed, as we
   \href{http://byorgey.wordpress.com/2012/12/06/species-definition-clarification-and-exercises/}{noted
@@ -259,24 +297,24 @@ We begin with a few primitive species:
   The species of \emph{bags}\footnote{The species literature calls this
     the species of \emph{sets}, but that's misleading to computer
     scientists, who expect the word ``set'' to imply that elements
-    cannot be repeated.}, denoted $\mathbf{E}$, is defined by
+    cannot be repeated.}, denoted $\Bag$, is defined by
 
-  $\mathbf{E}[U] = \{U\}$,
+  $\Bag[U] = \{U\}$,
 
-  that is, there is a single $\mathbf{E}$-structure on any set of labels
+  that is, there is a single $\Bag$-structure on any set of labels
   $U$, which we usually identify with the set of labels itself (although
-  we could equivalently define $\mathbf{E}[U] = \{\star\}$). The idea is
-  that an $\mathbf{E}$-structure consists solely of a collection of
+  we could equivalently define $\Bag[U] = \{\star\}$). The idea is
+  that an $\Bag$-structure consists solely of a collection of
   labels, with no imposed ordering whatsoever.
 
-  If you want to abuse types slightly, one can define $\mathbf{E}$ as
+  If you want to abuse types slightly, one can define $\Bag$ as
   a hom-functor too, namely $\mathbb{E}(-,\{\star\})$. (\citet{yeh}
   actually has $\mathbb{B}(-, \{\star\})$, but that's wrong.)
 \end{itemize}
 
 As a summary, \pref{fig:prims} contains a graphic showing
-$\mathbf{0}$-, $\mathbf{1}$-, $\mathbf{X}$-, and
-$\mathbf{E}$-structures arranged by size (\emph{i.e.}, the size of the
+$\mathbf{0}$-, $\One$-, $\X$-, and
+$\Bag$-structures arranged by size (\emph{i.e.}, the size of the
 underlying set of labels $U$): a dot indicates a single structure, and
 the size of the label set increases as you move to the right.
 
@@ -288,7 +326,7 @@ row p     = hcat' with {sep=0.1} . map (drawOne . p) $ [0..10]
 lRow x p  = (text [x] <> phantom (square 1 :: D R2)) |||||| strutX 0.5 |||||| row p
 drawOne b = square 1 <> mconcat [dot||b]
 
-dia = 
+dia =
   pad 1.1 .
   centerXY .
   vcat' with {sep = 0.3} $
@@ -298,17 +336,58 @@ dia =
   , lRow 'E' (const True)
   ]
 \end{diagram}
-%$   
+%$
   \caption{Primitive species}
   \label{fig:prims}
 \end{figure}
 
-Just as a teaser, it turns out that $\mathbf{X}$ and $\mathbf{E}$ are
+Just as a teaser, it turns out that $\X$ and $\Bag$ are
 identity elements for certain binary operations on species as well,
 though you'll have to wait to find out which ones!
 
 \subsubsection{Operations}
 \label{sec:operations}
+
+\begin{itemize}
+\item The \term{sum} of two species $F + G$ is just a disjoint
+  (tagged) union: that is,
+  \[ (F+G)[U] = F[U] + G[U], \] where the $+$ on the right denotes the
+  coproduct of sets, \[ S + T = \{ \cons{inl}(s) \mid s \in S \} \cup \{
+  \cons{inr}(t) \mid t \in T \}. \]  The transport of relabelings
+  along a sum works in the evident manner,
+  \begin{align*}
+    (F+G)[\sigma](\inl(f)) &= \inl(F[\sigma](f)) \\
+    (F+G)[\sigma](\inr(g)) &= \inr(G[\sigma](g)).
+  \end{align*}
+
+  $\Zero$ is the identity element for species sum,
+  though only up to isomorphism (defined in~\pref{sec:unlabeled}).
+  Intuitively, if one has either a $\Zero$-structure or an
+  $F$-structure, one must in fact have an $F$-structure, since
+  $\Zero$-structures do not exist.
+
+  \todo{pictures}
+
+  \todo{examples}
+
+  \todo{explain about $2 = 1 + 1$ and so on.  Use natural number
+    notation, $0 = \inl(\star)$ (?) and so on.}
+
+\item The \term{product} of species is a bit more interesting.  One
+  might na\"ively expect to have
+  \[ (F \times G)[U] = F[U] \times G[U] \] where $\times$ denotes the
+  Cartesian product of sets.  This is a sensible operation on species
+  (to be discussed further below) but not the most natural notion of
+  product.  The reason is that \todo{finish}
+
+  \todo{pictures}
+
+  \todo{examples}
+
+  \todo{note that multiplication on naturals works as expected.  Copy
+    of $\N$ embedded inside species as a subring.}
+
+\end{itemize}
 
 \subsubsection{Recursion}
 \label{sec:recursion}
@@ -333,13 +412,20 @@ diagram in~\pref{fig:nat-iso}.
 \xymatrix{
 F[U] \ar[r]^{\phi_U} \ar[d]_{F[\sigma]} & G[U] \ar[d]^{G[\sigma]} \\
 F[V] \ar[r]_{\phi_V} & G[V]
-}  
+}
 }
   \caption{Natural isomorphism between species}
   \label{fig:nat-iso}
 \end{figure}
-For example, $X + (X + X)$ and $3X$ are isomorphic,
-\todo{explain why}.  
+For example, $X + (X + X)$ and $3X$ are isomorphic, as witnessed by
+the mapping
+\begin{align*}
+  \inl(u) &\bij (0, u) \\
+  \inr(\inl(u)) &\bij (1,u) \\
+  \inr(\inr(u)) &\bij (2,u)
+\end{align*}
+\todo{is there a more perspicuous way to write the above?}
+\todo{explain why it commutes with relabeling}
 
 \todo{write about other algebraic laws that hold up to isomorphism}
 
@@ -359,6 +445,11 @@ We say that two \emph{structures} of a given species are isomorphic when
 there exists a relabeling taking one to the other.  That is, $f_1 \in
 F[U]$ and $f_2 \in F[V]$ are isomorphic iff there is some $\sigma : U
 \bij V$ such that $F[\sigma](f_1) = f_2$.
+
+\todo{define unlabelled species, with pictures, etc.}
+\todo{stuff about regular vs. other species.}
+
+\todo{non-regular, molecular species.}
 
 \subsection{Generating Functions}
 \label{sec:gen-funcs}
@@ -441,6 +532,14 @@ beyond the scope of this proposal, but \todo{finish}
 \section{Species as Data Types}
 \label{sec:species-types}
 
+% In particular, we want to extend the theory of algebraic data types to
+% a theory of \emph{species data types}. A programming language with
+% support for species would raise the level of abstraction available to
+% programmers, making it easier for them to express programs that are
+% closer to what they really \emph{mean}, instead of being forced to
+% ``encode'' their intended meaning using the constructs available to
+% them.
+
 Although it seems ``obvious'' that there is a deep connection between
 the theory of species and the theory of algebraic data types, care
 must be taken to state the precise nature of the relationship.
@@ -475,7 +574,7 @@ them as type constructors, as shown in \pref{fig:type-constructors}.
 
 \begin{figure}
   \centering
-  \begin{align*}    
+  \begin{align*}
   \ty{\Zero} A &= 0 \\
   \ty{\One} A &= 1 \\
   \ty{\X} A &= A \\
@@ -494,7 +593,7 @@ a given expression $S$?
 
 \todo{define $\sim_S$}
 
-\begin{thm} 
+\begin{thm}
   For all species expressions $S$,
   \[ \ty{S} A \cong \left( \sum_U \spe{S}[U] \times (U \to A) \right)
   / \sim_S. \]
@@ -526,7 +625,7 @@ However, there are many features that could yet be added. \todo{talk
 % \label{sec:enumerating}
 
 % \section{Doing Other Stuff}
-% 
+%
 % \todo{Need to figure out what other stuff to propose!  Views? Sharing?
 %   L-species? Virtual species? Species + infinity?  Enumerating
 %   unlabeled structures?  See NSF proposal for ideas, of course.}
@@ -551,6 +650,8 @@ data structures, they only care about structures! \todo{format this
 point out connections between the theory of
 species and computer science~\cite{FlSa95,
   FlajoletSalvyZimmermann1989a}.
+
+Keck work.
 
 \section{Timeline and Conclusion}
 \label{sec:timeline}
