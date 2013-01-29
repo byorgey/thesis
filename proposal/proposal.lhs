@@ -225,6 +225,8 @@ operations on species. (It's important to note that it does \emph{not}
 allow us to build \emph{all} species, but it does allow us to build
 many of the ones we care about.)
 
+\todo{rethink sectioning.  Maybe use paras for individual definitions?}
+
 \subsubsection{Primitives}
 \label{sec:primitives}
 
@@ -354,24 +356,47 @@ dia =
 
   \todo{pictures}
 
-  \todo{examples}
+  For example, structures of the species $\One + \X$ are either a unit
+  structure (containing no labels) or a singleton structure
+  containing a label, along with a tag indicating which.  This
+  corresponds to the standard |Maybe| type in Haskell.
 
-  \todo{explain about $2 = 1 + 1$ and so on.  Use natural number
-    notation, $0 = \inl(\star)$ (?) and so on.}
+  The species $\One + \One$ has precisely two distinct structures,
+  $\inl(\star)$ and $\inr(\star)$.  In general, there are $n$ distinct
+  structures of the species $\underbrace{\One + \dots + \One}_n$,
+  which we abbreviate as $\Sp{n}$.  Instead of writing things like
+  $\inr(\inr(\inr(\inl(\star))))$ we often use the natural numbers $0
+  \dots (n-1)$ as names for $\Sp{n}$-structures.
 
 \item The \term{product} of species is a bit more interesting.  One
   might na\"ively expect to have
-  \[ (F \times G)[U] = F[U] \times G[U] \] where $\times$ denotes the
+  \[ (F \sprod G)[U] = F[U] \times G[U] \] where $\times$ denotes the
   Cartesian product of sets.  This is a sensible operation on species
-  (to be discussed further below) but not the most natural notion of
-  product.  The reason is that \todo{finish}
+  (to be discussed below) but not the most natural notion of product.
+  This is because label sets are a generalization of \emph{size}, so an
+  $(F \sprod G)$-structure indexed by $U$ should not contain two
+  copies of every label.
+
+  Instead, to make an $(F \sprod G)$-structure on $U$, we first
+  \emph{split} $U$ into two disjoint subsets $U_1$ and $U_2$ (that is,
+  $U_1 \cup U_2 = U$ and $U_1 \cap U_2 = \varnothing$), and then pair
+  an $F$-structure on $U_1$ with a $G$-structure on $U_2$.  We get the
+  set of \emph{all} $(F \sprod G)$-structures by doing this in all
+  possible ways.  More formally, \[ (F \sprod G)[U] = \sum_{U_1 \uplus
+    U_2 = U} F[U_1] \times G[U_2]. \]
 
   \todo{pictures}
 
   \todo{examples}
 
+  
+
   \todo{note that multiplication on naturals works as expected.  Copy
     of $\N$ embedded inside species as a subring.}
+
+\item Derivative
+
+\item 
 
 \end{itemize}
 
