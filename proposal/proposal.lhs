@@ -544,9 +544,23 @@ Although it seems ``obvious'' that there is a deep connection between
 the theory of species and the theory of algebraic data types, care
 must be taken to state the precise nature of the relationship.
 
-Let's begin with the very simple universe of species expressions shown
-in~\pref{fig:universe}.  For now we have only regular species and no
-recursion.
+\subsection{Species types}
+\label{sec:species-types}
+
+Species, as defined, are not data types; rather, they represent
+labeled shapes.  If we want to treat them as representing data types,
+the relationship between species and their corresponding data types
+must be defined precisely.
+
+As explained previously, the basic idea is to represent a data
+structure as a labeled structure \emph{paired with} a mapping from
+labels to values.  However, we must also take care to quotient out by
+the labels, since the same data structure may be represented using
+many different labelings.
+
+To see how these ideas work, we begin with the very simple universe of
+species expressions shown in~\pref{fig:universe}.  For now we have
+only regular species and no recursion.
 
 \begin{figure}
   \centering
@@ -603,8 +617,26 @@ a given expression $S$?
   \todo{write me}
 \end{proof}
 
+Also,
+\begin{lem}
+  \[ \left( \sum_U \spe{S}[U] \times (U \to A) \right)
+  / \sim_S \cong \left( \sum_{n \in \N} \spe{S}[n] \times A^n \right)
+  / \sim_S \]
+\end{lem}
+
+As a corollary, \[ \ty{S} A \cong \left( \sum_{n \in \N} \spe{S}[n]
+  \times A^n \right) / \sim_S, \] which intuitively states that
+\todo{explain}.
+
 \todo{who cares? Why is this relevant?}
-\todo{write about next directions to take this.}
+
+\todo{write about next directions to take this. Multisort, nonregular,
+  recursive.}
+
+\subsection{Eliminators for species types}
+\label{sec:eliminators}
+
+
 
 \section{The \pkg{species} library}
 \label{sec:species-library}
