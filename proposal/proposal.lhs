@@ -44,15 +44,15 @@
 \todo{Talk generically about the theory of algebraic data types.  Give
   some examples of the sorts of things we'd like to do.}
 
-\subsection{Goals and Outline}
-\label{sec:goals}
-
 The theory of \term{combinatorial species} was invented in 1981 by
 Andr\'{e} Joyal~\cite{joyal} as a framework for understanding and
 unifying much of enumerative combinatorics.  Since then, the theory
 has been explored and extended by many other mathematicians. Like the
 theory of algebraic data types, it is also concerned with describing
 structures compositionally, but is much more general.
+
+\subsection{Goals and Outline}
+\label{sec:goals}
 
 The overarching goal of the proposed research is to begin answering
 the question:
@@ -64,8 +64,8 @@ the question:
 Answers to this question can take many forms.  What would a
 programming language with ``species types'' look like?  Can we use
 species theory as a tool for working with existing algebraic data
-types?  More specifically, the concrete goals of the proposed research
-are threefold:
+types?  Specifically, the contributions of the proposed research are
+threefold:
 \begin{enumerate}
 \item I see myself primarily as a \emph{teacher} and secondarily as a
   researcher.  For this reason, a significant part of the proposed
@@ -232,7 +232,7 @@ We begin with a few primitive species:
 
 \begin{itemize}
 \item
-  The \emph{zero} or \emph{empty} species, denoted $\mathbf{0}$, is the
+  The \emph{zero} or \emph{empty} species, denoted $\Zero$, is the
   unique species with no structures whatsoever; that is,
   \begin{align*}
   \Zero[U] &= \varnothing \\
@@ -275,10 +275,11 @@ We begin with a few primitive species:
   species product, defined in~\pref{sec:product}.
 
 \item
-  The \emph{singleton} species, denoted $\X$, is defined by
-
-  $\X[U] = \begin{cases} U & ||U|| = 1 \\ \emptyset & \text{otherwise} \end{cases}$
-
+  The \emph{singleton} species, denoted $\X$, is defined by 
+  \[ \X[U]
+  = \begin{cases} U & ||U|| = 1 \\ \emptyset &
+    \text{otherwise} \end{cases} 
+  \]
   with lifting of bijections defined in the evident manner. That is,
   there is a single $\X$-structure on a label set of size $1$
   (which we identify with the label itself, though we could have also
@@ -288,32 +289,19 @@ We begin with a few primitive species:
   As with $\One$, we may equivalently define $\X$ as a
   hom-functor, namely $\X = \mathbb{B}(\{\star\}, -)$.
 
-  It's worth noting again that although $\One$ and $\X$ do
-  ``case analysis'' on the label set $U$, they actually only depend on
-  the \emph{size} of $U$; indeed, as we
-  \href{http://byorgey.wordpress.com/2012/12/06/species-definition-clarification-and-exercises/}{noted
-  previously}, by functoriality this is all they can do.
-\item
-  The species of \emph{bags}\footnote{The species literature calls this
-    the species of \emph{sets}, but that's misleading to computer
+\item The species of \emph{bags}\footnote{The species literature calls
+    this the species of \emph{sets}, but that's misleading to computer
     scientists, who expect the word ``set'' to imply that elements
-    cannot be repeated.}, denoted $\Bag$, is defined by
-
-  $\Bag[U] = \{U\}$,
-
-  that is, there is a single $\Bag$-structure on any set of labels
-  $U$, which we usually identify with the set of labels itself (although
-  we could equivalently define $\Bag[U] = \{\star\}$). The idea is
-  that an $\Bag$-structure consists solely of a collection of
+    cannot be repeated.}, denoted $\Bag$, is defined by \[ \Bag[U] =
+  \{U\}, \] that is, there is a single $\Bag$-structure on any set of
+  labels $U$, which we usually identify with the set of labels itself
+  (although we could equivalently define $\Bag[U] = \{\star\}$). The
+  idea is that an $\Bag$-structure consists solely of a collection of
   labels, with no imposed ordering whatsoever.
-
-  If you want to abuse types slightly, one can define $\Bag$ as
-  a hom-functor too, namely $\mathbb{E}(-,\{\star\})$. (\citet{yeh}
-  actually has $\mathbb{B}(-, \{\star\})$, but that's wrong.)
 \end{itemize}
 
 As a summary, \pref{fig:prims} contains a graphic showing
-$\mathbf{0}$-, $\One$-, $\X$-, and
+$\Zero$-, $\One$-, $\X$-, and
 $\Bag$-structures arranged by size (\emph{i.e.}, the size of the
 underlying set of labels $U$): a dot indicates a single structure, and
 the size of the label set increases as you move to the right.
@@ -341,12 +329,10 @@ dia =
   \label{fig:prims}
 \end{figure}
 
-Just as a teaser, it turns out that $\X$ and $\Bag$ are
-identity elements for certain binary operations on species as well,
-though you'll have to wait to find out which ones!
-
 \subsubsection{Operations}
 \label{sec:operations}
+
+
 
 \begin{itemize}
 \item The \term{sum} of two species $F + G$ is just a disjoint
@@ -687,5 +673,7 @@ Keck work.
 
 \section{Timeline and Conclusion}
 \label{sec:timeline}
+
+
 
 \end{document}
