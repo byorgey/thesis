@@ -16,7 +16,7 @@
 
 \let\oldtodo\todo
 
-\renewcommand{\todo}[1]{\oldtodo[inline]{#1}}
+\renewcommand{\todo}[1]{\oldtodo{#1}}
 
 \title{Towards a Species-Based Theory of Data Types \\ {\small Dissertation Proposal}}
 \author{Brent Yorgey}
@@ -41,15 +41,24 @@
 \section{Introduction}
 \label{sec:intro}
 
+The theory of \term{algebraic data types} XXX
+
 \todo{Talk generically about the theory of algebraic data types.  Give
   some examples of the sorts of things we'd like to do.}
 
-The theory of \term{combinatorial species} was invented in 1981 by
-Andr\'{e} Joyal~\cite{joyal} as a framework for understanding and
-unifying much of enumerative combinatorics.  Since then, the theory
-has been explored and extended by many other mathematicians. Like the
-theory of algebraic data types, it is also concerned with describing
-structures compositionally, but is much more general.
+The theory of \term{combinatorial species} was first described in 1981
+by Andr\'{e} Joyal~\cite{joyal} as a framework for understanding and
+unifying much of \term{enumerative combinatorics}, the branch of
+mathematics concerned with counting abstract structures.  Since then,
+the theory has been explored and extended by many other
+mathematicians. Like the theory of algebraic data types, it is also
+concerned with describing structures compositionally, but is much more
+general.
+
+Upon gaining even a passing familiarity with both subjects, one cannot
+help but be struck by obvious similarities.  However, there has yet to
+be a comprehensive treatment of the precise connections between the
+two. \todo{finish}
 
 \subsection{Goals and Outline}
 \label{sec:goals}
@@ -76,28 +85,33 @@ threefold:
   PL researchers, since they assume an extensive mathematical
   background and motivations that many PL researchers do not have.
 
-  For example, \todo{labeled vs unlabeled}.  I have begun a series of
-  blog posts \cite{blog posts} which will form the basis for this
-  presentation; \pref{sec:species} contains an abridged version.
+  I have begun a series of blog posts \cite{blog posts} which will
+  form the basis for this presentation; \pref{sec:species} contains an
+  abridged version.
 
 \item The second goal is to lay the theoretical groundwork for
   understanding species as a foundation for data types.  That is, if
   one wanted to design a programming language with ``species types''
   from the ground up, upon what theory could it be based?
-  \pref{sec:species-types} presents some preliminary results in this
-  direction and lays out a roadmap for the remaining theory to be
-  developed.
+  Section~\ref{sec:species-as-data-types} presents some preliminary
+  results in this direction and lays out a roadmap for the remaining
+  theory to be developed.
 
 \item Third, the theory of species can be used to build practical
   tools for working with existing algebraic data types.  Towards this
-  end I have developed XXX.  \pref{sec:species-library} explains the
-  current features of the library and proposes features to be added.
-  \todo{more detail here?}
+  end I have developed a library, written in Haskell, for computing
+  with species and facilitating application of the theory to existing
+  data types.  Section~\ref{sec:species-library} explains the current
+  features of the library and proposes new features to be added.
 
 \end{enumerate}
 
 \section{Combinatorial Species}
 \label{sec:species}
+
+\todo{talk about cardinality restriction somewhere?}
+\todo{talk about algebraic laws}
+\todo{mention identity elements for operations}
 
 \todo{This isn't really the goal, at least it wasn't the original goal!}
 The goal of species is to have a unified theory of \emph{structures}, or
@@ -204,15 +218,15 @@ $F$'s action on all label sets of size $n$ is determined by its action
 on any particular such set: if $||U_1|| = ||U_2||$ and we know
 $F[U_1]$, we can determine $F[U_2]$ by lifting an arbitrary
 bijection between $U_1$ and $U_2$.  So we often take the finite set of
-natural numbers $\{0, \dots, n-1\}$ (also written $[n]$) as \emph{the}
+natural numbers $[n] = \{0, \dots, n-1\}$ as \emph{the}
 canonical label set of size $n$, and write $F[n]$ (instead of
 $F[[n]]$) for the set of $F$-structures built from this set.
 
-It's not hard to show that functors preserve isomorphisms, so although
-the definition only says that a species $F$ sends a bijection $\sigma
-: U \bij V$ to a \emph{function} $F[\sigma] : F[U] \to F[V]$, in fact,
-by functoriality every such function must be a bijection. \todo{is
-  this really important to say?}
+% It's not hard to show that functors preserve isomorphisms, so although
+% the definition only says that a species $F$ sends a bijection $\sigma
+% : U \bij V$ to a \emph{function} $F[\sigma] : F[U] \to F[V]$, in fact,
+% by functoriality every such function must be a bijection. \todo{is
+%   this really important to say?}
 
 \subsection{Building Species Algebraically}
 \label{sec:building-species}
@@ -221,19 +235,17 @@ The formal definition of species is wonderfully simple, but working
 directly with the definition in practice does not get one very far.
 Instead, we use an algebraic theory that lets us compositionally build
 a wide variety of species from a collection of primitive species and
-operations on species. (It's important to note that it does \emph{not}
+operations on species. It's important to note that it does \emph{not}
 allow us to build \emph{all} species, but it does allow us to build
-many of the ones we care about.)
-
-\todo{rethink sectioning.  Maybe use paras for individual definitions?}
+many of the ones we care about.
 
 \subsubsection{Primitives}
 \label{sec:primitives}
 
-We begin with a few primitive species:
+We begin with a few primitive species, which form the building blocks
+out of which more complex species can be composed.
 
-\begin{itemize}
-\item
+\paragraph{Zero}
   The \emph{zero} or \emph{empty} species, denoted $\Zero$, is the
   unique species with no structures whatsoever; that is,
   \begin{align*}
@@ -243,7 +255,7 @@ We begin with a few primitive species:
   Of course, $\Zero$ is the identity element for
   the sum operation on species (defined in~\pref{sec:sum}).
 
-\item
+\paragraph{One}
   The \emph{unit} species, denoted $\One$, is defined by
   \[ \One[U] =
   \begin{cases}
@@ -276,22 +288,45 @@ We begin with a few primitive species:
   As expected, $\One$ is the identity element for the operation of
   species product, defined in~\pref{sec:product}.
 
-\item
-  The \emph{singleton} species, denoted $\X$, is defined by 
+%   \begin{figure}
+%     \centering
+%     \begin{diagram}[width=25]
+% import Species
+
+% dia = drawSpT (nd "1" []) # centerXY # pad 1.1
+%     \end{diagram}
+%     \caption{Abstract diagram for the unit species}
+%     \label{fig:unit}
+%   \end{figure}
+
+\paragraph{Singleton}
+  The \emph{singleton} species, denoted $\X$, is defined by
   \[ \X[U]
   = \begin{cases} U & ||U|| = 1 \\ \emptyset &
-    \text{otherwise} \end{cases} 
+    \text{otherwise} \end{cases}
   \]
   with lifting of bijections defined in the evident manner. That is,
   there is a single $\X$-structure on a label set of size $1$
   (which we identify with the label itself, though we could have also
   defined $\X[U] = \{\star\}$ when $||U|| = 1$), and no
   $\X$-structures indexed by any other number of labels.
+%   \begin{figure}
+%     \centering
+%     \begin{diagram}[width=100]
+% import Species
+% import Data.Tree
+
+% dia = drawSpT (nd "X" [lf Leaf]) # centerXY # pad 1.1
+%     \end{diagram}
+%     \caption{Abstract diagram for the species of singletons}
+%     \label{fig:singleton}
+%   \end{figure}
 
   As with $\One$, we may equivalently define $\X$ as a
   hom-functor, namely $\X = \mathbb{B}(\{\star\}, -)$.
 
-\item The species of \emph{bags}\footnote{The species literature calls
+\paragraph{Bags}
+  The species of \emph{bags}\footnote{The species literature calls
     this the species of \emph{sets}, but that's misleading to computer
     scientists, who expect the word ``set'' to imply that elements
     cannot be repeated.}, denoted $\Bag$, is defined by \[ \Bag[U] =
@@ -300,7 +335,6 @@ We begin with a few primitive species:
   (although we could equivalently define $\Bag[U] = \{\star\}$). The
   idea is that an $\Bag$-structure consists solely of a collection of
   labels, with no imposed ordering whatsoever.
-\end{itemize}
 
 As a summary, \pref{fig:prims} contains a graphic showing
 $\Zero$-, $\One$-, $\X$-, and
@@ -331,13 +365,16 @@ dia =
   \label{fig:prims}
 \end{figure}
 
+\todo{There are others, in fact it is possible to give a complete
+  classification.}
+
 \subsubsection{Operations}
 \label{sec:operations}
 
+\todo{Say something general about operations here.}
 
-
-\begin{itemize}
-\item The \term{sum} of two species $F + G$ is just a disjoint
+\paragraph{Sum}
+  The \term{sum} of two species $F + G$ is a disjoint
   (tagged) union: that is,
   \[ (F+G)[U] = F[U] + G[U], \] where the $+$ on the right denotes the
   coproduct of sets, \[ S + T = \{ \cons{inl}(s) \mid s \in S \} \cup \{
@@ -354,7 +391,31 @@ dia =
   $F$-structure, one must in fact have an $F$-structure, since
   $\Zero$-structures do not exist.
 
-  \todo{pictures}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import Species
+
+theDia = struct 5 "F+G"
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         ( struct 5 "F"
+           ===
+           txt "+"
+           ===
+           struct 5 "G"
+         ) # centerY
+
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Species sum}
+    \label{fig:sum}
+  \end{figure}
 
   For example, structures of the species $\One + \X$ are either a unit
   structure (containing no labels) or a singleton structure
@@ -368,7 +429,8 @@ dia =
   $\inr(\inr(\inr(\inl(\star))))$ we often use the natural numbers $0
   \dots (n-1)$ as names for $\Sp{n}$-structures.
 
-\item The \term{product} of species is a bit more interesting.  One
+\paragraph{Product}
+  The \term{product} of species is a bit more interesting.  One
   might na\"ively expect to have
   \[ (F \sprod G)[U] = F[U] \times G[U] \] where $\times$ denotes the
   Cartesian product of sets.  This is a sensible operation on species
@@ -385,23 +447,219 @@ dia =
   possible ways.  More formally, \[ (F \sprod G)[U] = \sum_{U_1 \uplus
     U_2 = U} F[U_1] \times G[U_2]. \]
 
-  \todo{pictures}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import Species
 
-  \todo{examples}
+theDia = struct 5 "F•G"
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         ( struct 2 "F"
+           ===
+           strutY 0.2
+           ===
+           struct 3 "G"
+         ) # centerY
 
-  
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Species product}
+    \label{fig:product}
+  \end{figure}
 
-  \todo{note that multiplication on naturals works as expected.  Copy
-    of $\N$ embedded inside species as a subring.}
+  Here are a few examples:
+  \begin{itemize}
+  \item $\X \sprod \X$ \todo{finish}
+  \item $\X \sprod \E$ \todo{pointed sets}
+  \item $\E \sprod \E$ \todo{subsets}
+  \end{itemize}
 
-\item Derivative
+  Note that products of ``natural numbers'' (the species $2 = 1 + 1$
+  and so on) work exactly as expected; in fact, we get an entire copy
+  of the natural numbers $\N$ embedded inside species as a subring.
 
-\item 
+\paragraph{Composition}
+The \term{composition} $F \comp G$ of two species $F$ and $G$,
+intuitively, creates ``$F$-structures of $G$-structures''.  Formally,
+to create an $(F \comp G)$-structure over a given set of labels $U$,
+we first \emph{partition} $U$ into some number of nonempty subsets;
+create a $G$-structure over each subset; then create an $F$-structure
+\emph{over the resulting set of $G$-structures}.  Doing this in all
+possible ways yields the complete set of $(F \comp
+G)$-structures over $U$. Formally,
+  \[ (F \comp G)[U] = \sum_{\pi \in \Par[U]} F[\pi] \times \prod_{p
+    \in \pi} G[p]. \]
+\pref{fig:composition} shows an abstract representation of the definition.
 
-\end{itemize}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import Species
+
+theDia = struct 6 "F∘G"
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         drawSpT
+         ( nd (txt "F")
+           [ struct' 2 "G"
+           , struct' 3 "G"
+           , struct' 1 "G"
+           ]
+         )
+
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Species composition}
+    \label{fig:composition}
+  \end{figure}
+
+\todo{examples}
+
+\paragraph{Derivative}
+
+The \term{derivative} $F'$ of a species $F$ is defined by \[ F'[U] =
+F[U \union \{\star\}], \] where $\star$ is some new distinguished
+label not already present in $U$.  The transport of bijections along
+the derivative is defined as expected, leaving the distinguished
+element alone and transporting the other labels.  
+
+The derivative of container types is a notion already familiar to many
+functional programmers through the work of McBride \todo{and others?}
+\cite{XXX}: the derivative of a type is its type of ``one-hole
+contexts''.  This can be seen in the definition above; $\star$
+represents the distinguished ``hole'' in the $F$-structure.
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import Species
+
+theDia = struct 5 "F'"
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         drawSpT
+         ( nd (txt "F")
+           [ lf Leaf
+           , lf Leaf
+           , lf Leaf
+           , lf Hole
+           , lf Leaf
+           ]
+         )
+
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Species differentiation}
+    \label{fig:derivative}
+  \end{figure}
+
+\paragraph{Pointing}
+
+  The \term{pointing} $F^{\bullet}$ of a species $F$ is a derived
+  operation defined by \[ F^{\bullet} = \X \sprod F' \].
+  \todo{write more}
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import Species
+
+theDia = struct 5 "F" -- XXX FIXME
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         drawSpT
+         ( nd (txt "F")
+           [ lf Leaf
+           , lf Leaf
+           , lf Leaf
+           , lf Point
+           , lf Leaf
+           ]
+         )
+
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Species pointing}
+    \label{fig:pointing}
+  \end{figure}
+
+\paragraph{Cartesian product}
+
+The \term{Cartesian product} $F \times G$ of two species $F$ and $G$
+is defined as \[ (F \times G)[U] = F[U] \times G[U], \] where the
+$\times$ on the right denotes Cartesian product of sets.  This is in
+fact the ``na\"ive'' definition of product that was discussed before.
+
+Since we want to consider each label as occurring uniquely, we should
+therefore think of an $(F \times G)$-structure as consisting of an
+$F$-structure and a $G$-structure \emph{superimposed on the same set
+  of labels}.  That is, we should think of labels as memory locations,
+so a Cartesian product structure consists of two structures each
+containing ``pointers'' to a set of shared memory locations.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=100]
+dia = circle 2 -- XXX todo   
+  \end{diagram}
+  \caption{Cartesian product}
+  \label{fig:cartesian}
+\end{figure}
+\todo{examples}
+
+\paragraph{Functor composition}
+
+The \term{functor composition} $F \fcomp G$ of two species $F$ and $G$
+is given by their literal composition as functors: \[ (F \fcomp G)[U]
+= F[G[U]]. \] An $(F \fcomp G)$-structure is thus an $F$-structure
+over the set of \emph{all possible} $G$-structures on the labels $U$.
+
+\todo{picture}
+
+As an example, the species of simple directed graphs with labeled
+vertices can be specified as \[ \mathcal{G} = (\E \sprod \E) \fcomp
+(\X^2 \sprod \E), \] describing a graph as a subset ($\E \sprod \E$)
+of the set of all ordered pairs chosen from the complete set of vertex
+labels ($\X^2 \sprod \E$).
 
 \subsubsection{Recursion}
 \label{sec:recursion}
+
+Of course, the theory of algebraic data types would not be very
+interesting without recursion, and the same is true for the theory of
+species.  Recursion is introduced by allowing \term{implicit
+  equations} such as \[ \L = 1 + \X \sprod \L, \] giving them a
+least-fixed-point interpretation.  There is a well-developed theory
+explaining when such implicit equations have least-fixed-point
+solutions which are unique (the implicit species theorem and its
+generalizations~\cite{XXX}).
+
+In general, we can allow arbitrary mutually recursive
+systems of implicit equations \[ \overline{\F_i = \Phi_i(F_1, \dots,
+  F_n)}^n. \]  For example, \todo{series-parallel graphs.}
+
+\todo{say something about connection to $\mu$ operator, etc.?}
 
 \subsection{Equipotence, Isomorphism, and Unlabeled Species}
 \label{sec:unlabeled}
@@ -440,15 +698,15 @@ the mapping
 
 \todo{write about other algebraic laws that hold up to isomorphism}
 
-As an example of species which are equipotent but
-not isomorphic, consider the species $\L$ of linear orderings (\ie\
-lists) and the species $\S$ of permutations.  It is well-known that
-the number of linear orderings and the number of permutations of $n$
-distinct labels are both $n!$.  However, there is no way to set up a
-family of bijections that respects relabeling: any list can be sent to
-any other by an appropriate relabeling, but there is no way to send
-(say) a permutation with two cycles to a permutation with three cycles
-just by relabeling.
+As an example of species which are equipotent but not isomorphic,
+consider the species $\L$ of linear orderings (\ie\ lists) and the
+species $\S$ of permutations.  It is well-known that the number of
+linear orderings and the number of permutations of $n$ distinct labels
+are both $n!$.  However, there is no way to set up a family of
+bijections that respects relabeling: any list can be sent to any other
+by an appropriate relabeling, but there is no way to send (say) a
+permutation with two cycles to a permutation with three cycles just by
+relabeling.
 
 \todo{draw picture here of relabeling lists and cycles}
 
@@ -541,7 +799,7 @@ structures but also information about their symmetry.  The details are
 beyond the scope of this proposal, but \todo{finish}
 
 \section{Species as Data Types}
-\label{sec:species-types}
+\label{sec:species-as-data-types}
 
 % In particular, we want to extend the theory of algebraic data types to
 % a theory of \emph{species data types}. A programming language with
