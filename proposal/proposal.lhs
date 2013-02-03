@@ -532,7 +532,7 @@ The \term{derivative} $F'$ of a species $F$ is defined by \[ F'[U] =
 F[U \union \{\star\}], \] where $\star$ is some new distinguished
 label not already present in $U$.  The transport of bijections along
 the derivative is defined as expected, leaving the distinguished
-element alone and transporting the other labels.  
+element alone and transporting the other labels.
 
 The derivative of container types is a notion already familiar to many
 functional programmers through the work of McBride \todo{and others?}
@@ -621,7 +621,7 @@ containing ``pointers'' to a set of shared memory locations.
 \begin{figure}
   \centering
   \begin{diagram}[width=100]
-dia = circle 2 -- XXX todo   
+dia = circle 2 -- XXX todo
   \end{diagram}
   \caption{Cartesian product}
   \label{fig:cartesian}
@@ -661,7 +661,7 @@ systems of implicit equations \[ \overline{\F_i = \Phi_i(F_1, \dots,
 
 \todo{say something about connection to $\mu$ operator, etc.?}
 
-\subsection{Equipotence, Isomorphism, and Unlabeled Species}
+\subsection{Equipotence and Isomorphism}
 \label{sec:unlabeled}
 
 We say that two species $F$ and $G$ are \term{equipotent}, denoted $F
@@ -694,7 +694,8 @@ the mapping
   \inr(\inr(u)) &\bij (2,u)
 \end{align*}
 \todo{is there a more perspicuous way to write the above?}
-\todo{explain why it commutes with relabeling}
+which commutes with relabeling since there is always exactly one label
+to modify.
 
 \todo{write about other algebraic laws that hold up to isomorphism}
 
@@ -710,12 +711,52 @@ relabeling.
 
 \todo{draw picture here of relabeling lists and cycles}
 
-We say that two \emph{structures} of a given species are isomorphic when
-there exists a relabeling taking one to the other.  That is, $f_1 \in
-F[U]$ and $f_2 \in F[V]$ are isomorphic iff there is some $\sigma : U
-\bij V$ such that $F[\sigma](f_1) = f_2$.
+We say that two \emph{structures} of a given species are isomorphic
+when there exists a relabeling taking one to the other.  That is, $f_1
+\in F[U]$ and $f_2 \in F[V]$ are isomorphic if and only if there is
+some $\sigma : U \bij V$ such that $F[\sigma](f_1) = f_2$.
 
-\todo{define unlabelled species, with pictures, etc.}
+\subsection{Unlabeled Species}
+\label{sec:unlabeled}
+
+Although the definition of species assures us that labels ``don't
+matter'', we still have to work with explicitly labeled structures.
+Much of the time, this explicit labeling is a nuisance.  Even when
+restricting ourselves to a chosen canonical set of labels (such as
+$[n]$), there can still be many distinct labeled structures that we do
+not wish to consider as distinct.  For example,
+\pref{fig:labeled-structures} shows six distinct labeled binary tree
+structures; but for most purposes, as long as each location has a
+distinct label it does not much matter which particular label is used
+for each.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=250]
+import Data.Tree
+import Diagrams.TwoD.Layout.Tree
+import Data.List (permutations)
+
+allTrees = [ Node a [Node b [], Node c []] || [a,b,c] <- permutations [0..2] ]
+
+dTree = renderTree ((<> circle 1 # fc white) . text . show) (~~)
+layout = symmLayout' with { slHSep = 4, slVSep = 3 }
+trees = hcat' with {sep = 1} . map (dTree . layout) $ allTrees
+
+dia = trees # centerXY # pad 1.1
+  \end{diagram}
+  %$
+  \caption{Six distinct labeled tree structures}
+  \label{fig:labeled-structures}
+\end{figure}
+
+We can give a precise meaning to the concept of \term{unlabeled}
+structures by defining them as \emph{equivalence classes} of labeled
+structures under isomorphism.
+
+\todo{picture here?  Note, using "dots"
+  works only for regular species.}
+
 \todo{stuff about regular vs. other species.}
 
 \todo{non-regular, molecular species.}
@@ -870,42 +911,88 @@ them as type constructors, as shown in \pref{fig:type-constructors}.
 \end{figure}
 
 What is the precise relationship between $\spe{S}$ and $\ty{S}{}$ for
-a given expression $S$?
+a given expression $S$?  First, $\spe{S}$ describes labeled shapes
+containing no data, whereas elements of $\ty{S}{A}$ are data
+structures containing data elements of type $A$.  Thus, as mentioned
+previously, we must pair structures of $\spe{S}[U]$ with functions of
+type $U \to A$ to describe the mapping of locations to
+data.  However, these structures now include ``too much'' information;
+in particular the precise labels used should not matter, so we need to
+quotient out by an equivalence relating structures which use different
+labels but are otherwise identical.
 
-\todo{more explanation leading up to this}
+\newcommand{\seqv}[2]{\mathord{\sim_{#1,#2}}}
 
-\todo{define $\sim_S$}
+Formally, for a given species expression $S$ we define a relation
+\[ \seqv S A \subseteq (\Sigma U : Set. \spe{S}[U] \times (U \to A))^2 \]
+as follows: $(U, (s, f)) \sim_{S,A} (V, (t, g))$ if and only if there
+exists some $\sigma : U \bij V$ such that $t = \spe{S}[\sigma](s)$ and
+$g = f \comp \sigma$. \todo{check this carefully} \todo{explain, give
+  examples}
 
+\todo{prove this is an equivalence relation, or at least argue why it is}
+
+Given these definitions, we can finally state the main theorem
+expressing the precise connection between types and species:
 \begin{thm}
   For all species expressions $S$,
   \[ \ty{S} A \cong \left( \sum_U \spe{S}[U] \times (U \to A) \right)
-  / \sim_S. \]
+  / \seqv S A. \]
 \end{thm}
 
 \begin{proof}
   \todo{write me}
 \end{proof}
 
-Also,
+We also have the following lemma, connecting the use of arbitrary
+label sets with the use of the canonical label set $[n]$:
 \begin{lem}
   \[ \left( \sum_U \spe{S}[U] \times (U \to A) \right)
-  / \sim_S \cong \left( \sum_{n \in \N} \spe{S}[n] \times A^n \right)
-  / \sim_S \]
+  / \seqv S A \mathrel{\cong} \left( \sum_{n \in \N} \spe{S}[n] \times A^n \right)
+  / \seqv S A \]
 \end{lem}
+Intuitively, including many different label sets of size $n$ does not
+add any information; considering only the canonical label set of each
+size is enough.
+\begin{proof}
+Formally, \todo{write me}
+\end{proof}
 
-As a corollary, \[ \ty{S} A \cong \left( \sum_{n \in \N} \spe{S}[n]
-  \times A^n \right) / \sim_S, \] which intuitively states that
-\todo{explain}.
+As a corollary, by transitivity we conclude that \[ \ty{S} A \cong
+\left( \sum_{n \in \N} \spe{S}[n] \times A^n \right) /
+\mathord{\sim_{S,A}}, \] which give a much more intuitive sense of
+what is going on: each type is built up as a sum of species structures
+of every possible size, each paired with a list of data
+elements. \todo{cite work on shape + data, explain further.  It's
+  exactly the census by size that gives the theory of species enough
+  of a foothold to do interesting computation.}
 
 \todo{who cares? Why is this relevant?}
 
-\todo{write about next directions to take this. Multisort, nonregular,
-  recursive.}
+The language of species expressions used above is intentionally
+simplified.  A full treatment will include some extra features:
+\begin{itemize}
+\item Multi-argument type constructors are quite common in practice
+  and can be modeled by multisort species.  Extending the above theory
+  to deal with multisort species is expected to be straightforward.
+\item As explained previously, one of the great promises of the theory
+  is to be able to talk about ``non-regular'' species and the
+  corresponding types.  This requires extending the interpretation of
+  species expressions from simple type constructors to \emph{setoids}
+  consisting of a type constructor together with an equivalence
+  relation on the values of the type.  All the theorems are then
+  extended to take this new equivalence relation into account as well.
+\item Recursion must be handled as well.  Recursive species
+  expressions can be interpreted as recursive types, and the theory
+  must be extended to take into account the relationship between them.
+  I do not yet have a good sense of the difficulty, but expect that it
+  should all go through.
+\end{itemize}
 
 \subsection{Eliminators for species types}
 \label{sec:eliminators}
 
-
+\todo{import stuff from WG 2.8 talk}
 
 \section{The \pkg{species} library}
 \label{sec:species-library}
@@ -930,6 +1017,16 @@ However, there are many features that could yet be added. \todo{talk
 % \todo{Need to figure out what other stuff to propose!  Views? Sharing?
 %   L-species? Virtual species? Species + infinity?  Enumerating
 %   unlabeled structures?  See NSF proposal for ideas, of course.}
+
+It is unknown (to me) whether fast methods exist for generating
+unlabeled structures (that is, representatives of equivalence classes)
+for species involving composition, Cartesian product, and/or functor
+composition.  I plan to investigate the combinatorics literature to
+see whether such methods already exist, and, if so, add them to the
+implementation in the \pkg{species} library.  If they do not, it may
+be worth spending a bit of time thinking about, though in that case it
+is likely to be quite difficult and probably beyond the scope of my
+proposed research.
 
 \section{Related Work}
 \label{sec:related}
