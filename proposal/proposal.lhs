@@ -18,7 +18,7 @@
 
 \renewcommand{\todo}[1]{\oldtodo{#1}}
 
-\title{Towards a Species-Based Theory of Data Types \\ {\small Dissertation Proposal}}
+\title{Combinatorial Species and Algebraic Data Types \\ {\small Dissertation Proposal}}
 \author{Brent Yorgey}
 
 \begin{document}
@@ -472,12 +472,43 @@ dia = theDia # centerXY # pad 1.1
     \caption{Species product}
     \label{fig:product}
   \end{figure}
+    \todo{also include jaggedy-line-type picture}
 
   Here are a few examples:
   \begin{itemize}
-  \item $\X \sprod \X$ \todo{finish}
-  \item $\X \sprod \E$ \todo{pointed sets}
-  \item $\E \sprod \E$ \todo{subsets}
+  \item $\X \sprod \X$ is the species of \term{ordered pairs}.  The
+    only way to obtain an $\X \sprod \X$ structure is to have exactly
+    two labels, one going to the first $\X$ and the other to the
+    second; as shown in \pref{fig:ord-pairs}, there are exactly two
+    ways to do so.
+    \begin{figure}
+      \centering
+    \begin{diagram}[width=200]
+import Species
+
+theDia = linOrd [0,1] |||||| strutX 0.5 |||||| linOrd [1,0]
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}      
+      \caption{$\X^2$-structures}
+      \label{fig:ord-pairs}
+    \end{figure}
+
+  \item $\X \sprod \E$ is the species of \term{pointed sets}, or
+    \term{elements}. Structures consist of a single distinguished
+    element paired with any number of remaining elements.  Whether
+    structures are thought of as ``pointed sets'' or ``elements''
+    depends on whether the $\E$-structure is thought of as an integral
+    part of the structure, or merely as a ``sink'' for throwing away
+    ``unwanted'' elements.
+
+    \todo{picture}
+  \item $\E \sprod \E$ is literally the species of ordered pairs of
+    sets; but we usually think of it as the species of \term{subsets},
+    where the first set picks out the labels of interest and the
+    second subset again serves as a ``sink'' for collecting the unused
+    labels.
+
+    \todo{picture}
   \end{itemize}
 
   Note that products of ``natural numbers'' (the species $2 = 1 + 1$
@@ -571,8 +602,10 @@ dia = theDia # centerXY # pad 1.1
 
 \paragraph{Pointing}
 
-  The \term{pointing} $F^{\bullet}$ of a species $F$ is a derived
-  operation defined by \[ F^{\bullet} = \X \sprod F' \].
+\newcommand{\pt}[1]{\ensuremath{#1^{\bullet}}}
+
+  The \term{pointing} $\pt F$ of a species $F$ is a derived
+  operation defined by \[ \pt F = \X \sprod F' \].
   \todo{write more}
 
   \begin{figure}
@@ -615,8 +648,8 @@ Since we want to consider each label as occurring uniquely, we should
 therefore think of an $(F \times G)$-structure as consisting of an
 $F$-structure and a $G$-structure \emph{superimposed on the same set
   of labels}.  That is, we should think of labels as memory locations,
-so a Cartesian product structure consists of two structures each
-containing ``pointers'' to a set of shared memory locations.
+so a Cartesian product structure consists of a pair of structures each
+containing ``pointers'' to a single set of shared memory locations.
 
 \begin{figure}
   \centering
@@ -652,8 +685,8 @@ species.  Recursion is introduced by allowing \term{implicit
   equations} such as \[ \L = 1 + \X \sprod \L, \] giving them a
 least-fixed-point interpretation.  There is a well-developed theory
 explaining when such implicit equations have least-fixed-point
-solutions which are unique (the implicit species theorem and its
-generalizations~\cite{XXX}).
+solutions which are unique (the \term{Implicit Species Theorem} and
+its generalizations~\cite{XXX}).
 
 In general, we can allow arbitrary mutually recursive
 systems of implicit equations \[ \overline{\F_i = \Phi_i(F_1, \dots,
@@ -757,6 +790,34 @@ structures under isomorphism.
 \todo{picture here?  Note, using "dots"
   works only for regular species.}
 
+\subsection{Regular and non-regular species}
+\label{sec:regular}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=75]
+import Species
+dia = cyc [0..4] 1.2 # pad 1.1
+  \end{diagram}
+  \begin{diagram}[width=60]
+import Species
+dia = ( roundedRect 2 1 0.2
+        <> (lab 0 |||||| strutX 0.3 |||||| lab 3)
+           # centerXY
+      )
+      # pad 1.1
+      # lw 0.02
+  \end{diagram}
+  \begin{diagram}[width=75]
+import Species
+import Data.Tree
+t   = Node Bag [lf (Lab 1), lf (Lab 2), Node Bag [lf (Lab 0), lf (Lab 3)]]
+dia = drawSpT' mempty with t # pad 1.1
+  \end{diagram}  
+  \caption{Non-regular structures}
+  \label{fig:non-regular}
+\end{figure}
+
 \todo{stuff about regular vs. other species.}
 
 \todo{non-regular, molecular species.}
@@ -854,6 +915,18 @@ Although it seems ``obvious'' that there is a deep connection between
 the theory of species and the theory of algebraic data types, care
 must be taken to state the precise nature of the relationship.
 
+\todo{type theory.  I conflate sets and types as convenient.  $0$ is
+  void type.  $1$ is canonical 1-elt type (note there are many
+  $1$-element sets.  Note we use $\Sigma U: Set...$ and also $\sum_U
+  ...$}
+
+A \term{relation} $R$ over a set $X$ is a set of pairs $R \subseteq
+X^2$.  We write $a \mathbin{R} b$ if $(a,b) \in R$.  An
+\term{equivalence} is a reflexive, symmetric, and transitive
+relation.  If $R$ is an equivalence over $X$, we write $X/R$ to denote
+the set of equivalence classes of $R$ in $X$, that is, maximal subsets
+of $X$ such that any two elements are related by $R$.
+
 \subsection{Species types}
 \label{sec:species-types}
 
@@ -870,7 +943,7 @@ many different labelings.
 
 To see how these ideas work, we begin with the very simple universe of
 species expressions shown in~\pref{fig:universe}.  For now we have
-only regular species and no recursion.
+only regular species and no recursion. \todo{improve?}
 
 \begin{figure}
   \centering
@@ -911,29 +984,44 @@ them as type constructors, as shown in \pref{fig:type-constructors}.
 \end{figure}
 
 What is the precise relationship between $\spe{S}$ and $\ty{S}{}$ for
-a given expression $S$?  First, $\spe{S}$ describes labeled shapes
-containing no data, whereas elements of $\ty{S}{A}$ are data
-structures containing data elements of type $A$.  Thus, as mentioned
-previously, we must pair structures of $\spe{S}[U]$ with functions of
-type $U \to A$ to describe the mapping of locations to
-data.  However, these structures now include ``too much'' information;
-in particular the precise labels used should not matter, so we need to
-quotient out by an equivalence relating structures which use different
-labels but are otherwise identical.
+a given expression $S$?  $\spe{S}[U]$ describes labeled shapes
+containing no data, with labels drawn from $U$, whereas elements of
+$\ty{S}{A}$ are data structures containing data elements of type $A$.
+Thus, we must pair structures of $\spe{S}[U]$ with functions of type
+$U \to A$ to describe the mapping of locations to data.  However,
+these structures now include ``too much'' information; in particular
+the precise labels used should not matter, so we need to quotient out
+by an equivalence relating structures which use different labels but
+are otherwise identical.
 
 \newcommand{\seqv}[2]{\mathord{\sim_{#1,#2}}}
 
-Formally, for a given species expression $S$ we define a relation
+Formally, for a given species expression $S$ and type $A$, we define a
+relation
 \[ \seqv S A \subseteq (\Sigma U : Set. \spe{S}[U] \times (U \to A))^2 \]
 as follows: $(U, (s, f)) \sim_{S,A} (V, (t, g))$ if and only if there
-exists some $\sigma : U \bij V$ such that $t = \spe{S}[\sigma](s)$ and
-$g = f \comp \sigma$. \todo{check this carefully} \todo{explain, give
-  examples}
+exists some $\sigma : U \bij V$ such that \[ t =
+\spe{S}[\sigma](s) \] and \[ g = f \comp \sigma^{-1}. \] \todo{explain, give
+  examples} It is not hard to show that $\seqv S A$ is an equivalence,
+using properties of bijections and the functoriality of $\spe S$:
+\begin{itemize}
+\item For reflexivity, we take $\sigma = id$, noting that $f = f \comp
+  id = f \comp id^{-1}$, and $s = \spe{S}[id](s)$
+  by functoriality of $\spe S$.
+\item For symmetry, suppose $t = \spe{S}[\sigma](s)$ and $g = f
+  \comp \sigma^{-1}$.  Then $s = \spe{S}[\sigma^{-1}](t) =
+  (\spe{S}[\sigma])^{-1}(t)$ by functoriality, and $f = g \comp
+  (\sigma^{-1})^{-1} = g \comp \sigma$.
 
-\todo{prove this is an equivalence relation, or at least argue why it is}
+\item For transitivity, if $(s,f)$ is related to $(t,g)$ by $\sigma$
+  and $(t,g)$ to $(u,h)$ by $\tau$, then as expected $(s,f)$ is
+  related to $(u,h)$ by $\tau \comp \sigma$.  The relation of $f$ to
+  $h$ can be seen by simple substitution; the relation of $s$ to $u$
+  follows again from the functoriality of $\spe S$.
+\end{itemize}
 
-Given these definitions, we can finally state the main theorem
-expressing the precise connection between types and species:
+Given this, we can finally state the main theorem expressing the
+precise connection between types and species:
 \begin{thm}
   For all species expressions $S$,
   \[ \ty{S} A \cong \left( \sum_U \spe{S}[U] \times (U \to A) \right)
@@ -941,7 +1029,20 @@ expressing the precise connection between types and species:
 \end{thm}
 
 \begin{proof}
-  \todo{write me}
+The proof is by induction on the structure of species expressions.
+\begin{itemize}
+\item When $S = \Zero$, both sides are trivially isomorphic to the empty
+  type $0$.
+\item When $S = \One$, the sum on the right-hand side collapses to
+  $\spe{\One}[\varnothing] \times (\varnothing \to A) \cong 1 \times 1
+  \cong 1$.
+\item When $S = \X$, \todo{finish}
+\item When $S = S_1 + S_2$, \todo{finish.  Need lemma about sums of
+    quotients?}
+\item When $S = S_1 \sprod S_2$, \todo{finish}
+\item When $S = S_1 \comp S_2$, \todo{finish}
+\end{itemize}
+
 \end{proof}
 
 We also have the following lemma, connecting the use of arbitrary
@@ -953,17 +1054,25 @@ label sets with the use of the canonical label set $[n]$:
 \end{lem}
 Intuitively, including many different label sets of size $n$ does not
 add any information; considering only the canonical label set of each
-size is enough.
-\begin{proof}
-Formally, \todo{write me}
-\end{proof}
+size is enough.  This lemma can be proved formally by noting that $|U|
+= n$ if and only if there exists a bijection $\sigma : U \bij [n]$, so
+every equivalence class on the left-hand side is a superset of one on
+the right.
 
-As a corollary, by transitivity we conclude that \[ \ty{S} A \cong
+As a corollary, by transitivity we conclude that 
+\begin{equation}
+\ty{S} A \cong
 \left( \sum_{n \in \N} \spe{S}[n] \times A^n \right) /
-\mathord{\sim_{S,A}}, \] which give a much more intuitive sense of
-what is going on: each type is built up as a sum of species structures
-of every possible size, each paired with a list of data
-elements. \todo{cite work on shape + data, explain further.  It's
+\mathord{\sim_{S,A}}, \label{eq:species-types}
+\end{equation}
+which gives a much more intuitive sense of what is going on: each type
+is built up as a sum of species structures of every possible size,
+each paired with a list of data elements.
+
+Note that the quotienting in \eqref{eq:species-types} is still
+required. \todo{explain why, and draw picture.}
+
+ \todo{cite work on shape + data, explain further.  It's
   exactly the census by size that gives the theory of species enough
   of a foothold to do interesting computation.}
 
@@ -991,6 +1100,61 @@ simplified.  A full treatment will include some extra features:
 
 \subsection{Eliminators for species types}
 \label{sec:eliminators}
+
+Every nonempty species is isomorphic to
+\begin{itemize}
+\item the unit species,
+\item a sum,
+\item a product,
+\item or an \emph{atomic} species $X^n/\mathcal{H}$ 
+  \begin{itemize}
+  \item (where $\mathcal{H}$ acts transitively on $\{0, \dots,
+    n-1\}$).
+  \end{itemize}
+\end{itemize}
+
+  So we can build eliminators in a type-directed way, using ``high
+  school algebra'' laws for exponents:
+  \begin{center}
+    \begin{tabular}{ccc}
+      $1[A] \to B$ & $\cong$ & $B$ \\
+      \\
+      $X[A] \to B$ & $\cong$ & $A \to B$ \\
+      \\
+      $(F+G)[A] \to B$ & $\cong$ & $(F[A] \to B) \times (G[A] \to B)$ \\
+      \\
+      $(F \cdot G)[A] \to B$ & $\cong$ & $F[A] \to (G[A] \to B)$ \\
+      \\
+      $(X^n/\mathcal{H})[A] \to B$ & $\cong$ & $\Sigma f : X^n \to B. \Pi \sigma \in \mathcal{H}. f = f \circ \sigma$
+    \end{tabular}
+  \end{center}
+
+  Pointing \emph{breaks symmetry}.
+
+  \begin{diagram}[width=250]
+    import Species
+    f   = drawSpT (nd (text "F") (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
+    fpt = drawSpT (nd (text "F") (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
+
+    dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||) 
+  \end{diagram}
+
+  \[ \pt{(-)} : F \to \pt{F} ? \]
+
+  \emph{Only} for polynomials!
+
+\newcommand{\down}{\chi}
+
+  \dots but Peter Hancock's ``cursor down'' operator \cite{hancock} is fine: \[ \down
+  : F \to F \pt{F} \]
+
+  \begin{diagram}[width=300]
+    import Species
+    c = Cyc [lab 0, lab 2, lab 3]
+    d1 = draw c
+    d2 = draw (down c)
+    dia = (d1 ||-|| elimArrow ||-|| d2) # pad 1.05
+  \end{diagram}
 
 \todo{import stuff from WG 2.8 talk}
 

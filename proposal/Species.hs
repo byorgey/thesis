@@ -8,13 +8,18 @@ import Data.List (intersperse)
 import Data.Tree
 import Diagrams.Backend.Cairo.CmdLine
 import Diagrams.Core.Points
-import Diagrams.Prelude
+import Diagrams.Prelude hiding ((&))
 import Diagrams.TwoD.Layout.Tree
+
+import Control.Lens (_head, _last, (%~), (&))
 
 colors = [red, orange, green, blue, purple, brown, grey, black]
 
 labR     = 0.3
 arrowGap = 0.2
+
+labT :: Int -> Diagram Cairo R2
+labT n = text (show n) # scale labR <> lab n
 
 lab :: Int -> Diagram Cairo R2
 lab n = lab' (colors !! n)
@@ -99,28 +104,33 @@ data SpN = Lab Int | Leaf | Hole | Point | Sp (Diagram Cairo R2) CircleFrac | Ba
 
 type SpT = Tree SpN
 
-drawSpT
-  = rotateBy (1/4)
-  . renderTree' drawSpN drawSpE
-  . symmLayout' with {slHSep = 0.5, slVSep = 2}
+drawSpT' tr slopts
+  = transform tr
+  . renderTree' (drawSpN' (inv tr)) drawSpE
+  . symmLayout' slopts
 
-drawSpN :: SpN -> Diagram Cairo R2
-drawSpN (Lab n)  = lab n # scale 0.5
-drawSpN Leaf     = circle (labR/2) # fc black
-drawSpN Hole     = circle (labR/2) # lw (labR / 10) # fc white
-drawSpN Point    = drawSpN Leaf <> drawSpN Hole # scale 1.7
-drawSpN (Sp s f) = ( arc (3/4 - f/2) (3/4 + f/2)
-                     |||
-                     strutX 0.2
-                     |||
-                     s # rotateBy (-1/4)
-                   )
-                   # scale 0.3
-drawSpN Bag     =
+drawSpT = drawSpT' (rotation (1/4 :: CircleFrac))
+                   with {slHSep = 0.5, slVSep = 2}
+
+drawSpN' :: Transformation R2 -> SpN -> Diagram Cairo R2
+drawSpN' tr (Lab n)  = lab n # scale 0.5
+drawSpN' tr Leaf     = circle (labR/2) # fc black
+drawSpN' tr Hole     = circle (labR/2) # lw (labR / 10) # fc white
+drawSpN' tr Point    = drawSpN' tr Leaf <> drawSpN' tr Hole # scale 1.7
+drawSpN' tr (Sp s f) = ( arc (3/4 - f/2) (3/4 + f/2)
+                       |||
+                       strutX 0.2
+                       |||
+                       s # transform tr
+                       )
+                       # scale 0.3
+drawSpN' tr Bag     =
                 ( (text "{" <> square 1 # lw 0) # scale 0.5 ||| strutX (labR/4)
                   ||| circle (labR/2) # fc black
                   ||| strutX (labR/4) ||| (text "}" <> square 1 # lw 0) # scale 0.5
                 ) # centerX
+
+drawSpN = drawSpN' mempty
 
 drawSpE (_,p) (Hole,q) = (p ~~ q) # dashing [0.05,0.05] 0
 drawSpE (_,p) (_,q)    = p ~~ q
@@ -143,3 +153,12 @@ struct n x = drawSpT (struct' n x)
 struct' n x = nd (text x <> rect 2 1 # lw 0) (replicate n (lf Leaf))
 
 txt s = text s <> square 1 # lw 0
+
+linOrd ls =
+    connect
+  . hcat' with {sep = 0.5}
+  $ map labT ls & _head %~ named "head" & _last %~ named "last"
+  where
+    connect =
+      withNames ["head", "last"] $ \[h,l] ->
+        beneath (location h ~~ location l)
