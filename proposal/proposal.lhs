@@ -719,7 +719,7 @@ F[V] \ar[r]_{\phi_V} & G[V]
   \caption{Natural isomorphism between species}
   \label{fig:nat-iso}
 \end{figure}
-For example, $X + (X + X)$ and $3X$ are isomorphic, as witnessed by
+For example, $\X + (\X + \X)$ and $\Sp{3} \sprod \X$ are isomorphic, as witnessed by
 the mapping
 \begin{align*}
   \inl(u) &\bij (0, u) \\
@@ -759,8 +759,8 @@ restricting ourselves to a chosen canonical set of labels (such as
 $[n]$), there can still be many distinct labeled structures that we do
 not wish to consider as distinct.  For example,
 \pref{fig:labeled-structures} shows six distinct labeled binary tree
-structures; but for most purposes, as long as each location has a
-distinct label it does not much matter which particular label is used
+structures; for most purposes, as long as each location has a
+distinct label it does not matter which particular label is used
 for each.
 
 \begin{figure}
@@ -783,15 +783,70 @@ dia = trees # centerXY # pad 1.1
   \label{fig:labeled-structures}
 \end{figure}
 
-We can give a precise meaning to the concept of \term{unlabeled}
-structures by defining them as \emph{equivalence classes} of labeled
-structures under isomorphism.
+We can give a precise meaning to the concept of \term{unlabeled
+  structures} by defining them as \emph{equivalence classes} of
+labeled structures under isomorphism. For example, the six labeled
+tree structures in \pref{fig:labeled-structures} are all elements of
+the same equivalence class (since for each pair of structures there
+exists a permutations $\sigma : [3] \to [3]$ sending one to the
+other), and together represent an unlabeled binary tree structure,
+which we may draw as in \pref{fig:unlabeled-trees}.
 
-\todo{picture here?  Note, using "dots"
-  works only for regular species.}
+\begin{figure}
+  \centering
+  \begin{diagram}[width=50]
+import Data.Tree
+import Diagrams.TwoD.Layout.Tree
+
+tree1 = Node () [Node () [], Node () []]
+
+dTree  = renderTree (const (circle 1 # fc black)) (~~)
+layout = symmLayout' with { slHSep = 4, slVSep = 3 }
+trees  = dTree . layout $ tree1
+
+dia = trees # centerXY # pad 1.1
+  \end{diagram}
+  %$
+  \caption{An unlabeled tree structure}
+  \label{fig:unlabeled-trees}
+\end{figure}
+
+\todo{add another unlabeled tree?}
+
+Although unlabeled structures formally consist of equivalence classes
+of labeled structures, we can informally think of them as normal
+structures built from ``indistinguishable labels''; for a given
+species $F$, there will be one unlabeled $F$-structure for each possible
+``shape'' that $F$-structures can take.
+
+However, one must be careful not to take this informal intuition too
+far.  For example, \pref{fig:unlabeled-cartesian} shows a $(\C \times
+(\E \sprod \E))$-structure of size $8$.  It is easy enough to
+\emph{draw} it using indistinguishable labels---but to describe it in
+a data structure still requires having some way to refer to individual
+labels (in order to specify which elements are selected by the
+superimposed subset structure). \todo{explain this more?}
+\begin{figure}
+  \centering
+  \begin{diagram}[width=150]
+import Species
+
+point' d = d <> drawSpN Hole # sizedAs (d # scale 1.3)
+
+dot :: Diagram Cairo R2
+dot = circle labR # fc black
+theDia = cyc' [dot, point' dot, point' dot, dot, dot, point' dot, dot,dot] 2
+
+dia = theDia # centerXY # pad 1.1
+  \end{diagram}
+  \caption{A $(\C \times (\E \sprod \E))$-structure}
+  \label{fig:unlabeled-cartesian}
+\end{figure}
 
 \subsection{Regular and non-regular species}
 \label{sec:regular}
+
+
 
 \begin{figure}
   \centering
@@ -914,6 +969,7 @@ beyond the scope of this proposal, but \todo{finish}
 Although it seems ``obvious'' that there is a deep connection between
 the theory of species and the theory of algebraic data types, care
 must be taken to state the precise nature of the relationship.
+
 
 \todo{type theory.  I conflate sets and types as convenient.  $0$ is
   void type.  $1$ is canonical 1-elt type (note there are many
