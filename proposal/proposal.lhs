@@ -18,6 +18,9 @@
 
 \renewcommand{\todo}[1]{\oldtodo{#1}}
 
+\newcommand{\fold}{\ensuremath{\mathit{fold}}}
+\newcommand{\map}{\ensuremath{\mathit{map}}}
+
 \title{Combinatorial Species and Algebraic Data Types \\ {\small Dissertation Proposal}}
 \author{Brent Yorgey}
 
@@ -41,10 +44,175 @@
 \section{Introduction}
 \label{sec:intro}
 
-The theory of \term{algebraic data types} XXX
+The theory of \term{algebraic data types} has had a profound impact on
+the practice of programming, especially in functional
+languages.  The basic idea is that types can be built up
+\term{algebraically} from a small set of primitive types and
+combinators: a unit type, base types, sums (\ie\ tagged unions),
+products (\ie\ tupling), and recursion.  Most languages with support
+for algebraic data types also add various bells and whistles for
+convenience (such as labeled products and sums, convenient syntax for
+defining types as a ``sum of products'', and pattern matching), but
+the basic idea is unchanged. 
+  % \scw{Could play up the practical aspects
+  % some more. We'll need to investigate how these aspects affect
+  % species when we do language design.} \bay{I learned from Jacques
+  % Carette (the idea is apparently originally from Bruno Salvy) how to
+  % model labeled sums using species -- in fact one can make an argument
+  % that they give a \emph{better} way to model what is really going on
+  % than the ADT point of view, which makes you forget about the labels.
+  % But I don't think it's worth talking about that in the proposal.}
 
-\todo{Talk generically about the theory of algebraic data types.  Give
-  some examples of the sorts of things we'd like to do.}
+For example, in Haskell~\cite{haskell} we can define a type of binary
+trees with integer values stored in the leaves as follows:
+\begin{code}
+data Tree  =  Leaf Int 
+           |  Branch Tree Tree
+\end{code}
+
+\newcommand{\Int}{\ensuremath{\mathsf{Int}}}
+
+Algebraically, we can think of this as defining a type $\mu T.\; \Int
++ T \times T$, where $\mu$ denotes a ``least fixed point'' operator.
+This description says that a |Tree| is either an |Int| (tagged with |Leaf|) or a
+pair of two recursive occurrences of |Trees| (tagged with |Branch|).
+
+This algebraic view of data leads to many benefits. From a theoretical
+point of view, recursive algebraic data types can be interpreted as
+\emph{initial algebras} (or \emph{final coalgebras}), which gives rise
+to an entire theory---both semantically elegant and practical---of
+programming with recursive data structures via \term{folds} and
+\term{unfolds} \cite{bananas, gibbons-calcfp}. A fold gives a principled way to compute a ``summary
+value'' from a data structure; dually, an unfold builds up a data
+structure from an initial ``seed value''.  For example, a fold for
+|Tree| can be implemented as
+\begin{code}
+treeFold :: (Int -> a) -> (a -> a -> a) -> Tree -> a
+treeFold f _ (Leaf i)     = f i
+treeFold f g (Branch l r) = g (treeFold f g l) (treeFold f g r)
+\end{code}
+The |treeFold| function captures the essential pattern of recursion
+over |Tree| data structures.  We can use |treeFold| to, say, compute
+the product of all the |Int| values stored in a tree:
+\begin{code}
+treeProd :: Tree -> Int
+treeProd = treeFold id (*)
+\end{code}
+Indeed, |treeFold| is \emph{universal} in the sense that anything we
+might wish to compute from a |Tree| can be accomplished with
+|treeFold|.  Such folds are guaranteed to exist for any algebraic data
+type---indeed, it is not hard to automatically generate the fold for a
+data type, given its algebraic description.  There are
+several Haskell libraries which can do this generation, including
+|derive|~\cite{derive} and |DrIFT|~\cite{DrIFT}. The Charity
+programming language~\cite{charity} was also designed so that all
+computation over inductive types was based on automatically-derived
+folds.
+
+Folds are ubiquitous---even languages without direct support for
+algebraic data types often make use of them.  For example, \emph{How
+  to Design Programs}~\cite[\S 9.4]{HTDP}, a popular introductory
+programming text using the Scheme (now Racket~\cite{racket})
+programming language, teaches students to write folds over recursive
+data types (although it does not use that terminology).  The
+\emph{visitor pattern}~\cite{GoF,palsberg:essence}, often used in
+object-oriented languages, can also be seen as a type of fold.
+
+Folds (and unfolds) satisfy many theorems which aid in transforming,
+optimizing, and reasoning about programs defined in terms of them.  As
+a simple example, a map (\ie\ applying the same function to every
+element of a container) followed by a fold can always be rewritten as
+a single fold. These laws, and others, allow Haskell compilers to
+eliminate intermediate data structures through an optimization called
+deforestation~\cite{Wadler:1988,Gill93ashort}.
+
+An algebraic view of data types also enables \term{datatype-generic
+  programming}---writing functions which operate generically over
+\emph{any} algebraic data type by examining its algebraic structure.
+For example, the following function (defined using Generic
+Haskell-like syntax~\cite{generic-haskell}) finds the product of all
+the |Int| values contained in a value of \emph{any} algebraic data
+type.  It gives the same result as |treeProd| on |Trees| but also
+works on lists or any other type.
+\begin{spec}
+genProd {| Int         |} i        = i
+genProd {| Sum t1 t2   |} (Inl x)  = genProd {| t1 |} x
+genProd {| Sum t1 t2   |} (Inr x)  = genProd {| t2 |} x
+genProd {| Prod t1 t2  |} (x,y)    = genProd {| t1 |} x * genProd {| t2 |} y
+genProd {| _           |} _        = 1
+\end{spec}
+Datatype-generic programming is a powerful technique for reducing boilerplate, made possible
+by the algebraic view of data types, and supported by many Haskell
+libraries and
+extensions~\cite{Jansson:PolyP,Lammel:SYB,Cheney:LIG,weirich:replib,weirich:erasure}.
+
+However, algebraic datatypes can only express types with tree-like
+structure. There are many such types, including tuples, records,
+options, variants, and lists, but this list does not include all
+common data structures. In particular, algebraic data types cannot
+directly represent data structures with \term{symmetry} or
+\term{sharing}.
+
+A data structure with \term{symmetry} is one whose elements can be
+permuted in certain ways without affecting its identity.  For example,
+permuting the elements of a bag always results in the same bag.
+Likewise, the elements of an ordered cycle may be cyclically permuted
+without affecting the cycle.  By contrast, the tree structure
+illustrated previously has no symmetry: any permutation of the
+elements results in a different tree.  In fact, every algebraic data
+structure has no symmetry. Every element in an algebraic structure can
+be uniquely identified by a \emph{path} from the root of the structure
+to the element, so permuting the elements always results in an
+observably different value.
+
+A data structure with \term{sharing} is one in which different parts
+of the structure may refer to the same subpart.  For example, consider
+the type of undirected, simple graphs, consisting of a set of vertices
+together with a set of edges connecting pairs of vertices.  In
+general, such graphs may involve sharing, since multiple edges may
+refer to the same vertex, and vice versa.
+
+In a language with first-class pointers, creating data structures with
+sharing is relatively easy, although writing correct programs that
+manipulate them may be another story. The same holds true in languages
+without first-class pointers. Creating data structures with sharing in
+the heap is not difficult in Haskell, but it may be difficult or even
+impossible to express the programs that manipulate them.  
+
+For example, in the following code,
+\begin{spec}
+t = let t3 = Leaf 1
+        t2 = Branch t3 t3
+        t1 = Branch t2 t2 
+    in Branch t1 t1
+\end{spec}
+only one ``Leaf'' and three ``Branch'' structures will be allocated in
+memory. The tree |t2| will be shared in the node |t1|, which will
+itself be shared in the node |t|.  Furthermore, in a lazy language
+such as Haskell, recursive ``knot-tying'' allows even cyclic
+structures to be created. For example,
+\begin{spec}
+nums = 1 : 2 : 3 : nums
+\end{spec}
+actually creates a cycle of three numbers in memory.  
+
+Semantically, however, |t| is a tree, not a dag, and |nums| is an
+infinite list, not a cycle.  It is impossible to observe the sharing
+(without resorting to compiler-specific
+tricks~\cite{Gill-2009-sharing}) in either of these examples. Even
+worse, applying standard functions such as |fold| and |map| destroys
+any sharing that might have been present and risks nontermination.
+
+When (as often) programmers wish to work with ``non-regular'' data
+types involving symmetry or sharing, they must instead work with
+suitable \emph{encodings} of them as regular data types.  For example,
+a bag may be represented as a list, or a graph as an adjacency matrix.
+However, this encoding puts extra burden on the programmer, both to ensure that
+invariants are maintained (\eg\ that the adjacency matrix for an
+undirected graph is always symmetric) and that functions respect
+abstract structure (\eg\ any function on bags should give the same
+result when given permutations of the same elements as inputs).
+
 
 The theory of \term{combinatorial species} was first described in 1981
 by Andr\'{e} Joyal~\cite{joyal} as a framework for understanding and
@@ -56,19 +224,21 @@ concerned with describing structures compositionally, but is much more
 general.
 
 Upon gaining even a passing familiarity with both subjects, one cannot
-help but be struck by obvious similarities.  However, there has yet to
-be a comprehensive treatment of the precise connections between the
-two. \todo{finish}
+help but be struck by obvious similarities.  \todo{e.g. algebraic
+  approach} However, there has yet to be a comprehensive treatment of
+the precise connections between the two. \todo{finish}
 
-\subsection{Goals and Outline}
+\todo{say something here about gf's etc.  Richer data types not the
+  only benefit.}
+
+\subsection{Goals and outline}
 \label{sec:goals}
 
 The overarching goal of the proposed research is to begin answering
 the question:
 \begin{quote}
   \textbf{What benefits can be derived from using the mathematical
-    theory of species as a foundational theory of data structures in
-    programming languages?}
+    theory of species as a foundational theory of data structures?}
 \end{quote}
 Answers to this question can take many forms.  What would a
 programming language with ``species types'' look like?  Can we use
@@ -228,7 +398,7 @@ $F[[n]]$) for the set of $F$-structures built from this set.
 % by functoriality every such function must be a bijection. \todo{is
 %   this really important to say?}
 
-\subsection{Building Species Algebraically}
+\subsection{Building species algebraically}
 \label{sec:building-species}
 
 The formal definition of species is wonderfully simple, but working
@@ -694,8 +864,8 @@ systems of implicit equations \[ \overline{\F_i = \Phi_i(F_1, \dots,
 
 \todo{say something about connection to $\mu$ operator, etc.?}
 
-\subsection{Equipotence and Isomorphism}
-\label{sec:unlabeled}
+\subsection{Equipotence and isomorphism}
+\label{sec:isomorphism}
 
 We say that two species $F$ and $G$ are \term{equipotent}, denoted $F
 \equiv G$, when there exists a family of bijections $\phi_U : F[U]
@@ -749,7 +919,7 @@ when there exists a relabeling taking one to the other.  That is, $f_1
 \in F[U]$ and $f_2 \in F[V]$ are isomorphic if and only if there is
 some $\sigma : U \bij V$ such that $F[\sigma](f_1) = f_2$.
 
-\subsection{Unlabeled Species}
+\subsection{Unlabeled species}
 \label{sec:unlabeled}
 
 Although the definition of species assures us that labels ``don't
@@ -877,7 +1047,7 @@ dia = drawSpT' mempty with t # pad 1.1
 
 \todo{non-regular, molecular species.}
 
-\subsection{Generating Functions}
+\subsection{Generating functions}
 \label{sec:gen-funcs}
 
 One of the most beautiful aspects of the algebraic theory of
