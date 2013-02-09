@@ -120,6 +120,7 @@
 (^|/)\.DS_Store$
 
 \.tex$
+\.ptb$
 (^|/)diagrams(/|$)
 .diagrams_cache
 Shake$
