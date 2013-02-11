@@ -1082,7 +1082,7 @@ dia = drawSpT' mempty with t # pad 1.1
 
 \todo{non-regular, molecular species.}
 
-\subsection{Generating functions}
+\subsection{Exponential generating functions}
 \label{sec:gen-funcs}
 
 One of the most beautiful aspects of the algebraic theory of
@@ -1102,11 +1102,11 @@ As an example, since there is a single \Sp{E}-structure on every label
 set, we have \[ \Bag(x) = \sum_{n \geq 0} \frac{x^n}{n!} = 1 + x +
 \frac x {2!} + \frac x {3!} + \dots = e^x. \]
 
-Going through the rest of the primitives, it is not hard to verify that
+Going through the rest of the primitives, one can verify that
 \begin{align*}
   \Zero(x) &= 0 \\
   \One(x)  &= 1 \\
-  \X(x)    &= x. \\
+  \X(x)    &= x.
 \end{align*}
 
 Since the number of $(F+G)$-structures on a given label set is the sum
@@ -1114,7 +1114,7 @@ of the number of $F$-structures and the number of $G$-structures, that
 is, $||(F+G)[n]|| = ||F[n]|| + ||G[n]||$, we have \[ (F+G)(x) =
 \sum_{n \geq 0} (f_n + g_n) \frac{x^n}{n!} = F(x) + G(x). \]
 
-We also have $(FG)(x) = F(x)G(x)$:
+We also have $(FG)(x) = F(x)G(x)$, which is worth verifying in detail:
 \begin{sproof}
   \stmt{F(x)G(x)}
   \reason{=}{definition}
@@ -1129,14 +1129,38 @@ We also have $(FG)(x) = F(x)G(x)$:
 \end{sproof}
 and we can confirm that the number of $FG$-structures on $n$ labels
 (that is, pairs of $F$- and $G$-structures with total size $n$) is
-indeed equal to \[ \sum_{0 \leq k \leq n} \binom{n}{k} f_k g_{n-k}. \]
-For each $0 \leq k \leq n$, we can distribute $k$ of the labels to the
+indeed equal to \[ \sum_{0 \leq k \leq n} \binom{n}{k} f_k g_{n-k} \]
+as follows (illustrated in \pref{fig:product-structures}): for
+each $0 \leq k \leq n$, we can distribute $k$ of the labels to the
 left side of the pair (and the remaining $n - k$ to the right) in
 $\binom n k$ ways; we then have $f_k$ choices of an $F$-structure to
 be the first element of the pair, and $g_{n-k}$ choices of
 $G$-structure for the second.
 
-In fact, it is also the case that
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import Diagrams.TwoD.Layout.Tree
+import Data.Tree
+
+tri = triangle 0.5 # scaleY 1.5 # alignT
+
+t = Node mempty [Node tri [], Node tri []]
+
+dia = renderTree id (~~) . symmLayout' with { slVSep = 0.5 } $ t
+  \end{diagram}
+  \caption{Building product structures}
+  \label{fig:product-structures}
+  %$
+\end{figure}
+\todo{add text to the above picture --- use diagrams-tikz?}
+
+The foregoing proof illustrates the combinatorial insight gained by
+examining the details of the mapping from species to generating
+functions.  Not only that, we can assign computational significance to
+\todo{finish}.
+
+In fact, the mapping extends still further: it is also the case that
 \begin{itemize}
 \item $(F\comp G)(x) = F(G(x))$
 \item $(F')(x) = (F(x))'$
@@ -1145,20 +1169,50 @@ In fact, it is also the case that
 A proof of the equation for derivative is straightforward.  The proof
 for composition is omitted from this proposal, but follows a similar
 (if somewhat more complicated) pattern as the proof for products
-above.  There are similar equations for other operations such as
-Cartesian product and functor composition.
+above, and can similarly be viewed computationally to derive a
+procedure for enumerating structures from a composition.  There are
+similar equations for other operations such as Cartesian product and
+functor composition.
+
+In other words, the mapping from species to egfs is a
+\term{homomorphism} preserving much of the algebraic structure we care
+about.  This means that an algebraic description of a species can
+easily and mechanically be turned into a recipe for computing the
+corresponding generating function.  It also means that we can take
+implicit species equations such as $\L = \One + \X \sprod \L$ and
+apply the homomorphism to both sides, yielding $\L(x) = 1 + x\L(x)$,
+which can be solved to obtain the closed form $\L(x) = 1/(1-x)$.  In
+many cases this leads to asymptotically faster methods for computing
+the generating function than simply unrolling the underlying
+recurrence. \todo{is there more to it than this?  Newton-Raphson,
+  etc.}
+
+The applications of generating functions are numerous:
+\begin{enumerate}
+\item They can be used to conduct asymptotic analysis of algorithms
+  making use of the corresponding structures \cite{AC}
+\item They can be used to enable fast random generation of structures
+  according to desirable distributions \cite{boltzmann, darasse}.
+\item \todo{more?}
+\end{enumerate}
+\todo{forward reference to species library}
+
+\subsection{Other generating functions}
+\label{sec:other-gfs}
 
 To each species we can also associate an \term{ordinary generating
   function} (ogf), \[ \unl{F}(x) = \sum_{n \geq 0} \unl{f}_n x^n, \]
 where $\unl{f}_n$ denotes the number of \emph{unlabeled}
-$F$-structures (that is, the number of equivalence classes of
-isomorphic $F$-structures).  The mapping from species to ogfs
-preserves addition, multiplication, and derivative, just as for egfs,
-but does \emph{not} preserve composition.  To compute the ogf for a
-composed species we can use yet a third type of generating function,
-the \term{cycle index series}, which tracks not just sizes of
-structures but also information about their symmetry.  The details are
-beyond the scope of this proposal, but \todo{finish}
+$F$-structures, that is, the number of equivalence classes of
+isomorphic $F$-structures.  Just as with egfs, the mapping from
+species to ogfs preserves addition, multiplication, and derivative,
+but unlike egfs, it does \emph{not} preserve composition.  To compute
+the ogf for a composed species we can use yet a third type of
+generating function, the \term{cycle index series}, which tracks not
+just sizes of structures but also information about their symmetry.
+The details are beyond the scope of this proposal, but I plan to
+include the details---and a computational interpretation thereof---in
+my final document.
 
 \section{Species as Data Types}
 \label{sec:species-as-data-types}
@@ -1175,11 +1229,28 @@ Although it seems ``obvious'' that there is a deep connection between
 the theory of species and the theory of algebraic data types, care
 must be taken to state the precise nature of the relationship.
 
+\subsection{Preliminaries}
+\label{sec:prelim}
 
-\todo{type theory.  I conflate sets and types as convenient.  $0$ is
-  void type.  $1$ is canonical 1-elt type (note there are many
-  $1$-element sets.  Note we use $\Sigma U: Set...$ and also $\sum_U
-  ...$}
+\newcommand{\pair}[2]{\ensuremath{\left\langle #1, #2 \right\rangle}}
+
+I will make use of a standard presentation of Martin-L\"of type
+theory. In particular, the collection of types includes
+\begin{itemize}
+\item the void type, $\bot$
+\item the unit type, $\top$
+\item When $A$ and $B$ are types, $A + B$ is the sum type formed by
+  the tagged union of $A$ and $B$.
+\item Dependent sum types are denoted $\Sigma x:A. B(x)$, whose values
+  are written $\pair{a}{b}$.  When $A$ is clear from context, we
+  sometimes write $\Sigma x. B(x)$.  When $B$ does not depend on $x$
+  we write $A \times B$ as an abbreviation for $\Sigma x:A. B$.
+\item Dependent function types are denoted $\Pi x:A. B(x)$, whose
+  values are written $\lambda x. b$.  When $B$ does not depend on $x$
+  we write $A \to B$ as an abbreviation for $\Pi x:A. B$.
+\end{itemize}
+
+\todo{We freely mix sets and types as convenient.}
 
 A \term{relation} $R$ over a set $X$ is a set of pairs $R \subseteq
 X^2$.  We write $a \mathbin{R} b$ if $(a,b) \in R$.  An
@@ -1259,12 +1330,13 @@ are otherwise identical.
 
 Formally, for a given species expression $S$ and type $A$, we define a
 relation
-\[ \seqv S A \subseteq (\Sigma U : Set. \spe{S}[U] \times (U \to A))^2 \]
-as follows: $(U, (s, f)) \sim_{S,A} (V, (t, g))$ if and only if there
-exists some $\sigma : U \bij V$ such that \[ t =
-\spe{S}[\sigma](s) \] and \[ g = f \comp \sigma^{-1}. \] \todo{explain, give
-  examples} It is not hard to show that $\seqv S A$ is an equivalence,
-using properties of bijections and the functoriality of $\spe S$:
+\[ \seqv S A \subseteq \pset{(\Sigma U : Set. \spe{S}[U] \times (U \to
+  A))^2} \] as follows: $(U, (s, f)) \sim_{S,A} (V, (t, g))$ if and
+only if there exists some $\sigma : U \bij V$ such that \[ t =
+\spe{S}[\sigma](s) \] and \[ g = f \comp \sigma^{-1}. \]
+\todo{explain, give examples} We must show that $\seqv S A$ is an
+equivalence, using properties of bijections and the functoriality of
+$\spe S$:
 \begin{itemize}
 \item For reflexivity, we take $\sigma = id$, noting that $f = f \comp
   id = f \comp id^{-1}$, and $s = \spe{S}[id](s)$
@@ -1362,6 +1434,25 @@ simplified.  A full treatment will include some extra features:
 \subsection{Eliminators for species types}
 \label{sec:eliminators}
 
+Standard type theory derives a generic \term{eliminator} for each type
+which describes the computation principle by which values of that type
+may be ``discharged'', \ie\ used in the service of computing some
+other value.  If species are to be used as a foundation for data types
+then we must be able to explain how to eliminate values of the
+resulting types.
+
+To see what is interesting about this we extend our universe of
+species expressions to include ``non-regular'' species: 
+  \begin{align*}
+    S & ::= \dots \\
+      & \mid \X^n/\H_n
+  \end{align*}
+Here $n$ is a natural number and $\H$ is a finite group of order $n$.
+$\spe{\X^n/\H_n}[U]$ is the set of length-$n$ sequences $\X^n[U]$,
+quotiented by the \term{action} of $\H_n$.  That is, two sequences
+$y,z \in \X^n[U]$ are considered equivalent if there is some $\sigma
+\in \H_n$ (considered as a \todo{foozle}) such that \todo{finish}.
+
 Every nonempty species is isomorphic to
 \begin{itemize}
 \item the unit species,
@@ -1417,7 +1508,7 @@ Every nonempty species is isomorphic to
     dia = (d1 ||-|| elimArrow ||-|| d2) # pad 1.05
   \end{diagram}
 
-\todo{import stuff from WG 2.8 talk}
+\todo{finish importing stuff from WG 2.8 talk}
 
 \section{The \pkg{species} library}
 \label{sec:species-library}
@@ -1430,6 +1521,8 @@ combinatorial species~\cite{yorgey}.  Its features include
 \item enumerating all structures of a given species ordered by size
 \item automatically derive species corresponding to user-defined data types
 \end{itemize}
+
+\todo{give examples of use}
 
 However, there are many features that could yet be added. \todo{talk
   about what some of these features are.}
@@ -1475,6 +1568,12 @@ species and computer science~\cite{FlSa95,
   FlajoletSalvyZimmermann1989a}.
 
 Keck work.
+
+Duregard.
+
+Darrasse.
+
+Sedgewick + Flajolet, AoA + AC
 
 \section{Timeline and Conclusion}
 \label{sec:timeline}
