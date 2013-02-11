@@ -18,6 +18,8 @@
 
 \renewcommand{\todo}[1]{\oldtodo{#1}}
 
+\graphicspath{{images/}}
+
 \newcommand{\fold}{\ensuremath{\mathit{fold}}}
 \newcommand{\map}{\ensuremath{\mathit{map}}}
 
@@ -213,7 +215,6 @@ undirected graph is always symmetric) and that functions respect
 abstract structure (\eg\ any function on bags should give the same
 result when given permutations of the same elements as inputs).
 
-
 The theory of \term{combinatorial species} was first described in 1981
 by Andr\'{e} Joyal~\cite{joyal} as a framework for understanding and
 unifying much of \term{enumerative combinatorics}, the branch of
@@ -223,10 +224,12 @@ mathematicians. Like the theory of algebraic data types, it is also
 concerned with describing structures compositionally, but is much more
 general.
 
-Upon gaining even a passing familiarity with both subjects, one cannot
-help but be struck by obvious similarities.  \todo{e.g. algebraic
-  approach} However, there has yet to be a comprehensive treatment of
-the precise connections between the two. \todo{finish}
+Upon gaining even a passing familiarity with both algebraic data types
+and combinatorial species, one cannot help but be struck by obvious
+similarities in the algebraic approaches to describing structures
+(though it is clear that species are much more general). However,
+there has yet to be a comprehensive treatment of the precise
+connections between the two. \todo{finish}
 
 \todo{say something here about gf's etc.  Richer data types not the
   only benefit.}
@@ -246,14 +249,15 @@ species theory as a tool for working with existing algebraic data
 types?  Specifically, the contributions of the proposed research are
 threefold:
 \begin{enumerate}
-\item I see myself primarily as a \emph{teacher} and secondarily as a
-  researcher.  For this reason, a significant part of the proposed
-  work will consist in presenting relevant parts of the theory of
-  species in a way that is accessible to others in the programming
-  languages community. The existing literature on species and recent
-  related developments~\cite{BLL,keck} are relatively inaccessible to
-  PL researchers, since they assume an extensive mathematical
-  background and motivations that many PL researchers do not have.
+\item A significant part of the proposed work will consist in
+  presenting relevant parts of the theory of species in a way that is
+  accessible to others in the programming languages community. This
+  will be a significant contribution: the existing literature on
+  species and recent related developments~\cite{BLL,keck} are fairly
+  inaccessible to PL researchers since they assume an extensive
+  mathematical background and motivations that many PL researchers do
+  not have.  My strong background in mathematics and experience in
+  teaching and writing make me an ideal \todo{finish this sentence?}
 
   I have begun a series of blog posts \cite{blog posts} which will
   form the basis for this presentation; \pref{sec:species} contains an
@@ -262,7 +266,10 @@ threefold:
 \item The second goal is to lay the theoretical groundwork for
   understanding species as a foundation for data types.  That is, if
   one wanted to design a programming language with ``species types''
-  from the ground up, upon what theory could it be based?
+  from the ground up---if one was to take the theory of species as the
+  starting point rather than the theory of algebraic data types---what
+  would it look like, and how would one understand the implementation
+  from a theoretical point of view?
   Section~\ref{sec:species-as-data-types} presents some preliminary
   results in this direction and lays out a roadmap for the remaining
   theory to be developed.
@@ -280,14 +287,12 @@ threefold:
 \label{sec:species}
 
 \todo{talk about cardinality restriction somewhere?}
-\todo{talk about algebraic laws}
-\todo{mention identity elements for operations}
 
-\todo{This isn't really the goal, at least it wasn't the original goal!}
-The goal of species is to have a unified theory of \emph{structures}, or
-\emph{containers}. By a \emph{structure} we mean some sort of ``shape''
-containing \emph{locations} (or \emph{positions}). Here are two
-different structures, each with eight locations:
+The theory if species is a unified theory of \emph{structures}, or as
+a programmer might say, \emph{containers}. By a \emph{structure} we
+mean some sort of ``shape'' containing \emph{locations} (or
+\emph{positions}). \pref{fig:example-structures} shows two different
+structures, each with eight locations:
 
 \begin{figure}
 \centering
@@ -300,16 +305,15 @@ dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
 \caption{Example structures} \label{fig:example-structures}
 \end{figure}
 
-One thing that's important to get straight from the beginning is that
-we are talking about structures with \emph{labeled locations}. The
-\textbf{numbers in \pref{fig:example-structures} are \emph{not} data}
-being stored in the structures, but \emph{names} or \emph{labels} for
-the locations.  To talk about a \emph{data structure} (\emph{i.e.} a
-structure filled with data), we must also specify a mapping from
-locations to data, like $\{ 0 \mapsto \texttt{'s'}, 1 \mapsto
-\texttt{'p'}, 2 \mapsto \texttt{'e'} \dots \}$, as shown
-in~\pref{fig:shape-data}.  This will be made more precise
-in~\pref{sec:species-types}.
+It is very important to note that we are talking about structures with
+\emph{labeled locations}; the numbers in \pref{fig:example-structures}
+are \emph{not} data being stored in the structures, but \emph{names}
+or \emph{labels} for the locations.  To talk about a \emph{data
+  structure} (\ie\ a structure filled with data), we must also
+specify a mapping from locations to data, like $\{ 0 \mapsto
+\texttt{'s'}, 1 \mapsto \texttt{'p'}, 2 \mapsto \texttt{'e'} \dots
+\}$, as shown in~\pref{fig:shape-data}.  This will be made more
+precise in~\pref{sec:species-types}.
 
 \begin{figure}
 \centering
@@ -338,35 +342,47 @@ One useful intuition is to think of the labels as \emph{memory
   addresses}, which point off to some location where a data value is
 stored. This intuition has some particularly interesting consequences
 when it comes to operations like Cartesian product and functor
-composition---explained in~\pref{sec:XXX}---since it gives us a way to
-model sharing (albeit only in limited ways).
+composition---explained in~\pref{sec:operations}---since it gives us a
+way to model sharing (albeit only in limited ways).
 
 Why have labels at all? In the tree shown
 in~\pref{fig:example-structures}, we can uniquely identify each
 location by a path from the root of the tree, without referencing
-labels at all. However, the other structure illustrates one reason why
-labels are needed. The circle is supposed to indicate that the
-structure has \emph{rotational symmetry}, so there would be no way to
-uniquely refer to any location other than by giving them labels.
+labels at all. However, the structure on the left illustrates one
+reason labels are needed. The circle is supposed to indicate that
+the structure has \emph{rotational symmetry}, so there would be no way
+to uniquely refer to any location other than by giving them labels.
 
 \subsection{Definition}
 \label{sec:species-definition}
 
 \begin{defn}
-A \term{species} $F$ is a pair of mappings which \todo{cite Joyal + BLL}
+A \term{species} $F$ is a pair of mappings which
 \begin{itemize}
 \item sends any finite set $U$ (of \term{labels}) to a finite set
   $F[U]$ (of \term{structures}), and
 \item sends any bijection on finite sets $\sigma : U \bij V$ (a
-  \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$,
+  \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$
+  (illustrated in \pref{fig:relabeling}),
 \end{itemize}
-satisfying the following conditions:
+satisfying the following functoriality conditions:
 \begin{itemize}
 \item $F[id_U] = id_{F[U]}$, and
 \item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
 \end{itemize}
 
+This definition is due to Joyal \cite{joyal}, as described in BLL
+\cite{BLL}.
 \end{defn}
+
+\begin{figure}
+  \centering
+  \includegraphics{relabeling}
+  \caption{Relabeling}
+  \label{fig:relabeling}
+\end{figure}
+
+\todo{redraw this with diagrams}
 
 Using the language of category theory, this definition can be pithily
 summed up by saying that ``a species is a functor from $\B$ to
@@ -379,6 +395,19 @@ labels drawn from $U$'', or simply ``$F$-structures on $U$'', or even
 (when $U$ is clear from context) just ``$F$-structures''.  $F[\sigma]$
 is called the ``transport of $\sigma$ along $F$'', or sometimes the
 ``relabeling of $F$-structures by $\sigma$''.
+
+To make this more concrete, consider a few examples:
+\begin{itemize}
+\item The species of \emph{lists} (or \emph{linear orderings}) sends
+  every set of labels (of size $n$) to the set of all sequences (of
+  size $n!$) containing each label exactly once.  \todo{draw a
+    picture}.
+
+\item The species of \emph{(rooted, ordered) binary trees}
+  \todo{finish}
+
+\item The species of \emph{series-parallel graphs} \todo{finish}
+\end{itemize}
 
 The functoriality of relabeling means that the actual labels used
 don't matter; we get ``the same structures'', up to relabeling, for
@@ -397,6 +426,67 @@ $F[[n]]$) for the set of $F$-structures built from this set.
 % : U \bij V$ to a \emph{function} $F[\sigma] : F[U] \to F[V]$, in fact,
 % by functoriality every such function must be a bijection. \todo{is
 %   this really important to say?}
+
+\subsection{Equipotence and isomorphism}
+\label{sec:isomorphism}
+
+\begin{defn}
+We say that two species $F$ and $G$ are \term{equipotent}, denoted $F
+\equiv G$, when there exists a family of bijections $\phi_U : F[U]
+\bij G[U]$, that is, there are the same number of $F$- and
+$G$-structures of each size.  
+\end{defn}
+Although this notion is occasionally useful, it is rather weak.  More
+useful is the notion of species \term{isomorphism}:
+\begin{defn}
+  Species $F$ and $G$ are isomorphic, denoted $F \cong G$, precisely
+  when they are \term{naturally isomorphic} as functors; that is, when
+  there exists a family of bijections \[ \phi_U : F[U] \bij G[U] \]
+  which moreover \term{commute with relabeling}: that is, $\phi_V
+  \comp F[\sigma] = G[\sigma] \comp \phi_U$ for all $\sigma : U \bij
+  V$, as illustrated by the commutative diagram in~\pref{fig:nat-iso}.
+\begin{figure}
+\centerline{
+\xymatrix{
+F[U] \ar[r]^{\phi_U} \ar[d]_{F[\sigma]} & G[U] \ar[d]^{G[\sigma]} \\
+F[V] \ar[r]_{\phi_V} & G[V]
+}
+}
+  \caption{Natural isomorphism between species}
+  \label{fig:nat-iso}
+\end{figure}  
+\end{defn}
+% For example, $\X + (\X + \X)$ and $\Sp{3} \sprod \X$ are isomorphic, as witnessed by
+% the mapping
+% \begin{align*}
+%   \inl(u) &\bij (0, u) \\
+%   \inr(\inl(u)) &\bij (1,u) \\
+%   \inr(\inr(u)) &\bij (2,u)
+% \end{align*}
+% \todo{is there a more perspicuous way to write the above?}
+% which commutes with relabeling since there is always exactly one label
+% to modify.
+
+For example, the species of rooted, ordered binary trees and the
+species of $n$-ary (``rose'') trees are isomorphic, since \todo{finish
+  explaining}.
+
+As an example of species which are equipotent but not isomorphic,
+consider the species $\L$ of linear orderings (\ie\ lists) and the
+species $\S$ of permutations.  It is well-known that the number of
+linear orderings and the number of permutations of $n$ distinct labels
+are both $n!$.  However, there is no way to set up a family of
+bijections that respects relabeling: any list can be sent to any other
+by an appropriate relabeling, but there is no way to send (say) a
+permutation with two cycles to a permutation with three cycles just by
+relabeling.
+
+\todo{draw picture here of relabeling lists and cycles}
+
+We say that two \emph{structures} of a given species are isomorphic
+when there exists a relabeling taking one to the other.  That is, $f_1
+\in F[U]$ and $f_2 \in F[V]$ are isomorphic if and only if there is
+some $\sigma : U \bij V$ such that $F[\sigma](f_1) = f_2$.
 
 \subsection{Building species algebraically}
 \label{sec:building-species}
@@ -864,61 +954,6 @@ systems of implicit equations \[ \overline{\F_i = \Phi_i(F_1, \dots,
 
 \todo{say something about connection to $\mu$ operator, etc.?}
 
-\subsection{Equipotence and isomorphism}
-\label{sec:isomorphism}
-
-We say that two species $F$ and $G$ are \term{equipotent}, denoted $F
-\equiv G$, when there exists a family of bijections $\phi_U : F[U]
-\bij G[U]$, that is, there are the same number of $F$- and
-$G$-structures of each size.  Although this notion is occasionally
-useful, it is rather weak.  More useful is the notion of species
-\term{isomorphism}: $F$ and $G$ are isomorphic, denoted $F \cong G$,
-precisely when they are \term{naturally isomorphic} as functors; that
-is, when there exists a family of bijections \[ \phi_U : F[U] \bij
-G[U] \] which moreover commute with relabeling. By ``commute with
-relabeling'', we mean that for all $\sigma : U \bij V, \phi_V \comp
-F[\sigma] = G[\sigma] \comp \phi_U$, as illustrated by the commutative
-diagram in~\pref{fig:nat-iso}.
-\begin{figure}
-\centerline{
-\xymatrix{
-F[U] \ar[r]^{\phi_U} \ar[d]_{F[\sigma]} & G[U] \ar[d]^{G[\sigma]} \\
-F[V] \ar[r]_{\phi_V} & G[V]
-}
-}
-  \caption{Natural isomorphism between species}
-  \label{fig:nat-iso}
-\end{figure}
-For example, $\X + (\X + \X)$ and $\Sp{3} \sprod \X$ are isomorphic, as witnessed by
-the mapping
-\begin{align*}
-  \inl(u) &\bij (0, u) \\
-  \inr(\inl(u)) &\bij (1,u) \\
-  \inr(\inr(u)) &\bij (2,u)
-\end{align*}
-\todo{is there a more perspicuous way to write the above?}
-which commutes with relabeling since there is always exactly one label
-to modify.
-
-\todo{write about other algebraic laws that hold up to isomorphism}
-
-As an example of species which are equipotent but not isomorphic,
-consider the species $\L$ of linear orderings (\ie\ lists) and the
-species $\S$ of permutations.  It is well-known that the number of
-linear orderings and the number of permutations of $n$ distinct labels
-are both $n!$.  However, there is no way to set up a family of
-bijections that respects relabeling: any list can be sent to any other
-by an appropriate relabeling, but there is no way to send (say) a
-permutation with two cycles to a permutation with three cycles just by
-relabeling.
-
-\todo{draw picture here of relabeling lists and cycles}
-
-We say that two \emph{structures} of a given species are isomorphic
-when there exists a relabeling taking one to the other.  That is, $f_1
-\in F[U]$ and $f_2 \in F[V]$ are isomorphic if and only if there is
-some $\sigma : U \bij V$ such that $F[\sigma](f_1) = f_2$.
-
 \subsection{Unlabeled species}
 \label{sec:unlabeled}
 
@@ -1280,7 +1315,7 @@ label sets with the use of the canonical label set $[n]$:
 \end{lem}
 Intuitively, including many different label sets of size $n$ does not
 add any information; considering only the canonical label set of each
-size is enough.  This lemma can be proved formally by noting that $|U|
+size is enough.  This lemma can be proved formally by noting that $||U||
 = n$ if and only if there exists a bijection $\sigma : U \bij [n]$, so
 every equivalence class on the left-hand side is a superset of one on
 the right.
