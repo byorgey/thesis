@@ -2,6 +2,8 @@
 
 \documentclass{article}
 
+\usepackage{showkeys}
+
 %include polycode.fmt
 
 \usepackage[outputdir=diagrams/]{diagrams-latex}
@@ -22,6 +24,12 @@
 
 \newcommand{\fold}{\ensuremath{\mathit{fold}}}
 \newcommand{\map}{\ensuremath{\mathit{map}}}
+
+\newcommand{\spe}[1]{\ensuremath{\langle #1 \rangle}}
+\newcommand{\ty}[2]{\ensuremath{\llbracket #1 \rrbracket}\ #2}
+\newcommand{\seqv}[2]{\mathord{\sim_{#1,#2}}}
+
+\newcommand{\elim}[3]{#2 \stackrel{#1}{\twoheadrightarrow} #3}
 
 \title{Combinatorial Species and Algebraic Data Types \\ {\small Dissertation Proposal}}
 \author{Brent Yorgey}
@@ -472,14 +480,21 @@ species of $n$-ary (``rose'') trees are isomorphic, since \todo{finish
   explaining}.
 
 As an example of species which are equipotent but not isomorphic,
-consider the species $\L$ of linear orderings (\ie\ lists) and the
-species $\S$ of permutations.  It is well-known that the number of
-linear orderings and the number of permutations of $n$ distinct labels
-are both $n!$.  However, there is no way to set up a family of
-bijections that respects relabeling: any list can be sent to any other
-by an appropriate relabeling, but there is no way to send (say) a
-permutation with two cycles to a permutation with three cycles just by
-relabeling.
+consider the species $\L$ of lists and the species $\S$ of
+permutations.  It is well-known that the number of linear orderings
+and the number of permutations of $n$ distinct labels are both $n!$.
+However, there is no way to set up a family of bijections between them
+which respect relabeling: put simply, any two lists of length $n$ are
+related by some relabeling, but not all permutations of size $n$ are.
+More specifically, pick two non-isomorphic permutations built on the
+same set of labels---say, pick one consisting of a single cycle and
+one consisting of two disjoint cycles.  These permutation structures
+must map to some list structures under the family of bijections.  But
+those two list structures must be related by some relabeling, and
+hence the family of bijections does not commute with
+relabeling. \pref{fig:equipotent-not-iso} illustrates the situation
+diagrammatically.  \todo{why is this interesting/important for
+  thinking about data types?}
 
 \todo{draw picture here of relabeling lists and cycles}
 
@@ -492,8 +507,8 @@ some $\sigma : U \bij V$ such that $F[\sigma](f_1) = f_2$.
 \label{sec:building-species}
 
 The formal definition of species is wonderfully simple, but working
-directly with the definition in practice does not get one very far.
-Instead, we use an algebraic theory that lets us compositionally build
+directly with the definition does not get one very far in practice.
+Instead, we use an algebraic theory that allows compositionally building
 a wide variety of species from a collection of primitive species and
 operations on species. It's important to note that it does \emph{not}
 allow us to build \emph{all} species, but it does allow us to build
@@ -512,8 +527,6 @@ out of which more complex species can be composed.
   \Zero[U] &= \varnothing \\
   \Zero[\sigma : U \bij V] &= id_{\varnothing} : \Zero[U] \to \Zero[V].
   \end{align*}
-  Of course, $\Zero$ is the identity element for
-  the sum operation on species (defined in~\pref{sec:sum}).
 
 \paragraph{One}
   The \emph{unit} species, denoted $\One$, is defined by
@@ -523,18 +536,20 @@ out of which more complex species can be composed.
     \varnothing & \text{otherwise}
   \end{cases}
   \]
-  That is, there is a unique $\One$-structure indexed by the empty
-  set of labels, and no $\One$-structures with any positive number
-  of labels. $\One$ lifts bijections in the obvious way, sending
-  every bijection to the appropriate identity function.
+  That is, there is a unique $\One$-structure indexed by the empty set
+  of labels, and no $\One$-structures with any nonzero number of
+  labels. $\One$ lifts bijections in the obvious way, sending every
+  bijection to the appropriate identity function.  Of course, one
+  should also verify that this definition satisfies the requisite
+  functoriality properties, which is not difficult.
 
-  Some people initially find this definition surprising, expecting
-  something like $\One[U] = \{ \star \}$ for all $U$ instead. That
-  is indeed a valid species, and we will meet it below; but as I hope
-  you will come to see, it doesn't deserve the name $\One$.
-
-  Of course, one should also verify that this definition satisfies the
-  requisite functoriality properties, which is not difficult.
+  Some initially find this definition surprising, instead expecting
+  something like $\One[U] = \{ \star \}$ for all $U$. (That
+  is indeed a valid species, and we will meet it below.)  In a sense,
+  the reason for the surprising definition of $\One$ is the surprising
+  definition of product, explained in \pref{sec:operations}, which in
+  turn is surprising precisely because of the fact that species are
+  indexed by size (whereas usual data types are not).
 
   More abstractly, it's worth mentioning that $\One$ can be defined as
   $\mathbb{B}(\emptyset, -) : \mathbb{B} \to \mathbb{E}$, that is, the
@@ -544,9 +559,6 @@ out of which more complex species can be composed.
   \leftrightarrow \emptyset$ and no bijections $\emptyset
   \leftrightarrow U$ for nonempty $U$, thus giving rise to the
   definition above.
-
-  As expected, $\One$ is the identity element for the operation of
-  species product, defined in~\pref{sec:product}.
 
 %   \begin{figure}
 %     \centering
@@ -567,8 +579,7 @@ out of which more complex species can be composed.
   \]
   with lifting of bijections defined in the evident manner. That is,
   there is a single $\X$-structure on a label set of size $1$
-  (which we identify with the label itself, though we could have also
-  defined $\X[U] = \{\star\}$ when $||U|| = 1$), and no
+  (which we identify with the label itself), and no
   $\X$-structures indexed by any other number of labels.
 %   \begin{figure}
 %     \centering
@@ -589,12 +600,19 @@ out of which more complex species can be composed.
   The species of \emph{bags}\footnote{The species literature calls
     this the species of \emph{sets}, but that's misleading to computer
     scientists, who expect the word ``set'' to imply that elements
-    cannot be repeated.}, denoted $\Bag$, is defined by \[ \Bag[U] =
+    cannot be repeated. The \emph{labels} in a bag structure cannot be
+  repeated, but nothing stops us from mapping labels to data elements
+  in a non-injective way.}, denoted $\Bag$, is defined by \[ \Bag[U] =
   \{U\}, \] that is, there is a single $\Bag$-structure on any set of
   labels $U$, which we usually identify with the set of labels itself
   (although we could equivalently define $\Bag[U] = \{\star\}$). The
   idea is that an $\Bag$-structure consists solely of a collection of
   labels, with no imposed ordering whatsoever.
+
+  $\E$ is precisely the species mentioned previously which people
+  na\"ively expect as the definition of $\One$.  In fact, $\E$ is
+  indeed the identity element for a product-like operation,
+  \term{Cartesian product}, to be discussed below.
 
 As a summary, \pref{fig:prims} contains a graphic showing
 $\Zero$-, $\One$-, $\X$-, and
@@ -625,13 +643,16 @@ dia =
   \label{fig:prims}
 \end{figure}
 
-\todo{There are others, in fact it is possible to give a complete
-  classification.}
+There are other primitive species, some of which we will encounter
+later.  In fact, it is possible to give a complete classification of
+primitive species (for a suitably formal notion of ``primitive'')---it
+is beyond the scope of this proposal, though relevant XXX
 
 \subsubsection{Operations}
 \label{sec:operations}
 
-\todo{Say something general about operations here.}
+We now turn to \emph{operations} that can be used to compose more
+complex species from simpler ones.
 
 \paragraph{Sum}
   The \term{sum} of two species $F + G$ is a disjoint
@@ -644,12 +665,6 @@ dia =
     (F+G)[\sigma](\inl(f)) &= \inl(F[\sigma](f)) \\
     (F+G)[\sigma](\inr(g)) &= \inr(G[\sigma](g)).
   \end{align*}
-
-  $\Zero$ is the identity element for species sum,
-  though only up to isomorphism (defined in~\pref{sec:unlabeled}).
-  Intuitively, if one has either a $\Zero$-structure or an
-  $F$-structure, one must in fact have an $F$-structure, since
-  $\Zero$-structures do not exist.
 
   \begin{figure}
     \centering
@@ -682,6 +697,12 @@ dia = theDia # centerXY # pad 1.1
   containing a label, along with a tag indicating which.  This
   corresponds to the standard |Maybe| type in Haskell.
 
+  Up to isomorphism, $\Zero$ is the identity element for sum.
+  Intuitively, if one has either a $\Zero$-structure or an
+  $F$-structure, one must in fact have an $F$-structure, since
+  $\Zero$-structures do not exist.  Sum is also associative and
+  commutative up to isomorphism.
+
   The species $\One + \One$ has precisely two distinct structures,
   $\inl(\star)$ and $\inr(\star)$.  In general, there are $n$ distinct
   structures of the species $\underbrace{\One + \dots + \One}_n$,
@@ -700,12 +721,12 @@ dia = theDia # centerXY # pad 1.1
   copies of every label.
 
   Instead, to make an $(F \sprod G)$-structure on $U$, we first
-  \emph{split} $U$ into two disjoint subsets $U_1$ and $U_2$ (that is,
+  \emph{split} $U$ into two disjoint subsets $U_1$ and $U_2$ (with
   $U_1 \cup U_2 = U$ and $U_1 \cap U_2 = \varnothing$), and then pair
-  an $F$-structure on $U_1$ with a $G$-structure on $U_2$.  We get the
-  set of \emph{all} $(F \sprod G)$-structures by doing this in all
-  possible ways.  More formally, \[ (F \sprod G)[U] = \sum_{U_1 \uplus
-    U_2 = U} F[U_1] \times G[U_2]. \]
+  an $F$-structure on $U_1$ with a $G$-structure on $U_2$.  The set of
+  \emph{all} $(F \sprod G)$-structures is obtained by doing this in
+  all possible ways.  More formally, \[ (F \sprod G)[U] = \sum_{U_1
+    \uplus U_2 = U} F[U_1] \times G[U_2]. \]
 
   \begin{figure}
     \centering
@@ -775,18 +796,23 @@ dia = theDia # centerXY # pad 1.1
   and so on) work exactly as expected; in fact, we get an entire copy
   of the natural numbers $\N$ embedded inside species as a subring.
 
+  All the usual algebraic laws hold up to isomorphism: $\One$ is the
+  identity element for product, $\Zero$ is an annihilator; product is
+  associative and commutative and distributes over sum.
+
 \paragraph{Composition}
 The \term{composition} $F \comp G$ of two species $F$ and $G$,
-intuitively, creates ``$F$-structures of $G$-structures''.  Formally,
-to create an $(F \comp G)$-structure over a given set of labels $U$,
-we first \emph{partition} $U$ into some number of nonempty subsets;
-create a $G$-structure over each subset; then create an $F$-structure
+intuitively, creates ``$F$-structures of $G$-structures''. To create
+an $(F \comp G)$-structure over a given set of labels $U$, we first
+\emph{partition} $U$ into some number of nonempty subsets; create a
+$G$-structure over each subset; then create an $F$-structure
 \emph{over the resulting set of $G$-structures}.  Doing this in all
-possible ways yields the complete set of $(F \comp
-G)$-structures over $U$. Formally,
-  \[ (F \comp G)[U] = \sum_{\pi \in \Par[U]} F[\pi] \times \prod_{p
-    \in \pi} G[p]. \]
-\pref{fig:composition} shows an abstract representation of the definition.
+possible ways yields the complete set of $(F \comp G)$-structures over
+$U$. Formally,
+\[ (F \comp G)[U] = \sum_{\pi \in \Par[U]} F[\pi] \times \prod_{p \in
+  \pi} G[p]. \] where $\Par$ denotes the species of partitions.
+\pref{fig:composition} shows an abstract representation of the
+definition.
 
   \begin{figure}
     \centering
@@ -815,7 +841,13 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:composition}
   \end{figure}
 
-\todo{examples}
+  \todo{examples: $\Par = \E_+ \comp \E$. Perfect trees. Others? Say
+    something about how this is particularly interesting since
+    composition is usually not treated in discussions of algebraic
+    data types.}
+
+Up to isomorphism, $\X$ is the identity element for composition.
+Composition also satisfies \todo{list some algebraic laws?}
 
 \paragraph{Derivative}
 
@@ -1051,8 +1083,6 @@ dia = theDia # centerXY # pad 1.1
 \subsection{Regular and non-regular species}
 \label{sec:regular}
 
-
-
 \begin{figure}
   \centering
   \begin{diagram}[width=75]
@@ -1197,7 +1227,7 @@ The applications of generating functions are numerous:
 \end{enumerate}
 \todo{forward reference to species library}
 
-\subsection{Other generating functions}
+\subsection{Other generating functions and applications}
 \label{sec:other-gfs}
 
 To each species we can also associate an \term{ordinary generating
@@ -1214,6 +1244,9 @@ The details are beyond the scope of this proposal, but I plan to
 include the details---and a computational interpretation thereof---in
 my final document.
 
+\todo{write something about applications of generating functions:
+  algorithm analysis, random generation.}
+
 \section{Species as Data Types}
 \label{sec:species-as-data-types}
 
@@ -1227,7 +1260,12 @@ my final document.
 
 Although it seems ``obvious'' that there is a deep connection between
 the theory of species and the theory of algebraic data types, care
-must be taken to state the precise nature of the relationship.
+must be taken to state the precise nature of the relationship.  I
+propose to lay out a foundational theory for types based on species,
+their eliminators, and generic programming techniques.  In this
+proposal I report on some preliminary results and give a roadmap for
+what remains to be accomplished.
+
 
 \subsection{Preliminaries}
 \label{sec:prelim}
@@ -1239,6 +1277,7 @@ theory. In particular, the collection of types includes
 \begin{itemize}
 \item the void type, $\bot$
 \item the unit type, $\top$
+\item a distinguished type $\Set$
 \item When $A$ and $B$ are types, $A + B$ is the sum type formed by
   the tagged union of $A$ and $B$.
 \item Dependent sum types are denoted $\Sigma x:A. B(x)$, whose values
@@ -1247,10 +1286,9 @@ theory. In particular, the collection of types includes
   we write $A \times B$ as an abbreviation for $\Sigma x:A. B$.
 \item Dependent function types are denoted $\Pi x:A. B(x)$, whose
   values are written $\lambda x. b$.  When $B$ does not depend on $x$
-  we write $A \to B$ as an abbreviation for $\Pi x:A. B$.
+  we write $A \to B$ as an abbreviation for $\Pi x:A. B$.  We also
+  write $\forall A. B$ as an abbreviation for $\Pi A:\Set. B$.
 \end{itemize}
-
-\todo{We freely mix sets and types as convenient.}
 
 A \term{relation} $R$ over a set $X$ is a set of pairs $R \subseteq
 X^2$.  We write $a \mathbin{R} b$ if $(a,b) \in R$.  An
@@ -1291,21 +1329,20 @@ only regular species and no recursion. \todo{improve?}
   \label{fig:universe}
 \end{figure}
 
-\newcommand{\spe}[1]{\ensuremath{\langle #1 \rangle}}
-
 We can interpret these expressions as species, that is, as functors
-$\B \to \E$ as described in previous sections.  We will write
-$\spe{S}$ to denote the functor $\B \to \E$ corresponding to the
+$\B \to \E$ as described in \pref{sec:building-species}.  We will
+write $\spe{S}$ to denote the functor $\B \to \E$ corresponding to the
 species expression $S$.  But we can also straightforwardly interpret
 them as type constructors, as shown in \pref{fig:type-constructors}.
-
-\newcommand{\ty}[2]{\ensuremath{\llbracket #1 \rrbracket}\ #2}
+The principal difference between the two interpretations is that $\ty
+S A$ does not take the size of $A$ into account, whereas $\spe{S}[U]$
+is indexed by the size of $U$. \todo{phrase this more accurately}
 
 \begin{figure}
   \centering
   \begin{align*}
-  \ty{\Zero} A &= 0 \\
-  \ty{\One} A &= 1 \\
+  \ty{\Zero} A &= \bot \\
+  \ty{\One} A &= \top \\
   \ty{\X} A &= A \\
   \ty{F+G} A &= \ty{F} A + \ty{G} A \\
   \ty{F \sprod G} A &= \ty F A \times \ty G A \\
@@ -1321,12 +1358,12 @@ containing no data, with labels drawn from $U$, whereas elements of
 $\ty{S}{A}$ are data structures containing data elements of type $A$.
 Thus, we must pair structures of $\spe{S}[U]$ with functions of type
 $U \to A$ to describe the mapping of locations to data.  However,
-these structures now include ``too much'' information; in particular
+such pairings include ``too much'' information; in particular,
 the precise labels used should not matter, so we need to quotient out
 by an equivalence relating structures which use different labels but
 are otherwise identical.
 
-\newcommand{\seqv}[2]{\mathord{\sim_{#1,#2}}}
+\todo{include a picture explaining the idea informally}
 
 Formally, for a given species expression $S$ and type $A$, we define a
 relation
@@ -1334,24 +1371,26 @@ relation
   A))^2} \] as follows: $(U, (s, f)) \sim_{S,A} (V, (t, g))$ if and
 only if there exists some $\sigma : U \bij V$ such that \[ t =
 \spe{S}[\sigma](s) \] and \[ g = f \comp \sigma^{-1}. \]
-\todo{explain, give examples} We must show that $\seqv S A$ is an
-equivalence, using properties of bijections and the functoriality of
-$\spe S$:
-\begin{itemize}
-\item For reflexivity, we take $\sigma = id$, noting that $f = f \comp
-  id = f \comp id^{-1}$, and $s = \spe{S}[id](s)$
-  by functoriality of $\spe S$.
-\item For symmetry, suppose $t = \spe{S}[\sigma](s)$ and $g = f
-  \comp \sigma^{-1}$.  Then $s = \spe{S}[\sigma^{-1}](t) =
-  (\spe{S}[\sigma])^{-1}(t)$ by functoriality, and $f = g \comp
-  (\sigma^{-1})^{-1} = g \comp \sigma$.
+\todo{explain, give examples} 
 
-\item For transitivity, if $(s,f)$ is related to $(t,g)$ by $\sigma$
-  and $(t,g)$ to $(u,h)$ by $\tau$, then as expected $(s,f)$ is
-  related to $(u,h)$ by $\tau \comp \sigma$.  The relation of $f$ to
-  $h$ can be seen by simple substitution; the relation of $s$ to $u$
-  follows again from the functoriality of $\spe S$.
-\end{itemize}
+% We must show that $\seqv S A$ is an
+% equivalence, using properties of bijections and the functoriality of
+% $\spe S$:
+% \begin{itemize}
+% \item For reflexivity, we take $\sigma = id$, noting that $f = f \comp
+%   id = f \comp id^{-1}$, and $s = \spe{S}[id](s)$
+%   by functoriality of $\spe S$.
+% \item For symmetry, suppose $t = \spe{S}[\sigma](s)$ and $g = f
+%   \comp \sigma^{-1}$.  Then $s = \spe{S}[\sigma^{-1}](t) =
+%   (\spe{S}[\sigma])^{-1}(t)$ by functoriality, and $f = g \comp
+%   (\sigma^{-1})^{-1} = g \comp \sigma$.
+
+% \item For transitivity, if $(s,f)$ is related to $(t,g)$ by $\sigma$
+%   and $(t,g)$ to $(u,h)$ by $\tau$, then as expected $(s,f)$ is
+%   related to $(u,h)$ by $\tau \comp \sigma$.  The relation of $f$ to
+%   $h$ can be seen by simple substitution; the relation of $s$ to $u$
+%   follows again from the functoriality of $\spe S$.
+% \end{itemize}
 
 Given this, we can finally state the main theorem expressing the
 precise connection between types and species:
@@ -1361,22 +1400,22 @@ precise connection between types and species:
   / \seqv S A. \]
 \end{thm}
 
-\begin{proof}
-The proof is by induction on the structure of species expressions.
-\begin{itemize}
-\item When $S = \Zero$, both sides are trivially isomorphic to the empty
-  type $0$.
-\item When $S = \One$, the sum on the right-hand side collapses to
-  $\spe{\One}[\varnothing] \times (\varnothing \to A) \cong 1 \times 1
-  \cong 1$.
-\item When $S = \X$, \todo{finish}
-\item When $S = S_1 + S_2$, \todo{finish.  Need lemma about sums of
-    quotients?}
-\item When $S = S_1 \sprod S_2$, \todo{finish}
-\item When $S = S_1 \comp S_2$, \todo{finish}
-\end{itemize}
+% \begin{proof}
+% The proof is by induction on the structure of species expressions.
+% \begin{itemize}
+% \item When $S = \Zero$, both sides are trivially isomorphic to the empty
+%   type $0$.
+% \item When $S = \One$, the sum on the right-hand side collapses to
+%   $\spe{\One}[\varnothing] \times (\varnothing \to A) \cong 1 \times 1
+%   \cong 1$.
+% \item When $S = \X$, \todo{finish}
+% \item When $S = S_1 + S_2$, \todo{finish.  Need lemma about sums of
+%     quotients?}
+% \item When $S = S_1 \sprod S_2$, \todo{finish}
+% \item When $S = S_1 \comp S_2$, \todo{finish}
+% \end{itemize}
 
-\end{proof}
+% \end{proof}
 
 We also have the following lemma, connecting the use of arbitrary
 label sets with the use of the canonical label set $[n]$:
@@ -1441,47 +1480,111 @@ other value.  If species are to be used as a foundation for data types
 then we must be able to explain how to eliminate values of the
 resulting types.
 
-To see what is interesting about this we extend our universe of
-species expressions to include ``non-regular'' species: 
+Specifically, we can define a (non-dependent) eliminator for the
+species expression $S$ as a function of type \[ \forall A B. (\elim S A B)
+\to \ty S A
+\to B, \] where $(\elim S A B)$, to be defined below, denotes the type
+of the arguments which must be provided to the eliminator.
+Intuitively, $(\elim S A B)$ should be isomorphic to $\ty S A \to B$:
+the forward direction is given by the eliminator itself, and the
+backwards direction corresponds to the idea that we want to be able to
+express every function of type $\ty S A \to B$ as an application of
+the eliminator for $S$.
+
+So far, our universe only contains species expressions whose type
+interpretations are usual algebraic data types; we already know how to
+construct eliminators for such types in a type-directed way, using
+``high school algebra'' laws for exponents
+\cite{hinze-reason-isomorphically}. \pref{fig:ADT-eliminators} can be
+regarded as a recursive \emph{definition} of the eliminator
+corresponding to any algebraic species expression.
+\begin{figure}
+  \centering
+  \begin{center}
+    \begin{tabular}{ccc}
+      $\elim \Zero A B$ & $=$ & $\top$ \\
+      $\elim \One A B$ & $=$ & $B$ \\
+      $\elim \X A B$ & $=$ & $A \to B$ \\
+      $\elim{F+G} A B$ & $=$ & $(\elim F A B) \times (\elim G A B)$ \\
+      $\elim{F \sprod G} A B$ & $=$ & $\elim F A {(\elim G A B)}$ \\
+      $\elim{F \comp G} A B$ & $=$ & $\elim F {(\ty G A)} B$
+    \end{tabular}
+  \end{center}  
+  \caption{Eliminators for algebraic types}
+  \label{fig:ADT-eliminators}
+\end{figure}
+
+% Note that if we continue the construction for composition
+% recursively we eventually reach X, where we get  [[G]] A -> B which
+% is actually isomorphic to A -G->> B.
+
+So far, we have seen nothing new.  However, the promise of this work
+is to be able to base types on species which do \emph{not} correspond
+to any algebraic data type. Consider adding the following new
+production to the grammar of species expressions, representing
+\emph{molecular species}:
   \begin{align*}
     S & ::= \dots \\
       & \mid \X^n/\H_n
   \end{align*}
-Here $n$ is a natural number and $\H$ is a finite group of order $n$.
-$\spe{\X^n/\H_n}[U]$ is the set of length-$n$ sequences $\X^n[U]$,
-quotiented by the \term{action} of $\H_n$.  That is, two sequences
-$y,z \in \X^n[U]$ are considered equivalent if there is some $\sigma
-\in \H_n$ (considered as a \todo{foozle}) such that \todo{finish}.
+  Here $n$ is a natural
+  number and $\H_n$ is a finite group of order $n$.
+  $\spe{\X^n/\H_n}[U]$ is the set of length-$n$ sequences $\X^n[U]$,
+  quotiented by the \term{action} of $\H_n$.  That is, two sequences
+  $y,z \in \X^n[U]$ are considered equivalent if there is some $\sigma
+  \in \H_n$ (considered as a permutation on $[n]$) such that $z =
+  \sigma y$, where $\sigma$ acts on $y$ by permuting its elements.
+  Here are a few examples:
 
-Every nonempty species is isomorphic to
 \begin{itemize}
-\item the unit species,
-\item a sum,
-\item a product,
-\item or an \emph{atomic} species $X^n/\mathcal{H}$ 
-  \begin{itemize}
-  \item (where $\mathcal{H}$ acts transitively on $\{0, \dots,
-    n-1\}$).
-  \end{itemize}
+\item Let $Z_n$ denote be the cyclic group of order $n$.  Then
+$\X^n/Z_n$ denotes the species of size-$n$ cycles, $\Sp{C}_n$: any two lists are
+equivalent if they are related by a rotation.
+
+\item As another example, if $\S_n$ is the symmetric group containing
+  all possible permutations on $n$, $\X^n/\S_n$ denotes the species of
+  size-$n$ bags, $\Bag_n$.
 \end{itemize}
 
-  So we can build eliminators in a type-directed way, using ``high
-  school algebra'' laws for exponents:
-  \begin{center}
-    \begin{tabular}{ccc}
-      $1[A] \to B$ & $\cong$ & $B$ \\
-      \\
-      $X[A] \to B$ & $\cong$ & $A \to B$ \\
-      \\
-      $(F+G)[A] \to B$ & $\cong$ & $(F[A] \to B) \times (G[A] \to B)$ \\
-      \\
-      $(F \cdot G)[A] \to B$ & $\cong$ & $F[A] \to (G[A] \to B)$ \\
-      \\
-      $(X^n/\mathcal{H})[A] \to B$ & $\cong$ & $\Sigma f : X^n \to B. \Pi \sigma \in \mathcal{H}. f = f \circ \sigma$
-    \end{tabular}
-  \end{center}
+There are still many interesting species we cannot express, but this
+addition gets at the crux of the matter.  The difficulty is that
+\todo{should not be able to observe stuff quotiented by symmetry}
 
-  Pointing \emph{breaks symmetry}.
+We can translate our intiution directly into a type for eliminators
+for $\X^n/\H_n$ as follows:
+\[ \elim{X^n/\H_n} A B \quad = \quad \Sigma f : \elim{X^n} A B.\ \Pi
+\sigma \in \H.\ f = f \circ \sigma \] That is, to use an eliminator
+for $\X^n/\H_n$, one must provide a way to eliminate $\X^n$,
+\emph{paired with a proof} that the provided function respects the
+symmetries imposed by $\H_n$; that is, permuting the list by one of
+the allowed symmetries does not change the result of the provided
+function.
+
+\todo{how to implement this: actual proof in dep. typed language;
+  randomized testing; theorem prover; etc.}
+
+% Every nonempty species is isomorphic to
+% \begin{itemize}
+% \item the unit species,
+% \item a sum,
+% \item a product,
+% \item or an \emph{atomic} species $X^n/\mathcal{H}$ 
+%   \begin{itemize}
+%   \item (where $\mathcal{H}$ acts transitively on $\{0, \dots,
+%     n-1\}$).
+%   \end{itemize}
+% \end{itemize}
+
+\subsection{An alternative approach to eliminators}
+\label{sec:elim-alternative}
+
+In this section I outline a possible alternative approach to
+eliminators for species with symmetries, which also lends itself to
+some nice programming constructs beyond eliminators.
+
+Consider the \term{pointing} operator \todo{finish}
+
+Pointing \emph{breaks symmetry}.
 
   \begin{diagram}[width=250]
     import Species
@@ -1508,7 +1611,60 @@ Every nonempty species is isomorphic to
     dia = (d1 ||-|| elimArrow ||-|| d2) # pad 1.05
   \end{diagram}
 
-\todo{finish importing stuff from WG 2.8 talk}
+  \begin{diagram}[width=300]
+    import Species
+    c = Cyc [lab 0, lab 2, lab 3]
+    d1 = draw c
+    d2 = draw (down c)
+    d3 = draw (Cyc (replicate 3 d4))
+    d4 :: Diagram Cairo R2
+    d4 = square 1 # fc purple
+    x ||/|| y = x |||||| strutX 0.5 |||||| y
+    t s = (text s <> strutY 1.3) # scale 0.5
+    dia = (d1 ||/||
+               arrow 1 (t "χ") ||/|| 
+           d2 ||/||
+               arrow 1 (t "F e'") ||/||
+           d3 ||/||
+               arrow 1 (t "δ") ||/||
+           d4
+          ) 
+          # pad 1.05    
+  \end{diagram}
+
+  \begin{diagram}[width=300]
+    import Species
+    c = Cyc (map lab' [blue, red, yellow])
+    d1 = draw c
+    d2 = draw (down c)
+    d3 = draw (fmap firstTwo (down c))
+    d4 = draw (Cyc (map lab' [purple, orange, green]))
+    firstTwo = map unPoint . take 2 . dropWhile isPlain . cycle . getCyc
+    isPlain (Plain x) = True
+    isPlain _         = False
+    unPoint (Plain x) = x
+    unPoint (Pointed x) = x
+    t s = (text s <> strutY 1.3) # scale 0.5
+    x ||/|| y = x |||||| strutX 0.5 |||||| y
+    infixl 6 ||/||
+    dia = (
+          ( d1 ||/||
+              arrow 1 (t "χ") ||/||
+            d2 ||/||
+              arrow 3 (t "F (id × head)" # scale 0.8)
+          )
+          ===
+          strutY 1
+          ===
+          ( square 1 # lw 0 ||/||
+            d3 ||/||
+              arrow 1 (t "F ⊕") ||/||
+            d4
+          )
+
+          )
+          # pad 1.05
+  \end{diagram}
 
 \section{The \pkg{species} library}
 \label{sec:species-library}
@@ -1549,18 +1705,101 @@ proposed research.
 \section{Related Work}
 \label{sec:related}
 
-The idea of decomposing data structures as shapes with locations
-combined with data is not unique to species. In the computer science
-community, the idea goes back, I think, to Jay and Cockett (1994) in
-their work on ``shapely types'' (their ``locations'' are always
-essentially natural numbers, since they work in terms of shapes and
-\emph{lists} of data) and more recently Abbott, Altenkirch, and Ghani
-(2003) with their definition of ``containers'' (which, like the theory
-of species, has a much more general notion of locations). However, it
-should be noted that the literature on species never actually talks
-about mappings from labels to data: combinatorialists don't care about
-data structures, they only care about structures! \todo{format this
-  properly} \todo{also mention references from JG}
+\paragraph{Species and computer science}
+
+Flajolet, Salvy, and Zimmermann were some of the first to point out
+connections between species and computer science \cite{FlSa95,
+  FlajoletSalvyZimmermann1989a}.  Their work is now packaged as part
+of the \emph{combstruct} library for
+Maple~\cite{combstruct}. This library can achieve some
+impressive results, but since it is only available within a
+proprietary system with a dynamically typed language, it is neither
+widely available nor easily portable to other languages.
+
+The most closely related work is that of Carette and
+Uszkay~\cite{Carette_Uszkay_2008_species}, who also see the potential
+of species as a framework to extend the usual notion of algebraic data
+types.  They describe some preliminary work adding species types to
+Haskell, but it seems their work has not yet progressed very far.  Our
+project plans to encompass their work and extend it in many directions.
+
+\paragraph{Extending algebraic data types}
+
+The idea of decomposing container types into shapes combined with data
+can be found in the work of Jay and Cockett~\cite{jay-shapely}. They
+define \term{shapely types} as a categorical framework for
+understanding and working with container types that can be decomposed
+in this way.  However, their framework cannot account for data types
+with symmetry. Abbott \etal\ also give a formal categorical account of
+\term{containers}~\cite{abbott_categories_2003}, a generalization of
+shapely types, and later extended their work to the notion of a
+\term{quotient container} \cite{abbott_quotient}, consisting of an
+algebraic data type ``quotiented'' by some symmetries.  A fold over a
+quotient container is thus a normal fold paired with a \emph{proof}
+that the fold respects the quotient symmetries. It seems there are
+strong connections with the theory of species, especially given the
+molecular decomposition theorem, but these connections have not been
+explored.  We would like to formalize the connection between species
+and quotient containers, to bring insights from the work on quotient
+containers to bear on species and vice versa.
+
+Declaratively specifying \emph{sharing} in data structures has been
+explored by Aiken \etal~\cite{aiken-2010-fusion}. In that work,
+mutable data structures are specified as relations between data values,
+and a language of indices describes the mapping from the relational
+specification of a data structure to its physical layout.  In the
+specific context of Haskell, Gill shows how it is possible to observe
+sharing using special facilities provided by the Glasgow Haskell
+Compiler~\cite{Gill-2009-sharing}.  These two approaches liberates
+programmers from the difficulties of programming with pointers, but
+otherwise does not not help with the problem of writing algorithms
+that work over such structures.
+
+Abel has implemented \emph{sized types}~\cite{abel-2010-miniagda} for the
+dependently typed programming language Agda.  Such types have a rather
+different goal than our proposed work on ``sized data types'': they
+are a tool for termination checking, rather than a way to statically
+track the size of containers.  Still, there may be some interesting
+connections.
+
+Atanassow and Jeuring explore the idea of automatically deriving
+isomorphisms between types by making use of the theory of
+\term{canonical isomorphisms}~\cite{Atanassow-2007-iso-inference}.  In
+particular, they derive isomorphisms between user-defined data types
+and the internal \emph{representation types} used by a generic
+programming framework.  This allows converting between any two types
+by converting to a representation type and back.  However, their
+framework does not give the user much freedom in determining how the
+isomorphism work; we envision a somewhat more flexible framework.
+
+\paragraph{Testing}
+
+Some early work on random generation is by Flajolet and Cutsem, who
+describe a general algorithmic framework for random generation of a
+certain subclass of labeled species~\cite{Flajolet-1994-random}.
+Later Duchon \etal\ introduced \term{Boltzmann
+  sampling}~\cite{Duchon-2002-Boltzmann, duchon-2004-boltzmann},
+giving a faster way to do \emph{approximate} random generation (which
+is sufficient for many applications, such as testing).  Boltzmann
+sampling has been implemented in OCaml by Canou and
+Darasse~\cite{ocaml-random-gen}, although only for algebraic data
+types rather than for species types in general.  Moreover, there is
+very recent work by Pivoteau, Salvy, and
+Soria~\cite{pivoteau-11-algorithms} extending these techniques, which
+as far as we know has not yet been incorporated into any real-world
+testing framework.
+
+In his masters thesis~\cite{agata}, Dureg{\r a}rd gives a careful
+analysis of the distribution of recursive data structures generated by
+naive QuickCheck generators, and explains the design of Agata, a
+compositional framework for constructing random generators with
+various desirable properties. However, the methods provided by Agata
+for controlling generator distributions are somewhat ad-hoc, and do
+not come with any sort of mathematical guarantees.  They are better
+than the naive methods but still require considerable case-by-case
+hand tuning.
+
+Duregard Haskell Symposium.  gencheck.
 
 
 point out connections between the theory of
@@ -1569,15 +1808,9 @@ species and computer science~\cite{FlSa95,
 
 Keck work.
 
-Duregard.
-
-Darrasse.
-
 Sedgewick + Flajolet, AoA + AC
 
 \section{Timeline and Conclusion}
 \label{sec:timeline}
-
-
 
 \end{document}
