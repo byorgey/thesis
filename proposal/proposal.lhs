@@ -31,6 +31,8 @@
 
 \newcommand{\elim}[3]{#2 \stackrel{#1}{\twoheadrightarrow} #3}
 
+\newcommand{\down}{\chi}
+
 \title{Combinatorial Species and Algebraic Data Types \\ {\small Dissertation Proposal}}
 \author{Brent Yorgey}
 
@@ -1547,21 +1549,44 @@ equivalent if they are related by a rotation.
 \end{itemize}
 
 There are still many interesting species we cannot express, but this
-addition gets at the crux of the matter.  The difficulty is that
-\todo{should not be able to observe stuff quotiented by symmetry}
+addition gets at the crux of the matter.  The data elements of any
+data structure must ultimately be stored in some particular order in
+memory; hence, for structures with nontrivial symmetry (\eg\
+$\X^n/\H_n$ where $\H_n$ is anything other than the trivial group),
+there will necessarily exist multiple distinct representations of the
+same logical structure (\ie\ the same equivalence class of
+structures).  We might think to get around this by always choosing
+some canonical representative of each class (for example, always
+storing a cycle of integers as a list with the smallest element
+first), but this depends on properties of the elements, such as the
+existence of a linear order relation, which may not always hold.  The
+important point is that \emph{eliminators should not be able to
+  observe the difference} between distinct representations of the same
+logical structure.  If one uses, say, a cycle data structure, the
+result of the program should not depend on precisely which element
+happens to be stored first, and one would like the compiler's help in
+ensuring this property holds.
 
-We can translate our intiution directly into a type for eliminators
-for $\X^n/\H_n$ as follows:
-\[ \elim{X^n/\H_n} A B \quad = \quad \Sigma f : \elim{X^n} A B.\ \Pi
-\sigma \in \H.\ f = f \circ \sigma \] That is, to use an eliminator
-for $\X^n/\H_n$, one must provide a way to eliminate $\X^n$,
-\emph{paired with a proof} that the provided function respects the
-symmetries imposed by $\H_n$; that is, permuting the list by one of
-the allowed symmetries does not change the result of the provided
-function.
+We can translate this intiution directly into a type for eliminators
+for $\X^n/\H_n$ as follows: \[ \elim{X^n/\H_n} A B \quad = \quad
+\Sigma f : \elim{X^n} A B.\ \Pi \sigma \in \H.\ f = f \circ \sigma \]
+That is, to use an eliminator for $\X^n/\H_n$, one must provide a way
+to eliminate $\X^n$, \emph{paired with a proof} that the provided
+function respects the symmetries imposed by $\H_n$; that is, permuting
+the list by one of the allowed symmetries does not change the result
+of the provided function.
 
-\todo{how to implement this: actual proof in dep. typed language;
-  randomized testing; theorem prover; etc.}
+Implementing this in an actual programming language may take one of
+several forms.  In a total, dependently typed language such as
+Agda~\cite{agda} or Coq~\cite{coq}, an eliminator could literally
+require a proof as an argument.  In other languages with a less
+expressive type system, \todo{finish}
+
+ \todo{how to implement this: actual
+  proof in dep. typed language; randomized testing; theorem prover;
+  etc.}
+
+\todo{talk about what I PROPOSE to do.}
 
 % Every nonempty species is isomorphic to
 % \begin{itemize}
@@ -1582,35 +1607,57 @@ In this section I outline a possible alternative approach to
 eliminators for species with symmetries, which also lends itself to
 some nice programming constructs beyond eliminators.
 
-Consider the \term{pointing} operator \todo{finish}
+Recall the \term{pointing} operation on species, defined by \[ \pt F =
+\X \sprod F'. \] A key observation is that for species with symmetry,
+pointing always \emph{breaks some symmetry}. \todo{explain more?}
+Since symmetry is what causes problems \todo{finish}
 
-Pointing \emph{breaks symmetry}.
+Of course, it would be cheating to just apply an operation
+\[ \pt{(-)} : \ty F A \to \ty {\pt{F}} A \]---or rather, such an
+operation cannot exist---for exactly the same reason that symmetry
+causes problems in the first place. If $F$ has any symmetry, then
+there may not be a canonical choice for the element to ``point''.  In
+fact, there will be a canonical choice only for \emph{regular}
+(non-symmetric) species---exactly the case we are not concerned about.
 
-  \begin{diagram}[width=250]
-    import Species
-    f   = drawSpT (nd (text "F") (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
-    fpt = drawSpT (nd (text "F") (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
+  % \begin{diagram}[width=250]
+  %   import Species
+  %   f   = drawSpT (nd (txt "F") (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
+  %   fpt = drawSpT (nd (txt "F") (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
 
-    dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||) 
-  \end{diagram}
+  %   dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||) # centerXY # pad 1.1
+  % \end{diagram}
 
-  \[ \pt{(-)} : F \to \pt{F} ? \]
+However, all is not lost: Peter Hancock's ``cursor down'' operator
+\cite{hancock} (which I will denote $\down$) gets around the problem
+of having no canonical choice of element by simultaneously choosing
+every element: \[ \down : \ty F A \to \ty {F \comp \pt{F}} A \]
+Intuitively, it works by ``decorating each point with its context'':
+that is, it replaces each data element in the structure with a copy of
+the entire structure in which that data element has been
+pointed. \pref{fig:cursor-down} illustrates applying $\down$ to a
+cycle of three elements, resulting in a cycle of pointed cycles.
 
-  \emph{Only} for polynomials!
-
-\newcommand{\down}{\chi}
-
-  \dots but Peter Hancock's ``cursor down'' operator \cite{hancock} is fine: \[ \down
-  : F \to F \pt{F} \]
-
+\begin{figure}
+  \centering
   \begin{diagram}[width=300]
     import Species
     c = Cyc [lab 0, lab 2, lab 3]
     d1 = draw c
     d2 = draw (down c)
-    dia = (d1 ||-|| elimArrow ||-|| d2) # pad 1.05
-  \end{diagram}
+    t s = (text s <> strutY 1.3) # scale 0.5
+    dia = (d1 ||-|| arrow 2 (t "χ") ||-|| d2) # pad 1.05
+  \end{diagram}  
+  \caption{The cursor down operator}
+  \label{fig:cursor-down}
+\end{figure}
 
+\todo{write about how eliminator works. \pref{fig:elim-cursor-down}.
+  Note this doesn't make sense computationally.  But might give some
+  interesting insight.  Connection between this and previous section?}
+
+\begin{figure}
+  \centering
   \begin{diagram}[width=300]
     import Species
     c = Cyc [lab 0, lab 2, lab 3]
@@ -1630,8 +1677,16 @@ Pointing \emph{breaks symmetry}.
            d4
           ) 
           # pad 1.05    
-  \end{diagram}
+  \end{diagram}  
+  \caption{Eliminating with $\down$}
+  \label{fig:elim-cursor-down}
+\end{figure}
 
+\todo{write about other stuff we can do with $\down$.  Explain
+  \pref{fig:computing-cursor-down}.}
+
+\begin{figure}
+  \centering
   \begin{diagram}[width=300]
     import Species
     c = Cyc (map lab' [blue, red, yellow])
@@ -1665,6 +1720,9 @@ Pointing \emph{breaks symmetry}.
           )
           # pad 1.05
   \end{diagram}
+  \caption{Computing with $\down$}
+  \label{fig:computing-cursor-down}
+\end{figure}
 
 \section{The \pkg{species} library}
 \label{sec:species-library}
