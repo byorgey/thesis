@@ -4,6 +4,7 @@ import Development.Shake.FilePath
 lhs2TeX  = "lhs2TeX"
 pdflatex = "pdflatex"
 rubber   = "rubber"
+bibtex   = "bibtex"
 
 main = shake shakeOptions $ do
 
@@ -16,6 +17,7 @@ main = shake shakeOptions $ do
 
     "*.pdf" *> \output -> do
         let input = replaceExtension output "tex"
-        need [input, "Diagrams.hs"]
+        need [input, "Diagrams.hs", "species.bib"]
         system' pdflatex $ ["--enable-write18", input]
+        system' bibtex $ [dropExtension input]
         system' pdflatex $ ["--enable-write18", input]

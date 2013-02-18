@@ -8,7 +8,8 @@
 
 \usepackage[outputdir=diagrams/]{diagrams-latex}
 
-\usepackage{hyperref}
+\usepackage{url}
+% \usepackage{hyperref}
 \usepackage[textsize=footnotesize,backgroundcolor=blue!20,linecolor=blue]{todonotes}
 \usepackage{natbib}
 \usepackage[all]{xy}
@@ -26,7 +27,8 @@
 \newcommand{\map}{\ensuremath{\mathit{map}}}
 
 \newcommand{\spe}[1]{\ensuremath{\langle #1 \rangle}}
-\newcommand{\ty}[2]{\ensuremath{\llbracket #1 \rrbracket}\ #2}
+\newcommand{\bbr}[1]{\ensuremath{\llbracket #1 \rrbracket}}
+\newcommand{\ty}[2]{\bbr{#1}\ #2}
 \newcommand{\seqv}[2]{\mathord{\sim_{#1,#2}}}
 
 \newcommand{\elim}[3]{#2 \stackrel{#1}{\twoheadrightarrow} #3}
@@ -75,7 +77,7 @@ the basic idea is unchanged.
   % than the ADT point of view, which makes you forget about the labels.
   % But I don't think it's worth talking about that in the proposal.}
 
-For example, in Haskell~\cite{haskell} we can define a type of binary
+For example, in Haskell~\citep{haskell} we can define a type of binary
 trees with integer values stored in the leaves as follows:
 \begin{code}
 data Tree  =  Leaf Int 
@@ -84,24 +86,26 @@ data Tree  =  Leaf Int
 
 \newcommand{\Int}{\ensuremath{\mathsf{Int}}}
 
-Algebraically, we can think of this as defining a type $\mu T.\; \Int
-+ T \times T$, where $\mu$ denotes a ``least fixed point'' operator.
+Algebraically, we can think of this as defining the type which is the
+least solution to the equation $T = \Int
++ T \times T$.
 This description says that a |Tree| is either an |Int| (tagged with |Leaf|) or a
 pair of two recursive occurrences of |Trees| (tagged with |Branch|).
 
-This algebraic view of data leads to many benefits. From a theoretical
-point of view, recursive algebraic data types can be interpreted as
-\emph{initial algebras} (or \emph{final coalgebras}), which gives rise
-to an entire theory---both semantically elegant and practical---of
-programming with recursive data structures via \term{folds} and
-\term{unfolds} \cite{bananas, gibbons-calcfp}. A fold gives a principled way to compute a ``summary
-value'' from a data structure; dually, an unfold builds up a data
-structure from an initial ``seed value''.  For example, a fold for
-|Tree| can be implemented as
+This algebraic view of data types has many benefits. From a
+theoretical point of view, recursive algebraic data types can be
+interpreted as \emph{initial algebras} (or \emph{final coalgebras}),
+which gives rise to an entire theory---both semantically elegant and
+practical---of programming with recursive data structures via
+\term{folds} and \term{unfolds} \citep{bananas, gibbons-calcfp}. A fold
+gives a principled way to compute a ``summary value'' from a data
+structure; dually, an unfold builds up a data structure from an
+initial ``seed value''.  For example, a fold for |Tree| can be
+implemented as
 \begin{code}
 treeFold :: (Int -> a) -> (a -> a -> a) -> Tree -> a
-treeFold f _ (Leaf i)     = f i
-treeFold f g (Branch l r) = g (treeFold f g l) (treeFold f g r)
+treeFold f _ (Leaf i)      = f i
+treeFold f g (Branch l r)  = g (treeFold f g l) (treeFold f g r)
 \end{code}
 The |treeFold| function captures the essential pattern of recursion
 over |Tree| data structures.  We can use |treeFold| to, say, compute
@@ -113,22 +117,22 @@ treeProd = treeFold id (*)
 Indeed, |treeFold| is \emph{universal} in the sense that anything we
 might wish to compute from a |Tree| can be accomplished with
 |treeFold|.  Such folds are guaranteed to exist for any algebraic data
-type---indeed, it is not hard to automatically generate the fold for a
+type---in fact, it is not hard to automatically generate the fold for a
 data type, given its algebraic description.  There are
 several Haskell libraries which can do this generation, including
-|derive|~\cite{derive} and |DrIFT|~\cite{DrIFT}. The Charity
-programming language~\cite{charity} was also designed so that all
+|derive|~\citep{derive} and |DrIFT|~\citep{DrIFT}. The Charity
+programming language~\citep{charity} was also designed so that all
 computation over inductive types was based on automatically-derived
 folds.
 
-Folds are ubiquitous---even languages without direct support for
-algebraic data types often make use of them.  For example, \emph{How
-  to Design Programs}~\cite[\S 9.4]{HTDP}, a popular introductory
-programming text using the Scheme (now Racket~\cite{racket})
-programming language, teaches students to write folds over recursive
-data types (although it does not use that terminology).  The
-\emph{visitor pattern}~\cite{GoF,palsberg:essence}, often used in
-object-oriented languages, can also be seen as a type of fold.
+% Folds are ubiquitous---even languages without direct support for
+% algebraic data types often make use of them.  For example, \emph{How
+%   to Design Programs}~\cite[\S 9.4]{HTDP}, a popular introductory
+% programming text using the Scheme (now Racket~\citep{racket})
+% programming language, teaches students to write folds over recursive
+% data types (although it does not use that terminology).  The
+% \emph{visitor pattern}~\citep{GoF,palsberg:essence}, often used in
+% object-oriented languages, can also be seen as a type of fold.
 
 Folds (and unfolds) satisfy many theorems which aid in transforming,
 optimizing, and reasoning about programs defined in terms of them.  As
@@ -136,16 +140,16 @@ a simple example, a map (\ie\ applying the same function to every
 element of a container) followed by a fold can always be rewritten as
 a single fold. These laws, and others, allow Haskell compilers to
 eliminate intermediate data structures through an optimization called
-deforestation~\cite{Wadler:1988,Gill93ashort}.
+deforestation~\citep{Wadler:1988,Gill93ashort}.
 
 An algebraic view of data types also enables \term{datatype-generic
   programming}---writing functions which operate generically over
 \emph{any} algebraic data type by examining its algebraic structure.
 For example, the following function (defined using Generic
-Haskell-like syntax~\cite{generic-haskell}) finds the product of all
-the |Int| values contained in a value of \emph{any} algebraic data
-type.  It gives the same result as |treeProd| on |Trees| but also
-works on lists or any other type.
+Haskell-like syntax~\citep{Hinze-2000-generic-Haskell,generic-haskell})
+finds the product of all the |Int| values contained in a value of
+\emph{any} algebraic data type.  It gives the same result as
+|treeProd| on |Trees| but also works on lists or any other type.
 \begin{spec}
 genProd {| Int         |} i        = i
 genProd {| Sum t1 t2   |} (Inl x)  = genProd {| t1 |} x
@@ -156,7 +160,7 @@ genProd {| _           |} _        = 1
 Datatype-generic programming is a powerful technique for reducing boilerplate, made possible
 by the algebraic view of data types, and supported by many Haskell
 libraries and
-extensions~\cite{Jansson:PolyP,Lammel:SYB,Cheney:LIG,weirich:replib,weirich:erasure}.
+extensions~\citep{Jansson:PolyP,Lammel:SYB,Cheney:LIG,weirich:replib,weirich:erasure}.
 
 However, algebraic datatypes can only express types with tree-like
 structure. There are many such types, including tuples, records,
@@ -169,13 +173,13 @@ A data structure with \term{symmetry} is one whose elements can be
 permuted in certain ways without affecting its identity.  For example,
 permuting the elements of a bag always results in the same bag.
 Likewise, the elements of an ordered cycle may be cyclically permuted
-without affecting the cycle.  By contrast, the tree structure
-illustrated previously has no symmetry: any permutation of the
-elements results in a different tree.  In fact, every algebraic data
-structure has no symmetry. Every element in an algebraic structure can
-be uniquely identified by a \emph{path} from the root of the structure
-to the element, so permuting the elements always results in an
-observably different value.
+without affecting the cycle.  By contrast, a typical binary tree
+structure has no symmetry: any permutation of the elements may result in
+a different tree.  In fact, every algebraic data structure has no
+symmetry: every element in an algebraic structure can be uniquely
+identified by a \emph{path} from the root of the structure to the
+element, so permuting the elements always results in an observably
+different value.
 
 A data structure with \term{sharing} is one in which different parts
 of the structure may refer to the same subpart.  For example, consider
@@ -186,10 +190,11 @@ refer to the same vertex, and vice versa.
 
 In a language with first-class pointers, creating data structures with
 sharing is relatively easy, although writing correct programs that
-manipulate them may be another story. The same holds true in languages
-without first-class pointers. Creating data structures with sharing in
-the heap is not difficult in Haskell, but it may be difficult or even
-impossible to express the programs that manipulate them.  
+manipulate them may be another story. The same holds true many
+languages without first-class pointers as well. Creating data
+structures with sharing in the heap is not difficult in Haskell, but
+it may be difficult or even impossible to express the programs that
+manipulate them.
 
 For example, in the following code,
 \begin{spec}
@@ -211,7 +216,7 @@ actually creates a cycle of three numbers in memory.
 Semantically, however, |t| is a tree, not a dag, and |nums| is an
 infinite list, not a cycle.  It is impossible to observe the sharing
 (without resorting to compiler-specific
-tricks~\cite{Gill-2009-sharing}) in either of these examples. Even
+tricks~\citep{Gill-2009-sharing}) in either of these examples. Even
 worse, applying standard functions such as |fold| and |map| destroys
 any sharing that might have been present and risks nontermination.
 
@@ -225,29 +230,45 @@ undirected graph is always symmetric) and that functions respect
 abstract structure (\eg\ any function on bags should give the same
 result when given permutations of the same elements as inputs).
 
-The theory of \term{combinatorial species} was first described in 1981
-by Andr\'{e} Joyal~\cite{joyal} as a framework for understanding and
-unifying much of \term{enumerative combinatorics}, the branch of
-mathematics concerned with counting abstract structures.  Since then,
-the theory has been explored and extended by many other
-mathematicians. Like the theory of algebraic data types, it is also
-concerned with describing structures compositionally, but is much more
-general.
+\subsection{Combinatorial species history}
+\label{sec:history}
+
+The theory of \term{combinatorial species} was first set forth by
+\citet{joyal} as a framework for understanding and unifying much of
+\term{enumerative combinatorics}, the branch of mathematics concerned
+with counting abstract structures.  Since then, the theory has been
+explored and extended by many other mathematicians \todo{citations?},
+culminating in a standard reference textbook by \citet{bll}. Like the
+theory of algebraic data types, it is also concerned with describing
+structures compositionally, but is much more general.
 
 Upon gaining even a passing familiarity with both algebraic data types
 and combinatorial species, one cannot help but be struck by obvious
 similarities in the algebraic approaches to describing structures
 (though it is clear that species are much more general). However,
 there has yet to be a comprehensive treatment of the precise
-connections between the two. \todo{finish}
+connections between the two. \citet{bll} is a comprehensive treatment
+of the theory of species, but it is written primarily from a
+mathematical point of view and is only tangentially concerned with
+issues of computation.  It is also written in a style that makes it
+relatively inaccessible to researchers in the programming languages
+community---it assumes quite a bit of mathematical background that
+many PL researchers do not have.
 
-\todo{say something here about gf's etc.  Richer data types not the
-  only benefit.}
+The connection between species and computation was first explored by
+Flajolet, Salvy, and Zimmermann, with their work on
+LUO~\citep{FlajoletSalvyZimmermann1989a} and \citep{FlSa95} \todo{finish}
+
+\todo{talk about Carette + Uszkay}
+
+\todo{talk about HTT, Keck.}
 
 \subsection{Goals and outline}
 \label{sec:goals}
 
-The overarching goal of the proposed research is to begin answering
+The overarching goal of the proposed research, then, is to create a
+bridge between the theory of species and the theory and practice of
+programming languages. In particular, I aim to begin answering
 the question:
 \begin{quote}
   \textbf{What benefits can be derived from using the mathematical
@@ -260,20 +281,24 @@ types?  Specifically, the contributions of the proposed research are
 threefold:
 \begin{enumerate}
 \item A significant part of the proposed work will consist in
-  presenting relevant parts of the theory of species in a way that is
-  accessible to others in the programming languages community. This
-  will be a significant contribution: the existing literature on
-  species and recent related developments~\cite{BLL,keck} are fairly
-  inaccessible to PL researchers since they assume an extensive
-  mathematical background and motivations that many PL researchers do
-  not have.  My strong background in mathematics and experience in
-  teaching and writing make me an ideal \todo{finish this sentence?}
+  synthesizing and re-presenting relevant parts of the theory of
+  species in a way that is accessible to others in the programming
+  languages community and the wider computer science community. This
+  will be a significant contribution: as explained above, the existing
+  literature on species is relatively inaccessible to programming
+  language researchers.  My strong background in mathematics and
+  experience in teaching and writing make me an ideal ``ambassador''
+  to bridge the two worlds.
 
-  I have begun a series of blog posts \cite{blog posts} which will
-  form the basis for this presentation; \pref{sec:species} contains an
-  abridged version.
+  \pref{sec:species}, which contains a brief exposition of relevant
+  parts of the theory of species, is not merely background for
+  understanding the rest of the proposal.  It also serves as a sample:
+  my proposed dissertation will contain a greatly expanded and
+  improved version of the presentation which I hope can serve as the
+  standard reference on combinatorial species for those in the
+  computer science community.
 
-\item The second goal is to lay the theoretical groundwork for
+\item The second contribution will be to lay the theoretical groundwork for
   understanding species as a foundation for data types.  That is, if
   one wanted to design a programming language with ``species types''
   from the ground up---if one was to take the theory of species as the
@@ -290,6 +315,10 @@ threefold:
   with species and facilitating application of the theory to existing
   data types.  Section~\ref{sec:species-library} explains the current
   features of the library and proposes new features to be added.
+
+  Simply writing a library is not necessarily worth being called a
+  research contribution, but this library represents such a
+  contribution for two reasons: \todo{finish}
 
 \end{enumerate}
 
@@ -381,8 +410,8 @@ satisfying the following functoriality conditions:
 \item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
 \end{itemize}
 
-This definition is due to Joyal \cite{joyal}, as described in BLL
-\cite{BLL}.
+This definition is due to Joyal \citep{joyal}, as described in BLL
+\citep{bll}.
 \end{defn}
 
 \begin{figure}
@@ -557,7 +586,7 @@ out of which more complex species can be composed.
   $\mathbb{B}(\emptyset, -) : \mathbb{B} \to \mathbb{E}$, that is, the
   covariant hom-functor sending each finite set $U \in \mathbb{B}$ to
   the (finite) set of bijections $\emptyset \leftrightarrow U$
-  \cite{yeh}. There is, of course, a unique bijection $\emptyset
+  \citep{yeh}. There is, of course, a unique bijection $\emptyset
   \leftrightarrow \emptyset$ and no bijections $\emptyset
   \leftrightarrow U$ for nonempty $U$, thus giving rise to the
   definition above.
@@ -648,7 +677,7 @@ dia =
 There are other primitive species, some of which we will encounter
 later.  In fact, it is possible to give a complete classification of
 primitive species (for a suitably formal notion of ``primitive'')---it
-is beyond the scope of this proposal, though relevant XXX
+is beyond the scope of this proposal, though relevant \todo{finish}
 
 \subsubsection{Operations}
 \label{sec:operations}
@@ -861,7 +890,7 @@ element alone and transporting the other labels.
 
 The derivative of container types is a notion already familiar to many
 functional programmers through the work of McBride \todo{and others?}
-\cite{XXX}: the derivative of a type is its type of ``one-hole
+\citep{XXX}: the derivative of a type is its type of ``one-hole
 contexts''.  This can be seen in the definition above; $\star$
 represents the distinguished ``hole'' in the $F$-structure.
 
@@ -980,7 +1009,7 @@ species.  Recursion is introduced by allowing \term{implicit
 least-fixed-point interpretation.  There is a well-developed theory
 explaining when such implicit equations have least-fixed-point
 solutions which are unique (the \term{Implicit Species Theorem} and
-its generalizations~\cite{XXX}).
+its generalizations~\citep{XXX}).
 
 In general, we can allow arbitrary mutually recursive
 systems of implicit equations \[ \overline{\F_i = \Phi_i(F_1, \dots,
@@ -1222,9 +1251,9 @@ recurrence. \todo{is there more to it than this?  Newton-Raphson,
 The applications of generating functions are numerous:
 \begin{enumerate}
 \item They can be used to conduct asymptotic analysis of algorithms
-  making use of the corresponding structures \cite{AC}
+  making use of the corresponding structures \citep{AC}
 \item They can be used to enable fast random generation of structures
-  according to desirable distributions \cite{boltzmann, darasse}.
+  according to desirable distributions \citep{boltzmann, darasse}.
 \item \todo{more?}
 \end{enumerate}
 \todo{forward reference to species library}
@@ -1497,7 +1526,7 @@ So far, our universe only contains species expressions whose type
 interpretations are usual algebraic data types; we already know how to
 construct eliminators for such types in a type-directed way, using
 ``high school algebra'' laws for exponents
-\cite{hinze-reason-isomorphically}. \pref{fig:ADT-eliminators} can be
+\citep{hinze-reason-isomorphically}. \pref{fig:ADT-eliminators} can be
 regarded as a recursive \emph{definition} of the eliminator
 corresponding to any algebraic species expression.
 \begin{figure}
@@ -1578,13 +1607,10 @@ of the provided function.
 
 Implementing this in an actual programming language may take one of
 several forms.  In a total, dependently typed language such as
-Agda~\cite{agda} or Coq~\cite{coq}, an eliminator could literally
+Agda~\citep{agda} or Coq~\citep{coq}, an eliminator could literally
 require a proof as an argument.  In other languages with a less
-expressive type system, \todo{finish}
-
- \todo{how to implement this: actual
-  proof in dep. typed language; randomized testing; theorem prover;
-  etc.}
+expressive type system, randomized testing or a call to an automatic
+theorem prover could take the place of user-supplied tests.
 
 \todo{talk about what I PROPOSE to do.}
 
@@ -1629,14 +1655,14 @@ fact, there will be a canonical choice only for \emph{regular}
   % \end{diagram}
 
 However, all is not lost: Peter Hancock's ``cursor down'' operator
-\cite{hancock} (which I will denote $\down$) gets around the problem
+\citep{hancock} (which I will denote $\down$) gets around the problem
 of having no canonical choice of element by simultaneously choosing
 every element: \[ \down : \ty F A \to \ty {F \comp \pt{F}} A \]
 Intuitively, it works by ``decorating each point with its context'':
 that is, it replaces each data element in the structure with a copy of
-the entire structure in which that data element has been
-pointed. \pref{fig:cursor-down} illustrates applying $\down$ to a
-cycle of three elements, resulting in a cycle of pointed cycles.
+the entire structure in which that data element has been pointed.
+\pref{fig:cursor-down} illustrates applying $\down$ to a cycle of
+three elements, resulting in a cycle of pointed cycles.
 
 \begin{figure}
   \centering
@@ -1652,9 +1678,23 @@ cycle of three elements, resulting in a cycle of pointed cycles.
   \label{fig:cursor-down}
 \end{figure}
 
-\todo{write about how eliminator works. \pref{fig:elim-cursor-down}.
-  Note this doesn't make sense computationally.  But might give some
-  interesting insight.  Connection between this and previous section?}
+We can use $\down$ to implement a generic eliminator for structures
+with symmetry as follows (illustrated in
+~\pref{fig:elim-cursor-down}).  Beginning with a structure of type
+$\ty F A$, we apply $\down$ to produce a structure of type $\ty{F
+  \comp \pt{F}} A = \ty{F}{(\ty{\pt F} A)}$.  We then use functoriality
+of $\bbrack{F}$ to apply an eliminator $e'$ to each $\ty{\pt F} A$
+structure.  Finally, we apply a partial operator $\delta : \ty F
+B \rightharpoonup B$ which, given an $\bbrack{F}$-structure full of identical
+$B$ values, returns that single $B$ value; $\delta$ is undefined
+otherwise.  This chain of operations will produce a value precisely
+when the eliminator $e'$ produces the same value for every different
+pointing of the structure; that is, it respects the symmetry of the
+original structure.
+
+The eliminator $e'$ itself may be constructed recursively by the same
+method; every pointing breaks some symmetry, and eventually a base
+case will be reached
 
 \begin{figure}
   \centering
@@ -1682,8 +1722,32 @@ cycle of three elements, resulting in a cycle of pointed cycles.
   \label{fig:elim-cursor-down}
 \end{figure}
 
-\todo{write about other stuff we can do with $\down$.  Explain
-  \pref{fig:computing-cursor-down}.}
+Of course, this makes for a rather poor method of computing an
+eliminator; it is not intended to be implemented literally as
+described.  One could imagine, for example, requiring a proof that
+$e'$ computes the same result for every possible pointing of the
+input, and then arbitrarily picking a single pointing on which to run
+$e'$.  In fact, viewed this way, the similarity with the eliminator in
+the previous section should be clear; indeed, I expect there is a
+theorem stating their equivalence formally.
+
+One advantage of a formulation using $\down$ is that $\down$ can also
+be used for carrying out other computations on symmetric structures.
+For example, consider the problem of ``zipping'' together two copies
+of a cycle, offset by one so that each element is combined with the
+element coming after it---ultimately resulting in a cycle again.
+Implementing this using an eliminator would be tedious---one would
+have to extract adjacent pairs from a list, remembering to treat the
+pair of the first and last elements specially, combine them, put them
+back into a cycle, and finally prove that one's implementation did not
+depend on the cycle representation.  Using $\down$, however, this
+operation can be implemented in a way that is correct by construction,
+requiring no user-supplied proofs or awkward special cases.
+\pref{fig:computing-cursor-down} illustrates how it works.  After
+applying $\down$, we extract the pointed element and the element
+immediately following from each pointed structure, giving us a cycle
+of pairs.  We then simply map the combining function over that,
+yielding precisely the cycle we wanted.
 
 \begin{figure}
   \centering
@@ -1729,7 +1793,7 @@ cycle of three elements, resulting in a cycle of pointed cycles.
 
 In previous work, I created a Haskell library\footnote{Available from
   Hackage at \url{http://hackage.haskell.org/package/species}} for working with
-combinatorial species~\cite{yorgey}.  Its features include
+combinatorial species~\citep{yorgey}.  Its features include
 \begin{itemize}
 \item computing egf, ogf, and cycle index series for arbitrary species
 \item enumerating all structures of a given species ordered by size
@@ -1766,16 +1830,16 @@ proposed research.
 \paragraph{Species and computer science}
 
 Flajolet, Salvy, and Zimmermann were some of the first to point out
-connections between species and computer science \cite{FlSa95,
+connections between species and computer science \citep{FlSa95,
   FlajoletSalvyZimmermann1989a}.  Their work is now packaged as part
 of the \emph{combstruct} library for
-Maple~\cite{combstruct}. This library can achieve some
+Maple~\citep{combstruct}. This library can achieve some
 impressive results, but since it is only available within a
 proprietary system with a dynamically typed language, it is neither
 widely available nor easily portable to other languages.
 
 The most closely related work is that of Carette and
-Uszkay~\cite{Carette_Uszkay_2008_species}, who also see the potential
+Uszkay~\citep{Carette_Uszkay_2008_species}, who also see the potential
 of species as a framework to extend the usual notion of algebraic data
 types.  They describe some preliminary work adding species types to
 Haskell, but it seems their work has not yet progressed very far.  Our
@@ -1784,14 +1848,14 @@ project plans to encompass their work and extend it in many directions.
 \paragraph{Extending algebraic data types}
 
 The idea of decomposing container types into shapes combined with data
-can be found in the work of Jay and Cockett~\cite{jay-shapely}. They
+can be found in the work of Jay and Cockett~\citep{jay-shapely}. They
 define \term{shapely types} as a categorical framework for
 understanding and working with container types that can be decomposed
 in this way.  However, their framework cannot account for data types
 with symmetry. Abbott \etal\ also give a formal categorical account of
-\term{containers}~\cite{abbott_categories_2003}, a generalization of
+\term{containers}~\citep{abbott_categories_2003}, a generalization of
 shapely types, and later extended their work to the notion of a
-\term{quotient container} \cite{abbott_quotient}, consisting of an
+\term{quotient container} \citep{abbott_quotient}, consisting of an
 algebraic data type ``quotiented'' by some symmetries.  A fold over a
 quotient container is thus a normal fold paired with a \emph{proof}
 that the fold respects the quotient symmetries. It seems there are
@@ -1802,18 +1866,18 @@ and quotient containers, to bring insights from the work on quotient
 containers to bear on species and vice versa.
 
 Declaratively specifying \emph{sharing} in data structures has been
-explored by Aiken \etal~\cite{aiken-2010-fusion}. In that work,
+explored by Aiken \etal~\citep{aiken-2010-fusion}. In that work,
 mutable data structures are specified as relations between data values,
 and a language of indices describes the mapping from the relational
 specification of a data structure to its physical layout.  In the
 specific context of Haskell, Gill shows how it is possible to observe
 sharing using special facilities provided by the Glasgow Haskell
-Compiler~\cite{Gill-2009-sharing}.  These two approaches liberates
+Compiler~\citep{Gill-2009-sharing}.  These two approaches liberates
 programmers from the difficulties of programming with pointers, but
 otherwise does not not help with the problem of writing algorithms
 that work over such structures.
 
-Abel has implemented \emph{sized types}~\cite{abel-2010-miniagda} for the
+Abel has implemented \emph{sized types}~\citep{abel-2010-miniagda} for the
 dependently typed programming language Agda.  Such types have a rather
 different goal than our proposed work on ``sized data types'': they
 are a tool for termination checking, rather than a way to statically
@@ -1822,7 +1886,7 @@ connections.
 
 Atanassow and Jeuring explore the idea of automatically deriving
 isomorphisms between types by making use of the theory of
-\term{canonical isomorphisms}~\cite{Atanassow-2007-iso-inference}.  In
+\term{canonical isomorphisms}~\citep{Atanassow-2007-iso-inference}.  In
 particular, they derive isomorphisms between user-defined data types
 and the internal \emph{representation types} used by a generic
 programming framework.  This allows converting between any two types
@@ -1834,20 +1898,20 @@ isomorphism work; we envision a somewhat more flexible framework.
 
 Some early work on random generation is by Flajolet and Cutsem, who
 describe a general algorithmic framework for random generation of a
-certain subclass of labeled species~\cite{Flajolet-1994-random}.
+certain subclass of labeled species~\citep{Flajolet-1994-random}.
 Later Duchon \etal\ introduced \term{Boltzmann
-  sampling}~\cite{Duchon-2002-Boltzmann, duchon-2004-boltzmann},
+  sampling}~\citep{Duchon-2002-Boltzmann, duchon-2004-boltzmann},
 giving a faster way to do \emph{approximate} random generation (which
 is sufficient for many applications, such as testing).  Boltzmann
 sampling has been implemented in OCaml by Canou and
-Darasse~\cite{ocaml-random-gen}, although only for algebraic data
+Darasse~\citep{ocaml-random-gen}, although only for algebraic data
 types rather than for species types in general.  Moreover, there is
 very recent work by Pivoteau, Salvy, and
-Soria~\cite{pivoteau-11-algorithms} extending these techniques, which
+Soria~\citep{pivoteau-11-algorithms} extending these techniques, which
 as far as we know has not yet been incorporated into any real-world
 testing framework.
 
-In his masters thesis~\cite{agata}, Dureg{\r a}rd gives a careful
+In his masters thesis~\citep{agata}, Dureg{\r a}rd gives a careful
 analysis of the distribution of recursive data structures generated by
 naive QuickCheck generators, and explains the design of Agata, a
 compositional framework for constructing random generators with
@@ -1861,7 +1925,7 @@ Duregard Haskell Symposium.  gencheck.
 
 
 point out connections between the theory of
-species and computer science~\cite{FlSa95,
+species and computer science~\citep{FlSa95,
   FlajoletSalvyZimmermann1989a}.
 
 Keck work.
@@ -1870,5 +1934,8 @@ Sedgewick + Flajolet, AoA + AC
 
 \section{Timeline and Conclusion}
 \label{sec:timeline}
+
+\bibliographystyle{abbrvnat}
+\bibliography{species}
 
 \end{document}
