@@ -177,3 +177,6 @@ unord ds = elts # centerXY
     w     = ((fromIntegral (length ds + 1) * s) +) . sum . map width $ ds
     maximum' d [] = d
     maximum' _ xs = maximum xs
+
+enRect d = roundedRect (w+0.5) (h+0.5) 0.5 <> d # centerXY
+  where (w,h) = size2D d

@@ -2,7 +2,7 @@
 
 \documentclass{article}
 
-\usepackage{showkeys}
+% \usepackage{showkeys}
 
 %include polycode.fmt
 
@@ -495,7 +495,7 @@ dia =
   # centerXY
   # pad 1.1
 
-drawList = hcat . intersperse (arrow 0.7 mempty) . map labT
+drawList = hcat . intersperse (arrow 0.4 mempty) . map labT
 
 listStructures =
     hcat' with {sep = 0.7}
@@ -504,9 +504,6 @@ listStructures =
   . map drawList
   . permutations
   $ [0..2]
-
-enRect d = roundedRect (w+0.5) (h+0.5) 0.5 <> d # centerXY
-  where (w,h) = size2D d
     \end{diagram}
     \caption{The species $\L$ of lists}
     \label{fig:lists}
@@ -514,10 +511,56 @@ enRect d = roundedRect (w+0.5) (h+0.5) 0.5 <> d # centerXY
   \end{figure}
 
 \item The species of \emph{(rooted, ordered) binary trees} sends every
-  set of labels to the set of all binary trees built over those labels.
-  \todo{finish}
+  set of labels to the set of all binary trees built over those labels
+  (\pref{fig:binary-trees}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import Species
+import Data.Tree
+import Diagrams.TwoD.Layout.Tree
+import Control.Arrow (first, second)
 
-\item The species of \emph{permutations} \todo{finish}
+dia = 
+  hcat' with {sep = 0.5}
+  [ unord (map labT [0..2])
+  , arrow 2 (txt "T")
+  , enRect treeStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
+
+trees []   = []
+trees [x]  = [ Node x [] ]
+trees xxs  = [ Node x [l,r] 
+             || (x,xs) <- select xxs
+             , (ys, zs) <- subsets xs
+             , l <- trees ys
+             , r <- trees zs
+             ]
+
+select []     = []
+select (x:xs) = (x,xs) : (map . second) (x:) (select xs)
+
+subsets []     = [ ([],[]) ]
+subsets (x:xs) = (map . first) (x:) ss ++ (map . second) (x:) ss
+  where ss = subsets xs
+
+treeStructures =
+    hcat' with {sep = 0.5}
+  . map drawTreeStruct
+  . trees
+  $ [0..2]   
+    \end{diagram}
+    \caption{The species $\T$ of binary trees}
+    \label{fig:binary-trees}
+    %$
+  \end{figure}
+
+% \item The species of \emph{permutations} \todo{finish}
+
 \end{itemize}
 
 The functoriality of relabeling means that the actual labels used
@@ -996,11 +1039,11 @@ the derivative is defined as expected, leaving the distinguished
 label alone and transporting the others.
 
 The derivative of container types is a notion already familiar to many
-functional programmers through the work of \citet{mcbride:derivative,
-  mcbride_clowns_2008} and \citet{abbott_deriv}: the derivative of a
-type is its type of ``one-hole contexts''.  This can be seen in the
-definition above; $\star$ represents the distinguished ``hole'' in the
-$F$-structure.
+functional programmers through the work of \citet{Huet_zipper},
+\citet{mcbride:derivative, mcbride_clowns_2008} and
+\citet{abbott_deriv}: the derivative of a type is its type of
+``one-hole contexts''.  This can be seen in the definition above;
+$\star$ represents the distinguished ``hole'' in the $F$-structure.
 
   \begin{figure}
     \centering
@@ -1623,27 +1666,6 @@ each paired with a list of data elements.
 
 % \todo{who cares? Why is this relevant?}
 
-The language of species expressions used above is intentionally
-simplified.  A full treatment will include some extra features:
-\begin{itemize}
-\item Multi-argument type constructors are quite common in practice
-  and can be modeled by multisort species.  Extending the above theory
-  to deal with multisort species is expected to be straightforward.
-\item As explained previously, one of the great promises of the theory
-  is to be able to talk about types corresponding to those species
-  which go beyond the usual algebraic data types.  This requires
-  extending the interpretation of species expressions from simple type
-  constructors to \emph{setoids} consisting of a type constructor
-  together with an equivalence relation on the values of the type.
-  All the theorems are then extended to take this new equivalence
-  relation into account as well.
-\item Recursion must be handled as well.  Recursive species
-  expressions can be interpreted as recursive types, and the theory
-  must be extended to take into account the relationship between them.
-  I do not yet have a good sense of the difficulty, but expect that it
-  should all go through.
-\end{itemize}
-
 \subsection{Eliminators for species types}
 \label{sec:eliminators}
 
@@ -1753,9 +1775,6 @@ Agda~\citep{agda} or Coq~\citep{coq}, an eliminator could literally
 require a proof as an argument.  In other languages with a less
 expressive type system, randomized testing or a call to an automatic
 theorem prover could take the place of user-supplied tests.
-
-\todo{talk about what I PROPOSE to do. eliminators for recursion +
-  multi-arg; generic programming, etc.}
 
 % Every nonempty species is isomorphic to
 % \begin{itemize}
@@ -1933,29 +1952,78 @@ yielding precisely the cycle we wanted.
   \label{fig:computing-cursor-down}
 \end{figure}
 
-\todo{something here about what I propose to do?}
+\subsection{Roadmap}
+\label{sec:roadmap}
+
+The language of species expressions used in this section has been
+intentionally simplified.  A full treatment of introduction and
+elimination forms for species types will include some extra features:
+\begin{itemize}
+\item Multi-argument type constructors are quite common in practice
+  and can be modeled by multisort species.  Extending the theory to
+  deal with multisort species is expected to be straightforward but
+  critical to practical application of the theory.
+\item As explained previously, one of the great promises of the theory
+  of species as a foundation for data types is to be able to talk
+  about types corresponding to those species which go beyond the usual
+  algebraic data types.  This requires extending the interpretation of
+  species expressions from simple type constructors to \emph{setoids}
+  consisting of a type constructor together with an equivalence
+  relation on the values of the type.  All the theorems must then be
+  extended to take this new equivalence relation into account as well.
+\item Recursion must be handled as well.  Recursive species
+  expressions can be interpreted as recursive types, and the theory
+  must be extended to take into account the relationship between them,
+  and fold-like eliminators must be devised for computing with them.
+\end{itemize}
 
 \section{The \pkg{species} library}
 \label{sec:species-library}
 
-\todo{something here}
-
-\todo{finish this section!}
-
 I have written a Haskell library\footnote{Available from Hackage at
   \url{http://hackage.haskell.org/package/species}} for working with
-combinatorial species~\citep{yorgey-2010-species}.  Its features
-include
+combinatorial species~\citep{yorgey-2010-species}, which I see
+fulfilling two main purposes.  
+
+First, the theory of species has many potential applications in
+working with existing algebraic data types.  The library includes
+methods for automatically deriving species associated to user-defined
+data types, which the user can then use to 
 \begin{itemize}
-\item computing egf, ogf, and cycle index series for arbitrary species
-\item enumerating all structures of a given species ordered by size
-\item automatically derive species corresponding to user-defined data types
+\item compute egf, ogf, and cycle index series corresponding to their
+  data type, as an aid in asymptotic analysis;
+\item enumerate all structures of their data type of a given size;
+\item derive isomorphisms between their data type and other types.
 \end{itemize}
+\pref{fig:species-features} shows a brief illustration of the first
+two features---here for the standard species $\Par = \E \comp \E_+$
+rather than a user-defined data type, though working with a
+user-defined data type is similar.
+\begin{figure}
+  \centering
+\begin{verbatim}
+>>> take 10 . labeled $ set `o` nonEmpty sets
+[1,1,2,5,15,52,203,877,4140,21147]
+>>> take 10 . unlabeled $ set `o` nonEmpty sets
+[1,1,2,3,5,7,11,15,22,30]
+>>> enumerate (set `o` nonEmpty sets) [1,2,3] :: [(Set :.: Set) Int]
+[{{1,2,3}},{{2,3},{1}},{{2},{1,3}},{{3},{1,2}},{{3},{2},{1}}]
+\end{verbatim}  
+  \caption{Generating function computation and enumeration}
+  \label{fig:species-features}
+\end{figure}
 
-\todo{give examples of use}
+One major missing feature of the library which I propose to add is the
+ability to randomly generate structures of user-defined data types,
+perhaps in concert with an existing test-generation framework such as
+FEAT~\citep{duregaard2012feat} or gencheck~\citep{gencheck}.  In
+particular, no existing frameworks can randomly generate structures
+corresponding to non-regular (symmetric) species.
 
-However, there are many features that could yet be added. \todo{talk
-  about what some of these features are.}
+Second, the library can serve as a testbed for the ideas outlined in
+\pref{sec:species-as-data-types}---instead of implementing an entirely
+new programming language from scratch, to a large extent we can simply
+\emph{embed} a new language as a library in Haskell.
 
 % \section{Enumerating Unlabeled Structures}
 % \label{sec:enumerating}
@@ -1966,15 +2034,15 @@ However, there are many features that could yet be added. \todo{talk
 %   L-species? Virtual species? Species + infinity?  Enumerating
 %   unlabeled structures?  See NSF proposal for ideas, of course.}
 
-It is unknown (to me) whether fast methods exist for generating
-unlabeled structures (that is, representatives of equivalence classes)
-for species involving composition, Cartesian product, and/or functor
-composition.  I plan to investigate the combinatorics literature to
-see whether such methods already exist, and, if so, add them to the
-implementation in the \pkg{species} library.  If they do not, it may
-be worth spending a bit of time thinking about, though in that case it
-is likely to be quite difficult and probably beyond the scope of my
-proposed research.
+% It is unknown (to me) whether fast methods exist for generating
+% unlabeled structures (that is, representatives of equivalence classes)
+% for species involving composition, Cartesian product, and/or functor
+% composition.  I plan to investigate the combinatorics literature to
+% see whether such methods already exist, and, if so, add them to the
+% implementation in the \pkg{species} library.  If they do not, it may
+% be worth spending a bit of time thinking about, though in that case it
+% is likely to be quite difficult and probably beyond the scope of my
+% proposed research.
 
 \section{Related Work}
 \label{sec:related}
@@ -2026,15 +2094,11 @@ programmers from the difficulties of programming with pointers, but
 otherwise do not not help with the problem of writing algorithms
 that work over such structures.
 
-Atanassow and Jeuring explore the idea of automatically deriving
-isomorphisms between types by making use of the theory of
-\term{canonical isomorphisms}~\citep{Atanassow-2007-iso-inference}.  In
-particular, they derive isomorphisms between user-defined data types
-and the internal \emph{representation types} used by a generic
-programming framework.  This allows converting between any two types
-by converting to a representation type and back.  However, their
-framework does not give the user much freedom in determining how the
-isomorphism work; we envision a somewhat more flexible framework.
+Joachim Kock has done some theoretical work generalizing species,
+``container types'', and several other notions of ``extended data
+type''~\citep{kock2012data}.  Via Kock's work, it looks like there may
+be some interesting connections between the theory of species and the
+recent work in Homotopy Type Theory.
 
 \paragraph{Testing}
 
@@ -2060,17 +2124,14 @@ compositional framework for constructing random generators with
 various desirable properties. However, the methods provided by Agata
 for controlling generator distributions are somewhat ad-hoc, and do
 not come with any sort of mathematical guarantees.  They are better
-than the naive methods but still require considerable case-by-case
-hand tuning.
+than the na\"ive methods but still require considerable case-by-case
+hand tuning.  
 
-\todo{finish}
-
-Duregard Haskell Symposium.  gencheck.
-
-
-Keck work.
-
-Sedgewick + Flajolet, AoA + AC
+\citet{duregaard2012feat} and \citet{gencheck} have created two
+similar systems, FEAT and gencheeck, for compositionally building
+enumerators and test case generators.  Both are based, to varying
+degrees, on the theory of generating functions, though neither yet
+includes any support for types beyond standard algebraic data types.
 
 \section{Timeline and Conclusion}
 \label{sec:timeline}
@@ -2079,7 +2140,8 @@ Within my overall research agenda, I have proposed three main strands
 of work: exposition of species theory for a programming languages
 audience; a theory of species types; and development of a Haskell
 library for computing with species.  In practice, these will most
-likely proceed somewhat in parallel.  However, 
+likely proceed somewhat in parallel.  However, it will be useful to
+set aside certain time periods with a particular focus.
 
 \textbf{March--August 2013}: my focus during this period will be
 twofold: to develop an exposition of species theory, both through my
@@ -2092,10 +2154,12 @@ on development of the \texttt{species} library, as outlined in
 \pref{sec:species-library}.
 
 \textbf{January--April 2014} My focus during the first part of 2014
-will be on actually writing my dissertation, with a goal of defending
-in May.
+will be on writing my dissertation, with the goal of defending in May.
 
-\todo{write some sort of conclusion here?}
+Algebraic data types have more than proven their worth in constructing
+and reasoning about programs.  However, they are not the end of the
+story! The time is ripe to harvest the great work of mathematicians in
+order to move beyond algebraic data types to something more general.
 
 \bibliographystyle{abbrvnat}
 \bibliography{species}
