@@ -1,0 +1,46 @@
+Brent Yorgey
+Dissertation Proposal
+
+Title:
+Combinatorial Species and Algebraic Data Types
+
+Committee:
+Jacques Carette (McMaster University)
+Benjamin Pierce
+Val Tannen
+Steve Zdancewic (chair)
+
+Advisor:
+Stephanie Weirich
+
+Date:
+1pm, Monday, March 4
+
+Location:
+Levine 307
+
+Abstract:
+
+The theory of algebraic data types has had a profound impact on the
+practice of programming, especially in functional languages.  The
+basic idea is that types can be built up algebraically from a small
+set of primitive types and combinators: a unit type, base types, sums
+(i.e. tagged unions), products (i.e. tupling), and recursion.
+
+However, algebraic datatypes can only express types with tree-like
+structure. There are many such types, including tuples, records,
+options, variants, and lists, but this list does not include all
+common data structures. In particular, algebraic data types cannot
+directly represent data structures with symmetry (where nontrivial
+permutations of the data structure elements leave it unchanged, as in
+bags or cycles) or sharing (where multiple parts of the data structure
+refer to the same memory location).
+
+The theory of combinatorial species was first explored as a unifying
+framework for enumerative combinatorics, but the connections to the
+theory of algebraic data types are striking and deep.  In this talk, I
+propose using the theory of species as a foundational theory of
+container data types, giving a principled way to work with a much
+wider range of data structures than is possible using algebraic data
+types alone.
+
