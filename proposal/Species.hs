@@ -80,6 +80,7 @@ instance Drawable a => Drawable (Pointed a) where
 point d = d <> drawSpN Hole # sizedAs (d # scale 5)
 
 down :: Cyc (Diagram Cairo R2) -> Cyc (Cyc (Pointed (Diagram Cairo R2)))
+
 down (Cyc ls) = Cyc (map Cyc (pointings ls))
 
 pointings []     = []
@@ -150,7 +151,9 @@ main = -- defaultMain (arrow 1 ((text "f" <> strutY 1) # scale 0.5))
 struct n x = drawSpT (struct' n x)
            # centerXY
 
-struct' n x = nd (text x <> rect 2 1 # lw 0) (replicate n (lf Leaf))
+struct' n x = struct'' n (text x <> rect 2 1 # lw 0)
+
+struct'' n d = nd d (replicate n (lf Leaf))
 
 txt s = text s <> square 1 # lw 0
 
@@ -162,3 +165,15 @@ linOrd ls =
     connect =
       withNames ["head", "last"] $ \[h,l] ->
         beneath (location h ~~ location l)
+
+unord [] = circle 1 # lw 0.1 # lc gray
+unord ds = elts # centerXY
+           <> roundedRect w (mh + s*2) ((mh + s*2) / 5)
+  where
+    elts  = hcat' with {sep = s} ds
+    mw    = maximum' 0 . map width  $ ds
+    s     = mw * 0.5
+    mh    = maximum' 0 . map height $ ds
+    w     = ((fromIntegral (length ds + 1) * s) +) . sum . map width $ ds
+    maximum' d [] = d
+    maximum' _ xs = maximum xs
