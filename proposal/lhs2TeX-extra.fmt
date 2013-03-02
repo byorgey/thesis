@@ -1,0 +1,113 @@
+%include polycode.fmt
+%include forall.fmt
+
+%if not color
+  \definecolor{blue}{named}{black}
+  \definecolor{red}{named}{black}
+  \definecolor{darkgreen}{named}{black}
+  \definecolor{orange}{named}{black}
+  \definecolor{green}{named}{black}
+  \renewcommand{\ty}[1]{\mathsf{#1}}
+%endif
+
+%if style == newcode
+
+% Spacing
+%format ^             =
+%format ^^            = " "
+%format ^^.           =
+%format ...           = "undefined"
+%format ....          =
+
+%else
+
+% Spacing
+%format ^             = " "
+%format ^^            = "\;"
+%format ^^^           = "\quad"
+%format ^^^^          = "\qquad"
+
+%format ~             = " \sim "
+
+% Pretty-printing
+%format ^^.           = "\;."
+%format ...           = "\ldots "
+%format ....          = "\ldots "
+%format SIGN t k      = t "::" k
+%format getType1      = getType "_1"
+
+% 'family' is keyword
+%format family = "\mathbf{family}"
+
+% Standard kinds
+%format *             = "\kind{\star}"
+%format #             = "\kind{\#}"
+%format Constraint    = "\kind{Constraint}"
+
+% Kind variables
+%format kK            = "\kind{\kappa}"
+%format kK1           = "\kind{\kappa_1}"
+%format kK2           = "\kind{\kappa_2}"
+
+% Type variables
+%format aT            = "\tyid{a}"
+%format asT           = "\tyid{as}"
+%format bT            = "\tyid{b}"
+%format cT            = "\tyid{c}"
+%format fT            = "\tyid{f}"
+%format gT            = "\tyid{g}"
+%format mT            = "\tyid{m}"
+%format nT            = "\tyid{n}"
+%format rT            = "\tyid{r}"
+%format tT            = "\tyid{t}"
+%format xT            = "\tyid{x}"
+
+% Standard types
+%format Unit          = "\tycon{()}"
+%format Pair          = "\tycon{(,)}"
+%format Maybe         = "\tycon{Maybe}"
+%format Option        = "\tycon{Option}"
+%format Rational      = "\tycon{Rational}"
+%format String        = "\tycon{String}"
+%format Int           = "\tycon{Int}"
+%format Bool          = "\tycon{Bool}"
+%format ShowS         = "\tycon{ShowS}"
+%format Char          = "\tycon{Char}"
+%format TypeRep       = "\tycon{TypeRep}"
+%format Either        = "\tycon{Either}"
+%format List1_        = "\tycon{[\,]}"
+%format Max           = "\tycon{Max}"
+%format Min           = "\tycon{Min}"
+%format Sum           = "\tycon{Sum}"
+%format Product       = "\tycon{Product}"
+
+%format Envelope      = "\tycon{Envelope}"
+%format Diagram       = "\tycon{Diagram}"
+%format Prim          = "\tycon{Prim}"
+
+% Standard constructors
+%format False         = "\con{False}"
+%format True          = "\con{True}"
+%format Left          = "\con{Left}"
+%format Right         = "\con{Right}"
+%format Just          = "\con{Just}"
+%format Nothing       = "\con{Nothing}"
+%format Cons_         = "\con{(:)}"
+%format cons_         = "\mathbin{\con{:}}"
+%format :             = "\mathbin{\con{:}}"
+
+% Standard type classes
+%format Show          = "\tycls{Show}"
+%format Functor       = "\tycls{Functor}"
+%format Num           = "\tycls{Num}"
+%format Typeable      = "\tycls{Typeable}"
+%format Typeable1     = "\tycls{{Typeable}_1}"
+%format Typeable2     = "\tycls{{Typeable}_2}"
+%format Monoid        = "\tycls{Monoid}"
+%format Semigroup     = "\tycls{Semigroup}"
+
+% Standard function names
+%format head          = "\fun{head}"
+%format error         = "\fun{error}"
+
+%endif
