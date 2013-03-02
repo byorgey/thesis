@@ -1,11 +1,13 @@
 %% -*- mode: LaTeX; compile-command: "mk" -*-
 \documentclass[xcolor=svgnames,12pt]{beamer}
 
-\newcommand{\pkg}[1]{\texttt{#1}}
-
 \usepackage{haskell}
-
 %include lhs2TeX-extra.fmt
+
+\usepackage{brent}
+\usepackage{species}
+\usepackage[outputdir=diagrams]{diagrams-latex}
+\graphicspath{{images/}}
 
 \renewcommand{\onelinecomment}{\quad--- \itshape}
 \renewcommand{\Varid}[1]{{\mathit{#1}}}
@@ -82,19 +84,6 @@
 
 % \setbeameroption{show only notes}
 
-\usepackage[english]{babel}
-\usepackage{graphicx}
-\usepackage{ulem}
-\usepackage{url}
-\usepackage{fancyvrb}
-\usepackage{amsmath}
-\usepackage{amsthm}
-
-\newtheorem{thm}{Theorem}
-
-\usepackage[outputdir=diagrams]{diagrams-latex}
-\graphicspath{{images/}}
-
 \renewcommand{\emph}{\textbf}
 
 \title{Combinatorial Species and Algebraic Data Types}
@@ -144,12 +133,12 @@
 \item Recursion
 \end{itemize}
 
-AKA \emph{polynomial functors}.  Note: no arrow types!
+Note: no arrow types!
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
+\begin{frame}{ADT example}
   Binary tree type:
 
 %format Tree  = "\tycon{Tree}"
@@ -173,12 +162,15 @@ type Tree = Either () (Tree, (Int, Tree))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-  A really fruitful idea!
+\begin{frame}{The fruits of algebra}
+  \begin{center}
+    \includegraphics[width=2in]{orange-tree}
+  \end{center}
+
   \begin{itemize}
   \item Initial algebra semantics, folds, ``origami'' programming
   \item Generic programming
-  \item Connections to algebra and calculus (\emph{e.g.} zippers)
+  \item Connections to algebra and calculus (e.g. zippers)
   \end{itemize}
 \end{frame}
 
@@ -186,8 +178,6 @@ type Tree = Either () (Tree, (Int, Tree))
 
 \section{Combinatorial species}
 \label{sec:species}
-
-
 
 \begin{frame}
   \emph{What are species, and what do they have to do with programming languages?}
@@ -198,17 +188,19 @@ type Tree = Either () (Tree, (Int, Tree))
 \end{frame}
 
 \begin{frame}{Before species\dots}
-  Collection of techniques for dealing with combinatorial
-  classes.
-
-  Connection with generating functions known (XXX cite EC, gfology -- note
-  Herb Wilf)
-
-  But all rather ad-hoc.
+  \begin{itemize}
+  \item A collection of techniques for dealing with combinatorial
+    classes
+  \item Largely centered around \emph{generating functions} (XXX cite
+    EC, gfology -- note Herb Wilf)
+  \item All rather ad-hoc.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Species!}
-  Joyal, 198? XXX -- ``Une ???''
+  André Joyal, 1980 XXX -- ``Une ???''
+
+  XXX picture of first page of Joyal's actual thesis???
 \end{frame}
 
 \begin{frame}{Species and ADTs?}
@@ -217,26 +209,193 @@ type Tree = Either () (Tree, (Int, Tree))
   \emph{A beautiful Answer in search of a Question.}
 \end{frame}
 
-\begin{frame}{Species definition}
-  XXX definition
+\begin{frame}{Species and computer science?}
+  XXX have to talk about history of people combining species + CS, to
+  argue why this is worthwhile
+  \begin{itemize}
+  \item Flajolet, Salvy, \& Zimmermann --- LUO, combinat
+  \item Carette \& Uszkay
+  \item Joachim Kock --- XXX
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Examples}
-  XXX species examples
+\begin{frame}{Species definition}
+  Big idea: structures \emph{indexed by size}.
+
+  XXX diagram here of binary tree structures by size.
+
+  Gives us all kinds of traction. XXX rephrase
+\end{frame}
+
+\begin{frame}{Species definition}
+  Better idea (Joyal's key insight): index by \emph{labels} and insist
+  the \emph{particular labels used don't matter}.
+
+  XXX diagram of labeled binary tree structures
+
+  \note{note also distinct labelings.  This is a feature, not a bug ---
+  allows to seamlessly talk about non-regular structures as well as
+  ``unlabelled'' structures.}
+\end{frame}
+
+\begin{frame}{Species definition}
+  A \term{species} $F$ is a pair of mappings which
+\begin{itemize}
+\item sends any finite set $U$ (of \term{labels}) to a finite set
+  $F[U]$ (of \term{structures}), and
+\item sends any bijection on finite sets $\sigma : U \bij V$ (a
+  \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$
+\end{itemize}
+satisfying the following functoriality conditions:
+\begin{itemize}
+\item $F[id_U] = id_{F[U]}$, and
+\item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Relabeling}
+  \begin{center}
+    \includegraphics{relabeling}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Examples}
+\begin{center}
+    \begin{diagram}[width=300]
+import Species
+import Data.List
+import Data.List.Split
+
+dia = 
+  hcat' with {sep = 0.5}
+  [ unord (map labT [0..2])
+  , arrow 2 (txt "L")
+  , enRect listStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+drawList = hcat . intersperse (arrow 0.4 mempty) . map labT
+
+listStructures =
+    hcat' with {sep = 0.7}
+  . map (vcat' with {sep = 0.5})
+  . chunksOf 2
+  . map drawList
+  . permutations
+  $ [0..2]
+    \end{diagram}
+%$
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Examples}
+  \begin{center}
+\begin{diagram}[width=300]
+import Species
+import Data.Tree
+import Diagrams.TwoD.Layout.Tree
+import Control.Arrow (first, second)
+
+dia = 
+  hcat' with {sep = 0.5}
+  [ unord (map labT [0..2])
+  , arrow 2 (txt "T")
+  , enRect treeStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
+
+trees []   = []
+trees [x]  = [ Node x [] ]
+trees xxs  = [ Node x [l,r] 
+             || (x,xs) <- select xxs
+             , (ys, zs) <- subsets xs
+             , l <- trees ys
+             , r <- trees zs
+             ]
+
+select []     = []
+select (x:xs) = (x,xs) : (map . second) (x:) (select xs)
+
+subsets []     = [ ([],[]) ]
+subsets (x:xs) = (map . first) (x:) ss ++ (map . second) (x:) ss
+  where ss = subsets xs
+
+treeStructures =
+    hcat' with {sep = 0.5}
+  . map drawTreeStruct
+  . trees
+  $ [0..2]   
+\end{diagram}
+%$    
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Examples}
+  XXX cycles
+\end{frame}
+
+\begin{frame}[fragile]{Examples}
+  XXX simple graphs?
 \end{frame}
 
 \begin{frame}
   XXX Vennish diagram showing species, algebra of species, ADTs.
 \end{frame}
 
-\begin{frame}{Algebra of species}
-  XXX the algebra of species
+\begin{frame}{Algebraic species}
+  \begin{columns}[t]
+    \begin{column}{0.5 \textwidth}
+      Primitive species:
+      \begin{itemize}
+      \item $\Zero$
+      \item $\One$
+      \item $\X$
+      \item $\C$
+      \item $\E$
+      \item \dots
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5 \textwidth}
+      Species operations:
+      \begin{itemize}
+      \item $F + G$
+      \item $F \sprod G$
+      \item $F \comp G$
+      \item $F \times G$
+      \item $F'$
+      \item $\pt{F}$
+      \item $F \fcomp G$
+      \item \dots
+      \end{itemize}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+  XXX how much detail to drill into here?
+\end{frame}
+
+\begin{frame}{Algebraic species example}
+  XXX give simple graphs as an example.
+
+  \[ \mathcal{G} = (\E \sprod \E) \fcomp
+  (\X^2 \sprod \E) \]
+\end{frame}
+
+\begin{frame}
+  XXX homomorphism to gen funcs.  Describe, state advantages.
 \end{frame}
 
 \begin{frame}
   Presentation will be a contribution of my thesis.
 
   XXX picture of BLL -- not accessible, expensive
+
+  \includegraphics[width=1in]{BLL-cover}
 \end{frame}
 
 \begin{frame}{Remaining work}
@@ -254,8 +413,10 @@ type Tree = Either () (Tree, (Int, Tree))
 \label{sec:species-types}
 
 \begin{frame}
-  \emph{Can we use the theory of species as a foundational basis for
-    container types?}
+  \begin{center}
+    \emph{Can we use the theory of species as a foundational basis for
+      container types?}
+  \end{center}
 \end{frame}
 
 \subsection{XXX relationship}
@@ -310,22 +471,8 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
   to ``representation details''.
 \end{frame}
 
-\begin{frame}{Species decomposition}
-    Every nonempty species is isomorphic to
-    \begin{itemize}
-    \item<+-> the unit species,
-    \item<+-> a sum,
-    \item<+-> a product,
-    \item<+-> or an \emph{atomic} species $X^n/\mathcal{H}$
-      \begin{itemize}
-      \item<+-> (where $\mathcal{H}$ acts transitively on $\{0, \dots,
-        n-1\}$).
-      \end{itemize}
-  \end{itemize}
-\end{frame}
-
 \begin{frame}
-  So we can build eliminators in a type-directed way, using ``high
+  We can build eliminators in a type-directed way, using ``high
   school algebra'' laws for exponents:
   \begin{center}
     \begin{tabular}{ccc}
@@ -336,8 +483,6 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
       $(F+G)[A] \to B$ & $\cong$ & $(F[A] \to B) \times (G[A] \to B)$ \\
       \\
       $(F \cdot G)[A] \to B$ & $\cong$ & $F[A] \to (G[A] \to B)$ \\
-      \onslide<2> & & \\
-      $(X^n/\mathcal{H})[A] \to B$ & $\cong$ & $ ?$
     \end{tabular}
   \end{center}
 \end{frame}
@@ -350,7 +495,12 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
   \end{gather*}
 \end{frame}
 
-\section{Eliminators, take 2!}
+\subsection{Eliminators, take 2}
+\label{sec:elim2}
+
+\begin{frame}{Eliminators, take 2}
+  XXX signposting here
+\end{frame}
 
 \begin{frame}[fragile]{Poking and pointing}
   The \emph{derivative} $F'$ of $F$ represents $F$-structures with a
