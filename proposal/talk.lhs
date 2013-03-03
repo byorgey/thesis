@@ -97,18 +97,69 @@
 
 \begin{frame}[fragile]
    \titlepage
+   \hfill \includegraphics[width=0.5in]{plclub}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Outline}
   \begin{itemize}
+  \item History
   \item Algebraic data types
   \item Combinatorial species
   \item Species types
   \item The \pkg{species} library
   \item Timeline
   \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{History}
+\label{sec:history}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Before species\dots}
+  \begin{itemize}
+  \item Collections of techniques for dealing with combinatorial objects
+  \item Largely centered around \emph{generating functions} (XXX cite
+    EC, gfology -- note Herb Wilf)
+  \item All rather ad-hoc.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Species!}
+  Andr\'e Joyal, 1980 XXX -- ``Une ???''
+
+  XXX picture of first page of Joyal's actual thesis???
+\end{frame}
+
+\begin{frame}{Species!}
+  XXX picture of BLL?
+\end{frame}
+
+\begin{frame}{Species and computer science}
+  XXX have to talk about history of people combining species + CS, to
+  argue why this is worthwhile
+
+  \begin{itemize}
+  \item Flajolet, Salvy, \& Zimmermann --- LUO, combinat
+  \item Carette \& Uszkay
+  \item Joachim Kock --- XXX
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Species and ADTs?}
+  \begin{center}
+    The connection is ``obvious''. \bigskip
+
+    \onslide<2->
+    \dots but what can we do with it? \bigskip
+
+    \onslide<3->
+    \emph{A beautiful Answer in search of a Question.}
+  \end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,19 +184,26 @@
 \item Recursion
 \end{itemize}
 
-Note: no arrow types!
+\onslide<2->
+\begin{center}
+  Note: no arrow types in this talk!
+\end{center}
+XXX if time, draw a little arrow with a slash through it =)
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{ADT example}
+\begin{frame}[fragile]{ADT example}
   Binary tree type:
 
 %format Tree  = "\tycon{Tree}"
 %format Empty = "\con{Empty}"
 %format Node  = "\con{Node}"
 
-XXX todo: picture here
+XXX draw tree here
+  % \begin{diagram}[width=100]
+
+  % \end{diagram}
 
   \begin{spec}
 data Tree
@@ -175,56 +233,37 @@ type Tree = Either () (Tree, (Int, Tree))
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Combinatorial species}
 \label{sec:species}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-  \emph{What are species, and what do they have to do with programming languages?}
+% \begin{frame}
+%   \emph{What are species, and what do they have to do with programming languages?}
 
-  XXX picture
+%   XXX picture
 
-  A theory of \emph{labeled structures}
-\end{frame}
+%   A theory of \emph{labeled structures}
+% \end{frame}
 
-\begin{frame}{Before species\dots}
-  \begin{itemize}
-  \item A collection of techniques for dealing with combinatorial
-    classes
-  \item Largely centered around \emph{generating functions} (XXX cite
-    EC, gfology -- note Herb Wilf)
-  \item All rather ad-hoc.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Species!}
-  André Joyal, 1980 XXX -- ``Une ???''
-
-  XXX picture of first page of Joyal's actual thesis???
-\end{frame}
-
-\begin{frame}{Species and ADTs?}
-  The connection is ``obvious''.
-
-  \emph{A beautiful Answer in search of a Question.}
-\end{frame}
-
-\begin{frame}{Species and computer science?}
-  XXX have to talk about history of people combining species + CS, to
-  argue why this is worthwhile
-  \begin{itemize}
-  \item Flajolet, Salvy, \& Zimmermann --- LUO, combinat
-  \item Carette \& Uszkay
-  \item Joachim Kock --- XXX
-  \end{itemize}
+\begin{frame}{Species}
+  \begin{center}
+    The theory of combinatorial species is a theory of \\
+    \emph{labeled structures}.
+  \end{center}
+  XXX picture here of a bunch of example labeled structures.
 \end{frame}
 
 \begin{frame}{Species definition}
+  \begin{center}
+
   Big idea: structures \emph{indexed by size}.
 
   XXX diagram here of binary tree structures by size.
 
   Gives us all kinds of traction. XXX rephrase
+\end{center}
 \end{frame}
 
 \begin{frame}{Species definition}
@@ -241,16 +280,21 @@ type Tree = Either () (Tree, (Int, Tree))
 \begin{frame}{Species definition}
   A \term{species} $F$ is a pair of mappings which
 \begin{itemize}
-\item sends any finite set $U$ (of \term{labels}) to a finite set
+\item<2-> sends any finite set $U$ (of \term{labels}) to a finite set
   $F[U]$ (of \term{structures}), and
-\item sends any bijection on finite sets $\sigma : U \bij V$ (a
+\item<3-> sends any bijection on finite sets $\sigma : U \bij V$ (a
   \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$
 \end{itemize}
+\onslide<4->
 satisfying the following functoriality conditions:
 \begin{itemize}
 \item $F[id_U] = id_{F[U]}$, and
 \item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
 \end{itemize}
+\onslide<5->
+\begin{center}
+  (Functors from $\B$ to $\FinSet$.)
+\end{center}
 \end{frame}
 
 \begin{frame}{Relabeling}
@@ -266,7 +310,7 @@ import Species
 import Data.List
 import Data.List.Split
 
-dia = 
+dia =
   hcat' with {sep = 0.5}
   [ unord (map labT [0..2])
   , arrow 2 (txt "L")
@@ -297,7 +341,7 @@ import Data.Tree
 import Diagrams.TwoD.Layout.Tree
 import Control.Arrow (first, second)
 
-dia = 
+dia =
   hcat' with {sep = 0.5}
   [ unord (map labT [0..2])
   , arrow 2 (txt "T")
@@ -310,7 +354,7 @@ drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
 
 trees []   = []
 trees [x]  = [ Node x [] ]
-trees xxs  = [ Node x [l,r] 
+trees xxs  = [ Node x [l,r]
              || (x,xs) <- select xxs
              , (ys, zs) <- subsets xs
              , l <- trees ys
@@ -328,9 +372,9 @@ treeStructures =
     hcat' with {sep = 0.5}
   . map drawTreeStruct
   . trees
-  $ [0..2]   
+  $ [0..2]
 \end{diagram}
-%$    
+%$
   \end{center}
 \end{frame}
 
@@ -340,6 +384,11 @@ treeStructures =
 
 \begin{frame}[fragile]{Examples}
   XXX simple graphs?
+\end{frame}
+
+\begin{frame}
+  XXX Vennish diagram showing just species + ADTs.  Say, species is
+  too big.
 \end{frame}
 
 \begin{frame}
@@ -354,7 +403,7 @@ treeStructures =
       \item $\Zero$
       \item $\One$
       \item $\X$
-      \item $\C$
+      \item $\Cyc$
       \item $\E$
       \item \dots
       \end{itemize}
@@ -398,25 +447,38 @@ treeStructures =
   \includegraphics[width=1in]{BLL-cover}
 \end{frame}
 
-\begin{frame}{Remaining work}
+\begin{frame}{Exposition: remaining work}
   XXX have begun with blog posts + proposal document
+  XXX stuff still remaining:
   \begin{itemize}
     \item $\mathbb{L}$-species
     \item Virtual species
     \item Molecular and atomic species
+    \item \dots
   \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Species types}
 \label{sec:species-types}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
   \begin{center}
     \emph{Can we use the theory of species as a foundational basis for
       container types?}
   \end{center}
+\end{frame}
+
+\begin{frame}{What would we need?}
+  \begin{itemize}
+  \item Formal way to interpret species as data types
+  \item Introduction and elimination forms
+  \item Generic programming
+  \item \dots?
+  \end{itemize}
 \end{frame}
 
 \subsection{XXX relationship}
@@ -455,6 +517,8 @@ dia = drawSpT t # pad 1.1
   \end{diagram}
   \bigskip
 
+  XXX fix the rightmost one
+
   \onslide<2>\dots how can we program with these?
   \end{center}
 \end{frame}
@@ -466,9 +530,10 @@ import Species
 dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad 1.1
   \end{diagram}
   \end{center}
-
-  \onslide<2>Want: compiler guarantee that eliminators are oblivious
-  to ``representation details''.
+  \begin{center}
+    \onslide<2>Want a compiler guarantee that eliminators are
+    oblivious to ``representation details''.
+  \end{center}
 \end{frame}
 
 \begin{frame}
@@ -581,9 +646,6 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 \end{frame}
 
 \begin{frame}[fragile]{Other uses of $\down$}
-  %% XXX 4  -- draw example of another thing "down" is useful for
-%  Note $\down$ is useful for other things too. ``Map in context''.
-%  e.g. cycles.
   \begin{diagram}[width=300]
     import Species
     c = Cyc (map lab' [blue, red, yellow])
@@ -619,32 +681,107 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
   \end{diagram}
 \end{frame}
 
+\begin{frame}{Species types: remaining work}
+  \begin{itemize}
+  \item Introduction forms
+  \item Relate two formulations of eliminators
+  \item Extend theory to multi-sort species and recursive species
+  \item Make all of this practical for programming
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{What if something goes wrong?}
+  XXX need to address that concern here.
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The \pkg{species} library}
 \label{sec:species-lib}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
   \emph{XXX need a question here}
 \end{frame}
 
+\begin{frame}
+  XXX describe library (show screencap of Hackage page)
+\end{frame}
 
--------------------------------------------------------------------------------
+\begin{frame}{Example}
+{\small
+\begin{verbatim}
+>>> take 10 . labeled $ set `o` nonEmpty sets
+[1,1,2,5,15,52,203,877,4140,21147]
 
+>>> take 10 . unlabeled $ set `o` nonEmpty sets
+[1,1,2,3,5,7,11,15,22,30]
 
+>>> enumerate (set `o` nonEmpty sets) [1,2,3]
+      :: [(Set :.: Set) Int]
+[{{1,2,3}},{{2,3},{1}},{{2},{1,3}},
+ {{3},{1,2}},{{3},{2},{1}}]
+\end{verbatim}
+}
+\end{frame}
 
+\begin{frame}
+  XXX proposed feature: random generation
 
+% One major missing feature of the library which I propose to add is the
+% ability to randomly generate structures of user-defined data types,
+% perhaps in concert with an existing test-generation framework such as
+% FEAT~\citep{duregaard2012feat} or gencheck~\citep{gencheck}.  In
+% particular, no existing frameworks can randomly generate structures
+% corresponding to non-regular (symmetric) species.
+\end{frame}
 
+\begin{frame}
+  XXX typed setting?
+\end{frame}
 
+\begin{frame}
+  XXX testbed for ideas from previous sections
 
+%   Second, the library can serve as a testbed for the ideas outlined in
+% \pref{sec:species-as-data-types}---instead of implementing an entirely
+% new programming language from scratch, to a large extent we can simply
+% \emph{embed} a new language as a library in Haskell.
+\end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Timeline}
+\label{sec:timeline}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}
+XXX March--August 2013
+% \textbf{March--August 2013}: my focus during this period will be
+% twofold: to develop an exposition of species theory, both through my
+% blog and in a form suitable to eventually go in my dissertation; and,
+% in parallel, to work out a theory of species data types as outlined in
+% \pref{sec:species-as-data-types}.
+\end{frame}
 
+\begin{frame}
+XXX September--December 2013
+% \textbf{September--December 2013}: My focus during this period will be
+% on development of the \texttt{species} library, as outlined in
+% \pref{sec:species-library}.
+\end{frame}
 
+\begin{frame}
+XXX January--April 2014
+% \textbf{January--April 2014} My focus during the first part of 2014
+% will be on writing my dissertation, with the goal of defending in May.
+\end{frame}
 
-
-
+\begin{frame}
+  XXX concluding slide
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
