@@ -698,26 +698,25 @@ Enumeration, asymptotics, random generation, \dots
   % Symmetric structure examples: cycles, bags, hierarchies,
   % heaps\dots
   \begin{center}
-  \begin{diagram}[width=75]
-import Species
-dia = cyc [0..4] 1.2 # pad 1.1
-  \end{diagram}
-  % XX vertically center, if time
-  \begin{diagram}[width=60]
-import Species
-dia = ( roundedRect 2 1 0.2
-        <> (lab 0 |||||| strutX 0.3 |||||| lab 3)
-           # centerXY
-      )
-      # pad 1.1
-      # lw 0.02
-  \end{diagram}
-  \begin{diagram}[width=75]
+  \begin{diagram}[width=250]
 import Species
 import Data.Tree
+
+dia1 = cyc [0..4] 1.2 # pad 1.1
+
+dia2 = ( roundedRect 2 1 0.2
+         <> (lab 0 |||||| strutX 0.3 |||||| lab 3)
+            # centerXY
+       )
+       # pad 1.1
+       # lw 0.02
+
 t   = Node Bag [lf (Lab 1), lf (Lab 2), Node Bag [lf (Lab 0), lf (Lab 3)]]
-dia = drawSpT' mempty with t # pad 1.1
+dia3 = drawSpT' mempty with t # pad 1.1
+
+dia = hcat' with {sep = 1} . map centerXY $ [dia1, dia2, dia3]
   \end{diagram}
+  %$
   \bigskip
 
 %  \onslide<2>\dots how can we program with these?
@@ -737,20 +736,42 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
   \end{center}
 \end{frame}
 
-\begin{frame}
-  XXX redo this slide.  What exactly do I want to say?
-  We can build eliminators in a type-directed way, using ``high
-  school algebra'' laws for exponents:
+% \begin{frame}
+%   XX redo this slide.  What exactly do I want to say?
+%   We can build eliminators in a type-directed way, using ``high
+%   school algebra'' laws for exponents:
+%   \begin{center}
+%     \begin{tabular}{ccc}
+%       $1[A] \to B$ & $\cong$ & $B$ \\
+%       \\
+%       $X[A] \to B$ & $\cong$ & $A \to B$ \\
+%       \\
+%       $(F+G)[A] \to B$ & $\cong$ & $(F[A] \to B) \times (G[A] \to B)$ \\
+%       \\
+%       $(F \cdot G)[A] \to B$ & $\cong$ & $F[A] \to (G[A] \to B)$ \\
+%     \end{tabular}
+%   \end{center}
+% \end{frame}
+
+\begin{frame}[fragile]{Molecular species}
   \begin{center}
-    \begin{tabular}{ccc}
-      $1[A] \to B$ & $\cong$ & $B$ \\
-      \\
-      $X[A] \to B$ & $\cong$ & $A \to B$ \\
-      \\
-      $(F+G)[A] \to B$ & $\cong$ & $(F[A] \to B) \times (G[A] \to B)$ \\
-      \\
-      $(F \cdot G)[A] \to B$ & $\cong$ & $F[A] \to (G[A] \to B)$ \\
-    \end{tabular}
+    The essence of symmetry: $\X^n/\H$, where $\H \subseteq \S_n$
+    \bigskip
+
+  \begin{overprint}
+    \onslide<1>
+    \centering
+  \begin{diagram}[width=200]
+import Species
+dia = hcat $ zipWith (\i n -> named i . (<> square 1) . labT $ n) ([0..] :: [Int]) [0..4]
+  \end{diagram}
+  \onslide<2>
+  \centering
+  \begin{diagram}[width=200]
+import Species
+dia = hcat $ zipWith (\i n -> named i . (<> square 1) . labT $ n) ([0..] :: [Int]) (4 : [0..3])
+  \end{diagram}
+  \end{overprint}
   \end{center}
 \end{frame}
 
@@ -758,7 +779,7 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
   \begin{gather*}
     (X^n/\mathcal{H})[A] \to B \\
     \cong \\
-    \Sigma f : X^n \to B. \Pi \sigma \in \mathcal{H}. f = f \circ \sigma
+    \Sigma f : X^n \to B.\;\; \Pi \sigma \in \mathcal{H}.\;\; f = f \circ \sigma
   \end{gather*}
 \end{frame}
 
@@ -766,7 +787,7 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 \label{sec:elim2}
 
 \begin{frame}{Eliminators, take 2}
-  XXX signposting here
+  A different way to think about eliminators\dots
 \end{frame}
 
 \begin{frame}[fragile]{Poking and pointing}
@@ -856,14 +877,15 @@ dia = theDia # centerXY # pad 1.1
 
 \begin{frame}[fragile]{Pointing}
   \begin{center}
-XXX picture here?
-  % \begin{diagram}[width=250]
-  %   import Species
-  %   f   = drawSpT (nd 'F' (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
-  %   fpt = drawSpT (nd 'F' (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
+  \begin{diagram}[width=250]
+import           Species
+f   = drawSpT (nd (label 'F') (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
+fpt = drawSpT (nd (label 'F') (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
 
-  %   dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||)
-  % \end{diagram}
+label c = text [c] <> rect 2 1 # lw 0
+
+dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||)
+  \end{diagram}
   \end{center}
 
   \[ \pt{(-)} : F \to \pt{F} ? \]
@@ -955,9 +977,9 @@ XXX picture here?
   \end{itemize}
 \end{frame}
 
-\begin{frame}{What if something goes wrong?}
-  XXX need to address that concern here.
-\end{frame}
+% \begin{frame}{What if something goes wrong?}
+%   XX need to address that concern here.
+% \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -971,13 +993,6 @@ XXX picture here?
     \includegraphics[width=4in]{species-package.png}
   \end{center}
 \end{frame}
-
-% XXX include this or not?
-% \begin{frame}
-%   \begin{center}
-%     \includegraphics[width=3in]{oh-my}
-%   \end{center}
-% \end{frame}
 
 \begin{frame}{Example usage}
   \begin{center} {\small
@@ -1051,8 +1066,30 @@ XXX picture here?
 % will be on writing my dissertation, with the goal of defending in May.
 \end{frame}
 
-\begin{frame}
-  XXX concluding slide
+\begin{frame}[fragile]
+  \begin{center}
+    Thank you! \bigskip
+
+  \begin{diagram}[width=250]
+import Species
+import Data.Tree
+
+dia1 = cyc [0..4] 1.2 # pad 1.1
+
+dia2 = ( roundedRect 2 1 0.2
+         <> (lab 0 |||||| strutX 0.3 |||||| lab 3)
+            # centerXY
+       )
+       # pad 1.1
+       # lw 0.02
+
+t   = Node Bag [lf (Lab 1), lf (Lab 2), Node Bag [lf (Lab 0), lf (Lab 3)]]
+dia3 = drawSpT' mempty with t # pad 1.1
+
+dia = hcat' with {sep = 1} . map centerXY $ [dia1, dia2, dia3]
+  \end{diagram}
+  %$
+  \end{center}
 \end{frame}
 
 \end{document}
