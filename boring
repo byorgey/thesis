@@ -125,3 +125,6 @@
 .diagrams_cache
 Shake$
 .shake.database
+tmp$
+\.errors$
+tmp.hs$
