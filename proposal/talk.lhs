@@ -9,6 +9,8 @@
 \usepackage[outputdir=diagrams]{diagrams-latex}
 \graphicspath{{images/}}
 
+\usepackage[percent]{overpic}
+
 \renewcommand{\onelinecomment}{\quad--- \itshape}
 \renewcommand{\Varid}[1]{{\mathit{#1}}}
 
@@ -28,7 +30,7 @@
                                               % bottom
   \setbeamerfont{normal text}{family=\sffamily}
 
-  % XXX remove this before giving actual talk!
+  % XX remove this before giving actual talk!
   % \setbeamertemplate{footline}[frame number]
   % {%
   %   \begin{beamercolorbox}{section in head/foot}
@@ -123,30 +125,29 @@
 \begin{frame}{Before species\dots}
   \begin{itemize}
   \item Collections of techniques for dealing with combinatorial objects
-  \item Largely centered around \emph{generating functions} (XXX cite
-    EC, gfology -- note Herb Wilf)
+  \item Largely centered around \emph{generating functions} (Stanley,
+    Enumerative Combinatorics; Wilf, generatingfunctionology)
   \item All rather ad-hoc.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Species!}
-  Andr\'e Joyal, 1980 XXX -- ``Une ???''
-
-  XXX picture of first page of Joyal's actual thesis???
+  \begin{center}
+    Andr\'e Joyal, 1981: \raisebox{-.5\height}{\includegraphics[height=0.8\textheight]{joyal-species}}
+  \end{center}
 \end{frame}
 
 \begin{frame}{Species!}
-  XXX picture of BLL?
+  \begin{center}
+    1997: \hspace{0.5in} \raisebox{-.5\height}{\includegraphics[width=1.5in]{BLL-cover}}
+  \end{center}
 \end{frame}
 
 \begin{frame}{Species and computer science}
-  XXX have to talk about history of people combining species + CS, to
-  argue why this is worthwhile
-
   \begin{itemize}
-  \item Flajolet, Salvy, \& Zimmermann --- LUO, combinat
+  \item Flajolet, Salvy, \& Zimmermann --- LUO, combstruct, combinat
   \item Carette \& Uszkay
-  \item Joachim Kock --- XXX
+  \item Joachim Kock
   \end{itemize}
 \end{frame}
 
@@ -169,7 +170,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{Algebraic data types}
+\begin{frame}[fragile]{Algebraic data types}
 
   \begin{center}
 \includegraphics[width=1in]{ocaml-logo} \hspace{1in}
@@ -187,24 +188,41 @@
 \onslide<2->
 \begin{center}
   Note: no arrow types in this talk!
+  \begin{minipage}[c]{1in}
+  \begin{diagram}[width=50]
+arrow = (hrule 1 # alignR <> arrowhead) # lw 0.1 # centerX
+arrowhead = fromVertices [ (-1) & 0, origin, ((-1) & 0) # rotate (70 :: Deg) ]
+          # rotate (-35 :: Deg)
+          # scale 0.3
+no = (circle 1 <> hrule 2 # rotateBy (1/8))
+   # lw 0.2 # lc red
+dia = (no <> arrow) # pad 1.2
+  \end{diagram}
+  \end{minipage}
 \end{center}
-XXX if time, draw a little arrow with a slash through it =)
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]{ADT example}
   Binary tree type:
+  \begin{diagram}[width=75]
+import           Diagrams.TwoD.Layout.Tree
+import Diagrams (drawBinTree)
+
+t = BNode 1 (BNode 8 (leaf 7) (leaf 2)) (BNode 6 (BNode 5 (leaf 2) (leaf 1)) (leaf 4))
+
+tree = drawBinTree with . fmap drawNode $ t
+
+drawNode n = text (show n) # fontSize 0.5 <> circle 0.3 # fc white
+
+dia = tree # centerXY # pad 1.1
+  \end{diagram}
+%$
 
 %format Tree  = "\tycon{Tree}"
 %format Empty = "\con{Empty}"
 %format Node  = "\con{Node}"
-
-XXX draw tree here
-  % \begin{diagram}[width=100]
-
-  % \end{diagram}
-
   \begin{spec}
 data Tree
   =  Empty
@@ -239,39 +257,116 @@ type Tree = Either () (Tree, (Int, Tree))
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \begin{frame}
-%   \emph{What are species, and what do they have to do with programming languages?}
-
-%   XXX picture
-
-%   A theory of \emph{labeled structures}
-% \end{frame}
-
-\begin{frame}{Species}
+\begin{frame}[fragile]{Species}
   \begin{center}
     The theory of combinatorial species is a theory of \\
-    \emph{labeled structures}.
+    \emph{labeled structures}. \bigskip
+
+  \begin{diagram}[width=200]
+import Diagrams
+dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
+    # centerXY
+    # pad 1.1
+  \end{diagram}
   \end{center}
-  XXX picture here of a bunch of example labeled structures.
 \end{frame}
 
-\begin{frame}{Species definition}
-  \begin{center}
+\begin{frame}[fragile]{Data structure = shape + data}
+\begin{diagram}[width=300]
+import Diagrams
+dia = shapePlusData # centerXY # pad 1.1
 
+shapePlusData = octo [0..7]
+  |||||| strutX 2
+  |||||| (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
+  |||||| strutX 2
+  |||||| mapping
+  |||||| strutX 2
+
+mapping = centerXY . vcat' with {sep = 0.2} . map mapsto $ zip [0..7] "species!"
+mapsto (lab,x) = loc lab ||-|| arrow ||-|| elt x
+x ||-|| y = x |||||| strutX 0.5 |||||| y
+arrow = (hrule 3 # alignR # lw 0.03)
+         <> (eqTriangle 0.5 # rotateBy (-1/4) # fc black # scaleY 0.7)
+\end{diagram}
+%$
+\end{frame}
+
+\begin{frame}[fragile]{Species definition}
+  \begin{center}
   Big idea: structures \emph{indexed by size}.
 
-  XXX diagram here of binary tree structures by size.
+  \begin{diagram}[width=300]
+import Diagrams
+import Diagrams.TwoD.Layout.Tree
 
-  Gives us all kinds of traction. XXX rephrase
+enumTreesU :: Int -> [BTree ()]
+enumTreesU 0 = [Empty]
+enumTreesU n = [ BNode () l r
+               || k <- [0..n-1]
+               , l <- enumTreesU (n-1-k)
+               , r <- enumTreesU k
+               ]
+
+dia = pad 1.1
+    . centerXY
+    . vcat' with { sep = 2 }
+    . zipWith (\n row -> (text (show n) # fontSize 1.5 <> square 1 # lw 0) |||||| strutX 2 |||||| row) [0..]
+    . map
+      ( centerY
+      . hcat' with { sep = 1 }
+      . map (drawBinTree with)
+      . (map . fmap) (const (circle 0.3 # fc black))
+      . enumTreesU
+      )
+    $ [0..4]
+  \end{diagram}
+%$
+  \note{Simple but gives us lots of traction.  Asymptotics, random
+    generation, ...}
 \end{center}
 \end{frame}
 
-\begin{frame}{Species definition}
-  Better idea (Joyal's key insight): index by \emph{labels} and insist
-  the \emph{particular labels used don't matter}.
+\begin{frame}[fragile]{Species definition}
+  \begin{center}
+    Better idea (Joyal's key insight): index by \emph{labels} and
+    insist the \emph{particular labels used don't matter}.
+    \begin{diagram}[width=300]
+import           Diagrams.TwoD.Layout.Tree
+import           Diagrams (drawBinTree, loc, select, subsets)
+import Data.List (intercalate)
 
-  XXX diagram of labeled binary tree structures
+enumTrees :: [a] -> [BTree a]
+enumTrees [] = [Empty]
+enumTrees as = [ BNode a l r
+               || (a,as') <- select as
+               , (ls,rs) <- subsets as'
+               , l <- enumTrees ls
+               , r <- enumTrees rs
+               ]
 
+ellipsis = hcat' with {sep = 0.4} (replicate 3 (circle 0.3 # fc black))
+
+dia = pad 1.1
+    . centerXY
+    . vcat' with { sep = 2 }
+    . zipWith (\n row -> (text ("{" ++ intercalate "," (map show [0..n-1]) ++ "}" ) # fontSize 1 <> square 1 # lw 0) |||||| strutX 2 |||||| row) [0..]
+    . map
+      ( centerY
+      . (\l -> if length l <= 10
+                 then hcat' with { sep = 1 } l
+                 else hcat' with { sep = 1 } (take 10 l) # centerY |||||| ellipsis)
+      . map (drawBinTree with { slVSep = 2, slHSep = 2 })
+      . (map . fmap) loc
+      . enumTrees
+      . (\n -> [0..n-1])
+      )
+    $ [0..3]
+    \end{diagram}
+%$
+% XX if time, come back and redraw the same thing with a different
+% set of labels
+  \end{center}
   \note{note also distinct labelings.  This is a feature, not a bug ---
   allows to seamlessly talk about non-regular structures as well as
   ``unlabelled'' structures.}
@@ -333,66 +428,155 @@ listStructures =
 \end{center}
 \end{frame}
 
+% \begin{frame}[fragile]{Examples}
+%   \begin{center}
+% \begin{diagram}[width=300]
+% import Species
+% import Diagrams
+% import Data.Tree
+% import Diagrams.TwoD.Layout.Tree
+
+% dia =
+%   hcat' with {sep = 0.5}
+%   [ unord (map labT [0..2])
+%   , arrow 2 (txt "T")
+%   , enRect treeStructures
+%   ]
+%   # centerXY
+%   # pad 1.1
+
+% drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
+
+% -- this is actually generating only FULL binary trees, where each node
+% -- has 0 or 2 children.
+
+% trees []   = []
+% trees [x]  = [ Node x [] ]
+% trees xxs  = [ Node x [l,r]
+%              || (x,xs) <- select xxs
+%              , (ys, zs) <- subsets xs
+%              , l <- trees ys
+%              , r <- trees zs
+%              ]
+
+% treeStructures =
+%     hcat' with {sep = 0.5}
+%   . map drawTreeStruct
+%   . trees
+%   $ [0..2]
+% \end{diagram}
+% %$
+%   \end{center}
+% \end{frame}
+
 \begin{frame}[fragile]{Examples}
-  \begin{center}
-\begin{diagram}[width=300]
+  \begin{diagram}[width=300]
 import Species
-import Data.Tree
-import Diagrams.TwoD.Layout.Tree
-import Control.Arrow (first, second)
+import Data.List (permutations)
 
 dia =
   hcat' with {sep = 0.5}
-  [ unord (map labT [0..2])
-  , arrow 2 (txt "T")
-  , enRect treeStructures
+  [ unord (map labT [0..3])
+  , arrow 2 (txt "C")
+  , enRect cycleStructures
   ]
   # centerXY
   # pad 1.1
 
-drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
-
-trees []   = []
-trees [x]  = [ Node x [] ]
-trees xxs  = [ Node x [l,r]
-             || (x,xs) <- select xxs
-             , (ys, zs) <- subsets xs
-             , l <- trees ys
-             , r <- trees zs
-             ]
-
-select []     = []
-select (x:xs) = (x,xs) : (map . second) (x:) (select xs)
-
-subsets []     = [ ([],[]) ]
-subsets (x:xs) = (map . first) (x:) ss ++ (map . second) (x:) ss
-  where ss = subsets xs
-
-treeStructures =
+cycleStructures =
     hcat' with {sep = 0.5}
-  . map drawTreeStruct
-  . trees
-  $ [0..2]
+  . map (flip cyc' 1 . map labT . (0:))
+  . permutations
+  $ [1..3]
+  \end{diagram}
+  %$
+\end{frame}
+
+\begin{frame}[fragile]{Examples}
+\begin{diagram}[width=300]
+import           Data.List.Split                (chunksOf)
+import qualified Data.Map                       as M
+import           Diagrams                       (drawGraph)
+import           Species
+
+dia =
+  hcat' with {sep = 0.5}
+  [ unord (map labT [0..3])
+  , arrow 2 (txt "G")
+  , enRect graphStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+-- generated using species library,
+--  map (map ((\[x,y] -> (x,y)) . getSet) . getSet . unComp) (enumerate simpleGraphs [0..2] :: [(Set :.: Set) Int])
+all3graphs = [[],[(0,1)],[(0,2)],[(0,2),(0,1)],[(1,2)],[(1,2),(0,1)],[(1,2),(0,2)],[(1,2),(0,2),(0,1)]]
+
+all4graphs = [[],[(0,1)],[(0,2)],[(0,2),(0,1)],[(0,3)],[(0,3),(0,1)],[(0,3),(0,2)],[(0,3),(0,2),(0,1)],[(1,2)],[(1,2),(0,1)],[(1,2),(0,2)],[(1,2),(0,2),(0,1)],[(1,2),(0,3)],[(1,2),(0,3),(0,1)],[(1,2),(0,3),(0,2)],[(1,2),(0,3),(0,2),(0,1)],[(1,3)],[(1,3),(0,1)],[(1,3),(0,2)],[(1,3),(0,2),(0,1)],[(1,3),(0,3)],[(1,3),(0,3),(0,1)],[(1,3),(0,3),(0,2)],[(1,3),(0,3),(0,2),(0,1)],[(1,3),(1,2)],[(1,3),(1,2),(0,1)],[(1,3),(1,2),(0,2)],[(1,3),(1,2),(0,2),(0,1)],[(1,3),(1,2),(0,3)],[(1,3),(1,2),(0,3),(0,1)],[(1,3),(1,2),(0,3),(0,2)],[(1,3),(1,2),(0,3),(0,2),(0,1)],[(2,3)],[(2,3),(0,1)],[(2,3),(0,2)],[(2,3),(0,2),(0,1)],[(2,3),(0,3)],[(2,3),(0,3),(0,1)],[(2,3),(0,3),(0,2)],[(2,3),(0,3),(0,2),(0,1)],[(2,3),(1,2)],[(2,3),(1,2),(0,1)],[(2,3),(1,2),(0,2)],[(2,3),(1,2),(0,2),(0,1)],[(2,3),(1,2),(0,3)],[(2,3),(1,2),(0,3),(0,1)],[(2,3),(1,2),(0,3),(0,2)],[(2,3),(1,2),(0,3),(0,2),(0,1)],[(2,3),(1,3)],[(2,3),(1,3),(0,1)],[(2,3),(1,3),(0,2)],[(2,3),(1,3),(0,2),(0,1)],[(2,3),(1,3),(0,3)],[(2,3),(1,3),(0,3),(0,1)],[(2,3),(1,3),(0,3),(0,2)],[(2,3),(1,3),(0,3),(0,2),(0,1)],[(2,3),(1,3),(1,2)],[(2,3),(1,3),(1,2),(0,1)],[(2,3),(1,3),(1,2),(0,2)],[(2,3),(1,3),(1,2),(0,2),(0,1)],[(2,3),(1,3),(1,2),(0,3)],[(2,3),(1,3),(1,2),(0,3),(0,1)],[(2,3),(1,3),(1,2),(0,3),(0,2)],[(2,3),(1,3),(1,2),(0,3),(0,2),(0,1)]]
+
+the3Map = M.fromList (zip [0..] (triangle 2))
+the4Map = M.fromList (zip [0..] (square 2))
+
+graphStructures
+  = vcat' with {sep = 0.5}
+  . map (hcat' with {sep = 0.5})
+  . chunksOf 8
+  . map (\es -> drawGraph labT (the4Map, es) # scale 0.5)
+  $ all4graphs
 \end{diagram}
 %$
+\end{frame}
+
+\begin{frame}{Too many species!}
+  \begin{center}
+    \includegraphics[width=\textwidth]{universe}
   \end{center}
 \end{frame}
 
-\begin{frame}[fragile]{Examples}
-  XXX cycles
+\begin{frame}[fragile]{Algebraic species}
+  \begin{columns}[t]
+    \begin{column}{0.5 \textwidth}
+      Primitive species:
+      \begin{itemize}
+      \item $\Zero$
+      \item $\One$
+      \item $\X$
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5 \textwidth}
+      Species operations:
+      \begin{itemize}
+      \item $F + G$
+      \item $F \sprod G$
+      \end{itemize}
+    \end{column}
+\end{columns}
+\onslide<2->
+\begin{center}
+  \begin{diagram}[width=130]
+    import Species
+
+    theDia = struct 5 "F+G" |||||| strutX 1 |||||| txt "=" ||||||
+             strutX 1 |||||| ( struct 5 "F" === txt "+" === struct 5 "G" )
+             # centerY
+
+    dia = theDia # centerXY # pad 1.1
+  \end{diagram}
+  \begin{diagram}[width=130]
+    import Species
+
+    theDia = struct 5 "F•G" |||||| strutX 1 |||||| txt "=" ||||||
+             strutX 1 |||||| ( struct 2 "F" === strutY 0.2 === struct 3 "G" )
+             # centerY
+
+    dia = theDia # centerXY # pad 1.1
+  \end{diagram}
+\end{center}
 \end{frame}
 
-\begin{frame}[fragile]{Examples}
-  XXX simple graphs?
-\end{frame}
-
-\begin{frame}
-  XXX Vennish diagram showing just species + ADTs.  Say, species is
-  too big.
-\end{frame}
-
-\begin{frame}
-  XXX Vennish diagram showing species, algebra of species, ADTs.
+\begin{frame}{Algebraic species examples}
+  \[ \L = \One + \X \sprod \L \]
+  \[ \T = \One + \X \sprod \T^2 \]
 \end{frame}
 
 \begin{frame}{Algebraic species}
@@ -403,9 +587,9 @@ treeStructures =
       \item $\Zero$
       \item $\One$
       \item $\X$
-      \item $\Cyc$
-      \item $\E$
-      \item \dots
+      \item<2-> $\Cyc$
+      \item<2-> $\E$
+      \item<2-> \dots
       \end{itemize}
     \end{column}
     \begin{column}{0.5 \textwidth}
@@ -413,47 +597,74 @@ treeStructures =
       \begin{itemize}
       \item $F + G$
       \item $F \sprod G$
-      \item $F \comp G$
-      \item $F \times G$
-      \item $F'$
-      \item $\pt{F}$
-      \item $F \fcomp G$
-      \item \dots
+      \item<2-> $F \comp G$
+      \item<2-> $F \times G$
+      \item<2-> $F'$
+      \item<2-> $\pt{F}$
+      \item<2-> $F \fcomp G$
+      \item<2-> \dots
       \end{itemize}
     \end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}
-  XXX how much detail to drill into here?
+\begin{frame}[fragile]{Algebraic species example}
+  \begin{center}
+    The species of \emph{simple graphs} can be described by:
+
+    \[ \mathcal{G} = (\E \sprod \E) \fcomp (\X^2 \sprod \E) \]
+
+    \begin{diagram}[width=200]
+import Diagrams
+
+dia = gr # centerXY # pad 1.1
+    \end{diagram}
+%$
+  \end{center}
 \end{frame}
 
-\begin{frame}{Algebraic species example}
-  XXX give simple graphs as an example.
+\begin{frame}{Generating functions}
+  \[ F(x) = \sum_{n \geq 0} ||F[n]|| \frac{x^n}{n!} \]
 
-  \[ \mathcal{G} = (\E \sprod \E) \fcomp
-  (\X^2 \sprod \E) \]
+\[ \L(x) = 1 + x + x^2 + \dots = \frac{1}{1-x} \]
+\[ \E(x) = 1 + x + \frac{x^2}{2} + \frac{x^3}{3!} + \dots = e^x \]
+\end{frame}
+
+\begin{frame}{Homomorphism!}
+  \[ \Zero(x) = 0 \]
+  \[ \One(x) = 1 \]
+  \[ \X(x) = x \]
+  \[ (F + G)(x) = F(x) + G(x) \]
+  \[ (F \sprod G)(x) = F(x)G(x) \]
+  \begin{center}
+  \dots
+  \end{center}
+\onslide<2->
+Enumeration, asymptotics, random generation, \dots
+\end{frame}
+
+\begin{frame}{Exposition}
+    A key contribution of my dissertation will be \emph{an exposition
+      of the theory of species},
+    \onslide<2-> accessible to functional
+    programmers and computer scientists in general.
 \end{frame}
 
 \begin{frame}
-  XXX homomorphism to gen funcs.  Describe, state advantages.
-\end{frame}
-
-\begin{frame}
-  Presentation will be a contribution of my thesis.
-
-  XXX picture of BLL -- not accessible, expensive
-
-  \includegraphics[width=1in]{BLL-cover}
+  \begin{center}
+    \begin{overpic}[width=1in]{BLL-cover}
+      \put(20,30){\huge \$\$\$}
+      \put(20,60){\huge ???}
+    \end{overpic}
+  \end{center}
 \end{frame}
 
 \begin{frame}{Exposition: remaining work}
-  XXX have begun with blog posts + proposal document
-  XXX stuff still remaining:
   \begin{itemize}
-    \item $\mathbb{L}$-species
-    \item Virtual species
     \item Molecular and atomic species
+    \item Weighted species
+    \item Virtual species
+    \item $\mathbb{L}$-species
     \item \dots
   \end{itemize}
 \end{frame}
@@ -476,16 +687,8 @@ treeStructures =
   \begin{itemize}
   \item Formal way to interpret species as data types
   \item Introduction and elimination forms
-  \item Generic programming
   \item \dots?
   \end{itemize}
-\end{frame}
-
-\subsection{XXX relationship}
-\label{sec:relationship}
-
-\begin{frame}{Relationship of species to data types}
-  XXX explain here.  From proposal.
 \end{frame}
 
 \subsection{Eliminators for species types}
@@ -499,7 +702,7 @@ treeStructures =
 import Species
 dia = cyc [0..4] 1.2 # pad 1.1
   \end{diagram}
-  % XXX vertically center, if time
+  % XX vertically center, if time
   \begin{diagram}[width=60]
 import Species
 dia = ( roundedRect 2 1 0.2
@@ -513,13 +716,11 @@ dia = ( roundedRect 2 1 0.2
 import Species
 import Data.Tree
 t   = Node Bag [lf (Lab 1), lf (Lab 2), Node Bag [lf (Lab 0), lf (Lab 3)]]
-dia = drawSpT t # pad 1.1
+dia = drawSpT' mempty with t # pad 1.1
   \end{diagram}
   \bigskip
 
-  XXX fix the rightmost one
-
-  \onslide<2>\dots how can we program with these?
+%  \onslide<2>\dots how can we program with these?
   \end{center}
 \end{frame}
 
@@ -537,6 +738,7 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 \end{frame}
 
 \begin{frame}
+  XXX redo this slide.  What exactly do I want to say?
   We can build eliminators in a type-directed way, using ``high
   school algebra'' laws for exponents:
   \begin{center}
@@ -572,19 +774,80 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
   hole.
 
   \begin{center}
-  \begin{diagram}[width=100]
-    import Species
-    dia = drawSpT (nd 'F' (map lf [Leaf, Hole, Leaf, Leaf])) # pad 1.1
+  \begin{diagram}[width=200]
+import Species
+
+theDia = struct 4 "F'"
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         drawSpT
+         ( nd (txt "F")
+           [ lf Leaf
+           , lf Leaf
+           , lf Leaf
+           , lf Hole
+           , lf Leaf
+           ]
+         )
+
+dia = theDia # centerXY # pad 1.1
   \end{diagram}
   \end{center}
+\end{frame}
 
+\begin{frame}[fragile]{Poking and pointing}
   The \emph{pointing} of $F$, $\pt{F} \triangleq X \cdot F'$,
   represents $F$-structures with a distinguished element.
 
   \begin{center}
-  \begin{diagram}[width=100]
-    import Species
-    dia = drawSpT (nd 'F' (map lf [Leaf, Point, Leaf, Leaf])) # pad 1.1
+  \begin{diagram}[width=200]
+import Species
+
+theDia = drawSpT (struct'' 5 ((text "F" <> rect 1 1 # lw 0) |||||| circle 0.2 # fc black # translateY 0.2)) # centerXY
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         ( struct 1 "X" # alignR
+           ===
+           strutY 0.1
+           ===
+           drawSpT
+           ( nd (txt "F")
+             [ lf Leaf
+             , lf Leaf
+             , lf Leaf
+             , lf Hole
+             , lf Leaf
+             ]
+           ) # alignR
+         ) # centerXY
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         drawSpT
+         ( nd (txt "F")
+           [ lf Leaf
+           , lf Leaf
+           , lf Leaf
+           , lf Point
+           , lf Leaf
+           ]
+         )
+
+dia = theDia # centerXY # pad 1.1
   \end{diagram}
   \end{center}
 
@@ -593,32 +856,34 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 
 \begin{frame}[fragile]{Pointing}
   \begin{center}
-  \begin{diagram}[width=250]
-    import Species
-    f   = drawSpT (nd 'F' (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
-    fpt = drawSpT (nd 'F' (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
+XXX picture here?
+  % \begin{diagram}[width=250]
+  %   import Species
+  %   f   = drawSpT (nd 'F' (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
+  %   fpt = drawSpT (nd 'F' (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
 
-    dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||)
-  \end{diagram}
+  %   dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||)
+  % \end{diagram}
   \end{center}
 
   \[ \pt{(-)} : F \to \pt{F} ? \]
 
   \begin{center}
-  \onslide<2>\emph{Only} for polynomials!
+  \onslide<2>\emph{Only} for polynomial species!
   \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Pointing in context}
-  \dots but Peter Hancock's ``cursor down'' operator is fine: \[ \down
-  : F \to F \pt{F} \]
+  The trick is to choose every point at once: \[ \down
+  : F \to F \comp \pt{F} \]
 
   \begin{diagram}[width=300]
     import Species
     c = Cyc [lab 0, lab 2, lab 3]
     d1 = draw c
     d2 = draw (down c)
-    dia = (d1 ||-|| elimArrow ||-|| d2) # pad 1.05
+    t s = (text s <> strutY 1.3) # scale 0.5
+    dia = (d1 ||-|| arrow 2 (t "χ") ||-|| d2) # pad 1.05
   \end{diagram}
 \end{frame}
 
@@ -686,7 +951,7 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
   \item Introduction forms
   \item Relate two formulations of eliminators
   \item Extend theory to multi-sort species and recursive species
-  \item Make all of this practical for programming
+  \item Make all of this practical for programming!
   \end{itemize}
 \end{frame}
 
@@ -702,15 +967,20 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
-  \emph{XXX need a question here}
+  \begin{center}
+    \includegraphics[width=4in]{species-package.png}
+  \end{center}
 \end{frame}
 
-\begin{frame}
-  XXX describe library (show screencap of Hackage page)
-\end{frame}
+% XXX include this or not?
+% \begin{frame}
+%   \begin{center}
+%     \includegraphics[width=3in]{oh-my}
+%   \end{center}
+% \end{frame}
 
-\begin{frame}{Example}
-{\small
+\begin{frame}{Example usage}
+  \begin{center} {\small
 \begin{verbatim}
 >>> take 10 . labeled $ set `o` nonEmpty sets
 [1,1,2,5,15,52,203,877,4140,21147]
@@ -723,11 +993,18 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 [{{1,2,3}},{{2,3},{1}},{{2},{1,3}},
  {{3},{1,2}},{{3},{2},{1}}]
 \end{verbatim}
-}
+    }
+  \end{center}
 \end{frame}
 
-\begin{frame}
-  XXX proposed feature: random generation
+\begin{frame}{Proposed feature: random generation}
+
+  \begin{itemize}
+  \item<+-> \emph{e.g.} randomly generate size-100 trees. (QuickCheck
+    cannot do this!)
+  \item<+-> Less urgent now that we have \texttt{gencheck} and \texttt{FEAT}\dots
+  \item<+-> \dots but neither can deal with non-polynomial species.
+  \end{itemize}
 
 % One major missing feature of the library which I propose to add is the
 % ability to randomly generate structures of user-defined data types,
@@ -737,17 +1014,14 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 % corresponding to non-regular (symmetric) species.
 \end{frame}
 
-\begin{frame}
-  XXX typed setting?
-\end{frame}
-
-\begin{frame}
-  XXX testbed for ideas from previous sections
-
-%   Second, the library can serve as a testbed for the ideas outlined in
-% \pref{sec:species-as-data-types}---instead of implementing an entirely
-% new programming language from scratch, to a large extent we can simply
-% \emph{embed} a new language as a library in Haskell.
+\begin{frame}{Why a library?}
+  \begin{itemize}
+  \item Of interest: doing all of this in a \emph{typed} setting.
+  \item Opportunities for genuine contributions in generative combinatorics?
+  \item Testbed and dissemination platform for ideas.
+  \item Still a useful contribution to the community even if not a
+    research contribution in and of itself.
+  \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -757,24 +1031,22 @@ dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-XXX March--August 2013
+\begin{frame}{Timeline}
+  \begin{itemize}
+  \item<+-> March--August 2013: exposition, and theory of species types
+  \item<+-> September--December 2013: \texttt{species} library
+  \item<+-> January--April 2014: writing
+  \item<+-> May 2014: defense
+  \end{itemize}
+
 % \textbf{March--August 2013}: my focus during this period will be
 % twofold: to develop an exposition of species theory, both through my
 % blog and in a form suitable to eventually go in my dissertation; and,
 % in parallel, to work out a theory of species data types as outlined in
 % \pref{sec:species-as-data-types}.
-\end{frame}
-
-\begin{frame}
-XXX September--December 2013
 % \textbf{September--December 2013}: My focus during this period will be
 % on development of the \texttt{species} library, as outlined in
 % \pref{sec:species-library}.
-\end{frame}
-
-\begin{frame}
-XXX January--April 2014
 % \textbf{January--April 2014} My focus during the first part of 2014
 % will be on writing my dissertation, with the goal of defending in May.
 \end{frame}
@@ -783,265 +1055,4 @@ XXX January--April 2014
   XXX concluding slide
 \end{frame}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \begin{frame}
-%   \begin{center}
-%     \vspace{1em}
-%     Joint work (in progress) with: \bigskip
-
-%     \begin{tabular}{cc}
-%     \includegraphics[height=1in]{jacques}
-%     & \includegraphics[height=1in]{gershom} \\
-%     Jacques Carette & Gershom Bazerman
-%     \end{tabular}
-%   \end{center}
-% \end{frame}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \begin{frame}{Combinatorial species}
-% \begin{center}
-%     \onslide<2->{\vfill{\Large ?}\vfill}
-%     \onslide<3>{For today: think ``container types'', \emph{i.e.} functors.}
-% \end{center}
-% \end{frame}
-
-% %% Idea: use them as basis for programming.  First steps: eliminators.
-
-% \begin{frame}[fragile]{Polynomial functors}
-%   \begin{center}
-%   \begin{tabular}{cl}
-%     $1$ & unit\\
-%     $X$ & identity \\
-%     $F + G$ & sums \\
-%     $F \cdot G$ & products
-%   \end{tabular}
-%   \end{center}
-
-%   \begin{center}
-%     \onslide<2-> \emph{e.g.} $1 + X$, $X^2$, \dots
-
-%     \onslide<3> \vspace{1em} No symmetry!
-%   \end{center}
-% \end{frame}
-
-% \begin{frame}[fragile]{Symmetry}
-%   % Symmetric structure examples: cycles, bags, hierarchies,
-%   % heaps\dots
-%   \begin{center}
-%   \begin{diagram}[width=75]
-% import Species
-% dia = cyc [0..4] 1.2 # pad 1.1
-%   \end{diagram}
-%   % XXX vertically center, if time
-%   \begin{diagram}[width=60]
-% import Species
-% dia = ( roundedRect 2 1 0.2
-%         <> (lab 0 |||||| strutX 0.3 |||||| lab 3)
-%            # centerXY
-%       )
-%       # pad 1.1
-%       # lw 0.02
-%   \end{diagram}
-%   \begin{diagram}[width=75]
-% import Species
-% import Data.Tree
-% t   = Node Bag [lf (Lab 1), lf (Lab 2), Node Bag [lf (Lab 0), lf (Lab 3)]]
-% dia = drawSpT t # pad 1.1
-%   \end{diagram}
-%   \bigskip
-
-%   \onslide<2>\dots how can we program with these?
-%   \end{center}
-% \end{frame}
-
-% \begin{frame}[fragile]{Eliminating symmetries?}
-%   \begin{center}
-%   \begin{diagram}[width=200]
-% import Species
-% dia = (cyc [0..4] 1.2 ||-|| elimArrow ||-|| (text "?" <> square 1 # lw 0)) # pad 1.1
-%   \end{diagram}
-%   \end{center}
-
-%   \onslide<2>Want: compiler guarantee that eliminators are oblivious
-%   to ``representation details''.
-% \end{frame}
-
-% \begin{frame}{Species decomposition}
-%     Every nonempty species is isomorphic to
-%     \begin{itemize}
-%     \item<+-> the unit species,
-%     \item<+-> a sum,
-%     \item<+-> a product,
-%     \item<+-> or an \emph{atomic} species $X^n/\mathcal{H}$
-%       \begin{itemize}
-%       \item<+-> (where $\mathcal{H}$ acts transitively on $\{0, \dots,
-%         n-1\}$).
-%       \end{itemize}
-%   \end{itemize}
-% \end{frame}
-
-% \begin{frame}
-%   So we can build eliminators in a type-directed way, using ``high
-%   school algebra'' laws for exponents:
-%   \begin{center}
-%     \begin{tabular}{ccc}
-%       $1[A] \to B$ & $\cong$ & $B$ \\
-%       \\
-%       $X[A] \to B$ & $\cong$ & $A \to B$ \\
-%       \\
-%       $(F+G)[A] \to B$ & $\cong$ & $(F[A] \to B) \times (G[A] \to B)$ \\
-%       \\
-%       $(F \cdot G)[A] \to B$ & $\cong$ & $F[A] \to (G[A] \to B)$ \\
-%       \onslide<2> & & \\
-%       $(X^n/\mathcal{H})[A] \to B$ & $\cong$ & $ ?$
-%     \end{tabular}
-%   \end{center}
-% \end{frame}
-
-% \begin{frame}{Eliminating symmetries}
-%   \begin{gather*}
-%     (X^n/\mathcal{H})[A] \to B \\
-%     \cong \\
-%     \Sigma f : X^n \to B. \Pi \sigma \in \mathcal{H}. f = f \circ \sigma
-%   \end{gather*}
-% \end{frame}
-
-% \section{Eliminators, take 2!}
-
-% \begin{frame}[fragile]{Poking and pointing}
-%   The \emph{derivative} $F'$ of $F$ represents $F$-structures with a
-%   hole.
-
-%   \begin{center}
-%   \begin{diagram}[width=100]
-%     import Species
-%     dia = drawSpT (nd 'F' (map lf [Leaf, Hole, Leaf, Leaf])) # pad 1.1
-%   \end{diagram}
-%   \end{center}
-
-%   The \emph{pointing} of $F$, $\pt{F} \triangleq X \cdot F'$,
-%   represents $F$-structures with a distinguished element.
-
-%   \begin{center}
-%   \begin{diagram}[width=100]
-%     import Species
-%     dia = drawSpT (nd 'F' (map lf [Leaf, Point, Leaf, Leaf])) # pad 1.1
-%   \end{diagram}
-%   \end{center}
-
-%   \onslide<2> Pointing \emph{breaks symmetry}.
-% \end{frame}
-
-% \begin{frame}[fragile]{Pointing}
-%   \begin{center}
-%   \begin{diagram}[width=250]
-%     import Species
-%     f   = drawSpT (nd 'F' (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
-%     fpt = drawSpT (nd 'F' (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
-
-%     dia = [f, elimArrow, fpt] # map centerY # foldr1 (||-||)
-%   \end{diagram}
-%   \end{center}
-
-%   \[ \pt{(-)} : F \to \pt{F} ? \]
-
-%   \begin{center}
-%   \onslide<2>\emph{Only} for polynomials!
-%   \end{center}
-% \end{frame}
-
-% \begin{frame}[fragile]{Pointing in context}
-%   \dots but Peter Hancock's ``cursor down'' operator is fine: \[ \down
-%   : F \to F \pt{F} \]
-
-%   \begin{diagram}[width=300]
-%     import Species
-%     c = Cyc [lab 0, lab 2, lab 3]
-%     d1 = draw c
-%     d2 = draw (down c)
-%     dia = (d1 ||-|| elimArrow ||-|| d2) # pad 1.05
-%   \end{diagram}
-% \end{frame}
-
-% \begin{frame}[fragile]{Eliminating with $\down$}
-%   \begin{diagram}[width=300]
-%     import Species
-%     c = Cyc [lab 0, lab 2, lab 3]
-%     d1 = draw c
-%     d2 = draw (down c)
-%     d3 = draw (Cyc (replicate 3 d4))
-%     d4 :: Diagram Cairo R2
-%     d4 = square 1 # fc purple
-%     x ||/|| y = x |||||| strutX 0.5 |||||| y
-%     t s = (text s <> strutY 1.3) # scale 0.5
-%     dia = (d1 ||/||
-%                arrow 1 (t "χ") ||/||
-%            d2 ||/||
-%                arrow 1 (t "F e'") ||/||
-%            d3 ||/||
-%                arrow 1 (t "δ") ||/||
-%            d4
-%           )
-%           # pad 1.05
-%   \end{diagram}
-% \end{frame}
-
-% \begin{frame}[fragile]{Other uses of $\down$}
-%   %% XXX 4  -- draw example of another thing "down" is useful for
-% %  Note $\down$ is useful for other things too. ``Map in context''.
-% %  e.g. cycles.
-%   \begin{diagram}[width=300]
-%     import Species
-%     c = Cyc (map lab' [blue, red, yellow])
-%     d1 = draw c
-%     d2 = draw (down c)
-%     d3 = draw (fmap firstTwo (down c))
-%     d4 = draw (Cyc (map lab' [purple, orange, green]))
-%     firstTwo = map unPoint . take 2 . dropWhile isPlain . cycle . getCyc
-%     isPlain (Plain x) = True
-%     isPlain _         = False
-%     unPoint (Plain x) = x
-%     unPoint (Pointed x) = x
-%     t s = (text s <> strutY 1.3) # scale 0.5
-%     x ||/|| y = x |||||| strutX 0.5 |||||| y
-%     infixl 6 ||/||
-%     dia = (
-%           ( d1 ||/||
-%               arrow 1 (t "χ") ||/||
-%             d2 ||/||
-%               arrow 3 (t "F (id × head)" # scale 0.8)
-%           )
-%           ===
-%           strutY 1
-%           ===
-%           ( square 1 # lw 0 ||/||
-%             d3 ||/||
-%               arrow 1 (t "F ⊕") ||/||
-%             d4
-%           )
-
-%           )
-%           # pad 1.05
-%   \end{diagram}
-% \end{frame}
-
-% \begin{frame}
-%   Future work:
-%   \begin{itemize}
-%   \item What do proof obligations for eliminators with $\down$ look
-%     like in practice?
-%   \item Relationship to quotient containers?
-%   \end{itemize}
-% \end{frame}
 \end{document}

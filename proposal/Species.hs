@@ -1,17 +1,17 @@
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE DeriveFunctor        #-}
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE GADTs                #-}
 {-# LANGUAGE TypeSynonymInstances #-}
-{-# LANGUAGE GADTs #-}
 module Species where
 
-import Data.List (intersperse)
-import Data.Tree
-import Diagrams.Backend.Cairo.CmdLine
-import Diagrams.Core.Points
-import Diagrams.Prelude hiding ((&))
-import Diagrams.TwoD.Layout.Tree
+import           Data.List                      (intersperse)
+import           Data.Tree
+import           Diagrams.Backend.Cairo.CmdLine
+import           Diagrams.Core.Points
+import           Diagrams.Prelude               hiding ((&))
+import           Diagrams.TwoD.Layout.Tree
 
-import Control.Lens (_head, _last, (%~), (&))
+import           Control.Lens                   ((%~), (&), _head, _last)
 
 colors = [red, orange, green, blue, purple, brown, grey, black]
 
@@ -139,9 +139,11 @@ drawSpE (_,p) (_,q)    = p ~~ q
 nd x = Node (Sp x (1/2))
 lf x = Node x []
 
+{-
 main = -- defaultMain (arrow 1 ((text "f" <> strutY 1) # scale 0.5))
 
  defaultMain (draw (down (Cyc [lab 0, lab 1, lab 2])))
+-}
 
 -- defaultMain (draw (Cyc [Cyc [lab 0, lab 4], Cyc [lab 1, lab 2, lab 3]]))
 -- (cyc' (replicate 5 (square 0.2 :: Diagram Cairo R2)) 1)
