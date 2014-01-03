@@ -1,0 +1,68 @@
+A place to dump text from elsewhere that should perhaps eventually end
+up in my dissertation in some form
+
+\subsection{Species isomorphism}
+\label{sec:species-iso}
+
+We have now seen four primitive species: \Zero, \One, \X, and \E.  It
+turns out that each of them is the unit for a different monoid
+structure on species; we will look at each of these in turn, as well
+as an additional fifth monoid structure.  Before we get there,
+however, we need to take a brief detour to discuss isomorphism of
+species, since the monoid laws hold only up to isomorphism.
+
+Since species are functors, a \term{morphism} between species $F$ and
+$G$ is a natural transformation, that is, a transformation from
+$F$-shapes to $G$-shapes which works uniformly for all label
+types. Formally, the type of species morphisms is given by
+\begin{align*}
+  &- \mor - : \Species \to \Species \to \Type \\
+  &F \mor G = (\varphi : \impl{L : \FinType} \to F\ L \to G\ L)
+  \times \Natural\ \varphi
+\end{align*}
+where $\Natural\ \varphi$ is the proposition which states that $\varphi$ is
+\term{natural}, that is, the diagram shown in
+\pref{fig:species-morphism} commutes for all $L, L' : \FinType$ and
+all $\sigma : L \iso L'$.
+\begin{figure}[h!]
+  \centering
+  \centerline{
+    \xymatrix{
+      F\ L \ar[d]_{\varphi_L} \ar[r]^{F\ \sigma} & F\ L' \ar[d]^{\varphi_{L'}} \\
+      G\ L                    \ar[r]_{G\ \sigma} & G\ L'
+    }
+  }
+  \caption{Naturality for species morphisms}
+  \label{fig:species-morphism}
+\end{figure}
+Intuitively, $\varphi$ is natural if it does not depend on the type of
+the labels, that is, it acts uniformly for all choices of label set:
+it does not matter whether one first relabels an $F$-shape and then
+applies $\varphi$, or applies $\varphi$ first and later relabels.
+
+An \term{isomorphism} between species, denoted $F \natiso G$, is just
+a pair of inverse morphisms, that is, $\varphi : F \mor G$ and
+$\varphi^{-1} : G \mor F$ such that $\varphi^{-1}_L \comp \varphi_L =
+id_{FL}$ and $\varphi_L \comp \varphi^{-1}_L = id_{GL}$ for all $L :
+\FinType$.  Species isomorphism preserves all the interesting
+\emph{combinatorial} properties of species; hence in the combinatorics
+literature everything is always implicitly done up to
+isomorphism. However, species isomorphisms carry computational
+content, so when dealing with labelled structures we must be more
+careful and explicit in their use.
+
+It is worth noting that an inverse pair of ``bare'' morphisms, without
+naturality, constitute what is termed an \term{equipotence} between
+two species.  An equipotence preserves the \emph{number} of shapes of
+each size, but it does not necessarily preserve the structure of those
+shapes. As a classic example, the species of \emph{lists} and the
+species of \emph{permutations} are equipotent but not isomorphic:
+there are the same number of lists as permutations of $n$ labels
+(namely, $n!$), but there is no way to set up an isomorphism between
+them which is uniform over the labels: any such isomorphism
+necessarily depends on a linear ordering of the labels.  In a sense,
+permutations have ``more structure'' than lists, and this extra
+structure cannot be preserved by an isomorphism.  In any case,
+although equipotences are of interest to combinatorialists, so far
+they do not seem to be of much use computationally, so we will not
+consider them further in this paper.
