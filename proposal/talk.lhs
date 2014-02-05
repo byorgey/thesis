@@ -89,7 +89,7 @@
 \renewcommand{\emph}{\textbf}
 
 \title{Combinatorial Species and Algebraic Data Types}
-\date{Dissertation Proposal \\ March 2, 2013}
+\date{Dissertation Proposal \\ March 4, 2013}
 \author{Brent Yorgey}
 \titlegraphic{}  % \includegraphics[width=2in]{foo}
 
@@ -636,6 +636,8 @@ dia = gr # centerXY # pad 1.1
   \[ \X(x) = x \]
   \[ (F + G)(x) = F(x) + G(x) \]
   \[ (F \sprod G)(x) = F(x)G(x) \]
+  \[ (F')(x) = \frac{d}{dx} F(x) \]
+  \[ (F \comp G)(x) = F(G(x)) \]
   \begin{center}
   \dots
   \end{center}
