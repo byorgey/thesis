@@ -43,10 +43,14 @@
 
 \title{Combinatorial Species and Algebraic Data Types \\ {\small Dissertation Proposal}}
 \author{Brent Yorgey}
+\date{March 4, 2013}
 
 \begin{document}
 
 \maketitle
+
+\noindent \emph{This material is based upon work supported by the National
+  Science Foundation under Grant Number 1218002.}
 
 \tableofcontents
 
