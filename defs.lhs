@@ -59,6 +59,9 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 
+\newcommand{\bij}{\stackrel{\sim}{\to}}
+\newcommand{\iso}{\simeq}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Theorems etc.
 
@@ -87,6 +90,17 @@
 
 \renewcommand{\False}{\cons{F}}
 \renewcommand{\True}{\cons{T}}
+
+\newcommand{\Type}{\ensuremath{\mathcal{U}}}
+\newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
+\newcommand{\size}[1]{\ensuremath{||#1||}}
+
+\DeclareMathOperator{\Fin}{Fin}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HoTT
+
+\newcommand{\ptrunc}[1]{\ensuremath{\||#1\||}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
