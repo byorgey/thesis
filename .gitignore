@@ -1,0 +1,8 @@
+.shake.database
+Shake
+*.hi
+*.o
+*.log
+*.aux
+
+*.tex
