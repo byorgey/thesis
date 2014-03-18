@@ -10,4 +10,6 @@ Shake
 
 *.tex
 !thesis.tex
+!abstract.tex
+!acks.tex
 thesis.pdf
