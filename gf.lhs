@@ -3,6 +3,12 @@
 \chapter{Generating functions}
 \label{chap:gfs}
 
+\bay{Whether this chapter will actually end up being included depends
+  on available time, how much other material there is, etc.  At any
+  rate it would still need a bunch more work.  I certainly plan to
+  flesh this out and publish it at some point, whether or not it goes
+  in my thesis.}
+
 \setcounter{section}{-1}
 \section{Introduction and motivation}
 \label{sec:motivation}
