@@ -161,7 +161,7 @@ In the other direction, we define $\size{} : \BT \to \PT$:
     \ar@@{<->}[u]_-{j^{-1}} } \]
 \end{itemize}
 The functoriality of $\size{}$ can be seen by noting the cancelling
-pair of inverse equivalences in each of the following two pictures:
+pair of inverse equivalences in each of the following two diagrams:
   \[ \xymatrix{\Fin m \ar@@<-.4em>@@{<->}[d]_i
          \ar@@<.4em>@@{<->}[d]^{i^{-1}}
        \\
