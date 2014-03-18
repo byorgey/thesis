@@ -16,6 +16,7 @@
   just to \Set\ but also to category of types and functions, etc.
 \item Lifting monoidal structure from $C$: sum, Cartesian/Hadamard product.
 \item Day convolution.  Cauchy product.  Arithmetic product.
+\item Composition.
 \end{itemize}
 
 \section{Foundations}
@@ -37,8 +38,13 @@ situations, and we miss this entirely if we start with the kitchen
 sink.
 
 More subtly, we wish to work in a constructive, computational setting,
-and the specific categories $\B$ and $\Set$ are inappropriate. As an
-example XXX
+and the specific categories $\B$ and $\Set$ are inappropriate.  Before
+returning to generalize species, we must take a small detour to see
+one reason why $\B$ is inappropriate in a computational setting, and
+the definitions of some more appropriate tools.
+
+\subsection{Constructive groupoids}
+\label{sec:constructive-groupoids}
 
 Let $\fin n \defeq \{0, \dots, n-1\}$ be the set of the first $n$ natural
 numbers.  Denote by $\P$ the category whose objects are natural
@@ -121,7 +127,12 @@ $\BT$ is the groupoid where
 That is, morphisms simply ignore the equivalences contained in
 objects.
 
-\todo{Note we can easily show sizes must be equal.}
+\begin{rem}
+  Note that given a morphism $e : \mor {(A,m,i)} {(B,n,j)}$, it is
+  provably the case that $m \equiv n$.  In particular, $i \then e \then j^{-1} :
+  \Fin m \iso \Fin n$, from which we may prove $m \equiv n$ by double
+  induction.
+\end{rem}
 
 \begin{rem}
   This may seem a bit funny: we go to the trouble of adding extra
@@ -132,8 +143,8 @@ objects.
   still make use of it (see \pref{defn:size}).  Instead of having to
   make an arbitrary choice of isomorphism when mapping out of an
   object, we ``blow up'' the category by making a separate object for
-  each possible choice, but ensure that objects which differ only in
-  the choice are isomorphic.
+  each possible choice, but ensure that objects which differ only by
+  this choice are isomorphic.
 \end{rem}
 
 \begin{defn}
@@ -171,7 +182,7 @@ In the other direction, we define $\size{} : \BT \to \PT$:
   \item On objects, $\fin{\size {(A,m,i)}} \equiv \fin{m} \equiv (\Fin
     m, m, \id)$, and
   \item on morphisms, $e : \mor {(A,m,i)} {(B,n,j)}$ is sent to
-    $\fin{\size e} \equiv \fin{i ; e ; j^{-1}} \equiv i ; e ; j^{-1}$.
+    $\fin{\size e} \equiv \fin{i \then e \then j^{-1}} \equiv i \then e \then j^{-1}$.
   \end{itemize}
   We must exhibit a natural isomorphism $\alpha : \nat{Id}{\fin{\size
       -}}$.  The component of $\alpha$ at $(A,m,i)$ must be a morphism
@@ -182,7 +193,7 @@ In the other direction, we define $\size{} : \BT \to \PT$:
   \[ \xymatrix{
          (A,m,i) \ar[r]^-{i^{-1}} \ar[d]_e
          &
-         (\Fin m, m, \id) \ar[d]^{i ; e ; j^{-1}}
+         (\Fin m, m, \id) \ar[d]^{i \then e \then j^{-1}}
        \\
          (B,n,j) \ar[r]_-{j^{-1}} & (\Fin n, n, \id)
      }
