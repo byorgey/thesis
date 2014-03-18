@@ -1,0 +1,67 @@
+Outline
+=======
+
++ Chapter 1: Introduction/preliminaries
+
+  - Homotopy type theory.
+  - Category theory.
+  - Functor categories.
+  - Groupoids.
+  - Finiteness.
+  - Parametricity.
+  - Monoids and monoidal categories.
+
++ Chapter 2: Species
+
+  - Traditional definition of species.
+  - Restart "from scratch": functor categories.  Along the way,
+    explain what extra structure is needed for each new feature, and
+    give examples of categories we care about with those properties.
+  - Lifting monoidal structure from codomain
+    - Coproduct
+    - Cartesian/Hadamard product
+  - Day convolution.
+  - Lifting monoidal structure from domain (via Day convolution)
+    - partitional/Cauchy product
+    - arithmetic product
+  - Composition
+
++ Chapter 3: Labelled structures
+
+  - Joyal's definition of analytic functors.
+  - Labelled structures
+  - Operations on labelled structures, lifted from operations on
+    species.
+  - Abstracting over "storage exponentials".
+    - Functions
+    - Vectors
+    - Tries
+
++ Chapter 4: Applications
+
+  - Generic functions (map, partition, filter, etc.)
+  - A theory of matrix operations and allocation
+  - ?
+
+There is also a half-started chapter on computational interpretation
+of generating functions which I'm quite excited about, but at this
+point I think it's probably best to leave it out of the dissertation,
+and work it out/write it up at some point in the future.
+
+Timeline
+========
+
+Here's a proposed timeline for me to graduate in August.  I don't know
+how realistic this is but I will sure try my best.  Feedback welcome.
+Note in particular this does not include revising/writing/submitting
+any papers; we should talk more about whether/when/where that might
+happen.
+
+March 18--28 (2 weeks): write (most of) Chapter 2
+March 28--April 5 (1 week): Brent in London & Leipzig
+April 7--18 (2 weeks): write Chapter 3
+April 21--May 16 (4 weeks): work out chapter 4 material
+May 19--30 (2 weeks): write Chapter 4
+June (4 weeks): write Chapter 1 / miscellaneous / account for inevitable schedule slippage
+Early July: defend (deadline is July 21)
+Rest of July: revise (deadline for deposit is July 28)
