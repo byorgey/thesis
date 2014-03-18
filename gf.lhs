@@ -273,11 +273,3 @@ Questions for further consideration:
   \emph{e.g.} do Boltzmann samplers have a semigroup structure?
 \end{itemize}
 
-\section{Test}
-
-\begin{equation}
-  \label{eq:foo}
-  4 = 2 + 2
-\end{equation}
-
-Blah blah \pageref{eq:foo}.
