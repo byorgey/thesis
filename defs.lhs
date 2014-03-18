@@ -17,17 +17,21 @@
 \usepackage[all,cmtip]{xy}
 \usepackage{xcolor}
 \usepackage{prettyref}
+\usepackage{xspace}
+
+% \usepackage{breakurl}
+\usepackage{natbib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Declarative formatting
 
 \newcommand{\term}[1]{\emph{#1}}
-\newcommand{\latin}[1]{\emph{#1}}
+\newcommand{\latin}[1]{\textit{#1}}
 \newcommand{\foreign}[1]{\emph{#1}}
 
-\newcommand{\ie}{\latin{i.e.}}
-\newcommand{\eg}{\latin{e.g.}}
-\newcommand{\etal}{\latin{et al.}}
+\newcommand{\ie}{\latin{i.e.}\xspace}
+\newcommand{\eg}{\latin{e.g.}\xspace}
+\newcommand{\etal}{\latin{et al.}\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Math typesetting
