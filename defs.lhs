@@ -93,7 +93,8 @@
 
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
 \newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
-\newcommand{\size}[1]{\ensuremath{||#1||}}
+\newcommand{\FinTypeT}{\ensuremath{\Type_{\||\text{Fin}\||}}}
+\newcommand{\size}[1]{\ensuremath{\##1}}
 
 \DeclareMathOperator{\Fin}{Fin}
 

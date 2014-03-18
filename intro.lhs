@@ -12,6 +12,15 @@
 
 \todo{put intro to HoTT here}
 
+Basics of type theory (copy from other paper).
+
+Equality/paths.  Univalence.  Intuition: richer space of equalities.
+We have Leibniz equality (transport) but transport may involve some
+work.
+
+Mere propositions, sets. Truncation. Recursion principle for
+truncation, intuition.
+
 \section{Category theory}
 \label{sec:category-theory}
 
