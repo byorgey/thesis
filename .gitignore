@@ -6,3 +6,4 @@ Shake
 *.aux
 
 *.tex
+!thesis.tex
