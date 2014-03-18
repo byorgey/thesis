@@ -185,10 +185,14 @@
 \newrefformat{prop}{Proposition~\ref{#1}}
 \newrefformat{defn}{Definition~\ref{#1}}
 \newrefformat{cor}{Corollary~\ref{#1}}
+
+% memoir defines pref and Pref as 'pageref'
+\providecommand{\pref}{}
 \renewcommand{\pref}[1]{\prettyref{#1}}
 
 % \Pref is just like \pref but it uppercases the first letter; for use
 % at the beginning of a sentence.
+\providecommand{\Pref}{}
 \renewcommand{\Pref}[1]{%
   \expandafter\ifx\csname r@@#1\endcsname\relax {\scriptsize[ref]}
     \else
