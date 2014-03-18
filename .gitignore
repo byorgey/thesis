@@ -5,6 +5,8 @@ Shake
 *.log
 *.aux
 *.toc
+*.bbl
+*.blg
 
 *.tex
 !thesis.tex
