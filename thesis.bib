@@ -1,0 +1,1193 @@
+@inproceedings{mcbride_clowns_2008,
+	address = {San Francisco, California, {USA}},
+	title = {Clowns to the left of me, jokers to the right (pearl): dissecting data structures},
+	isbn = {978-1-59593-689-9},
+	shorttitle = {Clowns to the left of me, jokers to the right (pearl)},
+	url = {http://portal.acm.org/citation.cfm?id=1328474},
+	doi = {10.1145/1328438.1328474},
+	abstract = {This paper introduces a small but useful generalisation to the 'derivative' operation on datatypes underlying Huet's notion of 'zipper', giving a concrete representation to one-hole contexts in data which is undergoing transformation. This operator, 'dissection', turns a container-like functor into a bifunctor representing a one-hole context in which elements to the left of the hole are distinguished in type from elements to its right.},
+	booktitle = {Proceedings of the 35th annual {ACM} {SIGPLAN-SIGACT} symposium on Principles of programming languages},
+	publisher = {{ACM}},
+	author = {Conor {McBride}},
+	year = {2008},
+	keywords = {datatype, differentiation, dissection, division, iteration, stack, tail recursion, traversal},
+	pages = {287--295}
+},
+
+@InProceedings{abbott_quotient,
+  author = 	 {Michael Abbott and Thorsten Altenkirch and Neil Ghani 
+                  and Conor McBride},
+  title = 	 {Constructing {P}olymorphic {P}rograms with {Q}uotient {T}ypes},
+  booktitle = 	 {7th International Conference on Mathematics of Program Construction (MPC 2004)},
+  year =	 {2004},
+  publisher = "Springer-Verlag",
+  series    = {LNCS},
+  volume    = 3125
+},
+
+
+@Unpublished{mcbride:derivative,
+  author = 	 "Conor McBride",
+  title = 	 "The {D}erivative of a {R}egular {T}ype is its {T}ype of
+		  {O}ne-{H}ole {C}ontexts",
+  note = 	 "{Available at \url{http://www.cs.nott.ac.uk/~ctm/diff.ps.gz}}",
+  year =	 2001
+
+},
+
+@InProceedings{abbott_deriv,
+  author = 	 {Michael Abbott and Thorsten Altenkirch and Neil Ghani 
+                  and Conor McBride},
+  title = 	 {Derivatives of {C}ontainers},
+  booktitle = 	 {Typed Lambda Calculi and Applications, TLCA},
+  year =	 {2003},
+  publisher = "Springer-Verlag",
+  series    = {LNCS},
+  volume    = 2701
+},
+
+@Unpublished{abbott.altenkirch.ghani.mcbride:partial-draft,
+  author = 	 {Michael Abbott and Thorsten Altenkirch and Neil Ghani 
+                  and Conor McBride},
+  title = 	 {$\partial$ for {D}ata},
+  note = 	 {{\em submitted for publication}},
+  month =	 {February},
+  year =	 {2004},
+},
+
+@inproceedings{abbott_categories_2003,
+  author = 	 {Michael Abbott and Thorsten Altenkirch and Neil Ghani },
+  title = 	 {Categories of Containers},
+  booktitle = 	 {Proceedings of FOSSACS 2003},  
+  pages = 	 {23-38},
+  editor = 	 {Andrew Gordon},
+  number = 	 {2620},
+  series = 	 {Lecture Notes in Computer Science},
+  publisher = {Springer-Verlag},
+  year = 	 {2003}
+}
+
+@article{voigtlnder_much_2008,
+	title = {Much ado about two (pearl): a pearl on parallel prefix computation},
+	volume = {43},
+	shorttitle = {Much ado about two (pearl)},
+	url = {http://portal.acm.org/citation.cfm?id=1328445&dl=GUIDE,},
+	doi = {10.1145/1328897.1328445},
+	abstract = {This pearl develops a statement about parallel prefix computation in the spirit of Knuth's {0-1-Principle} for oblivious sorting algorithms. It turns out that 0-1 is not quite enough here. The perfect hammer for the nails we are going to drive in is relational parametricity.},
+	number = {1},
+	journal = {{SIGPLAN} Not.},
+	author = {Janis Voigtl\"{a}nder},
+	year = {2008},
+	keywords = {0-1-principle, free theorems, parallel prefix computation, relational parametricity},
+	pages = {29--35}
+},
+
+@unpublished{carette_species,
+	title = {Species: making analytic functors practical for functional programming},
+	abstract = {Inspired by Joyals theory of species, we show how to add new type constructors and constructor combinators
+to the tool set of functional languages. We show that all the important properties of inductive types lift
+to this new setting. Species are analytic functors, representing a broader range of structures than regular
+functors. This includes structures such as bags, cycles and graphs. The theory is greatly inspired by
+combinatorics rather than type theory: this adds interesting new tools to bear, but also requires more
+work on our part to show that species form a good foundations for a theory of type constructors. The
+combinatorial tools provide a calculus for these structures which has strong links with classical analysis,
+via a functorial interpretation of generating series. Furthermore, we show how generic programming idioms
+also generalise to this richer setting. Once the theory is understood, various methods of implementation are
+relatively straightforward.},
+        note = {Available at \url{http://www.cas.mcmaster.ca/~carette/species/}},
+	author = {Jacques Carette and Gordon Uszkay},
+        year = 2008
+},
+
+@inproceedings{regular_tree_types,
+	title = {Exploring the regular tree types},
+	author = {Peter Morris and Thorsten Altenkirch and Conor McBride},
+	year = {2006},
+	abstract = {In this paper we use the Epigram language to define the universe of regular tree types—closed under empty, unit, sum, product and least fixpoint. We then present a generic decision procedure for Epigram’s in-built equality at each type, taking a complementary approach to that of Benke, Dybjer and Jansson [7]. We also give a generic definition of map, taking our inspiration from Jansson and Jeuring [21]. Finally, we equip the regular universe with the partial derivative which can be interpreted functionally as Huet’s notion of ‘zipper’, as suggested by McBride in [27] and implemented (without the fixpoint case) in Generic Haskell by Hinze, Jeuring and Löh [18]. We aim to show through these examples that generic programming can be ordinary programming in a dependently typed language.},
+  booktitle = "Types for Proofs and Programs ({TYPES} 2004)",
+  editor = "Jean-Christophe Filliatre, Christine Paulin-Mohring and Benjamin Werner",
+  series = "Lecture Notes in Computer Science",
+  publisher = {Springer-Verlag},
+},
+
+@ARTICLE{Huet_zipper,
+    author = {G\'{e}rard Huet},
+    title = {Functional Pearl: The Zipper},
+    journal = {J. Functional Programming},
+    year = {1997},
+    volume = {7},
+    pages = {7--5}
+},
+
+@Book{wilf-gfology,
+  author =	"Herbert S. Wilf",
+  title =	"Generatingfunctionology",
+  publisher =	"{Academic Press}",
+  year = 	"1990",
+},
+
+@misc{piponi-comb,
+  author = "Dan Piponi",
+  title  = "A Small Combinatorial Library",
+  note   = "\url{http://blog.sigfpe.com/2007/11/small-combinatorial-library.html}",
+  month  = "November",
+  year   = "2007"
+},
+
+@article{mcilroy-powerserious,
+author = {McIlroy, M. Douglas},
+title = {Power series, power serious},
+journal = {Journal of Functional Programming},
+volume = {9},
+number = {03},
+pages = {325-337},
+year = {1999},
+doi = {10.1017/S0956796899003299},
+URL = {http://journals.cambridge.org/action/displayAbstract?fromPage=online&aid=44225&fulltextType=RL&fileId=S0956796899003299},
+eprint = {http://journals.cambridge.org/article_S0956796899003299},
+},
+
+@Book{bll,
+  address =	"Cambridge",
+  author =	"F. Bergeron and G. Labelle and P. Leroux",
+  translator =  "Margaret Readdy",
+  number =	"67",
+  publisher =	"Cambridge University Press",
+  series =	"Encyclopedia of Mathematics and its Applications",
+  title =	"Combinatorial species and tree-like structures",
+  year = 	"1998",
+},
+
+@inproceedings{jay-shapely,
+ author = {Jay, C. Barry and Cockett, J. Robin B.},
+ title = {Shapely Types and Shape Polymorphism},
+ booktitle = {ESOP '94: Proceedings of the 5th European Symposium on Programming},
+ year = {1994},
+ isbn = {3-540-57880-3},
+ pages = {302--316},
+ publisher = {Springer-Verlag},
+ address = {London, UK},
+ },
+
+@inproceedings{quickcheck,
+ author = {Claessen, Koen and Hughes, John},
+ title = {Quick{C}heck: a lightweight tool for random testing of {H}askell programs},
+ booktitle = {ICFP '00: Proceedings of the fifth ACM SIGPLAN international conference on Functional programming},
+ year = {2000},
+ isbn = {1-58113-202-6},
+ pages = {268--279},
+ doi = {http://doi.acm.org/10.1145/351240.351266},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ },
+
+@inproceedings{smallcheck,
+ author = {Runciman, Colin and Naylor, Matthew and Lindblad, Fredrik},
+ title = {Smallcheck and lazy smallcheck: automatic exhaustive testing for small values},
+ booktitle = {Haskell '08: Proceedings of the first ACM SIGPLAN symposium on Haskell},
+ year = {2008},
+ isbn = {978-1-60558-064-7},
+ pages = {37--48},
+ location = {Victoria, BC, Canada},
+ doi = {http://doi.acm.org/10.1145/1411286.1411292},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ },
+
+@Article{joyal,
+  author =	"Andr{\'e} Joyal",
+  journal =	"Advances in Mathematics",
+  number =	"1",
+  pages =	"1--82",
+  title =	"Une Th{\'e}orie Combinatoire des {S}{\'e}ries
+		 Formelles",
+  volume =	"42",
+  year = 	"1981",
+},
+
+@incollection{Joyal86,
+  year={1986},
+  isbn={978-3-540-17207-9},
+  booktitle={Combinatoire \'{E}num\'{e}rative},
+  volume={1234},
+  series={Lecture Notes in Mathematics},
+  editor={Labelle, Gilbert and Leroux, Pierre},
+  doi={10.1007/BFb0072514},
+  title={Foncteurs analytiques et esp\`{e}ces de structures},
+  url={http://dx.doi.org/10.1007/BFb0072514},
+  publisher={Springer Berlin Heidelberg},
+  author={Joyal, Andr{\'e}},
+  pages={126-159}
+}
+@mastersthesis{agata,
+  author = {Jonas Almstr\"{o}m Dureg\r{a}rd},
+  title  = "{AGATA}: Random generation of test data",
+  school = "Chalmers University of Technology",
+  year   = "2009",
+  month  = "December"
+},
+
+@inproceedings{polymorphic-testing,
+  title = "Testing Polymorphic Properties",
+  pages = "125--144",
+  year = "2010",
+  author = "Bernardy, Jean-Philippe and Jansson, Patrik and Claessen, Koen",
+  booktitle = {ESOP 2010: Proceedings of the 19th European Symposium on Programming},
+  publisher = {Springer-Verlag},
+  address = {London, UK}
+},
+
+@inproceedings{ocaml-random-gen,
+ author = {Canou, Benjamin and Darrasse, Alexis},
+ title = {Fast and sound random generation for automated testing and benchmarking in objective {C}aml},
+ booktitle = {ML '09: Proceedings of the 2009 ACM SIGPLAN workshop on ML},
+ year = {2009},
+ isbn = {978-1-60558-509-3},
+ pages = {61--70},
+ location = {Edinburgh, Scotland},
+ doi = {http://doi.acm.org/10.1145/1596627.1596637},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+@Misc{haskell,
+  author =	"Simon Marlow",
+  editor =      "Simon Marlow",
+  title =	"Haskell 2010 {Language} {Report}",
+  year = 	"2010",
+}
+
+@InProceedings{nested,
+  author =	"Bird and Meertens",
+  title =	"Nested Datatypes",
+  booktitle =	"MPC: 4th International Conference on Mathematics of
+		 Program Construction",
+  publisher =	"LNCS, Springer-Verlag",
+  year = 	"1998",
+}
+
+@Misc{ocaml,
+  author =	"Xavier Leroy",
+  title =	"The {O}bjective {C}aml system release 3.11:
+                  Documentation and User's Manual",
+  year = 	"2008",
+  note = 	"With Damien Doligez, Jacques Garrigue, Didier R\'emy, and J\'er\^ome Vouillon. Available from \url{http://caml.inria.fr}",
+}
+
+@phdthesis{agda,
+  author  = {Ulf Norell},
+  title	  = {Towards a practical programming language based on dependent type
+	     theory},
+  school  = {Department of Computer Science and Engineering, Chalmers University of Technology},
+  year	  = 2007,
+  month	  = {September},
+  address = {SE-412 96 G\"{o}teborg, Sweden}
+}
+
+@TechReport{coq,
+  author =	"{The Coq Development Team}",
+  title =	"The {C}oq {P}roof {A}ssistant {R}eference {M}anual, {V}ersion
+		 8.2",
+  institution =  "INRIA",
+  address =	"Roquencourt, France",
+  year = 	"2009"
+}
+
+@article{FlSa95,
+    author      = {Flajolet, Philippe and Salvy, Bruno},
+    title       = {Computer Algebra Libraries for Combinatorial Structures},
+    journal     = {Journal of Symbolic Computation},
+    number      = {5-6},
+    year        = {1995},
+    volume      = {20},
+    pages       = {653--671},
+    doi         = {10.1006/jsco.1995.1070},
+    abstract    = {This paper introduces the framework of decomposable
+  combinatorial structures and their traversal algorithms. A combinatorial type
+  is decomposable if it admits a specification in terms of unions, products,
+  sequences, sets, and cycles, either in the labelled or in the unlabelled
+  context. Many properties of decomposable structures are decidable. Generating
+  function equations, counting sequences, and random generation algorithms can
+  be compiled from specifications. Asymptotic properties can be determined
+  automatically for a reasonably large subclass. Maple libraries that implement
+  such decision procedures are briefly surveyed (LUO, combstruct, equivalent).
+  In addition, libraries for manipulating holonomic sequences and functions are
+  presented (gfun, Mgfun).},
+}
+
+@techreport{FlajoletSalvyZimmermann1989a,
+    author      = {Flajolet, P. and Salvy, B. and Zimmermann, P.},
+    title       = {Lambda-Upsilon-Omega: The 1989 CookBook},
+    number      = {1073},
+    year        = {1989},
+    month       = {August},
+    institution = {Institut National de Recherche en Informatique et en
+  Automatique},
+    note        = {116 pages},
+    url         = {http://www.inria.fr/rrrt/rr-1073.html},
+    abstract    = {Lambda-Upsilon-Omega (LUO) is a research tool designed to
+  assist the average case analysis of some well defined classes of algorithms
+  and data structures. This cookbook consists of an informal introduction to
+  the system together with eighteen examples of programmes that are
+  automatically analyzed. Amongst the applications treated here, we find:
+  addition chains, quantitative concurrency analysis of simple systems,
+  symbolic manipulation algorithms such as formal differentiation,
+  simplification and rewriting systems, as well as combinatorial models
+  including various tree and permutation statistics and functional graphs with
+  applications to integer factorisation.},
+}
+
+@inproceedings{batteries,
+ author = {Coutts, Duncan and Potoczny-Jones, Isaac and Stewart, Don},
+ title = {Haskell: batteries included},
+ booktitle = {Haskell '08: Proceedings of the first ACM SIGPLAN symposium on Haskell},
+ year = {2008},
+ isbn = {978-1-60558-064-7},
+ pages = {125--126},
+ location = {Victoria, BC, Canada},
+ doi = {http://doi.acm.org/10.1145/1411286.1411303},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+@article{random-gen,
+ author = {Flajolet, Philippe and Zimmerman, Paul and Van Cutsem, Bernard},
+ title = {A calculus for the random generation of labelled combinatorial structures},
+ journal = {Theor. Comput. Sci.},
+ volume = {132},
+ number = {1-2},
+ year = {1994},
+ issn = {0304-3975},
+ pages = {1--35},
+ doi = {http://dx.doi.org/10.1016/0304-3975(94)90226-7},
+ publisher = {Elsevier Science Publishers Ltd.},
+ address = {Essex, UK},
+ }
+
+@inproceedings{Henglein:2008:GDS:1411204.1411220,
+ author = {Henglein, Fritz},
+ title = {Generic discrimination: sorting and paritioning unshared data in linear time},
+ booktitle = {Proceedings of the 13th ACM SIGPLAN international conference on Functional programming},
+ series = {ICFP '08},
+ year = {2008},
+ isbn = {978-1-59593-919-7},
+ location = {Victoria, BC, Canada},
+ pages = {91--102},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1411204.1411220},
+ doi = {10.1145/1411204.1411220},
+ acmid = {1411220},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {discrimination, discriminator, equivalence, functional, generic, multiset discrimination, order, partitioning, sorting, total preorder},
+} 
+
+@incollection{yeh-k-species,
+year={1986},
+isbn={978-3-540-17207-9},
+booktitle={Combinatoire \'enum\'erative},
+volume={1234},
+series={Lecture Notes in Mathematics},
+editor={Labelle, Gilbert and Leroux, Pierre},
+doi={10.1007/BFb0072525},
+title={The calculus of virtual species and {$K$}-species},
+url={http://dx.doi.org/10.1007/BFb0072525},
+publisher={Springer Berlin Heidelberg},
+author={Yeh, Yeong-Nan},
+pages={351-369}
+}
+
+@article{Rajan93,
+  author    = {Dayanand S. Rajan},
+  title     = {The Adjoints to the Derivative Functor on Species},
+  journal   = {J. Comb. Theory, Ser. A},
+  volume    = {62},
+  number    = {1},
+  year      = {1993},
+  pages     = {93-106},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@incollection {bananas,
+   author = {Meijer, Erik and Fokkinga, Maarten and Paterson, Ross},
+   affiliation = {University of Nijmegen Department of Informatics Toernooiveld 6525 ED Nijmegen Toernooiveld 6525 ED Nijmegen},
+   title = {Functional programming with bananas, lenses, envelopes and barbed wire},
+   booktitle = {Functional Programming Languages and Computer Architecture},
+   series = {Lecture Notes in Computer Science},
+   editor = {Hughes, John},
+   publisher = {Springer Berlin / Heidelberg},
+   isbn = {978-3-540-54396-1},
+   keyword = {Computer Science},
+   pages = {124-144},
+   volume = {523},
+   url = {http://dx.doi.org/10.1007/3540543961_7},
+   doi = {doi:10.1007/3540543961_7},
+   year = {1991}
+}
+
+@INCOLLECTION{gibbons-calcfp,
+  author = {Jeremy Gibbons},
+  title = {Calculating Functional Programs},
+  crossref = {acmmpc},
+  pages = {148--203},
+  url = {http://www.comlab.ox.ac.uk/oucl/work/jeremy.gibbons/publications/acmmpc-calcfp.pdf},
+  abstract = {Functional programs are merely equations; they may be
+      manipulated by straightforward equational reasoning. In particular,
+      one can use this style of reasoning to \emph{calculate} programs, in
+      the same way that one calculates numeric values in arithmetic. Many
+      useful theorems for such reasoning derive from an \emph{algebraic}
+      view of programs, built around datatypes and their
+      operations. Traditional algebraic methods concentrate on initial
+      algebras, constructors, and values; dual \emph{co-algebraic} methods
+      concentrate on final co-algebras, destructors, and processes. Both
+      methods are elegant and powerful; they deserve to be combined. }
+}
+
+@BOOK{acmmpc,
+  editor = {Roland Backhouse and Roy Crole and Jeremy Gibbons},
+  title = {Algebraic and Coalgebraic Methods in the Mathematics of Program
+     Construction},
+  booktitle = {Algebraic and Coalgebraic Methods in the Mathematics of Program
+     Construction},
+  publisher = {Springer-Verlag},
+  year = {2002},
+  volume = {2297},
+  series = {Lecture Notes in Computer Science},
+  image = {http://www.comlab.ox.ac.uk/oucl/work/jeremy.gibbons/publications/acmmpc.jpg},
+  url = {http://www.comlab.ox.ac.uk/oucl/work/jeremy.gibbons/publications/acmmpc-toc.pdf},
+  abstract = {Program construction is about turning specifications of computer software into implementations. Doing so in a way that guarantees correctness is an undertaking requiring deep understanding of the languages and tools being used, as well as of the application domain. Recent research aimed at improving the process of program construction exploits insights from abstract algebraic tools such as lattice theory, fixpoint calculus, universal algebra, category theory and allegory theory. This book provides an introduction to these mathematical theories and how they are applied to practical problems.}
+}
+
+@misc {derive,
+  author = {Neil Mitchell and Stefan O'Rear},
+  title = {The \texttt{Derive} package},
+  howpublished = {\url{http://community.haskell.org/~ndm/derive/}},
+  year = 2012
+}
+
+@misc {DrIFT,
+  author = {Noel Winstanley and John Meacham},
+  title = {The \texttt{DrIFT} package},
+  howpublished = {\url{http://repetae.net/computer/haskell/DrIFT/}},
+  year = 2012
+}
+
+@techreport {charity,
+ author      = "Robin Cockett and Tom Fukushima",
+ title       = "About {C}harity",
+ institution = "Department of Computer Science, The University of Calgary",
+ month       = jun,
+ year        = 1992,
+ type        = "Yellow Series Report",
+ number      = "No.\ 92/480/18"
+}
+
+@Book{HTDP,
+  author =	"Matthias Felleisen and Robert Bruce Findler and
+		 Matthew Flatt and Shiram Krishnamurthi",
+  publisher =	"The MIT Press",
+  title =	"How to Design Programs",
+  year = 	"2003",
+}
+
+@inproceedings{Gill93ashort,
+ author = {Gill, Andrew and Launchbury, John and Peyton Jones, Simon L.},
+ title = {A short cut to deforestation},
+ booktitle = {Proceedings of the conference on Functional programming languages and computer architecture},
+ series = {FPCA '93},
+ year = {1993},
+ isbn = {0-89791-595-X},
+ location = {Copenhagen, Denmark},
+ pages = {223--232},
+ numpages = {10},
+ url = {http://doi.acm.org/10.1145/165180.165214},
+ doi = {http://doi.acm.org/10.1145/165180.165214},
+ acmid = {165214},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+
+
+@article{Wadler:1988,
+ author = {Wadler, Philip},
+ title = {Deforestation: transforming programs to eliminate trees},
+ journal = {Theor. Comput. Sci.},
+ volume = {73},
+ issue = {2},
+ month = {January},
+ year = {1988},
+ issn = {0304-3975},
+ pages = {231--248},
+ numpages = {18},
+ doi = {http://dx.doi.org/10.1016/0304-3975(90)90147-A},
+ acmid = {80104},
+ publisher = {Elsevier Science Publishers Ltd.},
+ address = {Essex, UK},
+} 
+
+@inproceedings{Hinze-2000-generic-Haskell,
+ author = {Hinze, Ralf},
+ title = {A new approach to generic functional programming},
+ booktitle = {Proceedings of the 27th ACM SIGPLAN-SIGACT symposium on Principles of programming languages},
+ series = {POPL '00},
+ year = {2000},
+ isbn = {1-58113-125-9},
+ location = {Boston, MA, USA},
+ pages = {119--132},
+ numpages = {14},
+ url = {http://doi.acm.org/10.1145/325694.325709},
+ doi = {http://doi.acm.org/10.1145/325694.325709},
+ acmid = {325709},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+
+
+@techreport{generic-haskell,
+  title =	"The Generic {H}askell User{'}s Guide",
+  author =	"D{\ae}v Clarke and Ralf Hinze and Johan Theodoor
+		 Jeuring and Andres L{\"o}h and Jan de Wit",
+  year = 	"2002",
+  institution = "Utrecht University",
+  number   = "UU-CS-2002-047"
+}
+
+@inproceedings{Jansson:PolyP,
+ author = {Jansson, Patrik and Jeuring, Johan},
+ title = {PolyP---a polytypic programming language extension},
+ booktitle = {Proceedings of the 24th ACM SIGPLAN-SIGACT symposium on Principles of programming languages},
+ series = {POPL '97},
+ year = {1997},
+ isbn = {0-89791-853-3},
+ location = {Paris, France},
+ pages = {470--482},
+ numpages = {13},
+ url = {http://doi.acm.org/10.1145/263699.263763},
+ doi = {http://doi.acm.org/10.1145/263699.263763},
+ acmid = {263763},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+
+@inproceedings{Cheney:LIG,
+ author = {Cheney, James and Hinze, Ralf},
+ title = {A lightweight implementation of generics and dynamics},
+ booktitle = {Proceedings of the 2002 ACM SIGPLAN workshop on Haskell},
+ series = {Haskell '02},
+ year = {2002},
+ isbn = {1-58113-605-6},
+ location = {Pittsburgh, Pennsylvania},
+ pages = {90--104},
+ numpages = {15},
+ url = {http://doi.acm.org/10.1145/581690.581698},
+ doi = {http://doi.acm.org/10.1145/581690.581698},
+ acmid = {581698},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {dynamic typing, generic programming, type representations},
+} 
+
+
+@inproceedings{Lammel:SYB,
+ author = {L\"{a}mmel, Ralf and Jones, Simon Peyton},
+ title = {Scrap your boilerplate: a practical design pattern for generic programming},
+ booktitle = {Proceedings of the 2003 ACM SIGPLAN international workshop on Types in languages design and implementation},
+ series = {TLDI '03},
+ year = {2003},
+ isbn = {1-58113-649-8},
+ location = {New Orleans, Louisiana, USA},
+ pages = {26--37},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/604174.604179},
+ doi = {http://doi.acm.org/10.1145/604174.604179},
+ acmid = {604179},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {generic programming, rank-2 types, traversal, type cast},
+} 
+
+@inproceedings{weirich:replib,
+  author = 		  {Stephanie Weirich},
+  title = 		  {{RepLib}: {A} library for derivable type classes},
+  booktitle =    {Haskell Workshop},
+  month =		  sep,
+  address =      {Portland, OR, USA},
+  year =			  2006,
+  plclub =       {yes},
+  pages =        "1--12",
+  pdf =          {http://repository.upenn.edu/cis_papers/362},
+  projecturl      =     {http://www.seas.upenn.edu/~sweirich/RepLib/},
+  abstract =     {
+  Some type class instances can be automatically derived from the
+  structure of types. As a result, the Haskell language includes the
+  "deriving" mechanism to automatic generates such instances for a
+  small number of built-in type classes. In this paper, we present
+  RepLib, a GHC library that enables a similar mechanism for arbitrary
+  type classes. Users of RepLib can define the relationship between
+  the structure of a datatype and the associated instance declaration
+  by a normal Haskell functions that pattern-matches a representation
+  types. Furthermore, operations defined in this manner are
+  extensible---instances for specific types not defined by type
+  structure may also be incorporated. Finally, this library also
+  supports the definition of operations defined by parameterized
+  types.
+  }
+}
+
+@Article{weirich:erasure,
+  author = 		  {Stephanie Weirich},
+  title = 		  {Type-Safe Run-time Polytypic Programming},
+  journal = 	  jfp,
+  year = 		  2006,
+  month =        nov, 
+  pages =        {681--710},
+  plclub =       {yes},
+  volume =       16, 
+  number =        10,
+  pdf =          {http://www.seas.upenn.edu/~sweirich/papers/erasure/erasure-jfp.pdf},
+  abstract =     {   
+  Polytypic programming is a way of defining type-indexed
+  operations, such as map, fold and zip, based on type information.
+  Run-time polytypic programming allows that type information to
+  be dynamically computed---this support is essential in modern
+  programming languages that support separate compilation, first-class
+  type abstraction, or polymorphic recursion.
+  
+  However, in previous work we defined run-time polytypic programming
+  with a type-passing semantics. Although it is natural to define
+  polytypic programs as operating over first-class types, such a
+  semantics suffers from a number of drawbacks. This paper describes
+  how to recast that work in a type-erasure semantics, where terms
+  represent type information in a safe manner.  The resulting language
+  is simple and easy to implement---we present a prototype
+  implementation of the necessary machinery as a small Haskell
+  library.                                                           
+  }
+}
+
+@inproceedings{Gill-2009-sharing,
+ author = {Gill, Andy},
+ title = {Type-safe observable sharing in Haskell},
+ booktitle = {Proceedings of the 2nd ACM SIGPLAN symposium on Haskell},
+ series = {Haskell '09},
+ year = {2009},
+ isbn = {978-1-60558-508-6},
+ location = {Edinburgh, Scotland},
+ pages = {117--128},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1596638.1596653},
+ doi = {http://doi.acm.org/10.1145/1596638.1596653},
+ acmid = {1596653},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {DSL compilation, observable sharing},
+} 
+
+@article{Pivoteau2012,
+  author    = {Carine Pivoteau and
+               Bruno Salvy and
+               Mich{\`e}le Soria},
+  title     = {Algorithms for combinatorial structures: Well-founded systems
+               and Newton iterations},
+  journal   = {J. Comb. Theory, Ser. A},
+  volume    = {119},
+  number    = {8},
+  year      = {2012},
+  pages     = {1711-1773},
+  ee        = {http://dx.doi.org/10.1016/j.jcta.2012.05.007},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@article{duchon-2004-boltzmann,
+  title  = {Boltzmann Samplers for the Random Generation of Combinatorial Structures},
+  author = {Philippe Duchon, Philippe Flajolet, Guy Louchard and Gilles Schaeffer},
+  year = {2004},
+  journal = {Combinatorics, Probability and Computing},
+  volume = {13},
+  pages = {577--625},
+  doi = {doi:10.1017/S0963548304006315}
+}
+
+@incollection {Duchon-2002-Boltzmann,
+   author = {Duchon, Philippe and Flajolet, Philippe and Louchard, Guy and Schaeffer, Gilles},
+   affiliation = {Université Bordeaux I 351 Cours de la Libération F-33405 Talence France},
+   title = {Random Sampling from Boltzmann Principles},
+   booktitle = {Automata, Languages and Programming},
+   series = {Lecture Notes in Computer Science},
+   editor = {Widmayer, Peter and Eidenbenz, Stephan and Triguero, Francisco and Morales, Rafael and Conejo, Ricardo and Hennessy, Matthew},
+   publisher = {Springer Berlin / Heidelberg},
+   isbn = {978-3-540-43864-9},
+   keyword = {Computer Science},
+   pages = {776-776},
+   volume = {2380},
+   url = {\url{http://dx.doi.org/10.1007/3-540-45465-9_43}},
+   year = {2002}
+}
+
+@book{flajolet2009analytic,
+  title={Analytic combinatorics},
+  author={Flajolet, Philippe and Sedgewick, Robert},
+  year={2009},
+  publisher={cambridge University press}
+}
+
+@inproceedings{hinze2010reason,
+  title={Reason isomorphically!},
+  author={Hinze, Ralf and James, Daniel WH},
+  booktitle={Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
+  pages={85--96},
+  year={2010},
+  organization={ACM}
+}
+
+@misc{cursor-down,
+  title = "Cursor Down",
+  author = "Conor McBride",
+  url = "http://web.archive.org/web/20061009071052/http://sneezy.cs.nott.ac.uk/containers/blog/?p=20",
+  year = 2005
+}
+
+@inproceedings{yorgey-2010-species,
+ author = {Yorgey, Brent A.},
+ title = {{Species and Functors and Types, Oh My!}},
+ booktitle = {Proceedings of the third ACM Haskell symposium on Haskell},
+ series = {Haskell '10},
+ year = {2010},
+ isbn = {978-1-4503-0252-4},
+ location = {Baltimore, Maryland, USA},
+ pages = {147--158},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1863523.1863542},
+ doi = {http://doi.acm.org/10.1145/1863523.1863542},
+ acmid = {1863542},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {algebraic data types, combinatorial species},
+}
+
+@misc{combstruct,
+  author       = {Bruno Salvy and Paul Zimmerman},
+  title        = {The combstruct library},
+  howpublished = {\url{http://algo.inria.fr/libraries/#combstruct}}
+}
+
+@incollection {aiken-2010-fusion,
+   author = {Hawkins, Peter and Aiken, Alex and Fisher, Kathleen and Rinard, Martin and Sagiv, Mooly},
+   affiliation = {Stanford University},
+   title = {Data Structure Fusion},
+   booktitle = {Programming Languages and Systems},
+   series = {Lecture Notes in Computer Science},
+   editor = {Ueda, Kazunori},
+   publisher = {Springer Berlin / Heidelberg},
+   isbn = {978-3-642-17163-5},
+   keyword = {Computer Science},
+   pages = {204-221},
+   volume = {6461},
+   url = {\url{http://dx.doi.org/10.1007/978-3-642-17164-2_15}},
+   year = {2010}
+}
+
+@InProceedings{abel-2010-miniagda,
+  author	= {Andreas Abel},
+  title		= {Mini{A}gda: {I}ntegrating {S}ized and {D}ependent {T}ypes},
+  booktitle	= par10,
+  year		= {2010},
+  editor	= {Ana Bove and Ekaterina Komendantskaya and Milad Niqui},
+}
+
+@article{Flajolet-1994-random,
+title = "A calculus for the random generation of labelled combinatorial structures",
+journal = "Theoretical Computer Science",
+volume = "132",
+number = "1-2",
+pages = "1 - 35",
+year = "1994",
+issn = "0304-3975",
+doi = "10.1016/0304-3975(94)90226-7",
+url = "\url{http://www.sciencedirect.com/science/article/pii/0304397594902267}",
+author = "Philippe Flajolet and Paul Zimmerman and Bernard Van Cutsem"
+}
+
+@inproceedings{kock2012data,
+  title={Data types with symmetries and polynomial functors over groupoids},
+  author={Kock, Joachim},
+  booktitle={Proceedings of the 28th Conference on the Mathematical Foundations of Programming Semantics (Bath, 2012)},
+  year={2012}
+}
+
+@inproceedings{yorgey2012promotion,
+  title={Giving Haskell a promotion},
+  author={Yorgey, Brent A and Weirich, Stephanie and Cretin, Julien and Peyton Jones, Simon and Vytiniotis, Dimitrios and Magalh{\~a}es, Jos{\'e} Pedro},
+  booktitle={Proceedings of the 8th ACM SIGPLAN Workshop on Types in Language Design and Implementation},
+  pages={53--66},
+  year={2012},
+  organization={ACM}
+}
+
+@inproceedings{eisenberg2012singletons,
+  title={Dependently typed programming with singletons},
+  author={Eisenberg, Richard A and Weirich, Stephanie},
+  booktitle={Proceedings of the 2012 symposium on Haskell symposium},
+  pages={117--130},
+  year={2012},
+  organization={ACM}
+}
+
+@inproceedings{schrijvers2008type,
+  title={Type checking with open type functions},
+  author={Schrijvers, Tom and Peyton Jones, Simon and Chakravarty, Manuel and Sulzmann, Martin},
+  booktitle={ACM Sigplan Notices},
+  volume={43},
+  number={9},
+  pages={51--62},
+  year={2008},
+  organization={ACM}
+}
+
+@inproceedings{duregaard2012feat,
+  title={Feat: functional enumeration of algebraic types},
+  author={Dureg{\aa}rd, Jonas and Jansson, Patrik and Wang, Meng},
+  booktitle={Proceedings of the 2012 symposium on Haskell symposium},
+  pages={61--72},
+  year={2012},
+  organization={ACM}
+}
+
+@misc{gencheck,
+  title={The \texttt{gencheck} package},
+  author={Uszkay, Gordon and Carette, Jacques},
+  url={http://hackage.haskell.org/package/gencheck},
+  year=2012
+}
+
+@PhDThesis{UszkayThesis,
+  title={Modular Property Based Testing},
+  author={Uszkay, Gordon},
+  note={(in preparation)},
+  school={{McMaster University}},
+  year=2014
+}
+
+@misc{species,
+  title={The \texttt{species} package},
+  author={Yorgey, Brent},
+  url={http://hackage.haskell.org/package/species},
+  year=2012
+}
+
+@article{FlSaZi91,
+    Author = {Flajolet, P. and Salvy, B. and Zimmermann, P.},
+    Doi = {10.1016/0304-3975(91)90145-R},
+    Journal = {Theoretical Computer Science A},
+    Month = feb,
+    Number = 1,
+    Pages = {37--109},
+    Title = {Automatic Average-case Analysis of Algorithms},
+    Volume = 79,
+    Year = 1991,
+    annote = {Covers the theory of analysis of algorithms that is relevant}
+} 
+
+@article{FlajoletZC94,
+  author    = {Philippe Flajolet and
+               Paul Zimmermann and
+               Bernard Van Cutsem},
+  title     = {A Calculus for the Random Generation of Labelled Combinatorial
+               Structures},
+  journal   = {Theor. Comput. Sci.},
+  volume    = {132},
+  number    = {2},
+  year      = {1994},
+  pages     = {1-35},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@article{banger1993foundation,
+  title={A foundation for theories of arrays},
+  author={Banger, CR and Skillicorn, DB},
+  journal={Queen's University, Canada},
+  year={1993}
+}
+
+@Book{hottbook,
+  author =    {The {Univalent Foundations Program}},
+  title =     {Homotopy Type Theory: Univalent Foundations of Mathematics},
+  publisher = {\url{http://homotopytypetheory.org/book}},
+  address =   {Institute for Advanced Study},
+  year =      2013
+}
+
+@misc{finite,
+  title={Finite sets},
+  author={The nLab},
+  url={http://ncatlab.org/nlab/show/finite+set},
+  year={2013},
+  misc={accessed revision 38}
+}
+
+@article{Maia2008arithmetic,
+title = "On the arithmetic product of combinatorial species ",
+journal = "Discrete Mathematics ",
+volume = "308",
+number = "23",
+pages = "5407 - 5427",
+year = "2008",
+issn = "0012-365X",
+doi = "http://dx.doi.org/10.1016/j.disc.2007.09.062",
+url = "http://www.sciencedirect.com/science/article/pii/S0012365X07007960",
+author = "Manuel Maia and Miguel M\'{e}ndez",
+keywords = "Combinatorial species",
+keywords = "Arithmetic product",
+keywords = "Euler product formula",
+keywords = "Graph product",
+keywords = "Partition meet "
+}
+
+@incollection{hofmann1995quotient,
+  title={A simple model for quotient types},
+  author={Hofmann, Martin},
+  booktitle={Typed lambda calculi and applications},
+  pages={216--234},
+  year={1995},
+  publisher={Springer}
+}
+
+@inproceedings{alti:lics09,
+  author =	 {Peter Morris and Thorsten Altenkirch},
+  title =	 {Indexed Containers},
+  year = 	 {2009},
+  booktitle =	 {Twenty-Fourth IEEE Symposium in Logic in Computer Science (LICS 2009)},
+}
+
+@Article{alti:cont-tcs,
+  author = 	 {Michael Abbott and Thorsten Altenkirch and Neil Ghani},
+  title = 	 {Containers - Constructing Strictly Positive Types},
+  journal = 	 {Theoretical Computer Science},
+  year = 	 {2005},
+  volume =	 {342},
+  pages =	 {3--27},
+  month =	 {September},
+  note =	 {Applied Semantics: Selected Topics},
+}
+
+@article{ContainerTypesCat,
+ author = {Hoogendijk, Paul and De Moor, Oege},
+ title = {Container Types Categorically},
+ journal = {J. Funct. Program.},
+ issue_date = {March 2000},
+ volume = {10},
+ number = {2},
+ month = mar,
+ year = {2000},
+ issn = {0956-7968},
+ pages = {191--225},
+ numpages = {35},
+ url = {http://dx.doi.org/10.1017/S0956796899003640},
+ doi = {10.1017/S0956796899003640},
+ acmid = {967462},
+ publisher = {Cambridge University Press},
+ address = {New York, NY, USA},
+} 
+
+@INPROCEEDINGS{BaezDolan01,
+    author = {John C. Baez and James Dolan},
+    editors =  {Björn Engquist and Wilfried Schmid},
+    title = {From Finite Sets to {F}eynman Diagrams},
+    booktitle = {Mathematics Unlimited---2001 And Beyond},
+    year = {2001},
+    pages = {29--50},
+    publisher = {Springer-Verlag}
+}
+
+@article{Morton2006,
+author="Morton, Jeffrey",
+title="{Categorified algebra and quantum mechanics.}",
+journal="Theory Appl. Categ. ",
+volume="16",
+pages="785-854",
+year="2006",
+abstract="{Summary: The process some call `categorification' consists of
+    interpreting set-theoretic structures in mathematics as derived from
+    category-theoretic structures. Examples include the interpretation of $\Bbb
+    N$ as the Burnside rig of the category of finite sets with product and
+    coproduct, and of $\Bbb N[x]$ in terms the category of combinatorial
+    species. This has interesting applications to quantum mechanics, and in
+    particular the quantum harmonic oscillator, via Joyal's `combinatorial
+    species', and a new generalization called `stuff types' described by Baez
+    and Dolan, which are a special case of Kelly's `clubs'. Operators between
+    stuff types be represented as rudimentary Feynman diagrams for the
+    oscillator. In quantum mechanics, we want to represent states in an algebra
+    over the complex numbers, and also want our Feynman diagrams to carry more
+    structure than these `stuff operators' can do, and these turn out to be
+    closely related. We will describe a categorification of the quantum harmonic
+    oscillator in which the group of `phases' - that is, $U(1)$, the circle
+    group - plays a special role. We describe a general notion of `$M$-stuff
+    types' for any monoid $M$, and see that the case $M=U(1)$ provides an
+    interpretation of time evolution in the combinatorial setting, as well as
+    recovering the usual Feynman rules for the quantum harmonic oscillator.}",
+classmath="{*18D10 (Monoidal categories)
+18B40 (Generalizations of groups viewed as categories)
+81P05 (General and philosophical topics in quantum theory)
+}",
+}
+
+@mastersthesis{Byrne2005,
+  author = {Simon Byrne},
+  title  = "On Groupoids and Stuff",
+  school = "Macquarie University",
+  year   = "2006"
+}
+
+@article{Fiore08,
+author = {Fiore, M. and Gambino, N. and Hyland, M. and Winskel, G.},
+title = {{The cartesian closed bicategory of generalised species of structures}},
+journal = {J. London Math. Soc.},
+volume = {77},
+number = {1},
+pages = {203-220},
+doi = {10.1112/jlms/jdm096},
+year = {2008},
+abstract = {The concept of generalised species of structures between small categories and, correspondingly, that of generalised analytic functor between presheaf categories are introduced. An operation of substitution for generalised species, which is the counterpart to the composition of generalised analytic functors, is also put forward. These definitions encompass most notions of combinatorial species considered in the literature  including of course Joyal's original notion  together with their associated substitution operation. Our first main result exhibits the substitution calculus of generalised species as arising from a Kleisli bicategory for a pseudo-comonad on profunctors. Our second main result establishes that the bicategory of generalised species of structures is cartesian closed.
+},
+URL = {http://jlms.oxfordjournals.org/cgi/content/abstract/77/1/203},
+eprint = {http://jlms.oxfordjournals.org/cgi/reprint/77/1/203.pdf}
+}
+
+@Misc{Aldor-Combinat,
+  author =	 {Ralf Hemmecke and Martin Rubey},
+  title =	 {Aldor-Combinat: An Implementation of Combinatorial Species},
+  year =	 2006,
+  note =	 {Available at \url{http://www.risc.uni-linz.ac.at/people/hemmecke/aldor/combinat/}}
+}
+
+@inproceedings{Berg85,
+	Annote = {Very short explanation of what Darwin is.},
+	Author = {F. Bergeron and C. Pichet},
+	Booktitle = {EUROCAL '85},
+	Date-Added = {2008-01-31 14:39:52 -0500},
+	Date-Modified = {2008-01-31 14:44:40 -0500},
+	Publisher = {Springer Berlin / Heidelberg},
+	Series = {Lecture Notes in Computer Science},
+	Title = {Darwin, a system designed for the study of enumerative combinatorics},
+	Volume = {204},
+	Year = {1985}}
+
+@article{Mupad-Combinat,
+    author = {Hivert, F. and Thi\'{e}ry, N.M},
+    title = {{MuPAD-Combinat}, an open-source package for research in algebraic combinatorics},
+    journal = {S\'{e}minaire Lotharingien de Combinatoire},
+    volume = {51},
+    year = {2004},
+    note = {70 pp.}
+}
+
+@article{Menni2008,
+    author = {Mat\'{\i}as Menni},
+    title = {Combinatorial functional and differential equations applied to
+        differential posets},
+    journal = {Discrete Mathematics},
+    volume = {308},
+    number = {10},
+    year = {2008},
+    month = {May},
+    pages = {1864--1888},
+    DOI = {10.1016/j.disc.2007.04.035} }
+
+@article{Mishna03b,
+    Author = {Mishna, Marni},
+    Journal = {Advances in Applied Mathematics},
+    Number = {1},
+    Pages = {189--207},
+    Title = {Attribute grammars and automatic complexity analysis},
+    Volume = {30},
+    Year = {2003},
+    annote = {doing the same but for attribute grammars}
+}
+
+@book{aguiar2010monoidal,
+  title={Monoidal Functors, Species and Hopf Algebras},
+  author={Aguiar, M. and Mahajan, S.A.},
+  isbn={9780821847763},
+  lccn={2010025240},
+  series={CRM monograph series / Centre de recherches math{\'e}matiques, Montr{\'e}al},
+  url={http://books.google.ca/books?id=tXnPbwAACAAJ},
+  year={2010},
+  publisher={American Mathematical Society}
+}
+
+
+@ARTICLE{Schmitt93hopfalgebras,
+    author = {William R. Schmitt},
+    title = {Hopf Algebras of Combinatorial Structures},
+    journal = {Canadian Journal of Mathematics},
+    year = {1993},
+    pages = {412--428}
+}
+@article{Hinze-generalized-tries,
+  author    = {Ralf Hinze},
+  title     = {Generalizing generalized tries},
+  journal   = {J. Funct. Program.},
+  volume    = {10},
+  number    = {4},
+  year      = {2000},
+  pages     = {327-351},
+  ee        = {http://journals.cambridge.org/action/displayAbstract?aid=59745},
+  bibsource = {DBLP, http://dblp.uni-trier.de}
+}
+
+@article{Girard1988,
+    author = {Girard, J.},
+    doi = {10.1016/0168-0072(88)90025-5},
+    issn = {01680072},
+    journal = {Annals of Pure and Applied Logic},
+    keywords = {cut-elimination, normalization, polynomial-functor},
+    month = feb,
+    number = {2},
+    pages = {129--177},
+    title = {Normal functors, power series and $\lambda$-calculus},
+    url = {http://dx.doi.org/10.1016/0168-0072(88)90025-5},
+    volume = {37},
+    year = {1988}
+}
+
+@inproceedings{InformationEffects,
+ author = {James, Roshan P. and Sabry, Amr},
+ title = {Information Effects},
+ booktitle = {Proceedings of the 39th Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+ series = {POPL '12},
+ year = {2012},
+ isbn = {978-1-4503-1083-3},
+ location = {Philadelphia, PA, USA},
+ pages = {73--84},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/2103656.2103667},
+ doi = {10.1145/2103656.2103667},
+ acmid = {2103667},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {arrows, linear logic, quantum computing, reversible logic},
+} 
+
+@misc{lens,
+  author = {Edward Kmett},
+  title = {The |lens| package},
+  url = {http://hackage.haskell.org/package/lens}
+}
+
+@inproceedings{Lindley2013hasochism,
+ author = {Lindley, Sam and McBride, Conor},
+ title = {Hasochism: The Pleasure and Pain of Dependently Typed Haskell Programming},
+ booktitle = {Proceedings of the 2013 ACM SIGPLAN Symposium on Haskell},
+ series = {Haskell '13},
+ year = {2013},
+ isbn = {978-1-4503-2383-3},
+ location = {Boston, Massachusetts, USA},
+ pages = {81--92},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/2503778.2503786},
+ doi = {10.1145/2503778.2503786},
+ acmid = {2503786},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {data type promotion, dependent types, invariants, proof search, singletons},
+}
