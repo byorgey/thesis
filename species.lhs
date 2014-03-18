@@ -5,27 +5,10 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
-\begin{itemize}
-\item Motivate application of the theory of species by starting
-  (mostly) ``from scratch'' and building up the pieces of the theory
-  we need.
-\end{itemize}
-
-\begin{itemize}
-\item Develop more general definitions along the way.  Applies not
-  just to \Set\ but also to category of types and functions, etc.
-\item Lifting monoidal structure from $C$: sum, Cartesian/Hadamard product.
-\item Day convolution.  Cauchy product.  Arithmetic product.
-\item Composition.
-\end{itemize}
-
-\section{Foundations}
-\label{sec:foo}
-
 Denote by $\B$ the category whose objects are finite sets and whose
 morphisms are bijections between finite sets.  Species are then
-defined as functors $\B \to \Set$.  Intuitively, the action of a
-species on objects takes a finite set of ``labels'' to a set of
+defined as functors $\B \to \Set$ \citep{bll}.  Intuitively, the action
+of a species on objects takes a finite set of ``labels'' to a set of
 ``structures''; the action on morphisms requires the action on objects
 to be ``invariant under relabelling''.
 
@@ -43,7 +26,7 @@ returning to generalize species, we must take a small detour to see
 one reason why $\B$ is inappropriate in a computational setting, and
 the definitions of some more appropriate tools.
 
-\subsection{Constructive groupoids}
+\section{Constructive groupoids}
 \label{sec:constructive-groupoids}
 
 Let $\fin n \defeq \{0, \dots, n-1\}$ be the set of the first $n$ natural
@@ -65,13 +48,14 @@ $\fin{\size S} \bij \fin{\size T}$, and intuitively we have no way to pick one: 
 would need to decide on a way to match up the elements of each set $S$
 with the set of natural numbers $\fin{\size S}$.  In a sense it ``does not
 matter'' what choice we make, since the results will be isomorphic in
-any case, and this is precisely where the axiom of choice comes in.
+any case, and this is precisely where the axiom of choice comes
+in. \todo{Need to think through this a bit more carefully.}
 
 \todo{Note that HoTT can express several variants on AC.  Some are
-inherently non-constructive so we do not want to assert them.  Note
-there is one variant which is simply provable, but in order to apply
-it we need to already have evidence of a correspondence between
-arbitrary finite sets and canonical finite sets of the same size.}
+  inherently non-constructive so we do not want to assert them.  There
+  is one variant which is simply provable, but in order to apply it we
+  need to already have evidence of a correspondence between arbitrary
+  finite sets and canonical finite sets of the same size.}
 
 This leads us to the need for \emph{computational evidence of
   finiteness}.  (Even the phrase ``send each set $S$ to its size
@@ -82,7 +66,8 @@ First, we define a counterpart to $\P$ in type theory:
 \begin{defn}
   $\PT$ is the groupoid where
   \begin{itemize}
-  \item the objects are natural numbers, that is, values of type $\N$, and
+  \item the objects are natural numbers in our type theory, that is,
+    values of type $\N$, and
   \item the morphisms $\mor m n$ are equivalences of type $\Fin m \iso
     \Fin n$.
   \end{itemize}
@@ -97,20 +82,32 @@ paths $p : a = b$.  As a first try at defining a constructive
 counterpart to $\B$, we consider $\tygrpd{\FinType}$, where
 \[ \FinType \defeq (A : \Type) \times (n : \N) \times (\Fin n \iso
 A). \] However, this does not work: the explicit evidence of
-finiteness is too strong, and interferes with the groupoid
-structure. \todo{Explain why.  Can show there is at most one
-  inhabitant of $A = B$ for $A, B : \FinTypeT$.  Use triangle
-  picture.}
+finiteness is too strong, and collapses all the interesting groupoid
+structure.
+
+\begin{prop}
+  There is at most one morphism between any two objects of
+  $\tygrpd{\FinType}$.  That is, for any $X, Y : \FinType$,
+  if $p_1, p_2 : X = Y$ then $p_1 = p_2$.  (Using the terminology of
+  homotopy type theory, $\FinType$ is a set, \ie a $0$-type.)
+\end{prop}
+
+\todo{Give some intuition.  Use triangle picture.}
+
+\begin{proof}
+  \todo{prove me.}
+\end{proof}
 
 The next thing to try is thus $\tygrpd{\FinTypeT}$, where \[ \FinTypeT
 \defeq (A : \Type) \times (n : \N) \times \ptrunc{\Fin n \iso A} \]
 This does give us the right groupoid structure, and we can prove that
 it is equivalent to $\PT$---as long as equivalence of categories is a
-mere proposition! \todo{explain why} Equivalence as a mere proposition
-is not all that useful, however. We want to define a functor
-$\tygrpd{\FinTypeT} \to \PT$ that we can actually compute with, but
-we cannot since it needs the equivalences in a computationally
-relevant way.
+mere proposition! \todo{explain why} \todo{Aren't there any tricks we
+  can pull to uniquely characterize the functor we're trying to
+  construct?} Equivalence as a mere proposition is not all that
+useful, however. We want to define a functor $\tygrpd{\FinTypeT} \to
+\PT$ that we can actually compute with, but we cannot since it needs
+the equivalences in a computationally relevant way.
 
 In the end, we are forced to give up on constructing a groupoid via
 $\tygrpd{-}$, and define $\BT$ as follows.
@@ -202,5 +199,21 @@ In the other direction, we define $\size{} : \BT \to \PT$:
   transformation between functors whose codomain is a groupoid is
   automatically an isomorphism.
 \end{proof}
-
 \end{prop}
+
+\section{Species from scratch}
+\label{sec:species-scratch}
+
+
+
+\begin{itemize}
+\item Motivate application of the theory of species by starting
+  (mostly) ``from scratch'' and building up the pieces of the theory
+  we need.
+\item Develop more general definitions along the way.  Applies not
+  just to \Set\ but also to category of types and functions, etc.
+\item Lifting monoidal structure from $C$: sum, Cartesian/Hadamard product.
+\item Day convolution.  Cauchy product.  Arithmetic product.
+\item Composition.
+\end{itemize}
+
