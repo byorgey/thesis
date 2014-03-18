@@ -40,24 +40,24 @@ More subtly, we wish to work in a constructive, computational setting,
 and the specific categories $\B$ and $\Set$ are inappropriate. As an
 example XXX
 
-Let $[n] = \{0, \dots n-1\}$ be the set of the first $n$ natural
+Let $\fin n \defeq \{0, \dots, n-1\}$ be the set of the first $n$ natural
 numbers.  Denote by $\P$ the category whose objects are natural
-numbers and whose morphisms $n \to n$ are bijections $[n] \bij [n]$
-(with no morphisms $m \to n$ for $m \neq n$).  Often it is noted as a
-triviality not requiring proof that $\P$ is equivalent to (in fact, a
-skeleton of) $\B$ and hence we are justified in working with $\P$
-rather than $\B$ when convenient.
+numbers and whose morphisms $\mor m n$ are bijections $\fin m \bij \fin
+n$ (hence there are no morphisms $\mor m n$ unless $m \equiv n$).  Often it
+is noted as a triviality not requiring proof that $\P$ is equivalent
+to (in fact, a skeleton of) $\B$ and hence we are justified in working
+with $\P$ rather than $\B$ when convenient.
 
 However, upon digging a bit deeper it is not quite so trivial: in
 particular, showing that $\P$ and $\B$ are (strongly) equivalent
 requires the axiom of choice.  In more detail, it is easy to define a
-functor $[-] : \P \to \B$ which sends $n$ to $[n]$ and preserves
+functor $\fin - : \P \to \B$ which sends $n$ to $\fin n$ and preserves
 morphisms.  Defining an inverse functor $\B \to \P$ is more
 problematic. Clearly we must send each set $S$ to its size
 $\size S$. However, a morphism $S \bij T$ must be sent to some bijection
-$[\size S] \bij [\size T]$, and intuitively we have no way to pick one: we
+$\fin{\size S} \bij \fin{\size T}$, and intuitively we have no way to pick one: we
 would need to decide on a way to match up the elements of each set $S$
-with the set of natural numbers $[\size S]$.  In a sense it ``does not
+with the set of natural numbers $\fin{\size S}$.  In a sense it ``does not
 matter'' what choice we make, since the results will be isomorphic in
 any case, and this is precisely where the axiom of choice comes in.
 
@@ -74,10 +74,10 @@ actually come from?)
 
 First, we define a counterpart to $\P$ in type theory:
 \begin{defn}
-  $\P_H$ is the groupoid where
+  $\PT$ is the groupoid where
   \begin{itemize}
   \item the objects are natural numbers, that is, values of type $\N$, and
-  \item the morphisms $n \to n$ are equivalences of type $\Fin n \iso
+  \item the morphisms $\mor m n$ are equivalences of type $\Fin m \iso
     \Fin n$.
   \end{itemize}
 \end{defn}
@@ -99,22 +99,22 @@ structure. \todo{Explain why.  Can show there is at most one
 The next thing to try is thus $\tygrpd{\FinTypeT}$, where \[ \FinTypeT
 \defeq (A : \Type) \times (n : \N) \times \ptrunc{\Fin n \iso A} \]
 This does give us the right groupoid structure, and we can prove that
-it is equivalent to $\P_H$---as long as equivalence of categories is a
+it is equivalent to $\PT$---as long as equivalence of categories is a
 mere proposition! \todo{explain why} Equivalence as a mere proposition
 is not all that useful, however. We want to define a functor
-$\tygrpd{\FinTypeT} \to \P_H$ that we can actually compute with, but
+$\tygrpd{\FinTypeT} \to \PT$ that we can actually compute with, but
 we cannot since it needs the equivalences in a computationally
 relevant way.
 
 In the end, we are forced to give up on constructing a groupoid via
-$\tygrpd{-}$, and define $\B_H$ as follows.
+$\tygrpd{-}$, and define $\BT$ as follows.
 
 \begin{defn}
-$\B_H$ is the groupoid where
+$\BT$ is the groupoid where
 \begin{itemize}
 \item the objects are values of type $\FinType \defeq (A : \Type) \times (n : \N)
 \times (\Fin n \iso A)$, and
-\item morphisms $(A,m,i) \to (B,n,j)$ are equivalences $A \iso B$.
+\item morphisms $\mor{(A,m,i)}{(B,n,j)}$ are equivalences $A \iso B$.
 \end{itemize}
 \end{defn}
 
@@ -124,17 +124,72 @@ objects.
 \todo{Note we can easily show sizes must be equal.}
 
 \begin{rem}
-  \bay{We're in a funny situation where we have to add a lot of
-    computational evidence to avoid using the axiom of choice---but
-    then the next minute we turn around and say that it's irrelevant
-    after all.  The way to think about it is ???}
+  This may seem a bit funny: we go to the trouble of adding extra
+  computational evidence to objects, but then the next minute we turn
+  around and say that the additional evidence is irrelevant after all!
+  However, the point is that although the extra evidence may be
+  irrelevant to \emph{morphisms}, functors out of the category may
+  still make use of it (see \pref{defn:size}).  Instead of having to
+  make an arbitrary choice of isomorphism when mapping out of an
+  object, we ``blow up'' the category by making a separate object for
+  each possible choice, but ensure that objects which differ only in
+  the choice are isomorphic.
+\end{rem}
+
+\begin{defn}
+We can now define a functor $\fin - : \PT \to \BT$ in the evident way:
+\begin{itemize}
+\item On objects, $\fin n \defeq (\Fin n, n, \id)$.
+\item $\fin -$ is the identity on morphisms.
+\end{itemize}
+\end{defn}
+
+\begin{defn} \label{defn:size}
+In the other direction, we define $\size{} : \BT \to \PT$:
+\begin{itemize}
+\item On objects, $\size{(A, m, i)} \defeq m$.
+\item On morphisms, $e : \mor {(A, m, i)} {(B, n, j)}$ is sent to \[
+  \xymatrix{\Fin m \ar@@{<->}[d]_-i & \Fin n \\ A \ar@@{<->}[r]_e & B
+    \ar@@{<->}[u]_-{j^{-1}} } \]
+\end{itemize}
+\end{defn}
+
+\begin{rem}
+  Note in particular how we make use of the extra computational
+  evidence present in objects to define $\size{}$ without resorting to
+  choice.
 \end{rem}
 
 \begin{prop}
-  There is a functor $\size - : \B_H \to \P_H$ which together with
-  $[-] : \P_H \to \B_H$ defines a (strong) equivalence.
+  The functors $\xymatrix{\PT \ar@@<.5ex>[r]^{\fin -} & \BT \ar@@<.5ex>[l]^{\size{}}}$ constitute a
+  (strong) equivalence between the groupoids $\PT$ and $\BT$.
 
 \begin{proof}
-  \todo{prove it.}
+  $\size{\fin -}$ is by definition the identity functor.  The
+  interesting direction is $\fin{\size -}$.
+  \begin{itemize}
+  \item On objects, $\fin{\size {(A,m,i)}} \equiv \fin{m} \equiv (\Fin
+    m, m, \id)$, and
+  \item on morphisms, $e : \mor {(A,m,i)} {(B,n,j)}$ is sent to
+    $\fin{\size e} \equiv \fin{i ; e ; j^{-1}} \equiv i ; e ; j^{-1}$.
+  \end{itemize}
+  We must exhibit a natural isomorphism $\alpha : \nat{Id}{\fin{\size
+      -}}$.  The component of $\alpha$ at $(A,m,i)$ must be a morphism
+  in $\BT$ from $(A,m,i)$ to $(\Fin m, m, \id)$, that is, an
+  equivalence $A \iso \Fin m$.  Therefore we define \[
+  \alpha_{(A,m,i)} \defeq i^{-1}. \]  Naturality of $\alpha$ is given
+  by the diagram
+  \[ \xymatrix{
+         (A,m,i) \ar[r]^-{i^{-1}} \ar[d]_e
+         &
+         (\Fin m, m, \id) \ar[d]^{i ; e ; j^{-1}}
+       \\
+         (B,n,j) \ar[r]_-{j^{-1}} & (\Fin n, n, \id)
+     }
+  \]
+  which commutes by inspection.  Finally, we note that any natural
+  transformation between functors whose codomain is a groupoid is
+  automatically an isomorphism.
 \end{proof}
+
 \end{prop}

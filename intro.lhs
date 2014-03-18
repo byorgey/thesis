@@ -14,6 +14,8 @@
 
 Basics of type theory (copy from other paper).
 
+Equivalences.
+
 Equality/paths.  Univalence.  Intuition: richer space of equalities.
 We have Leibniz equality (transport) but transport may involve some
 work.

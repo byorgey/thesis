@@ -96,22 +96,31 @@
 \newcommand{\FinTypeT}{\ensuremath{\Type_{\||\text{Fin}\||}}}
 \newcommand{\size}[1]{\ensuremath{\##1}}
 
-\DeclareMathOperator{\Fin}{Fin}
+\newcommand{\Fin}[1]{\ensuremath{\cons{Fin}\ #1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% HoTT
 
 \newcommand{\ptrunc}[1]{\ensuremath{\||#1\||}}
+\newcommand{\id}{\cons{id}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
+
+\newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\Set}{\cat{Set}}
+
+\newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
+\newcommand{\nat}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
 
 \providecommand{\B}{\bbb{B}}
 \renewcommand{\P}{\bbb{P}}
 \providecommand{\FinSet}{\bbb{E}}
 
-\newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}}
-\newcommand{\Set}{\cat{Set}}
+\newcommand{\BT}{\B_H}
+\newcommand{\PT}{\P_H}
+
+\newcommand{\fin}[1]{\ensuremath{[#1]}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species
