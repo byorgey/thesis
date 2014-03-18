@@ -59,7 +59,7 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 
-\newcommand{\bij}{\stackrel{\sim}{\to}}
+\newcommand{\bij}{\stackrel{\sim}{\longrightarrow}}
 \newcommand{\iso}{\simeq}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,6 +112,8 @@
 
 \newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
 \newcommand{\nat}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
+
+\newcommand{\then}{\mathbin{;}}
 
 \providecommand{\B}{\bbb{B}}
 \renewcommand{\P}{\bbb{P}}
