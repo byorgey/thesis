@@ -160,6 +160,24 @@ In the other direction, we define $\size{} : \BT \to \PT$:
   \xymatrix{\Fin m \ar@@{<->}[d]_-i & \Fin n \\ A \ar@@{<->}[r]_e & B
     \ar@@{<->}[u]_-{j^{-1}} } \]
 \end{itemize}
+The functoriality of $\size{}$ can be seen by noting the cancelling
+pair of inverse equivalences in each of the following two pictures:
+  \[ \xymatrix{\Fin m \ar@@<-.4em>@@{<->}[d]_i
+         \ar@@<.4em>@@{<->}[d]^{i^{-1}}
+       \\
+         A \ar@@(dl,dr)_{\id}
+     }
+     \qquad\qquad
+     \xymatrix{
+       \Fin m \ar@@{<->}[d]_i &
+       \Fin n \ar@@<-.4em>@@{<->}[d]_j \ar@@<.4em>@@{<->}[d]^{j^{-1}} &
+       \Fin o \ar@@{<->}[d]^k
+     \\
+       A \ar@@{<->}[r]_e &
+       B \ar@@{<->}[r]_f &
+       C
+     }
+  \]
 \end{defn}
 
 \begin{rem}
@@ -204,8 +222,6 @@ In the other direction, we define $\size{} : \BT \to \PT$:
 \section{Species from scratch}
 \label{sec:species-scratch}
 
-
-
 \begin{itemize}
 \item Motivate application of the theory of species by starting
   (mostly) ``from scratch'' and building up the pieces of the theory
@@ -216,4 +232,3 @@ In the other direction, we define $\size{} : \BT \to \PT$:
 \item Day convolution.  Cauchy product.  Arithmetic product.
 \item Composition.
 \end{itemize}
-
