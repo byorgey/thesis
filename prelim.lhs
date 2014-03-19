@@ -29,6 +29,8 @@ truncation, intuition.
 Make extensive use of category theory.  Assume basics (categories,
 functors, natural transformations, functor categories).
 
+Equivalence of categories.
+
 \subsection{Groupoids}
 \label{sec:groupoids}
 
@@ -46,7 +48,7 @@ Examples of groupoids include:
 
 \item Any type $T$ gives rise to a groupoid $\tygrpd{T}$ where the objects
 are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is,
-morphisms from $a$ to $b$ are paths $p : a = b$
+morphisms from $a$ to $b$ are paths $p : a = b$.
 \end{itemize}
 
 \subsection{Finiteness}
