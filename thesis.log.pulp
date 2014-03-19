@@ -1,1 +1,10 @@
-!(boring | info | message | under | over | unknown)
+!(boring
+ | info
+ | message
+ | under
+ | over
+ | 'Package [^ ]*[][0-9/ ]* emulated by memoir\\.'
+ | "write18 enabled"
+ | "runsystem\\(.*diagrams.*\\)\\.\\.\\.executed\\."
+ | "Opening diagrams-latex stream"
+ )
