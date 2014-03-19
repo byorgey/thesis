@@ -170,9 +170,18 @@ product (though not a categorical product) which is in some sense more
 natural/useful than Cartesian product, even though it is much more
 complicated; it will be explored in the next section.
 
-\todo{Note \Set is Cartesian closed; however, lifting does not
-  necessarily preserve closedness.  In particular category of species
-  is not Cartesian closed. (?) Need to check this.}
+In addition to having products, \Set is Cartesian closed. However,
+lifting does not necessarily preserve closedness.  In particular, the
+category $[\B, \Set]$ of species is not Cartesian closed---we cannot
+(in general) model function types with species. \todo{Though we can in
+  some specific situations---see ...?}
+
+\todo{give some examples with other categories.}
+
+\todo{\Set is distributive, in the sense that the canonical morphism
+  $X \times Y + X \times Z \to X \times (Y + Z)$ is an isomorphism.
+  Is $[\B, \Set]$ distributive in the same way?  If so, does lifting
+  monoids always preserve distributivity?}
 
 \section{Outline of remaining stuff to write}
 \label{sec:outline}
@@ -180,7 +189,6 @@ complicated; it will be explored in the next section.
 \begin{itemize}
 \item Develop more general definitions along the way.  Applies not
   just to \Set\ but also to category of types and functions, etc.
-\item Lifting monoidal structure from $C$: sum, Cartesian/Hadamard product.
 \item Day convolution.  Cauchy product.  Arithmetic product.
 \item Composition.
 \item Derivative (+ antiderivative?).  Might need to read up on any related
