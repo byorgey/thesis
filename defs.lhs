@@ -108,6 +108,8 @@
 \newcommand{\ptrunc}[1]{\ensuremath{\||#1\||}}
 \newcommand{\id}{\cons{id}}
 
+\newcommand{\tygrpd}[1]{\ensuremath{\mathbf{G}(#1)}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
 

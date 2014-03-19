@@ -2,8 +2,8 @@
 
 %include polycode.fmt
 
-\chapter{Introduction}
-\label{chap:intro}
+\chapter{Preliminaries}
+\label{chap:prelim}
 
 \todo{describe big ideas here}
 
@@ -27,10 +27,27 @@ truncation, intuition.
 \label{sec:category-theory}
 
 Make extensive use of category theory.  Assume basics (categories,
-functors, natural transformations).
+functors, natural transformations, functor categories).
 
 \subsection{Groupoids}
 \label{sec:groupoids}
+
+A \term{groupoid} is a category in which all morphisms are invertible,
+that is, for each morphism $f$ there is another morphism $f^{-1}$ for
+which $f \comp f^{-1} = id$ and $f^{-1} \comp f = id$.  Groupoids play
+a prominent role in \todo{finish; cite groupoids and stuff; HoTT; etc.}
+
+Examples of groupoids include:
+
+\begin{itemize}
+\item $\B$ is the groupoid whose objects are finite sets and whose
+  morphisms are \emph{bijections} between finite sets. \todo{intuition,
+    picture}
+
+\item Any type $T$ gives rise to a groupoid $\tygrpd{T}$ where the objects
+are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is,
+morphisms from $a$ to $b$ are paths $p : a = b$
+\end{itemize}
 
 \subsection{Finiteness}
 \label{sec:finiteness}
@@ -45,19 +62,20 @@ is noted as a triviality not requiring proof that $\P$ is equivalent
 to (in fact, a skeleton of) $\B$ and hence we are justified in working
 with $\P$ rather than $\B$ when convenient.
 
-However, upon digging a bit deeper it is not quite so trivial: in
-particular, showing that $\P$ and $\B$ are (strongly) equivalent
-requires the axiom of choice.  In more detail, it is easy to define a
-functor $\fin - : \P \to \B$ which sends $n$ to $\fin n$ and preserves
-morphisms.  Defining an inverse functor $\B \to \P$ is more
-problematic. Clearly we must send each set $S$ to its size
-$\size S$. However, a morphism $S \bij T$ must be sent to some bijection
-$\fin{\size S} \bij \fin{\size T}$, and intuitively we have no way to pick one: we
-would need to decide on a way to match up the elements of each set $S$
-with the set of natural numbers $\fin{\size S}$.  In a sense it ``does not
-matter'' what choice we make, since the results will be isomorphic in
-any case, and this is precisely where the axiom of choice comes
-in. \todo{Need to think through this a bit more carefully.}
+However, upon digging a bit deeper it is not quite so trivial after
+all: in particular, showing that $\P$ and $\B$ are (strongly)
+equivalent requires the axiom of choice.  In more detail, it is easy
+to define a functor $\fin - : \P \to \B$ which sends $n$ to $\fin n$
+and preserves morphisms.  Defining an inverse functor $\B \to \P$ is
+more problematic. Clearly we must send each set $S$ to its size $\size
+S$. However, a morphism $S \bij T$ must be sent to some bijection
+$\fin{\size S} \bij \fin{\size T}$, and intuitively we have no way to
+pick one: we would need to decide on a way to match up the elements of
+each set $S$ with the set of natural numbers $\fin{\size S}$.  In a
+sense it ``does not matter'' what choice we make, since the results
+will be isomorphic in any case, and this is precisely where the axiom
+of choice comes in. \todo{Need to think through this a bit more
+  carefully.}
 
 \todo{Note that HoTT can express several variants on AC.  Some are
   inherently non-constructive so we do not want to assert them.  There
@@ -81,13 +99,8 @@ First, we define a counterpart to $\P$ in type theory:
   \end{itemize}
 \end{defn}
 
-\newcommand{\tygrpd}[1]{\ensuremath{\mathbf{G}(#1)}}
-
-We now note the general principle that any type $T$ gives rise to a
-groupoid $\tygrpd{T}$ where the objects are values $a : T$, and
-$\tygrpd{T}(a,b) \defeq a = b$, that is, morphisms from $a$ to $b$ are
-paths $p : a = b$.  As a first try at defining a constructive
-counterpart to $\B$, we consider $\tygrpd{\FinType}$, where
+As a first try at defining a constructive counterpart to $\B$, we
+consider $\tygrpd{\FinType}$, where
 \[ \FinType \defeq (A : \Type) \times (n : \N) \times (\Fin n \iso
 A). \] However, this does not work: the explicit evidence of
 finiteness is too strong, and collapses all the interesting groupoid
@@ -188,15 +201,10 @@ pair of inverse equivalences in each of the following two diagrams:
   \]
 \end{defn}
 
-\begin{rem}
-  Note in particular how we make use of the extra computational
-  evidence present in objects to define $\size{}$ without resorting to
-  choice.
-\end{rem}
-
 \begin{prop}
-  The functors $\xymatrix{\PT \ar@@<.5ex>[r]^{\fin -} & \BT \ar@@<.5ex>[l]^{\size{}}}$ constitute a
-  (strong) equivalence between the groupoids $\PT$ and $\BT$.
+  The pair of functors $\xymatrix{\PT \ar@@<.5ex>[r]^{\fin -} & \BT
+    \ar@@<.5ex>[l]^{\size{}}}$ constitutes a (strong) equivalence
+  between the groupoids $\PT$ and $\BT$.
 
 \begin{proof}
   $\size{\fin -}$ is by definition the identity functor.  The
@@ -227,15 +235,17 @@ pair of inverse equivalences in each of the following two diagrams:
 \end{proof}
 \end{prop}
 
-\subsection{Parametricity}
-\label{sec:parametricity}
-
-Talk about connection between natural transformations and polymorphic
-functions, specific ways it plays out in a dependent type
-theory---e.g. can we assume parametricity for functions that abstract
-over things classified by |*|? Cite Bernardy et al.
-
 \subsection{Monoids}
 \label{sec:monoids}
 
-Monoids, monoidal categories.
+Monoids, monoidal categories.  Products and coproducts.
+
+\subsection{Ends, coends, and parametricity}
+\label{sec:parametricity}
+
+Define/give intuition for ends and coends.  Talk about connection
+between natural transformations and polymorphic functions, specific
+ways it plays out in a dependent type theory---e.g. can we assume
+parametricity for functions that abstract over things classified by
+|*|? Cite Bernardy et al.
+
