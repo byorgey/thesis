@@ -1,11 +1,17 @@
 % -*- mode: LaTeX; compile-command: "mk" -*-
 
-%include polycode.fmt
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Haskell typesetting
+
+%include thesis.fmt
 
 % Use 'arrayhs' mode, so code blocks will not be split across page breaks.
 \arrayhs
 
 \renewcommand{\Conid}[1]{\mathsf{#1}}
+
+\newcommand{\mappend}{\diamond}
+\newcommand{\mempty}{\varepsilon}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Package imports
@@ -22,16 +28,19 @@
 % \usepackage{breakurl}
 \usepackage{natbib}
 
+\usepackage{graphicx}
+\usepackage[outputdir=diagrams,backend=ps,extension=eps]{diagrams-latex}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Declarative formatting
 
 \newcommand{\term}[1]{\emph{#1}}
-\newcommand{\latin}[1]{\textit{#1}}
+\newcommand{\latin}[1]{\textit{#1}\ }
 \newcommand{\foreign}[1]{\emph{#1}}
 
-\newcommand{\ie}{\latin{i.e.}\xspace}
-\newcommand{\eg}{\latin{e.g.}\xspace}
-\newcommand{\etal}{\latin{et al.}\xspace}
+\newcommand{\ie}{\latin{i.e.}}
+\newcommand{\eg}{\latin{e.g.}}
+\newcommand{\etal}{\latin{et al.}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Math typesetting
@@ -47,10 +56,13 @@
 \providecommand{\C}{\bbb{C}}
 
 \newcommand{\mcal}[1]{\ensuremath{\mathcal{#1}}}
+\let\Sect\S
 \renewcommand{\S}{\mcal S}
 \renewcommand{\H}{\mcal H}
 \newcommand{\I}{\mcal I}
 \newcommand{\Sym}{\mcal S}
+
+\newcommand{\msf}[1]{\ensuremath{\mathsf{#1}}\xspace}
 
 \newcommand{\param}{\mathord{-}}
 
@@ -113,7 +125,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
 
-\newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}\xspace}
 \newcommand{\Set}{\cat{Set}}
 
 \newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
@@ -133,7 +145,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species
 
-\renewcommand{\Sp}[1]{\ensuremath{\mathsf{#1}}}
+\renewcommand{\Sp}{\msf}
 \newcommand{\X}{\Sp{X}}
 \newcommand{\Y}{\Sp{Y}}
 \newcommand{\E}{\Sp{E}}
@@ -145,8 +157,8 @@
 \newcommand{\Bag}{\Sp{E}}
 \newcommand{\Cyc}{\Sp{C}}
 
-\newcommand{\Zero}{\mathsf{0}}
-\newcommand{\One}{\mathsf{1}}
+\newcommand{\Zero}{\msf{0}}
+\newcommand{\One}{\msf{1}}
 
 \newcommand{\sprod}{\cdot}
 \newcommand{\fcomp}{\mathbin{\square}}
@@ -158,6 +170,9 @@
 \newcommand{\ucomp}{\boxcircle}
 
 \newcommand{\unl}[1]{\widetilde{#1}}
+
+\newcommand{\Lab}{\bbb{L}}
+\newcommand{\Str}{\bbb{S}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Comments
@@ -178,7 +193,7 @@
 %% Prettyref
 
 \newrefformat{fig}{Figure~\ref{#1}}
-\newrefformat{sec}{section~\ref{#1}}
+\newrefformat{sec}{\Sect\ref{#1}}
 \newrefformat{eq}{equation~\eqref{#1}}
 \newrefformat{prob}{Problem~\ref{#1}}
 \newrefformat{tab}{Table~\ref{#1}}
