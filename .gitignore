@@ -7,9 +7,13 @@ Shake
 *.toc
 *.bbl
 *.blg
+*.ptb
 
 *.tex
 !thesis.tex
 !abstract.tex
 !acks.tex
 thesis.pdf
+
+.diagrams_cache
+/diagrams/*
