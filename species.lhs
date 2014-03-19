@@ -183,14 +183,17 @@ category $[\B, \Set]$ of species is not Cartesian closed---we cannot
   Is $[\B, \Set]$ distributive in the same way?  If so, does lifting
   monoids always preserve distributivity?}
 
-\section{Outline of remaining stuff to write}
-\label{sec:outline}
+\section{Partitional/Cauchy product}
+\label{sec:product}
 
-\begin{itemize}
-\item Develop more general definitions along the way.  Applies not
-  just to \Set\ but also to category of types and functions, etc.
-\item Day convolution.  Cauchy product.  Arithmetic product.
-\item Composition.
-\item Derivative (+ antiderivative?).  Might need to read up on any related
-  categorical literature.
-\end{itemize}
+\section{Day convolution}
+\label{sec:day-convolution}
+
+\section{Arithmetic product}
+\label{sec:arithmetic-product}
+
+\section{Composition}
+\label{sec:composition}
+
+\section{Differentiation}
+\label{sec:differentiation}
