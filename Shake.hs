@@ -32,6 +32,8 @@ main = shake shakeOptions $ do
 
         system' pdflatex $ ["--enable-write18", input]
         system' pdflatex $ ["--enable-write18", input]
+        system' bibtex [dropExtension input]
+        system' pdflatex $ ["--enable-write18", input]
 
 isInclude = liftA2 (||) ("\\include" `isPrefixOf`) ("\\input" `isPrefixOf`) . dropWhile isSpace
 
