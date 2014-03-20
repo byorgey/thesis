@@ -102,7 +102,7 @@
 \newcommand{\dep}[1]{\prod_{#1}}
 \newcommand{\fun}[1]{\lambda #1.\ }
 
-\newcommand{\cons}[1]{\mathsf{#1}}
+\newcommand{\cons}[1]{\ensuremath{\mathsf{#1}}}
 
 \renewcommand{\False}{\cons{F}}
 \renewcommand{\True}{\cons{T}}
@@ -193,6 +193,7 @@
 %% Prettyref
 
 \newrefformat{fig}{Figure~\ref{#1}}
+\newrefformat{chap}{Chapter~\ref{#1}}
 \newrefformat{sec}{\Sect\ref{#1}}
 \newrefformat{eq}{equation~\eqref{#1}}
 \newrefformat{prob}{Problem~\ref{#1}}

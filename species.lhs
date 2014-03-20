@@ -41,6 +41,10 @@ The idea is to start ``from scratch'' and build up a generic notion of
 species which supports the operations we want.  Along the way, we will
 also get a much clearer picture of where the operations ``come from''.
 
+\todo{cite ``Operads of J.P. May'', ``Cartesian Closed Bicategory of
+  Generalised Species of Structure'', ``Monoidal Functors, Species, and
+  Hopf Algebras''}
+
 We begin by considering functor categories in general.  Given two
 categories $\Lab$ and $\Str$, what can we say about functors $\Lab \to
 \Str$, and more generally about the functor category $[\Lab, \Str]$?
@@ -146,13 +150,23 @@ Disjoint union is not the only monoidal structure on $\Set$. In
 addition to coproducts $\Set$ also has products, where the product of
 two sets $S$ and $T$ is given by the Cartesian product, $S \times T =
 \{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as the
-identity.  By the discussion of the previous section, this
-automatically lifts to a pointwise product structure on species, known
-as the Cartesian or Hadamard product: \[ (F \times G)\ L = F\ L \times
-G\ L. \]  In the same way that an $(F + G)$-shape is either an
+identity.
+\begin{defn}
+  By the discussion of the previous section, this automatically lifts
+  to a pointwise product structure on species, known as the
+  \term{Cartesian} or \term{Hadamard product}: \[ (F \times G)\ L = F\
+  L \times G\ L. \]
+\end{defn}
+In the same way that an $(F + G)$-shape is either an
 $F$-shape \emph{or} a $G$-shape on a given set of labels, an $(F
 \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape, on
-\emph{the same set of labels}.
+\emph{the same set of labels} (\pref{fig:Cartesian-product}).
+\begin{figure}
+  \centering
+  \todo{Make a diagram.}
+  \caption{Cartesian species product}
+  \label{fig:Cartesian-product}
+\end{figure}
 
 Lifting the identity element pointwise gives the species $\E\ L =
 \{\star\}$, usually called the species of sets, which is the identity
@@ -186,11 +200,132 @@ category $[\B, \Set]$ of species is not Cartesian closed---we cannot
 \section{Partitional/Cauchy product}
 \label{sec:product}
 
+There is another notion of product for species, the \term{partitional}
+or \term{Cauchy} product, which is more generally useful than
+Cartesian product, even though it is much more complex to define.  In
+particular, when species are extended to labelled structures
+(\pref{chap:labelled}) it is the partitional product, rather than
+Cartesian, which gives rise to the usual notion of product on
+algebraic data types.  For this reason partitional product is
+often simply referred to as ``product'', without any modifier,
+although as we have seen it is Cartesian product, rather than
+partitional product, which is actually a categorical product.
+
+\begin{defn}
+  The partitional product $F \sprod G$ of two species $F$ and $G$
+  consists of paired $F$- and $G$-shapes, but with a twist: instead of
+  being replicated, as in Cartesian product, the labels are
+  \emph{partitioned} between the two shapes (\pref{fig:product}).
+\end{defn}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import SpeciesDiagrams
+
+theDia
+  = hcat' (with & sep .~ 1)
+    [ struct 5 "F•G"
+    , text' 1 "="
+    , vcat' (with & sep .~ 0.2)
+      [ struct 2 "F"
+      , struct 3 "G"
+      ]
+      # centerY
+    ]
+
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Partitional species product}
+    \label{fig:product}
+  \end{figure}
+
+%%% XXX remove me
+\newcommand{\under}[1]{\floor{#1}}
+\newcommand{\lift}[1]{\ceil{#1}}
+\newcommand{\lab}[1]{\langle #1 \rangle}
+\newcommand{\LStr}[3]{#1 #2 #3}
+
+\begin{equation*}
+  (F \sprod G)\ L = \sum_{L_1 \uplus L_2 = L} F\ L_1 \times G\ L_2
+\end{equation*}
+The intuition behind partitioning the labels in this way is that each
+label represents a unique ``location'' which can hold a data value, so
+the locations in the two paired shapes should be disjoint.
+
+Generalizing partitional product over arbitrary functor categories is
+much more complex than generalizing sum and Cartesian product, and
+requires turning to a construction known as \term{Day convolution}.
+
 \section{Day convolution}
 \label{sec:day-convolution}
 
+The essential idea of Day convolution, first described by Brian
+Day~\cite{day-convolution}, is to construct monoidal structure on a
+functor category $[\Lab, \Str]$ out of monoidal structure on the
+\emph{domain} category $\Lab$.  In particular, Day convolution requires
+\begin{itemize}
+\item a monoidal structure $\oplus$ on $\Lab$;
+\item that $\Lab$ be \emph{enriched over} $\Str$, \ie there is a way
+  to interpret morphisms in $\Lab$ as objects in $\Str$;
+\item a symmetric monoidal structure $\otimes$ on $\Str$;
+\item that $\Str$ be \todo{(finitely?)} cocomplete, and in particular
+  have coends.
+\end{itemize}
+
+\bay{Maybe don't use same letter $L$ for generic definition as we do for $L
+  \in \B$?}
+\begin{defn}
+  Given the above conditions, the Day convolution product of $F, G \in
+  [\Lab, \Str]$ is given by \[ (F \oast G)\ L = \int^{L_1, L_2} F\ L_1
+  \otimes G\ L_2 \otimes \Lab(L_1 \oplus L_2, L). \]
+\end{defn}
+\todo{Make sure I got all of this right.}
+
+\todo{Explain.  Give some intuition.}
+
+\todo{Instantiate with $\B$ and $\Set$, show they have the right
+  properties, and show where partitional product comes from.}
+
+\todo{Turn the following paragraph into an example with different
+  categories}
+
+Another
+good way to gain intuition is to imagine indexing species not by label
+types, but by natural number sizes.  Then it is easy to see that we
+would have \[ (F \sprod G)_n \defeq \sum_{n_1, n_2 : \N} (n_1 + n_2 = n)
+\times F_{n_1} \times G_{n_2}, \] that is, an $(F \sprod G)$-shape of
+size $n$ consists of an $F$-shape of size $n_1$ and a $G$-shape of
+size $n_2$, where $n_1 + n_2 = n$.  Indexing by labels is a
+generalization (a \emph{categorification}, in fact) of this
+size-indexing scheme, where we replace natural numbers with finite
+types, addition with coproduct, and multiplication with product.
+
+\todo{Do example with $\P$.}
+
+\todo{Show that $\BT/\PT$ along with \Type\ have the right properties,
+instantiate framework to show how it comes out.}
+
 \section{Arithmetic product}
 \label{sec:arithmetic-product}
+
+There is another monoidal structure on $\B$ (and similarly on $\P$ and
+$\N$) corresponding to the \emph{product} of sets/natural numbers.
+What happens if we instantiate the framework of Day convolution with
+this product-like monoidal structure instead of the coproduct-like
+structure used to define partitional product?
+
+\bay{How can we say that we are using ``the same'' ``product-like''
+  monoidal structure in all these different categories?  Are they
+  related by monoidal functors?}
+
+Beginning with a simple example, \todo{example using $\N$}
+
+Using the standard formulation of the category of species as $[\B,
+\Set]$, we get \todo{finish. This is called \term{arithmetic product},
+and was recently described by (XXX cite), although they say nothing
+about Day convolution.}
+
+\todo{pictures, intuition.}
 
 \section{Composition}
 \label{sec:composition}

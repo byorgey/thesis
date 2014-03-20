@@ -5,7 +5,11 @@
 \chapter{Preliminaries}
 \label{chap:prelim}
 
-\todo{describe big ideas here}
+\todo{Describe some big ideas here.  Give some instruction for how to
+  use this chapter.}
+
+\todo{Give some backward references from the rest of the text to
+  relevant descriptions here.} 
 
 \section{Homotopy type theory}
 \label{sec:HoTT}
@@ -30,6 +34,8 @@ Make extensive use of category theory.  Assume basics (categories,
 functors, natural transformations, functor categories).
 
 Equivalence of categories.
+
+Enriched categories.
 
 \subsection{Groupoids}
 \label{sec:groupoids}
