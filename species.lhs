@@ -197,3 +197,11 @@ category $[\B, \Set]$ of species is not Cartesian closed---we cannot
 
 \section{Differentiation}
 \label{sec:differentiation}
+
+\section{Extensions}
+\label{sec:extensions}
+
+\todo{If possible, fit weighted and multisort (and virtual?) species
+  into this framework.  It would be really great if they can just be
+  seen as picking a functor category other than $[\B, \Set]$ and
+  verifying that it still has the required properties.}
