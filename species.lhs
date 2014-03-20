@@ -181,7 +181,7 @@ category $[\B, \Set]$ of species is not Cartesian closed---we cannot
 \todo{\Set is distributive, in the sense that the canonical morphism
   $X \times Y + X \times Z \to X \times (Y + Z)$ is an isomorphism.
   Is $[\B, \Set]$ distributive in the same way?  If so, does lifting
-  monoids always preserve distributivity?}
+  monoids always preserve distributivity? Answers: yes, and yes.}
 
 \section{Partitional/Cauchy product}
 \label{sec:product}
