@@ -1,7 +1,12 @@
 Outline
 =======
 
-+ Chapter 1: Introduction/preliminaries
++ Chapter 0: Introduction + related work
+
+  - Motivation
+  - Summary of contributions
+
++ Chapter 1: preliminaries
 
   - Homotopy type theory.
   - Category theory.
@@ -12,7 +17,13 @@ Outline
   - Monoids and monoidal categories.
 
 + Chapter 2: Species
-
+  CONTRIBUTIONS:
+    - Generic categorical framework for species and generalizations thereof
+    - with a target audience of type theorists/functional programmers
+         novel parts: new audience, new gathering of material,
+         once material is in once place, new connections
+         (hopefully) see variants as instances of general framework
+         new instantiation in type theory
   - Traditional definition of species.
   - Restart "from scratch": functor categories.  Along the way,
     explain what extra structure is needed for each new feature, and
@@ -25,8 +36,13 @@ Outline
     - partitional/Cauchy product
     - arithmetic product
   - Composition
+  - Differentiation + Pointing
+
+  - Think about how to incorporate material on elimination etc.?
 
 + Chapter 3: Labelled structures
+  CONTRIBUTIONS:
+    - new idea of a labelled structure
 
   - Joyal's definition of analytic functors.
   - Labelled structures
@@ -60,8 +76,10 @@ happen.
 March 18--28 (2 weeks): write (most of) Chapter 2
 March 28--April 5 (1 week): Brent in London & Leipzig
 April 7--18 (2 weeks): write Chapter 3
+  - Sometime in here: get some feedback from committee
 April 21--May 16 (4 weeks): work out chapter 4 material
 May 19--30 (2 weeks): write Chapter 4
-June (4 weeks): write Chapter 1 / miscellaneous / account for inevitable schedule slippage
-Early July: defend (deadline is July 21)
-Rest of July: revise (deadline for deposit is July 28)
+June (4 weeks): turn material from Chapters 2 & 3 into a POPL submission?
+July (4 weeks): write Chapter 1 / miscellaneous / account for inevitable schedule slippage
+Last week of July/week of August 18-22?: defend
+
