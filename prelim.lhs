@@ -31,7 +31,8 @@ truncation, intuition.
 \label{sec:category-theory}
 
 Make extensive use of category theory.  Assume basics (categories,
-functors, natural transformations, functor categories).
+functors, natural transformations, functor categories).  Basic
+categories which will be used often: $\Set$, $\N$, \Type.
 
 Equivalence of categories.
 
@@ -246,7 +247,8 @@ pair of inverse equivalences in each of the following two diagrams:
 \subsection{Monoids}
 \label{sec:monoids}
 
-Monoids, monoidal categories.  Products and coproducts.
+Monoids, monoidal categories.  Products and coproducts. Monoidal
+closed. Cartesian closed.
 
 \subsection{Ends, coends, and parametricity}
 \label{sec:parametricity}

@@ -150,7 +150,8 @@ Disjoint union is not the only monoidal structure on $\Set$. In
 addition to coproducts $\Set$ also has products, where the product of
 two sets $S$ and $T$ is given by the Cartesian product, $S \times T =
 \{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as the
-identity.
+identity (for convenience, we may suppose there is some canonical
+choice of one-element set, $\{\star\}$).
 \begin{defn}
   By the discussion of the previous section, this automatically lifts
   to a pointwise product structure on species, known as the
@@ -168,9 +169,18 @@ $F$-shape \emph{or} a $G$-shape on a given set of labels, an $(F
   \label{fig:Cartesian-product}
 \end{figure}
 
-Lifting the identity element pointwise gives the species $\E\ L =
-\{\star\}$, usually called the species of sets, which is the identity
-for Cartesian product of species. \todo{Give more intuition here.}
+\begin{defn}
+  Lifting the identity element pointwise gives the species \[ \E\ L =
+  \{\star\}, \] usually called the \term{species of sets}, which is the
+  identity for Cartesian product of species.
+\end{defn}
+\begin{rem}
+  It is called the species of sets since there is exactly one
+  structure on any set of labels, which can intuitively be thought of
+  as the set of labels itself, with no additional structure.  In fact,
+  since all one-element sets are isomorphic, we may as well define \[
+  \E\ L = \{L\}. \]
+\end{rem}
 
 Cartesian product can produce structures with multiple copies of each
 label.  Insofar as we view labels as pointers or names for memory
@@ -181,14 +191,15 @@ Of course, since Cartesian product is the categorical product in \Set,
 Cartesian/Hadamard product is also the product in the category of
 species.  Interestingly, there is a different notion of species
 product (though not a categorical product) which is in some sense more
-natural/useful than Cartesian product, even though it is much more
+natural/useful than Cartesian product, even though it is more
 complicated; it will be explored in the next section.
 
 In addition to having products, \Set is Cartesian closed. However,
-lifting does not necessarily preserve closedness.  In particular, the
-category $[\B, \Set]$ of species is not Cartesian closed---we cannot
-(in general) model function types with species. \todo{Though we can in
-  some specific situations---see ...?}
+lifting does not necessarily preserve closedness. \todo{Is this right?
+  If so, why not?} In particular, the category $[\B, \Set]$ of species
+is not Cartesian closed---we cannot (in general) model function types
+with species. \todo{Though we can in some specific situations---see
+  ...?}
 
 \todo{give some examples with other categories.}
 
@@ -260,9 +271,10 @@ requires turning to a construction known as \term{Day convolution}.
 \label{sec:day-convolution}
 
 The essential idea of Day convolution, first described by Brian
-Day~\cite{day-convolution}, is to construct monoidal structure on a
-functor category $[\Lab, \Str]$ out of monoidal structure on the
-\emph{domain} category $\Lab$.  In particular, Day convolution requires
+Day~\cite{day-convolution}, is to construct a monoidal structure on a
+functor category $[\Lab, \Str]$ out of a monoidal structure on the
+\emph{domain} category $\Lab$.  In particular, Day convolution
+requires
 \begin{itemize}
 \item a monoidal structure $\oplus$ on $\Lab$;
 \item that $\Lab$ be \emph{enriched over} $\Str$, \ie there is a way
