@@ -138,8 +138,8 @@
 \renewcommand{\P}{\bbb{P}}
 \providecommand{\FinSet}{\bbb{E}}
 
-\newcommand{\BT}{\B_H}
-\newcommand{\PT}{\P_H}
+\newcommand{\BT}{\mcal{B}}
+\newcommand{\PT}{\mcal{P}}
 
 \newcommand{\fin}[1]{\ensuremath{[#1]}}
 
