@@ -17,3 +17,7 @@ thesis.pdf
 
 .diagrams_cache
 /diagrams/*
+/proposal/diagrams/*
+/proposal/SpeciesDiagrams.hs
+/proposal/proposal.pdf
+/proposal/species.*
