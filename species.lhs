@@ -140,6 +140,37 @@ to products and coproducts on $[\Lab, \Str]$.  Since $(+,\varnothing)$
 is a coproduct structure on $\Set$, it follows that $(+, \Zero)$ is in
 fact a coproduct structure on the category of species.
 
+\begin{ex}
+  Take $\Lab = \cat{1}$ (the trivial category with one object and one
+  morphism). In this case, functors in $[\cat{1}, \Str]$ are just
+  objects of $\Str$.  Then \todo{lifted monoidal structure is identical.}
+\end{ex}
+
+\newcommand{\disc}[1]{\ensuremath{\left||#1\right||}}
+%% TODO: latin shouldn't have xspace after it, just e.g. and i.e. in particular
+\newcommand{\etc}{\latin{etc.}}
+
+\begin{ex}
+  Take $\Lab = \disc{\cat{2}}$, the discrete category with two objects.
+  Then a functor $F : \disc{\cat{2}} \to \Str$ is just a pair of objects in
+  $\Str$.  For example, if $\Str = \Set$, a functor $\disc{\cat{2}} \to
+  \Set$ is a pair of sets, which we could think of as a collection of
+  objects where each object is tagged with one of two tags (``left''
+  or ``right'', $0$ or $1$, \etc).
+  In this case, taking the lifted sum of two functors
+  $F,G : \disc{\cat{2}} \to \Set$ corresponds to \todo{finish}
+
+  \todo{picture}
+\end{ex}
+
+\begin{ex}
+  $\Lab = \disc{\N}$. Consider $\Str = \Set$, $\Str = \Type$.
+\end{ex}
+
+\begin{ex}
+  $\Lab = \cat{2}$ (with an arrow $\mor 0 1$).  Highlight functoriality.
+\end{ex}
+
 \todo{Give some examples other than $\B \to \Set$.  $\PT \to
   \Type$. Simpler things.}
 
@@ -348,7 +379,11 @@ about Day convolution.}
 \section{Multisort species}
 \label{sec:multisort}
 
-\todo{General introduction to the concept of multisort species}
+\todo{General introduction to the concept of multisort species, and
+  usual definition.}
+
+\todo{The idea is to show that this fits into our general setting,
+  which also widens its applicability.}
 
 \newcommand{\lcat}[1]{#1^*}
 \newcommand{\emptylist}{[\,]}
@@ -431,6 +466,17 @@ the notion of multisort species defined in \citet{bll}.
 \section{Weighted species}
 \label{sec:weighted}
 
+\todo{General explanation and intuition for weighted species, and usual definition.}
+
+\newcommand{\A}{\bbb{A}}
+
+Given some object $A \in \Str$, consider the slice category $\Str/A$.
+\todo{$\Str/A$ inherits coproducts.} \todo{Can define a product
+  structure on $\Str/A$ if $A$ is a ring object (???)  Note according
+  to \url{http://ncatlab.org/nlab/show/internalization} we just need
+  finite products to internalize the notion of a ring.}
+
 \section{Virtual species}
 \label{sec:virtual}
 
+\todo{Do virtual species fit too?}
