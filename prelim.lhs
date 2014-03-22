@@ -247,7 +247,8 @@ pair of inverse equivalences in each of the following two diagrams:
 \subsection{Monoids}
 \label{sec:monoids}
 
-Monoids, monoidal categories.  Products and coproducts. Monoidal
+Monoids, monoidal categories.  Note we will pretend all monoidal
+categories are strict (justify).  Products and coproducts. Monoidal
 closed. Cartesian closed.
 
 \subsection{Ends, coends, and parametricity}

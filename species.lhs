@@ -345,10 +345,92 @@ about Day convolution.}
 \section{Differentiation}
 \label{sec:differentiation}
 
-\section{Extensions}
-\label{sec:extensions}
+\section{Multisort species}
+\label{sec:multisort}
 
-\todo{If possible, fit weighted and multisort (and virtual?) species
-  into this framework.  It would be really great if they can just be
-  seen as picking a functor category other than $[\B, \Set]$ and
-  verifying that it still has the required properties.}
+\todo{General introduction to the concept of multisort species}
+
+\newcommand{\lcat}[1]{#1^*}
+\newcommand{\emptylist}{[\,]}
+
+\begin{defn}
+  Given a category $\C$, define the category $\lcat{\C}$ as follows.
+  \begin{itemize}
+  \item The objects of $\lcat{\C}$ are finite (possibly empty) lists
+    $[C_1, C_2, C_3, \dots]$ of objects from $\C$.
+  \item The morphisms from $[C_1, \dots, C_n]$ to $[D_1, \dots, D_n]$
+    are lists of morphisms $[f_1, \dots, f_n]$ with $f_i : C_i \to
+    D_i$.  Note there are no morphisms $[C_1, \dots, C_m] \to [D_1,
+    \dots, D_n]$ when $m \neq n$.
+  \end{itemize}
+\end{defn}
+
+\todo{Need to add more text here motivating these definitions and
+  propositions.  Will go much better once I get a better sense of
+  where this all is headed exactly, and which of these properties we
+  need and why.}
+
+\begin{lem}
+  For any category $\C$, $\lcat{\C}$ is monoidal with list
+  concatenation |++| as the tensor product and the empty list as
+  the identity object.
+\end{lem}
+
+\renewcommand{\Cat}{\cat{Cat}}
+
+\todo{Note that $\lcat{-}$ is a functor $\Cat \to \Cat$? (Is it?)}
+
+\begin{defn}
+  Define the embedding functor $e : \C \to \lcat{\C}$ which sends $C$
+  to the singleton list $[C]$ and $f$ to $[f]$.
+\end{defn}
+
+\begin{prop}
+  $e$ is full and faithful.
+\end{prop}
+
+\begin{defn}
+  If $(\C, \otimes, I)$ is a monoidal category, we may define a
+  functor $F^\otimes : \lcat{\C} \to \C$ by:
+  \begin{itemize}
+  \item $F^\otimes\ \emptylist = I$
+  \item $F^\otimes\ [C_1, \dots, C_n] = C_1 \otimes \dots \otimes C_n$
+  \end{itemize}
+  and similarly for morphisms.
+\end{defn}
+
+\begin{prop}
+  $F^\otimes$ is a (strict) monoidal functor.
+  \begin{proof}
+    $F^\otimes\ \emptylist = I$ by definition, and it is easy to check
+    that $F^\otimes\ (\ell_1 \plus \ell_2) = F^\otimes\ \ell_1 \otimes
+    F^\otimes\ \ell_2$.
+  \end{proof}
+\end{prop}
+
+\begin{rem}
+  Note that $F^\otimes$ is not, in general, an isomorphism.  In
+  particular, there may exist morphisms $C_1 \otimes \dots \otimes C_n
+  \to D_1 \otimes \dots \otimes D_n$ which do not arise as a tensorial
+  product of morphisms $f_i : C_i \to D_i$.  For example, in $(\Set,
+  +)$ we may define \todo{finish me}.
+\end{rem}
+
+Given a functor category of generalized species $[\Lab, \Str]$, we may
+now form the category $[\lcat{\Lab}, \Str]$ of generalized multisort
+species.  In particular, $[\lcat{\B}, \Set]$ corresponds exactly to
+the notion of multisort species defined in \citet{bll}.
+
+\todo{Note conditions under which this preserves the structure we care
+  about.  Need $\lcat{\Lab}$ to still be enriched over $\Str$.  We
+  have shown above that $\lcat{\Lab}$ preserves relevant monoidal
+  structure.  Hmm\dots multisort corresponds particularly to
+  interpreting lists using coproduct from underlying category\dots
+  where does that come from?}
+
+\section{Weighted species}
+\label{sec:weighted}
+
+\section{Virtual species}
+\label{sec:virtual}
+
