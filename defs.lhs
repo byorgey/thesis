@@ -24,6 +24,7 @@
 \usepackage{xcolor}
 \usepackage{prettyref}
 \usepackage{xspace}
+\usepackage{url}
 
 % \usepackage{breakurl}
 \usepackage{natbib}
