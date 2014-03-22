@@ -11,7 +11,7 @@ import           Data.List                           (intersperse)
 import           Data.Tree
 import           Diagrams.Backend.Postscript.CmdLine
 import           Diagrams.Core.Points
-import           Diagrams.Prelude                    hiding (arrow)
+import           Diagrams.Prelude
 import           Diagrams.TwoD.Layout.Tree
 import           Graphics.SVGFonts.ReadFont
 
@@ -117,7 +117,7 @@ instance Drawable a => Drawable (Cyc a) where
 
 instance Drawable a => Drawable [a] where
   draw ls = centerX . hcat' (with & sep .~ 0.1)
-          $ intersperse (arrow 0.5 mempty) (map draw ls)
+          $ intersperse (mkArrow 0.5 mempty) (map draw ls)
 
 instance Drawable a => Drawable (Pointed a) where
   draw (Plain a) = draw a
@@ -138,15 +138,13 @@ elimArrow :: Diagram B R2
 elimArrow = (hrule 2 # lw 0.03)
         ||| eqTriangle 0.2 # rotateBy (-1/4) # fc black
 
-arrow :: Double -> Diagram B R2 -> Diagram B R2
-arrow len l =
+mkArrow :: Double -> Diagram B R2 -> Diagram B R2
+mkArrow len l =
   ( l
     ===
-    hrule len # lw 0.03
+    arrow len # lw 0.03
   )
   # alignB
-  |||
-  eqTriangle 0.2 # rotateBy (-1/4) # fc black
 
 (|-|) :: Diagram B R2 -> Diagram B R2 -> Diagram B R2
 x |-| y = x ||| strutX 1 ||| y
@@ -246,3 +244,5 @@ unord ds = elts # centerXY
 enRect :: (Semigroup a, TrailLike a, Alignable a, Enveloped a, HasOrigin a, V a ~ R2) => a -> a
 enRect d = roundedRect (w+0.5) (h+0.5) 0.5 <> d # centerXY
   where (w,h) = size2D d
+
+txt x = text x <> square 1 # lw 0

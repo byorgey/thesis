@@ -12,15 +12,15 @@ import           Diagrams.TwoD.Layout.Tree
 
 import           Diagrams.Backend.Cairo
 
-locColor = blend 0.5 white lightblue
+mlocColor = blend 0.5 white lightblue
 eltColor = blend 0.5 white lightgreen
 
-loc m = text (show m) <> circle 0.8 # fc locColor
+mloc m = text (show m) <> circle 0.8 # fc mlocColor
 elt x = text (show x) <> square 1.6 # fc eltColor
 
-arm m n r = ( loc m # rotateBy (-r)
+arm m n r = ( mloc m # rotateBy (-r)
           ||| hrule 1.5
-          ||| loc n # rotateBy (-r)
+          ||| mloc n # rotateBy (-r)
             )
             # translateX 3
             # rotateBy r
@@ -34,9 +34,9 @@ lf x = Node x []
 
 tree :: Diagram Cairo R2
 tree = renderTree
-         loc
+         mloc
          (~~)
-         (symmLayout' with { slHSep = 4, slVSep = 4 } t)
+         (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) t)
        # lw 0.03
 
 drawBinTree :: SymmLayoutOpts (Maybe (Diagram Cairo R2))

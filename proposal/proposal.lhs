@@ -6,7 +6,7 @@
 
 %include polycode.fmt
 
-\usepackage[outputdir=diagrams/]{diagrams-latex}
+\usepackage[outputdir=diagrams/,backend=ps,extension=eps]{diagrams-latex}
 
 \usepackage{url}
 % \usepackage{hyperref}
@@ -77,7 +77,7 @@ products (\ie\ tupling), and recursion.  Most languages with support
 for algebraic data types also add various bells and whistles for
 convenience (such as labeled products and sums, convenient syntax for
 defining types as a ``sum of products'', and pattern matching), but
-the basic idea is unchanged. 
+the basic idea is unchanged.
   % \scw{Could play up the practical aspects
   % some more. We'll need to investigate how these aspects affect
   % species when we do language design.} \bay{I learned from Jacques
@@ -90,7 +90,7 @@ the basic idea is unchanged.
 For example, in Haskell~\citep{haskell} we can define a type of binary
 trees with integer values stored in the leaves as follows:
 \begin{code}
-data Tree  =  Leaf Int 
+data Tree  =  Leaf Int
            |  Branch Tree Tree
 \end{code}
 
@@ -208,7 +208,7 @@ For example, in the following code,
 \begin{spec}
 t = let t3 = Leaf 1
         t2 = Branch t3 t3
-        t1 = Branch t2 t2 
+        t1 = Branch t2 t2
     in Branch t1 t1
 \end{spec}
 only one ``Leaf'' and three ``Branch'' structures will be allocated in
@@ -219,7 +219,7 @@ structures to be created. For example,
 \begin{spec}
 nums = 1 : 2 : 3 : nums
 \end{spec}
-actually creates a cycle of three numbers in memory.  
+actually creates a cycle of three numbers in memory.
 
 Semantically, however, |t| is a tree, not a dag, and |nums| is an
 infinite list, not a cycle.  It is impossible to observe the sharing
@@ -399,11 +399,11 @@ shapePlusData = octo [0..7]
   |||||| mapping
   |||||| strutX 2
 
-mapping = centerXY . vcat' with {sep = 0.2} . map mapsto $ zip [0..7] "species!"
-mapsto (lab,x) = loc lab ||-|| arrow ||-|| elt x
+mapping = centerXY . vcat' (with & sep .~ 0.2) . map mapsto $ zip [0..7] "species!"
+mapsto (l,x) = lab l ||-|| mkArrow 3 mempty ||-|| elt x
 x ||-|| y = x |||||| strutX 0.5 |||||| y
-arrow = (hrule 3 # alignR # lw 0.03)
-         <> (eqTriangle 0.5 # rotateBy (-1/4) # fc black # scaleY 0.7)
+-- arr = (hrule 3 # alignR # lw 0.03)
+--          <> (eqTriangle 0.5 # rotateBy (-1/4) # fc black # scaleY 0.7)
 \end{diagram}
 %$
 \caption{Data structure = shape + data} \label{fig:shape-data}
@@ -486,24 +486,24 @@ To make this more concrete, consider a few examples:
   \begin{figure}
     \centering
     \begin{diagram}[width=400]
-import Species
+import SpeciesDiagrams
 import Data.List
 import Data.List.Split
 
-dia = 
-  hcat' with {sep = 0.5}
+dia =
+  hcat' (with & sep .~ 0.5)
   [ unord (map labT [0..2])
-  , arrow 2 (txt "L")
+  , mkArrow 2 (txt "L")
   , enRect listStructures
   ]
   # centerXY
   # pad 1.1
 
-drawList = hcat . intersperse (arrow 0.4 mempty) . map labT
+drawList = hcat . intersperse (mkArrow 0.4 mempty) . map labT
 
 listStructures =
-    hcat' with {sep = 0.7}
-  . map (vcat' with {sep = 0.5})
+    hcat' (with & sep .~ 0.7)
+  . map (vcat' (with & sep .~ 0.5))
   . chunksOf 2
   . map drawList
   . permutations
@@ -520,15 +520,15 @@ listStructures =
   \begin{figure}
     \centering
     \begin{diagram}[width=400]
-import Species
+import SpeciesDiagrams
 import Data.Tree
 import Diagrams.TwoD.Layout.Tree
 import Control.Arrow (first, second)
 
-dia = 
-  hcat' with {sep = 0.5}
+dia =
+  hcat' (with & sep .~ 0.5)
   [ unord (map labT [0..2])
-  , arrow 2 (txt "T")
+  , mkArrow 2 (txt "T")
   , enRect treeStructures
   ]
   # centerXY
@@ -538,7 +538,7 @@ drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
 
 trees []   = []
 trees [x]  = [ Node x [] ]
-trees xxs  = [ Node x [l,r] 
+trees xxs  = [ Node x [l,r]
              || (x,xs) <- select xxs
              , (ys, zs) <- subsets xs
              , l <- trees ys
@@ -553,10 +553,10 @@ subsets (x:xs) = (map . first) (x:) ss ++ (map . second) (x:) ss
   where ss = subsets xs
 
 treeStructures =
-    hcat' with {sep = 0.5}
+    hcat' (with & sep .~ 0.5)
   . map drawTreeStruct
   . trees
-  $ [0..2]   
+  $ [0..2]
     \end{diagram}
     \caption{The species $\T$ of binary trees}
     \label{fig:binary-trees}
@@ -592,7 +592,7 @@ $F[[n]]$) for the set of $F$-structures built from this set.
 We say that two species $F$ and $G$ are \term{equipotent}, denoted $F
 \equiv G$, when there exists a family of bijections $\phi_U : F[U]
 \bij G[U]$, that is, there are the same number of $F$- and
-$G$-structures of each size.  
+$G$-structures of each size.
 \end{defn}
 Although this notion is occasionally useful, it is rather weak.  More
 useful is the notion of species \term{isomorphism}:
@@ -613,7 +613,7 @@ F[V] \ar[r]_{\phi_V} & G[V]
 }
   \caption{Natural isomorphism between species}
   \label{fig:nat-iso}
-\end{figure}  
+\end{figure}
 \end{defn}
 % For example, $\X + (\X + \X)$ and $\Sp{3} \sprod \X$ are isomorphic, as witnessed by
 % the mapping
@@ -718,7 +718,7 @@ out of which more complex species can be composed.
 %   \begin{figure}
 %     \centering
 %     \begin{diagram}[width=25]
-% import Species
+% import SpeciesDiagrams
 
 % dia = drawSpT (nd "1" []) # centerXY # pad 1.1
 %     \end{diagram}
@@ -739,7 +739,7 @@ out of which more complex species can be composed.
 %   \begin{figure}
 %     \centering
 %     \begin{diagram}[width=100]
-% import Species
+% import SpeciesDiagrams
 % import Data.Tree
 
 % dia = drawSpT (nd "X" [lf Leaf]) # centerXY # pad 1.1
@@ -779,14 +779,14 @@ the size of the label set increases from left to right.
   \centering
 \begin{diagram}[width='200']
 dot = circle 0.2 # fc black
-row p     = hcat' with {sep=0.1} . map (drawOne . p) $ [0..10]
+row p     = hcat' (with & sep.~0.1) . map (drawOne . p) $ [0..10]
 lRow x p  = (text [x] <> phantom (square 1 :: D R2)) |||||| strutX 0.5 |||||| row p
 drawOne b = square 1 <> mconcat [dot||b]
 
 dia =
   pad 1.1 .
   centerXY .
-  vcat' with {sep = 0.3} $
+  vcat' (with & sep .~ 0.3) $
   [ lRow '0' (const False)
   , lRow '1' (==0)
   , lRow 'X' (==1)
@@ -846,7 +846,7 @@ $F$-structures.
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
-import Species
+import SpeciesDiagrams
 
 theDia = struct 5 "F+G"
          ||||||
@@ -908,7 +908,7 @@ dia = theDia # centerXY # pad 1.1
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
-import Species
+import SpeciesDiagrams
 
 theDia = struct 5 "F•G"
          ||||||
@@ -942,11 +942,11 @@ dia = theDia # centerXY # pad 1.1
     \begin{figure}
       \centering
     \begin{diagram}[width=200]
-import Species
+import SpeciesDiagrams
 
 theDia = linOrd [0,1] |||||| strutX 0.5 |||||| linOrd [1,0]
 dia = theDia # centerXY # pad 1.1
-    \end{diagram}      
+    \end{diagram}
       \caption{$\X^2$-structures}
       \label{fig:ord-pairs}
     \end{figure}
@@ -993,7 +993,7 @@ representation of the definition.
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
-import Species
+import SpeciesDiagrams
 
 theDia = struct 6 "F∘G"
          ||||||
@@ -1052,7 +1052,9 @@ $\star$ represents the distinguished ``hole'' in the $F$-structure.
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
-import Species
+import SpeciesDiagrams hiding (lf)
+
+lf x = Node x []
 
 theDia = struct 4 "F'"
          ||||||
@@ -1090,7 +1092,7 @@ $F$-structure with one particular distinguished element.
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
-import Species
+import SpeciesDiagrams
 
 theDia = drawSpT (struct'' 5 ((text "F" <> rect 1 1 # lw 0) |||||| circle 0.2 # fc black # translateY 0.2)) # centerXY
          ||||||
@@ -1232,8 +1234,8 @@ import Data.List (permutations)
 allTrees = [ Node a [Node b [], Node c []] || [a,b,c] <- permutations [0..2] ]
 
 dTree = renderTree ((<> circle 1 # fc white) . text . show) (~~)
-layout = symmLayout' with { slHSep = 4, slVSep = 3 }
-trees = hcat' with {sep = 1} . map (dTree . layout) $ allTrees
+layout = symmLayout' (with & slHSep .~ 4 & slVSep .~ 3)
+trees = hcat' (with & sep .~ 1) . map (dTree . layout) $ allTrees
 
 dia = trees # centerXY # pad 1.1
   \end{diagram}
@@ -1260,7 +1262,7 @@ import Diagrams.TwoD.Layout.Tree
 tree1 = Node () [Node () [], Node () []]
 
 dTree  = renderTree (const (circle 1 # fc black)) (~~)
-layout = symmLayout' with { slHSep = 4, slVSep = 3 }
+layout = symmLayout' (with & slHSep .~ 4 & slVSep .~ 3)
 trees  = dTree . layout $ tree1
 
 dia = trees # centerXY # pad 1.1
@@ -1286,11 +1288,11 @@ superimposed subset structure).
 \begin{figure}
   \centering
   \begin{diagram}[width=150]
-import Species
+import SpeciesDiagrams
 
 point' d = d <> drawSpN Hole # sizedAs (d # scale 1.3)
 
-dot :: Diagram Cairo R2
+dot :: Diagram B R2
 dot = circle labR # fc black
 theDia = cyc' [dot, point' dot, point' dot, dot, dot, point' dot, dot,dot] 2
 
@@ -1306,11 +1308,11 @@ dia = theDia # centerXY # pad 1.1
 % \begin{figure}
 %   \centering
 %   \begin{diagram}[width=75]
-% import Species
+% import SpeciesDiagrams
 % dia = cyc [0..4] 1.2 # pad 1.1
 %   \end{diagram}
 %   \begin{diagram}[width=60]
-% import Species
+% import SpeciesDiagrams
 % dia = ( roundedRect 2 1 0.2
 %         <> (lab 0 |||||| strutX 0.3 |||||| lab 3)
 %            # centerXY
@@ -1319,11 +1321,11 @@ dia = theDia # centerXY # pad 1.1
 %       # lw 0.02
 %   \end{diagram}
 %   \begin{diagram}[width=75]
-% import Species
+% import SpeciesDiagrams
 % import Data.Tree
 % t   = Node Bag [lf (Lab 1), lf (Lab 2), Node Bag [lf (Lab 0), lf (Lab 3)]]
 % dia = drawSpT' mempty with t # pad 1.1
-%   \end{diagram}  
+%   \end{diagram}
 %   \caption{Non-regular structures}
 %   \label{fig:non-regular}
 % \end{figure}
@@ -1342,7 +1344,7 @@ connection to various types of \term{generating functions}.
 In the simplest case, we can associate to each species $F$ an
 \term{exponential generating function} (egf) $F(x)$, defined as \[ F(x)
 = \sum_{n \geq 0} f_n \frac{x^n}{n!}, \] where $f_n = ||F[n]||$ is the
-number of $F$-structures on a label set of size $n$. 
+number of $F$-structures on a label set of size $n$.
 
 % (Note that we
 % usually want to think of $F(x)$ as just a \emph{formal power series},
@@ -1398,7 +1400,7 @@ choices of $G$-structure for the second.
 
 % t = Node mempty [Node tri [], Node tri []]
 
-% dia = renderTree id (~~) . symmLayout' with { slVSep = 0.5 } $ t
+% dia = renderTree id (~~) . symmLayout' (with &  slVSep .~ 0.5 ) $ t
 %   \end{diagram}
 %   \caption{Building product structures}
 %   \label{fig:product-structures}
@@ -1655,7 +1657,7 @@ size is enough.  This lemma can be proved formally by noting that $||U||
 every equivalence class on the left-hand side is a superset of one on
 the right.
 
-As a corollary, by transitivity we conclude that 
+As a corollary, by transitivity we conclude that
 \begin{equation}
 \ty{S} A \cong
 \left( \sum_{n \in \N} \spe{S}[n] \times A^n \right) /
@@ -1709,7 +1711,7 @@ algebraic species expression.
       $\elim{F \sprod G} A B$ & $=$ & $\elim F A {(\elim G A B)}$ \\
       $\elim{F \comp G} A B$ & $=$ & $\elim F {(\ty G A)} B$
     \end{tabular}
-  \end{center}  
+  \end{center}
   \caption{Eliminators for algebraic types}
   \label{fig:ADT-eliminators}
 \end{figure}
@@ -1785,7 +1787,7 @@ theorem prover could take the place of user-supplied tests.
 % \item the unit species,
 % \item a sum,
 % \item a product,
-% \item or an \emph{atomic} species $X^n/\mathcal{H}$ 
+% \item or an \emph{atomic} species $X^n/\mathcal{H}$
 %   \begin{itemize}
 %   \item (where $\mathcal{H}$ acts transitively on $\{0, \dots,
 %     n-1\}$).
@@ -1815,7 +1817,7 @@ fact, there will be a canonical choice only for \emph{regular}
 (non-symmetric) species---exactly the case we are not concerned about.
 
   % \begin{diagram}[width=250]
-  %   import Species
+  %   import SpeciesDiagrams
   %   f   = drawSpT (nd (txt "F") (map lf [Leaf, Leaf, Leaf, Leaf])) # pad 1.1
   %   fpt = drawSpT (nd (txt "F") (map lf [Point, Leaf, Leaf, Leaf])) # pad 1.1
 
@@ -1835,13 +1837,13 @@ three elements, resulting in a cycle of pointed cycles.
 \begin{figure}
   \centering
   \begin{diagram}[width=300]
-    import Species
+    import SpeciesDiagrams
     c = Cyc [lab 0, lab 2, lab 3]
     d1 = draw c
     d2 = draw (down c)
     t s = (text s <> strutY 1.3) # scale 0.5
-    dia = (d1 ||-|| arrow 2 (t "χ") ||-|| d2) # pad 1.05
-  \end{diagram}  
+    dia = (d1 ||-|| mkArrow 2 (t "χ") ||-|| d2) # pad 1.05
+  \end{diagram}
   \caption{The cursor down operator}
   \label{fig:cursor-down}
 \end{figure}
@@ -1867,25 +1869,25 @@ case of a completely non-symmetric structure will be reached.
 \begin{figure}
   \centering
   \begin{diagram}[width=300]
-    import Species
+    import SpeciesDiagrams
     c = Cyc [lab 0, lab 2, lab 3]
     d1 = draw c
     d2 = draw (down c)
     d3 = draw (Cyc (replicate 3 d4))
-    d4 :: Diagram Cairo R2
+    d4 :: Diagram B R2
     d4 = square 1 # fc purple
     x ||/|| y = x |||||| strutX 0.5 |||||| y
     t s = (text s <> strutY 1.3) # scale 0.5
     dia = (d1 ||/||
-               arrow 1 (t "χ") ||/|| 
+               mkArrow 1 (t "χ") ||/||
            d2 ||/||
-               arrow 1 (t "F e'") ||/||
+               mkArrow 1 (t "F e'") ||/||
            d3 ||/||
-               arrow 1 (t "δ") ||/||
+               mkArrow 1 (t "δ") ||/||
            d4
-          ) 
-          # pad 1.05    
-  \end{diagram}  
+          )
+          # pad 1.05
+  \end{diagram}
   \caption{Eliminating with $\down$}
   \label{fig:elim-cursor-down}
 \end{figure}
@@ -1920,12 +1922,15 @@ yielding precisely the cycle we wanted.
 \begin{figure}
   \centering
   \begin{diagram}[width=300]
-    import Species
+    import SpeciesDiagrams
+    c :: Cyc (Diagram B R2)
     c = Cyc (map lab' [blue, red, yellow])
     d1 = draw c
     d2 = draw (down c)
     d3 = draw (fmap firstTwo (down c))
-    d4 = draw (Cyc (map lab' [purple, orange, green]))
+    c2 :: Cyc (Diagram B R2)
+    c2 = Cyc $ map lab' [purple, orange, green]
+    d4 = draw c2
     firstTwo = map unPoint . take 2 . dropWhile isPlain . cycle . getCyc
     isPlain (Plain x) = True
     isPlain _         = False
@@ -1936,16 +1941,16 @@ yielding precisely the cycle we wanted.
     infixl 6 ||/||
     dia = (
           ( d1 ||/||
-              arrow 1 (t "χ") ||/||
+              mkArrow 1 (t "χ") ||/||
             d2 ||/||
-              arrow 3 (t "F (id × head)" # scale 0.8)
+              mkArrow 3 (t "F (id × head)" # scale 0.8)
           )
           ===
           strutY 1
           ===
           ( square 1 # lw 0 ||/||
             d3 ||/||
-              arrow 1 (t "F ⊕") ||/||
+              mkArrow 1 (t "F ⊕") ||/||
             d4
           )
 
@@ -1987,12 +1992,12 @@ elimination forms for species types will include some extra features:
 I have written a Haskell library\footnote{Available from Hackage at
   \url{http://hackage.haskell.org/package/species}} for working with
 combinatorial species~\citep{yorgey-2010-species}, which I see
-fulfilling two main purposes.  
+fulfilling two main purposes.
 
 First, the theory of species has many potential applications in
 working with existing algebraic data types.  The library includes
 methods for automatically deriving species associated to user-defined
-data types, which the user can then use to 
+data types, which the user can then use to
 \begin{itemize}
 \item compute egf, ogf, and cycle index series corresponding to their
   data type, as an aid in asymptotic analysis;
@@ -2012,7 +2017,7 @@ user-defined data type is similar.
 [1,1,2,3,5,7,11,15,22,30]
 >>> enumerate (set `o` nonEmpty sets) [1,2,3] :: [(Set :.: Set) Int]
 [{{1,2,3}},{{2,3},{1}},{{2},{1,3}},{{3},{1,2}},{{3},{2},{1}}]
-\end{verbatim}  
+\end{verbatim}
   \caption{Generating function computation and enumeration}
   \label{fig:species-features}
 \end{figure}
@@ -2129,7 +2134,7 @@ various desirable properties. However, the methods provided by Agata
 for controlling generator distributions are somewhat ad-hoc, and do
 not come with any sort of mathematical guarantees.  They are better
 than the na\"ive methods but still require considerable case-by-case
-hand tuning.  
+hand tuning.
 
 \citet{duregaard2012feat} and \citet{gencheck} have created two
 similar systems, FEAT and gencheeck, for compositionally building
