@@ -9,7 +9,7 @@
   use this chapter.}
 
 \todo{Give some backward references from the rest of the text to
-  relevant descriptions here.} 
+  relevant descriptions here.}
 
 \section{Homotopy type theory}
 \label{sec:HoTT}
@@ -30,9 +30,10 @@ truncation, intuition.
 \section{Category theory}
 \label{sec:category-theory}
 
-Make extensive use of category theory.  Assume basics (categories,
-functors, natural transformations, functor categories).  Basic
-categories which will be used often: $\Set$, $\N$, \Type.
+Make extensive use of category theory.  Very quick overview of basics
+(categories, functors, natural transformations, functor categories,
+adjunctions).  Basic categories which will be used often: $\Set$,
+$\N$, \Type.
 
 Equivalence of categories.
 

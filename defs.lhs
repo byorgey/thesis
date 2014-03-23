@@ -30,18 +30,20 @@
 \usepackage{natbib}
 
 \usepackage{graphicx}
+\graphicspath{{images/}}
 \usepackage[outputdir=diagrams,backend=ps,extension=eps]{diagrams-latex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Declarative formatting
 
 \newcommand{\term}[1]{\emph{#1}}
-\newcommand{\latin}[1]{\textit{#1}\ }
+\newcommand{\latin}[1]{\textit{#1}\xspace}
 \newcommand{\foreign}[1]{\emph{#1}}
 
 \newcommand{\ie}{\latin{i.e.}}
 \newcommand{\eg}{\latin{e.g.}}
 \newcommand{\etal}{\latin{et al.}}
+\newcommand{\etc}{\latin{etc.}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Math typesetting
@@ -126,13 +128,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
 
+% typesetting for category names
 \newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}\xspace}
-\newcommand{\Set}{\cat{Set}}
 
+% discrete category
+\newcommand{\disc}[1]{\ensuremath{\left||#1\right||}}
+
+% morphisms
 \newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
 \newcommand{\nat}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
 
+% flipped composition
 \newcommand{\then}{\mathbin{;}}
+
+% some standard categories
+\newcommand{\Set}{\cat{Set}}
 
 \providecommand{\B}{\bbb{B}}
 \renewcommand{\P}{\bbb{P}}
