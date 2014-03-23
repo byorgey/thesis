@@ -5,8 +5,235 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
-\todo{Gentler introduction, with some more intuition (and examples?),
-  explanation of the diagrams, and pointers to further reading.}
+\todo{edit, dumped here from proposal}
+
+The theory of species is a unified theory of \emph{structures}, or as
+a programmer might say, \emph{containers}. By a \emph{structure} we
+mean some sort of ``shape'' containing \emph{locations} (or
+\emph{positions}). \pref{fig:example-structures} shows two different
+structures, each with eight locations.
+
+\begin{figure}
+\centering
+\begin{diagram}[width=250]
+import Diagrams
+dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
+    # centerXY
+    # pad 1.1
+\end{diagram}
+\caption{Example structures} \label{fig:example-structures}
+\end{figure}
+
+It is very important to note that we are talking about structures with
+\emph{labeled locations}; the numbers in \pref{fig:example-structures}
+are not data being stored in the structures, but \emph{names}
+or \emph{labels} for the locations.  To talk about a \emph{data
+  structure} (\ie\ a structure filled with data), we must also
+specify a mapping from locations to data, like $\{ 0 \mapsto
+\texttt{'s'}, 1 \mapsto \texttt{'p'}, 2 \mapsto \texttt{'e'} \dots
+\}$, as shown in~\pref{fig:shape-data}.  This will be made more
+precise in~\pref{sec:species-types}.
+
+\begin{figure}
+\centering
+\begin{diagram}[width=200]
+import Diagrams
+dia = shapePlusData # centerXY # pad 1.1
+
+shapePlusData = octo [0..7]
+  |||||| strutX 2
+  |||||| (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
+  |||||| strutX 2
+  |||||| mapping
+  |||||| strutX 2
+
+mapping = centerXY . vcat' (with & sep .~ 0.2) . map mapsto $ zip [0..7] "species!"
+mapsto (l,x) = lab l ||-|| mkArrow 3 mempty ||-|| elt x
+x ||-|| y = x |||||| strutX 0.5 |||||| y
+-- arr = (hrule 3 # alignR # lw 0.03)
+--          <> (eqTriangle 0.5 # rotateBy (-1/4) # fc black # scaleY 0.7)
+\end{diagram}
+%$
+\caption{Data structure = shape + data} \label{fig:shape-data}
+\end{figure}
+
+One useful intuition is to think of the labels as \emph{memory
+  addresses}, which point off to some location where a data value is
+stored. This intuition has some particularly interesting consequences
+when it comes to operations like Cartesian product and functor
+composition---explained in~\pref{sec:operations}---since it gives us a
+way to model sharing (albeit in limited ways).
+
+Why have labels at all? In the tree shown
+in~\pref{fig:example-structures}, we can uniquely identify each
+location by a path from the root of the tree, without referencing
+labels at all. Hence we can unambiguously separate a tree from its
+data by storing a simple unlabeled tree shape (with unit values at all
+the locations) along with a list of values.  However, the structure on
+the left illustrates one reason labels are needed. The circle is
+supposed to indicate that the structure has \emph{rotational
+  symmetry}, so there would be no way to uniquely refer to any
+location except by giving them labels.
+
+\subsection{Definition}
+\label{sec:species-definition}
+
+We want to think of each labeled structure as \emph{indexed by} its
+set of labels (or, more generally, by the \emph{size} of the set of
+labels).  We can accomplish this by a mapping from label sets to all
+the structures built from them, with some extra properties to
+guarantee that we really do get the same family of structures no
+matter what set of labels we happen to choose.
+
+\begin{defn}
+A \term{species} $F$ is a pair of mappings which
+\begin{itemize}
+\item sends any finite set $U$ (of \term{labels}) to a finite set
+  $F[U]$ (of \term{structures}), and
+\item sends any bijection on finite sets $\sigma : U \bij V$ (a
+  \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$
+  (illustrated in \pref{fig:relabeling}),
+\end{itemize}
+satisfying the following functoriality conditions:
+\begin{itemize}
+\item $F[id_U] = id_{F[U]}$, and
+\item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
+\end{itemize}
+
+This definition is due to Joyal \citep{joyal}, as described in BLL
+\citep{bll}.
+\end{defn}
+
+\begin{figure}
+  \centering
+  \includegraphics{relabeling}
+  \caption{Relabeling}
+  \label{fig:relabeling}
+\end{figure}
+\todo{redraw this with diagrams}
+
+Using the language of category theory, this definition can be pithily
+summed up by saying that ``a species is a functor from $\B$ to
+$\FinSet$'', where $\B$ is the category of finite sets whose morphisms are
+bijections, and $\FinSet$ is the category of finite sets whose morphisms
+are arbitrary (total) functions.
+
+We call $F[U]$ the set of ``$F$-structures with
+labels drawn from $U$'', or simply ``$F$-structures on $U$'', or even
+(when $U$ is clear from context) just ``$F$-structures''.  $F[\sigma]$
+is called the ``transport of $\sigma$ along $F$'', or sometimes the
+``relabeling of $F$-structures by $\sigma$''.
+
+To make this more concrete, consider a few examples:
+\begin{itemize}
+\item The species $\L$ of \emph{lists} (or \emph{linear orderings})
+  sends every set of labels (of size $n$) to the set of all sequences
+  (of size $n!$) containing each label exactly once
+  (\pref{fig:lists}).
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import SpeciesDiagrams
+import Data.List
+import Data.List.Split
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..2])
+  , mkArrow 2 (txt "L")
+  , enRect listStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+drawList = hcat . intersperse (mkArrow 0.4 mempty) . map labT
+
+listStructures =
+    hcat' (with & sep .~ 0.7)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 2
+  . map drawList
+  . permutations
+  $ [0..2]
+    \end{diagram}
+    \caption{The species $\L$ of lists}
+    \label{fig:lists}
+    %$
+  \end{figure}
+
+\item The species of \emph{(rooted, ordered) binary trees} sends every
+  set of labels to the set of all binary trees built over those labels
+  (\pref{fig:binary-trees}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import SpeciesDiagrams
+import Data.Tree
+import Diagrams.TwoD.Layout.Tree
+import Control.Arrow (first, second)
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..2])
+  , mkArrow 2 (txt "T")
+  , enRect treeStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
+
+trees []   = []
+trees [x]  = [ Node x [] ]
+trees xxs  = [ Node x [l,r]
+             || (x,xs) <- select xxs
+             , (ys, zs) <- subsets xs
+             , l <- trees ys
+             , r <- trees zs
+             ]
+
+select []     = []
+select (x:xs) = (x,xs) : (map . second) (x:) (select xs)
+
+subsets []     = [ ([],[]) ]
+subsets (x:xs) = (map . first) (x:) ss ++ (map . second) (x:) ss
+  where ss = subsets xs
+
+treeStructures =
+    hcat' (with & sep .~ 0.5)
+  . map drawTreeStruct
+  . trees
+  $ [0..2]
+    \end{diagram}
+    \caption{The species $\T$ of binary trees}
+    \label{fig:binary-trees}
+    %$
+  \end{figure}
+
+% \item The species of \emph{permutations} \todo{finish}
+
+\end{itemize}
+
+The functoriality of relabeling means that the actual labels used
+don't matter; we get ``the same structures'', up to relabeling, for
+any label sets of the same size.  We might say that species are
+\term{parametric} in the label sets of a given size. In particular,
+$F$'s action on all label sets of size $n$ is determined by its action
+on any particular such set: if $||U_1|| = ||U_2||$ and we know
+$F[U_1]$, we can determine $F[U_2]$ by lifting an arbitrary
+bijection between $U_1$ and $U_2$.  So we often take the finite set of
+natural numbers $[n] = \{0, \dots, n-1\}$ as \emph{the}
+canonical label set of size $n$, and write $F[n]$ (instead of
+$F[[n]]$) for the set of $F$-structures built from this set.
+
+% It's not hard to show that functors preserve isomorphisms, so although
+% the definition only says that a species $F$ sends a bijection $\sigma
+% : U \bij V$ to a \emph{function} $F[\sigma] : F[U] \to F[V]$, in fact,
+% by functoriality every such function must be a bijection. \todo{is
+%   this really important to say?}
+
+\todo{edit}
 
 Species are defined as functors $\B \to \Set$ \citep{bll}.
 Intuitively, the action of a species on objects takes a finite set of
