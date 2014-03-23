@@ -292,9 +292,13 @@ are needed in order to define them---\ie\ where the constructions
 \label{sec:sum}
 
 One of the simplest operations on species is the \emph{sum} of two
-species.  Given species $F, G : \B \to \Set$, we may form their sum $F
-+ G$, defined on objects by \[ (F + G)\ L \defeq F\ L + G\ L, \] where
-the $+$ on the right hand side denotes disjoint union of sets.  That
+species.
+\begin{defn}
+  Given species $F, G : \B \to \Set$, we may form their sum $F + G$,
+  defined on objects by \[ (F + G)\ L \defeq F\ L + G\ L, \] where the
+  $+$ on the right hand side denotes disjoint union of sets.
+\end{defn}
+That
 is, a labelled $(F + G)$-shape is either a labelled $F$-shape or a
 labelled $G$-shape (\pref{fig:sum}). \todo{Say something about action
   on arrows/functoriality.}
@@ -322,12 +326,13 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:sum}
   \end{figure}
 
-We may also define the \term{zero} or \term{empty} species, $\Zero$,
-as the unique species with no shapes whatsoever, that is,
-
-\begin{equation*}
-  \Zero\ L \defeq \varnothing
-\end{equation*}
+\begin{defn}
+  We may also define the \term{zero} or \term{empty} species,
+  $\Zero$, as the unique species with no shapes whatsoever, that is,
+  \begin{equation*}
+    \Zero\ L \defeq \varnothing
+  \end{equation*}
+\end{defn}
 
 % As a simple example, the species $\One + \X$ corresponds to the
 % familiar |Maybe| type from Haskell, with $\lab{\inl} \lab{\One}$
