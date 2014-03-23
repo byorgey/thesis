@@ -375,36 +375,77 @@ fact a coproduct structure on the category of species.
 \begin{ex}
   Take $\Lab = \cat{1}$ (the trivial category with one object and one
   morphism). In this case, functors in $[\cat{1}, \Str]$ are just
-  objects of $\Str$.  Then \todo{lifted monoidal structure is identical.}
+  objects of $\Str$, and a lifted monoidal operation is identical
+  to the unlifted one.
 \end{ex}
 
-\newcommand{\disc}[1]{\ensuremath{\left||#1\right||}}
-%% TODO: latin shouldn't have xspace after it, just e.g. and i.e. in particular
-\newcommand{\etc}{\latin{etc.}}
+\begin{ex}
+  Take $\Lab = \disc{\cat{2}}$, the discrete category with two
+  objects.  Then a functor $F : \disc{\cat{2}} \to \Str$ is just a
+  pair of objects in $\Str$.  For example, if $\Str = \Set$, a functor
+  $\disc{\cat{2}} \to \Set$ is a pair of sets.  In this case, taking
+  the lifted sum $F + G$ of two functors $F,G : \disc{\cat{2}} \to
+  \Set$ corresponds to summing the pairs elementwise, that is, $(S_1,
+  T_1) + (S_2, T_2) = (S_1 + S_2, T_1 + T_2)$.  Another way of
+  thinking of a functor $\disc{\cat{2}} \to \Set$ is as a single
+  collection of elements where each element is tagged with one of two
+  tags (``left'' or ``right'', $0$ or $1$, \etc).  From this point of
+  view, a lifted sum can be thought of as a tag-preserving disjoint union.
+
+  \todo{picture?}
+\end{ex}
 
 \begin{ex}
-  Take $\Lab = \disc{\cat{2}}$, the discrete category with two objects.
-  Then a functor $F : \disc{\cat{2}} \to \Str$ is just a pair of objects in
-  $\Str$.  For example, if $\Str = \Set$, a functor $\disc{\cat{2}} \to
-  \Set$ is a pair of sets, which we could think of as a collection of
-  objects where each object is tagged with one of two tags (``left''
-  or ``right'', $0$ or $1$, \etc).
-  In this case, taking the lifted sum of two functors
-  $F,G : \disc{\cat{2}} \to \Set$ corresponds to \todo{finish}
+  As an example in a similar vein, consider $\Lab = \disc{\N}$, the
+  discrete category with natural numbers as objects.  Functors
+  $\disc{\N} \to \Str$ are countably infinite sequences of objects
+  $[S_0, S_1, S_2, \dots]$.  One way to think of this is as a
+  collection of $\Str$-objects, one for each natural number
+  \emph{size}.  For example, if $\Str = \Set$ then the sequence of
+  sets $[S_0, S_1, S_2, \dots]$ can be thought of as a single
+  collection of elements with each element tagged by its size. (This
+  ``size'' intuition is actually fairly arbitrary at this point---the
+  objects of $\disc{\N}$ are in some sense just an arbitrary countably
+  infinite set of labels, and there is no particular reason they
+  should represent ``sizes''.  However, as we will see, this intuition
+  carries through well to subsequent examples.)
 
+  Lifting a monoidal operation to countable sequences of objects
+  performs a ``zip'', applying the monoidal operation between matching
+  positions in the two lists: \[ [S_1, S_2, S_3, \dots] \oplus [T_1,
+  T_2, T_3, \dots] = [S_1 \oplus T_1, S_2 \oplus T_2, S_3 \oplus T_3,
+  \dots] \] If $\oplus$ can be thought of as a size-preserving
+  operation---for example, disjoint union combines two collections of
+  size-$n$ things into one collection of size-$n$ things---then
+  lifting $\oplus$ combines entire size-indexed collections in a
+  size-preserving way.
   \todo{picture}
 \end{ex}
 
 \begin{ex}
-  $\Lab = \disc{\N}$. Consider $\Str = \Set$, $\Str = \Type$.
+  Up until now we have mostly considered examples with $\Str = \Set$,
+  but any monoidal category will do.  $\Type$ works similarly to
+  $\Set$, for example, with disjoint union of sets replaced by
+  coproduct of types.  \todo{Give an example with some non-set-like
+    monoidal category.}
 \end{ex}
 
 \begin{ex}
-  $\Lab = \cat{2}$ (with an arrow $\mor 0 1$).  Highlight functoriality.
+  All the previous examples have used a discrete category in place of
+  $\Lab$; it is instructive to see an example with nontrivial
+  morphisms involved. As the simplest nontrivial example, consider
+  $\Lab = \cat{2}$, the category with two objects $0$ and $1$ and a
+  single non-identity morphism $\mor 0 1$.  A functor $\cat{2} \to
+  \Str$ is not just a pair of objects (as with $\Lab = \disc{\cat 2}$)
+  but a pair of objects with a morphism between them: \[ S_0
+  \stackrel{f}{\longrightarrow} S_1. \] Combining two such functors
+  with a lifted monoidal operation combines not just the objects but
+  also the morphisms: \[ (S_0 \stackrel{f}{\longrightarrow} S_1)
+  \oplus (T_0 \stackrel{g}{\longrightarrow} T_1) = (S_0 \oplus T_0)
+  \stackrel{f \oplus g}{\longrightarrow} (S_1 \oplus T_1) \] This is
+  possible since the monoidal operation $\oplus$ is, by definition,
+  required to be a bifunctor.
 \end{ex}
-
-\todo{Give some examples other than $\B \to \Set$.  $\PT \to
-  \Type$. Simpler things.}
 
 \section{Cartesian/Hadamard product}
 \label{sec:cartesian}
@@ -457,12 +498,7 @@ product (though not a categorical product) which is in some sense more
 natural/useful than Cartesian product, even though it is more
 complicated; it will be explored in the next section.
 
-In addition to having products, \Set is Cartesian closed. However,
-lifting does not necessarily preserve closedness. \todo{Is this right?
-  If so, why not?} In particular, the category $[\B, \Set]$ of species
-is not Cartesian closed---we cannot (in general) model function types
-with species. \todo{Though we can in some specific situations---see
-  ...?}
+\todo{Forward reference to material on closedness?}
 
 \todo{give some examples with other categories.}
 
@@ -604,6 +640,73 @@ about Day convolution.}
 
 \section{Composition}
 \label{sec:composition}
+
+\section{Closed monoidal structures and elimination}
+\label{sec:closed}
+
+\paragraph{Cartesian closed}  If $\Lab$ is small and $\Str$ is complete and
+Cartesian closed, then $[\Lab,\Str]$ is also complete and Cartesian
+closed. (cite:
+\url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178#104178})
+In particular the exponential of $F,G : \Lab \to \Str$ is given by \[
+G^F (L) = \int_{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] Note
+that neither $\B$ nor $\BT$ is small, since the class of all finite
+sets or types is too large; however, their skeletons $\P$ and $\PT$
+are small.  Since $\Set$ and $\Type$ are both complete \todo{check: is
+  $\Type$ complete?  What does this mean, type-theoretically?}  and
+Cartesian closed, we conclude that both the skeletonized category
+$[\P,\Set]$ of traditional species and its type-theoretic counterpart
+$[\PT, \Type]$ are complete and Cartesian closed as well.
+
+Let's unpack this result a bit in the specific case of $[\PT,
+\Type]$.  Ends in $\Type$ are given by (parametric) universal
+quantification, and indexed products are $\Pi$-types; hence, we
+have
+\begin{align*}
+(H^G)_n &= \int_{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
+       &= \forall (m : \N). (\Fin m \iso \Fin n) \to G_n \to H_n \\
+       &\iso (\Fin n \iso \Fin n) \to G_n \to H_n
+\end{align*}
+where the final isomorphism follows since $(\Fin m \iso \Fin n)$ is
+only inhabited when $m = n$.
+
+Being Cartesian closed means there is an adjunction $- \times G \vdash
+-^G$ between products and exponentials, which gives us a natural
+isomorphism \[ [\PT,\Type](F \times G, H) \iso [\PT,\Type](F,H^G) \]
+Expanding morphisms of the functor category $[\PT, \Type]$ as natural
+transformations and the definition of $H^G$ derived above, this
+yields \[ \left( \forall n. (F \times G)_n \to H_n\right) \iso \left(
+  \forall n. F_n \to (\Fin n \iso \Fin n) \to G_n \to H_n\right). \]
+Intuitively, this says that a size-polymorphic function that takes a
+Cartesian product shape $F \times G$ and yields another species $H$ is
+isomorphic to a size-polymorphic function that takes a triple of an
+$F$-shape, a $G$-shape, \emph{and a permutation on $\Fin n$}, and
+yields an $H$-shape.  The point is that an $(F \times G)$-shape
+consists not just of separate $F$- and $G$-shapes, but those shapes
+get to ``interact'': in particular we need a permutation to tell us
+how the labels on the separate $F$- and $G$-shapes ``line up''.  An
+$(F \times G)$-shape encodes this information implicitly, by the fact
+that the two shapes share the exact same set of labels. \todo{Need to
+  think about this a bit more carefully in the context of $\P$.}
+
+\todo{picture.  Two cases with identical shapes but ``interacting''
+  differently.}
+
+Practically speaking, this result tells us how to express an
+eliminator for $(F \times G)$-shapes. \todo{Elaborate on this.}
+
+Note that $[\B, \Set]$ \emph{is} actually Cartesian closed, since it
+is isomorphic to $[\P, \Set]$.  \todo{Check this for sure.}  The above
+derivations can be carried out in the context of $[\B, \Set]$ as well,
+with similar results.  Intuitively, $\B$ ``appears to be too big on
+the surface'', but is saved by virtue of being isomorphic to a small
+category.  In a sense, $\P$ is what is ``really going on''; $\B$ is
+like $\P$ with lots of ``extra junk'' thrown in because it's
+convenient to talk about \emph{sets} of labels rather than having to
+work with the canonical set $\{0, \dots, n-1\}$ all the time.  This is
+quite a special property of $\B$; for example, $\Set$ is certainly not
+isomorphic to any small categories. The same argument shows that
+$[\BT, \Type]$ is Cartesian closed as well.
 
 \section{Differentiation}
 \label{sec:differentiation}
