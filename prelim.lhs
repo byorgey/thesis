@@ -35,6 +35,11 @@ Make extensive use of category theory.  Very quick overview of basics
 adjunctions).  Basic categories which will be used often: $\Set$,
 $\N$, \Type.
 
+\bay{Note a category is complete iff it has pullbacks and products.
+  $\Type$ clearly has products.  It also has pullbacks: given $A
+  \stackrel{f}{\longrightarrow} C \stackrel{g}{\longleftarrow} B$, we
+  can define $A \times_C B = (a : A) \times (b : B) \times (g\ a = f\ b)$.}
+
 Equivalence of categories.
 
 Enriched categories.

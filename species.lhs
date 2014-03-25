@@ -288,6 +288,10 @@ then generalize to arbitrary functor categories to see what properties
 are needed in order to define them---\ie\ where the constructions
 ``come from''---and give some specific examples.
 
+\todo{Idea is that $[\B,\Type]$ gives an interpretation in type
+  theory.  In particular, note that \emph{any} function of type $\Type
+  \to \Type$ can be interpreted as a functor in this category!}
+
 \section{Sum}
 \label{sec:sum}
 
@@ -562,6 +566,11 @@ The intuition behind partitioning the labels in this way is that each
 label represents a unique ``location'' which can hold a data value, so
 the locations in the two paired shapes should be disjoint.
 
+\todo{picture of a pair of trees with disjoint labels, or something
+  like that}
+
+\todo{Write about identity element: 1}
+
 Generalizing partitional product over arbitrary functor categories is
 much more complex than generalizing sum and Cartesian product, and
 requires turning to a construction known as \term{Day convolution}.
@@ -576,10 +585,9 @@ functor category $[\Lab, \Str]$ out of a monoidal structure on the
 requires
 \begin{itemize}
 \item a monoidal structure $\oplus$ on $\Lab$;
-\item that $\Lab$ be \emph{enriched over} $\Str$, \ie there is a way
-  to interpret morphisms in $\Lab$ as objects in $\Str$;
+\item that $\Lab$ be \emph{enriched over} $\Str$;
 \item a symmetric monoidal structure $\otimes$ on $\Str$;
-\item that $\Str$ be \todo{(finitely?)} cocomplete, and in particular
+\item that $\Str$ be cocomplete, and in particular
   have coends.
 \end{itemize}
 
@@ -587,31 +595,88 @@ requires
   \in \B$?}
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G \in
-  [\Lab, \Str]$ is given by \[ (F \oast G)\ L = \int^{L_1, L_2} F\ L_1
-  \otimes G\ L_2 \otimes \Lab(L_1 \oplus L_2, L). \]
+  [\Lab, \Str]$ is given by \[ F \cdot G = \int^{L_1, L_2} F\ L_1
+  \otimes G\ L_2 \otimes \Lab(-, L_1 \oplus L_2). \]
 \end{defn}
-\todo{Make sure I got all of this right.}
 
 \todo{Explain.  Give some intuition.}
 
-\todo{Instantiate with $\B$ and $\Set$, show they have the right
-  properties, and show where partitional product comes from.}
+This operation is associative, and has as a unit $j(I)$ where $I$ is
+the unit for $\oplus$ and $j : \Lab \to [\Lab^{\text{op}}, \Str]$ is the Yoneda
+embedding, that is, $j(L) = \Lab(-,L)$.
 
-\todo{Turn the following paragraph into an example with different
-  categories}
+\todo{Argh! Some inconsistency going on here with $\Lab$ vs
+  $\Lab^{op}$; the problem is that \eg\ $\B$ and $\P$ are self-dual so
+  the problem doesn't show up with them.}
 
-Another
-good way to gain intuition is to imagine indexing species not by label
-types, but by natural number sizes.  Then it is easy to see that we
-would have \[ (F \sprod G)_n \defeq \sum_{n_1, n_2 : \N} (n_1 + n_2 = n)
-\times F_{n_1} \times G_{n_2}, \] that is, an $(F \sprod G)$-shape of
-size $n$ consists of an $F$-shape of size $n_1$ and a $G$-shape of
-size $n_2$, where $n_1 + n_2 = n$.  Indexing by labels is a
-generalization (a \emph{categorification}, in fact) of this
-size-indexing scheme, where we replace natural numbers with finite
-types, addition with coproduct, and multiplication with product.
+\begin{ex}
+  Let's begin by looking at the traditional setting of $\Lab = \B$ and
+  $\Str = \Set$.  Though $\B$ does not have coproducts, it does have
+  at least two monoidal structures, given by disjoint union and
+  Cartesian product.  $\B$ is indeed enriched over $\Set$, which is
+  also cocomplete and has a symmetric monoidal structure given by
+  Cartesian product.
 
-\todo{Do example with $\P$.}
+  If we choose the monoidal structure on $\B$ given by disjoint union,
+  and products in $\Set$, then we obtain
+  \begin{align*}
+    (F \cdot G)(L) &= \int^{L_1, L_2} F\ L_1 \times G\ L_2 \times
+    (L \iso L_1 \uplus L_2) \\
+  \end{align*}
+  \todo{Somehow the coend reduces to a sum over things that are
+    \emph{equal} instead of everything isomorphic??  Is this described
+    in one of the papers I was looking at?}
+
+  Also, in this case the identity element is $j(I) = j(\varnothing) =
+  \B(-,\varnothing)$, that is, the species which takes as input a
+  label set $L$ and constructs the set of bijections between $L$ and
+  the empty set.  Clearly there is exactly one such bijection when $L
+  = \varnothing$, and none otherwise: as expected, this is the species
+  $\One$ defined in the previous section.
+\end{ex}
+
+\begin{ex}
+  $\B$ and $\P$ are isomorphic, of course, but it is still instructive
+  to work out the general definition in the case of $\P$.  In this
+  case, we have a monoidal structure on $\P$ given by addition, with
+  $f + g : \Fin (m + n) \iso \Fin (m + n)$ defined in the evident way,
+  with $f$ acting on the first $m$ values of $\Fin (m+n)$ and $g$ on
+  the last $n$.
+
+  \todo{edit}
+  Then it is easy to see that we would have \[ (F \sprod G)_n \defeq
+  \sum_{n_1, n_2 : \N} (n_1 + n_2 = n) \times F_{n_1} \times
+  G_{n_2}, \] that is, an $(F \sprod G)$-shape of size $n$ consists of
+  an $F$-shape of size $n_1$ and a $G$-shape of size $n_2$, where $n_1
+  + n_2 = n$.  Indexing by labels is a generalization (a
+  \emph{categorification}, in fact) of this size-indexing scheme,
+  where we replace natural numbers with finite types, addition with
+  coproduct, and multiplication with product.
+\end{ex}
+
+\begin{ex}
+  We should verify that $\BT$ and $\Type$ have the right properties.
+  \begin{itemize}
+  \item \todo{Monoidal coproduct structure on $\BT$}
+  \item $\BT$ is indeed enriched over $\Type$, since the class of
+    arrows between $(A,m,i)$ and $(B,n,j)$ is given by the type $A
+    \iso B$.
+  \item There is a symmetric monoidal structure on $\Type$ given by
+    the product of types.
+  \item The last condition is the most interesting: we need to say
+    what a coend is in $\Type$. \todo{pushouts as HITs, weak
+      Sigma-types, \dots ?}
+  \end{itemize}
+
+  Given $F,G \in [\B,\Type]$, we can thus instantiate the definition
+  of Day convolution to obtain
+  \begin{align*}
+    (F \cdot G)(L) &= \sum_{L_1, L_2} F\ L_1 \times G\ L_2 \times
+    (L \iso L_1 + L_2) \\
+  \end{align*}
+  \todo{the above needs to be a \emph{weak} Sigma-type.  Need some
+    different notation.  Is there already standard notation?}
+\end{ex}
 
 \todo{Show that $\BT/\PT$ along with \Type\ have the right properties,
 instantiate framework to show how it comes out.}
@@ -652,11 +717,15 @@ In particular the exponential of $F,G : \Lab \to \Str$ is given by \[
 G^F (L) = \int_{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] Note
 that neither $\B$ nor $\BT$ is small, since the class of all finite
 sets or types is too large; however, their skeletons $\P$ and $\PT$
-are small.  Since $\Set$ and $\Type$ are both complete \todo{check: is
-  $\Type$ complete?  What does this mean, type-theoretically?}  and
+are small.  Since $\Set$ and $\Type$ are both complete and
 Cartesian closed, we conclude that both the skeletonized category
 $[\P,\Set]$ of traditional species and its type-theoretic counterpart
 $[\PT, \Type]$ are complete and Cartesian closed as well.
+
+\todo{Note, here we don't need parametric polymorphism over $\forall
+  (n : \N)$ since there are no arrows between different $n$ to
+  preserve.  Should unpack this somewhere, and use a different
+  notation below.}
 
 Let's unpack this result a bit in the specific case of $[\PT,
 \Type]$.  Ends in $\Type$ are given by (parametric) universal
@@ -671,7 +740,7 @@ where the final isomorphism follows since $(\Fin m \iso \Fin n)$ is
 only inhabited when $m = n$.
 
 Being Cartesian closed means there is an adjunction $- \times G \vdash
--^G$ between products and exponentials, which gives us a natural
+-^G$ between products and exponentials, which yields a natural
 isomorphism \[ [\PT,\Type](F \times G, H) \iso [\PT,\Type](F,H^G) \]
 Expanding morphisms of the functor category $[\PT, \Type]$ as natural
 transformations and the definition of $H^G$ derived above, this
@@ -688,6 +757,7 @@ how the labels on the separate $F$- and $G$-shapes ``line up''.  An
 $(F \times G)$-shape encodes this information implicitly, by the fact
 that the two shapes share the exact same set of labels. \todo{Need to
   think about this a bit more carefully in the context of $\P$.}
+\todo{Note that we could require the equivalence to always be \id.}
 
 \todo{picture.  Two cases with identical shapes but ``interacting''
   differently.}
