@@ -19,6 +19,12 @@
 
 \todo{Edit. Dumped here from description of product from paper.}
 
+%%% XXX remove me
+\newcommand{\under}[1]{\floor{#1}}
+\newcommand{\lift}[1]{\ceil{#1}}
+\newcommand{\lab}[1]{\langle #1 \rangle}
+\newcommand{\LStr}[3]{#1 #2 #3}
+
 One introduces a labelled $(F \sprod G)$-shape by pairing a labelled
 $F$-shape and a labelled $G$-shape, using a label set isomorphic to
 the coproduct of the two label types:

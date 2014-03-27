@@ -31,7 +31,7 @@
 
 \usepackage{graphicx}
 \graphicspath{{images/}}
-\usepackage[outputdir=diagrams,backend=ps,extension=eps]{diagrams-latex}
+\usepackage[outputdir=diagrams,backend=cairo,extension=pdf]{diagrams-latex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Declarative formatting

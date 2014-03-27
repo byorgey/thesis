@@ -260,9 +260,10 @@ closed. Cartesian closed.
 \subsection{Ends, coends, and parametricity}
 \label{sec:parametricity}
 
-Define/give intuition for ends and coends.  Talk about connection
-between natural transformations and polymorphic functions, specific
-ways it plays out in a dependent type theory---e.g. can we assume
-parametricity for functions that abstract over things classified by
-|*|? Cite Bernardy et al.
+Define/give intuition for ends and coends.  (Co)ends as
+(co)equializers.  Talk about connection between natural
+transformations and polymorphic functions, specific ways it plays out
+in a dependent type theory---e.g. can we assume parametricity for
+functions that abstract over things classified by |*|? Cite Bernardy
+et al.
 

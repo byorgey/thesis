@@ -5,8 +5,6 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
-\todo{edit, dumped here from proposal}
-
 The theory of species is a unified theory of \emph{structures}, or as
 a programmer might say, \emph{containers}. By a \emph{structure} we
 mean some sort of ``shape'' containing \emph{locations} (or
@@ -16,7 +14,7 @@ structures, each with eight locations.
 \begin{figure}
 \centering
 \begin{diagram}[width=250]
-import Diagrams
+import SpeciesDiagrams
 dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
     # centerXY
     # pad 1.1
@@ -24,34 +22,35 @@ dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
 \caption{Example structures} \label{fig:example-structures}
 \end{figure}
 
-It is very important to note that we are talking about structures with
-\emph{labeled locations}; the numbers in \pref{fig:example-structures}
-are not data being stored in the structures, but \emph{names}
-or \emph{labels} for the locations.  To talk about a \emph{data
-  structure} (\ie\ a structure filled with data), we must also
-specify a mapping from locations to data, like $\{ 0 \mapsto
-\texttt{'s'}, 1 \mapsto \texttt{'p'}, 2 \mapsto \texttt{'e'} \dots
-\}$, as shown in~\pref{fig:shape-data}.  This will be made more
-precise in~\pref{sec:species-types}.
+\begin{rem}
+  It is important to keep in mind that we are talking about structures
+  with \emph{labeled locations}; the numbers in
+  \pref{fig:example-structures} are not data being stored in the
+  structures, but \emph{names} or \emph{labels} for the locations.  To
+  talk about a \emph{data structure} (\ie\ a structure filled with
+  data), we must also specify a mapping from locations to data, like
+  $\{ 0 \mapsto \texttt{'s'}, 1 \mapsto \texttt{'p'}, 2 \mapsto
+  \texttt{'e'} \dots \}$, as shown in~\pref{fig:shape-data}.  This
+  will be made more precise in~\pref{sec:species-types}.
+\end{rem}
 
 \begin{figure}
 \centering
 \begin{diagram}[width=200]
-import Diagrams
+import SpeciesDiagrams
 dia = shapePlusData # centerXY # pad 1.1
 
-shapePlusData = octo [0..7]
-  |||||| strutX 2
-  |||||| (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
-  |||||| strutX 2
-  |||||| mapping
-  |||||| strutX 2
+shapePlusData = hcat
+  [ octo [0..7]
+  , strutX 2
+  , (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
+  , strutX 2
+  , mapping
+  , strutX 2
+  ]
 
 mapping = centerXY . vcat' (with & sep .~ 0.2) . map mapsto $ zip [0..7] "species!"
-mapsto (l,x) = lab l ||-|| mkArrow 3 mempty ||-|| elt x
-x ||-|| y = x |||||| strutX 0.5 |||||| y
--- arr = (hrule 3 # alignR # lw 0.03)
---          <> (eqTriangle 0.5 # rotateBy (-1/4) # fc black # scaleY 0.7)
+mapsto (l,x) = hcat' (with & sep .~ 0.5) [lab l, mkArrow 3 mempty, elt x]
 \end{diagram}
 %$
 \caption{Data structure = shape + data} \label{fig:shape-data}
@@ -75,21 +74,24 @@ supposed to indicate that the structure has \emph{rotational
   symmetry}, so there would be no way to uniquely refer to any
 location except by giving them labels.
 
-\subsection{Definition}
+In fact, this was the original motivation for the definition of
+\todo{finish}
+
+\section{Definition}
 \label{sec:species-definition}
 
 We want to think of each labeled structure as \emph{indexed by} its
 set of labels (or, more generally, by the \emph{size} of the set of
 labels).  We can accomplish this by a mapping from label sets to all
-the structures built from them, with some extra properties to
-guarantee that we really do get the same family of structures no
+the shapes built from them, with some extra properties to
+guarantee that we really do get the same family of shapes no
 matter what set of labels we happen to choose.
 
 \begin{defn}
 A \term{species} $F$ is a pair of mappings which
 \begin{itemize}
 \item sends any finite set $U$ (of \term{labels}) to a finite set
-  $F[U]$ (of \term{structures}), and
+  $F[U]$ (of \term{shapes}), and
 \item sends any bijection on finite sets $\sigma : U \bij V$ (a
   \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$
   (illustrated in \pref{fig:relabeling}),
@@ -100,29 +102,76 @@ satisfying the following functoriality conditions:
 \item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
 \end{itemize}
 
-This definition is due to Joyal \citep{joyal}, as described in BLL
-\citep{bll}.
+This definition is due to \citet{joyal}, as described in \citet{bll}.
 \end{defn}
 
 \begin{figure}
   \centering
-  \includegraphics{relabeling}
-  \caption{Relabeling}
-  \label{fig:relabeling}
+  \begin{diagram}[width=200]
+import           Data.Maybe                     (fromMaybe)
+import           Diagrams.TwoD.Layout.Tree
+
+t :: BTree Int
+t = BNode 2 (leaf 1) (BNode 3 (leaf 4) (leaf 5))
+
+sig :: Int -> Char
+sig = ("acebd"!!) . pred
+
+mkNamedNode :: IsName a => (a -> String) -> a -> Diagram B R2
+mkNamedNode sh a = (text (sh a) # scale 0.3 <> circle 0.2 # fc white) # named a
+
+mkNamedTree :: IsName a => (a -> String) -> BTree a -> BTree (Diagram B R2)
+mkNamedTree = fmap . mkNamedNode
+
+drawDiaBT :: BTree (Diagram B R2) -> Diagram B R2
+drawDiaBT
+  = maybe mempty (renderTree id (~~))
+  . symmLayoutBin
+
+t1 = drawDiaBT . mkNamedTree show $ t
+t2 = drawDiaBT . mkNamedTree (:[]) $ fmap sig t
+
+linkedTrees = hcat' (with & sep .~ 1) [t1, t2]
+  # applyAll (map conn [1..5 :: Int])
+  where
+    conn i = connectOutside'
+      (with & arrowShaft .~ selectShaft i
+            & shaftStyle %~ dashing [0.05,0.05] 0
+            & arrowHead .~ noHead
+      )
+      i (sig i)
+    selectShaft i || i `elem` [1,4] = theArc # reverseTrail
+                  || i `elem` [3,5] = theArc
+    selectShaft _ = hrule 1
+    theArc = arc (0 @@@@ deg) (75 @@@@ deg)
+
+dia = linkedTrees # centerXY # frame 1
+  \end{diagram}
+  \caption{Relabeling} \label{fig:relabeling}
 \end{figure}
-\todo{redraw this with diagrams}
 
-Using the language of category theory, this definition can be pithily
-summed up by saying that ``a species is a functor from $\B$ to
-$\FinSet$'', where $\B$ is the category of finite sets whose morphisms are
-bijections, and $\FinSet$ is the category of finite sets whose morphisms
-are arbitrary (total) functions.
+We call $F[U]$ the set of ``$F$-shapes with labels drawn from $U$'',
+or simply ``$F$-shapes on $U$'', or even (when $U$ is clear from
+context) just ``$F$-shapes''.\footnote{Margaret Readdy's translation
+  of \citet{bll} uses the word ``structure'' instead of ``shape'', but
+  that word is likely to remind computer scientists of ``data
+  structures'', which is the wrong association: data structures
+  contain \emph{data}, whereas species shapes do not.  We choose the
+  word shape to emphasize the fact that they are ``form without
+  content''.}  $F[\sigma]$ is called the ``transport of $\sigma$ along
+$F$'', or sometimes the ``relabeling of $F$-shapes by $\sigma$''.
 
-We call $F[U]$ the set of ``$F$-structures with
-labels drawn from $U$'', or simply ``$F$-structures on $U$'', or even
-(when $U$ is clear from context) just ``$F$-structures''.  $F[\sigma]$
-is called the ``transport of $\sigma$ along $F$'', or sometimes the
-``relabeling of $F$-structures by $\sigma$''.
+The functoriality of relabeling means that the actual labels used
+don't matter; we get ``the same shapes'', up to relabeling, for
+any label sets of the same size.  We might say that species are
+\term{parametric} in the label sets of a given size. In particular,
+$F$'s action on all label sets of size $n$ is determined by its action
+on any particular such set: if $||U_1|| = ||U_2||$ and we know
+$F[U_1]$, we can determine $F[U_2]$ by lifting an arbitrary
+bijection between $U_1$ and $U_2$.  So we often take the finite set of
+natural numbers $[n] = \{0, \dots, n-1\}$ as \emph{the}
+canonical label set of size $n$, and write $F[n]$ (instead of
+$F[[n]]$) for the set of $F$-shapes built from this set.
 
 To make this more concrete, consider a few examples:
 \begin{itemize}
@@ -193,13 +242,6 @@ trees xxs  = [ Node x [l,r]
              , r <- trees zs
              ]
 
-select []     = []
-select (x:xs) = (x,xs) : (map . second) (x:) (select xs)
-
-subsets []     = [ ([],[]) ]
-subsets (x:xs) = (map . first) (x:) ss ++ (map . second) (x:) ss
-  where ss = subsets xs
-
 treeStructures =
     hcat' (with & sep .~ 0.5)
   . map drawTreeStruct
@@ -211,101 +253,92 @@ treeStructures =
     %$
   \end{figure}
 
-% \item The species of \emph{permutations} \todo{finish}
+\item \todo{More examples.  Cycles, bags.  Permutations.  Examples of
+    algebra: describe lists and trees algebraically, etc.}
 
 \end{itemize}
 
-The functoriality of relabeling means that the actual labels used
-don't matter; we get ``the same structures'', up to relabeling, for
-any label sets of the same size.  We might say that species are
-\term{parametric} in the label sets of a given size. In particular,
-$F$'s action on all label sets of size $n$ is determined by its action
-on any particular such set: if $||U_1|| = ||U_2||$ and we know
-$F[U_1]$, we can determine $F[U_2]$ by lifting an arbitrary
-bijection between $U_1$ and $U_2$.  So we often take the finite set of
-natural numbers $[n] = \{0, \dots, n-1\}$ as \emph{the}
-canonical label set of size $n$, and write $F[n]$ (instead of
-$F[[n]]$) for the set of $F$-structures built from this set.
+Using the language of category theory, we can give an equivalent, more
+concise definition of species:
+\begin{defn}
+  A \term{species} is a functor $F : \B \to \Set$, where $\B$ is the
+  groupoid of finite sets whose morphisms are bijections, and
+  $\Set$ is the category of sets and (total) functions.
+\end{defn}
 
-% It's not hard to show that functors preserve isomorphisms, so although
-% the definition only says that a species $F$ sends a bijection $\sigma
-% : U \bij V$ to a \emph{function} $F[\sigma] : F[U] \to F[V]$, in fact,
-% by functoriality every such function must be a bijection. \todo{is
-%   this really important to say?}
-
-\todo{edit}
-
-Species are defined as functors $\B \to \Set$ \citep{bll}.
-Intuitively, the action of a species on objects takes a finite set of
-``labels'' to a set of ``structures''; the action on morphisms
-requires the action on objects to be ``invariant under relabelling''.
-
-This is a simple and convenient definition, but there are several
-reasons that compel us to generalize it.  First, \B and \Set enjoy
-many special properties as categories (for example, \Set is
-cartesian closed, has all limits and colimits, and so on).  It is
-enlightening to see precisely which properties are required in which
-situations, and we miss this entirely if we start with the kitchen
-sink.
-
-More subtly, we wish to work in a constructive, computational setting,
-and the specific categories \B and \Set are
-inappropriate. \todo{reference stuff from finiteness section
-  previously.}  We will wish to work with more computationally
-concrete categories based in type theory, such as $\BT$, but in order
-to do so we need to show that they have the right properties.
-
-\todo{Note we will often use the intuition of ``sets of labels'' but
-  of course in more general settings the objects of the category
-  $\Lab$ might not ``have elements'' at all. More generally we can
-  just think of structures indexed by objects of $\Lab$, rather that
-  structures ``containing labels''.}
+\begin{rem}
+  Although the definition only says that a species $F$ sends a
+  bijection $\sigma : U \bij V$ to a \emph{function} $F[\sigma] : F[U]
+  \to F[V]$, functors preserve isomorphisms, so in fact every such
+  function must be a bijection.
+\end{rem}
 
 \section{Species from scratch}
 \label{sec:species-scratch}
 
+There are several reasons to generalize the definition of species
+given in the previous section.  First, $\B$ and \Set enjoy many special
+properties as categories (for example, \Set is cartesian closed, has
+all limits and colimits, and so on).  It is enlightening to see
+precisely which properties are required in which situations, and we
+miss this entirely if we start with the kitchen sink.
+
+More subtly, we wish to work in a constructive, computational setting,
+and the specific categories $\B$ and \Set are inappropriate, as seen
+\todo{reference stuff from finiteness section previously}.  We wish to
+work with more computationally concrete categories based in type
+theory, such as $\BT$, but in order to do so we need to show that they
+have the right properties.
+
 The idea is to start ``from scratch'' and build up a generic notion of
-species which supports the operations we want.  Along the way, we will
+species which support the operations we want.  Along the way, we will
 also get a much clearer picture of where the operations ``come from''.
+Much of the material in this chapter has been inspired by
+\citet{Kelly-operads} \todo{``Operads of J.P. May''},
+\todo{``Cartesian Closed Bicategory of Generalised Species of
+  Structure''}, and \todo{``Monoidal Functors, Species, and Hopf
+  Algebras''}, though the aim is for the current chapter to be at the
+same time more elementary and (in some ways) more general.
 
-\todo{cite ``Operads of J.P. May'', ``Cartesian Closed Bicategory of
-  Generalised Species of Structure'', ``Monoidal Functors, Species, and
-  Hopf Algebras''}
+Given two categories $\Lab$ and $\Str$, what can we say about functors
+$\Lab \to \Str$, and more generally about the functor category $[\Lab,
+\Str]$?  Of course, there is no point in calling functors $\Lab \to
+\Str$ ``species'' for just any old categories $\Lab$ and $\Str$.  But
+what properties must $\Lab$ and $\Str$ possess to make this
+interesting and worthwhile?  In particular, what properties must
+$\Lab$ and $\Str$ possess to enable the sorts of operations we
+typically want to do on species?  In each of the following sections,
+we will discuss some specific constructions on species (considered as
+functors $\B \to \Set$), and then generalize to arbitrary functor
+categories to see what properties are needed in order to define
+them---\ie\ where the constructions ``come from''---and give some
+specific examples.  One particular example that will be considered
+throughout is $[\BT, \Type]$, which, as we will see, makes a good case
+for a ``constructive counterpart'' to $[\B, \Set]$.
 
-We begin by considering functor categories in general.  Given two
-categories $\Lab$ and $\Str$, what can we say about functors $\Lab \to
-\Str$, and more generally about the functor category $[\Lab, \Str]$?
-Of course, there is no point in calling functors $\Lab \to \Str$
-``species'' for just any old categories $\Lab$ and $\Str$.  But what
-properties must $\Lab$ and $\Str$ possess to make this interesting and
-worthwhile?
-
-\todo{should talk about motivation from memory locations and structures.}
-
-In each of the following sections we will discuss some specific
-constructions on species (considered as functors $\B \to \Set$), and
-then generalize to arbitrary functor categories to see what properties
-are needed in order to define them---\ie\ where the constructions
-``come from''---and give some specific examples.
-
-\todo{Idea is that $[\B,\Type]$ gives an interpretation in type
-  theory.  In particular, note that \emph{any} function of type $\Type
-  \to \Type$ can be interpreted as a functor in this category!}
+\begin{rem}
+  It will often be convenient to have recourse to the intuition of
+  ``sets of labels''; but in more general settings the objects of
+  $\Lab$ might not correspond to ``sets'' at all. More generally, we
+  can just think of shapes indexed by objects of $\Lab$, rather
+  than shapes ``containing labels''.
+\end{rem}
 
 \section{Sum}
 \label{sec:sum}
 
 One of the simplest operations on species is the \emph{sum} of two
-species.
+species. The intuition is that an $(F + G)$-shape is either an
+$F$-shape \emph{or} a $G$-shape (\pref{fig:sum}).  \todo{insert back
+  reference to some example(s)?} Formally:
+
 \begin{defn}
   Given species $F, G : \B \to \Set$, we may form their sum $F + G$,
   defined on objects by \[ (F + G)\ L \defeq F\ L + G\ L, \] where the
-  $+$ on the right hand side denotes disjoint union of sets.
+  $+$ on the right hand side denotes the disjoint union (coproduct) of
+  sets, with the action on morphisms similarly given by \[ (F + G)\
+  \sigma \defeq F\ \sigma + G\ \sigma. \]
 \end{defn}
-That
-is, a labelled $(F + G)$-shape is either a labelled $F$-shape or a
-labelled $G$-shape (\pref{fig:sum}). \todo{Say something about action
-  on arrows/functoriality.}
 
   \begin{figure}
     \centering
@@ -318,7 +351,7 @@ theDia
     , text' 1 "="
     , vcat
       [ struct 5 "F"
-      , text' 1 "+"
+      , text' 0.5 "OR"
       , struct 5 "G"
       ]
       # centerY
@@ -332,10 +365,13 @@ dia = theDia # centerXY # pad 1.1
 
 \begin{defn}
   We may also define the \term{zero} or \term{empty} species,
-  $\Zero$, as the unique species with no shapes whatsoever, that is,
+  $\Zero$, as the unique species with no shapes whatsoever.  That is,
+  on objects,
   \begin{equation*}
-    \Zero\ L \defeq \varnothing
+    \Zero\ L \defeq \varnothing,
   \end{equation*}
+  and on morphisms $\Zero$ sends every $\sigma$ to the unique function
+  $\varnothing \to \varnothing$.
 \end{defn}
 
 % As a simple example, the species $\One + \X$ corresponds to the
@@ -353,18 +389,21 @@ dia = theDia # centerXY # pad 1.1
 
 It's not hard to check that $(+,\Zero)$ forms a commutative monoid
 structure on species (up to isomorphism).  Stepping back a bit, we can
-see that this monoidal structure on species arises from a
-corresponding monoidal structure on sets in an entirely
-straightforward way: the sum of two functors is defined as the
-pointwise sum of their outputs, and likewise \Zero, the identity for
-the sum of species, is defined as the functor which constantly, \ie
-pointwise, returns $\varnothing$, the identity for the sum of sets.
+see that this monoidal structure on species arises straightforwardly
+from the corresponding monoidal structure on sets: the sum of two
+functors is defined as the pointwise sum of their outputs, and
+likewise \Zero, the identity for the sum of species, is defined as the
+functor which constantly, \ie pointwise, returns $\varnothing$, the
+identity for the sum of sets.
 
-This generalizes straightforwardly: any monoidal structure on a
-category $\Str$ lifts pointwise to a corresponding monoidal structure
-on the functor category $[\Lab, \Str]$. \todo{find a reference for
-  proof?} (Note that this is exactly the same idea as the standard
-Haskell type class instance
+\section{Lifting monoids}
+\label{sec:lifting-monoids}
+
+This same construction works in a much more general setting.  In fact,
+any monoidal structure on a category $\Str$ lifts pointwise to a
+corresponding monoidal structure on the functor category $[\Lab,
+\Str]$. \todo{find a reference for proof?} (Note that this is exactly
+the same idea as the standard Haskell type class instance
 \begin{spec}
 instance Monoid a => Monoid (e -> a) where
   mempty         = \ _ -> mempty
@@ -449,51 +488,56 @@ fact a coproduct structure on the category of species.
   \stackrel{f \oplus g}{\longrightarrow} (S_1 \oplus T_1) \] This is
   possible since the monoidal operation $\oplus$ is, by definition,
   required to be a bifunctor.
+
+  \todo{Explain how the above plays out in the case of species.}
 \end{ex}
 
 \section{Cartesian/Hadamard product}
 \label{sec:cartesian}
 
 Disjoint union is not the only monoidal structure on $\Set$. In
-addition to coproducts $\Set$ also has products, where the product of
-two sets $S$ and $T$ is given by the Cartesian product, $S \times T =
-\{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as the
-identity (for convenience, we may suppose there is some canonical
-choice of one-element set, $\{\star\}$).
+addition to coproducts $\Set$ also has products, given by $S \times T
+= \{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as the
+identity. (For convenience, we may suppose there is some canonical
+choice of one-element set, $\{\star\}$; this is justified since all
+one-element sets are isomorphic in \Set.)
 \begin{defn}
   By the discussion of the previous section, this automatically lifts
   to a pointwise product structure on species, known as the
   \term{Cartesian} or \term{Hadamard product}: \[ (F \times G)\ L = F\
   L \times G\ L. \]
 \end{defn}
-In the same way that an $(F + G)$-shape is either an
-$F$-shape \emph{or} a $G$-shape on a given set of labels, an $(F
-\times G)$-shape is both an $F$-shape \emph{and} a $G$-shape, on
-\emph{the same set of labels} (\pref{fig:Cartesian-product}).
+In the same way that an $(F + G)$-shape is either an $F$-shape
+\emph{or} a $G$-shape on a given set of labels, an $(F \times
+G)$-shape is both an $F$-shape \emph{and} a $G$-shape, on \emph{the
+  same set of labels} (\pref{fig:Cartesian-product-dup}).  As
+illustrated in the figure, there are several intuitive ways to think
+about this situation. One can think of two distinct shapes, with
+labels duplicated between them; one can think of the labels as
+\emph{pointers} or \emph{labels} for locations in a shared memory (to
+be explored more in \pref{sec:sharing}); or one can think of the
+shapes themselves as being superimposed.
+
 \begin{figure}
   \centering
   \todo{Make a diagram.}
   \caption{Cartesian species product}
-  \label{fig:Cartesian-product}
+  \label{fig:Cartesian-product-dup}
 \end{figure}
 
 \begin{defn}
   Lifting the identity element pointwise gives the species \[ \E\ L =
-  \{\star\}, \] usually called the \term{species of sets}, which is the
-  identity for Cartesian product of species.
+  \{\star\}, \] where every bijection sent to the unique function
+  $\{\star\} \to \{\star\}$.  By construction, $\E$ is the identity
+  for Cartesian product of species.
 \end{defn}
 \begin{rem}
-  It is called the species of sets since there is exactly one
-  structure on any set of labels, which can intuitively be thought of
-  as the set of labels itself, with no additional structure.  In fact,
-  since all one-element sets are isomorphic, we may as well define \[
-  \E\ L = \{L\}. \]
+  $\E$ is usually called the \term{species of sets} since there is
+  exactly one structure on any set of labels, which can intuitively be
+  thought of as the set of labels itself, with no additional
+  structure.  In fact, since all one-element sets are isomorphic, we
+  may as well define \[ \E\ L = \{L\}. \]
 \end{rem}
-
-Cartesian product can produce structures with multiple copies of each
-label.  Insofar as we view labels as pointers or names for memory
-locations, this allows \emph{explicitly} modelling value-level
-sharing---this is explored more in \pref{sec:sharing}.
 
 Of course, since Cartesian product is the categorical product in \Set,
 Cartesian/Hadamard product is also the product in the category of
@@ -504,7 +548,8 @@ complicated; it will be explored in the next section.
 
 \todo{Forward reference to material on closedness?}
 
-\todo{give some examples with other categories.}
+\todo{give some examples with other categories. $\Type$.  $1/\Set$,
+  \ie\ pointed sets with smash product?}
 
 \todo{\Set is distributive, in the sense that the canonical morphism
   $X \times Y + X \times Z \to X \times (Y + Z)$ is an isomorphism.
@@ -516,21 +561,23 @@ complicated; it will be explored in the next section.
 
 There is another notion of product for species, the \term{partitional}
 or \term{Cauchy} product, which is more generally useful than
-Cartesian product, even though it is much more complex to define.  In
+Cartesian product, even though it is more complex to define.  In
 particular, when species are extended to labelled structures
 (\pref{chap:labelled}) it is the partitional product, rather than
 Cartesian, which gives rise to the usual notion of product on
-algebraic data types.  For this reason partitional product is
-often simply referred to as ``product'', without any modifier,
-although as we have seen it is Cartesian product, rather than
-partitional product, which is actually a categorical product.
+algebraic data types.  For this reason partitional product is often
+simply referred to as ``product'', without any modifier, although as
+we have seen it is Cartesian product, rather than partitional product,
+which is actually a categorical product.
 
-\begin{defn}
-  The partitional product $F \sprod G$ of two species $F$ and $G$
-  consists of paired $F$- and $G$-shapes, but with a twist: instead of
-  being replicated, as in Cartesian product, the labels are
-  \emph{partitioned} between the two shapes (\pref{fig:product}).
-\end{defn}
+Intuitively, the partitional product $F \sprod G$ of two species $F$
+and $G$ consists of paired $F$- and $G$-shapes, but with a twist:
+instead of being replicated, as in Cartesian product, the labels are
+\emph{partitioned} between the two shapes (\pref{fig:product}).
+
+\todo{picture of a pair of trees with disjoint labels, or something
+  like that.}
+
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
@@ -553,23 +600,33 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:product}
   \end{figure}
 
-%%% XXX remove me
-\newcommand{\under}[1]{\floor{#1}}
-\newcommand{\lift}[1]{\ceil{#1}}
-\newcommand{\lab}[1]{\langle #1 \rangle}
-\newcommand{\LStr}[3]{#1 #2 #3}
+Formally, the partitional product of species
+\begin{defn}
+The \term{partitional} or \term{Cauchy product} of two species $F$ and
+$G$ is the functor defined on objects by \[   (F \sprod G)\ L =
+\sum_{L_1 + L_2 = L} F\ L_1 \times G\ L_2 \]
+where $\Sigma$ denotes simply an indexed coproduct of sets.  \todo{Say
+  something about the action of $(F \cdot G)$ on bijections?}
+  \todo{equality is a bit sketchy here\dots}
+\end{defn}
 
-\begin{equation*}
-  (F \sprod G)\ L = \sum_{L_1 \uplus L_2 = L} F\ L_1 \times G\ L_2
-\end{equation*}
-The intuition behind partitioning the labels in this way is that each
-label represents a unique ``location'' which can hold a data value, so
-the locations in the two paired shapes should be disjoint.
+The identity for partitional product should evidently be some species
+$\One$ such that \[ (\One \cdot G)\ L = \left(\sum_{L_1 + L_2 = L}
+  \One\ L_1 \times G\ L_2 \right) \iso G\ L. \] The only way for this
+isomorphism to hold naturally in $L$ is if $\One\ \varnothing =
+\{\star\}$ (yielding a summand of $G\ L$ when $\varnothing+L = L$) and
+$\One\ L_1 = \varnothing$ for all other $L_1$ (cancelling all the
+other summands).
 
-\todo{picture of a pair of trees with disjoint labels, or something
-  like that}
-
-\todo{Write about identity element: 1}
+\begin{defn}
+  The unit species, $\One$, is defined by
+  \[ \One\ L =
+  \begin{cases}
+    \{\star\} & L = \varnothing \\
+    \varnothing & \text{otherwise}.
+  \end{cases}
+  \]
+\end{defn}
 
 Generalizing partitional product over arbitrary functor categories is
 much more complex than generalizing sum and Cartesian product, and
@@ -584,7 +641,7 @@ functor category $[\Lab, \Str]$ out of a monoidal structure on the
 \emph{domain} category $\Lab$.  In particular, Day convolution
 requires
 \begin{itemize}
-\item a monoidal structure $\oplus$ on $\Lab$;
+\item a monoidal structure $\oplus$ on the domain $\Lab$;
 \item that $\Lab$ be \emph{enriched over} $\Str$;
 \item a symmetric monoidal structure $\otimes$ on $\Str$;
 \item that $\Str$ be cocomplete, and in particular
