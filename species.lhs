@@ -742,23 +742,44 @@ instantiate framework to show how it comes out.}
 \label{sec:arithmetic-product}
 
 There is another monoidal structure on $\B$ (and similarly on $\P$ and
-$\N$) corresponding to the \emph{product} of sets/natural numbers.
-What happens if we instantiate the framework of Day convolution with
-this product-like monoidal structure instead of the coproduct-like
-structure used to define partitional product?
+$\N$) corresponding to the \emph{product} of sets/natural numbers.  If
+we instantiate the framework of Day convolution with this product-like
+monoidal structure instead of the coproduct-like structure used to
+define partitional product---but keep everything else the same, in
+particular continuing to use products on $\Set$---we obtain an
+operation known as \term{arithmetic product}
+\citep{arithmetic-product}.
+
+Let's examine this in detail in the case of $[\P,\Set]$.  The monoidal
+structure on $\P$ is defined on objects as $m \otimes n = mn$.  On
+morphisms, given $f : \fin m \bij \fin m$ and $g : \fin n \bij \fin
+n$, we have $f \otimes g : \fin{mn} \bij \fin{mn}$ defined by \todo{finish}.
+
+Instantiating the definition of Day convolution yields
+\begin{align*}
+  (F \boxtimes G)_n &= \int^{n_1,n_2} F_{n_1} \times G_{n_2} \times
+  \P(n, n_1n_2) \\
+  &= \int^{n_1,n_2} F_{n_1} \times G_{n_2} \times (\fin n \bij \fin
+  {n_1 n_2}) \\
+  &= ? \\
+  &= \sum_{d \mid n} F_d \times G_{n/d}
+\end{align*}
+
+% where $\otimes$ denotes the product monoidal structure on
+% $\B$.  We cannot write this quite as nicely as partitional product,
+% since there is no canonical way to decompose
+
+The intuition behind this operation is that we end up with a
+``matrix'' of labels, with an $F$-shape on the ``rows'' and a
+$G$-shape on the ``columns''.
+
+\todo{picture}
+
+\todo{examples}
 
 \bay{How can we say that we are using ``the same'' ``product-like''
   monoidal structure in all these different categories?  Are they
   related by monoidal functors?}
-
-Beginning with a simple example, \todo{example using $\N$}
-
-Using the standard formulation of the category of species as $[\B,
-\Set]$, we get \todo{finish. This is called \term{arithmetic product},
-and was recently described by (XXX cite), although they say nothing
-about Day convolution.}
-
-\todo{pictures, intuition.}
 
 \section{Composition}
 \label{sec:composition}
@@ -933,10 +954,39 @@ the notion of multisort species defined in \citet{bll}.
 \newcommand{\A}{\bbb{A}}
 
 Given some object $A \in \Str$, consider the slice category $\Str/A$.
-\todo{$\Str/A$ inherits coproducts.} \todo{Can define a product
-  structure on $\Str/A$ if $A$ is a ring object (???)  Note according
-  to \url{http://ncatlab.org/nlab/show/internalization} we just need
-  finite products to internalize the notion of a ring.}
+We can interpret objects of $\Str/A$ as objects of $\Str$ paired with
+a ``weighting''; morphisms in $\Str/A$ are thus ``weight-preserving''
+morphisms of $\Str$.
+
+The first thing to note is that $\Str/A$ inherits coproducts from
+$\Str$: first, given two weighted objects $(X, \omega_X)$ and $(Y,
+\omega_Y)$, we can uniquely construct a weaighting $(X+Y, [\omega_X,
+\omega_Y])$:
+\[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
+  \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
+  \ar[dl]^{\omega_Y} \\ & A & } \] To see that this is indeed the
+coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \todo{finish}
+
+Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
+weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
+categorical product in $\Str/A$ is the set $\{(x,y) \mid x \in X, y
+\in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not actually a
+very useful notion of product in this context: intuitively, taking a
+product of weighted objects should yield a combined object with some
+sort of combined weight, instead of limiting us to cases where the
+weights match.
+
+Instead of requiring $\Str$ to have pullbacks, we can define a
+different sort of monoidal product on $\Str/A$ if we assume that
+$\Str$ has products and $A$ is a monoid object, that is, there exist
+morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
+\todo{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
+\omega_Y)$ by
+\[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
+  \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
+by
+\[\xymatrix{ \{\star\} \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
+One can check that $\otimes$ inherits monoidal structure from $A$.
 
 \section{Virtual species}
 \label{sec:virtual}
