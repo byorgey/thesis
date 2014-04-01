@@ -1,0 +1,111 @@
+<byorgey> consider the category whose objects are types and whose arrows are functions of the appropriate type (in HoTT).  Does anyone have any references on constructing coends in this category?
+<byorgey> Sigma-types seem too strong.
+<byorgey> It's suggestive that being cocomplete is equivalent to having coproducts and pushouts, and pushouts can (I think) be constructed in that category using a HIT.
+<byorgey> so maybe we can define coends via some sort of HIT?  Is it as simple as a Sigma-type paired with some path constructors corresponding to the commuting diagrams that define a coend?
+<Saizan> it should pretty much be a quotients of sigmas, yeah
+<byorgey> ok, thanks
+<byorgey> I also found this comment: http://math.andrej.com/2014/01/13/univalent-foundations-subsume-classical-mathematics/comment-page-1/#comment-34504
+<byorgey> (it mentions coends at the very end.) I found it cryptic the first time I read it but now it makes perfect sense.
+<Saizan> mh
+<Saizan> i guess there it's saying that sigma types are already coends, when we consider the domain type as a category in itself
+<Saizan> it's just that usual domain types are discrete, so it degenerates into a coproduct
+<byorgey> ah, right
+<Saizan> but i think you were considering another categorical view at the start
+<byorgey> was I?
+<byorgey> oh, I see, I think I was just being imprecise
+<Saizan> well, considering types as objects and functions as arrows is not the same as considering types as categories and functions as functors
+<byorgey> true.
+<byorgey> the precise way to look at it, I suppose, is that I want to build coends over functors  T^op x T -> U,   where  T is some type considered as a category, and U is the category of types and functions
+<byorgey> which it seems to me is exactly the sort of coend under consideration in that comment I linked
+<rwbarton> byorgey: by "category" in your original question do you mean an (infty,1)-category?
+<rwbarton> or when you talk about U
+<byorgey> rwbarton: I think so, though to be honest I am not sure what the difference would be
+<byorgey> I only know about (infty,1)-categories via HoTT, I know nothing about them from the category theory side
+<rwbarton> well, with an ordinary category (where hom-sets are sets) you can't capture much
+<rwbarton> what set is the set of maps from the point to the circle?
+<rwbarton> put differently, what does it mean for two maps f, g : * -> S^1 to be "the same"
+<byorgey> I don't have very good intuition for S^1
+<jgross_> rwbarton: If you have funtional extensionality, (* -> A) and A are equivalent types.  So (* -> S^1) is equivalent to S^1.
+<Saizan> byorgey: i think you get the sufficient equalities from a sigma type, because really it's mostly the arrows in T that matter, from U you're going to use the equality anyway
+<rwbarton> jgross_: Yes of course, but S^1 isn't a set
+<jgross_> rwbarton: The proof doesn't assume that A is a set.
+<rwbarton> (Tangentially, does that actually require functional extensionality?)
+<rwbarton> jgross_: but byorgey wants to make a category
+<rwbarton> Well, I assume he actually doesn't want to make a category
+<byorgey> yes, it seems I do want (infty,1)-categories then.  The real answer is that I want "whatever is the right thing to model the things I am trying to model ;)"
+<rwbarton> OK
+<byorgey> Saizan: can you elaborate?  I'm not sure I understand what you mean
+<rwbarton> In that case, in the theory of (infty,1)-categories, what you want is a homotopy coend, which you can compute as the colimit of a simplicial object
+<jgross_> rwbarton: (Yes.  You need it to show that the maps (* -> S^1) -> S^1 and S^1 -> (* -> S^1) are inverses, in particular in the (* -> S^1) -> S^1 -> (* -> S^1) direction, because otherwise you have no way prove that the function you start with and the function you end with are equal.)
+<byorgey> rwbarton: do you have a good reference for that?
+<rwbarton> jgross_: So does that mean you also need it to show that (X x -) and (X -> -) are adjoint functors? (since (* x -) is unconditionally equivalent to the identity, right?)
+<jgross_> byorgey: Are you looking for directed homotopy type theory (which doesn't exist yet)?  i.e., where types are interpreted as infinity-categories rather than infinity groupoids?  Otherwise you need to define "category" internally.  That is, your diagram isn't a thing of type Type, but a thing of type Category.
+<rwbarton> byorgey: I can spell it out
+<Saizan> byorgey: i think rwbarton can do a better job :)
+<byorgey> jgross_: no, I don't think I want directed HoTT.
+<rwbarton> Normally when you want to compute the coend of a functor F : T^op x T -> U, you start with the coproduct of all the objects F(a,a), right?
+<byorgey> right
+<rwbarton> And then for each f : a -> b in T and each point of F(a,b), we have an identification between a point of F(a,a) and one of F(b,b)
+<byorgey> right
+<jgross_> rwbarton: You need it to show that (X * (X -> Y)) and Y are equivalent types.  I think that means you need it for that adjunction, but I'm not entirely sure.
+<rwbarton> byorgey: OK, so in a homotopy coend we have to keep going
+<rwbarton> Suppose you have f : a -> b, g : b -> c and a point x of F(a,c)
+<rwbarton> I can compose f and g to get a map a -> c, and that determines one of the identifications between F(a,a) and F(c,c) that I made in the previous step
+<rwbarton> Er, I notice I have my indices backwards
+<rwbarton> Let's pretend I said F : T x T^op -> U
+<byorgey> no worries =)
+<rwbarton> I can also take my x : F(a,c) and use f to get an element of F(b,c)
+<rwbarton> that element of F(b,c) plus g : b -> c give me an identification between F(b,b) and F(c,c) from the previous step
+<rwbarton> similarly I can get use x and g to get an element of F(a,b), and use that and f to get an identification between F(a,a) and F(b,b)
+<rwbarton> Now, I add a 2-cell
+<Saizan> (a : T , x : F(a,a)) = (b : T , y : F(b,b)) <=> exists (f : T(a,b)), F(id,f)(x) = F(f,id)(y) -- that's the identification, right?
+<rwbarton> right, so let's pick a notation for that equality constructor that was introduced by "And then for each f : a -> b in T and each point of F(a,b), we have an identification between a point of F(a,a) and one of F(b,b)"
+<rwbarton> Saizan: wait, not quite
+<rwbarton> (a : T , x : F(a,a)) = (b : T , y : F(b,b)) <=> exists (f : T(a,b), z : F(a,b)), F(id,f)(z) = x /\ F(f,id)(z) = y
+<byorgey> makes sense
+<rwbarton> In other words for every f : T(a,b), z : F(a,b), I create a constructor [f,z] : F(id,f)(z) = F(f,id)(z)
+<rwbarton> that's how you compute the ordinary coend
+<byorgey> right
+<rwbarton> but for a homotopy coend, you continue as I was explaining. so in the situation where you have f : a -> b, g : b -> c, z : F(a,c), you also add a 2-cell from [gf,z] to the composition of [f,F(id,g)z] and [g,F(f,id)z]
+<rwbarton> (If I got all the orderings right, which I probably didn't)
+<byorgey> oh, I see
+<byorgey> I suppose the next step is "and so on" =)
+<rwbarton> and you continue like this, for strings of arbitrary length a1 -> a2 -> ... -> an
+<byorgey> right
+<rwbarton> BUT it seems in HoTT that sometimes you can sidestep this kind of iterative/simplicial construction with a carefully chosen HIT; but I don't know if there is any way to do so in this case.
+<byorgey> interesting.
+<Saizan> rwbarton: if we are in HoTT and consider T(a,b) = a =_T b, does that make Sigma T (\a -> F a a) the coend of F?
+<rwbarton> I feel like that's some magical part of the theory which I don't understand at all yet.
+<Saizan> mh, i guess contravariance is not that easy to talk about
+<byorgey> rwbarton: are you referring to your previous comment, or to Saizan's question?
+<Saizan> well, otoh, they are groupoids so selfdual
+<rwbarton> My previous comment
+<rwbarton> Saizan: if the index category is a groupoid then there should be some simple formula for the coend already in homotopy theory
+<byorgey> rwbarton: hmm, can you elaborate?
+<jgross_> rwbarton: If the index category is not a(n) (infinity-)groupoid, then you can't make the coend in HoTT, you need directed HoTT.
+<rwbarton> Or use an internal notion of category for the index
+<rwbarton> as you suggested before -- I expect that's what byorgey wanted
+<byorgey> actually, in my case the index category will always be a(n) (infinity-)groupoid
+<rwbarton> Oh, right
+<byorgey> or rather, I have some freedom in choosing the properties of the index category, and this sounds like a good reason for requiring a groupoid.
+<rwbarton> Hmm
+<rwbarton> Let me think a bit, and get back to you on that
+<byorgey> ok, thanks
+<byorgey> I should go get some lunch anyway
+<Saizan> mh, if U is the category of types and functions then your action on morphisms is something like b = a -> c = d -> F a c -> F b d?
+<Saizan> from the sigma you get (a : T , x : F(a,a)) = (b : T , y : F(b,b)) <=> exists p : a = b, transport (\ a -> F a a) p x = y
+<rwbarton> Saizan: which agrees with the coend I think
+<rwbarton> since the index category is a groupoid, what I called "z" is determined by "x" and "f" (or "p")
+<rwbarton> or let's say "y" and "f"
+<rwbarton> Pick z so that F(f,id)(z) = y; so z = F(f^-1,id)(y); then my condition was F(id,f)(F(f^-1,id)(y)) = y
+<rwbarton> and that should agree with your transport (\ a -> F a a) p
+<Saizan> unless F(p,q) does more than transporting?
+<rwbarton> well, I'm not sure in what framework one could make this precise, but there should be a correspondence between functors T^op x T -> U, where T is the path (infinity-)groupoid of the space also denoted T, and functions T x T -> U
+<rwbarton> the correspondence being given in the reverse direction by "transport"
+<rwbarton> So given a functor T^op x T -> U, you have to massage it into the form of a function T x T -> U, and then form the Sigma-type
+<Saizan> with U still the category of types and functions, or the inf-groupoid of types and equivalences?
+<rwbarton> Oh, well since T^op x T is a groupoid, the functor can only carry morphisms to equivalences anyways
+<rwbarton> So in the phrase "a functor T^op x T -> U", it doesn't matter
+<rwbarton> in the phrase "T x T -> U", I just mean U = Type
+<Saizan> nice :)
+<byorgey> many thanks for this enlightening discussion =)

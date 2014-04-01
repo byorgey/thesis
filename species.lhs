@@ -543,8 +543,8 @@ Of course, since Cartesian product is the categorical product in \Set,
 Cartesian/Hadamard product is also the product in the category of
 species.  Interestingly, there is a different notion of species
 product (though not a categorical product) which is in some sense more
-natural/useful than Cartesian product, even though it is more
-complicated; it will be explored in the next section.
+natural than Cartesian product, even though it is more complicated; it
+will be explored in the next section.
 
 \todo{Forward reference to material on closedness?}
 
@@ -602,16 +602,18 @@ dia = theDia # centerXY # pad 1.1
 
 Formally, the partitional product of species
 \begin{defn}
-The \term{partitional} or \term{Cauchy product} of two species $F$ and
-$G$ is the functor defined on objects by \[   (F \sprod G)\ L =
-\sum_{L_1 + L_2 = L} F\ L_1 \times G\ L_2 \]
-where $\Sigma$ denotes simply an indexed coproduct of sets.  \todo{Say
-  something about the action of $(F \cdot G)$ on bijections?}
-  \todo{equality is a bit sketchy here\dots}
+  The \term{partitional} or \term{Cauchy product} of two species $F$
+  and $G$ is the functor defined on objects by \[ (F \sprod G)\ L =
+  \sum_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2 \] where $\Sigma$
+  denotes simply an indexed coproduct of sets, and $L_1,L_2 \vdash L$
+  denotes that $L_1$ and $L_2$ constitute a partition of $L$, that is,
+  $L_1 \union L_2 = L$ and $L_1 \intersect L_2 = \varnothing$. On
+  bijections, $F \cdot G$ uses the action of $F$ on the restriction of
+  the bijections to $L_1$, and similarly for $G$ and $L_2$.
 \end{defn}
 
 The identity for partitional product should evidently be some species
-$\One$ such that \[ (\One \cdot G)\ L = \left(\sum_{L_1 + L_2 = L}
+$\One$ such that \[ (\One \cdot G)\ L = \left(\sum_{L_1,L_2 \vdash L}
   \One\ L_1 \times G\ L_2 \right) \iso G\ L. \] The only way for this
 isomorphism to hold naturally in $L$ is if $\One\ \varnothing =
 \{\star\}$ (yielding a summand of $G\ L$ when $\varnothing+L = L$) and
@@ -637,26 +639,29 @@ requires turning to a construction known as \term{Day convolution}.
 
 The essential idea of Day convolution, first described by Brian
 Day~\cite{day-convolution}, is to construct a monoidal structure on a
-functor category $[\Lab, \Str]$ out of a monoidal structure on the
-\emph{domain} category $\Lab$.  In particular, Day convolution
-requires
+functor category $[\Lab, \Str]$ based primarily on a monoidal
+structure on the \emph{domain} category $\Lab$.  In particular, Day
+convolution requires
 \begin{itemize}
 \item a monoidal structure $\oplus$ on the domain $\Lab$;
-\item that $\Lab$ be \emph{enriched over} $\Str$;
-\item a symmetric monoidal structure $\otimes$ on $\Str$;
+\item that $\Lab$ be \emph{enriched over} $\Str$, \ie\ for any two
+  objects $L_1,L_2 \in \Lab$ there is a hom-object $\Lab(L_1,L_2) \in
+  \Str$ rather than a set;
+\item a symmetric monoidal structure $\otimes$ on the codomain $\Str$;
 \item that $\Str$ be cocomplete, and in particular
-  have coends.
+  have coends over $\Lab$.
 \end{itemize}
 
-\bay{Maybe don't use same letter $L$ for generic definition as we do for $L
-  \in \B$?}
+Note that any monoidal structures will do; in particular there is no
+requirement that $\oplus$ be ``sum-like'' or $\otimes$
+``product-like'', though that is indeed the case for partitional
+product.
+
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G \in
-  [\Lab, \Str]$ is given by \[ F \cdot G = \int^{L_1, L_2} F\ L_1
-  \otimes G\ L_2 \otimes \Lab(-, L_1 \oplus L_2). \]
+  [\Lab, \Str]$ is given by the coend \[ F \oast G = \int^{L_1, L_2}
+  F\ L_1 \otimes G\ L_2 \otimes \Lab(-, L_1 \oplus L_2). \]
 \end{defn}
-
-\todo{Explain.  Give some intuition.}
 
 This operation is associative, and has as a unit $j(I)$ where $I$ is
 the unit for $\oplus$ and $j : \Lab \to [\Lab^{\text{op}}, \Str]$ is the Yoneda
@@ -664,27 +669,41 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 
 \todo{Argh! Some inconsistency going on here with $\Lab$ vs
   $\Lab^{op}$; the problem is that \eg\ $\B$ and $\P$ are self-dual so
-  the problem doesn't show up with them.}
+  the problem doesn't show up with them.  Perhaps we should be using
+  $[\Lab^{\mathrm{op}}, \Str]$?}
+
+\begin{rem}
+  Note that there are only covariant occurrences of $L_1$ and $L_2$ in
+  the above definition, which simplifies the definition of the coend.
+\end{rem}
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
-  $\Str = \Set$.  Though $\B$ does not have coproducts, it does have
-  at least two monoidal structures, given by disjoint union and
-  Cartesian product.  $\B$ is indeed enriched over $\Set$, which is
-  also cocomplete and has a symmetric monoidal structure given by
-  Cartesian product.
+  $\Str = \Set$.  Though $\B$ does not have coproducts, it does have a
+  monoidal structure given by disjoint union.  $\B$ is indeed enriched
+  over $\Set$, which is also cocomplete and has a symmetric monoidal
+  structure given by Cartesian product.
 
-  If we choose the monoidal structure on $\B$ given by disjoint union,
-  and products in $\Set$, then we obtain
+  Specializing the definition to this case, we obtain
   \begin{align*}
     (F \cdot G)(L) &= \int^{L_1, L_2} F\ L_1 \times G\ L_2 \times
-    (L \iso L_1 \uplus L_2) \\
+    (L \iso L_1 + L_2) \\
+    &= \left( \sum_{L_1, L_2} F\ L_1 \times G\ L_2 \times (L \iso L_1
+      + L_2) \right) \Big/ \sim
   \end{align*}
-  \todo{Somehow the coend reduces to a sum over things that are
-    \emph{equal} instead of everything isomorphic??  Is this described
-    in one of the papers I was looking at?}
+  where every pair of bijections $\sigma_i : L_i \iso L_i'$ induces
+  equivalences of the form $(L_1, L_2, f, g, i) \sim (L_1', L_2', F\
+  \sigma_1\ f, G\ \sigma_2\ g, (\sigma_1 + \sigma_2) \comp i)$.  In
+  other words, we ``cannot tell apart'' any two summands related by a
+  pair of relabellings.  The only way to tell two summands apart is if
+  their respective values of $L_1$ and $L_2$ stand in a different
+  relation to $L$, as witnessed by the isomorphism.  Therefore, all
+  the equivalence classes can be represented canonically by a
+  partition of $L$ into two disjoint subsets, giving rise to the
+  earlier definition: \[ (F \sprod G)\ L =
+  \sum_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2. \]
 
-  Also, in this case the identity element is $j(I) = j(\varnothing) =
+  Also, in this case, the identity element is $j(I) = j(\varnothing) =
   \B(-,\varnothing)$, that is, the species which takes as input a
   label set $L$ and constructs the set of bijections between $L$ and
   the empty set.  Clearly there is exactly one such bijection when $L
@@ -700,15 +719,14 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   with $f$ acting on the first $m$ values of $\Fin (m+n)$ and $g$ on
   the last $n$.
 
-  \todo{edit}
-  Then it is easy to see that we would have \[ (F \sprod G)_n \defeq
-  \sum_{n_1, n_2 : \N} (n_1 + n_2 = n) \times F_{n_1} \times
-  G_{n_2}, \] that is, an $(F \sprod G)$-shape of size $n$ consists of
-  an $F$-shape of size $n_1$ and a $G$-shape of size $n_2$, where $n_1
-  + n_2 = n$.  Indexing by labels is a generalization (a
-  \emph{categorification}, in fact) of this size-indexing scheme,
-  where we replace natural numbers with finite types, addition with
-  coproduct, and multiplication with product.
+  Specializing the definition, \[ (F \sprod G)_n \defeq \int^{n_1,
+    n_2} F_{n_1} \times G_{n_2} \times (\Fin n \iso \Fin {n_1} + \Fin {n_2})  \] that is, an
+  $(F \sprod G)$-shape of size $n$ consists of an $F$-shape of size
+  $n_1$ and a $G$-shape of size $n_2$, where $n_1 + n_2 = n$.
+  Indexing by labels is a generalization (a \emph{categorification},
+  in fact) of this size-indexing scheme, where we replace natural
+  numbers with finite types, addition with coproduct, and
+  multiplication with product.
 \end{ex}
 
 \begin{ex}
