@@ -15,7 +15,7 @@ structures, each with eight locations.
 \centering
 \begin{diagram}[width=250]
 import SpeciesDiagrams
-dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
+dia = hcat [octo [0..7], strutX 4, tree # centerXY]
     # centerXY
     # pad 1.1
 \end{diagram}
@@ -31,7 +31,7 @@ dia = (octo [0..7] |||||| strutX 4 |||||| tree # centerXY)
   data), we must also specify a mapping from locations to data, like
   $\{ 0 \mapsto \texttt{'s'}, 1 \mapsto \texttt{'p'}, 2 \mapsto
   \texttt{'e'} \dots \}$, as shown in~\pref{fig:shape-data}.  This
-  will be made more precise in~\pref{sec:species-types}.
+  will be made precise in~\pref{sec:species-types}.
 \end{rem}
 
 \begin{figure}
@@ -80,6 +80,7 @@ In fact, this was the original motivation for the definition of
 \section{Definition}
 \label{sec:species-definition}
 
+\todo{Explain this. More discussion/justification.}
 We want to think of each labeled structure as \emph{indexed by} its
 set of labels (or, more generally, by the \emph{size} of the set of
 labels).  We can accomplish this by a mapping from label sets to all
@@ -90,8 +91,8 @@ matter what set of labels we happen to choose.
 \begin{defn}
 A \term{species} $F$ is a pair of mappings which
 \begin{itemize}
-\item sends any finite set $U$ (of \term{labels}) to a finite set
-  $F[U]$ (of \term{shapes}), and
+\item sends any finite set $U$ (of \term{labels}) to a set $F[U]$ (of
+  \term{shapes}), and
 \item sends any bijection on finite sets $\sigma : U \bij V$ (a
   \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$
   (illustrated in \pref{fig:relabeling}),
@@ -399,21 +400,99 @@ identity for the sum of sets.
 \section{Lifting monoids}
 \label{sec:lifting-monoids}
 
+\newcommand{\lifted}[1]{\hat{#1}}
+\newcommand{\lotimes}{\mathbin{\lifted{\otimes}}}
+
 This same construction works in a much more general setting.  In fact,
 any monoidal structure on a category $\Str$ lifts pointwise to a
 corresponding monoidal structure on the functor category $[\Lab,
-\Str]$. \todo{find a reference for proof?} (Note that this is exactly
-the same idea as the standard Haskell type class instance
+\Str]$. The basic idea is exactly the same as the standard Haskell
+type class instance
 \begin{spec}
 instance Monoid a => Monoid (e -> a) where
   mempty         = \ _ -> mempty
   f `mappend` g  = \a -> f a `mappend` g a
 \end{spec}
-but quite a bit more general.)  Moreover, this lifting preserves
-commutativity, and products and coproducts on a category $\Str$ lift
-to products and coproducts on $[\Lab, \Str]$.  Since $(+,\varnothing)$
-is a coproduct structure on $\Set$, it follows that $(+, \Zero)$ is in
-fact a coproduct structure on the category of species.
+but quite a bit more general.  This construction will be entirely
+unsurprising to a category theorist, but is included here for
+completeness.
+\begin{defn}
+  Given a monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on
+  a category $\Str$, define $(\lifted{\otimes}, \lifted{I},
+  \lifted{\alpha}, \lifted{\lambda}, \lifted{\rho})$ as follows.
+  \begin{itemize}
+  \item $\lifted{\otimes} : [\Lab,\Str] \times [\Lab,\Str] \to [\Lab,\Str]$ is the
+    bifunctor computing the lifted monoidal product.
+    \begin{itemize}
+    \item On objects, $\lotimes$ sends pairs of functors $F,G : \Lab \to
+      \Str$ to the functor $F \lotimes G : \Lab \to \Str$, defined as the
+      pointwise tensor product of $F$ and $G$.  That is, on objects of
+      $\Lab$, \[ (F \lotimes G)\ L = F\ L \otimes G\ L, \] and similarly, on
+      morphisms \[ (F \lotimes G)\ f = F\ f \otimes G\ f. \]
+      Functoriality of $F \lotimes G$ follows from that of $F$, $G$,
+      and $\otimes$:
+      \begin{align*}
+        (F \lotimes G)\
+        id &= F\ id \otimes G\ id = id \otimes id = id, \text{and} \\
+        (F \lotimes G) (f \comp g) &= F\ (f \comp g) \otimes G\ (f
+        \comp
+        g) \\
+        &= (F\ f \comp F\ g) \otimes (G\ f \comp G\ g) \\
+        &= (F\ f \otimes G\ f) \comp (F\ g \otimes G\ g) \\
+        &= (F \lotimes G)\ f \comp (F \lotimes G)\ g.
+      \end{align*}
+
+    \newcommand{\nt}{\stackrel{\bullet}{\rightarrow}}
+
+  \item $\lotimes$ also sends pairs of natural transformations $\phi :
+    F \nt G : \Lab \to \Str$, $\psi : F' \nt G' : \Lab \to \Str$ to a
+    natural transformation $\phi \lotimes \psi : F \lotimes F' \nt G
+    \lotimes G'$, defined by \todo{finish}. Naturality of $\phi
+    \lotimes \psi$ is given by \todo{finish}.
+
+% \[ \xymatrix{ F\ L
+%       \ar[r]^{\phi_L \otimes \psi_L} \ar[d]_{F f} & G\ L \ar[d]^{G f} \\
+%       F\ L' \ar[r]_{\phi_{L'} \otimes \psi_{L'}} & G\ L' } \]
+    \end{itemize}
+
+    Functoriality of $\lotimes$ XXX:
+
+    \begin{align*}
+      id \lotimes id =
+    \end{align*}
+
+  \item $\lifted{I} \in [\Lab,\Str]$ is the constant functor $\Delta_I$.
+  \item $\lifted{\alpha}$ \todo{finish}
+  \item $\lifted{\lambda}$ \todo{finish}
+  \item $\lifted{\rho}$ \todo{finish}
+  \end{itemize}
+\end{defn}
+
+\begin{thm}
+  If $(\otimes, I, \alpha, \lambda, \rho)$ is a monoidal structure on
+  $\Str$, then $(\lotimes, \lifted I, \lifted \alpha, \lifted \lambda,
+  \lifted \rho)$ defines a monoidal structure on the functor category
+  $[\Lab, \Str]$.
+\end{thm}
+\begin{proof}
+  It remains to check the coherence properties. \todo{Finish}
+\end{proof}
+
+\begin{prop}
+  The monoidal lifting defined above preserves the following properties:
+  \begin{itemize}
+  \item If $\otimes$ is symmetric, so is $\lotimes$.
+  \item If $\otimes$ is a categorical product, so is $\lotimes$.
+  \item If $\otimes$ is a categorical coproduct, so is $\lotimes$.
+  \end{itemize}
+\end{prop}
+\begin{proof}
+  \todo{Finish}
+\end{proof}
+
+Since $(+,\varnothing)$ is a coproduct structure on $\Set$, it follows
+that $(+, \Zero)$ is in fact a coproduct structure on the category of
+species.
 
 \begin{ex}
   Take $\Lab = \cat{1}$ (the trivial category with one object and one
@@ -712,7 +791,7 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \end{ex}
 
 \begin{ex}
-  $\B$ and $\P$ are isomorphic, of course, but it is still instructive
+  $\B$ and $\P$ are equivalent, of course, but it is still instructive
   to work out the general definition in the case of $\P$.  In this
   case, we have a monoidal structure on $\P$ given by addition, with
   $f + g : \Fin (m + n) \iso \Fin (m + n)$ defined in the evident way,
@@ -862,16 +941,16 @@ Practically speaking, this result tells us how to express an
 eliminator for $(F \times G)$-shapes. \todo{Elaborate on this.}
 
 Note that $[\B, \Set]$ \emph{is} actually Cartesian closed, since it
-is isomorphic to $[\P, \Set]$.  \todo{Check this for sure.}  The above
+is equivalent to $[\P, \Set]$.  \todo{Check this for sure.}  The above
 derivations can be carried out in the context of $[\B, \Set]$ as well,
 with similar results.  Intuitively, $\B$ ``appears to be too big on
-the surface'', but is saved by virtue of being isomorphic to a small
+the surface'', but is saved by virtue of being equivalent to a small
 category.  In a sense, $\P$ is what is ``really going on''; $\B$ is
 like $\P$ with lots of ``extra junk'' thrown in because it's
 convenient to talk about \emph{sets} of labels rather than having to
 work with the canonical set $\{0, \dots, n-1\}$ all the time.  This is
 quite a special property of $\B$; for example, $\Set$ is certainly not
-isomorphic to any small categories. The same argument shows that
+equivalent to any small categories. The same argument shows that
 $[\BT, \Type]$ is Cartesian closed as well.
 
 \section{Differentiation}
@@ -977,7 +1056,7 @@ a ``weighting''; morphisms in $\Str/A$ are thus ``weight-preserving''
 morphisms of $\Str$.
 
 The first thing to note is that $\Str/A$ inherits coproducts from
-$\Str$: first, given two weighted objects $(X, \omega_X)$ and $(Y,
+$\Str$: given two weighted objects $(X, \omega_X)$ and $(Y,
 \omega_Y)$, we can uniquely construct a weaighting $(X+Y, [\omega_X,
 \omega_Y])$:
 \[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
@@ -988,8 +1067,8 @@ coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \todo{finish}
 Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
 weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
 categorical product in $\Str/A$ is the set $\{(x,y) \mid x \in X, y
-\in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not actually a
-very useful notion of product in this context: intuitively, taking a
+\in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not a very
+useful notion of product in this context: intuitively, taking a
 product of weighted objects should yield a combined object with some
 sort of combined weight, instead of limiting us to cases where the
 weights match.
@@ -1002,11 +1081,14 @@ morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
 \omega_Y)$ by
 \[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
   \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
-by
-\[\xymatrix{ \{\star\} \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
-One can check that $\otimes$ inherits monoidal structure from $A$.
+by $\eta$.
+%% xymatrix{ \{\star\} \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
+One can check that $\otimes$ inherits monoidal structure from
+$A$. \todo{Finish this proof.}
 
-\section{Virtual species}
-\label{sec:virtual}
+\todo{Show that this gives the usual notion of weighted species.}
 
-\todo{Do virtual species fit too?}
+\todo{Show that this construction preserves the properties we care
+  about.}
+
+\todo{Give some examples.}
