@@ -398,7 +398,7 @@ pair of inverse equivalences in each of the following two diagrams:
   \item on morphisms, $e : \mor {(A,m,i)} {(B,n,j)}$ is sent to
     $\fin{\size e} \equiv \fin{i \then e \then j^{-1}} \equiv i \then e \then j^{-1}$.
   \end{itemize}
-  We must exhibit a natural isomorphism $\alpha : \nat{Id}{\fin{\size
+  We must exhibit a natural isomorphism $\alpha : \nt{Id}{\fin{\size
       -}}$.  $\alpha_{(A,m,i)}$ must be a morphism
   in $\BT$ from $(A,m,i)$ to $(\Fin m, m, \id)$, that is, an
   equivalence $A \iso \Fin m$.  Therefore we define $

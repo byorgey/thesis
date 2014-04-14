@@ -569,18 +569,20 @@ category theorist, but is included here for completeness.
       morphisms \[ (F \lotimes G)\ f = F\ f \otimes G\ f. \]
       Functoriality of $F \lotimes G$ follows from that of $F$, $G$,
       and $\otimes$:
-      \begin{align*}
-        (F \lotimes G)\
-        id &= F\ id \otimes G\ id = id \otimes id = id, \text{and} \\
-        (F \lotimes G) (f \comp g) &= F\ (f \comp g) \otimes G\ (f
-        \comp
-        g) \\
-        &= (F\ f \comp F\ g) \otimes (G\ f \comp G\ g) \\
-        &= (F\ f \otimes G\ f) \comp (F\ g \otimes G\ g) \\
-        &= (F \lotimes G)\ f \comp (F \lotimes G)\ g.
-      \end{align*}
-
-    \newcommand{\nt}{\stackrel{\bullet}{\rightarrow}}
+      \[ (F \lotimes G)\ id = F\ id \otimes G\ id = id \otimes id =
+      id, \]
+      and
+      \begin{sproof}
+        \stmt{(F \lotimes G) (f \comp g)}
+        \reason{=}{definition of $\lotimes$}
+        \stmt{F\ (f \comp g) \otimes G\ (f \comp g)}
+        \reason{=}{funtoriality of $F$, $G$}
+        \stmt{(F\ f \comp F\ g) \otimes (G\ f \comp G\ g)}
+        \reason{=}{functoriality of $\otimes$}
+        \stmt{(F\ f \otimes G\ f) \comp (F\ g \otimes G\ g)}
+        \reason{=}{definition of $\lotimes$}
+        \stmt{(F \lotimes G)\ f \comp (F \lotimes G)\ g.}
+      \end{sproof}
 
   \item $\lotimes$ also sends pairs of natural transformations $\phi :
     F \nt G : \Lab \to \Str$, $\psi : F' \nt G' : \Lab \to \Str$ to a
@@ -607,16 +609,23 @@ category theorist, but is included here for completeness.
     functoriality of $\otimes$.
     \end{itemize}
 
-    We must show that $\lotimes$ is a bifunctor.
-
+    We must show that $\lotimes$ is a bifunctor, which follows
+    straightforwardly from the functoriality of $\otimes$:
     \begin{align*}
-      (id \lotimes id)_L = id_L \otimes id_L = ?
+      (id \lotimes id)_L = id_L \otimes id_L = id_L,
     \end{align*}
-    \todo{Work out exactly what kind of identities we're talking about here\dots}
-
-    \begin{align*}
-      \todo{Preserves composition of natural transformations.}
-    \end{align*}
+    and
+    \begin{sproof}
+      \stmt{((\phi \comp \phi') \lotimes (\psi \comp \psi'))_L}
+      \reason{=}{definition of $\lotimes$}
+      \stmt{(\phi \comp \phi')_L \otimes (\psi \comp \psi')_L}
+      \reason{=}{definition of vertical composition \todo{check}}
+      \stmt{(\phi_L \comp \phi'_L) \otimes (\psi_L \comp \psi'_L)}
+      \reason{=}{functoriality of $\otimes$}
+      \stmt{(\phi_L \otimes \psi_L) \comp (\phi'_L \otimes \psi'_L)}
+      \reason{=}{definition of $\lotimes$}
+      \stmt{(\phi \lotimes \psi)_L \comp (\phi' \lotimes \psi'}
+    \end{sproof}
 
   \item $\lifted{I} \in [\Lab,\Str]$ is the constant functor $\Delta_I$.
   \item $\lifted{\alpha}$ \todo{finish}

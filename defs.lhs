@@ -156,7 +156,7 @@
 
 % morphisms
 \newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
-\newcommand{\nat}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
+\newcommand{\nt}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
 
 % some standard categories
 \newcommand{\Set}{\cat{Set}}
