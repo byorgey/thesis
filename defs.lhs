@@ -80,6 +80,10 @@
 
 \newcommand{\bij}{\stackrel{\sim}{\longrightarrow}}
 \newcommand{\iso}{\simeq}
+\newcommand{\mkIso}{\rightleftharpoons}
+
+% axiom of choice
+\newcommand{\AC}{\mathsf{AC}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Theorems etc.
@@ -105,10 +109,21 @@
 \newcommand{\dep}[1]{\prod_{#1}}
 \newcommand{\fun}[1]{\lambda #1.\ }
 
+\newcommand{\TyZero}{\ensuremath{\bot}\xspace}
+\newcommand{\TyOne}{\ensuremath{\top}\xspace}
+\newcommand{\unit}{\ensuremath{\star}\xspace}
+
 \newcommand{\cons}[1]{\ensuremath{\mathsf{#1}}}
 
+\providecommand{\False}{}
 \renewcommand{\False}{\cons{F}}
+\providecommand{\True}{}
 \renewcommand{\True}{\cons{T}}
+
+\newcommand{\inl}{\cons{inl}}
+\newcommand{\inr}{\cons{inr}}
+\newcommand{\outl}{\cons{outl}}
+\newcommand{\outr}{\cons{outr}}
 
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
 \newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
@@ -120,10 +135,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% HoTT
 
-\newcommand{\ptrunc}[1]{\ensuremath{\||#1\||}}
+\newcommand{\ptrunc}[1]{\ensuremath{\left\||#1\right\||}}
 \newcommand{\id}{\cons{id}}
 
 \newcommand{\tygrpd}[1]{\ensuremath{\mathbf{G}(#1)}}
+
+\newcommand{\transport}[2]{\ensuremath{\mathsf{transport}^{#1}(#2)}}
+
+\newcommand{\ua}{\ensuremath{\mathsf{ua}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
@@ -131,15 +150,13 @@
 % typesetting for category names
 \newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}\xspace}
 
-% discrete category
-\newcommand{\disc}[1]{\ensuremath{\left||#1\right||}}
+\newcommand{\op}{\ensuremath{\mathrm{op}}}            % opposite category
+\newcommand{\disc}[1]{\ensuremath{\left||#1\right||}} % discrete category
+\newcommand{\then}{\mathbin{;}}                       % flipped composition
 
 % morphisms
 \newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
 \newcommand{\nat}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
-
-% flipped composition
-\newcommand{\then}{\mathbin{;}}
 
 % some standard categories
 \newcommand{\Set}{\cat{Set}}
@@ -152,6 +169,13 @@
 \newcommand{\PT}{\mcal{P}}
 
 \newcommand{\fin}[1]{\ensuremath{[#1]}}
+
+% generic categories
+\newcommand{\D}{\bbb{D}}
+
+% monoidal lifting
+\newcommand{\lifted}[1]{\hat{#1}}
+\newcommand{\lotimes}{\mathbin{\lifted{\otimes}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species

@@ -88,7 +88,9 @@ the shapes built from them, with some extra properties to
 guarantee that we really do get the same family of shapes no
 matter what set of labels we happen to choose.
 
-\begin{defn}
+\begin{defn}[Species \citep{joyal, bll}]
+\label{defn:species-set}
+
 A \term{species} $F$ is a pair of mappings which
 \begin{itemize}
 \item sends any finite set $U$ (of \term{labels}) to a set $F[U]$ (of
@@ -103,7 +105,6 @@ satisfying the following functoriality conditions:
 \item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
 \end{itemize}
 
-This definition is due to \citet{joyal}, as described in \citet{bll}.
 \end{defn}
 
 \begin{figure}
@@ -262,60 +263,65 @@ treeStructures =
 Using the language of category theory, we can give an equivalent, more
 concise definition of species:
 \begin{defn}
+  \label{defn:species-cat}
   A \term{species} is a functor $F : \B \to \Set$, where $\B$ is the
   groupoid of finite sets whose morphisms are bijections, and
   $\Set$ is the category of sets and (total) functions.
 \end{defn}
 
 \begin{rem}
-  Although the definition only says that a species $F$ sends a
-  bijection $\sigma : U \bij V$ to a \emph{function} $F[\sigma] : F[U]
-  \to F[V]$, functors preserve isomorphisms, so in fact every such
-  function must be a bijection.
+  Although Definitions \ref{defn:species-set} and
+  \ref{defn:species-cat} say only that a species $F$ sends a bijection
+  $\sigma : U \bij V$ to a \emph{function} $F\ \sigma : F\ U \to F\
+  V$, the functoriality of $F$ guarantees that $F\ \sigma$ is a
+  bijection as well. In particular, $(F\ \sigma)^{-1} = F\
+  (\sigma^{-1})$, since $F\ \sigma \comp F\ (\sigma^{-1}) = F\ (\sigma
+  \comp \sigma^{-1}) = F\ id = id$, and similarly $F\ (\sigma^{-1})
+  \comp F\ \sigma = id$.
 \end{rem}
 
-\section{Species from scratch}
-\label{sec:species-scratch}
+\subsection{Generalized species}
+\label{sec:constructive-species}
 
-There are several reasons to generalize the definition of species
-given in the previous section.  First, $\B$ and \Set enjoy many special
-properties as categories (for example, \Set is cartesian closed, has
-all limits and colimits, and so on).  It is enlightening to see
-precisely which properties are required in which situations, and we
-miss this entirely if we start with the kitchen sink.
+\begin{defn}
+  Recall that $\Type = \Type_0$ denotes the universe of types.  We
+  also denote by $\Type$ the category whose objects are values of
+  $\Type_0$ and morphisms are (typed) functions.
+\end{defn}
 
-More subtly, we wish to work in a constructive, computational setting,
-and the specific categories $\B$ and \Set are inappropriate, as seen
-\todo{reference stuff from finiteness section previously}.  We wish to
-work with more computationally concrete categories based in type
-theory, such as $\BT$, but in order to do so we need to show that they
-have the right properties.
+We claim that an appropriate encoding of species within homotopy type
+theory is given by $[\BT, \Type]$, the category of functors from $\BT$
+to $\Type$.  We cannot directly justify this by showing that
+$[\B,\Set]$ and $[\BT,\Type]$ are categorically equivalent, which is
+unlikely to be true.  For one, $\Set$ is ``too big'': there are many sets that
+do not correspond to any type definable in type theory.
 
-The idea is to start ``from scratch'' and build up a generic notion of
-species which support the operations we want.  Along the way, we will
-also get a much clearer picture of where the operations ``come from''.
-Much of the material in this chapter has been inspired by
-\citet{Kelly-operads} \todo{``Operads of J.P. May''},
-\todo{``Cartesian Closed Bicategory of Generalised Species of
-  Structure''}, and \todo{``Monoidal Functors, Species, and Hopf
-  Algebras''}, though the aim is for the current chapter to be at the
-same time more elementary and (in some ways) more general.
+However, most working mathematicians do not actually make use of such
+``exotic'' sets;  the constructions they care about
+are typically those which can indeed be encoded in type theory.  In
+order to justify $[\BT, \Type]$ as a constructive counterpart to $[\B,
+\Set]$, therefore, we must look at what operations and constructions
+are typically carried out on $[\B, \Set]$, and show that $[\BT,\Type]$
+supports them as well.
 
-Given two categories $\Lab$ and $\Str$, what can we say about functors
-$\Lab \to \Str$, and more generally about the functor category $[\Lab,
-\Str]$?  Of course, there is no point in calling functors $\Lab \to
-\Str$ ``species'' for just any old categories $\Lab$ and $\Str$.  But
-what properties must $\Lab$ and $\Str$ possess to make this
-interesting and worthwhile?  In particular, what properties must
-$\Lab$ and $\Str$ possess to enable the sorts of operations we
-typically want to do on species?  In each of the following sections,
-we will discuss some specific constructions on species (considered as
-functors $\B \to \Set$), and then generalize to arbitrary functor
-categories to see what properties are needed in order to define
-them---\ie\ where the constructions ``come from''---and give some
-specific examples.  One particular example that will be considered
-throughout is $[\BT, \Type]$, which, as we will see, makes a good case
-for a ``constructive counterpart'' to $[\B, \Set]$.
+To do this, we look carefully at common operations on species,
+generalize them to arbitrary functors $\Lab \to \Str$, and identify precisely
+what properties of $\Lab$ and $\Str$ are necessary to define them. In this
+way, we start ``from scratch'' and build up a generic notion of species that
+supports the operations we want.  In the process, we get a much clearer
+picture of where the operations ``come from''.
+In particular, $\B$ and \Set enjoy many special properties as
+categories (for example, \Set is cartesian closed, has all limits and
+colimits, and so on).  It is enlightening to see precisely which of these
+properties are required in which situations.
+
+After generalizing these common operations to arbitrary functor categories, we
+can justify our constructive definition of species by showing that the
+functor category [$\BT$,$\Type$] satisfies each required property.
+In the following, to keep these various functor categories
+straight, we use the terminology ``species'' for $[\B,\Set]$, ``generalized
+species'' for some abstract $[\Lab, \Str]$, and ``constructive species'' for
+$[\BT, \Type]$.
 
 \begin{rem}
   It will often be convenient to have recourse to the intuition of
@@ -325,21 +331,32 @@ for a ``constructive counterpart'' to $[\B, \Set]$.
   than shapes ``containing labels''.
 \end{rem}
 
-\section{Sum}
-\label{sec:sum}
+\section{Lifted monoids: sum and Cartesian product}
 
-One of the simplest operations on species is the \emph{sum} of two
-species. The intuition is that an $(F + G)$-shape is either an
-$F$-shape \emph{or} a $G$-shape (\pref{fig:sum}).  \todo{insert back
-  reference to some example(s)?} Formally:
+Two of the simplest operations on species are the \emph{sum} and
+\emph{Cartesian product}.  As we will see, these operations are
+structurally analogous: the only difference is that species sum arises
+from coproducts in $\Set$ (disjoint union), whereas the Cartesian
+product of species arises from products in $\Set$.
+
+\subsection{Species sum}
+
+The \emph{sum} of two species is given by their disjoint
+union: an $(F + G)$-shape is either an $F$-shape \emph{or} a
+$G$-shape (together with a tag so we can tell which).
 
 \begin{defn}
-  Given species $F, G : \B \to \Set$, we may form their sum $F + G$,
-  defined on objects by \[ (F + G)\ L \defeq F\ L + G\ L, \] where the
-  $+$ on the right hand side denotes the disjoint union (coproduct) of
-  sets, with the action on morphisms similarly given by \[ (F + G)\
-  \sigma \defeq F\ \sigma + G\ \sigma. \]
+  Given $F, G : \B \to \Set$, $F + G$ is defined on objects by \[ (F +
+  G)\ L \defeq F\ L \uplus G\ L, \] where $\uplus$ denotes disjoint
+  union (coproduct) of sets, and the action on morphisms \[ (F + G)\
+  \sigma \defeq F\ \sigma \uplus G\ \sigma, \] where $\uplus$ is
+  considered as a bifunctor in the evident way: $(f \uplus g)\ (\inl\
+  x) = \inl\ (f\ x)$ and $(f \uplus g)\ (\inr\ y) = \inr\ (g\ y)$.
 \end{defn}
+
+Thinking of species as functors in $[\P, \Set]$, we may
+say that an $(F+G)$-shape of size $n$ is either an $F$-shape of size
+$n$ or a $G$-shape of size $n$.
 
   \begin{figure}
     \centering
@@ -365,57 +382,178 @@ dia = theDia # centerXY # pad 1.1
   \end{figure}
 
 \begin{defn}
-  We may also define the \term{zero} or \term{empty} species,
-  $\Zero$, as the unique species with no shapes whatsoever.  That is,
+  The \term{zero} or \term{empty} species,
+  $\Zero$, is the unique species with no shapes whatsoever.  That is,
   on objects,
-  \begin{equation*}
-    \Zero\ L \defeq \varnothing,
-  \end{equation*}
+    $\Zero\ L \defeq \varnothing$,
   and on morphisms $\Zero$ sends every $\sigma$ to the unique function
   $\varnothing \to \varnothing$.
 \end{defn}
 
-% As a simple example, the species $\One + \X$ corresponds to the
-% familiar |Maybe| type from Haskell, with $\lab{\inl} \lab{\One}$
-% playing the role of |Nothing| and $\lab{\inr} \comp \lab{\cons{x}}$
-% playing the role of |Just|.  Note that $\LStr {\One + \X} L A$ is
-% only inhabited for certain $L$ (those of size $0$ or $1$), and moreover that
-% this size restriction determines the possible structure of an
-% inhabitant.
-%
-% Note, can't include the above if we haven't talked about 1 or X
-% yet.  And I now think a better way to organize things is by talking
-% about each fundamental monoidal construction along with its unit.
-% As for introduction forms, it's pretty trivial.
+One can check that $(+,\Zero)$ gives a symmetric monoidal structure to
+$[\B, \Set]$.
 
-It's not hard to check that $(+,\Zero)$ forms a commutative monoid
-structure on species (up to isomorphism).  Stepping back a bit, we can
-see that this monoidal structure on species arises straightforwardly
-from the corresponding monoidal structure on sets: the sum of two
-functors is defined as the pointwise sum of their outputs, and
-likewise \Zero, the identity for the sum of species, is defined as the
-functor which constantly, \ie pointwise, returns $\varnothing$, the
-identity for the sum of sets.
+Stepping back a bit, we can see that this monoidal structure on
+species arises straightforwardly from the corresponding monoidal
+structure on sets: the sum of two functors is defined as the pointwise
+sum of their outputs, and likewise \Zero, the identity for the sum of
+species, is defined as the functor which pointwise returns
+$\varnothing$, the identity for the coproduct of sets.  This general
+construction will be spelled out in \pref{sec:lifting-monoids}; but
+first, we turn to the formally similar operation of \emph{Cartesian
+  product}.
 
-\section{Lifting monoids}
+\subsection{Cartesian/Hadamard product}
+\label{sec:cartesian}
+
+$\Set$ also has products, given by $S \times
+T = \{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as
+the identity. (We may suppose there is some canonical
+choice of one-element set, $\{\star\}$; this is justified since all
+one-element sets are isomorphic in \Set.)
+\begin{defn}
+  The \term{Cartesian} or \term{Hadamard product} of species, is defined on
+  objects by $ (F \times G)\ L = F\ L \times G\ L. $
+\end{defn}
+An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
+on \emph{the same set of labels}.  There are several ways to think
+about this situation, as illustrated in \pref{fig:Cartesian-product}.
+One can think of two distinct shapes, with labels duplicated between
+them; one can think of the labels as \emph{pointers} or \emph{labels}
+for locations in a shared memory (to be explored more in
+\pref{sec:sharing}); or one can think of the shapes themselves as
+being superimposed.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=380]
+import           Data.Bits
+import           Data.List.Split
+import           Diagrams.TwoD.Layout.Tree
+import           Diagrams.TwoD.Path.Metafont
+
+import           SpeciesDiagrams
+
+mkLeaf :: IsName n => Diagram B R2 -> n -> Diagram B R2
+mkLeaf shp n = shp # fc white # named n
+
+tree2 nd
+  = maybe mempty (renderTree nd (~~))
+  . symmLayoutBin' (with & slVSep .~ 4 & slHSep .~ 6)
+  $ (BNode (1 :: Int) (BNode 2 (BNode 3 Empty (BNode 4 Empty Empty)) Empty) (BNode 5 (BNode 6 Empty Empty) (BNode 7 Empty Empty)))
+
+listL nd n = hcat . map nd $ [1 :: Int .. n]
+
+connectAll l1 l2 n perm =
+  withNames (map (l1 .>) [1 :: Int .. n]) $ \l1s ->
+  withNames (map (l2 .>) [1 :: Int .. n]) $ \l2s ->
+  applyAll (zipWith conn l1s (perm l2s))
+
+conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
+
+-- (mkLeaf shp . (l .>))
+
+sharedMem = vcat' (with & sep .~ 3)
+  [ hcat' (with & sep .~ 1)
+    [ tree2 (mkLeaf (circle 1) . ("l1" .>)) # centerY
+    , listL (mkLeaf (circle 1) . ("l2" .>)) 7 # centerY
+    ] # centerXY
+  , listL (mkLeaf (square 2) . ("s" .>)) 7 # centerXY
+  ]
+  # connectAll "l1" "s" 7 perm1
+  # connectAll "l2" "s" 7 perm2
+  # centerXY # pad 1.1
+
+perm1 = id
+perm2 = concat . map reverse . chunksOf 2
+
+asFun :: ([Int] -> [Int]) -> Int -> Int
+asFun perm i = perm [1..7] !! (i - 1)
+
+numbering = vcat' (with & sep .~ 3)
+  [ tree2 numbered # centerX
+  , listL (numbered . asFun perm2) 7 # centerX
+  ]
+  where
+    numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
+
+super = tree2 (mkLeaf (circle 1))
+  # cCurve 2 1 (1/4 @@@@ turn)
+  # cStr   1 4
+  # cCurve 4 3 (1/2 @@@@ turn)
+  # cStr   3 6
+  # cCurve 6 5 (1/4 @@@@ turn)
+  # cCurve 5 7 (0 @@@@ turn)
+  where
+    cCurve :: Int -> Int -> Angle -> Diagram B R2 -> Diagram B R2
+    cCurve n1 n2 a =
+      connectPerim'
+        (aSty & arrowShaft .~ arc (0 @@@@ turn) (1/5 @@@@ turn) # reverseTrail)
+        n1 n2
+        a (a ^+^ (1/4 @@@@ turn))
+    cStr :: Int -> Int -> Diagram B R2 -> Diagram B R2
+    cStr   = connectOutside' aSty
+    aSty   = with & shaftStyle %~ dashing [0.3,0.3] 0 . lw 0.2
+                  & arrowHead .~ tri
+                  & headSize .~ 1
+
+dia
+  = frame 0.5 . centerXY . lw 0.1
+  . hcat' (with & sep .~ 2) . map centerXY
+  $
+  [ numbering
+  , sharedMem
+  , super
+  ]
+  \end{diagram}
+  %$
+  \caption{Three views on Cartesian product of species}
+  \label{fig:Cartesian-product}
+\end{figure}
+
+\begin{defn}
+  The species of \emph{sets}, $\E$, is defined as the constant functor
+  yielding $\{\star\}$, that is, $\E\ L = \{\star\}$.
+\end{defn}
+
+\begin{rem}
+  $\E$ is called the \term{species of sets} since there is
+  exactly one structure on any set of labels, which can be
+  thought of as the set of labels itself, with no additional
+  structure.  In fact, as all one-element sets are isomorphic, we
+  may define $\E\ L = \{L\}$.
+\end{rem}
+
+\begin{prop}
+  Up to isomorphism, $\E$ is the identity for Cartesian product.
+\end{prop}
+
+\todo{Forward reference to material on closedness?}
+
+\subsection{Lifting monoids}
 \label{sec:lifting-monoids}
 
-\newcommand{\lifted}[1]{\hat{#1}}
-\newcommand{\lotimes}{\mathbin{\lifted{\otimes}}}
-
-This same construction works in a much more general setting.  In fact,
-any monoidal structure on a category $\Str$ lifts pointwise to a
-corresponding monoidal structure on the functor category $[\Lab,
-\Str]$. The basic idea is exactly the same as the standard Haskell
-type class instance
+Both these constructions generalize readily.
+\begin{prop}
+Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a category
+$\Str$ lifts pointwise to a monoidal structure $(\lotimes,
+\lifted I, \lifted \alpha, \lifted \lambda, \lifted \rho)$ on
+$[\Lab, \Str]$.
+\end{prop}
+\noindent The basic idea is exactly the same as the standard Haskell type class
+instance
 \begin{spec}
 instance Monoid a => Monoid (e -> a) where
   mempty         = \ _ -> mempty
   f `mappend` g  = \a -> f a `mappend` g a
 \end{spec}
-but quite a bit more general.  This construction will be entirely
-unsurprising to a category theorist, but is included here for
-completeness.
+but quite a bit more general.  To understand the basic intuition
+behind the proof, the reader may enjoy proving that the above |Monoid|
+instance for |e -> a| satisfies the monoid laws if the instance for
+|a| does.
+
+The formal construction and proof will be entirely unsurprising to a
+category theorist, but is included here for completeness.
 \begin{defn}
   Given a monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on
   a category $\Str$, define $(\lifted{\otimes}, \lifted{I},
@@ -447,18 +585,37 @@ completeness.
   \item $\lotimes$ also sends pairs of natural transformations $\phi :
     F \nt G : \Lab \to \Str$, $\psi : F' \nt G' : \Lab \to \Str$ to a
     natural transformation $\phi \lotimes \psi : F \lotimes F' \nt G
-    \lotimes G'$, defined by \todo{finish}. Naturality of $\phi
-    \lotimes \psi$ is given by \todo{finish}.
-
-% \[ \xymatrix{ F\ L
-%       \ar[r]^{\phi_L \otimes \psi_L} \ar[d]_{F f} & G\ L \ar[d]^{G f} \\
-%       F\ L' \ar[r]_{\phi_{L'} \otimes \psi_{L'}} & G\ L' } \]
+    \lotimes G'$.  The component of $\phi \lotimes \psi$ at an object
+    $L \in \Lab$ is a morphism $\mor {(F \lotimes F')\ L} {(G \lotimes
+      G')\ L} = \mor {F\ L \otimes F'\ L} {F\ L \otimes G'\ L}$,
+    similarly defined by $\phi_L \otimes \psi_L$.  Naturality of $\phi
+    \lotimes \psi$ is thus given by
+    \[ \xymatrixcolsep{5pc}
+       \xymatrix{
+         F\ L \otimes F'\ L
+           \ar[r]^{\phi_L \otimes \psi_L}
+           \ar[d]_{F f \otimes F' f}
+       & G\ L \otimes G'\ L
+           \ar[d]^{G f \otimes G' f}
+       \\
+         F\ L' \otimes F'\ L'
+           \ar[r]_{\phi_{L'} \otimes \psi_{L'}}
+       & G\ L' \otimes G'\ L'
+       }
+    \]
+    which commutes by naturality of $\phi$ and $\psi$ and
+    functoriality of $\otimes$.
     \end{itemize}
 
-    Functoriality of $\lotimes$ XXX:
+    We must show that $\lotimes$ is a bifunctor.
 
     \begin{align*}
-      id \lotimes id =
+      (id \lotimes id)_L = id_L \otimes id_L = ?
+    \end{align*}
+    \todo{Work out exactly what kind of identities we're talking about here\dots}
+
+    \begin{align*}
+      \todo{Preserves composition of natural transformations.}
     \end{align*}
 
   \item $\lifted{I} \in [\Lab,\Str]$ is the constant functor $\Delta_I$.
@@ -484,15 +641,27 @@ completeness.
   \item If $\otimes$ is symmetric, so is $\lotimes$.
   \item If $\otimes$ is a categorical product, so is $\lotimes$.
   \item If $\otimes$ is a categorical coproduct, so is $\lotimes$.
+  \item \todo{distributive}
   \end{itemize}
 \end{prop}
+\todo{\Set is distributive, in the sense that the canonical morphism
+  $X \times Y + X \times Z \to X \times (Y + Z)$ is an isomorphism.
+  Is $[\B, \Set]$ distributive in the same way?  If so, does lifting
+  monoids always preserve distributivity? Answers: yes, and yes.}
+
 \begin{proof}
   \todo{Finish}
 \end{proof}
 
-Since $(+,\varnothing)$ is a coproduct structure on $\Set$, it follows
-that $(+, \Zero)$ is in fact a coproduct structure on the category of
-species.
+\begin{ex}
+  We note that lifting coproducts in $\Set$ to $[\B,\Set]$ yields the
+  $(+, \Zero)$ structure on species, and likewise lifting products
+  yields $(\times, \E)$, Cartesian product.  Since
+  $(\uplus,\varnothing)$ is a coproduct structure on $\Set$, it
+  follows that $(+, \Zero)$ is in fact a coproduct structure on the
+  category $[\B,\Set]$ of species, and likewise $(\times, \One)$ is a
+  categorical product.
+\end{ex}
 
 \begin{ex}
   Take $\Lab = \cat{1}$ (the trivial category with one object and one
@@ -567,92 +736,52 @@ species.
   \stackrel{f \oplus g}{\longrightarrow} (S_1 \oplus T_1) \] This is
   possible since the monoidal operation $\oplus$ is, by definition,
   required to be a bifunctor.
-
-  \todo{Explain how the above plays out in the case of species.}
 \end{ex}
 
-\section{Cartesian/Hadamard product}
-\label{sec:cartesian}
+\begin{ex}
+  In $\Type$, the coproduct of two types $A$ and $B$ is given by their
+  sum, $A + B$, with the void type $\TyZero$ serving as the identity.
+  We may thus lift this coproduct structure to the functor category
+  $[\BT, \Type]$---or indeed to any $[\Lab, \Type]$, since no
+  requirements are imposed on the domain category.
+\end{ex}
 
-Disjoint union is not the only monoidal structure on $\Set$. In
-addition to coproducts $\Set$ also has products, given by $S \times T
-= \{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as the
-identity. (For convenience, we may suppose there is some canonical
-choice of one-element set, $\{\star\}$; this is justified since all
-one-element sets are isomorphic in \Set.)
-\begin{defn}
-  By the discussion of the previous section, this automatically lifts
-  to a pointwise product structure on species, known as the
-  \term{Cartesian} or \term{Hadamard product}: \[ (F \times G)\ L = F\
-  L \times G\ L. \]
-\end{defn}
-In the same way that an $(F + G)$-shape is either an $F$-shape
-\emph{or} a $G$-shape on a given set of labels, an $(F \times
-G)$-shape is both an $F$-shape \emph{and} a $G$-shape, on \emph{the
-  same set of labels} (\pref{fig:Cartesian-product-dup}).  As
-illustrated in the figure, there are several intuitive ways to think
-about this situation. One can think of two distinct shapes, with
-labels duplicated between them; one can think of the labels as
-\emph{pointers} or \emph{labels} for locations in a shared memory (to
-be explored more in \pref{sec:sharing}); or one can think of the
-shapes themselves as being superimposed.
+\begin{ex}
+  Similarly, categorical products in $\Type$ are given by product
+  types $A \times B$, with the unit type $\TyOne$ as the identity.
+  This then lifts to products on $[\BT,\Type]$ (or, again, any
+  $[\Lab,\Type]$) which serve as an analogue of Cartesian product of
+  species.
+\end{ex}
 
-\begin{figure}
-  \centering
-  \todo{Make a diagram.}
-  \caption{Cartesian species product}
-  \label{fig:Cartesian-product-dup}
-\end{figure}
+\todo{give some examples with other categories. $1/\Set$,
+  \ie\ pointed sets with smash product? $\cat{Vect}$?}
 
-\begin{defn}
-  Lifting the identity element pointwise gives the species \[ \E\ L =
-  \{\star\}, \] where every bijection sent to the unique function
-  $\{\star\} \to \{\star\}$.  By construction, $\E$ is the identity
-  for Cartesian product of species.
-\end{defn}
-\begin{rem}
-  $\E$ is usually called the \term{species of sets} since there is
-  exactly one structure on any set of labels, which can intuitively be
-  thought of as the set of labels itself, with no additional
-  structure.  In fact, since all one-element sets are isomorphic, we
-  may as well define \[ \E\ L = \{L\}. \]
-\end{rem}
-
-Of course, since Cartesian product is the categorical product in \Set,
-Cartesian/Hadamard product is also the product in the category of
-species.  Interestingly, there is a different notion of species
-product (though not a categorical product) which is in some sense more
-natural than Cartesian product, even though it is more complicated; it
-will be explored in the next section.
-
-\todo{Forward reference to material on closedness?}
-
-\todo{give some examples with other categories. $\Type$.  $1/\Set$,
-  \ie\ pointed sets with smash product?}
-
-\todo{\Set is distributive, in the sense that the canonical morphism
-  $X \times Y + X \times Z \to X \times (Y + Z)$ is an isomorphism.
-  Is $[\B, \Set]$ distributive in the same way?  If so, does lifting
-  monoids always preserve distributivity? Answers: yes, and yes.}
-
-\section{Partitional/Cauchy product}
-\label{sec:product}
+\section{Day convolution: partitional and arithmetic product}
+\label{sec:day}
 
 There is another notion of product for species, the \term{partitional}
-or \term{Cauchy} product, which is more generally useful than
-Cartesian product, even though it is more complex to define.  In
-particular, when species are extended to labelled structures
-(\pref{chap:labelled}) it is the partitional product, rather than
-Cartesian, which gives rise to the usual notion of product on
-algebraic data types.  For this reason partitional product is often
-simply referred to as ``product'', without any modifier, although as
-we have seen it is Cartesian product, rather than partitional product,
-which is actually a categorical product.
+or \term{Cauchy} product.  It it is the partitional product, rather
+than Cartesian product, which corresponds to the product of generating
+functions and which gives rise to the usual notion of product on
+algebraic data types.  For these reasons, partitional product is often
+simply referred to as ``product'', without any modifier.
 
-Intuitively, the partitional product $F \sprod G$ of two species $F$
-and $G$ consists of paired $F$- and $G$-shapes, but with a twist:
-instead of being replicated, as in Cartesian product, the labels are
-\emph{partitioned} between the two shapes (\pref{fig:product}).
+There is also another less well-known product, \term{arithmetic
+  product} \cite{Maia2008arithmetic}, which can be thought of as a
+symmetric form of composition.  These two products arise in an
+analogous way, via a categorical construction known as \emph{Day
+  convolution}.
+
+\subsection{Partitional/Cauchy product}
+\label{sec:partitional-product}
+
+
+The partitional product $F \sprod G$ of two species $F$
+and $G$ consists of paired $F$- and $G$-shapes %, but with a twist:
+% instead of being replicated, as in Cartesian product, the labels are
+with the labels \emph{partitioned} between the two shapes
+(\pref{fig:product}).
 
 \todo{picture of a pair of trees with disjoint labels, or something
   like that.}
@@ -679,20 +808,20 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:product}
   \end{figure}
 
-Formally, the partitional product of species
 \begin{defn}
   The \term{partitional} or \term{Cauchy product} of two species $F$
   and $G$ is the functor defined on objects by \[ (F \sprod G)\ L =
-  \sum_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2 \] where $\Sigma$
-  denotes simply an indexed coproduct of sets, and $L_1,L_2 \vdash L$
-  denotes that $L_1$ and $L_2$ constitute a partition of $L$, that is,
-  $L_1 \union L_2 = L$ and $L_1 \intersect L_2 = \varnothing$. On
-  bijections, $F \cdot G$ uses the action of $F$ on the restriction of
-  the bijections to $L_1$, and similarly for $G$ and $L_2$.
+  \biguplus_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2 \] where
+  $\biguplus$ denotes an indexed coproduct of sets, and $L_1,L_2
+  \vdash L$ denotes that $L_1$ and $L_2$ constitute a partition of
+  $L$, (\ie $L_1 \union L_2 = L$ and $L_1 \intersect L_2 =
+  \varnothing$). On bijections, $F \cdot G$ uses the action of $F$ on
+  the restriction of the bijections to $L_1$, and similarly for $G$
+  and $L_2$.
 \end{defn}
 
-The identity for partitional product should evidently be some species
-$\One$ such that \[ (\One \cdot G)\ L = \left(\sum_{L_1,L_2 \vdash L}
+The identity for partitional product needs to be some species $\One$
+such that \[ (\One \cdot G)\ L = \left(\biguplus_{L_1,L_2 \vdash L}
   \One\ L_1 \times G\ L_2 \right) \iso G\ L. \] The only way for this
 isomorphism to hold naturally in $L$ is if $\One\ \varnothing =
 \{\star\}$ (yielding a summand of $G\ L$ when $\varnothing+L = L$) and
@@ -709,14 +838,100 @@ other summands).
   \]
 \end{defn}
 
-Generalizing partitional product over arbitrary functor categories is
-much more complex than generalizing sum and Cartesian product, and
-requires turning to a construction known as \term{Day convolution}.
+\subsection{Arithmetic product}
+\label{sec:arithmetic-product}
 
-\section{Day convolution}
+\newcommand{\aprod}{\boxtimes}
+
+There is another, more recently discovered monoidal structre on
+species known as \emph{arithmetic product} \cite{Maia2008arithmetic}.
+The arithmetic product of species $F$ and $G$, written $F \aprod G$,
+can intuitively be thought of as an ``$F$-assembly of cloned
+$G$-shapes'', that is, an $F$-shape containing multiple copies of a
+single $G$-shape (\pref{fig:arithmetic-product}).  Unlike the usual
+notion of composition, where the $F$-shape would be allowed to contain
+many different $G$-shapes, this notion is symmetric: an $F$-assembly
+of cloned $G$-shapes is isomorphic to a $G$-assembly of cloned
+$F$-shapes.  Another intuitive way to think of the arithmetic product,
+which points out the symmetry more clearly, is to think of a
+rectangular matrix of labels, together with an $F$-shape labelled by
+the rows of the grid, and a $G$-shape labelled by the columns.
+
+\todo{Give more formal definition and examples.}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=380]
+import           Diagrams.TwoD.Layout.Tree
+
+mkLeaf :: IsName n => Diagram B R2 -> n -> Diagram B R2
+mkLeaf shp n = shp # fc white # named n
+
+grays  = map (\k -> blend k black white) [0, 0.2, 0.8, 1, 0.5]
+shapes = [circle 0.2, triangle 0.4, square 0.4]
+
+grid = vcat' (with & sep .~ 0.5)
+  [ tree3 (\n -> mkLeaf (circle 0.4 # fc (grays !! (n-1))) n) # translateX 3.4
+  , hcat' (with & sep .~ 0.5)
+    [ list2 (\n -> (mkLeaf ((shapes !! (n-1)) # rotateBy (1/4) <> circle 0.4) n)) # rotateBy (3/4)
+    , theGrid
+    ]
+  ]
+  where
+    theGrid :: Diagram B R2
+    theGrid = vcat . map hcat $
+      [ [ (shapes !! i) # fc (grays !! j) <> square 1
+        || j <- [1,0,3,2,4]
+        ]
+      || i <- [0..2]
+      ]
+
+assembly1 =
+  tree3 (mkLeaf $ enrect (list2 (mkLeaf (circle 0.4)) # centerX # scale 0.5))
+
+assembly2 = hcat' (with & sep .~ 0.4)
+  (map (fc white . enrect . (mkLeaf (tree3 (mkLeaf (circle 0.4)) # centerXY # scale 0.5))) [1 .. 3 :: Int])
+  <>
+  hrule 7 # alignL
+
+enrect d = d <> roundedRect (width d + 0.2) (height d + 0.2) 0.2
+
+tree3 nd
+  = maybe mempty (renderTree nd (~~))
+  . uniqueXLayout 1 1
+  $ (BNode (1 :: Int) (BNode 2 Empty Empty) (BNode 3 (BNode 4 Empty Empty) (BNode 5 Empty Empty)))
+
+list2 nd = hcat' (with & sep .~ 1 & catMethod .~ Distrib)
+  (map nd [1 :: Int .. 3])
+  <>
+  hrule 2 # alignL
+  where
+    aSty = with & arrowHead .~ noHead
+
+dia = frame 0.2 . centerXY . hcat' (with & sep .~ 2) . map centerXY $
+  [ grid
+  , assembly1 # scale 1.3
+  , assembly2
+  ]
+  # lw 0.05
+  \end{diagram}
+  \caption{Three views on arithmetic product of species}
+  \label{fig:arithmetic-product}
+\end{figure}
+
+\bay{How can we say that we are using ``the same'' ``product-like''
+  monoidal structure in all these different categories?  Are they
+  related by monoidal functors?}
+
+\subsection{Day convolution}
 \label{sec:day-convolution}
 
-The essential idea of Day convolution, first described by Brian
+Just as sum and Cartesian product were seen to arise from the same
+construction applied to different monoids, both partitional and
+arithmetic product arise from \emph{Day convolution}, applied to
+different monoidal structures on $\B$.
+
+The essential idea, first described by Brian
 Day~\cite{day-convolution}, is to construct a monoidal structure on a
 functor category $[\Lab, \Str]$ based primarily on a monoidal
 structure on the \emph{domain} category $\Lab$.  In particular, Day
@@ -725,7 +940,8 @@ convolution requires
 \item a monoidal structure $\oplus$ on the domain $\Lab$;
 \item that $\Lab$ be \emph{enriched over} $\Str$, \ie\ for any two
   objects $L_1,L_2 \in \Lab$ there is a hom-object $\Lab(L_1,L_2) \in
-  \Str$ rather than a set;
+  \Str$ rather than a set, with approrpiate coherent notions of
+  composition and identity morphisms;
 \item a symmetric monoidal structure $\otimes$ on the codomain $\Str$;
 \item that $\Str$ be cocomplete, and in particular
   have coends over $\Lab$.
@@ -742,19 +958,25 @@ product.
   F\ L_1 \otimes G\ L_2 \otimes \Lab(-, L_1 \oplus L_2). \]
 \end{defn}
 
-This operation is associative, and has as a unit $j(I)$ where $I$ is
-the unit for $\oplus$ and $j : \Lab \to [\Lab^{\text{op}}, \Str]$ is the Yoneda
-embedding, that is, $j(L) = \Lab(-,L)$.
-
-\todo{Argh! Some inconsistency going on here with $\Lab$ vs
-  $\Lab^{op}$; the problem is that \eg\ $\B$ and $\P$ are self-dual so
-  the problem doesn't show up with them.  Perhaps we should be using
-  $[\Lab^{\mathrm{op}}, \Str]$?}
+\begin{rem}
+  Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
+  coend over the product category $\Lab \times \Lab$.
+\end{rem}
 
 \begin{rem}
   Note that there are only covariant occurrences of $L_1$ and $L_2$ in
-  the above definition, which simplifies the definition of the coend.
+  the above definition, which simplifies the definition of the
+  coend. \todo{flesh out}
 \end{rem}
+
+\begin{rem}
+  Since groupoids are self-dual, we may ignore the $-^\op$ in the
+  common case that $\Lab$ is a groupoid.
+\end{rem}
+
+This operation is associative, and has as a unit $j(I)$ where $I$ is
+the unit for $\oplus$ and $j : \Lab \to [\Lab^{\text{op}}, \Str]$ is the Yoneda
+embedding, that is, $j(L) = \Lab(-,L)$.
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
@@ -763,11 +985,12 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   over $\Set$, which is also cocomplete and has a symmetric monoidal
   structure given by Cartesian product.
 
-  Specializing the definition to this case, we obtain
+  Specializing the definition to this case, and expressing the coend
+  as a quotient, we obtain
   \begin{align*}
     (F \cdot G)(L) &= \int^{L_1, L_2} F\ L_1 \times G\ L_2 \times
     (L \iso L_1 + L_2) \\
-    &= \left( \sum_{L_1, L_2} F\ L_1 \times G\ L_2 \times (L \iso L_1
+    &= \left( \biguplus_{L_1, L_2} F\ L_1 \times G\ L_2 \times (L \iso L_1
       + L_2) \right) \Big/ \sim
   \end{align*}
   where every pair of bijections $\sigma_i : L_i \iso L_i'$ induces
@@ -780,7 +1003,7 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   the equivalence classes can be represented canonically by a
   partition of $L$ into two disjoint subsets, giving rise to the
   earlier definition: \[ (F \sprod G)\ L =
-  \sum_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2. \]
+  \biguplus_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2. \]
 
   Also, in this case, the identity element is $j(I) = j(\varnothing) =
   \B(-,\varnothing)$, that is, the species which takes as input a
@@ -791,7 +1014,8 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \end{ex}
 
 \begin{ex}
-  $\B$ and $\P$ are equivalent, of course, but it is still instructive
+  \todo{edit this. Monoidal structure on $\P$??}
+  Although $\B$ and $\P$ are equivalent, it is still instructive
   to work out the general definition in the case of $\P$.  In this
   case, we have a monoidal structure on $\P$ given by addition, with
   $f + g : \Fin (m + n) \iso \Fin (m + n)$ defined in the evident way,
@@ -809,74 +1033,65 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \end{ex}
 
 \begin{ex}
-  We should verify that $\BT$ and $\Type$ have the right properties.
+  There is another monoidal structure on $\B$ corresponding to the
+  Cartesian product of sets. If we instantiate the framework of Day
+  convolution with this product-like monoidal structure ---but
+  keep everything else the same, in particular continuing to use
+  products on $\Set$---we obtain the arithmetic product.
+\end{ex}
+
+\begin{ex}
+  Let's examine this in detail in the case of $[\P,\Set]$.  The
+  monoidal structure on $\P$ is defined on objects as $m \otimes n =
+  mn$.  On morphisms, given $f : \fin m \bij \fin m$ and $g : \fin n
+  \bij \fin n$, we have $f \otimes g : \fin{mn} \bij \fin{mn}$ defined
+  by \todo{finish}.
+
+  Instantiating the definition of Day convolution yields
+  \begin{align*}
+    (F \boxtimes G)\ n &= \int^{n_1,n_2} F\ n_1 \times G\ n_2 \times
+    \P(n, n_1n_2) \\
+    &= \int^{n_1,n_2} F\ n_1 \times G\ n_2 \times (\fin n \bij \fin
+    {n_1 n_2}) \\
+    &= ? \\
+    &= \biguplus_{d \mid n} F\ d \times G\ (n/d)
+  \end{align*}
+
+  \todo{Finish. where $\otimes$ denotes the product monoidal structure
+    on $\B$.  We cannot write this quite as nicely as partitional
+    product, since there is no canonical way to decompose}
+\end{ex}
+
+\begin{ex}
+  It remains to verify that $\BT$ and $\Type$ have the right properties.
   \begin{itemize}
-  \item \todo{Monoidal coproduct structure on $\BT$}
+  \item Like $\B$, there are monoidal structures on $\BT$
+    corresponding to the coproduct and product of types. It is worth
+    noting, however, that there are \emph{many} monoidal structures
+    corresponding to each. A monoidal operation on $\BT$ does not
+    simply combine two types into their coproduct or product, but also
+    combines their finiteness evidence into corresponding evidence for
+    the combined type, and there are many ways to accomplish this.
   \item $\BT$ is indeed enriched over $\Type$, since the class of
     arrows between $(A,m,i)$ and $(B,n,j)$ is given by the type $A
     \iso B$.
-  \item There is a symmetric monoidal structure on $\Type$ given by
-    the product of types.
+  \item We have already seen that there is a symmetric monoidal
+    structure on $\Type$ given by the product of types.
   \item The last condition is the most interesting: we need to say
-    what a coend is in $\Type$. \todo{pushouts as HITs, weak
-      Sigma-types, \dots ?}
+    what a coend over $\BT$ is in $\Type$. In fact, in this case a
+    coend is just a $\Sigma$-type!  This is because the morphisms in
+    $\BT$ are paths, and hence the required identifications between
+    inhabitants of the $\Sigma$-type are already present---they are
+    induced by transport of paths in $\BT$. \todo{flesh out more}
   \end{itemize}
 
-  Given $F,G \in [\B,\Type]$, we can thus instantiate the definition
-  of Day convolution to obtain
-  \begin{align*}
-    (F \cdot G)(L) &= \sum_{L_1, L_2} F\ L_1 \times G\ L_2 \times
-    (L \iso L_1 + L_2) \\
-  \end{align*}
-  \todo{the above needs to be a \emph{weak} Sigma-type.  Need some
-    different notation.  Is there already standard notation?}
+  Given $F,G \in [\BT,\Type]$, we can instantiate the definition
+  of Day convolution to get
+  \[ (F \cdot G)\ L = \sum_{L_1, L_2} F\ L_1 \times G\ L_2 \times (L
+  \iso L_1 + L_2), \] and similarly for generalized arithmetic
+  product.
+
 \end{ex}
-
-\todo{Show that $\BT/\PT$ along with \Type\ have the right properties,
-instantiate framework to show how it comes out.}
-
-\section{Arithmetic product}
-\label{sec:arithmetic-product}
-
-There is another monoidal structure on $\B$ (and similarly on $\P$ and
-$\N$) corresponding to the \emph{product} of sets/natural numbers.  If
-we instantiate the framework of Day convolution with this product-like
-monoidal structure instead of the coproduct-like structure used to
-define partitional product---but keep everything else the same, in
-particular continuing to use products on $\Set$---we obtain an
-operation known as \term{arithmetic product}
-\citep{arithmetic-product}.
-
-Let's examine this in detail in the case of $[\P,\Set]$.  The monoidal
-structure on $\P$ is defined on objects as $m \otimes n = mn$.  On
-morphisms, given $f : \fin m \bij \fin m$ and $g : \fin n \bij \fin
-n$, we have $f \otimes g : \fin{mn} \bij \fin{mn}$ defined by \todo{finish}.
-
-Instantiating the definition of Day convolution yields
-\begin{align*}
-  (F \boxtimes G)_n &= \int^{n_1,n_2} F_{n_1} \times G_{n_2} \times
-  \P(n, n_1n_2) \\
-  &= \int^{n_1,n_2} F_{n_1} \times G_{n_2} \times (\fin n \bij \fin
-  {n_1 n_2}) \\
-  &= ? \\
-  &= \sum_{d \mid n} F_d \times G_{n/d}
-\end{align*}
-
-% where $\otimes$ denotes the product monoidal structure on
-% $\B$.  We cannot write this quite as nicely as partitional product,
-% since there is no canonical way to decompose
-
-The intuition behind this operation is that we end up with a
-``matrix'' of labels, with an $F$-shape on the ``rows'' and a
-$G$-shape on the ``columns''.
-
-\todo{picture}
-
-\todo{examples}
-
-\bay{How can we say that we are using ``the same'' ``product-like''
-  monoidal structure in all these different categories?  Are they
-  related by monoidal functors?}
 
 \section{Composition}
 \label{sec:composition}

@@ -42,8 +42,6 @@ in mathematical notation.
 
 %% XXX remove me
 \newcommand{\List}{\cons{List}}
-\newcommand{\inl}{\cons{inl}}
-\newcommand{\inr}{\cons{inr}}
 \newcommand{\StoreNP}{\mapsto}
 
 \todo{Edit. Dumped here from paper.}
