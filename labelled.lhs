@@ -125,3 +125,13 @@ dia = vcat' (with & sep .~ 5)
   \caption{Superimposing a tree and a list on shared data}
   \label{fig:tree-list-cp}
 \end{figure}
+
+\todo{Examples. Bounded tree width.  Generic programming.}
+
+\todo{Apply combinatorics?  e.g. generating trees.  Random generation,
+  Boltzmann sampling...}
+
+\todo{Stick in a bit of the generating functions story?  Just enough
+  to show where it's going?  With some applications to enumeration or
+  counting etc.  Maybe put it in a future work section---can be very
+  concrete.}
