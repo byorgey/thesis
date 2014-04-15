@@ -157,6 +157,7 @@
 % morphisms
 \newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
 \newcommand{\nt}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
+\newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
 
 % some standard categories
 \newcommand{\Set}{\cat{Set}}

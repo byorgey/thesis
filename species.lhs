@@ -554,6 +554,9 @@ instance for |e -> a| satisfies the monoid laws if the instance for
 
 The formal construction and proof will be entirely unsurprising to a
 category theorist, but is included here for completeness.
+
+\todo{This definition and proof feels repetitive in some fundamental
+  way.  Is there an easier way to present it??}
 \begin{defn}
   Given a monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on
   a category $\Str$, define $(\lifted{\otimes}, \lifted{I},
@@ -574,13 +577,13 @@ category theorist, but is included here for completeness.
       and
       \begin{sproof}
         \stmt{(F \lotimes G) (f \comp g)}
-        \reason{=}{definition of $\lotimes$}
+        \reason{=}{$\lotimes$ definition}
         \stmt{F\ (f \comp g) \otimes G\ (f \comp g)}
-        \reason{=}{funtoriality of $F$, $G$}
+        \reason{=}{$F$, $G$ functors}
         \stmt{(F\ f \comp F\ g) \otimes (G\ f \comp G\ g)}
-        \reason{=}{functoriality of $\otimes$}
+        \reason{=}{$\otimes$ functor}
         \stmt{(F\ f \otimes G\ f) \comp (F\ g \otimes G\ g)}
-        \reason{=}{definition of $\lotimes$}
+        \reason{=}{$\lotimes$ definition}
         \stmt{(F \lotimes G)\ f \comp (F \lotimes G)\ g.}
       \end{sproof}
 
@@ -617,20 +620,24 @@ category theorist, but is included here for completeness.
     and
     \begin{sproof}
       \stmt{((\phi \comp \phi') \lotimes (\psi \comp \psi'))_L}
-      \reason{=}{definition of $\lotimes$}
+      \reason{=}{$\lotimes$ definition}
       \stmt{(\phi \comp \phi')_L \otimes (\psi \comp \psi')_L}
       \reason{=}{definition of vertical composition \todo{check}}
       \stmt{(\phi_L \comp \phi'_L) \otimes (\psi_L \comp \psi'_L)}
-      \reason{=}{functoriality of $\otimes$}
+      \reason{=}{$\otimes$ functor}
       \stmt{(\phi_L \otimes \psi_L) \comp (\phi'_L \otimes \psi'_L)}
-      \reason{=}{definition of $\lotimes$}
-      \stmt{(\phi \lotimes \psi)_L \comp (\phi' \lotimes \psi'}
+      \reason{=}{$\lotimes$ definition}
+      \stmt{(\phi \lotimes \psi)_L \comp (\phi' \lotimes \psi')}
     \end{sproof}
 
   \item $\lifted{I} \in [\Lab,\Str]$ is the constant functor $\Delta_I$.
-  \item $\lifted{\alpha}$ \todo{finish}
-  \item $\lifted{\lambda}$ \todo{finish}
-  \item $\lifted{\rho}$ \todo{finish}
+  \item Define $\lifted{\alpha}_{F,G,H} : \ntiso {(F \lotimes G) \lotimes H}
+    {F \lotimes (G \lotimes H)}$ by $(\lifted \alpha_{F,G,H})_L =
+    \alpha_{FL,GL,HL}$. \todo{Need to show $\lifted{\alpha}$
+      is a natural isomorphism, and for any $F,G,H$,
+      $\lifted{\alpha}_{F,G,H}$ is a natural transformation. (?)}
+  \item Similarly, $(\lifted{\lambda}_F)_L = \lambda_{FL}$ and
+    $(\lifted{\rho}_F)_L = \rho_{FL}$.
   \end{itemize}
 \end{defn}
 
