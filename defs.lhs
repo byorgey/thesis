@@ -192,6 +192,7 @@
 \newcommand{\Par}{\Sp{Par}}
 \newcommand{\Bag}{\Sp{E}}
 \newcommand{\Cyc}{\Sp{C}}
+\newcommand{\Bin}{\Sp{B}}
 
 \newcommand{\Zero}{\msf{0}}
 \newcommand{\One}{\msf{1}}
@@ -207,8 +208,8 @@
 
 \newcommand{\unl}[1]{\widetilde{#1}}
 
-\newcommand{\Lab}{\bbb{L}}
-\newcommand{\Str}{\bbb{S}}
+\newcommand{\Lab}{\mathfrak{L}}
+\newcommand{\Str}{\mathfrak{S}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Comments

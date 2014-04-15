@@ -5,111 +5,201 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
-The theory of species is a unified theory of \emph{structures}, or as
-a programmer might say, \emph{containers}. By a \emph{structure} we
-mean some sort of ``shape'' containing \emph{locations} (or
-\emph{positions}). \pref{fig:example-structures} shows two different
-structures, each with eight locations.
+The theory of combinatorial species, introduced by \citet{joyal}, is a
+unified theory of \term{combinatorial structures} or \term{shapes}.
+It was originally intended as a unified framework for algebraically
+describing combinatorial structures of interest, and in particular one
+which gave new justification and a unifying context for an existing
+body of techniques involving \term{generating functions}. It is hoped
+that the beautiful theory of generating functions will also prove a
+rich seam of material to mine for computational significance. However,
+that is left to future work; this dissertation instead focuses on the
+idea of \term{labels}.
+
+One of Joyal's great insights in formulating the theory of species was
+to take the notion of \emph{labelled} structures as fundamental, and
+to build other notions (such as \emph{unlabelled} structures) on top
+of it.  Species fundamentally describe labelled objects; for example,
+\pref{fig:example-labelled} shows two representative examples, a
+labelled tree and a labelled ``octopus''.  In these examples the
+integers $\{0, \dots, 7\}$ are used as labels, but in general, labels
+can be drawn from any set.
 
 \begin{figure}
 \centering
 \begin{diagram}[width=250]
 import SpeciesDiagrams
-dia = hcat [octo [0..7], strutX 4, tree # centerXY]
+dia = hcat [tree # centerXY, strutX 4, octo [0..7]]
     # centerXY
     # pad 1.1
 \end{diagram}
-\caption{Example structures} \label{fig:example-structures}
+\caption{Representative labelled shapes} \label{fig:example-labelled}
 \end{figure}
 
-\begin{rem}
-  It is important to keep in mind that we are talking about structures
-  with \emph{labeled locations}; the numbers in
-  \pref{fig:example-structures} are not data being stored in the
-  structures, but \emph{names} or \emph{labels} for the locations.  To
-  talk about a \emph{data structure} (\ie\ a structure filled with
-  data), we must also specify a mapping from locations to data, like
-  $\{ 0 \mapsto \texttt{'s'}, 1 \mapsto \texttt{'p'}, 2 \mapsto
-  \texttt{'e'} \dots \}$, as shown in~\pref{fig:shape-data}.  This
-  will be made precise in~\pref{sec:species-types}.
-\end{rem}
+Why \emph{labelled} shapes?  In the tree shown
+in~\pref{fig:example-labelled}, one can uniquely identify each
+location in the tree by a path from the root, without referencing
+labels at all.  However, the structure on the right illustrates one
+reason labels are needed. The circle indicates that the structure has
+\emph{rotational symmetry}, so there is be no way to uniquely refer
+to any location except by label.  More abstractly, to correctly
+enumerate unique unlabelled shapes, it is necessary to consider the
+action of label permutations on labelled shapes: which shapes are
+fixed by which permutations?
 
-\begin{figure}
-\centering
-\begin{diagram}[width=200]
+Beyond its focus on labels, the power of the theory of species derives
+in large part from its ability to describe structures of interest
+\emph{algebraically}, making them amenable to further analysis with
+only a relatively small set of general tools.
+
+\begin{ex}
+  Consider the species $\L$ of \term{lists}, or \term{linear
+    orderings}; \pref{fig:lists} illustrates all the labelled list
+  structures (containing each label exactly once) on the set of labels
+  $[3] = \{0,1,2\}$.  Of course, there are exactly $n!$ such list
+  structures on any set of $n$ labels.
+
+  \todo{Fix this figure.  Should use connectOutside instead of drawing
+    arrows from scratch.}
+  \todo{Use better colors.  Also need a story for black and white.}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
 import SpeciesDiagrams
-dia = shapePlusData # centerXY # pad 1.1
+import Data.List
+import Data.List.Split
 
-shapePlusData = hcat
-  [ octo [0..7]
-  , strutX 2
-  , (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
-  , strutX 2
-  , mapping
-  , strutX 2
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..2])
+  , mkArrow 2 (txt "L")
+  , listStructures
   ]
+  # centerXY
+  # pad 1.1
 
-mapping = centerXY . vcat' (with & sep .~ 0.2) . map mapsto $ zip [0..7] "species!"
-mapsto (l,x) = hcat' (with & sep .~ 0.5) [lab l, mkArrow 3 mempty, elt x]
-\end{diagram}
-%$
-\caption{Data structure = shape + data} \label{fig:shape-data}
-\end{figure}
+drawList = hcat . intersperse (mkArrow 0.4 mempty) . map labT
 
-One useful intuition is to think of the labels as \emph{memory
-  addresses}, which point off to some location where a data value is
-stored. This intuition has some particularly interesting consequences
-when it comes to operations like Cartesian product and functor
-composition---explained in~\pref{sec:operations}---since it gives us a
-way to model sharing (albeit in limited ways).
+listStructures
+  = centerXY
+  . hcat' (with & sep .~ 0.7)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 2
+  . map drawList
+  . permutations
+  $ [0..2]
+    \end{diagram}
+    \caption{The species $\L$ of lists}
+    \label{fig:lists}
+    %$
+  \end{figure}
+The species of lists can be described by the recursive algebraic
+expression \[ \L = \One + \X \cdot \L. \] The meaning of this will be
+made precise later. For now, its intuitive meaning should be clear
+to anyone familiar with recursive algebraic data types in a language
+such as Haskell or OCaml: a labelled list ($\L$) is empty ($1$), or ($+$) a
+single label ($\X$) together with ($\cdot$) another labelled list ($\L$).
+\end{ex}
 
-Why have labels at all? In the tree shown
-in~\pref{fig:example-structures}, we can uniquely identify each
-location by a path from the root of the tree, without referencing
-labels at all. Hence we can unambiguously separate a tree from its
-data by storing a simple unlabeled tree shape (with unit values at all
-the locations) along with a list of values.  However, the structure on
-the left illustrates one reason labels are needed. The circle is
-supposed to indicate that the structure has \emph{rotational
-  symmetry}, so there would be no way to uniquely refer to any
-location except by giving them labels.
+\begin{ex}
+As another example, consider the species $\Bin$ of \emph{(rooted,
+  ordered) binary trees}.  The set of all labelled binary trees on
+$\{0,1,2\}$ is shown in \pref{fig:binary-trees}.
 
-In fact, this was the original motivation for the definition of
-\todo{finish}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import SpeciesDiagrams
+import Data.Tree
+import Diagrams.TwoD.Layout.Tree
+import Control.Arrow (first, second)
+import Data.List.Split (chunksOf)
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..2])
+  , mkArrow 2 (txt "T")
+  , treeStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+nil = square 0.2 # fc black
+
+drawTreeStruct = renderTree id (~~) . symmLayout . fmap (maybe nil labT)
+
+trees :: [a] -> [Tree (Maybe a)]
+trees []   = [ Node Nothing [] ]
+trees xxs  = [ Node (Just x) [l,r]
+             || (x,xs) <- select xxs
+             , (ys, zs) <- subsets xs
+             , l <- trees ys
+             , r <- trees zs
+             ]
+
+treeStructures
+  = centerXY
+  . vcat' (with & sep .~ 0.5)
+  . map (centerX . hcat' (with & sep .~ 0.5))
+  . chunksOf 10
+  . map drawTreeStruct
+  . trees
+  $ [0..2]
+    \end{diagram}
+    \caption{The species $\T$ of binary trees}
+    \label{fig:binary-trees}
+    %$
+  \end{figure}
+  Algebraically, such trees can be described by \[ \Bin = \One + \X
+  \cdot \Bin \cdot \Bin. \]
+\end{ex}
+
+\todo{More examples.  Cycles, bags.  Permutations.  Examples of
+    algebra: describe lists and trees algebraically, etc.}
+
+  In a computational context, it is important to keep in mind the
+  distinction between \emph{labels} and \emph{data}, or more generally
+  between \emph{labelled shapes} and \emph{labelled (data)
+    structures}.  Labels are merely names for locations where data can
+  be stored; data structures contain data associated with each label,
+  whereas labelled shapes have no data, only labels.  Put more
+  intuitively, species shapes are ``form without content''.  As a
+  concrete example, the numbers in \pref{fig:example-labelled} are not
+  data being stored in the structures, but merely labels for the
+  locations.  To talk about a data structure, one must also specify a
+  mapping from locations to data; this will be made precise
+  in~\pref{chap:labelled}.
 
 \section{Definition}
 \label{sec:species-definition}
 
-\todo{Explain this. More discussion/justification.}
-We want to think of each labeled structure as \emph{indexed by} its
-set of labels (or, more generally, by the \emph{size} of the set of
-labels).  We can accomplish this by a mapping from label sets to all
-the shapes built from them, with some extra properties to
-guarantee that we really do get the same family of shapes no
-matter what set of labels we happen to choose.
+Informally, a species is a family of labelled shapes.  Crucially, the
+actual labels used ``shouldn't matter'': for example, we should get
+the ``same'' binary trees no matter what labels we want to use.  This
+intuition is made precise in the formal definition of combinatorial
+species.
 
 \begin{defn}[Species \citep{joyal, bll}]
 \label{defn:species-set}
 
 A \term{species} $F$ is a pair of mappings which
 \begin{itemize}
-\item sends any finite set $U$ (of \term{labels}) to a set $F[U]$ (of
+\item sends any finite set $U$ (of \term{labels}) to a set $F\ U$ (of
   \term{shapes}), and
 \item sends any bijection on finite sets $\sigma : U \bij V$ (a
-  \term{relabeling}) to a function $F[\sigma] : F[U] \to F[V]$
-  (illustrated in \pref{fig:relabeling}),
+  \term{relabelling}) to a function $F\ \sigma : F\ U \to F\ V$
+  (illustrated in \pref{fig:relabelling}),
 \end{itemize}
 satisfying the following functoriality conditions:
 \begin{itemize}
-\item $F[id_U] = id_{F[U]}$, and
-\item $F[\sigma \circ \tau] = F[\sigma] \circ F[\tau]$.
+\item $F\ id_U = id_{F U}$, and
+\item $F\ (\sigma \circ \tau) = F\ \sigma \circ F\ \tau$.
 \end{itemize}
-
 \end{defn}
 
 \begin{figure}
   \centering
-  \begin{diagram}[width=200]
+  \begin{diagram}[width=300]
 import           Data.Maybe                     (fromMaybe)
 import           Diagrams.TwoD.Layout.Tree
 
@@ -147,120 +237,50 @@ linkedTrees = hcat' (with & sep .~ 1) [t1, t2]
     selectShaft _ = hrule 1
     theArc = arc (0 @@@@ deg) (75 @@@@ deg)
 
-dia = linkedTrees # centerXY # frame 1
+drawSig :: Int -> (Int -> Char) -> Diagram B R2
+drawSig n sig = hcat' (with & sep .~ 0.1) (map drawOne [1..n])
+  where
+    drawOne i = vcat
+      [ mkNamedNode show i
+      , vrule 1 # dashing [0.05,0.05] 0
+      , mkNamedNode (:[]) (sig i) ]
+
+dia = hcat' (with & sep .~ 3)
+  [ drawSig 5 sig # centerXY # named "sig"
+  , linkedTrees   # centerXY # named "trees"
+  ]
+  # connectOutside' (with & gap .~ 0.5) "sig" "trees"
+  # frame 0.5
   \end{diagram}
-  \caption{Relabeling} \label{fig:relabeling}
+  \caption{Relabelling} \label{fig:relabelling}
 \end{figure}
 
-We call $F[U]$ the set of ``$F$-shapes with labels drawn from $U$'',
+We call $F\ U$ the set of ``$F$-shapes with labels drawn from $U$'',
 or simply ``$F$-shapes on $U$'', or even (when $U$ is clear from
 context) just ``$F$-shapes''.\footnote{Margaret Readdy's translation
   of \citet{bll} uses the word ``structure'' instead of ``shape'', but
   that word is likely to remind computer scientists of ``data
-  structures'', which is the wrong association: data structures
-  contain \emph{data}, whereas species shapes do not.  We choose the
-  word shape to emphasize the fact that they are ``form without
-  content''.}  $F[\sigma]$ is called the ``transport of $\sigma$ along
-$F$'', or sometimes the ``relabeling of $F$-shapes by $\sigma$''.
+  structures'', but again, that is the wrong association: data
+  structures contain \emph{data}, whereas species shapes do not.}  $F\
+\sigma$ is called the ``transport of $\sigma$ along $F$'', or
+sometimes the ``relabelling of $F$-shapes by $\sigma$''.
 
-The functoriality of relabeling means that the actual labels used
-don't matter; we get ``the same shapes'', up to relabeling, for
-any label sets of the same size.  We might say that species are
+The functoriality of relabelling means that the actual labels used
+don't matter; we get ``the same shapes'', up to relabelling, for any
+label sets of the same size.  We might say that species area
 \term{parametric} in the label sets of a given size. In particular,
 $F$'s action on all label sets of size $n$ is determined by its action
-on any particular such set: if $||U_1|| = ||U_2||$ and we know
-$F[U_1]$, we can determine $F[U_2]$ by lifting an arbitrary
-bijection between $U_1$ and $U_2$.  So we often take the finite set of
-natural numbers $[n] = \{0, \dots, n-1\}$ as \emph{the}
-canonical label set of size $n$, and write $F[n]$ (instead of
-$F[[n]]$) for the set of $F$-shapes built from this set.
+on any particular such set: if $||U_1|| = ||U_2||$ and we know $F\
+U_1$, we can determine $F\ U_2$ by lifting an arbitrary bijection
+between $U_1$ and $U_2$.  So we often take the finite set of natural
+numbers $[n] = \{0, \dots, n-1\}$ as \emph{the} canonical label set of
+size $n$, and write $F\ n$ (instead of $F\ [n]$) for the set of
+$F$-shapes built from this set.
 
-To make this more concrete, consider a few examples:
-\begin{itemize}
-\item The species $\L$ of \emph{lists} (or \emph{linear orderings})
-  sends every set of labels (of size $n$) to the set of all sequences
-  (of size $n!$) containing each label exactly once
-  (\pref{fig:lists}).
+Some intuition is in order: why do we require $F$ to be functorial?
+\todo{Why indeed?  Functoriality ensures that $F$ is defined uniformly??}
 
-  \begin{figure}
-    \centering
-    \begin{diagram}[width=400]
-import SpeciesDiagrams
-import Data.List
-import Data.List.Split
-
-dia =
-  hcat' (with & sep .~ 0.5)
-  [ unord (map labT [0..2])
-  , mkArrow 2 (txt "L")
-  , enRect listStructures
-  ]
-  # centerXY
-  # pad 1.1
-
-drawList = hcat . intersperse (mkArrow 0.4 mempty) . map labT
-
-listStructures =
-    hcat' (with & sep .~ 0.7)
-  . map (vcat' (with & sep .~ 0.5))
-  . chunksOf 2
-  . map drawList
-  . permutations
-  $ [0..2]
-    \end{diagram}
-    \caption{The species $\L$ of lists}
-    \label{fig:lists}
-    %$
-  \end{figure}
-
-\item The species of \emph{(rooted, ordered) binary trees} sends every
-  set of labels to the set of all binary trees built over those labels
-  (\pref{fig:binary-trees}).
-  \begin{figure}
-    \centering
-    \begin{diagram}[width=400]
-import SpeciesDiagrams
-import Data.Tree
-import Diagrams.TwoD.Layout.Tree
-import Control.Arrow (first, second)
-
-dia =
-  hcat' (with & sep .~ 0.5)
-  [ unord (map labT [0..2])
-  , mkArrow 2 (txt "T")
-  , enRect treeStructures
-  ]
-  # centerXY
-  # pad 1.1
-
-drawTreeStruct = renderTree id (~~) . symmLayout . fmap labT
-
-trees []   = []
-trees [x]  = [ Node x [] ]
-trees xxs  = [ Node x [l,r]
-             || (x,xs) <- select xxs
-             , (ys, zs) <- subsets xs
-             , l <- trees ys
-             , r <- trees zs
-             ]
-
-treeStructures =
-    hcat' (with & sep .~ 0.5)
-  . map drawTreeStruct
-  . trees
-  $ [0..2]
-    \end{diagram}
-    \caption{The species $\T$ of binary trees}
-    \label{fig:binary-trees}
-    %$
-  \end{figure}
-
-\item \todo{More examples.  Cycles, bags.  Permutations.  Examples of
-    algebra: describe lists and trees algebraically, etc.}
-
-\end{itemize}
-
-Using the language of category theory, we can give an equivalent, more
+Using the language of category theory, we can also give an equivalent, more
 concise definition of species:
 \begin{defn}
   \label{defn:species-cat}
@@ -280,15 +300,33 @@ concise definition of species:
   \comp F\ \sigma = id$.
 \end{rem}
 
+\begin{rem}
+  \todo{Don't think of $\B \to \Set$ computationally.  It's just a
+    convenient way to record the indexing of the sets by labels.}
+\end{rem}
+
+\begin{rem}
+  Recall that $[\B, \Set]$ denotes the \emph{functor category} whose
+  objects are functors $\B \to \Set$ and whose morphisms are natural
+  transformations.  In other words, species form a category, where
+  morphisms between species are mappings which commute with
+  relabelling.  \todo{example of mapping which commutes with
+    relabelling.}
+\end{rem}
+
+\todo{Include here $[\P,\Set]$ definition?}
+
 \subsection{Generalized species}
 \label{sec:constructive-species}
 
-\begin{defn}
-  Recall that $\Type = \Type_0$ denotes the universe of types.  We
-  also denote by $\Type$ the category whose objects are values of
-  $\Type_0$ and morphisms are (typed) functions.
-\end{defn}
+\todo{Justification for generalizing.  Want to use species as a basis
+  for computation---type theory.  Unify existing generalizations (some
+  citations).}
 
+Recall that $\BT$ denotes \todo{finish}, and $\Type$ denotes
+\todo{finish}.
+
+\todo{edit the following}
 We claim that an appropriate encoding of species within homotopy type
 theory is given by $[\BT, \Type]$, the category of functors from $\BT$
 to $\Type$.  We cannot directly justify this by showing that
@@ -1323,3 +1361,6 @@ $A$. \todo{Finish this proof.}
   about.}
 
 \todo{Give some examples.}
+
+\section{$\Lab$-species}
+

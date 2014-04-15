@@ -16,6 +16,8 @@
 
 \todo{$\fin n = \{0, \dots, n-1\}$.}
 
+\todo{Typography.}
+
 \section{Homotopy type theory}
 \label{sec:HoTT}
 

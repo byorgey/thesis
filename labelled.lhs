@@ -11,6 +11,37 @@
 \item Sharing.
 \end{itemize}
 
+\begin{figure}
+\centering
+\begin{diagram}[width=200]
+import SpeciesDiagrams
+dia = shapePlusData # centerXY # pad 1.1
+
+shapePlusData = hcat
+  [ octo [0..7]
+  , strutX 2
+  , (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
+  , strutX 2
+  , mapping
+  , strutX 2
+  ]
+
+mapping = centerXY . vcat' (with & sep .~ 0.2) . map mapsto $ zip [0..7] "species!"
+mapsto (l,x) = hcat' (with & sep .~ 0.5) [lab l, mkArrow 3 mempty, elt x]
+\end{diagram}
+%$
+\caption{Data structure = shape + data} \label{fig:shape-data}
+\end{figure}
+
+  One useful intuition is to think of the labels as \emph{memory
+    addresses}, which point off to some location where a data value is
+  stored. This intuition has some particularly interesting
+  consequences when it comes to operations like Cartesian product and
+  functor composition---explained in~\pref{sec:operations}---since it
+  gives us a way to model sharing (albeit in limited ways).
+
+
+
 \section{Analytic functors and labelled structures}
 \label{sec:analytic}
 
@@ -125,6 +156,13 @@ dia = vcat' (with & sep .~ 5)
   \caption{Superimposing a tree and a list on shared data}
   \label{fig:tree-list-cp}
 \end{figure}
+
+\section{Recursion and the implicit species theorem}
+\label{sec:recursion}
+
+\todo{Write me}
+
+\section{Other stuff}
 
 \todo{Examples. Bounded tree width.  Generic programming.}
 
