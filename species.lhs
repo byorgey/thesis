@@ -1424,4 +1424,4 @@ $A$. \todo{Finish this proof.}
 
 \todo{Give some examples.}
 
-\section{$\Lab$-species}
+\section{$\mathbb{L}$-species}
