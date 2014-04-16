@@ -5,6 +5,8 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
+\todo{List contributions of this chapter somewhere?}
+
 The theory of combinatorial species, introduced by \citet{joyal}, is a
 unified theory of \term{combinatorial structures} or \term{shapes}.
 It was originally intended as a unified framework for algebraically
@@ -53,7 +55,7 @@ in large part from its ability to describe structures of interest
 only a relatively small set of general tools.
 
 \begin{ex}
-  Consider the species $\L$ of \term{lists}, or \term{linear
+  Consider the species $\List$ of \term{lists}, or \term{linear
     orderings}; \pref{fig:lists} illustrates all the labelled list
   structures (containing each label exactly once) on the set of labels
   $[3] = \{0,1,2\}$.  Of course, there are exactly $n!$ such list
@@ -87,16 +89,16 @@ listStructures
   . permutations
   $ [0..2]
     \end{diagram}
-    \caption{The species $\L$ of lists}
+    \caption{The species $\List$ of lists}
     \label{fig:lists}
     %$
   \end{figure}
 The species of lists can be described by the recursive algebraic
-expression \[ \L = \One + \X \cdot \L. \] The meaning of this will be
+expression \[ \List = \One + \X \cdot \List. \] The meaning of this will be
 made precise later. For now, its intuitive meaning should be clear
 to anyone familiar with recursive algebraic data types in a language
-such as Haskell or OCaml: a labelled list ($\L$) is empty ($1$), or ($+$) a
-single label ($\X$) together with ($\cdot$) another labelled list ($\L$).
+such as Haskell or OCaml: a labelled list ($\List$) is empty ($1$), or ($+$) a
+single label ($\X$) together with ($\cdot$) another labelled list ($\List$).
 \end{ex}
 
 \begin{ex}
@@ -389,26 +391,68 @@ aOpts = with & gap .~ 3 & headSize .~ 1.5
     \label{fig:species-morphism}
   \end{figure}
 
-\todo{Foreshadow some properties of this category.  Functor categories
-  have a lot of structure.}
+  It turns out that functor categories have a lot of interesting
+  structure.  For example, as we will see, $[\B, \Set]$ has (at least)
+  five different monoidal structures!  The rest of this chapter is
+  dedicated to exploring and generalizing this structure.
 
-\subsection{Generalized species}
+\section{Generalized species}
 \label{sec:constructive-species}
 
-\todo{Justification for generalizing.  Want to use species as a basis
-  for computation---type theory.  Unify existing generalizations (some
-  citations).}
+In many ways, $[\B, \Set]$ as the definition of species is too
+specific and restrictive.  For example, one of the big motivations for
+this work is to use species as a basis for computation, but ideally
+this means working with shapes and labels corresponding to
+\emph{types}, formalized in type theory, rather than sets.  Even
+within the realm of pure mathematics, there are many extensions to the
+basic theory of species (\eg multisort species, weighted species,
+$\L$-species, vector species, \dots) which require moving beyond $[\B,
+\Set]$ in some way.
 
-Recall that $\BT$ denotes \todo{finish}, and $\Type$ denotes
-\todo{finish}.
+The goal of the rest of this chapter is to examine a number of species
+operations in the context of general functor categories $[\Lab,\Str]$,
+in order to identify precisely what properties of $\Lab$ and $\Str$
+are necessary to define each operation. That is, starting ``from
+scratch'', we will build up a generic notion of species that supports
+the operations we are interested in. In the process, we get a much
+clearer picture of where the operations ``come from''.  In particular,
+$\B$ and \Set enjoy many special properties as categories (for
+example, \Set is cartesian closed, has all limits and colimits, and so
+on).  It is enlightening to see precisely which of these properties
+are required in which situations.
 
-\todo{edit the following}
-We claim that an appropriate encoding of species within homotopy type
-theory is given by $[\BT, \Type]$, the category of functors from $\BT$
-to $\Type$.  We cannot directly justify this by showing that
-$[\B,\Set]$ and $[\BT,\Type]$ are categorically equivalent, which is
-unlikely to be true.  For one, $\Set$ is ``too big'': there are many sets that
-do not correspond to any type definable in type theory.
+Along the way, by way of examples, we will also explore various
+generalizations of species (multisort, weighted, and see how they fit
+in this framework: each arises from considering particular categories
+in place of $\B$ and $\Set$.  To keep these various functor categories
+straight, the word ``species'' will be used for $[\B,\Set]$,
+and ``generalized species'' for some abstract $[\Lab, \Str]$.
+
+\subsection{Species in type theory}
+\label{sec:species-in-type-theory}
+
+\todo{Move this up somehow, and follow it with a general description
+  of the rest of the chapter, to make a nice transition into the more
+  technical material on lifted monoids etc.}
+One generalization that will be of particular interest is a ``port''
+of species into type theory. Recall that $\BT$ denotes the
+($\infty$-)groupoid whose objects are triples consisting of a type $A$, a
+size $n$, and an equivalence $\Fin n \iso A$, and whose morphisms are
+paths between types.  Recall also that $\Type$ denotes the category of
+types and (well-typed) functions.
+
+\begin{defn}
+  A \term{constructive species} is a functor $F : \BT \to \Type$.  We
+  use $\CSpe = [\BT,\Type]$ to refer to the category of constructive
+  species.
+\end{defn}
+
+Another one of the major goals of this chapter is to argue that this
+is an appropriate encoding of species within homotopy type theory.
+Note that this cannot be directly justified by showing that
+$[\B,\Set]$ and $[\BT,\Type]$ are categorically equivalent.  In fact,
+that is unlikely to be true, since $\Set$ is ``too big'': there are
+many sets that do not correspond to any type definable in type theory.
 
 However, most working mathematicians do not actually make use of such
 ``exotic'' sets;  the constructions they care about
@@ -417,33 +461,6 @@ order to justify $[\BT, \Type]$ as a constructive counterpart to $[\B,
 \Set]$, therefore, we must look at what operations and constructions
 are typically carried out on $[\B, \Set]$, and show that $[\BT,\Type]$
 supports them as well.
-
-To do this, we look carefully at common operations on species,
-generalize them to arbitrary functors $\Lab \to \Str$, and identify precisely
-what properties of $\Lab$ and $\Str$ are necessary to define them. In this
-way, we start ``from scratch'' and build up a generic notion of species that
-supports the operations we want.  In the process, we get a much clearer
-picture of where the operations ``come from''.
-In particular, $\B$ and \Set enjoy many special properties as
-categories (for example, \Set is cartesian closed, has all limits and
-colimits, and so on).  It is enlightening to see precisely which of these
-properties are required in which situations.
-
-After generalizing these common operations to arbitrary functor categories, we
-can justify our constructive definition of species by showing that the
-functor category [$\BT$,$\Type$] satisfies each required property.
-In the following, to keep these various functor categories
-straight, we use the terminology ``species'' for $[\B,\Set]$, ``generalized
-species'' for some abstract $[\Lab, \Str]$, and ``constructive species'' for
-$[\BT, \Type]$.
-
-\begin{rem}
-  It will often be convenient to have recourse to the intuition of
-  ``sets of labels''; but in more general settings the objects of
-  $\Lab$ might not correspond to ``sets'' at all. More generally, we
-  can just think of shapes indexed by objects of $\Lab$, rather
-  than shapes ``containing labels''.
-\end{rem}
 
 \section{Lifted monoids: sum and Cartesian product}
 
@@ -468,7 +485,7 @@ $G$-shape (together with a tag so we can tell which).
   x) = \inl\ (f\ x)$ and $(f \uplus g)\ (\inr\ y) = \inr\ (g\ y)$.
 \end{defn}
 
-Thinking of species as functors in $[\P, \Set]$, we may
+Alternatively, thinking of species as functors in $[\P, \Set]$, we may
 say that an $(F+G)$-shape of size $n$ is either an $F$-shape of size
 $n$ or a $G$-shape of size $n$.
 
@@ -495,6 +512,39 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:sum}
   \end{figure}
 
+For example, $\Bin + \List$ is the species representing things which
+are \emph{either} binary trees or lists (\pref{fig:bin-plus-list}).
+
+\begin{figure}
+  \centering
+  \todo{Make this diagram}
+
+  \begin{diagram}[width=200]
+    dia = circle 1 # frame 1
+  \end{diagram}
+  \caption{The species $\Bin + \List$}
+  \label{fig:bin-plus-list}
+\end{figure}
+
+It is important to bear in mind that $+$ yields a \emph{disjoint} or
+``tagged'' union.  So, for example, the species $\Bin + \Bin$ consists
+of two copies of every binary tree (\pref{fig:bin-plus-bin}), and in
+particular it is distinct from $\Bin$.
+
+\begin{figure}
+  \centering
+  \todo{Make this diagram}
+
+  \begin{diagram}[width=200]
+    dia = circle 1 # frame 1
+  \end{diagram}
+  \caption{The species $\Bin + \Bin$}
+  \label{fig:bin-plus-bin}
+\end{figure}
+
+There is also a primitive species which is an identity element for
+species sum:
+
 \begin{defn}
   The \term{zero} or \term{empty} species,
   $\Zero$, is the unique species with no shapes whatsoever.  That is,
@@ -504,8 +554,45 @@ dia = theDia # centerXY # pad 1.1
   $\varnothing \to \varnothing$.
 \end{defn}
 
-One can check that $(+,\Zero)$ gives a symmetric monoidal structure to
-$[\B, \Set]$.
+\begin{prop}
+  $(+,\Zero)$ is a symmetric monoid on $[\B, \Set]$.
+\end{prop}
+
+\begin{proof}
+  First, we must show that $+$ is a bifunctor. By definition it sends
+  two functors to a functor, but this is only its action on the
+  objects of $\Spe$.  We must also specify its action on morphisms,
+  that is, natural transformations between species, and we must show
+  that it preserves identity natural transformations and (vertical
+  \todo{double-check}) composition of natural transformations.
+
+  In this case it's enough simply to unfold definitions and follow the
+  types.  Given species $F$, $F'$, $G$, and $G'$, and natural
+  transformations $\phi : \nt F {F'}$ and $\psi : \nt G {G'}$, we
+  should have $\phi + \psi : \nt {F+G} {F'+G'}$.  The component of
+  $\phi + \psi$ at some $L \in \B$ should thus be a morphism in $\Set$
+  of type $F\ L \uplus G\ L \to F'\ L \uplus G'\ L$; the only thing
+  that fits the bill is $\phi_L \uplus \psi_L$.
+
+  This nicely fits with the ``elementwise'' definition of $+$ on
+  species: $(F + G)\ L = F\ L \uplus G\ L$, and likewise $(\phi +
+  \psi)_L = \phi_L \uplus \psi_L$.  \todo{there's some
+    generalization to be made here; what is it?  Is it true that any
+    functor from a groupoid need only be defined on objects, and
+    ``automatically'' acquires an action on morphisms?  Is this only
+    true if we restrict ourselves to some special term language?}
+
+  The action of $+$ on natural transformations thus reduces to the
+  elementwise action of $\uplus$ on their components.  From this it
+  follows that
+  \begin{itemize}
+  \item $\phi + \psi$ is natural (because XXX), and
+  \item $+$ preserves identity and composition (because $\uplus$
+    does). \qedhere
+  \end{itemize}
+
+  \todo{Argue it is symmetric.  Note strict vs. non-strict.}
+\end{proof}
 
 Stepping back a bit, we can see that this monoidal structure on
 species arises straightforwardly from the corresponding monoidal
@@ -533,10 +620,12 @@ An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
 on \emph{the same set of labels}.  There are several ways to think
 about this situation, as illustrated in \pref{fig:Cartesian-product}.
 One can think of two distinct shapes, with labels duplicated between
-them; one can think of the labels as \emph{pointers} or \emph{labels}
-for locations in a shared memory (to be explored more in
-\pref{sec:sharing}); or one can think of the shapes themselves as
-being superimposed.
+them. One can think of the labels as \emph{pointers} for locations in
+a shared memory (this view will be explored more in
+\pref{sec:sharing}).  Finally, one can think of the shapes themselves
+as being superimposed..  This last view highlights the fact that
+$\times$ is symmetric, but only up to isomorphism, since at root it
+still consists of an \emph{ordered} pair of shapes.
 
 \begin{figure}
   \centering
@@ -554,9 +643,10 @@ connectAll l1 l2 n perm =
   applyAll (zipWith conn l1s (perm l2s))
 
 conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
+-- $
 
-sharedMem = vcat' (with & sep .~ 3)
-  [ hcat' (with & sep .~ 1)
+sharedMem = vcat' (with & sep .~ 5)
+  [ hcat' (with & sep .~ 3)
     [ wideTree (mkLeaf (circle 1) . ("l1" .>)) sampleBTree7 # centerY
     , drawList (mkLeaf (circle 1) . ("l2" .>)) 7 # centerY
     ] # centerXY
@@ -572,14 +662,14 @@ perm2 = concat . map reverse . chunksOf 2
 asFun :: ([Int] -> [Int]) -> Int -> Int
 asFun perm i = perm [1..7] !! (i - 1)
 
-numbering = vcat' (with & sep .~ 3)
+numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
   [ wideTree numbered sampleBTree7 # centerX
   , drawList (numbered . asFun perm2) 7 # centerX
   ]
   where
     numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
 
-super = wideTree (mkLeaf (circle 1)) sampleBTree7
+listOnTree = wideTree (mkLeaf (circle 1)) sampleBTree7
   # cCurve 2 1 (1/4 @@@@ turn)
   # cStr   1 4
   # cCurve 4 3 (1/2 @@@@ turn)
@@ -590,18 +680,41 @@ super = wideTree (mkLeaf (circle 1)) sampleBTree7
     cCurve :: Int -> Int -> Angle -> Diagram B R2 -> Diagram B R2
     cCurve n1 n2 a =
       connectPerim'
-        (aSty & arrowShaft .~ arc (0 @@@@ turn) (1/5 @@@@ turn) # reverseTrail)
+        (superASty & arrowShaft .~ arc (0 @@@@ turn) (1/5 @@@@ turn) # reverseTrail)
         n1 n2
         a (a ^+^ (1/4 @@@@ turn))
     cStr :: Int -> Int -> Diagram B R2 -> Diagram B R2
-    cStr   = connectOutside' aSty
-    aSty   = with & shaftStyle %~ dashing [0.3,0.3] 0 . lw 0.2
-                  & arrowHead .~ tri
-                  & headSize .~ 1
+    cStr   = connectOutside' superASty
+
+superASty   = with & shaftStyle %~ dashing [0.3,0.3] 0 . lw 0.2
+                   & arrowHead .~ tri
+                   & headSize .~ 1
+
+treeOnList = drawList (mkLeaf (circle 1)) 7
+  # top 2 1
+  # top 2 6
+  # top 4 3
+  # bot 1 4
+  # bot 6 5
+  # bot 6 7
+  where
+    top = conn True
+    bot = conn False
+    conn :: Bool -> Int -> Int -> Diagram B R2 -> Diagram B R2
+    conn isTop x y = connectPerim'
+        (superASty & arrowShaft .~ (arc (zeroV) (3/8  @@@@ turn) # adjShaft))
+        x y pAng pAng
+      where
+        adjShaft || (x < y) /= isTop = id
+                 || otherwise        = reverseTrail
+        pAng || isTop     = 1/4 @@@@ turn
+             || otherwise = 3/4 @@@@ turn
+
+super = (hcat' (with & sep .~ 5) . map centerXY) [listOnTree, treeOnList]
 
 dia
   = frame 0.5 . centerXY . lw 0.1
-  . hcat' (with & sep .~ 2) . map centerXY
+  . vcat' (with & sep .~ 4) . map centerXY
   $
   [ numbering
   , sharedMem
@@ -609,9 +722,13 @@ dia
   ]
   \end{diagram}
   %$
-  \caption{Three views on Cartesian product of species}
+  \caption{Four views on the Cartesian product $\Bin \times \List$}
   \label{fig:Cartesian-product}
 \end{figure}
+
+There is also a species, usually called $\E$, which is an identity
+element for Cartesian product.  Considering $(\E \times G)\ L = \E\ L
+\times G\ L \iso G\ L$, the proper definition of $\E$ becomes clear:
 
 \begin{defn}
   The species of \emph{sets}, $\E$, is defined as the constant functor
@@ -626,9 +743,18 @@ dia
   may define $\E\ L = \{L\}$.
 \end{rem}
 
+\todo{Picture for $\E$.}
+
 \begin{prop}
-  Up to isomorphism, $\E$ is the identity for Cartesian product.
+  $(\times, \E)$ is a symmetric monoid on $\Spe$.
 \end{prop}
+
+\begin{proof}
+  The proof is omitted, since it is almost exactly the same as the
+  proof for $(+, \Zero)$; the only difference is the substitution of
+  Cartesian product of sets for disjoint union.  In the next section
+  we will see how to generalize both proofs.
+\end{proof}
 
 \todo{Forward reference to material on closedness?}
 
@@ -1424,4 +1550,4 @@ $A$. \todo{Finish this proof.}
 
 \todo{Give some examples.}
 
-\section{$\mathbb{L}$-species}
+\section{$\L$-species}

@@ -160,12 +160,16 @@
 \newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
 
 % some standard categories
-\newcommand{\Set}{\cat{Set}}  % category of sets
-\newcommand{\Spe}{\cat{Spe}}  % category of species
+\newcommand{\Set}{\cat{Set}}   % category of sets
+\newcommand{\Spe}{\cat{Spe}}   % category of species
+\newcommand{\CSpe}{\cat{CSpe}} % category of constructive species
 
 \providecommand{\B}{\bbb{B}}
 \renewcommand{\P}{\bbb{P}}
 \providecommand{\FinSet}{\bbb{E}}
+
+\providecommand{\L}{}
+\renewcommand{\L}{\bbb{L}}     % category of linear orderings
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
@@ -188,7 +192,7 @@
 \newcommand{\E}{\Sp{E}}
 \newcommand{\F}{\Sp{F}}
 \newcommand{\G}{\Sp{G}}
-\renewcommand{\L}{\Sp{L}}
+\newcommand{\List}{\Sp{L}}
 \newcommand{\T}{\Sp{T}}
 \newcommand{\Par}{\Sp{Par}}
 \newcommand{\Bag}{\Sp{E}}
