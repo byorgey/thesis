@@ -78,14 +78,12 @@ dia =
   # centerXY
   # pad 1.1
 
-drawList = hcat . intersperse (mkArrow 0.4 mempty) . map labT
-
 listStructures
   = centerXY
   . hcat' (with & sep .~ 0.7)
   . map (vcat' (with & sep .~ 0.5))
   . chunksOf 2
-  . map drawList
+  . map (drawList' labT)
   . permutations
   $ [0..2]
     \end{diagram}
@@ -255,6 +253,8 @@ dia = hcat' (with & sep .~ 3)
   \caption{Relabelling} \label{fig:relabelling}
 \end{figure}
 
+\todo{Note about finiteness of output.}
+
 We call $F\ U$ the set of ``$F$-shapes with labels drawn from $U$'',
 or simply ``$F$-shapes on $U$'', or even (when $U$ is clear from
 context) just ``$F$-shapes''.\footnote{Margaret Readdy's translation
@@ -289,32 +289,108 @@ concise definition of species:
   $\Set$ is the category of sets and (total) functions.
 \end{defn}
 
+Reflecting the fact that the groupoid $\P$ of natural numbers and
+finite permutations is (weakly) equivalent to the groupoid $\B$, it is
+also possible to define species as families of shapes, indexed not by
+their labels but merely by their \emph{size}:
+
+\begin{defn}[Species (alternate)]
+  \label{defn:species-p}
+  A species is a functor $F : \P \to \Set$.
+\end{defn}
+
+In this case, the set of shapes corresponding to a given size $n$ can be
+thought of as precisely those labelled by the canonical label set $[n]$.
+
 \begin{rem}
-  Although Definitions \ref{defn:species-set} and
-  \ref{defn:species-cat} say only that a species $F$ sends a bijection
-  $\sigma : U \bij V$ to a \emph{function} $F\ \sigma : F\ U \to F\
-  V$, the functoriality of $F$ guarantees that $F\ \sigma$ is a
-  bijection as well. In particular, $(F\ \sigma)^{-1} = F\
-  (\sigma^{-1})$, since $F\ \sigma \comp F\ (\sigma^{-1}) = F\ (\sigma
-  \comp \sigma^{-1}) = F\ id = id$, and similarly $F\ (\sigma^{-1})
-  \comp F\ \sigma = id$.
+  Although Definitions \ref{defn:species-set}-- \ref{defn:species-p}
+  say only that a species $F$ sends a bijection $\sigma : U \bij V$ to
+  a \emph{function} $F\ \sigma : F\ U \to F\ V$, the functoriality of
+  $F$ guarantees that $F\ \sigma$ is a bijection as well. In
+  particular, $(F\ \sigma)^{-1} = F\ (\sigma^{-1})$, since $F\ \sigma
+  \comp F\ (\sigma^{-1}) = F\ (\sigma \comp \sigma^{-1}) = F\ id =
+  id$, and similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.  So one
+  could (and some authors do) define species as endofunctors $F : \B
+  \to \B$ with no loss of expressivity. \todo{Up to issues of
+    finiteness!}
 \end{rem}
 
 \begin{rem}
-  \todo{Don't think of $\B \to \Set$ computationally.  It's just a
-    convenient way to record the indexing of the sets by labels.}
+  In my experience, computer scientists tend to have a bit of trouble
+  with these definitions, because their first instinct is to think of a
+  functor $\B \to \Set$ from a \emph{computational} point of view: \ie
+  a species $F : \B \to \Set$, given some set of labels $L \in \B$,
+  \emph{computes} some family of structures having those labels.
+
+  However, I find this intuition unhelpful, since it places too much
+  emphasis on analyzing the ``input'' set of labels, making case
+  distinctions on the size of the set, and so on.  Instead of thinking
+  of functors $\B \to \Set$ as computational, it is better to think of
+  them as \emph{descriptive}.  We begin with some entire family of
+  labelled shapes, and want to classify them by the labels that they
+  use. A functor $\B \to \Set$ is then a convenient technical device
+  for organizing such a classification: it describes a family of
+  labelled shapes \emph{indexed by} their labels.
+
+  Given this shift in emphasis, one might think it more natural to
+  define a set of labelled shapes along with a function from shapes to
+  the set of labels contained in them (indeed, down this path lies the
+  notion of \term{containers} \citep{abbott_categories_2003,
+    abbott_quotient, alti:cont-tcs, alti:lics09}).  Species can be
+  seen as dual to these shapes-to-labels mappings, giving the
+  \term{fiber} of each label set.  Both formulations have their
+  strengths and weaknesses.
 \end{rem}
 
-\begin{rem}
-  Recall that $[\B, \Set]$ denotes the \emph{functor category} whose
-  objects are functors $\B \to \Set$ and whose morphisms are natural
-  transformations.  In other words, species form a category, where
-  morphisms between species are mappings which commute with
-  relabelling.  \todo{example of mapping which commutes with
-    relabelling.}
-\end{rem}
+\subsection{The category of species}
+\label{sec:category-of-species}
 
-\todo{Include here $[\P,\Set]$ definition?}
+Recall that $[\C, \D]$ denotes the \term{functor category} whose
+objects are functors $\C \to \D$ and whose morphisms are natural
+transformations between functors.  We may thus consider the
+\term{category of species}, $\Spe = [\B, \Set]$, where the objects are
+species, and morphisms between species are label-preserving mappings
+which commute with relabelling---that is, mappings which are entirely
+``structural'' and do not depend on the labels in any way. For
+example, an in-order traversal constitutes such a mapping from the
+species of binary trees to the species of lists, as illustrated in
+\pref{fig:species-morphism}: computing an in-order traversal and then
+relabelling yields the same list as first relabelling and then doing
+the traversal.
+
+  \begin{figure}
+    \todo{Add labels to the arrows?}
+    \centering
+  \begin{diagram}[width=300]
+import Diagrams.TwoD.Layout.Tree
+import SpeciesDiagrams
+
+charLabel c = mkLeaf (text [c] # fc black <> circle 1) ()
+
+sps =
+  [ drawList' charLabel "cdbafeg"      # centerXY # named "la"
+  , drawList' numbered [3,4,2,1,6,5,7] # centerXY # named "l1"
+  , wideTree numbered sampleBTree7     # centerXY # named "t1"
+  , wideTree lettered sampleBTree7     # centerXY # named "ta"
+  ]
+
+dia = decoratePath (rect 30 25) sps
+    # connectOutside' (aOpts & tailGap .~ 5) "t1" "l1" -- top
+    # connectOutside' (aOpts & tailGap .~ 5) "t1" "ta" -- left
+    # connectOutside' aOpts "l1" "la" -- right
+    # connectOutside' (aOpts & tailGap .~ 5) "ta" "la" -- bottom
+    # lw 0.05
+    # frame 1
+
+aOpts = with & gap .~ 3 & headSize .~ 1.5
+  \end{diagram}
+  %$
+    \caption{Inorder traversal is natural}
+    \label{fig:species-morphism}
+  \end{figure}
+
+\todo{Foreshadow some properties of this category.  Functor categories
+  have a lot of structure.}
 
 \subsection{Generalized species}
 \label{sec:constructive-species}
@@ -472,16 +548,6 @@ import           Diagrams.TwoD.Path.Metafont
 
 import           SpeciesDiagrams
 
-mkLeaf :: IsName n => Diagram B R2 -> n -> Diagram B R2
-mkLeaf shp n = shp # fc white # named n
-
-tree2 nd
-  = maybe mempty (renderTree nd (~~))
-  . symmLayoutBin' (with & slVSep .~ 4 & slHSep .~ 6)
-  $ (BNode (1 :: Int) (BNode 2 (BNode 3 Empty (BNode 4 Empty Empty)) Empty) (BNode 5 (BNode 6 Empty Empty) (BNode 7 Empty Empty)))
-
-listL nd n = hcat . map nd $ [1 :: Int .. n]
-
 connectAll l1 l2 n perm =
   withNames (map (l1 .>) [1 :: Int .. n]) $ \l1s ->
   withNames (map (l2 .>) [1 :: Int .. n]) $ \l2s ->
@@ -489,14 +555,12 @@ connectAll l1 l2 n perm =
 
 conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
 
--- (mkLeaf shp . (l .>))
-
 sharedMem = vcat' (with & sep .~ 3)
   [ hcat' (with & sep .~ 1)
-    [ tree2 (mkLeaf (circle 1) . ("l1" .>)) # centerY
-    , listL (mkLeaf (circle 1) . ("l2" .>)) 7 # centerY
+    [ wideTree (mkLeaf (circle 1) . ("l1" .>)) sampleBTree7 # centerY
+    , drawList (mkLeaf (circle 1) . ("l2" .>)) 7 # centerY
     ] # centerXY
-  , listL (mkLeaf (square 2) . ("s" .>)) 7 # centerXY
+  , drawList (mkLeaf (square 2) . ("s" .>)) 7 # centerXY
   ]
   # connectAll "l1" "s" 7 perm1
   # connectAll "l2" "s" 7 perm2
@@ -509,13 +573,13 @@ asFun :: ([Int] -> [Int]) -> Int -> Int
 asFun perm i = perm [1..7] !! (i - 1)
 
 numbering = vcat' (with & sep .~ 3)
-  [ tree2 numbered # centerX
-  , listL (numbered . asFun perm2) 7 # centerX
+  [ wideTree numbered sampleBTree7 # centerX
+  , drawList (numbered . asFun perm2) 7 # centerX
   ]
   where
     numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
 
-super = tree2 (mkLeaf (circle 1))
+super = wideTree (mkLeaf (circle 1)) sampleBTree7
   # cCurve 2 1 (1/4 @@@@ turn)
   # cStr   1 4
   # cCurve 4 3 (1/2 @@@@ turn)
@@ -917,9 +981,7 @@ the rows of the grid, and a $G$-shape labelled by the columns.
   \centering
   \begin{diagram}[width=380]
 import           Diagrams.TwoD.Layout.Tree
-
-mkLeaf :: IsName n => Diagram B R2 -> n -> Diagram B R2
-mkLeaf shp n = shp # fc white # named n
+import           SpeciesDiagrams
 
 grays  = map (\k -> blend k black white) [0, 0.2, 0.8, 1, 0.5]
 shapes = [circle 0.2, triangle 0.4, square 0.4]
@@ -953,7 +1015,7 @@ enrect d = d <> roundedRect (width d + 0.2) (height d + 0.2) 0.2
 tree3 nd
   = maybe mempty (renderTree nd (~~))
   . uniqueXLayout 1 1
-  $ (BNode (1 :: Int) (BNode 2 Empty Empty) (BNode 3 (BNode 4 Empty Empty) (BNode 5 Empty Empty)))
+  $ sampleBTree5
 
 list2 nd = hcat' (with & sep .~ 1 & catMethod .~ Distrib)
   (map nd [1 :: Int .. 3])
@@ -1363,4 +1425,3 @@ $A$. \todo{Finish this proof.}
 \todo{Give some examples.}
 
 \section{$\Lab$-species}
-

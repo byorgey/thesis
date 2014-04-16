@@ -160,7 +160,8 @@
 \newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
 
 % some standard categories
-\newcommand{\Set}{\cat{Set}}
+\newcommand{\Set}{\cat{Set}}  % category of sets
+\newcommand{\Spe}{\cat{Spe}}  % category of species
 
 \providecommand{\B}{\bbb{B}}
 \renewcommand{\P}{\bbb{P}}

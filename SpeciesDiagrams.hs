@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveFunctor             #-}
+{-# LANGUAGE FlexibleContexts          #-}
 {-# LANGUAGE FlexibleInstances         #-}
 {-# LANGUAGE GADTs                     #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
@@ -7,7 +8,7 @@
 
 module SpeciesDiagrams where
 
-import           Control.Arrow                  (first, second)
+import           Control.Arrow                  (first, second, (&&&))
 import           Data.List                      (intersperse)
 import           Data.List.Split
 import qualified Data.Map                       as M
@@ -324,3 +325,40 @@ gr  = drawGraph mloc
            ] # scale 1.5
          , [(2,0), (2,4), (0,4), (4,3), (3,1), (0,1), (0,5)]
          )
+
+--------------------------------------------------
+
+sampleBTree5, sampleBTree7 :: BTree Int
+sampleBTree5 = (BNode (1 :: Int) (BNode 2 Empty Empty) (BNode 3 (BNode 4 Empty Empty) (BNode 5 Empty Empty)))
+sampleBTree7 = (BNode (1 :: Int) (BNode 2 (BNode 3 Empty (BNode 4 Empty Empty)) Empty) (BNode 5 (BNode 6 Empty Empty) (BNode 7 Empty Empty)))
+
+
+wideTree
+  :: (Monoid m, Semigroup m, TrailLike (QDiagram b R2 m))
+  => (a -> QDiagram b R2 m) -> BTree a -> QDiagram b R2 m
+wideTree n
+  = maybe mempty (renderTree n (~~))
+  . symmLayoutBin' (with & slVSep .~ 4 & slHSep .~ 6)
+
+mkLeaf
+  :: ( InnerSpace v, HasLinearMap v
+     , Floating (Scalar v), Ord (Scalar v)
+     , Semigroup m, IsName n
+     )
+  => QDiagram b v m -> n -> QDiagram b v m
+mkLeaf shp n = shp # fc white # named n
+
+numbered :: Show a => a -> Diagram B R2
+numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
+
+lettered :: Int -> Diagram B R2
+lettered n = mkLeaf (text [(' ' : ['a' ..]) !! n] # fc black <> circle 1) ()
+
+drawList nd n = drawList' nd [1::Int .. n]
+
+drawList' nd ns = lst # centerX `atop` hrule (width lst - w)
+  where
+    elts = map nd ns
+    w    = maximum . map width $ elts
+    lst  = hcat' (with & sep .~ w/2) elts
+
