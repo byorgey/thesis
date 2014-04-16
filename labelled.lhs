@@ -72,7 +72,6 @@ in mathematical notation.
 
 
 %% XXX remove me
-\newcommand{\List}{\cons{List}}
 \newcommand{\StoreNP}{\mapsto}
 
 \todo{Edit. Dumped here from paper.}
