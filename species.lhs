@@ -485,6 +485,8 @@ $G$-shape (together with a tag so we can tell which).
   x) = \inl\ (f\ x)$ and $(f \uplus g)\ (\inr\ y) = \inr\ (g\ y)$.
 \end{defn}
 
+\todo{Have to show this is a functor.}
+
 Alternatively, thinking of species as functors in $[\P, \Set]$, we may
 say that an $(F+G)$-shape of size $n$ is either an $F$-shape of size
 $n$ or a $G$-shape of size $n$.
@@ -616,6 +618,8 @@ one-element sets are isomorphic in \Set.)
   The \term{Cartesian} or \term{Hadamard product} of species, is defined on
   objects by $ (F \times G)\ L = F\ L \times G\ L. $
 \end{defn}
+\todo{Say something about action on morphisms and functoriality.}
+
 An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
 on \emph{the same set of labels}.  There are several ways to think
 about this situation, as illustrated in \pref{fig:Cartesian-product}.
