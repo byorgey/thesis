@@ -328,8 +328,8 @@ gr  = drawGraph mloc
 --------------------------------------------------
 
 sampleBTree5, sampleBTree7 :: BTree Int
-sampleBTree5 = (BNode (1 :: Int) (BNode 2 Empty Empty) (BNode 3 (BNode 4 Empty Empty) (BNode 5 Empty Empty)))
-sampleBTree7 = (BNode (1 :: Int) (BNode 2 (BNode 3 Empty (BNode 4 Empty Empty)) Empty) (BNode 5 (BNode 6 Empty Empty) (BNode 7 Empty Empty)))
+sampleBTree5 = (BNode (0 :: Int) (BNode 1 Empty Empty) (BNode 2 (BNode 3 Empty Empty) (BNode 4 Empty Empty)))
+sampleBTree7 = (BNode (0 :: Int) (BNode 1 (BNode 2 Empty (BNode 3 Empty Empty)) Empty) (BNode 4 (BNode 5 Empty Empty) (BNode 6 Empty Empty)))
 
 
 wideTree
@@ -351,9 +351,9 @@ numbered :: Show a => a -> Diagram B R2
 numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
 
 lettered :: Int -> Diagram B R2
-lettered n = mkLeaf (text [(' ' : ['a' ..]) !! n] # fc black <> circle 1) ()
+lettered n = mkLeaf (text [['a' ..] !! n] # fc black <> circle 1) ()
 
-drawList nd n = drawList' nd [1::Int .. n]
+drawList nd n = drawList' nd [0::Int .. (n - 1)]
 
 drawList' nd ns = lst # centerX `atop` hrule (width lst - w)
   where
@@ -361,3 +361,11 @@ drawList' nd ns = lst # centerX `atop` hrule (width lst - w)
     w    = maximum . map width $ elts
     lst  = hcat' (with & sep .~ w/2) elts
 
+enumTrees :: [a] -> [BTree a]
+enumTrees []   = [ Empty ]
+enumTrees xxs  = [ BNode x l r
+             | (x,xs) <- select xxs
+             , (ys, zs) <- subsets xs
+             , l <- enumTrees ys
+             , r <- enumTrees zs
+             ]

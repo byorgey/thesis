@@ -6,7 +6,9 @@
 \label{chap:species}
 
 \todo{List contributions of this chapter somewhere?}
-\todo{Need a story for building with both color or black/white figures}
+\todo{Need a story for building with both color or black/white
+  figures}
+\todo{Include example of bounded tree width graphs somewhere.}
 
 The theory of combinatorial species, introduced by \citet{joyal}, is a
 unified theory of \term{combinatorial structures} or \term{shapes}.
@@ -125,22 +127,13 @@ dia =
 
 nil = square 0.2 # fc black
 
-trees :: [a] -> [BTree a]
-trees []   = [ Empty ]
-trees xxs  = [ BNode x l r
-             || (x,xs) <- select xxs
-             , (ys, zs) <- subsets xs
-             , l <- trees ys
-             , r <- trees zs
-             ]
-
 treeStructures
   = centerXY
   . vcat' (with & sep .~ 0.5)
   . map (centerX . hcat' (with & sep .~ 0.5))
   . chunksOf 10
-  . map (drawBinTree' (with & slHSep .~ 1.5) . fmap labT)
-  . trees
+  . map (drawBinTreeWide . fmap labT)
+  . enumTrees
   $ [0..2]
     \end{diagram}
     \caption{The species $\Bin$ of binary trees}
@@ -151,8 +144,7 @@ treeStructures
   \cdot \Bin \cdot \Bin. \]
 \end{ex}
 
-\todo{More examples.  Cycles, bags.  Permutations.  Examples of
-    algebra: describe lists and trees algebraically, etc.}
+\todo{More examples: Cycles, bags, permutations.}
 
   In a computational context, it is important to keep in mind the
   distinction between \emph{labels} and \emph{data}, or more generally
@@ -365,7 +357,7 @@ charLabel c = mkLeaf (text [c] # fc black <> circle 1) ()
 
 sps =
   [ drawList' charLabel "cdbafeg"      # centerXY # named "la"
-  , drawList' numbered [3,4,2,1,6,5,7] # centerXY # named "l1"
+  , drawList' numbered [2,3,1,0,5,4,6] # centerXY # named "l1"
   , wideTree numbered sampleBTree7     # centerXY # named "t1"
   , wideTree lettered sampleBTree7     # centerXY # named "ta"
   ]
@@ -527,31 +519,54 @@ functorial.
   \end{sproof}
 \end{proof}
 
-For example, $\Bin + \List$ is the species representing things which
-are \emph{either} binary trees or lists (\pref{fig:bin-plus-list}). As
-another example, consider $\Bin + \Bin$.  It is important to bear in
-mind that $+$ yields a \emph{disjoint} or ``tagged'' union; so $\Bin +
-\Bin$ yields two copies of every binary tree
-(\pref{fig:bin-plus-bin}), and in particular it is distinct from
-$\Bin$.
+\begin{ex}
+  $\Bin + \List$ is the species representing things which are
+  \emph{either} binary trees or lists (\pref{fig:bin-plus-list}).
+\end{ex}
 
+\todo{Use color scheme to indicate tag, instead of coloring labels?}
 \begin{figure}
   \centering
   \begin{diagram}[width=200]
-dia = hcat' (with & sep .~ 0.5) [trees, lists]
+import SpeciesDiagrams
+import Data.List (permutations)
 
-trees = 
+dia = (hcat' (with & sep .~ 0.5) . map centerXY) (trees ++ lists)
+    # frame 0.5
+
+trees
+  = map (drawBinTreeWide . fmap labT)
+  $ enumTrees [0,1 :: Int]
+
+lists
+  = map (drawList' labT)
+  . permutations
+  $ [0,1 :: Int]
   \end{diagram}
   \caption{$(\Bin + \List)\ 2$}
   \label{fig:bin-plus-list}
 \end{figure}
 
+\begin{ex}
+  As another example, consider $\Bin + \Bin$.  It is important to bear
+  in mind that $+$ yields a \emph{disjoint} or ``tagged'' union; so
+  $\Bin + \Bin$ yields two copies of every binary tree
+  (\pref{fig:bin-plus-bin}), and in particular it is distinct from
+  $\Bin$.
+\end{ex}
+
+\todo{Definitely need to use a different color scheme here.}
 \begin{figure}
   \centering
-  \todo{Make this diagram}
-
   \begin{diagram}[width=200]
-    dia = circle 1 # frame 1
+import SpeciesDiagrams
+
+dia = (hcat' (with & sep .~ 0.5) . map centerXY) (trees ++ trees)
+    # frame 0.5
+
+trees
+  = map (drawBinTreeWide . fmap labT)
+  $ enumTrees [0,1 :: Int]
   \end{diagram}
   \caption{The species $\Bin + \Bin$}
   \label{fig:bin-plus-bin}
@@ -631,7 +646,9 @@ one-element sets are isomorphic in \Set.)
   The \term{Cartesian} or \term{Hadamard product} of species, is defined on
   objects by $ (F \times G)\ L = F\ L \times G\ L. $
 \end{defn}
-\todo{Say something about action on morphisms and functoriality.}
+\todo{Say something about action on morphisms and functoriality. I
+  show later they come for free; at this point can just say the
+  argument is similar.}
 
 An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
 on \emph{the same set of labels}.  There are several ways to think
@@ -640,7 +657,7 @@ One can think of two distinct shapes, with labels duplicated between
 them. One can think of the labels as \emph{pointers} for locations in
 a shared memory (this view will be explored more in
 \pref{sec:sharing}).  Finally, one can think of the shapes themselves
-as being superimposed..  This last view highlights the fact that
+as being superimposed.  This last view highlights the fact that
 $\times$ is symmetric, but only up to isomorphism, since at root it
 still consists of an \emph{ordered} pair of shapes.
 
@@ -655,8 +672,8 @@ import           Diagrams.TwoD.Path.Metafont
 import           SpeciesDiagrams
 
 connectAll l1 l2 n perm =
-  withNames (map (l1 .>) [1 :: Int .. n]) $ \l1s ->
-  withNames (map (l2 .>) [1 :: Int .. n]) $ \l2s ->
+  withNames (map (l1 .>) [0 :: Int .. n-1]) $ \l1s ->
+  withNames (map (l2 .>) [0 :: Int .. n-1]) $ \l2s ->
   applyAll (zipWith conn l1s (perm l2s))
 
 conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
@@ -677,7 +694,7 @@ perm1 = id
 perm2 = concat . map reverse . chunksOf 2
 
 asFun :: ([Int] -> [Int]) -> Int -> Int
-asFun perm i = perm [1..7] !! (i - 1)
+asFun perm i = perm [0..6] !! i
 
 numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
   [ wideTree numbered sampleBTree7 # centerX
@@ -687,12 +704,12 @@ numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
     numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
 
 listOnTree = wideTree (mkLeaf (circle 1)) sampleBTree7
-  # cCurve 2 1 (1/4 @@@@ turn)
-  # cStr   1 4
-  # cCurve 4 3 (1/2 @@@@ turn)
-  # cStr   3 6
-  # cCurve 6 5 (1/4 @@@@ turn)
-  # cCurve 5 7 (0 @@@@ turn)
+  # cCurve 1 0 (1/4 @@@@ turn)
+  # cStr   0 3
+  # cCurve 3 2 (1/2 @@@@ turn)
+  # cStr   2 5
+  # cCurve 5 4 (1/4 @@@@ turn)
+  # cCurve 4 6 (0 @@@@ turn)
   where
     cCurve :: Int -> Int -> Angle -> Diagram B R2 -> Diagram B R2
     cCurve n1 n2 a =
@@ -708,12 +725,12 @@ superASty   = with & shaftStyle %~ dashing [0.3,0.3] 0 . lw 0.2
                    & headSize .~ 1
 
 treeOnList = drawList (mkLeaf (circle 1)) 7
-  # top 2 1
-  # top 2 6
-  # top 4 3
-  # bot 1 4
-  # bot 6 5
-  # bot 6 7
+  # top 1 0
+  # top 1 5
+  # top 3 2
+  # bot 0 3
+  # bot 5 4
+  # bot 5 6
   where
     top = conn True
     bot = conn False
@@ -744,8 +761,9 @@ dia
 \end{figure}
 
 There is also a species, usually called $\E$, which is an identity
-element for Cartesian product.  Considering $(\E \times G)\ L = \E\ L
-\times G\ L \iso G\ L$, the proper definition of $\E$ becomes clear:
+element for Cartesian product.  Considering that we should have $(\E
+\times G)\ L = \E\ L \times G\ L \iso G\ L$, the proper definition of
+$\E$ becomes clear:
 
 \begin{defn}
   The species of \emph{sets}, $\E$, is defined as the constant functor
@@ -779,10 +797,10 @@ element for Cartesian product.  Considering $(\E \times G)\ L = \E\ L
 \label{sec:lifting-monoids}
 
 \begin{rem}
-  Say something first about action on morphisms following from action
+  \todo{Say something first about action on morphisms following from action
   on objects.  Always true when expression giving action on objects is
   composed of functors from groupoids; then functoriality comes for
-  free too.  Later, can make connection to homotopy type theory.
+  free too.  Later, can make connection to homotopy type theory.}
 \end{rem}
 
 Both these constructions generalize readily.
@@ -903,38 +921,39 @@ category theorist, but is included here for completeness.
   It remains to check the coherence properties. \todo{Finish}
 \end{proof}
 
+This lifting is also ``nice'' in the sense that it preserves many
+additional properties.
+
 \begin{prop}
   The monoidal lifting defined above preserves the following properties:
   \begin{itemize}
   \item If $\otimes$ is symmetric, so is $\lotimes$.
   \item If $\otimes$ is a categorical product, so is $\lotimes$.
   \item If $\otimes$ is a categorical coproduct, so is $\lotimes$.
-  \item \todo{distributive}
+  \item If $(\Str, \otimes, \oplus)$ is \term{distributive} (that is,
+    the canonical morphism $X \times Y + X \times Z \to X \times (Y +
+    Z)$ is always an isomorphism), then so is $([\Lab,\Str], \lotimes,
+    \lifted{\oplus})$.
   \end{itemize}
 \end{prop}
-\todo{\Set is distributive, in the sense that the canonical morphism
-  $X \times Y + X \times Z \to X \times (Y + Z)$ is an isomorphism.
-  Is $[\B, \Set]$ distributive in the same way?  If so, does lifting
-  monoids always preserve distributivity? Answers: yes, and yes.}
 
 \begin{proof}
-  \todo{Finish}
+  \todo{Write me.}
 \end{proof}
 
 \begin{ex}
-  We note that lifting coproducts in $\Set$ to $[\B,\Set]$ yields the
-  $(+, \Zero)$ structure on species, and likewise lifting products
-  yields $(\times, \E)$, Cartesian product.  Since
-  $(\uplus,\varnothing)$ is a coproduct structure on $\Set$, it
-  follows that $(+, \Zero)$ is in fact a coproduct structure on the
-  category $[\B,\Set]$ of species, and likewise $(\times, \One)$ is a
-  categorical product.
+  Lifting coproducts in $\Set$ to $[\B,\Set]$ yields the $(+, \Zero)$
+  structure on species, and likewise lifting products yields $(\times,
+  \E)$.  Since $(\uplus,\varnothing)$ is a coproduct structure on
+  $\Set$, it follows that $(+, \Zero)$ is in fact a coproduct
+  structure on the category $[\B,\Set]$ of species, and likewise
+  $(\times, \One)$ is a categorical product.
 \end{ex}
 
 \begin{ex}
   Take $\Lab = \cat{1}$ (the trivial category with one object and one
   morphism). In this case, functors in $[\cat{1}, \Str]$ are just
-  objects of $\Str$, and a lifted monoidal operation is identical
+  objects of $\Str$, and a lifted monoidal operation is isomorphic
   to the unlifted one.
 \end{ex}
 
@@ -945,7 +964,7 @@ category theorist, but is included here for completeness.
   $\disc{\cat{2}} \to \Set$ is a pair of sets.  In this case, taking
   the lifted sum $F + G$ of two functors $F,G : \disc{\cat{2}} \to
   \Set$ corresponds to summing the pairs elementwise, that is, $(S_1,
-  T_1) + (S_2, T_2) = (S_1 + S_2, T_1 + T_2)$.  Another way of
+  T_1) + (S_2, T_2) = (S_1 \uplus S_2, T_1 \uplus T_2)$.  Another way of
   thinking of a functor $\disc{\cat{2}} \to \Set$ is as a single
   collection of elements where each element is tagged with one of two
   tags (``left'' or ``right'', $0$ or $1$, \etc).  From this point of
@@ -1137,9 +1156,9 @@ grays  = map (\k -> blend k black white) [0, 0.2, 0.8, 1, 0.5]
 shapes = [circle 0.2, triangle 0.4, square 0.4]
 
 grid = vcat' (with & sep .~ 0.5)
-  [ tree3 (\n -> mkLeaf (circle 0.4 # fc (grays !! (n-1))) n) # translateX 3.4
+  [ tree3 (\n -> mkLeaf (circle 0.4 # fc (grays !! n)) n) # translateX 3.4
   , hcat' (with & sep .~ 0.5)
-    [ list2 (\n -> (mkLeaf ((shapes !! (n-1)) # rotateBy (1/4) <> circle 0.4) n)) # rotateBy (3/4)
+    [ list2 (\n -> (mkLeaf ((shapes !! n) # rotateBy (1/4) <> circle 0.4) n)) # rotateBy (3/4)
     , theGrid
     ]
   ]
@@ -1156,7 +1175,7 @@ assembly1 =
   tree3 (mkLeaf $ enrect (list2 (mkLeaf (circle 0.4)) # centerX # scale 0.5))
 
 assembly2 = hcat' (with & sep .~ 0.4)
-  (map (fc white . enrect . (mkLeaf (tree3 (mkLeaf (circle 0.4)) # centerXY # scale 0.5))) [1 .. 3 :: Int])
+  (map (fc white . enrect . (mkLeaf (tree3 (mkLeaf (circle 0.4)) # centerXY # scale 0.5))) [0 .. 2 :: Int])
   <>
   hrule 7 # alignL
 
@@ -1168,7 +1187,7 @@ tree3 nd
   $ sampleBTree5
 
 list2 nd = hcat' (with & sep .~ 1 & catMethod .~ Distrib)
-  (map nd [1 :: Int .. 3])
+  (map nd [0 :: Int .. 2])
   <>
   hrule 2 # alignL
   where
