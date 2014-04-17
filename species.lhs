@@ -6,6 +6,7 @@
 \label{chap:species}
 
 \todo{List contributions of this chapter somewhere?}
+\todo{Need a story for building with both color or black/white figures}
 
 The theory of combinatorial species, introduced by \citet{joyal}, is a
 unified theory of \term{combinatorial structures} or \term{shapes}.
@@ -61,9 +62,6 @@ only a relatively small set of general tools.
   $[3] = \{0,1,2\}$.  Of course, there are exactly $n!$ such list
   structures on any set of $n$ labels.
 
-  \todo{Fix this figure.  Should use connectOutside instead of drawing
-    arrows from scratch.}
-  \todo{Use better colors.  Also need a story for black and white.}
   \begin{figure}
     \centering
     \begin{diagram}[width=400]
@@ -114,23 +112,22 @@ import Data.Tree
 import Diagrams.TwoD.Layout.Tree
 import Control.Arrow (first, second)
 import Data.List.Split (chunksOf)
+import Data.Maybe (fromJust)
 
 dia =
   hcat' (with & sep .~ 0.5)
   [ unord (map labT [0..2])
   , mkArrow 2 (txt "T")
-  , treeStructures
+  , treeStructures # scale 0.5
   ]
   # centerXY
   # pad 1.1
 
 nil = square 0.2 # fc black
 
-drawTreeStruct = renderTree id (~~) . symmLayout . fmap (maybe nil labT)
-
-trees :: [a] -> [Tree (Maybe a)]
-trees []   = [ Node Nothing [] ]
-trees xxs  = [ Node (Just x) [l,r]
+trees :: [a] -> [BTree a]
+trees []   = [ Empty ]
+trees xxs  = [ BNode x l r
              || (x,xs) <- select xxs
              , (ys, zs) <- subsets xs
              , l <- trees ys
@@ -142,11 +139,11 @@ treeStructures
   . vcat' (with & sep .~ 0.5)
   . map (centerX . hcat' (with & sep .~ 0.5))
   . chunksOf 10
-  . map drawTreeStruct
+  . map (drawBinTree' (with & slHSep .~ 1.5) . fmap labT)
   . trees
   $ [0..2]
     \end{diagram}
-    \caption{The species $\T$ of binary trees}
+    \caption{The species $\Bin$ of binary trees}
     \label{fig:binary-trees}
     %$
   \end{figure}
@@ -200,31 +197,28 @@ satisfying the following functoriality conditions:
 \begin{figure}
   \centering
   \begin{diagram}[width=300]
+import           Data.Char                      (ord)
 import           Data.Maybe                     (fromMaybe)
 import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
 
 t :: BTree Int
-t = BNode 2 (leaf 1) (BNode 3 (leaf 4) (leaf 5))
+t = BNode 1 (leaf 0) (BNode 2 (leaf 3) (leaf 4))
 
 sig :: Int -> Char
-sig = ("acebd"!!) . pred
+sig = ("acebd"!!)
 
-mkNamedNode :: IsName a => (a -> String) -> a -> Diagram B R2
-mkNamedNode sh a = (text (sh a) # scale 0.3 <> circle 0.2 # fc white) # named a
+mkNamedNode :: IsName n => (Int -> n) -> (Int -> String) -> Int -> Diagram B R2
+mkNamedNode name sh n = (text (sh n) # scale labR <> lab n) # named (name n)
 
-mkNamedTree :: IsName a => (a -> String) -> BTree a -> BTree (Diagram B R2)
-mkNamedTree = fmap . mkNamedNode
+mkNamedTree :: IsName n => (Int -> n) -> (Int -> String) -> BTree Int -> BTree (Diagram B R2)
+mkNamedTree name sh = fmap (mkNamedNode name sh)
 
-drawDiaBT :: BTree (Diagram B R2) -> Diagram B R2
-drawDiaBT
-  = maybe mempty (renderTree id (~~))
-  . symmLayoutBin
+t1 = drawBinTreeWide . mkNamedTree id show $ t
+t2 = drawBinTreeWide . mkNamedTree sig ((:[]) . sig) $ t
 
-t1 = drawDiaBT . mkNamedTree show $ t
-t2 = drawDiaBT . mkNamedTree (:[]) $ fmap sig t
-
-linkedTrees = hcat' (with & sep .~ 1) [t1, t2]
-  # applyAll (map conn [1..5 :: Int])
+linkedTrees = hcat' (with & sep .~ 0.5) [t1, t2]
+  # applyAll (map conn [0..4 :: Int])
   where
     conn i = connectOutside'
       (with & arrowShaft .~ selectShaft i
@@ -232,18 +226,18 @@ linkedTrees = hcat' (with & sep .~ 1) [t1, t2]
             & arrowHead .~ noHead
       )
       i (sig i)
-    selectShaft i || i `elem` [1,4] = theArc # reverseTrail
-                  || i `elem` [3,5] = theArc
+    selectShaft i || i `elem` [0,3] = theArc # reverseTrail
+                  || i `elem` [2,4] = theArc
     selectShaft _ = hrule 1
     theArc = arc (0 @@@@ deg) (75 @@@@ deg)
 
 drawSig :: Int -> (Int -> Char) -> Diagram B R2
-drawSig n sig = hcat' (with & sep .~ 0.1) (map drawOne [1..n])
+drawSig n sig = hcat' (with & sep .~ 0.1) (map drawOne [0..(n-1)])
   where
     drawOne i = vcat
-      [ mkNamedNode show i
+      [ mkNamedNode id show i
       , vrule 1 # dashing [0.05,0.05] 0
-      , mkNamedNode (:[]) (sig i) ]
+      , mkNamedNode sig ((:[]) . sig) i ]
 
 dia = hcat' (with & sep .~ 3)
   [ drawSig 5 sig # centerXY # named "sig"
@@ -472,24 +466,12 @@ product of species arises from products in $\Set$.
 
 \subsection{Species sum}
 
-The \emph{sum} of two species is given by their disjoint
-union: an $(F + G)$-shape is either an $F$-shape \emph{or} a
-$G$-shape (together with a tag so we can tell which).
-
-\begin{defn}
-  Given $F, G : \B \to \Set$, $F + G$ is defined on objects by \[ (F +
-  G)\ L \defeq F\ L \uplus G\ L, \] where $\uplus$ denotes disjoint
-  union (coproduct) of sets, and the action on morphisms \[ (F + G)\
-  \sigma \defeq F\ \sigma \uplus G\ \sigma, \] where $\uplus$ is
-  considered as a bifunctor in the evident way: $(f \uplus g)\ (\inl\
-  x) = \inl\ (f\ x)$ and $(f \uplus g)\ (\inr\ y) = \inr\ (g\ y)$.
-\end{defn}
-
-\todo{Have to show this is a functor.}
-
-Alternatively, thinking of species as functors in $[\P, \Set]$, we may
-say that an $(F+G)$-shape of size $n$ is either an $F$-shape of size
-$n$ or a $G$-shape of size $n$.
+The \emph{sum} of two species is given by their disjoint union: an $(F
++ G)$-shape is either an $F$-shape \emph{or} a $G$-shape, together
+with a tag so we can tell which (\pref{fig:sum}). Alternatively,
+thinking of species as functors in $[\P, \Set]$, we may say that an
+$(F+G)$-shape of size $n$ is either an $F$-shape of size $n$ or a
+$G$-shape of size $n$.
 
   \begin{figure}
     \centering
@@ -514,24 +496,55 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:sum}
   \end{figure}
 
+\begin{defn}
+  Given $F, G : \B \to \Set$, their sum $F + G : \B \to \Set$ is
+  defined on objects by \[ (F + G)\ L \defeq F\ L \uplus G\ L, \]
+  where $\uplus$ denotes disjoint union (coproduct) of sets, and on
+  morphisms by \[ (F + G)\ \sigma \defeq F\ \sigma \uplus G\
+  \sigma, \] where $\uplus$ is considered as a bifunctor in the
+  evident way: $(f \uplus g)\ (\inl\ x) = \inl\ (f\ x)$ and $(f \uplus
+  g)\ (\inr\ y) = \inr\ (g\ y)$.
+\end{defn}
+
+It remains to prove that the $F + G$ defined above is actually
+functorial.
+
+\begin{proof}
+  The functoriality of $F + G$ follows from that of $F$, $G$, and
+  $\uplus$:
+  \[ (F + G)\ id = F\ id \uplus G\ id = id \uplus id = id, \]
+  and
+  \begin{sproof}
+  \stmt{(F + G) (f \comp g)}
+  \reason{=}{$+$ definition}
+  \stmt{F\ (f \comp g) \uplus G\ (f \comp g)}
+  \reason{=}{$F$, $G$ functors}
+  \stmt{(F\ f \comp F\ g) \uplus (G\ f \comp G\ g)}
+  \reason{=}{$\uplus$ functor}
+  \stmt{(F\ f \uplus G\ f) \comp (F\ g \uplus G\ g)}
+  \reason{=}{$+$ definition}
+  \stmt{(F + G)\ f \comp (F + G)\ g.}
+  \end{sproof}
+\end{proof}
+
 For example, $\Bin + \List$ is the species representing things which
-are \emph{either} binary trees or lists (\pref{fig:bin-plus-list}).
+are \emph{either} binary trees or lists (\pref{fig:bin-plus-list}). As
+another example, consider $\Bin + \Bin$.  It is important to bear in
+mind that $+$ yields a \emph{disjoint} or ``tagged'' union; so $\Bin +
+\Bin$ yields two copies of every binary tree
+(\pref{fig:bin-plus-bin}), and in particular it is distinct from
+$\Bin$.
 
 \begin{figure}
   \centering
-  \todo{Make this diagram}
-
   \begin{diagram}[width=200]
-    dia = circle 1 # frame 1
+dia = hcat' (with & sep .~ 0.5) [trees, lists]
+
+trees = 
   \end{diagram}
-  \caption{The species $\Bin + \List$}
+  \caption{$(\Bin + \List)\ 2$}
   \label{fig:bin-plus-list}
 \end{figure}
-
-It is important to bear in mind that $+$ yields a \emph{disjoint} or
-``tagged'' union.  So, for example, the species $\Bin + \Bin$ consists
-of two copies of every binary tree (\pref{fig:bin-plus-bin}), and in
-particular it is distinct from $\Bin$.
 
 \begin{figure}
   \centering
@@ -765,12 +778,19 @@ element for Cartesian product.  Considering $(\E \times G)\ L = \E\ L
 \subsection{Lifting monoids}
 \label{sec:lifting-monoids}
 
+\begin{rem}
+  Say something first about action on morphisms following from action
+  on objects.  Always true when expression giving action on objects is
+  composed of functors from groupoids; then functoriality comes for
+  free too.  Later, can make connection to homotopy type theory.
+\end{rem}
+
 Both these constructions generalize readily.
 \begin{prop}
-Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a category
-$\Str$ lifts pointwise to a monoidal structure $(\lotimes,
-\lifted I, \lifted \alpha, \lifted \lambda, \lifted \rho)$ on
-$[\Lab, \Str]$.
+  Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a
+  category $\Str$ lifts pointwise to a monoidal structure $(\lotimes,
+  \lifted I, \lifted \alpha, \lifted \lambda, \lifted \rho)$ on
+  $[\Lab, \Str]$.
 \end{prop}
 \noindent The basic idea is exactly the same as the standard Haskell type class
 instance
