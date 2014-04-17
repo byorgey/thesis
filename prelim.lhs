@@ -102,6 +102,18 @@ Make extensive use of category theory.  Very quick overview of basics
 adjunctions).  Basic categories which will be used often: $\Set$,
 $\N$, \Type.
 
+Bifunctors.
+
+  \todo{Action of functor on morphisms follows from action
+  on objects.  Always true when expression giving action on objects is
+  composed of functors from groupoids; then functoriality comes for
+  free too.  Later, can make connection to homotopy type theory.}
+
+Functor categories.  The notations $[\C,\D]$ and $\D^\C$ for a functor
+category will be used interchangeably, as convenient.  The notation
+$\D^\C$ is often helpful since intuition for exponents carries over to
+functor categories.  For example, \todo{finish}
+
 \bay{Note a category is complete iff it has pullbacks and products.
   $\Type$ clearly has products.  It also has pullbacks: given $A
   \stackrel{f}{\longrightarrow} C \stackrel{g}{\longleftarrow} B$, we

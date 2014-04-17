@@ -173,15 +173,15 @@ species.
 
 A \term{species} $F$ is a pair of mappings which
 \begin{itemize}
-\item sends any finite set $U$ (of \term{labels}) to a set $F\ U$ (of
+\item sends any finite set $L$ (of \term{labels}) to a set $F\ L$ (of
   \term{shapes}), and
-\item sends any bijection on finite sets $\sigma : U \bij V$ (a
-  \term{relabelling}) to a function $F\ \sigma : F\ U \to F\ V$
+\item sends any bijection on finite sets $\sigma : L \bij L'$ (a
+  \term{relabelling}) to a function $F\ \sigma : F\ L \to F\ L'$
   (illustrated in \pref{fig:relabelling}),
 \end{itemize}
 satisfying the following functoriality conditions:
 \begin{itemize}
-\item $F\ id_U = id_{F U}$, and
+\item $F\ id_L = id_{F L}$, and
 \item $F\ (\sigma \circ \tau) = F\ \sigma \circ F\ \tau$.
 \end{itemize}
 \end{defn}
@@ -241,10 +241,8 @@ dia = hcat' (with & sep .~ 3)
   \caption{Relabelling} \label{fig:relabelling}
 \end{figure}
 
-\todo{Note about finiteness of output.}
-
-We call $F\ U$ the set of ``$F$-shapes with labels drawn from $U$'',
-or simply ``$F$-shapes on $U$'', or even (when $U$ is clear from
+We call $F\ L$ the set of ``$F$-shapes with labels drawn from $L$'',
+or simply ``$F$-shapes on $L$'', or even (when $L$ is clear from
 context) just ``$F$-shapes''.\footnote{Margaret Readdy's translation
   of \citet{bll} uses the word ``structure'' instead of ``shape'', but
   that word is likely to remind computer scientists of ``data
@@ -258,15 +256,40 @@ don't matter; we get ``the same shapes'', up to relabelling, for any
 label sets of the same size.  We might say that species area
 \term{parametric} in the label sets of a given size. In particular,
 $F$'s action on all label sets of size $n$ is determined by its action
-on any particular such set: if $||U_1|| = ||U_2||$ and we know $F\
-U_1$, we can determine $F\ U_2$ by lifting an arbitrary bijection
-between $U_1$ and $U_2$.  So we often take the finite set of natural
+on any particular such set: if $||L_1|| = ||L_2||$ and we know $F\
+L_1$, we can determine $F\ L_2$ by lifting an arbitrary bijection
+between $L_1$ and $L_2$.  So we often take the finite set of natural
 numbers $[n] = \{0, \dots, n-1\}$ as \emph{the} canonical label set of
 size $n$, and write $F\ n$ (instead of $F\ [n]$) for the set of
 $F$-shapes built from this set.
 
-Some intuition is in order: why do we require $F$ to be functorial?
-\todo{Why indeed?  Functoriality ensures that $F$ is defined uniformly??}
+Some intuition is in order: why is $F$ required to be functorial?
+The answer is that it is functoriality which forces the family of
+shapes to be ``independent'' of the particular labels chosen.
+Intuitively, labels should be arbitrary; a species $F$ should not be
+able to ``do something different'' depending on the particular set of
+labels.  For example, we could define a mapping $B$ which
+\begin{itemize}
+\item sends the set of labels $\{a,b,c\}$ to the set of ``shapes''
+  $\{I,J,K\}$,
+\item sends any other set to $\{P,Q\}$, and
+\item sends every bijection to the identity function when possible, or
+  to the constantly $I$ or constantly $P$ functions as
+  appropriate. (For example, a bijection between $\{1,2\}$ and
+  $\{x,y\}$ is mapped to the identity function on $\{P,Q\}$, whereas a
+  bijection bewteen $\{a,b,c\}$ and $\{1,2,3\}$ is sent to the
+  constantly $P$ function from $\{I,J,K\}$.)
+\end{itemize}
+The fact that this definition singles out the special set of labels
+$\{a,b,c\}$ seems ``bogus'', and it is exactly functoriality that
+prevents this sort of definition.  Indeed, this definition is not
+functorial.  Though it does preserve identities, it does not preserve
+composition: consider, for example, a bijection $\sigma : \{a,b,c\}
+\bij \{1,2,3\}$ (it does not matter which).  Then $B (\sigma \comp
+\sigma^{-1}) = id_{\{P,Q\}}$, but $B \sigma \comp B \sigma^{-1}$ is
+the constantly $P$ endofunction on $\{P,Q\}$.  This example is
+somewhat egregious; the reader may enjoy formulating more subtly wrong
+mappings and showing why they do not satisfy functoriality.
 
 Using the language of category theory, we can also give an equivalent, more
 concise definition of species:
@@ -291,16 +314,33 @@ In this case, the set of shapes corresponding to a given size $n$ can be
 thought of as precisely those labelled by the canonical label set $[n]$.
 
 \begin{rem}
+  Typically, the sets of shapes $F\ L$ are required to be
+  \emph{finite}, that is, species are defined as functors into the
+  category of \emph{finite} sets.  Of course, this is important if the
+  goal is to \emph{count} them!  However, nothing in the present work
+  hinges on this restriction, so it is simpler to drop it.
+
+  It should be noted, however, that requiring finiteness in this way
+  is actually no great restriction: requiring each \emph{particular}
+  set of shapes $F\ L$ to be finite is not at all the same thing as
+  requiring the \emph{entire family} of shapes, $\uplus_{n \in \N} F\
+  n$, to be finite!  Typically, even in the cases that computer
+  scientists care about, each individual $F\ n$ is finite but the
+  entire family is not---that is, a type may have infinitely many
+  inhabitants but only finitely many of a given size.
+\end{rem}
+
+\begin{rem}
   Although Definitions \ref{defn:species-set}-- \ref{defn:species-p}
-  say only that a species $F$ sends a bijection $\sigma : U \bij V$ to
-  a \emph{function} $F\ \sigma : F\ U \to F\ V$, the functoriality of
-  $F$ guarantees that $F\ \sigma$ is a bijection as well. In
+  say only that a species $F$ sends a bijection $\sigma : L \bij L'$
+  to a \emph{function} $F\ \sigma : F\ L \to F\ L'$, the functoriality
+  of $F$ guarantees that $F\ \sigma$ is a bijection as well. In
   particular, $(F\ \sigma)^{-1} = F\ (\sigma^{-1})$, since $F\ \sigma
   \comp F\ (\sigma^{-1}) = F\ (\sigma \comp \sigma^{-1}) = F\ id =
-  id$, and similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.  So one
-  could (and some authors do) define species as endofunctors $F : \B
-  \to \B$ with no loss of expressivity. \todo{Up to issues of
-    finiteness!}
+  id$, and similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.  So
+  (given the restriction that $F\ n$ be finite) one could, and some
+  authors do, define species as endofunctors $F : \B \to \B$ with no
+  loss of expressivity.
 \end{rem}
 
 \begin{rem}
@@ -498,6 +538,9 @@ dia = theDia # centerXY # pad 1.1
   g)\ (\inr\ y) = \inr\ (g\ y)$.
 \end{defn}
 
+\todo{redo based on theorem about functoriality following from action
+  on objects etc.}
+
 It remains to prove that the $F + G$ defined above is actually
 functorial.
 
@@ -566,7 +609,7 @@ dia = (hcat' (with & sep .~ 0.5) . map centerXY) (trees ++ trees)
 
 trees
   = map (drawBinTreeWide . fmap labT)
-  $ enumTrees [0,1 :: Int]
+  $ enumTrees [0,1 :: Int]  -- $
   \end{diagram}
   \caption{The species $\Bin + \Bin$}
   \label{fig:bin-plus-bin}
@@ -593,8 +636,8 @@ species sum:
   two functors to a functor, but this is only its action on the
   objects of $\Spe$.  We must also specify its action on morphisms,
   that is, natural transformations between species, and we must show
-  that it preserves identity natural transformations and (vertical
-  \todo{double-check}) composition of natural transformations.
+  that it preserves identity natural transformations and (vertical)
+  composition of natural transformations.
 
   In this case it's enough simply to unfold definitions and follow the
   types.  Given species $F$, $F'$, $G$, and $G'$, and natural
@@ -644,23 +687,17 @@ choice of one-element set, $\{\star\}$; this is justified since all
 one-element sets are isomorphic in \Set.)
 \begin{defn}
   The \term{Cartesian} or \term{Hadamard product} of species, is defined on
-  objects by $ (F \times G)\ L = F\ L \times G\ L. $
+  objects by $ (F \times G)\ L = F\ L \times G\ L.$
 \end{defn}
-\todo{Say something about action on morphisms and functoriality. I
-  show later they come for free; at this point can just say the
-  argument is similar.}
-
+\begin{rem}
+  The action of $(F \times G)$ on morphisms, functoriality, \etc are
+  omitted; the details are exactly parallel with the definition of
+  species sum, and are presented much more generally in the next
+  subsection.
+\end{rem}
 An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
 on \emph{the same set of labels}.  There are several ways to think
 about this situation, as illustrated in \pref{fig:Cartesian-product}.
-One can think of two distinct shapes, with labels duplicated between
-them. One can think of the labels as \emph{pointers} for locations in
-a shared memory (this view will be explored more in
-\pref{sec:sharing}).  Finally, one can think of the shapes themselves
-as being superimposed.  This last view highlights the fact that
-$\times$ is symmetric, but only up to isomorphism, since at root it
-still consists of an \emph{ordered} pair of shapes.
-
 \begin{figure}
   \centering
   \begin{diagram}[width=380]
@@ -759,29 +796,36 @@ dia
   \caption{Four views on the Cartesian product $\Bin \times \List$}
   \label{fig:Cartesian-product}
 \end{figure}
+One can think of two distinct shapes, with labels duplicated between
+them. One can think of the labels as \emph{pointers} for locations in
+a shared memory (this view will be explored more in
+\pref{sec:sharing}).  Finally, one can think of the shapes themselves
+as being superimposed.  This last view highlights the fact that
+$\times$ is symmetric, but only up to isomorphism, since at root it
+still consists of an \emph{ordered} pair of shapes.
 
-There is also a species, usually called $\E$, which is an identity
-element for Cartesian product.  Considering that we should have $(\E
-\times G)\ L = \E\ L \times G\ L \iso G\ L$, the proper definition of
-$\E$ becomes clear:
+There is also a species, usually called $\Bag$, which is an identity
+element for Cartesian product.  Considering that we should have $(\Bag
+\times G)\ L = \Bag\ L \times G\ L \iso G\ L$, the proper definition of
+$\Bag$ becomes clear:
 
 \begin{defn}
-  The species of \emph{sets}, $\E$, is defined as the constant functor
-  yielding $\{\star\}$, that is, $\E\ L = \{\star\}$.
+  The species of \emph{sets}, $\Bag$, is defined as the constant functor
+  yielding $\{\star\}$, that is, $\Bag\ L = \{\star\}$.
 \end{defn}
 
 \begin{rem}
-  $\E$ is called the \term{species of sets} since there is
+  $\Bag$ is called the \term{species of sets} since there is
   exactly one structure on any set of labels, which can be
   thought of as the set of labels itself, with no additional
   structure.  In fact, as all one-element sets are isomorphic, we
-  may define $\E\ L = \{L\}$.
+  may define $\Bag\ L = \{L\}$.
 \end{rem}
 
-\todo{Picture for $\E$.}
+\todo{Picture for $\Bag$.}
 
 \begin{prop}
-  $(\times, \E)$ is a symmetric monoid on $\Spe$.
+  $(\times, \Bag)$ is a symmetric monoid on $\Spe$.
 \end{prop}
 
 \begin{proof}
@@ -791,163 +835,42 @@ $\E$ becomes clear:
   we will see how to generalize both proofs.
 \end{proof}
 
-\todo{Forward reference to material on closedness?}
+As we will see in \pref{sec:closed}, $\Spe$ is also closed with
+respect to $\times$.
 
 \subsection{Lifting monoids}
 \label{sec:lifting-monoids}
 
-\begin{rem}
-  \todo{Say something first about action on morphisms following from action
-  on objects.  Always true when expression giving action on objects is
-  composed of functors from groupoids; then functoriality comes for
-  free too.  Later, can make connection to homotopy type theory.}
-\end{rem}
-
-Both these constructions generalize readily.
-\begin{prop}
-  Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a
-  category $\Str$ lifts pointwise to a monoidal structure $(\lotimes,
-  \lifted I, \lifted \alpha, \lifted \lambda, \lifted \rho)$ on
-  $[\Lab, \Str]$.
-\end{prop}
-\noindent The basic idea is exactly the same as the standard Haskell type class
-instance
+Both these constructions generalize readily. In fact, any monoidal
+structure on a category $\Str$ can be lifted to one on $[\Lab,\Str]$
+where everything is done ``elementwise''.  The basic idea is exactly
+the same as the standard Haskell type class instance
 \begin{spec}
 instance Monoid a => Monoid (e -> a) where
   mempty         = \ _ -> mempty
   f `mappend` g  = \a -> f a `mappend` g a
 \end{spec}
-but quite a bit more general.  To understand the basic intuition
-behind the proof, the reader may enjoy proving that the above |Monoid|
-instance for |e -> a| satisfies the monoid laws if the instance for
-|a| does.
+but quite a bit more general.
 
-The formal construction and proof will be entirely unsurprising to a
-category theorist, but is included here for completeness.
-
-\todo{This definition and proof feels repetitive in some fundamental
-  way.  Is there an easier way to present it??}
-\begin{defn}
-  Given a monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on
-  a category $\Str$, define $(\lifted{\otimes}, \lifted{I},
-  \lifted{\alpha}, \lifted{\lambda}, \lifted{\rho})$ as follows.
-  \begin{itemize}
-  \item $\lifted{\otimes} : [\Lab,\Str] \times [\Lab,\Str] \to [\Lab,\Str]$ is the
-    bifunctor computing the lifted monoidal product.
-    \begin{itemize}
-    \item On objects, $\lotimes$ sends pairs of functors $F,G : \Lab \to
-      \Str$ to the functor $F \lotimes G : \Lab \to \Str$, defined as the
-      pointwise tensor product of $F$ and $G$.  That is, on objects of
-      $\Lab$, \[ (F \lotimes G)\ L = F\ L \otimes G\ L, \] and similarly, on
-      morphisms \[ (F \lotimes G)\ f = F\ f \otimes G\ f. \]
-      Functoriality of $F \lotimes G$ follows from that of $F$, $G$,
-      and $\otimes$:
-      \[ (F \lotimes G)\ id = F\ id \otimes G\ id = id \otimes id =
-      id, \]
-      and
-      \begin{sproof}
-        \stmt{(F \lotimes G) (f \comp g)}
-        \reason{=}{$\lotimes$ definition}
-        \stmt{F\ (f \comp g) \otimes G\ (f \comp g)}
-        \reason{=}{$F$, $G$ functors}
-        \stmt{(F\ f \comp F\ g) \otimes (G\ f \comp G\ g)}
-        \reason{=}{$\otimes$ functor}
-        \stmt{(F\ f \otimes G\ f) \comp (F\ g \otimes G\ g)}
-        \reason{=}{$\lotimes$ definition}
-        \stmt{(F \lotimes G)\ f \comp (F \lotimes G)\ g.}
-      \end{sproof}
-
-  \item $\lotimes$ also sends pairs of natural transformations $\phi :
-    F \nt G : \Lab \to \Str$, $\psi : F' \nt G' : \Lab \to \Str$ to a
-    natural transformation $\phi \lotimes \psi : F \lotimes F' \nt G
-    \lotimes G'$.  The component of $\phi \lotimes \psi$ at an object
-    $L \in \Lab$ is a morphism $\mor {(F \lotimes F')\ L} {(G \lotimes
-      G')\ L} = \mor {F\ L \otimes F'\ L} {F\ L \otimes G'\ L}$,
-    similarly defined by $\phi_L \otimes \psi_L$.  Naturality of $\phi
-    \lotimes \psi$ is thus given by
-    \[ \xymatrixcolsep{5pc}
-       \xymatrix{
-         F\ L \otimes F'\ L
-           \ar[r]^{\phi_L \otimes \psi_L}
-           \ar[d]_{F f \otimes F' f}
-       & G\ L \otimes G'\ L
-           \ar[d]^{G f \otimes G' f}
-       \\
-         F\ L' \otimes F'\ L'
-           \ar[r]_{\phi_{L'} \otimes \psi_{L'}}
-       & G\ L' \otimes G'\ L'
-       }
-    \]
-    which commutes by naturality of $\phi$ and $\psi$ and
-    functoriality of $\otimes$.
-    \end{itemize}
-
-    We must show that $\lotimes$ is a bifunctor, which follows
-    straightforwardly from the functoriality of $\otimes$:
-    \begin{align*}
-      (id \lotimes id)_L = id_L \otimes id_L = id_L,
-    \end{align*}
-    and
-    \begin{sproof}
-      \stmt{((\phi \comp \phi') \lotimes (\psi \comp \psi'))_L}
-      \reason{=}{$\lotimes$ definition}
-      \stmt{(\phi \comp \phi')_L \otimes (\psi \comp \psi')_L}
-      \reason{=}{definition of vertical composition \todo{check}}
-      \stmt{(\phi_L \comp \phi'_L) \otimes (\psi_L \comp \psi'_L)}
-      \reason{=}{$\otimes$ functor}
-      \stmt{(\phi_L \otimes \psi_L) \comp (\phi'_L \otimes \psi'_L)}
-      \reason{=}{$\lotimes$ definition}
-      \stmt{(\phi \lotimes \psi)_L \comp (\phi' \lotimes \psi')}
-    \end{sproof}
-
-  \item $\lifted{I} \in [\Lab,\Str]$ is the constant functor $\Delta_I$.
-  \item Define $\lifted{\alpha}_{F,G,H} : \ntiso {(F \lotimes G) \lotimes H}
-    {F \lotimes (G \lotimes H)}$ by $(\lifted \alpha_{F,G,H})_L =
-    \alpha_{FL,GL,HL}$. \todo{Need to show $\lifted{\alpha}$
-      is a natural isomorphism, and for any $F,G,H$,
-      $\lifted{\alpha}_{F,G,H}$ is a natural transformation. (?)}
-  \item Similarly, $(\lifted{\lambda}_F)_L = \lambda_{FL}$ and
-    $(\lifted{\rho}_F)_L = \rho_{FL}$.
-  \end{itemize}
-\end{defn}
-
-\begin{thm}
-  If $(\otimes, I, \alpha, \lambda, \rho)$ is a monoidal structure on
-  $\Str$, then $(\lotimes, \lifted I, \lifted \alpha, \lifted \lambda,
-  \lifted \rho)$ defines a monoidal structure on the functor category
-  $[\Lab, \Str]$.
-\end{thm}
-\begin{proof}
-  It remains to check the coherence properties. \todo{Finish}
-\end{proof}
-
-This lifting is also ``nice'' in the sense that it preserves many
-additional properties.
-
-\begin{prop}
-  The monoidal lifting defined above preserves the following properties:
-  \begin{itemize}
-  \item If $\otimes$ is symmetric, so is $\lotimes$.
-  \item If $\otimes$ is a categorical product, so is $\lotimes$.
-  \item If $\otimes$ is a categorical coproduct, so is $\lotimes$.
-  \item If $(\Str, \otimes, \oplus)$ is \term{distributive} (that is,
-    the canonical morphism $X \times Y + X \times Z \to X \times (Y +
-    Z)$ is always an isomorphism), then so is $([\Lab,\Str], \lotimes,
-    \lifted{\oplus})$.
-  \end{itemize}
+\begin{prop} \label{prop:lift-monoid-simple}
+  Any (strict) monoid $(\otimes, I)$ on $\Str$ lifts to a monoid,
+  denoted $(\otimes^\Lab, I^\Lab)$, on the functor category
+  $[\Lab,\Str]$.  In particular, $(F \otimes^\Lab G)\ L = F\ L \otimes
+  G\ L$, and $I^\Lab$ is $\Delta_I$, the functor which is constantly
+  $I$.  Moreover, this lifting preserves products, coproducts, and
+  distributivity.
 \end{prop}
 
-\begin{proof}
-  \todo{Write me.}
-\end{proof}
+A yet more general version of this proposition, along with a detailed
+proof, will be given later. First, however, we consider some examples.
 
 \begin{ex}
   Lifting coproducts in $\Set$ to $[\B,\Set]$ yields the $(+, \Zero)$
   structure on species, and likewise lifting products yields $(\times,
-  \E)$.  Since $(\uplus,\varnothing)$ is a coproduct structure on
-  $\Set$, it follows that $(+, \Zero)$ is in fact a coproduct
-  structure on the category $[\B,\Set]$ of species, and likewise
-  $(\times, \One)$ is a categorical product.
+  \Bag)$. According to \pref{prop:lift-monoid-simple}, since
+  $(\uplus,\varnothing)$ is a coproduct structure on $\Set$, $(+,
+  \Zero)$ is likewise a coproduct structure on the category $[\B,\Set]$
+  of species, and similarly $(\times, \One)$ is a categorical product.
 \end{ex}
 
 \begin{ex}
@@ -1043,6 +966,173 @@ additional properties.
 
 \todo{give some examples with other categories. $1/\Set$,
   \ie\ pointed sets with smash product? $\cat{Vect}$?}
+
+For completeness, we now turn to a detailed and fully general
+construction which shows how monoids (and many other structures of
+interest) can be lifted from a category $\Str$ to a functor category
+$[\Lab,\Str]$.  We must first develop some technical machinery
+regarding functor categories.  In particular, we show how to lift
+objects, functors, and natural transformations based on some category $\Str$
+into related objects, functors, and natural transformations based on
+the functor category $\Str^\Lab$.
+
+\begin{prop} \label{prop:lift-object}
+  An object $D \in \D$ lifts to an object (\ie a functor) $D^\C \in
+  \D^\C$, defined as the constant functor $\Delta_D$.
+\end{prop}
+
+\begin{prop} \label{prop:lift-functor}
+  Any functor $F : \D \to \E$ lifts to a functor $F^\C : \D^\C \to
+  \E^\C$ given by postcomposition with $F$.  That is, $F^\C(G) = F
+  \comp G = FG$, and $F^\C(\alpha) = F\alpha$.
+\end{prop}
+
+\begin{proof}
+  As usual, $F\alpha$ denotes the ``right whiskering'' of $\alpha$ by $F$,
+  \[ \xymatrix{ \C \rtwocell^G_H{\alpha} & \D \ar[r]^F & \E. } \]
+  $F^\C$ preserves identities since
+  \[ \xymatrix{ \C \ar[r]^G & \D \ar[r]^F & \E } \]
+  can be seen as both $F id_G$ and $id_{FG}$, and it preserves
+  composition since
+  \[ \xymatrixrowsep{1pc}
+     \xymatrix{ \C \ruppertwocell{\alpha} \rlowertwocell{\beta} \ar[r]
+              & \D \ar[r]^F & \E }
+     =
+     \vcenter{
+     \xymatrix{ \C \ruppertwocell{\alpha} \ar[r] & \D \ar[r]^F & \E \\
+                \C \rlowertwocell{\beta} \ar[r] & \D \ar[r]_F & \E }
+     }.
+     \qedhere
+  \]
+  \bay{If time, figure out how to align this to the bottom for
+    placement of the period and QED symbol.}
+\end{proof}
+
+Natural transformations lift in the same way:
+
+\begin{prop} \label{prop:lift-nt} Given functors $F,G : \D \to \E$,
+  any natural transformation $\alpha : \nt F G$ lifts to a natural
+  transformation $\alpha^\C : \nt {F^\C} {G^\C} : \D^\C \to \E^\C$
+  given by postcomposition with $\alpha$.  That is, the component of
+  $\alpha^\C$ at $H :\C \to \D$ is $\alpha^\C_H = \alpha H$. Moreover,
+  if $\alpha$ is an isomorphism then so is $\alpha^\C$.
+\end{prop}
+
+\begin{proof}
+  Here $\alpha H$ denotes the ``left whiskering'' of $\alpha$ by $H$,
+  \[ \xymatrix{ \C \ar[r]^H & \D \rtwocell^F_G{\alpha} & \E. } \]
+  Note that $\alpha^\C_H$ should be a morphism $\mor {F^\C H} {G^\C
+    H}$ in $\E^\C$, that is, a natural transformation $\nt {FH} {GH}$,
+  so $\alpha H$ has the right type.  The naturality square for
+  $\alpha^\C$ is
+  \[ \xymatrix {
+        FH \ar[r]^{\alpha^\C_H} \ar[d]_{F\beta}
+      & GH \ar[d]^{G\beta}
+     \\ FJ \ar[r]_{\alpha^\C_J}
+      & GJ
+     }
+  \]
+  which commutes by naturality of $\alpha$: at any particular $C \in
+  \C$ the above diagram reduces to
+  \[ \xymatrix{
+        FHC \ar[r]^{\alpha_{HC}} \ar[d]_{F\beta_C}
+      & GHC \ar[d]^{G\beta_C}
+     \\ FJC \ar[r]_{\alpha_{JC}}
+      & GJC
+     }
+  \]
+  If $\alpha$ is an isomorphism, then $(\alpha^{-1})^\C$ is the
+  inverse of $\alpha^\C$: for any $H$, $\alpha^{-1}H \cdot \alpha H =
+  (\alpha^{-1} \cdot \alpha) H = id_H$.
+\end{proof}
+
+\todo{Theorem here about lifting diagrams.}
+
+We now have the necessary tools to show how monoids lift into a
+functor category.
+
+\begin{prop} \label{prop:lift-monoid}
+  Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a
+  category $\Str$ lifts pointwise to a monoidal structure $(\otimes^\Lab,
+  I^\Lab, \alpha^\Lab, \lambda^\Lab, \rho^\Lab)$ on the functor category
+  $[\Lab, \Str]$.
+\end{prop}
+
+\begin{proof}
+  Immediate from Propositions \ref{prop:lift-object},
+  \ref{prop:lift-functor}, and \ref{prop:lift-nt}, and
+  \pref{thm:lift-diagrams}.
+\end{proof}
+
+In \pref{prop:lift-monoid-simple} it was claimed that this lifting
+preserves products, coproducts, and distributivity.  To make this
+precise requires showing that lifting preserves adjunctions.
+
+\begin{prop} \label{prop:lift-adj}
+  Let $F : \D \to \E$ and $G : \D \leftarrow \E$ be functors.  If $F
+  \adj G$, then $F^\C \adj G^\C$.
+\end{prop}
+
+\begin{proof}
+  Since $F \adj G$, assume we have $\gamma_{A,B} : \E(FA, B) \cong
+  \D(A, GB)$.  To show $F^\C \adj G^\C$, we must define a natural
+  isomorphism $\gamma^\C_{H,J} : \E^\C(F \comp H, J) \cong \D^\C(H, G
+  \comp J)$.  Given $\phi \in \E^\C(FH,J)$, that is, $\phi : \nt {FH}
+  J : \C \to \E$, and an object $C \in \C$, define \[
+  \gamma^\C_{H,J}(\phi)_C = \gamma_{HC,JC}(\phi_C). \]  Note that
+  $\gamma_{HC,JC} : \E(FHC,JC) \cong \D(HC,GJC)$, so it sends $\phi_C
+  : FHC \to JC$ to a morphism $HC \to GJC$, as required.
+
+  From the fact that $\gamma$ is an isomorphism it thus follows
+  directly that $\gamma^\C$ is an isomorphism as well.  Naturality of
+  $\gamma^\C$ also follows straightforwardly from naturality of
+  $\gamma$. \bay{Weasel words!  Should try to actually prove this.
+    Intuitively I believe it really is ``straightforward'' but getting
+    the details straight is tricky.  Is this just an application of
+    the previous lemma about lifting natural transformations?  It
+    might be, but if so it would require a bit of unfolding to see it.}
+\end{proof}
+
+\begin{prop}
+  The lifting defined in \pref{prop:lift-monoid} preserves coproducts
+  and products.
+\end{prop}
+
+\begin{proof}
+  Consider a category $\Str$ with coproducts, given by a bifunctor $+
+  : \Str \times \Str \to \Str$.  Lifting yields a functor $+^\Lab :
+  (\Str \times \Str)^\Lab \to \Str^\Lab$.  Note that $(\Str \times
+  \Str)^\Lab \cong \Str^\Lab \times \Str^\Lab$, so we may consider
+  $+^\Lab$ as a bifunctor $\Str^\Lab \times \Str^\Lab \to \Str^\Lab$.
+
+  There is \latin{a priori} no guarantee that $+^\Lab$ has any special
+  properties, but it turns out that $+^\Lab$ is a coproduct on
+  $\Str^\Lab$, which we demonstrate as follows.  The key idea is that
+  the property of being a coproduct can be described in terms of an
+  adjunction: in particular, $+$ is a coproduct if and only if it is
+  left adjoint to the diagonal functor $\Delta : \Str \to \Str \times
+  \Str$. \bay{Is it worth proving this?  In an appendix?  It's fairly
+    standard.}  Since lifting preserves adjunctions
+  (\pref{prop:lift-adj}), we must have $+^\Lab \adj \Delta^\Lab$. But
+  note we have $\Delta^\Lab : \Str^\Lab \to (\Str \times \Str)^\Lab
+  \cong \Str^\Lab \times \Str^\Lab$, with $\Delta^\Lab (F) = \Delta
+  \comp F \cong (F,F)$, so in fact $\Delta^\Lab$ is the diagonal
+  functor on $\Str^\Lab$.  Hence $+^\Lab$, being left adjoint to the
+  diagonal functor, is indeed a coproduct on $\Str^\Lab$.
+
+  Of course, this dualizes to products as well, which are
+  characterized by being right adjoint to the diagonal functor.
+\end{proof}
+
+\begin{prop}
+  The lifting defined in \pref{prop:lift-monoid} preserves
+  distributivity.
+\end{prop}
+
+\begin{proof}
+  \todo{Prove me! Will probably require finding some appropriate
+    adjunction\dots}
+\end{proof}
 
 \section{Day convolution: partitional and arithmetic product}
 \label{sec:day}

@@ -20,7 +20,8 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{stmaryrd}
-\usepackage[all,cmtip]{xy}
+\usepackage[all,cmtip,2cell]{xy}
+\UseAllTwocells
 \usepackage{xcolor}
 \usepackage{prettyref}
 \usepackage{xspace}
@@ -178,6 +179,10 @@
 
 % generic categories
 \newcommand{\D}{\bbb{D}}
+\newcommand{\E}{\bbb{E}}
+
+% adjunctions
+\newcommand{\adj}{\dashv}
 
 % monoidal lifting
 \newcommand{\lifted}[1]{\hat{#1}}
@@ -189,7 +194,6 @@
 \renewcommand{\Sp}{\msf}
 \newcommand{\X}{\Sp{X}}
 \newcommand{\Y}{\Sp{Y}}
-\newcommand{\E}{\Sp{E}}
 \newcommand{\F}{\Sp{F}}
 \newcommand{\G}{\Sp{G}}
 \newcommand{\List}{\Sp{L}}
