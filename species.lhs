@@ -1130,8 +1130,12 @@ precise requires showing that lifting preserves adjunctions.
 \end{prop}
 
 \begin{proof}
-  \todo{Prove me! Will probably require finding some appropriate
-    adjunction\dots}
+  In a category with products and coproducts, for every $X$, $Y$, and
+  $Z$, there is a canonical morphism $X \times Y + X \times Z \to X
+  \times (Y + Z)$, given by \todo{finish}.  The category is
+  distributive if this morphism is always an isomorphism.
+
+  \todo{Finish proof}
 \end{proof}
 
 \section{Day convolution: partitional and arithmetic product}
