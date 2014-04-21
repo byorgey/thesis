@@ -451,8 +451,11 @@ Along the way, by way of examples, we will also explore various
 generalizations of species (multisort, weighted, and see how they fit
 in this framework: each arises from considering particular categories
 in place of $\B$ and $\Set$.  To keep these various functor categories
-straight, the word ``species'' will be used for $[\B,\Set]$,
-and ``generalized species'' for some abstract $[\Lab, \Str]$.
+straight, the word ``species'' will be used for $[\B,\Set]$, and
+``generalized species'' (or, more specifically,
+``$[\Lab,\Str]$-species''\footnote{Not to be confused with
+  \todo{generalized species of XXX, ``$(A,B)$-species''}}) for some
+  abstract $[\Lab, \Str]$.
 
 \subsection{Species in type theory}
 \label{sec:species-in-type-theory}
@@ -852,17 +855,17 @@ instance Monoid a => Monoid (e -> a) where
 \end{spec}
 but quite a bit more general.
 
-\begin{prop} \label{prop:lift-monoid-simple}
-  Any (strict) monoid $(\otimes, I)$ on $\Str$ lifts to a monoid,
-  denoted $(\otimes^\Lab, I^\Lab)$, on the functor category
-  $[\Lab,\Str]$.  In particular, $(F \otimes^\Lab G)\ L = F\ L \otimes
-  G\ L$, and $I^\Lab$ is $\Delta_I$, the functor which is constantly
-  $I$.  Moreover, this lifting preserves products, coproducts, and
-  distributivity.
+\begin{prop} \label{prop:lift-monoid-simple} Any (strict) monoid
+  $(\otimes, I)$ on $\Str$ lifts to a monoid, denoted $(\otimes^\Lab,
+  I^\Lab)$, on the functor category $[\Lab,\Str]$.  In particular, $(F
+  \otimes^\Lab G)\ L = F\ L \otimes G\ L$, and $I^\Lab$ is $\Delta_I$,
+  the functor which is constantly $I$.  Moreover, this lifting
+  preserves products, coproducts, symmetry, and distributivity.
 \end{prop}
 
-A yet more general version of this proposition, along with a detailed
-proof, will be given later. First, however, we consider some examples.
+In fact, non-strict monoids lift as well; a yet more general version
+of this proposition, along with a detailed proof, will be given
+later. First, however, we consider some examples.
 
 \begin{ex}
   Lifting coproducts in $\Set$ to $[\B,\Set]$ yields the $(+, \Zero)$
@@ -976,16 +979,17 @@ objects, functors, and natural transformations based on some category $\Str$
 into related objects, functors, and natural transformations based on
 the functor category $\Str^\Lab$.
 
-\begin{prop} \label{prop:lift-object}
+\begin{lem} \label{lem:lift-object}
+  \bay{Not sure if this is actually needed at all.}
   An object $D \in \D$ lifts to an object (\ie a functor) $D^\C \in
   \D^\C$, defined as the constant functor $\Delta_D$.
-\end{prop}
+\end{lem}
 
-\begin{prop} \label{prop:lift-functor}
+\begin{lem} \label{lem:lift-functor}
   Any functor $F : \D \to \E$ lifts to a functor $F^\C : \D^\C \to
   \E^\C$ given by postcomposition with $F$.  That is, $F^\C(G) = F
   \comp G = FG$, and $F^\C(\alpha) = F\alpha$.
-\end{prop}
+\end{lem}
 
 \begin{proof}
   As usual, $F\alpha$ denotes the ``right whiskering'' of $\alpha$ by $F$,
@@ -1001,22 +1005,20 @@ the functor category $\Str^\Lab$.
      \vcenter{
      \xymatrix{ \C \ruppertwocell{\alpha} \ar[r] & \D \ar[r]^F & \E \\
                 \C \rlowertwocell{\beta} \ar[r] & \D \ar[r]_F & \E }
-     }.
-     \qedhere
-  \]
-  \bay{If time, figure out how to align this to the bottom for
-    placement of the period and QED symbol.}
+     }
+  \] \bay{Improve this picture with composition symbols?}
+  by the interchange law for horizontal and vertical composition.
 \end{proof}
 
 Natural transformations lift in the same way:
 
-\begin{prop} \label{prop:lift-nt} Given functors $F,G : \D \to \E$,
+\begin{lem} \label{lem:lift-nt} Given functors $F,G : \D \to \E$,
   any natural transformation $\alpha : \nt F G$ lifts to a natural
   transformation $\alpha^\C : \nt {F^\C} {G^\C} : \D^\C \to \E^\C$
   given by postcomposition with $\alpha$.  That is, the component of
   $\alpha^\C$ at $H :\C \to \D$ is $\alpha^\C_H = \alpha H$. Moreover,
   if $\alpha$ is an isomorphism then so is $\alpha^\C$.
-\end{prop}
+\end{lem}
 
 \begin{proof}
   Here $\alpha H$ denotes the ``left whiskering'' of $\alpha$ by $H$,
@@ -1043,35 +1045,72 @@ Natural transformations lift in the same way:
   \]
   If $\alpha$ is an isomorphism, then $(\alpha^{-1})^\C$ is the
   inverse of $\alpha^\C$: for any $H$, $\alpha^{-1}H \cdot \alpha H =
-  (\alpha^{-1} \cdot \alpha) H = id_H$.
+  (\alpha^{-1} \cdot \alpha) H = id_{FH}$. \todo{fix the $\alpha^{-1}$}
+  \[ {\xymatrixcolsep{5pc} \xymatrix{ \C \ar[r]^H & \D
+     \ruppertwocell^F{\alpha} \ar[r] \rlowertwocell_F{\alpha^{-1}} & \E
+     }}
+     =
+     \xymatrix{ \C \ar[r]^H & \D \ar[r]^F & \E }
+   \]
 \end{proof}
 
-\todo{Theorem here about lifting diagrams.}
+\begin{thm} \label{thm:lift-expressions}
+\todo{Theorem here about lifting expressions/diagrams.}
+\end{thm}
 
 We now have the necessary tools to show how monoids lift into a
 functor category.
 
-\begin{prop} \label{prop:lift-monoid}
+\begin{thm} \label{thm:lift-monoid}
   Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a
   category $\Str$ lifts pointwise to a monoidal structure $(\otimes^\Lab,
   I^\Lab, \alpha^\Lab, \lambda^\Lab, \rho^\Lab)$ on the functor category
   $[\Lab, \Str]$.
-\end{prop}
+\end{thm}
 
 \begin{proof}
-  Immediate from Propositions \ref{prop:lift-object},
-  \ref{prop:lift-functor}, and \ref{prop:lift-nt}, and
-  \pref{thm:lift-diagrams}.
+  Immediate from Propositions \ref{lem:lift-object},
+  \ref{lem:lift-functor}, and \ref{lem:lift-nt}, and
+  \pref{thm:lift-expressions}.
 \end{proof}
 
 In \pref{prop:lift-monoid-simple} it was claimed that this lifting
-preserves products, coproducts, and distributivity.  To make this
-precise requires showing that lifting preserves adjunctions.
+preserves products, coproducts, symmetry, and distributivity.  We can
+already show that symmetry and distributivity are preserved:
 
-\begin{prop} \label{prop:lift-adj}
+\begin{prop}
+  The lifting defined in \pref{thm:lift-monoid} preserves symmetry.
+\end{prop}
+
+\begin{proof}
+  Symmetry is given by a natural isomorphism $\all {X Y} {X \otimes Y
+  \iso Y \otimes X}$. By \pref{thm:lift-expressions}, this lifts to a natural isomorphism
+  $\all {F G} {F \otimes^\Lab G \iso G \otimes^\Lab F}$.
+\end{proof}
+
+\begin{prop}
+  The lifting defined in \pref{thm:lift-monoid} preserves
+  distributivity.
+\end{prop}
+
+\begin{proof}
+  In any category with all products and coproducts, there is a natural
+  transformation $\all {X Y Z} {X \times Y + X \times Z \to X \times
+    (Y + Z)}$, given by
+  $\fork{\choice{\pi_1}{\pi_1}}{\choice{\pi_2}{\pi_2}}$.  The category
+  is \term{distributive} if this is an isomorphism.  Again by
+  \pref{thm:lift-expressions}, such an isomorphism lifts to another natural
+  isomorphism $\all {F G H} {(F \times^\Lab G) +^\Lab (F \times^\Lab H) \to F \times^\Lab (G +^\Lab
+    H)}$.
+\end{proof}
+
+To show that products and coproducts are preserved requires first
+showing that lifting preserves adjunctions.
+
+\begin{lem} \label{lem:lift-adj}
   Let $F : \D \to \E$ and $G : \D \leftarrow \E$ be functors.  If $F
   \adj G$, then $F^\C \adj G^\C$.
-\end{prop}
+\end{lem}
 
 \begin{proof}
   Since $F \adj G$, assume we have $\gamma_{A,B} : \E(FA, B) \cong
@@ -1094,7 +1133,7 @@ precise requires showing that lifting preserves adjunctions.
 \end{proof}
 
 \begin{prop}
-  The lifting defined in \pref{prop:lift-monoid} preserves coproducts
+  The lifting defined in \pref{thm:lift-monoid} preserves coproducts
   and products.
 \end{prop}
 
@@ -1113,7 +1152,7 @@ precise requires showing that lifting preserves adjunctions.
   left adjoint to the diagonal functor $\Delta : \Str \to \Str \times
   \Str$. \bay{Is it worth proving this?  In an appendix?  It's fairly
     standard.}  Since lifting preserves adjunctions
-  (\pref{prop:lift-adj}), we must have $+^\Lab \adj \Delta^\Lab$. But
+  (\pref{lem:lift-adj}), we must have $+^\Lab \adj \Delta^\Lab$. But
   note we have $\Delta^\Lab : \Str^\Lab \to (\Str \times \Str)^\Lab
   \cong \Str^\Lab \times \Str^\Lab$, with $\Delta^\Lab (F) = \Delta
   \comp F \cong (F,F)$, so in fact $\Delta^\Lab$ is the diagonal
@@ -1122,20 +1161,6 @@ precise requires showing that lifting preserves adjunctions.
 
   Of course, this dualizes to products as well, which are
   characterized by being right adjoint to the diagonal functor.
-\end{proof}
-
-\begin{prop}
-  The lifting defined in \pref{prop:lift-monoid} preserves
-  distributivity.
-\end{prop}
-
-\begin{proof}
-  In a category with products and coproducts, for every $X$, $Y$, and
-  $Z$, there is a canonical morphism $X \times Y + X \times Z \to X
-  \times (Y + Z)$, given by \todo{finish}.  The category is
-  distributive if this morphism is always an isomorphism.
-
-  \todo{Finish proof}
 \end{proof}
 
 \section{Day convolution: partitional and arithmetic product}
@@ -1149,7 +1174,7 @@ algebraic data types.  For these reasons, partitional product is often
 simply referred to as ``product'', without any modifier.
 
 There is also another less well-known product, \term{arithmetic
-  product} \cite{Maia2008arithmetic}, which can be thought of as a
+  product} \citep{Maia2008arithmetic}, which can be thought of as a
 symmetric form of composition.  These two products arise in an
 analogous way, via a categorical construction known as \emph{Day
   convolution}.
@@ -1158,11 +1183,10 @@ analogous way, via a categorical construction known as \emph{Day
 \label{sec:partitional-product}
 
 
-The partitional product $F \sprod G$ of two species $F$
-and $G$ consists of paired $F$- and $G$-shapes %, but with a twist:
-% instead of being replicated, as in Cartesian product, the labels are
-with the labels \emph{partitioned} between the two shapes
-(\pref{fig:product}).
+The partitional product $F \sprod G$ of two species $F$ and $G$
+consists of paired $F$- and $G$-shapes, as with the Cartesian product,
+but with the labels \emph{partitioned} between the two shapes
+(\pref{fig:product}) instead of replicated.
 
 \todo{picture of a pair of trees with disjoint labels, or something
   like that.}
@@ -1170,21 +1194,25 @@ with the labels \emph{partitioned} between the two shapes
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
-import SpeciesDiagrams
-
-theDia
-  = hcat' (with & sep .~ 1)
-    [ struct 5 "F•G"
-    , text' 1 "="
-    , vcat' (with & sep .~ 0.2)
-      [ struct 2 "F"
-      , struct 3 "G"
-      ]
-      # centerY
-    ]
-
-dia = theDia # centerXY # pad 1.1
+dia = circle 1
     \end{diagram}
+
+%     \begin{diagram}[width=250]
+% import SpeciesDiagrams
+
+% theDia
+%   = hcat' (with & sep .~ 1)
+%     [ struct 5 "F•G"
+%     , text' 1 "="
+%     , vcat' (with & sep .~ 0.2)
+%       [ struct 2 "F"
+%       , struct 3 "G"
+%       ]
+%       # centerY
+%     ]
+
+% dia = theDia # centerXY # pad 1.1
+%     \end{diagram}
     \caption{Partitional species product}
     \label{fig:product}
   \end{figure}
@@ -1502,7 +1530,7 @@ quantification, and indexed products are $\Pi$-types; hence, we
 have
 \begin{align*}
 (H^G)_n &= \int_{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
-       &= \forall (m : \N). (\Fin m \iso \Fin n) \to G_n \to H_n \\
+       &= \all {(m : \N)} {(\Fin m \iso \Fin n) \to G_n \to H_n} \\
        &\iso (\Fin n \iso \Fin n) \to G_n \to H_n
 \end{align*}
 where the final isomorphism follows since $(\Fin m \iso \Fin n)$ is
@@ -1513,8 +1541,8 @@ Being Cartesian closed means there is an adjunction $- \times G \vdash
 isomorphism \[ [\PT,\Type](F \times G, H) \iso [\PT,\Type](F,H^G) \]
 Expanding morphisms of the functor category $[\PT, \Type]$ as natural
 transformations and the definition of $H^G$ derived above, this
-yields \[ \left( \forall n. (F \times G)_n \to H_n\right) \iso \left(
-  \forall n. F_n \to (\Fin n \iso \Fin n) \to G_n \to H_n\right). \]
+yields \[ \left( \all n {(F \times G)_n \to H_n} \right) \iso \left(
+  \all n {F_n \to (\Fin n \iso \Fin n) \to G_n \to H_n} \right). \]
 Intuitively, this says that a size-polymorphic function that takes a
 Cartesian product shape $F \times G$ and yields another species $H$ is
 isomorphic to a size-polymorphic function that takes a triple of an

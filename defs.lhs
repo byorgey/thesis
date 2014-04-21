@@ -59,6 +59,8 @@
 \providecommand{\R}{\bbb{R}}
 \providecommand{\C}{\bbb{C}}
 
+\newcommand{\all}[2]{\forall #1.\; #2}
+
 \newcommand{\mcal}[1]{\ensuremath{\mathcal{#1}}}
 \let\Sect\S
 \renewcommand{\S}{\mcal S}
@@ -187,6 +189,10 @@
 % monoidal lifting
 \newcommand{\lifted}[1]{\hat{#1}}
 \newcommand{\lotimes}{\mathbin{\lifted{\otimes}}}
+
+% products and coproducts
+\newcommand{\choice}[2]{[#1, #2]}
+\newcommand{\fork}[2]{\langle #1, #2 \rangle}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species
