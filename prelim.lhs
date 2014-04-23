@@ -16,6 +16,8 @@
 
 \todo{$\fin n = \{0, \dots, n-1\}$.}
 
+\todo{Image of a set under a function or bijection.  Function restriction.}
+
 \todo{Typography.}
 
 \section{Homotopy type theory}
@@ -137,6 +139,9 @@ Examples of groupoids include:
 \item $\B$ is the groupoid whose objects are finite sets and whose
   morphisms are \emph{bijections} between finite sets. \todo{intuition,
     picture}
+
+  \todo{Notation for permutations: $\perm{A}$}
+  \todo{Define ``transitive''}
 
 \item Any type $T$ gives rise to a groupoid $\tygrpd{T}$ where the objects
 are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is,
@@ -439,6 +444,10 @@ Monoids, monoidal categories.  Note we will pretend all monoidal
 categories are strict (justify).  Products and coproducts. Monoidal
 closed. Cartesian closed.
 
+\bay{How can we say that we are using ``the same'' ``product-like''
+  monoidal structure in all these different categories?  Are they
+  related by monoidal functors?}
+
 \subsection{Ends, coends, and parametricity}
 \label{sec:parametricity}
 
@@ -480,3 +489,9 @@ encoding, since \texttt{exists} is not actually valid Haskell snytax)
 contravariantly in the interface.
 
 \todo{Expand.  Give formal definition in terms of coequalizer.}
+
+\begin{rem}
+  Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
+  coend over the product category $\Lab \times \Lab$.
+\end{rem}
+

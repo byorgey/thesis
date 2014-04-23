@@ -26,6 +26,8 @@
 \usepackage{prettyref}
 \usepackage{xspace}
 \usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
 
 % \usepackage{breakurl}
 \usepackage{natbib}
@@ -77,13 +79,30 @@
 \newcommand{\Union}{\bigcup}
 \newcommand{\intersect}{\cap}
 \newcommand{\Intersect}{\bigcap}
+\newcommand{\powerset}{\mcal P}
+\newcommand{\singleton}{\{\star\}}
+
+\newcommand{\partition}{\vdash}
+\newcommand{\rectangle}{\multimap}
+
+% problem: doesn't seem to adapt to different font sizes, even though
+% we use em units??
+%
+% \newcommand{\rectangle}{\mathbin{%
+% \begin{tikzpicture}%
+% \draw (0,0) rectangle (1.618ex,1ex);%
+% \end{tikzpicture}}%
+% }
 
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 
 \newcommand{\bij}{\stackrel{\sim}{\longrightarrow}}
+\newcommand{\perm}[1]{#1!}
 \newcommand{\iso}{\simeq}
 \newcommand{\mkIso}{\rightleftharpoons}
+
+\newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 
 % axiom of choice
 \newcommand{\AC}{\mathsf{AC}}
@@ -123,6 +142,8 @@
 \providecommand{\True}{}
 \renewcommand{\True}{\cons{T}}
 
+\newcommand{\lam}[2]{\lambda\,#1.\;#2}
+
 \newcommand{\inl}{\cons{inl}}
 \newcommand{\inr}{\cons{inr}}
 \newcommand{\outl}{\cons{outl}}
@@ -131,6 +152,7 @@
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
 \newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
 \newcommand{\FinTypeT}{\ensuremath{\Type_{\||\text{Fin}\||}}}
+\newcommand{\IsFinite}[1]{\mathsf{IsFinite}\;#1}
 \newcommand{\size}[1]{\ensuremath{\##1}}
 
 \newcommand{\Fin}[1]{\ensuremath{\cons{Fin}\ #1}}

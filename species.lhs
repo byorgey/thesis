@@ -686,7 +686,7 @@ first, we turn to the formally similar operation of \emph{Cartesian
 $\Set$ also has products, given by $S \times
 T = \{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as
 the identity. (We may suppose there is some canonical
-choice of one-element set, $\{\star\}$; this is justified since all
+choice of one-element set, $\singleton$; this is justified since all
 one-element sets are isomorphic in \Set.)
 \begin{defn}
   The \term{Cartesian} or \term{Hadamard product} of species, is defined on
@@ -704,7 +704,6 @@ about this situation, as illustrated in \pref{fig:Cartesian-product}.
 \begin{figure}
   \centering
   \begin{diagram}[width=380]
-import           Data.Bits
 import           Data.List.Split
 import           Diagrams.TwoD.Layout.Tree
 import           Diagrams.TwoD.Path.Metafont
@@ -814,7 +813,7 @@ $\Bag$ becomes clear:
 
 \begin{defn}
   The species of \emph{sets}, $\Bag$, is defined as the constant functor
-  yielding $\{\star\}$, that is, $\Bag\ L = \{\star\}$.
+  yielding $\singleton$, that is, $\Bag\ L = \singleton$.
 \end{defn}
 
 \begin{rem}
@@ -1185,17 +1184,59 @@ analogous way, via a categorical construction known as \emph{Day
 
 The partitional product $F \sprod G$ of two species $F$ and $G$
 consists of paired $F$- and $G$-shapes, as with the Cartesian product,
-but with the labels \emph{partitioned} between the two shapes
-(\pref{fig:product}) instead of replicated.
-
-\todo{picture of a pair of trees with disjoint labels, or something
-  like that.}
+but with the labels \emph{partitioned} between the two shapes instead
+of replicated (\pref{fig:product}).
 
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
-dia = circle 1
+import           Data.List.Split
+import           Diagrams.TwoD.Layout.Tree
+import           Diagrams.TwoD.Path.Metafont
+
+import           SpeciesDiagrams
+
+connectAll l1 l2 n =
+  withNames (map (l1 .>) [0 :: Int .. n-1]) $ \l1s ->
+  withNames (map (l2 .>) [0 :: Int .. n-1]) $ \l2s ->
+  applyAll (zipWith conn l1s l2s)
+
+conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
+-- $
+
+sharedMem = vcat' (with & sep .~ 5)
+  [ hcat' (with & sep .~ 3)
+    [ wideTree (mkLeaf (circle 1) . ("l" .>) . (part1!!)) sampleBTree5 # centerY
+    , drawList (mkLeaf (circle 1) . ("l" .>) . (part2!!)) 3 # centerY
+    ] # centerXY
+  , drawList (mkLeaf (square 2) . ("s" .>)) 8 # centerXY
+  ]
+  # connectAll "l" "s" 8
+  # centerXY # pad 1.1
+
+perm1 = id
+perm2 = id
+
+part1, part2 :: [Int]
+part1 = [3,0,1,2,6]
+part2 = [5,4,7]
+
+numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
+  [ wideTree (numbered . (part1!!)) sampleBTree5 # centerX
+  , drawList (numbered . (part2!!)) 3 # centerX
+  ]
+  where
+    numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
+
+dia
+  = frame 0.5 . centerXY . lw 0.1
+  . vcat' (with & sep .~ 4) . map centerXY
+  $
+  [ numbering
+  , sharedMem
+  ]
     \end{diagram}
+    %$
 
 %     \begin{diagram}[width=250]
 % import SpeciesDiagrams
@@ -1220,32 +1261,43 @@ dia = circle 1
 \begin{defn}
   The \term{partitional} or \term{Cauchy product} of two species $F$
   and $G$ is the functor defined on objects by \[ (F \sprod G)\ L =
-  \biguplus_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2 \] where
-  $\biguplus$ denotes an indexed coproduct of sets, and $L_1,L_2
-  \vdash L$ denotes that $L_1$ and $L_2$ constitute a partition of
-  $L$, (\ie $L_1 \union L_2 = L$ and $L_1 \intersect L_2 =
-  \varnothing$). On bijections, $F \cdot G$ uses the action of $F$ on
-  the restriction of the bijections to $L_1$, and similarly for $G$
-  and $L_2$.
+  \biguplus_{L_F,L_G \partition L} F\ L_F \times G\ L_G \] where
+  $\biguplus$ denotes an indexed coproduct of sets, and $L_F,L_G
+  \partition L$ denotes that $L_F$ and $L_G$ constitute a partition of
+  $L$, (\ie $L_F \union L_G = L$ and $L_F \intersect L_G =
+  \varnothing$).
+
+  On morphisms, $(F \cdot G)\ \sigma$ is the function which sends \[
+  (L_F,L_G, x, y) \mapsto (\sigma\ L_F, \sigma\ L_G, F\ (\sigma
+  \vert_{L_F})\ x, G\ (\sigma \vert_{L_G})\ y), \] where $L_F,L_G
+  \partition L$, $x \in F\ L_F$, and $y \in G\ L_G$.
 \end{defn}
 
-The identity for partitional product needs to be some species $\One$
-such that \[ (\One \cdot G)\ L = \left(\biguplus_{L_1,L_2 \vdash L}
-  \One\ L_1 \times G\ L_2 \right) \iso G\ L. \] The only way for this
-isomorphism to hold naturally in $L$ is if $\One\ \varnothing =
-\{\star\}$ (yielding a summand of $G\ L$ when $\varnothing+L = L$) and
-$\One\ L_1 = \varnothing$ for all other $L_1$ (cancelling all the
-other summands).
+The identity for partitional product should evidently be some species
+$\One$ such that \[ (\One \cdot G)\ L = \left(\biguplus_{L_F,L_G
+    \partition L} \One\ L_F \times G\ L_G \right) \iso G\ L. \] The only
+way for this isomorphism to hold naturally in $L$ is if $\One\
+\varnothing = \singleton$ (yielding a summand of $G\ L$ when
+$\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
+(cancelling all the other summands).
 
 \begin{defn}
-  The unit species, $\One$, is defined by
+  The \term{unit species}, $\One$, is defined by
   \[ \One\ L =
   \begin{cases}
-    \{\star\} & L = \varnothing \\
+    \singleton & L = \varnothing \\
     \varnothing & \text{otherwise}.
   \end{cases}
   \]
 \end{defn}
+
+\begin{rem}
+  The unit species denotes a sort of ``trivial'' or ``leaf'' structure
+  containing no labels.  Intuitively, it corresponds to a Haskell type
+  like |data Unit a = Unit|.
+\end{rem}
+
+\todo{Examples.  Pairs, lists, trees, $X \cdot E$.}
 
 \subsection{Arithmetic product}
 \label{sec:arithmetic-product}
@@ -1253,24 +1305,24 @@ other summands).
 \newcommand{\aprod}{\boxtimes}
 
 There is another, more recently discovered monoidal structre on
-species known as \emph{arithmetic product} \cite{Maia2008arithmetic}.
+species known as \emph{arithmetic product} \citep{Maia2008arithmetic}.
 The arithmetic product of species $F$ and $G$, written $F \aprod G$,
 can intuitively be thought of as an ``$F$-assembly of cloned
 $G$-shapes'', that is, an $F$-shape containing multiple copies of a
-single $G$-shape (\pref{fig:arithmetic-product}).  Unlike the usual
-notion of composition, where the $F$-shape would be allowed to contain
-many different $G$-shapes, this notion is symmetric: an $F$-assembly
-of cloned $G$-shapes is isomorphic to a $G$-assembly of cloned
-$F$-shapes.  Another intuitive way to think of the arithmetic product,
-which points out the symmetry more clearly, is to think of a
+\emph{single} $G$-shape.  Unlike the usual notion of composition
+(\pref{sec:composition}), where the $F$-shape would be allowed to
+contain many different $G$-shapes, this notion is symmetric: an
+$F$-assembly of cloned $G$-shapes is isomorphic to a $G$-assembly of
+cloned $F$-shapes.  Another intuitive way to think of the arithmetic
+product, which points out the symmetry more clearly, is to think of a
 rectangular matrix of labels, together with an $F$-shape labelled by
-the rows of the grid, and a $G$-shape labelled by the columns.
-
-\todo{Give more formal definition and examples.}
+the rows of the grid, and a $G$-shape labelled by the
+columns. \pref{fig:arithmetic-product} illustrates these intuitions
+with the arithmetic product of a tree and a list.
 
 \begin{figure}
   \centering
-  \begin{diagram}[width=380]
+  \begin{diagram}[width=250]
 import           Diagrams.TwoD.Layout.Tree
 import           SpeciesDiagrams
 
@@ -1315,10 +1367,10 @@ list2 nd = hcat' (with & sep .~ 1 & catMethod .~ Distrib)
   where
     aSty = with & arrowHead .~ noHead
 
-dia = frame 0.2 . centerXY . hcat' (with & sep .~ 2) . map centerXY $
-  [ grid
-  , assembly1 # scale 1.3
+dia = frame 0.2 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
+  [ assembly1 # scale 1.3
   , assembly2
+  , grid
   ]
   # lw 0.05
   \end{diagram}
@@ -1326,9 +1378,84 @@ dia = frame 0.2 . centerXY . hcat' (with & sep .~ 2) . map centerXY $
   \label{fig:arithmetic-product}
 \end{figure}
 
-\bay{How can we say that we are using ``the same'' ``product-like''
-  monoidal structure in all these different categories?  Are they
-  related by monoidal functors?}
+A more formal definition requires the notion of a \term{rectangle} on
+a set~\citep{Maia2008arithmetic, XXX}, which plays a role similar to
+that of set partition in the definition of partitional product. (So
+perhaps arithmetic product ought to be called \emph{rectangular
+  product}.)  In particular, whereas a binary partition of a set $L$
+gives a canonical decomposition of $L$ into a sum, a rectangle on $L$
+gives a canonical decomposition into a product.  The basic idea is to
+partition $L$ in two different ways, and require the partitions to act
+like the ``rows'' and ``columns'' of a rectangular matrix.
+
+\begin{defn}[\citet{Maia2008arithmetic}]
+  \label{defn:rectangle}
+  A \term{rectangle} on a set $L$ is a pair $(\pi, \tau)$ of families
+  of subsets of $L$, such that
+  \begin{itemize}
+  \item $\pi \partition L$ and $\tau \partition L$, and
+  \item $||X \intersect Y|| = 1$, for all $X \in \pi$, $Y \in \tau$.
+  \end{itemize}
+  Here, $\pi \partition L$ denotes that $\pi$ is a partition of $L$
+  into any number of nonempty parts, that is, the elements of $\pi$
+  are nonempty, pairwise disjoint, and have $L$ as their union.  We
+  write $\pi,\tau \rectangle L$ to denote that $(\pi,\tau)$ constitute
+  a rectangle on $L$, and call $\pi$ and $\tau$ the \term{sides} of
+  the rectangle.
+\end{defn}
+
+We can now formally define arithmetic product as follows:
+
+\begin{defn}
+  The \term{arithmetic product} $F \aprod G$ of two species $F$ and
+  $G$ is the species defined on objects by \[ (F \aprod G)\ L =
+  \biguplus_{L_F, L_G \rectangle L} F\ L_F \times G\ L_G. \]
+
+  $(F \aprod G)$ lifts bijections $\sigma : L \bij L'$ to functions
+  $(F \aprod G)\ L \to (F \aprod G)\ L'$ as follows: \[ (F \aprod G)\
+  \sigma\ (L_F, L_G, f, g) = (\powerset(\sigma)\ L_F,
+  \powerset(\sigma)\ L_G, F\ \powerset(\sigma)\ L_F, G\
+  \powerset(\sigma)\ L_G), \] where $\powerset(\sigma) : \powerset(L)
+  \bij \powerset(L')$ denotes the functorial lifting of $\sigma$ to a
+  bijection between subsets of $L$ and $L'$.
+\end{defn}
+
+\begin{rem}
+  The similarity of this definition to the definition of partitional
+  product should be apparent: the only difference is that we have
+  substituted rectangles ($L_F,L_G \rectangle L$) for partitions
+  ($L_F,L_G \partition L$).
+\end{rem}
+
+An identity element for arithmetic product should be some species $\X$
+such that \[ (\X \aprod G)\ L = \left(\biguplus_{L_\X, L_G \rectangle L} \X\
+L_\X \times G\ L_G\right) \cong G\ L. \] Thus we want $\X\ L_\X = \singleton$
+when $L_\X, L \rectangle L$ and $\X\ L_\X = \varnothing$ otherwise.
+Consider $L_\X, L \rectangle L$.  Of course, $L$ does not have the
+right type to be one side of a rectangle on itself, but it is
+isomorphic to the set of all singleton subsets of itself, which does.
+The definition of a rectangle now requires every element of $L_\X$ to
+have a nontrivial intersection with every singleton subset of $L$
+(such intersections will automatically have size $1$).  Therefore
+$L_\X$ has only one element, namely, $L$ itself, and is isomorphic to
+$\singleton$.  Intuitively, $\singleton, L \rectangle L$ corresponds
+to the fact that we can always make a $1 \times n$ rectangle on any
+set of size $n$, that is, any number $n$ can be ``factored'' as $1
+\times n$.
+
+This leads to the following definition:
+\begin{defn}
+  The \term{singleton species}, $\X$, is defined by \[ \X\ L =
+  \begin{cases}
+    \singleton & ||L|| = 1 \\
+    \varnothing & \text{otherwise}.
+  \end{cases}
+  \]
+\end{defn}
+
+\todo{More intuitive ideas about $\X$.}
+
+\todo{Examples. $\List \aprod \List$.}
 
 \subsection{Day convolution}
 \label{sec:day-convolution}
@@ -1340,13 +1467,13 @@ different monoidal structures on $\B$.
 
 The essential idea, first described by Brian
 Day~\cite{day-convolution}, is to construct a monoidal structure on a
-functor category $[\Lab, \Str]$ based primarily on a monoidal
+functor category $[\Lab^\op, \Str]$ based primarily on a monoidal
 structure on the \emph{domain} category $\Lab$.  In particular, Day
 convolution requires
 \begin{itemize}
 \item a monoidal structure $\oplus$ on the domain $\Lab$;
 \item that $\Lab$ be \emph{enriched over} $\Str$, \ie\ for any two
-  objects $L_1,L_2 \in \Lab$ there is a hom-object $\Lab(L_1,L_2) \in
+  objects $L_F,L_G \in \Lab$ there is a hom-object $\Lab(L_F,L_G) \in
   \Str$ rather than a set, with approrpiate coherent notions of
   composition and identity morphisms;
 \item a symmetric monoidal structure $\otimes$ on the codomain $\Str$;
@@ -1361,24 +1488,19 @@ product.
 
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G \in
-  [\Lab, \Str]$ is given by the coend \[ F \oast G = \int^{L_1, L_2}
-  F\ L_1 \otimes G\ L_2 \otimes \Lab(-, L_1 \oplus L_2). \]
+  [\Lab^\op, \Str]$ is given by the coend \[ F \oast G = \int^{L_F, L_G}
+  F\ L_F \otimes G\ L_G \otimes \Lab(-, L_F \oplus L_G). \]
 \end{defn}
-
-\begin{rem}
-  Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
-  coend over the product category $\Lab \times \Lab$.
-\end{rem}
-
-\begin{rem}
-  Note that there are only covariant occurrences of $L_1$ and $L_2$ in
-  the above definition, which simplifies the definition of the
-  coend. \todo{flesh out}
-\end{rem}
 
 \begin{rem}
   Since groupoids are self-dual, we may ignore the $-^\op$ in the
   common case that $\Lab$ is a groupoid.
+\end{rem}
+
+\begin{rem}
+  Note that there are only covariant occurrences of $L_F$ and $L_G$ in
+  the above definition, which simplifies the definition of the
+  coend. \todo{flesh out}
 \end{rem}
 
 This operation is associative, and has as a unit $j(I)$ where $I$ is
@@ -1387,30 +1509,54 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
-  $\Str = \Set$.  Though $\B$ does not have coproducts, it does have a
-  monoidal structure given by disjoint union.  $\B$ is indeed enriched
-  over $\Set$, which is also cocomplete and has a symmetric monoidal
-  structure given by Cartesian product.
+  $\Str = \Set$.  $\B$ does not have coproducts\footnote{To see why,
+    consider that $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B
+      \ar[l]_-{\iota_G}}$ in $\B$ would imply that any two finite sets
+      $A$ and $B$ must be in bijection, and therefore the same size.};
+    however, it does have a monoidal structure given by disjoint
+    union.  $\B$ is indeed enriched over $\Set$, which is also
+    cocomplete and has a symmetric monoidal structure given by
+    Cartesian product.
 
-  Specializing the definition to this case, and expressing the coend
-  as a quotient, we obtain
+  Specializing the definition to this case, we obtain
   \begin{align*}
-    (F \cdot G)(L) &= \int^{L_1, L_2} F\ L_1 \times G\ L_2 \times
-    (L \iso L_1 + L_2) \\
-    &= \left( \biguplus_{L_1, L_2} F\ L_1 \times G\ L_2 \times (L \iso L_1
-      + L_2) \right) \Big/ \sim
+    (F \cdot G)(L) &= \int^{L_F, L_G} F\ L_F \times G\ L_G \times
+    (L \bij L_F + L_G).
   \end{align*}
-  where every pair of bijections $\sigma_i : L_i \iso L_i'$ induces
-  equivalences of the form $(L_1, L_2, f, g, i) \sim (L_1', L_2', F\
-  \sigma_1\ f, G\ \sigma_2\ g, (\sigma_1 + \sigma_2) \comp i)$.  In
-  other words, we ``cannot tell apart'' any two summands related by a
-  pair of relabellings.  The only way to tell two summands apart is if
-  their respective values of $L_1$ and $L_2$ stand in a different
-  relation to $L$, as witnessed by the isomorphism.  Therefore, all
-  the equivalence classes can be represented canonically by a
-  partition of $L$ into two disjoint subsets, giving rise to the
-  earlier definition: \[ (F \sprod G)\ L =
-  \biguplus_{L_1,L_2 \vdash L} F\ L_1 \times G\ L_2. \]
+  Let $R \defeq \biguplus_{L_F, L_G} F\ L_F \times G\ L_G \times (L
+  \bij L_F + L_G)$; elements of $R$ look like quintuples $(L_F, L_G,
+  f, g, i)$, where $f \in F\ L_F$, $g \in G\ L_G$, and $i : L \bij L_F
+  + L_G$.  Then, as we have seen, the coend can be expressed as a
+  quotient $\quotient{R}{\sim}$, where every pair of bijections
+  $(\sigma_F : L_F \bij L_F', \sigma_G : L_G \bij L_G')$ induces an
+  equivalence of the form \[ (L_F, L_G, f, g, i) \sim (L_F',\; L_G',\;
+  F\ \sigma_F\ f,\; G\ \sigma_G\ g,\; i \then (\sigma_F +
+  \sigma_G)). \] That is, $f \in F\ L_F$ is sent to $F\ \sigma_F\ f$
+  (the relabelling of $f$ by $\sigma_F$); $g \in G\ L_G$ is sent to
+  $G\ \sigma_G\ g$; and $i : L \bij L_F + L_G$ is sent to $i ;
+  (\sigma_F + \sigma_G) : L \bij L_F' + L_G'$.
+
+  When are two elements of $R$ inequivalent, that is, when can we be
+  certain two elements of $R$ are not related by a pair of
+  relabellings?  Two elements $(L_{F1}, L_{G2}, f_1, g_1, i_1)$ and
+  $(L_{F2},L_{G2},f_2,g_2,i_2)$ of $R$ are unrelated if and only if
+  \begin{itemize}
+  \item $f_1$ and $f_2$ are unrelated by any relabelling, or
+  \item $g_1$ and $g_2$ are unrelated by any relabelling, or
+  \item $L_{F1}$ and $L_{G1}$ ``sit inside'' $L$ differently than $L_{F2}$ and
+    $L_{G2}$ in $L_2$, that is, $i_1^{-1}(L_{F1}) \neq i_2^{-1}(L_{F2})$.
+  \end{itemize}
+  A pair of relabellings can permute the elements of $L_F$ and $L_G$
+  arbitrarily, or replace $L_F$ and $L_G$ with any other sets of the
+  same size, but relabelling alone can never change which elements of
+  $L$ correspond to $L_F$ and which to $L_G$, since that is preserved
+  by composition with a coproduct bijection $\sigma_F + \sigma_G$.
+
+  Therefore, all the equivalence classes of $\quotient{R}{\sim}$ can
+  be represented canonically by a partition of $L$ into two disjoint
+  subsets, along with a choice of $F$ and $G$ structures, giving rise
+  to the earlier definition: \[ (F \sprod G)\ L =
+  \biguplus_{L_F,L_G \partition L} F\ L_F \times G\ L_G. \]
 
   Also, in this case, the identity element is $j(I) = j(\varnothing) =
   \B(-,\varnothing)$, that is, the species which takes as input a
@@ -1421,64 +1567,96 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \end{ex}
 
 \begin{ex}
-  \todo{edit this. Monoidal structure on $\P$??}
-  Although $\B$ and $\P$ are equivalent, it is still instructive
-  to work out the general definition in the case of $\P$.  In this
-  case, we have a monoidal structure on $\P$ given by addition, with
-  $f + g : \Fin (m + n) \iso \Fin (m + n)$ defined in the evident way,
-  with $f$ acting on the first $m$ values of $\Fin (m+n)$ and $g$ on
-  the last $n$.
+  Although $\B$ and $\P$ are equivalent, it is still instructive to
+  work out the general definition in the case of $\P$, particulary
+  because, as we have seen, proving $\B \cong \P$ requires the axiom
+  of choice.
 
-  Specializing the definition, \[ (F \sprod G)_n \defeq \int^{n_1,
-    n_2} F_{n_1} \times G_{n_2} \times (\Fin n \iso \Fin {n_1} + \Fin {n_2})  \] that is, an
-  $(F \sprod G)$-shape of size $n$ consists of an $F$-shape of size
-  $n_1$ and a $G$-shape of size $n_2$, where $n_1 + n_2 = n$.
-  Indexing by labels is a generalization (a \emph{categorification},
-  in fact) of this size-indexing scheme, where we replace natural
-  numbers with finite types, addition with coproduct, and
-  multiplication with product.
+  We find that $\P$ has not just one but \emph{many} monoidal
+  structures corresponding to disjoint union.  The action of such a
+  monoid on objects of $\P$ is clear: the natural numbers $m$ and $n$
+  are sent to their sum $m + n$.  For the action on morphisms, we are
+  given $\sigma : \perm{(\Fin m)}$ and $\tau : \perm{(\Fin n)}$ and
+  have to produce some $\perm{(\Fin (m+n))}$.  However, there are many
+  ways to do this---in fact, one for every choice of \[ \varphi : \Fin
+  m \uplus \Fin n \bij \Fin (m + n), \] which specifies how to embed
+  $\{0, \dots, m-1\}$ and $\{0, \dots, n-1\}$ into $\{0, \dots,
+  m+n-1\}$.  \todo{picture}
+
+  Given such a $\varphi$, we may construct \[ \Fin (m+n)
+  \stackrel{\varphi^{-1}}{\bij} \Fin m \uplus \Fin n \stackrel{\sigma
+    \uplus \tau}{\bij} \Fin m \uplus \Fin n \stackrel{\varphi}{\bij}
+  \Fin (m+n). \] Conversely, given some functorial $q : \perm{(\Fin
+    m)} \to \perm{(\Fin n)} \to \perm{(\Fin (m+n))}$, we can recover
+  $\varphi$ by passing some transitive bijection (say, $\lam{i}{(i +
+    1) \bmod m}$) as the first argument to $q$, and $\id$ as the
+  second---the resulting permutation will increment those indices
+  which are matched with $\Fin m$, and fix those matched with $\Fin
+  n$. \todo{picture?}
+
+  The choice of $\varphi$ does not matter up to isomorphism---hence
+  this is where the axiom of choice can be invoked, in order to define
+  a single, canonical monoid structure on $\P$.  However, it is
+  preferable to simply retain a plethora of monoidal structures, each
+  associated to a bijection $\varphi : \Fin m \uplus \Fin n \bij \Fin
+  (m+n)$ and denoted $+_\varphi$.
+
+  We may now instantiate the definition of Day convolution,
+  obtaining \[ (F \sprod G)_n = \int^{n_F, n_G} F_{n_F} \times G_{n_G}
+  \times (\Fin n \bij \Fin (n_F + n_G)). \] Again, letting $R \defeq
+  \biguplus_{n_F, n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin
+  (n_F + n_G))$, the coend is equivalent to $\quotient{R}{\sim}$,
+  where \[ (n_F, n_G, f, g, i) \sim (n_F, n_G,\;F\ \sigma_F\ f,\;G\
+  \sigma_G\ g,\;i \then (\sigma_F +_\varphi \sigma_G)) \] for any
+  $\sigma_F : \perm{(\Fin n_F)}$ and $\sigma_G : \perm{(\Fin
+    n_G)}$. \todo{Finish}
 \end{ex}
 
 \begin{ex}
   There is another monoidal structure on $\B$ corresponding to the
   Cartesian product of sets. If we instantiate the framework of Day
-  convolution with this product-like monoidal structure ---but
+  convolution with this product-like monoidal structure---but
   keep everything else the same, in particular continuing to use
   products on $\Set$---we obtain the arithmetic product.
+
+  \todo{Flesh out.  Derive $\X$ categorically.}
 \end{ex}
 
 \begin{ex}
-  Let's examine this in detail in the case of $[\P,\Set]$.  The
-  monoidal structure on $\P$ is defined on objects as $m \otimes n =
-  mn$.  On morphisms, given $f : \fin m \bij \fin m$ and $g : \fin n
-  \bij \fin n$, we have $f \otimes g : \fin{mn} \bij \fin{mn}$ defined
-  by \todo{finish}.
+  \todo{Work out details here.  Do arithmetic product but in
+    $[\P,\Set]$.}  Let's examine this in detail in the case of
+  $[\P,\Set]$.  The monoidal structure on $\P$ is defined on objects
+  as $m \otimes n = mn$.  On morphisms, given $f : \fin m \bij \fin m$
+  and $g : \fin n \bij \fin n$, we have $f \otimes g : \fin{mn} \bij
+  \fin{mn}$ defined by \todo{finish}.
 
   Instantiating the definition of Day convolution yields
   \begin{align*}
-    (F \boxtimes G)\ n &= \int^{n_1,n_2} F\ n_1 \times G\ n_2 \times
-    \P(n, n_1n_2) \\
-    &= \int^{n_1,n_2} F\ n_1 \times G\ n_2 \times (\fin n \bij \fin
-    {n_1 n_2}) \\
+    (F \boxtimes G)\ n &= \int^{n_F,n_G} F\ n_F \times G\ n_G \times
+    \P(n, n_Fn_G) \\
+    &= \int^{n_F,n_G} F\ n_F \times G\ n_G \times (\fin n \bij \fin
+    {n_F n_G}) \\
     &= ? \\
     &= \biguplus_{d \mid n} F\ d \times G\ (n/d)
   \end{align*}
-
-  \todo{Finish. where $\otimes$ denotes the product monoidal structure
-    on $\B$.  We cannot write this quite as nicely as partitional
-    product, since there is no canonical way to decompose}
 \end{ex}
 
 \begin{ex}
-  It remains to verify that $\BT$ and $\Type$ have the right properties.
+  We now verify that $\BT$ and $\Type$ have the right properties, so
+  that partitional and arithmetic product are well-defined on
+  $[\BT,\Type]$-species.
   \begin{itemize}
   \item Like $\B$, there are monoidal structures on $\BT$
-    corresponding to the coproduct and product of types. It is worth
-    noting, however, that there are \emph{many} monoidal structures
-    corresponding to each. A monoidal operation on $\BT$ does not
+    corresponding to the coproduct and product of types. As with $\P$,
+    however, there are many monoidal structures corresponding to
+    each. In contrast to $\P$, however, the choice concerns what to do
+    with \emph{objects}.  A monoidal operation on $\BT$ does not
     simply combine two types into their coproduct or product, but also
     combines their finiteness evidence into corresponding evidence for
-    the combined type, and there are many ways to accomplish this.
+    the combined type, via some function $\oplus_{\Fin{}} : \IsFinite
+    A \to \IsFinite B \to \IsFinite (A \oplus B)$.  Any such function,
+    in combination with a monoid $\oplus$ on $\Type$, gives rise to a
+    valid monoid on $\FinType$, since \todo{finish}
   \item $\BT$ is indeed enriched over $\Type$, since the class of
     arrows between $(A,m,i)$ and $(B,n,j)$ is given by the type $A
     \iso B$.
@@ -1492,12 +1670,17 @@ embedding, that is, $j(L) = \Lab(-,L)$.
     induced by transport of paths in $\BT$. \todo{flesh out more}
   \end{itemize}
 
-  Given $F,G \in [\BT,\Type]$, we can instantiate the definition
+  Given $F,G \in [\BT,\Type]$, and picking some particular sum-like
+  monoid $\oplus$ on $\BT$, we can instantiate the definition
   of Day convolution to get
-  \[ (F \cdot G)\ L = \sum_{L_1, L_2} F\ L_1 \times G\ L_2 \times (L
-  \iso L_1 + L_2), \] and similarly for generalized arithmetic
-  product.
+  \[ (F \cdot G)\ L = \sum_{L_F, L_G} F\ L_F \times G\ L_G \times
+  (\mor L {L_F \oplus L_G}). \] \todo{Flesh out. Need some notation
+    for the underlying sets of $L$, $L_F$, and $L_G$.  Particular
+    monoid chosen doesn't actually matter here.}
+\end{ex}
 
+\begin{ex}
+  Try it with $(\otimes, \oplus)$ and $(\oplus, \oplus)$.
 \end{ex}
 
 \section{Composition}
@@ -1536,7 +1719,7 @@ have
 where the final isomorphism follows since $(\Fin m \iso \Fin n)$ is
 only inhabited when $m = n$.
 
-Being Cartesian closed means there is an adjunction $- \times G \vdash
+Being Cartesian closed means there is an adjunction $- \times G \adj
 -^G$ between products and exponentials, which yields a natural
 isomorphism \[ [\PT,\Type](F \times G, H) \iso [\PT,\Type](F,H^G) \]
 Expanding morphisms of the functor category $[\PT, \Type]$ as natural
@@ -1704,7 +1887,7 @@ morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
 \[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
   \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
 by $\eta$.
-%% xymatrix{ \{\star\} \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
+%% xymatrix{ \singleton \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
 One can check that $\otimes$ inherits monoidal structure from
 $A$. \todo{Finish this proof.}
 
