@@ -104,6 +104,8 @@ Make extensive use of category theory.  Very quick overview of basics
 adjunctions).  Basic categories which will be used often: $\Set$,
 $\N$, \Type.
 
+Use $\forall$ notation for natural transformations. \todo{Make it so.}
+
 Bifunctors.
 
   \todo{Action of functor on morphisms follows from action

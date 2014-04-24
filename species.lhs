@@ -1521,20 +1521,20 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   Specializing the definition to this case, we obtain
   \begin{align*}
     (F \cdot G)(L) &= \int^{L_F, L_G} F\ L_F \times G\ L_G \times
-    (L \bij L_F + L_G).
+    (L \bij L_F \uplus L_G).
   \end{align*}
   Let $R \defeq \biguplus_{L_F, L_G} F\ L_F \times G\ L_G \times (L
-  \bij L_F + L_G)$; elements of $R$ look like quintuples $(L_F, L_G,
+  \bij L_F \uplus L_G)$; elements of $R$ look like quintuples $(L_F, L_G,
   f, g, i)$, where $f \in F\ L_F$, $g \in G\ L_G$, and $i : L \bij L_F
-  + L_G$.  Then, as we have seen, the coend can be expressed as a
+  \uplus L_G$.  Then, as we have seen, the coend can be expressed as a
   quotient $\quotient{R}{\sim}$, where every pair of bijections
   $(\sigma_F : L_F \bij L_F', \sigma_G : L_G \bij L_G')$ induces an
   equivalence of the form \[ (L_F, L_G, f, g, i) \sim (L_F',\; L_G',\;
-  F\ \sigma_F\ f,\; G\ \sigma_G\ g,\; i \then (\sigma_F +
+  F\ \sigma_F\ f,\; G\ \sigma_G\ g,\; i \then (\sigma_F \uplus
   \sigma_G)). \] That is, $f \in F\ L_F$ is sent to $F\ \sigma_F\ f$
   (the relabelling of $f$ by $\sigma_F$); $g \in G\ L_G$ is sent to
-  $G\ \sigma_G\ g$; and $i : L \bij L_F + L_G$ is sent to $i ;
-  (\sigma_F + \sigma_G) : L \bij L_F' + L_G'$.
+  $G\ \sigma_G\ g$; and $i : L \bij L_F \uplus L_G$ is sent to $i ;
+  (\sigma_F \uplus \sigma_G) : L \bij L_F' \uplus L_G'$.
 
   When are two elements of $R$ inequivalent, that is, when can we be
   certain two elements of $R$ are not related by a pair of
@@ -1546,11 +1546,12 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   \item $L_{F1}$ and $L_{G1}$ ``sit inside'' $L$ differently than $L_{F2}$ and
     $L_{G2}$ in $L_2$, that is, $i_1^{-1}(L_{F1}) \neq i_2^{-1}(L_{F2})$.
   \end{itemize}
-  A pair of relabellings can permute the elements of $L_F$ and $L_G$
+  The first two bullets are immediate; the third follows since a pair
+  of relabellings can permute the elements of $L_F$ and $L_G$
   arbitrarily, or replace $L_F$ and $L_G$ with any other sets of the
   same size, but relabelling alone can never change which elements of
   $L$ correspond to $L_F$ and which to $L_G$, since that is preserved
-  by composition with a coproduct bijection $\sigma_F + \sigma_G$.
+  by composition with a coproduct bijection $\sigma_F \uplus \sigma_G$.
 
   Therefore, all the equivalence classes of $\quotient{R}{\sim}$ can
   be represented canonically by a partition of $L$ into two disjoint
@@ -1598,7 +1599,7 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   this is where the axiom of choice can be invoked, in order to define
   a single, canonical monoid structure on $\P$.  However, it is
   preferable to simply retain a plethora of monoidal structures, each
-  associated to a bijection $\varphi : \Fin m \uplus \Fin n \bij \Fin
+  indexed by a bijection $\varphi : \Fin m \uplus \Fin n \bij \Fin
   (m+n)$ and denoted $+_\varphi$.
 
   We may now instantiate the definition of Day convolution,
@@ -1899,3 +1900,7 @@ $A$. \todo{Finish this proof.}
 \todo{Give some examples.}
 
 \section{$\L$-species}
+
+\section{Unlabelled species}
+
+\todo{Unlabelled structures, equivalence classes, and HITs}
