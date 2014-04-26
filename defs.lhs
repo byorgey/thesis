@@ -105,7 +105,7 @@
 \newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 
 % axiom of choice
-\newcommand{\AC}{\mathsf{AC}}
+\newcommand{\AC}{\msf{AC}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Theorems etc.
@@ -215,6 +215,10 @@
 % products and coproducts
 \newcommand{\choice}[2]{[#1, #2]}
 \newcommand{\fork}[2]{\langle #1, #2 \rangle}
+
+% ends and coends
+\newcommand{\eend}[1]{\int_{#1}}
+\newcommand{\coend}[1]{\int^{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species

@@ -1488,7 +1488,7 @@ product.
 
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G \in
-  [\Lab^\op, \Str]$ is given by the coend \[ F \oast G = \int^{L_F, L_G}
+  [\Lab^\op, \Str]$ is given by the coend \[ F \oast G = \coend{L_F, L_G}
   F\ L_F \otimes G\ L_G \otimes \Lab(-, L_F \oplus L_G). \]
 \end{defn}
 
@@ -1512,15 +1512,18 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   $\Str = \Set$.  $\B$ does not have coproducts\footnote{To see why,
     consider that $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B
       \ar[l]_-{\iota_G}}$ in $\B$ would imply that any two finite sets
-      $A$ and $B$ must be in bijection, and therefore the same size.};
-    however, it does have a monoidal structure given by disjoint
-    union.  $\B$ is indeed enriched over $\Set$, which is also
-    cocomplete and has a symmetric monoidal structure given by
-    Cartesian product.
+    $A$ and $B$ must be in bijection, and therefore the same size.
+    More generally, any category with coproducts (or products) is
+    necessarily \term{connected}, \ie has some zig-zag sequence of
+    arrows connecting any two objects; this is clearly not true of
+    $\B$.}; however, it does have a monoidal structure given by
+  disjoint union.  $\B$ is indeed enriched over $\Set$, which is also
+  cocomplete and has a symmetric monoidal structure given by Cartesian
+  product.
 
   Specializing the definition to this case, we obtain
   \begin{align*}
-    (F \cdot G)(L) &= \int^{L_F, L_G} F\ L_F \times G\ L_G \times
+    (F \cdot G)(L) &= \coend{L_F, L_G} F\ L_F \times G\ L_G \times
     (L \bij L_F \uplus L_G).
   \end{align*}
   Let $R \defeq \biguplus_{L_F, L_G} F\ L_F \times G\ L_G \times (L
@@ -1603,7 +1606,7 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   (m+n)$ and denoted $+_\varphi$.
 
   We may now instantiate the definition of Day convolution,
-  obtaining \[ (F \sprod G)_n = \int^{n_F, n_G} F_{n_F} \times G_{n_G}
+  obtaining \[ (F \sprod G)_n = \coend{n_F, n_G} F_{n_F} \times G_{n_G}
   \times (\Fin n \bij \Fin (n_F + n_G)). \] Again, letting $R \defeq
   \biguplus_{n_F, n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin
   (n_F + n_G))$, the coend is equivalent to $\quotient{R}{\sim}$,
@@ -1633,9 +1636,9 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 
   Instantiating the definition of Day convolution yields
   \begin{align*}
-    (F \boxtimes G)\ n &= \int^{n_F,n_G} F\ n_F \times G\ n_G \times
+    (F \boxtimes G)\ n &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times
     \P(n, n_Fn_G) \\
-    &= \int^{n_F,n_G} F\ n_F \times G\ n_G \times (\fin n \bij \fin
+    &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times (\fin n \bij \fin
     {n_F n_G}) \\
     &= ? \\
     &= \biguplus_{d \mid n} F\ d \times G\ (n/d)
@@ -1687,6 +1690,150 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \section{Composition}
 \label{sec:composition}
 
+We have already seen that arithmetic product can be thought of as a
+restricted sort of composition, where an $F$-structure contains
+$G$-structures all of the same shape (or vice versa).  More generally,
+there is an unrestricted version of composition, where $(F \comp
+G)$-shapes consist of $F$-shapes containing \emph{arbitrary}
+$G$-shapes.  In more detail, to create an $(F \comp G)$-shape over a
+given set of labels $L$, we first \emph{partition} $L$ into some
+number of nonempty subsets; create a $G$-shape over each subset; then
+create an $F$-shape over the resulting set of $G$-shapes.
+
+Formally,
+\[ (F \comp G)\ L = \sum_{\pi \partition L} F\ \pi \times \prod_{p \in
+  \pi} G\ p. \] \pref{fig:composition} shows an abstract
+representation of the definition.
+
+%   \begin{figure}
+%     \centering
+%     \begin{diagram}[width=250]
+% import SpeciesDiagrams
+
+% theDia = struct 6 "F∘G"
+%          ||||||
+%          strutX 1
+%          ||||||
+%          txt "="
+%          ||||||
+%          strutX 1
+%          ||||||
+%          drawSpT
+%          ( nd (txt "F")
+%            [ struct' 2 "G"
+%            , struct' 3 "G"
+%            , struct' 1 "G"
+%            ]
+%          )
+
+% dia = theDia # centerXY # pad 1.1
+%     \end{diagram}
+%     \caption{Species composition}
+%     \label{fig:composition}
+%   \end{figure}
+
+One can see that in addition to being the identity for $\aprod$, $\X$
+is the (two-sided) identity for $\comp$ as well, since an $F$-shape
+containing singletons and a singleton $F$-shape are both isomorphic to
+an $F$-shape.
+
+\begin{ex}
+  As an example, we may define the species $\Par$ of set partitions
+  by \[ \Par = \E \comp \E_+.\] \todo{picture + more commentary}
+\end{ex}
+
+\begin{ex}
+  The species $\Sp{R}$ of nonempty $n$-ary (``rose'') trees, with data
+  stored at internal nodes, may be defined by the recursive species
+  equation \[ \Sp{R} = \X \sprod (\L \comp \Sp{R}). \] \todo{picture +
+    more commentary}
+\end{ex}
+
+\begin{ex}
+  The species $\Sp{P}$ of \emph{perfect trees}, with data stored in
+  the leaves, may be defined by \[ \Sp{P} = \X + (\Sp{P} \comp
+  \X^2). \] \todo{picture + more commentary}
+\end{ex}
+
+\subsection{Generalized composition}
+\label{sec:generalized-composition}
+
+We first show how to carry out the definition of composition in $[\B,
+\Set]$ more abstractly, and then discuss how it may be generalized to
+other functor categories $[\Lab, \Str]$.
+Street~\citep{street2012monoidal} gives the following abstract
+definition of composition:
+\[ (F \comp G)\ L = \coend{K} F\ K \times G^{\bullet \size K}\ L, \]
+where $G^{\bullet n} = \underbrace{G \bullet \dots \bullet G}_n$ is
+the $n$-fold partitional product of $G$.  However, this is problematic
+from a constructive point of view: $G^{\bullet \size K}$ retains no
+information about which element of $K$ corresponds to which $G$-shape
+in the product.  Given the coend over $K$, the choice does not matter
+up to isomorphism---but only if one invokes the axiom of choice.
+
+The axiom of choice is rendered unnecessary, however, by the following
+more explicit construction of a $K$-indexed product of $G$, which
+retains the correspondence between elements of $K$ and individual
+$G$-shapes.\footnote{This construction is also due to
+  Street~\cite{personal-communication}.}
+
+First, consider the diagonal functor $\Delta^L : \Set \to \Set^L$,
+where $L$ is some finite set regarded as a discrete category.  A
+functor $L \to \Set$ can thus be regarded as an $L$-indexed tuple of
+sets; \eg in the case $L = \cat{2}$, a functor $L \to \Set$ is just an
+ordered pair of sets. $\Delta^L (X)$ is just the $L$-indexed tuple
+containing $\size L$ copies of $X$.
+
+The fact that $\Set$ has all limits and colimits is equivalent to
+saying that for any category $J$, the diagonal functor $\Delta^J :
+\Set \to \Set^J$ always has (respectively) a right and left
+adjoint~\cite{wikipedia on limits}. In the particular case of a discrete
+category $L$, we call these adjoints $\Pi^L$ and $\Sigma^L$: \[
+\Sigma^L \adj \Delta^L \adj \Pi^L. \] In particular, $\Sigma^L :
+\Set^L \to \Set$ constructs $L$-indexed coproducts, and $\Pi^L$
+indexed products. (In the special case $L = \cat{2}$, $\Sigma^2$ and
+$\Pi^2$ resolve to the familiar notions of binary coproduct and
+product, respectively.)  We often omit the superscripts, writing
+simply $\Sigma$ and $\Pi$ when $L$ is clear from the context.
+
+As noted before, $\B$ has no products or coproducts, so we cannot
+directly define $\Sigma$ or $\Pi$ as adjoints in $\B$.  However, we
+may take the restriction of $\Sigma : \Set^L \to \Set$ to $\Sigma :
+\B^L \to \B$ (and likewise for $\Pi$), since $\B$ is a subcategory of
+$\Set$.
+
+We now define a general notion of indexed species product. For a
+species $F \in [\B,\Set]$ and $K \in \B$ a finite set, $F^K \in
+[\B,\Set]$ represents the $\size K$-fold product of $F$, indexed by
+the elements of $K$: \todo{picture?} \[ F^K\ L = \coend{P \in [K,\B]}
+\B(\Sigma P, L) \times \Pi (F \comp P). \] Note that $K$ is regarded
+as a discrete category, so $P \in \B^K$ is a $K$-indexed collection of
+finite sets.  $\B(\Sigma P, L)$, a bijection between the coproduct of
+$P$ and $L$, witnesses the fact that $P$ represents a partition of
+$L$; the coend means that we generate only one shape per fundamentally
+distinct partition. The composite $F \comp P = \xymatrix{K \ar[r]^P &
+  \B \ar[r]^F & \Set}$ is a $K$-indexed collection of $F$-structures,
+one on each finite set of labels in $P$; the $\Pi$ constructs their
+product.
+
+\todo{Note this is functorial in $K$, i.e. $F^- : \B \to [\B,\Set]$ is
+a functor.}
+
+\begin{rem}
+  We do lose something with this more general definition: the fact
+  that $F^K$ represents an indexed \emph{partitional} product is
+  somewhat obscured; with $F^{\bullet \size K}$, the use of
+  partitional product is apparent by construction.
+\end{rem}
+
+Finally, the composite $F \comp G$ is defined by
+\[ (F \comp G)\ L = \coend{K} F\ K \times G^K\ L, \] \ie an $(F \comp
+G)$-shape on $L$ is an $F$-shape on some label set $K$ paired with a $K$-indexed
+product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
+
+\todo{Prove it is associative?}
+\todo{Distributes over sum and product?}
+
 \section{Closed monoidal structures and elimination}
 \label{sec:closed}
 
@@ -1695,7 +1842,7 @@ Cartesian closed, then $[\Lab,\Str]$ is also complete and Cartesian
 closed. (cite:
 \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178#104178})
 In particular the exponential of $F,G : \Lab \to \Str$ is given by \[
-G^F (L) = \int_{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] Note
+G^F (L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] Note
 that neither $\B$ nor $\BT$ is small, since the class of all finite
 sets or types is too large; however, their skeletons $\P$ and $\PT$
 are small.  Since $\Set$ and $\Type$ are both complete and
@@ -1713,7 +1860,7 @@ Let's unpack this result a bit in the specific case of $[\PT,
 quantification, and indexed products are $\Pi$-types; hence, we
 have
 \begin{align*}
-(H^G)_n &= \int_{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
+(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
        &= \all {(m : \N)} {(\Fin m \iso \Fin n) \to G_n \to H_n} \\
        &\iso (\Fin n \iso \Fin n) \to G_n \to H_n
 \end{align*}
