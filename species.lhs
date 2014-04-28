@@ -1761,15 +1761,18 @@ an $F$-shape.
 We first show how to carry out the definition of composition in $[\B,
 \Set]$ more abstractly, and then discuss how it may be generalized to
 other functor categories $[\Lab, \Str]$.
-Street~\citep{street2012monoidal} gives the following abstract
+\citet{street2012monoidal} gives the following abstract
 definition of composition:
 \[ (F \comp G)\ L = \coend{K} F\ K \times G^{\bullet \size K}\ L, \]
 where $G^{\bullet n} = \underbrace{G \bullet \dots \bullet G}_n$ is
 the $n$-fold partitional product of $G$.  However, this is problematic
-from a constructive point of view: $G^{\bullet \size K}$ retains no
-information about which element of $K$ corresponds to which $G$-shape
-in the product.  Given the coend over $K$, the choice does not matter
-up to isomorphism---but only if one invokes the axiom of choice.
+from a constructive point of view, since $G^{\bullet \size K}$ retains
+no information about which element of $K$ corresponds to which
+$G$-shape in the product.  Given the coend over $K$, the choice does
+not matter up to isomorphism---but only if one invokes the axiom of
+choice (since $K$ is finite we may use the axiom of choice to select
+an ordering on $K$, \ie a bijection with $\fin n$, which gives a
+canonical way to match elements of $K$ with $G$-shapes.
 
 The axiom of choice is rendered unnecessary, however, by the following
 more explicit construction of a $K$-indexed product of $G$, which
@@ -1777,44 +1780,46 @@ retains the correspondence between elements of $K$ and individual
 $G$-shapes.\footnote{This construction is also due to
   Street~\cite{personal-communication}.}
 
-First, consider the diagonal functor $\Delta^L : \Set \to \Set^L$,
-where $L$ is some finite set regarded as a discrete category.  A
-functor $L \to \Set$ can thus be regarded as an $L$-indexed tuple of
-sets; \eg in the case $L = \cat{2}$, a functor $L \to \Set$ is just an
-ordered pair of sets. $\Delta^L (X)$ is just the $L$-indexed tuple
-containing $\size L$ copies of $X$.
+First, consider the diagonal functor $\Delta_L : \Set \to \Set^L$,
+where $L$ is some discrete category.  A functor $L \to \Set$ can thus
+be regarded as an $L$-indexed tuple of sets; \eg in the case $L =
+\disc{\cat{2}}$, the discrete category on two objects, a functor
+$\disc{\cat{2}} \to \Set$ is just an ordered pair of sets. $\Delta_L
+(X)$ is the $L$-indexed tuple containing identical copies of $X$.
 
 The fact that $\Set$ has all limits and colimits is equivalent to
-saying that for any category $J$, the diagonal functor $\Delta^J :
+saying that for any category $J$, the diagonal functor $\Delta_J :
 \Set \to \Set^J$ always has (respectively) a right and left
-adjoint~\cite{wikipedia on limits}. In the particular case of a discrete
-category $L$, we call these adjoints $\Pi^L$ and $\Sigma^L$: \[
-\Sigma^L \adj \Delta^L \adj \Pi^L. \] In particular, $\Sigma^L :
-\Set^L \to \Set$ constructs $L$-indexed coproducts, and $\Pi^L$
-indexed products. (In the special case $L = \cat{2}$, $\Sigma^2$ and
-$\Pi^2$ resolve to the familiar notions of binary coproduct and
-product, respectively.)  We often omit the superscripts, writing
-simply $\Sigma$ and $\Pi$ when $L$ is clear from the context.
+adjoint~\cite{wikipedia on limits}. \todo{Look up Taylor, Ex 7.3.7
+  p.387, 9.1.7 p.474.}  In the particular case of a discrete category
+$L$, we call these adjoints $\Pi^L$ and $\Sigma^L$: \[ \Sigma^L \adj
+\Delta_L \adj \Pi^L. \] In particular, $\Sigma^L : \Set^L \to \Set$
+constructs $L$-indexed coproducts, and $\Pi^L$ indexed products. (In
+the special case $L = \cat{2}$, $\Sigma^2$ and $\Pi^2$ resolve to the
+familiar notions of binary disjoint union and Cartesian product of
+sets, respectively.)  We often omit the superscripts, writing simply
+$\Sigma$ and $\Pi$ when $L$ is clear from the context.
 
-As noted before, $\B$ has no products or coproducts, so we cannot
-directly define $\Sigma$ or $\Pi$ as adjoints in $\B$.  However, we
-may take the restriction of $\Sigma : \Set^L \to \Set$ to $\Sigma :
-\B^L \to \B$ (and likewise for $\Pi$), since $\B$ is a subcategory of
-$\Set$.
+As noted previously, $\B$ does not have products or coproducts, so we
+cannot directly define $\Sigma$ or $\Pi$ as adjoints in $\B$.
+However, we may take the restriction of $\Sigma : \Set^L \to \Set$ to
+$\Sigma : \B^L \to \B$ (and likewise for $\Pi$), since $\B$ is a
+subcategory of $\Set$ and disjoint union (respectively product)
+preserves finiteness.
 
 We now define a general notion of indexed species product. For a
 species $F \in [\B,\Set]$ and $K \in \B$ a finite set, $F^K \in
-[\B,\Set]$ represents the $\size K$-fold product of $F$, indexed by
-the elements of $K$: \todo{picture?} \[ F^K\ L = \coend{P \in [K,\B]}
-\B(\Sigma P, L) \times \Pi (F \comp P). \] Note that $K$ is regarded
-as a discrete category, so $P \in \B^K$ is a $K$-indexed collection of
-finite sets.  $\B(\Sigma P, L)$, a bijection between the coproduct of
-$P$ and $L$, witnesses the fact that $P$ represents a partition of
-$L$; the coend means that we generate only one shape per fundamentally
-distinct partition. The composite $F \comp P = \xymatrix{K \ar[r]^P &
-  \B \ar[r]^F & \Set}$ is a $K$-indexed collection of $F$-structures,
-one on each finite set of labels in $P$; the $\Pi$ constructs their
-product.
+[\B,\Set]$ represents the $\size K$-fold partitional product of $F$,
+indexed by the elements of $K$: \todo{picture?} \[ F^K\ L = \coend{P
+  \in [K,\B]} \B(\Sigma P, L) \times \Pi (F \comp P). \] Note that $K$
+is regarded as a discrete category, so $P \in \B^K$ is a $K$-indexed
+collection of finite sets.  $\B(\Sigma P, L)$, a bijection between the
+coproduct of $P$ and $L$, witnesses the fact that $P$ represents a
+partition of $L$; the coend means there is only one shape per
+fundamentally distinct partition. The composite $F \comp P =
+\xymatrix{K \ar[r]^P & \B \ar[r]^F & \Set}$ is a $K$-indexed
+collection of $F$-structures, one on each finite set of labels in $P$;
+the $\Pi$ constructs their product.
 
 \todo{Note this is functorial in $K$, i.e. $F^- : \B \to [\B,\Set]$ is
 a functor.}
@@ -1837,18 +1842,17 @@ product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
 \section{Closed monoidal structures and elimination}
 \label{sec:closed}
 
-\paragraph{Cartesian closed}  If $\Lab$ is small and $\Str$ is complete and
-Cartesian closed, then $[\Lab,\Str]$ is also complete and Cartesian
-closed. (cite:
-\url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178#104178})
-In particular the exponential of $F,G : \Lab \to \Str$ is given by \[
-G^F (L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] Note
-that neither $\B$ nor $\BT$ is small, since the class of all finite
-sets or types is too large; however, their skeletons $\P$ and $\PT$
-are small.  Since $\Set$ and $\Type$ are both complete and
-Cartesian closed, we conclude that both the skeletonized category
-$[\P,\Set]$ of traditional species and its type-theoretic counterpart
-$[\PT, \Type]$ are complete and Cartesian closed as well.
+\paragraph{Cartesian closed} If $\Lab$ is locally small and $\Str$ is
+complete and Cartesian closed, then $[\Lab,\Str]$ is also complete and
+Cartesian closed. \todo{cite
+  \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178#104178},
+  also check locally small thing?  Jacques asked it on MO?}  In
+particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
+(L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,
+$\B$, $\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and
+$\U$ are complete and Cartesian closed, so $[\B,\Set]$, $[\P,\Set]$,
+$[\BT,\Set]$, and $[\PT,\Set]$ are all complete and Cartesian closed
+as well.
 
 \todo{Note, here we don't need parametric polymorphism over $\forall
   (n : \N)$ since there are no arrows between different $n$ to
@@ -1908,6 +1912,77 @@ $[\BT, \Type]$ is Cartesian closed as well.
 
 \section{Differentiation}
 \label{sec:differentiation}
+
+The \term{derivative} $F'$ of a species $F$ is defined by \[ F'[U] =
+F[U \union \{\star\}], \] where $\star$ is some new distinguished
+label not already present in $U$.  The transport of relabelings along
+the derivative is defined as expected, leaving the distinguished
+label alone and transporting the others.
+
+The derivative of container types is a notion already familiar to many
+functional programmers through the work of \citet{Huet_zipper},
+\citet{mcbride:derivative, mcbride_clowns_2008} and
+\citet{abbott_deriv}: the derivative of a type is its type of
+``one-hole contexts''.  This can be seen in the definition above;
+$\star$ represents the distinguished ``hole'' in the $F$-structure.
+
+\newcommand{\pt}[1]{#1^{\bullet}}
+
+The related operation of \term{pointing} can be defined in terms of
+the derivative as \[ \pt F = \X \sprod F'. \] As illustrated in
+\pref{fig:pointing}, an $\pt F$-structure can be thought of as an
+$F$-structure with one particular distinguished element.
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import SpeciesDiagrams
+
+theDia = drawSpT (struct'' 5 ((text "F" <> rect 1 1 # lw 0) |||||| circle 0.2 # fc black # translateY 0.2)) # centerXY
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         ( struct 1 "X" # alignR
+           ===
+           strutY 0.1
+           ===
+           drawSpT
+           ( nd (txt "F")
+             [ lf Leaf
+             , lf Leaf
+             , lf Leaf
+             , lf Hole
+             , lf Leaf
+             ]
+           ) # alignR
+         ) # centerXY
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         drawSpT
+         ( nd (txt "F")
+           [ lf Leaf
+           , lf Leaf
+           , lf Leaf
+           , lf Point
+           , lf Leaf
+           ]
+         )
+
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Species pointing}
+    \label{fig:pointing}
+  \end{figure}
+
 
 \section{Multisort species}
 \label{sec:multisort}
