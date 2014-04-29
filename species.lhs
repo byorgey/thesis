@@ -1850,7 +1850,7 @@ Cartesian closed. \todo{cite
 particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
 (L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,
 $\B$, $\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and
-$\U$ are complete and Cartesian closed, so $[\B,\Set]$, $[\P,\Set]$,
+$\Type$ are complete and Cartesian closed, so $[\B,\Set]$, $[\P,\Set]$,
 $[\BT,\Set]$, and $[\PT,\Set]$ are all complete and Cartesian closed
 as well.
 
