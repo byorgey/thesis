@@ -1756,16 +1756,25 @@ We first show how to carry out the definition of composition in $[\B,
 other functor categories $[\Lab, \Str]$.
 \citet{street2012monoidal} gives the following abstract
 definition of composition:
-\[ (F \comp G)\ L = \coend{K} F\ K \times G^{\bullet \size K}\ L, \]
-where $G^{\bullet n} = \underbrace{G \bullet \dots \bullet G}_n$ is
-the $n$-fold partitional product of $G$.  However, this is problematic
-from a constructive point of view, since $G^{\bullet \size K}$ retains
-no information about which element of $K$ corresponds to which
-$G$-shape in the product.  Given the coend over $K$, the choice does
-not matter up to isomorphism---but only if one invokes the axiom of
-choice (since $K$ is finite we may use the axiom of choice to select
-an ordering on $K$, \ie a bijection with $\fin n$, which gives a
-canonical way to match elements of $K$ with $G$-shapes.
+\[ (F \comp G)\ L = \coend{K} F\ K \times G^{\size K}\ L, \]
+where $G^{n} = \underbrace{G \bullet \dots \bullet G}_n$ is
+the $n$-fold partitional product of $G$.  Intuitively, this
+corresponds to a top-level $F$-shape on labels drawn from the
+``internal'' label set $K$, paired with $\size K$-many $G$-shapes,
+with the labels from $L$ partitioned among all the $G$-shapes.  The
+coend ensures that the precise choice of $K$ ``does not matter'' up to
+isomorphism.
+
+However, this definition is puzzling from a constructive point of
+view, since it is would seem that $G^{\size K}$ retains no information
+about which element of $K$ corresponds to which $G$-shape in the
+product.  The problem boils down, again, to the use of the axiom of
+choice.  For each finite set $K$ we may choose some ordering
+$K \bij \fin{\size K}$; this ordering then dictates how to match up
+the elements of $K$ with the $G$-shapes in the product $G^{\size K}$.
+
+Our goal will be to instead define $G^K$, a ``$K$-indexed product'' of
+$G$-shapes.  todo{working here}
 
 The axiom of choice is rendered unnecessary, however, by the following
 more explicit construction of a $K$-indexed product of $G$, which
@@ -1816,13 +1825,6 @@ the $\Pi$ constructs their product.
 
 \todo{Note this is functorial in $K$, i.e. $F^- : \B \to [\B,\Set]$ is
 a functor.}
-
-\begin{rem}
-  We do lose something with this more general definition: the fact
-  that $F^K$ represents an indexed \emph{partitional} product is
-  somewhat obscured; with $F^{\bullet \size K}$, the use of
-  partitional product is apparent by construction.
-\end{rem}
 
 Finally, the composite $F \comp G$ is defined by
 \[ (F \comp G)\ L = \coend{K} F\ K \times G^K\ L, \] \ie an $(F \comp
