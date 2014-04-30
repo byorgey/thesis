@@ -191,7 +191,7 @@
 
 \providecommand{\B}{\bbb{B}}
 \renewcommand{\P}{\bbb{P}}
-\providecommand{\FinSet}{\bbb{E}}
+\providecommand{\FinSet}{\cat{FinSet}}
 
 \providecommand{\L}{}
 \renewcommand{\L}{\bbb{L}}     % category of linear orderings

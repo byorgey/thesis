@@ -1509,17 +1509,10 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
-  $\Str = \Set$.  $\B$ does not have coproducts\footnote{To see why,
-    consider that $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B
-      \ar[l]_-{\iota_G}}$ in $\B$ would imply that any two finite sets
-    $A$ and $B$ must be in bijection, and therefore the same size.
-    More generally, any category with coproducts (or products) is
-    necessarily \term{connected}, \ie has some zig-zag sequence of
-    arrows connecting any two objects; this is clearly not true of
-    $\B$.}; however, it does have a monoidal structure given by
-  disjoint union.  $\B$ is indeed enriched over $\Set$, which is also
-  cocomplete and has a symmetric monoidal structure given by Cartesian
-  product.
+  $\Str = \Set$.  As noted in~\pref{sec:groupoids}, $\B$ has a
+  monoidal structure given by disjoint union of finite sets. $\B$ is
+  indeed enriched over $\Set$, which is also cocomplete and has a
+  symmetric monoidal structure given by Cartesian product.
 
   Specializing the definition to this case, we obtain
   \begin{align*}

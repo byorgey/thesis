@@ -135,20 +135,66 @@ that is, for each morphism $f$ there is another morphism $f^{-1}$ for
 which $f \comp f^{-1} = id$ and $f^{-1} \comp f = id$.  Groupoids play
 a prominent role in \todo{finish; cite groupoids and stuff; HoTT; etc.}
 
-Examples of groupoids include:
+Some examples:
 
-\begin{itemize}
-\item $\B$ is the groupoid whose objects are finite sets and whose
-  morphisms are \emph{bijections} between finite sets. \todo{intuition,
-    picture}
-
-  \todo{Notation for permutations: $\perm{A}$}
-  \todo{Define ``transitive''}
-
-\item Any type $T$ gives rise to a groupoid $\tygrpd{T}$ where the objects
+\begin{defn}
+Any type $T$ gives rise to a groupoid $\tygrpd{T}$ where the objects
 are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is,
 morphisms from $a$ to $b$ are paths $p : a = b$.
-\end{itemize}
+\end{defn}
+
+\begin{defn}
+  Any category $\C$ gives rise to a groupoid $\C^*$, called the
+  \term{core} of $\C$, whose objects are the objects of $\C$ and whose
+  morphisms are the isomorphisms in $\C$.
+\end{defn}
+
+Checking that $\C^*$ is indeed a groupoid is left as an easy exercise.
+
+\begin{defn}
+  We give the name $\B$ to $\FinSet^*$, that is, the groupoid whose
+  objects are finite sets and whose morphisms are \emph{bijections}
+  between finite sets. \todo{intuition, picture}
+\end{defn}
+
+\todo{Notation for permutations: $\perm{A}$}
+\todo{Define ``transitive''} \bay{Why is this todo here?}
+
+$\B$ does not have products or coproducts. To see that $\B$ does not
+have coproducts, let $A, B \in \B$ be arbitrary finite sets, and
+suppose they have some coproduct $A+B$. By definition this comes with
+a diagram $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B \ar[l]_-{\iota_2}}$
+in $\B$. Since morphisms in $\B$ are bijections, this would imply that
+$A$ and $B$ are in bijection, but since $A$ and $B$ were arbitrary
+finite sets, this is absurd.  A similar argument applies in the case
+of products.  More generally, any category with all products or coproducts
+is necessarily \term{connected}, \ie has some zig-zag sequence of
+arrows connecting any two objects, and this is clearly not true of
+$\B$.
+
+$\B$ does, however, have monoidal structures given by Cartesian
+product and disjoint union of finite sets, even though these are not a
+categorical product or coproduct. \todo{More intuition/illustration here.}
+In fact, something more general is true:
+
+\begin{prop}
+  Any monoid $(\otimes,1)$ on a category $\C$ restricts to a monoid
+  $(\otimes^*,1)$ on the groupoid $\C^*$.
+\end{prop}
+\begin{proof}
+  There is a forgetful functor $U : \C^* \to \C$ which is the identity
+  on both objects and morphisms.  Given $X,Y \in \C^*$, we may define
+  \[ X \otimes^* Y = U X \otimes U Y; \] this may be considered as an
+  object of $\C^*$ since $\C$ and $\C^*$ have the same objects.  Given
+  morphisms $\sigma$ and $\tau$ of $\C^*$, we also define \[ \sigma
+  \otimes^* \tau = U \sigma \otimes U \tau, \] and note that the
+  result must be an isomorphism---hence a morphism in $\C^*$---since
+  all functors (here, $U$ and $\otimes$ in particular) preserve
+  isomorphisms.
+
+  The fact that $1$ is an identity for $\otimes^*$, associativity, and
+  the coherence conditions all follow readily from the definitions.
+\end{proof}
 
 \subsection{Finiteness}
 \label{sec:finiteness}
