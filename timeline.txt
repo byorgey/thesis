@@ -24,6 +24,7 @@ Outline
          once material is in once place, new connections
          (hopefully) see variants as instances of general framework
          new instantiation in type theory
+
   - Traditional definition of species.
   - Restart "from scratch": functor categories.  Along the way,
     explain what extra structure is needed for each new feature, and
@@ -37,6 +38,9 @@ Outline
     - arithmetic product
   - Composition
   - Differentiation + Pointing
+  - multisort species
+  - weighted species
+  - L-species
 
   - Think about how to incorporate material on elimination etc.?
 
@@ -84,4 +88,3 @@ June (4 weeks): write chapter 4, and turn material from Chapters 2 & 3 into a PO
 July (4 weeks): write Chapter 1 / miscellaneous / account for inevitable schedule slippage
 
 October?: defend
-

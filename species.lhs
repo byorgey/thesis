@@ -9,6 +9,7 @@
 \todo{Need a story for building with both color or black/white
   figures}
 \todo{Include example of bounded tree width graphs somewhere.}
+\todo{Include $\Cat$-valued species as an example.}
 
 The theory of combinatorial species, introduced by \citet{joyal}, is a
 unified theory of \term{combinatorial structures} or \term{shapes}.
@@ -1773,21 +1774,19 @@ choice.  For each finite set $K$ we may choose some ordering
 $K \bij \fin{\size K}$; this ordering then dictates how to match up
 the elements of $K$ with the $G$-shapes in the product $G^{\size K}$.
 
-Our goal will be to instead define $G^K$, a ``$K$-indexed product'' of
-$G$-shapes.  todo{working here}
+Our goal will be to instead define $G^K$, a ``$K$-indexed partitional
+product'' of $G$-shapes, where each $G$-shape corresponds, by
+construction, to an element of $K$.
 
-The axiom of choice is rendered unnecessary, however, by the following
-more explicit construction of a $K$-indexed product of $G$, which
-retains the correspondence between elements of $K$ and individual
-$G$-shapes.\footnote{This construction is also due to
-  Street~\cite{personal-communication}.}
+As a warm-up, consider first the situation in $\Set$.  We can
+represent a $K$-indexed collection of sets by a functor $K \to \Set$
+(where $L$ is regarded as a discrete category). \todo{working here}
 
-First, consider the diagonal functor $\Delta_L : \Set \to \Set^L$,
-where $L$ is some discrete category.  A functor $L \to \Set$ can thus
-be regarded as an $L$-indexed tuple of sets; \eg in the case $L =
-\disc{\cat{2}}$, the discrete category on two objects, a functor
-$\disc{\cat{2}} \to \Set$ is just an ordered pair of sets. $\Delta_L
-(X)$ is the $L$-indexed tuple containing identical copies of $X$.
+be regarded as an
+$L$-indexed tuple of sets; \eg in the case $L = \disc{\cat{2}}$, the
+discrete category on two objects, a functor $\disc{\cat{2}} \to \Set$
+is just an ordered pair of sets. $\Delta_L (X)$ is the $L$-indexed
+tuple containing identical copies of $X$.
 
 The fact that $\Set$ has all limits and colimits is equivalent to
 saying that for any category $J$, the diagonal functor $\Delta_J :
