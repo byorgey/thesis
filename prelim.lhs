@@ -127,6 +127,64 @@ Equivalence of categories.
 
 Enriched categories.
 
+\subsection{Monoids}
+\label{sec:monoids}
+
+Monoids, monoidal categories.  Note we will pretend all monoidal
+categories are strict (justify).  Products and coproducts. Monoidal
+closed. Cartesian closed.
+
+\bay{How can we say that we are using ``the same'' ``product-like''
+  monoidal structure in all these different categories?  Are they
+  related by monoidal functors?}
+
+\subsection{Ends, coends, and parametricity}
+\label{sec:parametricity}
+
+\todo{Define/give intuition for ends and coends.  (Co)ends as
+(co)equializers.  Talk about connection between natural
+transformations and polymorphic functions, specific ways it plays out
+in a dependent type theory---e.g. can we assume parametricity for
+functions that abstract over things classified by |*|? Cite Bernardy
+et al.}
+
+\subsection{Coends}
+\label{sec:coends}
+
+Given a bifunctor $T : \C^\op \times \C \to \D$, a \term{coend} over
+$T$, denoted $\int^C T(C,C)$, is an object of $\D$ together with some
+(di)naturality conditions.  In the specific case when the objects of
+$\D$ can be thought of as sets or types with
+``elements''\footnote{This definition can be made precise in full
+  generality (without requiring the objects of $\D$ to have
+  ``elements'') using a \emph{coequalizer}.}, the coend $\int^C
+T(C,C)$ is given by a quotient of an indexed coproduct $\left( \sum_{C
+    \in \C} T(C,C) \right) / \sim$.  Elements of the indexed coproduct
+look like pairs $(C, t)$ where $C \in \C$ and $t \in T(C,C)$. The idea
+behind the quotient is that we want to consider two pairs $(C,t)$ and
+$(C', t')$ equivalent if they are related by the functoriality of $T$.
+In particular, for each arrow $f : C \to C'$ in $\C$ and each $x \in
+T(C',C)$, we set $(C, T(f,1)\ x) \sim (C', T(1,f)\ x)$.  That is, we
+can always ``swap out $(C,t)$ for $(C',t')$'' as long as we have some
+way to map from $C$ to $C'$ and the associated values $t$ and $t'$ are
+related by the same mapping.
+
+Intuitively, the functor $T$ can be thought of as an ``interface'';
+$(C,t)$ is then a ``module'' with ``representation type'' $C$ and
+``implementation'' $t$.  Indeed, in Haskell, the coend of $T$ is given
+by the type \texttt{exists c.\ T c c} (or rather, by an isomorphic
+encoding, since \texttt{exists} is not actually valid Haskell snytax)
+\cite{kmett2008kan}. $T$ is required to be a bifunctor from $\C^\op
+\times \C$ since the representation type may occur both co- and
+contravariantly in the interface.
+
+\todo{Expand.  Give formal definition in terms of coequalizer.}
+
+\begin{rem}
+  Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
+  coend over the product category $\Lab \times \Lab$.
+\end{rem}
+
 \subsection{Groupoids}
 \label{sec:groupoids}
 
@@ -195,6 +253,143 @@ In fact, something more general is true:
   The fact that $1$ is an identity for $\otimes^*$, associativity, and
   the coherence conditions all follow readily from the definitions.
 \end{proof}
+
+\section{The Axiom of Choice (and how to avoid it)}
+\label{sec:AC}
+
+The (in)famous \emph{Axiom of Choice} (hereafter, AC) can be
+formulated in a number of equivalent ways.  Perhaps the most
+well-known is
+\begin{equation}
+  \label{eq:ac1} \tag{AC}
+  \text{The Cartesian product of any collection of non-empty sets is non-empty.}
+\end{equation}
+Given a family of sets $\{X_i \mid i \in I\}$, an element of their
+Cartesian product is some $I$-indexed tuple $\{x_i \mid i \in I\}$
+where $x_i \in X_i$ for each $i$. Such a tuple can be thought of as a
+function (called a \emph{choice function}) which picks out some
+particular $x_i$ from each $X_i$. \todo{finish.  Move discussion of AC
+  in HoTT here.}
+
+The problem with the axiom of choice is that it is non-constructive,
+in the sense that a choice function produced by AC has no real
+computational content.  AC simply postulates the \emph{existence} of a
+choice function but does not actually specify its behavior.  In the
+setting of this work, therefore, AC must be rejected. \bay{Expound on
+  this a bit?  Why must it be rejected?  Maybe somewhere else I ought
+  to clearly lay out and motivate the constructivist viewpoint
+  underlying this work.}
+
+\subsection{Unique isomorphism and generalized ``the''}
+\label{sec:generalized-the}
+
+In category theory, one is typically interested in specifying objects
+only \emph{up to unique isomorphism}.  In fact, definitions which make
+use of actual \emph{equality} on objects are sometimes referred to
+(half-jokingly) as \emph{evil}.  More positively, the widely
+subscribed-to \term{principle of
+  equivalence}~\cite{principle-of-equivalence} states that properties
+of mathematical structures should be invariant under equivalence.
+This principle leads naturally to speaking of ``the'' object having
+some property, when in fact there may be many objects with the given
+property, but are all uniquely isomorphic; this cannot cause
+confusion if the principle of equivalence is in effect.
+
+This phenomenon should be familiar to anyone who has seen simple
+universal constructions such as terminal objects or categorical
+products.  For example, an object $1 \in \C$ is called \term{terminal}
+if there is a unique morphism $\mor A 1$ from each object $A \in
+\C$. In general, there may be many objects satisfying this
+criterion; for example, in \Set, every singleton set is terminal.
+However, it is not hard to show that any two terminal objects must be
+uniquely isomorphic.  Thus it ``does not matter'' which terminal
+object we use---they all have the same properties, as long as we don't
+do anything ``evil''---and one therefore speaks of ``the'' terminal
+object of $\C$.  As another example, a \term{product} of two objects
+$A,B \in \C$ is a diagram $\xymatrix{A & C \ar[l]_{\pi_1}
+  \ar[r]^{\pi_2} & B}$ with the universal property that any other $C'$
+with morphisms to $A$ and $B$ uniquely factors through $C$.  Again,
+there may be multiple such products, but they are all uniquely
+isomorphic, and one speaks of ``the'' product $A \times B$.
+
+Note that in some cases, there may be a canonical choice among
+isomorphic objects.  For example, this is the case with products in
+$\Set$, where we may always pick the Cartesian product $\{(a,b) \mid a
+\in A, b \in B\}$ as a canonical product of $A$ and $B$.  In such
+cases use of ``the'', as in ``the product of $A$ and $B$'', is even
+more strongly justified, since we may take it to mean ``the
+\emph{canonical} product of $A$ and $B$''. However, in many cases (for
+example, with terminal objects in $\Set$), there is no canonical
+choice, and ``the terminal object'' simply means something like ``some
+terminal object, it doesn't matter which''.
+
+Beneath this seemingly innocuous use of ``the'' (often referred to as
+\term{generalized ``the''}), however, lurks the axiom of choice!  For
+example, if a category $\C$ has all products, we can define a functor
+$P : \C \times \C \to \C$\footnote{Note that we have made use here of
+  ``the'' product category $\C \times \C$---fortunately $\Cat$, like
+  $\Set$, has a suitably \emph{canonical} notion of products.} which
+picks out ``the'' product of any two objects $A$ and $B$---indeed, $P$
+may be taken as the \emph{definition} of ``the'' product of $A$ and
+$B$.  But how is $P$ to be defined?  Consider $\{ \mathrm{Prod}(A,B)
+\mid A,B \in \C \}$, where $\mathrm{Prod}(A,B)$ denotes the set of all
+possible products of $A$ and $B$, \ie all suitable diagrams
+$\xymatrix{A & C \ar[l]_{\pi_1} \ar[r]^{\pi_2} & B}$ in $\C$.  Since
+$\C$ has all products, this is a collection of nonempty sets;
+therefore we may invoke AC to obtain a choice function, which is
+precisely $P_0$, the action of $P$ on objects.  The action of $P$ on
+morphisms may then be defined straightforwardly.
+
+The axiom of choice really is necessary to construct $P$: as has
+already been noted, there is, in general, no way to make some
+canonical choice of object from each equivalence class.  On the other
+hand, this seems like a fairly ``benign'' use of AC.  If we have a
+collection of equivalence classes, where the elements in each class
+are all uniquely isomorphic, then using AC to pick one representative
+from each really ``does not matter'', in the sense that we cannot tell
+the difference between different choices (as long as we refrain from
+evil).  Unfortunately, even such ``benign'' use of AC still poses a
+problem for computation.
+
+There are (at least) two ways around the problem; both are presented
+here since the first serves as a nice lead-in to the second.
+
+\subsection{Cliques}
+\label{sec:cliques}
+
+The first method of circumventing AC is via the theory of
+\term{cliques}~\cite{cliques}.  Intuitively, a clique is a formal way
+of representing the informal notion of ``equivalence class of uniquely
+isomorphic objects''.
+
+\begin{defn}
+  A \term{clique} in a category $\C$ is given by
+  \begin{itemize}
+  \item a collection of objects $\{A_i \mid i \in I\}$, indexed by
+    some collection $I$, and
+  \item a collection of morphisms $\{\xymatrix{A_i \ar[r]^{u_{ij}} &
+      A_j} \mid i,j \in I\}$,
+  \end{itemize}
+  such that for all $i,j,k \in I$,
+  \begin{itemize}
+  \item $u_{ii} = id_{A_i}$, and
+  \item $u_{ij} \then u_{jk} = u_{ik}$.
+  \end{itemize}
+\end{defn}
+
+\begin{rem}
+  Note that the last two conditions together imply $u_{ij} =
+  u_{ji}^{-1}$, since $u_{ij} \then u_{ji} = u_{ii} = id$.
+\end{rem}
+
+A clique can thus be visualized as an actual clique in a directed
+graph, with a unique morphism between any two objects. \todo{picture}
+Note that this is actually a \emph{commuting} diagram!
+
+Thus, a clique represents a collection of objects in $\C$ which are
+all isomorphic, with a single chosen isomorphism between any two.
+Note that $\C$ may in fact contain \emph{other} isomorphisms between
+two objects in a clique. \todo{More intuition for why this is OK}
 
 \subsection{Finiteness}
 \label{sec:finiteness}
@@ -484,62 +679,4 @@ pair of inverse equivalences in each of the following two diagrams:
   automatically an isomorphism.
 \end{proof}
 \end{prop}
-
-\subsection{Monoids}
-\label{sec:monoids}
-
-Monoids, monoidal categories.  Note we will pretend all monoidal
-categories are strict (justify).  Products and coproducts. Monoidal
-closed. Cartesian closed.
-
-\bay{How can we say that we are using ``the same'' ``product-like''
-  monoidal structure in all these different categories?  Are they
-  related by monoidal functors?}
-
-\subsection{Ends, coends, and parametricity}
-\label{sec:parametricity}
-
-\todo{Define/give intuition for ends and coends.  (Co)ends as
-(co)equializers.  Talk about connection between natural
-transformations and polymorphic functions, specific ways it plays out
-in a dependent type theory---e.g. can we assume parametricity for
-functions that abstract over things classified by |*|? Cite Bernardy
-et al.}
-
-\subsection{Coends}
-\label{sec:coends}
-
-Given a bifunctor $T : \C^\op \times \C \to \D$, a \term{coend} over
-$T$, denoted $\int^C T(C,C)$, is an object of $\D$ together with some
-(di)naturality conditions.  In the specific case when the objects of
-$\D$ can be thought of as sets or types with
-``elements''\footnote{This definition can be made precise in full
-  generality (without requiring the objects of $\D$ to have
-  ``elements'') using a \emph{coequalizer}.}, the coend $\int^C
-T(C,C)$ is given by a quotient of an indexed coproduct $\left( \sum_{C
-    \in \C} T(C,C) \right) / \sim$.  Elements of the indexed coproduct
-look like pairs $(C, t)$ where $C \in \C$ and $t \in T(C,C)$. The idea
-behind the quotient is that we want to consider two pairs $(C,t)$ and
-$(C', t')$ equivalent if they are related by the functoriality of $T$.
-In particular, for each arrow $f : C \to C'$ in $\C$ and each $x \in
-T(C',C)$, we set $(C, T(f,1)\ x) \sim (C', T(1,f)\ x)$.  That is, we
-can always ``swap out $(C,t)$ for $(C',t')$'' as long as we have some
-way to map from $C$ to $C'$ and the associated values $t$ and $t'$ are
-related by the same mapping.
-
-Intuitively, the functor $T$ can be thought of as an ``interface'';
-$(C,t)$ is then a ``module'' with ``representation type'' $C$ and
-``implementation'' $t$.  Indeed, in Haskell, the coend of $T$ is given
-by the type \texttt{exists c.\ T c c} (or rather, by an isomorphic
-encoding, since \texttt{exists} is not actually valid Haskell snytax)
-\cite{kmett2008kan}. $T$ is required to be a bifunctor from $\C^\op
-\times \C$ since the representation type may occur both co- and
-contravariantly in the interface.
-
-\todo{Expand.  Give formal definition in terms of coequalizer.}
-
-\begin{rem}
-  Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
-  coend over the product category $\Lab \times \Lab$.
-\end{rem}
 

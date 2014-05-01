@@ -26,6 +26,7 @@
 \usepackage{prettyref}
 \usepackage{xspace}
 \usepackage{url}
+\usepackage{footmisc}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 
@@ -186,6 +187,8 @@
 
 % some standard categories
 \newcommand{\Set}{\cat{Set}}   % category of sets
+\providecommand{\Cat}{}
+\renewcommand{\Cat}{\cat{Cat}} % category of (small) categories
 \newcommand{\Spe}{\cat{Spe}}   % category of species
 \newcommand{\CSpe}{\cat{CSpe}} % category of constructive species
 
