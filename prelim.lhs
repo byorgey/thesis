@@ -351,23 +351,25 @@ the difference between different choices (as long as we refrain from
 evil).  Unfortunately, even such ``benign'' use of AC still poses a
 problem for computation.
 
-There are (at least) two ways around the problem; both are presented
-here since the first serves as a nice lead-in to the second.
+The right way around this use of AC is to generalize functors to
+\term{anafunctors}, which are presented below.  The theory of
+\term{cliques} is presented first---cliques come close to being a way
+around AC, and although they don't completely surmount the problem in
+the end, they offer some good intuition for understanding anafunctors.
 
 \subsection{Cliques}
 \label{sec:cliques}
 
-The first method of circumventing AC is via the theory of
-\term{cliques}~\cite{cliques}.  Intuitively, a clique is a formal way
-of representing the informal notion of ``equivalence class of uniquely
-isomorphic objects''.
+A clique is a formal way of representing the informal notion of
+``equivalence class of uniquely isomorphic objects''.
 
 \begin{defn}
-  A \term{clique} in a category $\C$ is given by
+  A \term{clique} $(I,A,u)$ in a category
+  $\C$ is given by
   \begin{itemize}
-  \item a collection of objects $\{A_i \mid i \in I\}$, indexed by
+  \item a collection of objects $A = \{A_i \mid i \in I\}$, indexed by
     some collection $I$, and
-  \item a collection of morphisms $\{\xymatrix{A_i \ar[r]^{u_{ij}} &
+  \item a collection of morphisms $u = \{\xymatrix{A_i \ar[r]^{u_{ij}} &
       A_j} \mid i,j \in I\}$,
   \end{itemize}
   such that for all $i,j,k \in I$,
@@ -390,6 +392,129 @@ Thus, a clique represents a collection of objects in $\C$ which are
 all isomorphic, with a single chosen isomorphism between any two.
 Note that $\C$ may in fact contain \emph{other} isomorphisms between
 two objects in a clique. \todo{More intuition for why this is OK}
+
+\begin{defn}
+  A morphism between two cliques $(I,A,u)$ and $(J,B,v)$
+  is given by a collection of arrows \[ \{ \xymatrix{A_i \ar[r]^f_{ij}
+    & B_j} \mid i \in I, j \in J \} \] such that \[ \xymatrix{ A_i
+    \ar[r]^{f_{ij}} \ar[d]_{u_{ik}} & B_j \ar[d]^{v_{jl}} \\ A_{k}
+    \ar[r]_{f_{kl}} & B_{l}} \] commutes for all $i,k \in I$ and
+  $j,l \in J$.
+\end{defn}
+
+Thus a morphism of cliques is a way to map an entire class of uniquely
+isomorphic objects to another---in particular, a way to map any
+representative of the first class to any representative of the
+second---in a way that preserves the unique isomorphisms.
+
+In fact, the class of cliques and clique morphisms in a category $\C$
+itself forms a category $\clq \C$.  It is easy to imagine what the
+identity morphism of cliques must be---the one which maps each $A_i$
+to $A_j$ via $u_{ij}$.  However, a surprise awaits us when we define
+composition of clique morphisms.  Suppose we have three cliques with
+morphisms $\xymatrix{(I,A,u) \ar[r]^f & (J,B,v) \ar[r]^g & (K,C,q)}$.
+We need to define a collection of morphisms $\xymatrix{A_i
+  \ar[r]^{h_{ik}} & C_k}$.  For any given $A_i$ and $C_k$, we have
+morphisms from $A_i$ to each of the $B_j$, and from each of the $B_j$
+to $C_k$, \todo{picture}.  If we pick some particular $B_j$, we can
+define $h_{ik} = f_{ij} \then g_{jk}$; and it's not hard to show that
+the result will be the same no matter which $B_j$ we pick, since
+everything in sight commutes.  But which $B_j$ should we pick?  In
+fact, we have to use the axiom of choice!  Again, this use of AC is
+``benign'', but it is a use nonetheless.
+
+In any case, the idea is now to replace functors $\C \to \D$ with
+functors $\C \to \clq \D$, which map objects of $\C$ to entire
+equivalence classes of objects in $\D$, instead of arbitrarily picking
+some object from each equivalence class.  For example, instead of a
+functor $\C \times \C \to \C$ giving ``the'' product of any two
+objects of $\C$, there is a functor $\C \times \C \to \clq \C$: given
+any two objects $A,B \in \C$, it constructs the clique whose objects
+are all possible products of $A$ and $B$, and whose morphisms are the
+unique isomorphisms $u_{ij}$ between products: \[ \xymatrix{ & C_i
+  \ar[dl] \ar[dd]^{u_{ij}} \ar[dr] & \\ A & & B \\ & C_j \ar[ul]
+  \ar[ur] & } \]
+
+This gets rid of the need for AC in defining such functors.  However,
+we have only succeeded in postponing the problem a bit, since defining
+composition in $\clq \D$ requires AC.  It is also somewhat cumbersome
+to replace $\D$ by $\clq \D$ in this way.  To make it tenable, one
+would likely end up defining a new notion of ``clique functor'' $F :
+\C \stackrel{\clq{}}{\to} \D$ given by a regular functor $\C \to \clq
+\D$, and showing that these clique functors ``act like'' functors (\ie
+can be composed, have a suitable notion of natural transformations,
+\etc).
+
+This starts to get at the right idea, which is to suitably generalize
+the notion of functor.
+
+\subsection{Anafunctors}
+\label{sec:anafunctors}
+
+The basic idea of an anafunctor is similar to that of a functor $\C
+\to \clq \D$---it represents a functor whose ``values are specified
+only up to unique isomorphsim''.  In fact, anafunctors $\C \to \D$ and
+functors $\C \to \clq \D$ are \todo{equivalent? with AC? check
+  this\dots}, though this is far from apparent, and anafunctors are
+nicer to work with.  Every functor is trivially an anafunctor, and in
+the presence of AC, anafunctors ``collapse'' to regular functors.
+Moreover, anafunctors possess many of the same properties as functors
+\todo{like what?}
+
+The key idea is to add a class of ``specifications'' which mediate the
+relationship between objects in the source and target categories, in
+exactly the same way that a ``junction table'' must be added to
+support a many-to-many relationship in a database schema.
+
+\begin{defn}
+  An \term{anafunctor} $F : \C \to \D$ is defined as follows.
+  \begin{itemize}
+  \item There is a class $||F||$ of \term{specifications}.
+  \item There are two functions $\xymatrix{\Ob \C & ||F|| \ar[l]_{\sigma}
+      \ar[r]^{\tau} & \Ob \D}$ mapping specifications to objects of
+    $\C$ and $\D$.
+  \end{itemize}
+  $||F||$, $\sigma$, and $\tau$ together define a many-to-many
+  relationship between objects of $\C$ and objects of $\D$.  Any
+  normal functor may map multiple objects of $\C$ to the same object
+  in $\D$; the novel aspect is the ability to have a single object of
+  $\C$ correspond to multiple objects of $\D$.
+
+  $D \in \D$ is called a \term{specified value of $F$ at $C$} if there
+  is some specification $s \in ||F||$ such that $\sigma(s) = C$ and
+  $\tau(s) = D$, in which case we write $F_s(C) = D$.  Moreover, $D$
+  is \term{a value of $F$ at $C$} (not necessarily a \emph{specified}
+  one) if there is some $s$ for which $D \cong F_s(C)$.
+
+  The name of the game now is to impose additional conditions which
+  ensure that $F$ ``acts like'' a regular functor $\C \to \D$.
+  \begin{itemize}
+  \item Functors are defined on all objects; so we require each object
+    of $\C$ to have at least one specification $s$ which corresponds
+    to it---that is, $\sigma$ must be surjective.
+  \item Functors transport morphisms as well as objects.  For each
+    $s,t \in ||F||$ and each $f : \sigma(s) \to \sigma(t)$ in $\C$,
+    there must be a morphism $F_{s,t}(f) : F_s(\sigma(s)) \to
+    F_t(\sigma(t))$ in $\D$. \todo{picture}
+  \item Functors preserve identities: for each $s \in ||F||$ we should
+    have $F_{s,s}(id_{\sigma(s)}) = id_{\tau(s)}$. \todo{picture}
+  \item Finally, functors preserve composition: for all $s,t,u \in
+    ||F||$, $f : \sigma(s) \to \sigma(t)$, and $g : \sigma(t) \to
+    \sigma(u)$, it must be the case that $F_{s,u}(f \then g) =
+    F_{s,t}(f) \then F_{t,u}(g)$. \todo{picture}
+  \end{itemize}
+\end{defn}
+
+Note that if $s,t \in ||F||$ with $\sigma(s) = \sigma(t) = C$, then
+$F_{s,t}(id_C) \then F_{t,s}(id_C) = F_{s,s}(id_C) = id_{\tau(s)}$, so
+each object of $\C$ really does map to an equivalence class of
+isomorphic objects in $\D$.
+
+In fact, there is an equivalent definition \todo{give equivalent definition}
+
+\todo{Should we discuss saturated anafunctors?}
+
+\todo{justify ``fast and loose'' mixed use of functors and anafunctors}
 
 \subsection{Finiteness}
 \label{sec:finiteness}

@@ -180,7 +180,8 @@
 \newcommand{\disc}[1]{\ensuremath{\left||#1\right||}} % discrete category
 \newcommand{\then}{\mathbin{;}}                       % flipped composition
 
-% morphisms
+% objects & morphisms
+\DeclareMathOperator{\Ob}{Ob}
 \newcommand{\mor}[2]{\ensuremath{#1 \longrightarrow #2}}
 \newcommand{\nt}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
 \newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
@@ -222,6 +223,9 @@
 % ends and coends
 \newcommand{\eend}[1]{\int_{#1}}
 \newcommand{\coend}[1]{\int^{#1}}
+
+% cliques
+\DeclareMathOperator{\clq}{clq}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species
