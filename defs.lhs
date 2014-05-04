@@ -154,7 +154,8 @@
 \newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
 \newcommand{\FinTypeT}{\ensuremath{\Type_{\||\text{Fin}\||}}}
 \newcommand{\IsFinite}[1]{\mathsf{IsFinite}\;#1}
-\newcommand{\size}[1]{\ensuremath{\##1}}
+\newcommand{\sizesymb}{\#}
+\newcommand{\size}[1]{\ensuremath{\sizesymb#1}}
 
 \newcommand{\Fin}[1]{\ensuremath{\cons{Fin}\ #1}}
 
@@ -226,6 +227,10 @@
 
 % cliques
 \DeclareMathOperator{\clq}{clq}
+
+% commutative diagrams
+\newcommand{\pushout}[1][dr]{\save*!/#1+1.2pc/#1:(1,-1)@@^{||-}\restore}
+\newcommand{\pullback}[1][dr]{\save*!/#1-1.2pc/#1:(-1,1)@@^{||-}\restore}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species

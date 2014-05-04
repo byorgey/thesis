@@ -268,8 +268,38 @@ Given a family of sets $\{X_i \mid i \in I\}$, an element of their
 Cartesian product is some $I$-indexed tuple $\{x_i \mid i \in I\}$
 where $x_i \in X_i$ for each $i$. Such a tuple can be thought of as a
 function (called a \emph{choice function}) which picks out some
-particular $x_i$ from each $X_i$. \todo{finish.  Move discussion of AC
-  in HoTT here.}
+particular $x_i$ from each $X_i$. \todo{finish.}
+
+\todo{Moved here, need to edit.}
+Several variants of the axiom of choice can be expressed within
+homotopy type theory.  A ``na\"ive'' variant, referred to as
+$\AC_\infty$, is given by
+\begin{equation} \tag{$\AC_\infty$}
+  \label{eq:ac-infty}
+  \left( \prod_{x : X} \sum_{(a : A(x))} P(x,a) \right) \iso \left(
+    \sum_{(g : \prod_{x:X} A(x))} \prod_{(x:X)} P(x,g(x)) \right).
+\end{equation}
+This variant is actually \emph{provable} within the theory; however,
+it is of little use here, since rather than just requiring a family of
+``nonempty'' sets, it actually requires, for each $x$, an explicit
+\emph{witness} $a : A(x)$ for which the property $P(x,a)$ holds.  That
+is, it requires that we have already made a choice for each $x$.
+
+A variant which corresponds more closely to standard mathematical
+practice, referred to as $\AC_{-1}$ or simply $\AC$, is
+\begin{equation} \tag{$\AC$}
+  \label{eq:AC}
+  \left( \prod_{x : X} \ptrunc{\sum_{(a : A(x))} P(x,a)} \right) \to
+    \ptrunc{\sum_{(g : \prod_{x:X} A(x))} \prod_{(x:X)} P(x,g(x))}.
+\end{equation}
+Intuitively, this says that given a family of \emph{nonempty}---\ie
+merely inhabited---sets, there merely exists a choice function.
+Although $\AC$ is not provable within the theory, it is consistent to
+assume it as an axiom.  However, as an axiom, it has no computational
+interpretation, and is therefore unsuitable for constructing a functor
+with computational content.  Moreover, even if it did have a computational
+interpretation, it would also be of limited use, since
+\todo{propositional truncation would get in the way.}
 
 The problem with the axiom of choice is that it is non-constructive,
 in the sense that a choice function produced by AC has no real
@@ -330,7 +360,7 @@ $P : \C \times \C \to \C$\footnote{Note that we have made use here of
   ``the'' product category $\C \times \C$---fortunately $\Cat$, like
   $\Set$, has a suitably \emph{canonical} notion of products.} which
 picks out ``the'' product of any two objects $A$ and $B$---indeed, $P$
-may be taken as the \emph{definition} of ``the'' product of $A$ and
+may be taken as the \emph{definition} of the product of $A$ and
 $B$.  But how is $P$ to be defined?  Consider $\{ \mathrm{Prod}(A,B)
 \mid A,B \in \C \}$, where $\mathrm{Prod}(A,B)$ denotes the set of all
 possible products of $A$ and $B$, \ie all suitable diagrams
@@ -445,8 +475,9 @@ would likely end up defining a new notion of ``clique functor'' $F :
 can be composed, have a suitable notion of natural transformations,
 \etc).
 
-This starts to get at the right idea, which is to suitably generalize
-the notion of functor.
+In fact, this idea of generalizing functors is the right one, but
+instead of generalizing them to ``clique functors'' we generalize
+instead to \term{anafunctors}.
 
 \subsection{Anafunctors}
 \label{sec:anafunctors}
@@ -510,31 +541,169 @@ $F_{s,t}(id_C) \then F_{t,s}(id_C) = F_{s,s}(id_C) = id_{\tau(s)}$, so
 each object of $\C$ really does map to an equivalence class of
 isomorphic objects in $\D$.
 
-In fact, there is an equivalent definition \todo{give equivalent definition}
+There is an alternative, equivalent definition of anafunctors, which
+is somewhat less intuitive but sometimes more convenient to work with.
 
-\todo{Should we discuss saturated anafunctors?}
+\begin{defn}
+  An anafunctor $F : \C \to \D$ is a category $||F||$ together with a
+  span of \emph{functors} $\xymatrix{\C & ||F|| \ar[l]_\sigma
+    \ar[r]^\tau & \D}$, such that $\sigma$ is faithful, and surjective
+  on both objects and morphisms.
+\end{defn}
 
-\todo{justify ``fast and loose'' mixed use of functors and anafunctors}
+We are punning on notation a bit here: in the original definition of
+anafunctor, $||F||$ is a set and $\sigma$ and $\tau$ are functions on
+objects, whereas in this more abstract definition $||F||$ is a
+category and $\sigma$ and $\tau$ are functors.  Of course, the two are
+closely related: given a span of functors $\xymatrix{\C & \overline F
+  \ar[l]_{\overline \sigma} \ar[r]^{\overline \tau} & \D}$, we may
+simply take the objects of $\overline F$ as the class of
+specifications $||F||$, and the actions of the functors $\overline
+\sigma$ and $\overline \tau$ on objects as the functions $\sigma$ and
+$\tau$.  Conversely, given a class of specifications $||F||$ and
+functions $\sigma$ and $\tau$, we may construct the category
+$\overline F$ with $\Ob \overline F = ||F||$ and with morphisms
+$\sigma(s) \to \sigma(t)$ in $\C$ acting as morphisms $s \to t$ in
+$\overline F$.  We take $\overline \sigma$ to be $\sigma$ on objects
+and the identity on morphisms, and $\overline \tau$ maps $f : s \to t$
+in $\overline F$ to $F_{s,t}(f) : \tau(s) \to \tau(t)$ in $\D$.
+
+Every functor $F : \C \to \D$ can be trivially turned into an
+anafunctor: we take $\overline F = \Ob \C$, $\sigma$ the
+identity functor, and $\tau = F$.
+
+Anafunctors compose: given anafunctors $F_1 : \C \to \D$ and $F_2 : \D
+\to \E$, the key idea is to take a suitable \emph{product} of their
+specifications.  In particular, \todo{finish.  Reference Makkai.}
+This is actually easier to see using the abstract definition in terms
+of spans: \[ \xymatrix{ {} \ar[d] \ar[r] \pullback & ||F_2||
+  \ar[d]_{\sigma_2} \ar[r]^{\tau_2} & \E \\ ||F_1|| \ar[d]_{\sigma_1}
+  \ar[r]^{\tau_1} & \D & \\ \C & & } \] $\Cat$ is cocomplete, and in
+particular has pullbacks, so we may construct a new anafunctor from
+$\C$ to $\E$ by taking a pullback of $\tau_1$ and $\sigma_2$ and then
+composing appropriately, as illustrated in the diagram.
+
+\todo{State a few other ways in which anafunctors ``act like''
+  functors; handwave at general theorem stating something about their
+  equivalence.} \todo{Do we need to discuss saturated anafunctors?
+  Maybe that only comes up in working out the precise details of
+  equivalence between functors and anafunctors?}
+
+We are therefore justified in ``mixing and matching'' functors and
+anafunctors as convenient, but discussing them all as if they were
+regular functors (except when defining a particular anafunctor).  Such
+usage can be formalized by turning everything into an anafunctor, and
+translating functor operations and properties into corresponding
+operations and properties of anafunctors.
 
 \subsection{Finiteness}
 \label{sec:finiteness}
 
-Recall that $\B$ denotes the groupoid of finite sets and bijections.
-We define its constructive
-counterpart $\BT$ in two stages. First, we introduce $\P$, the
-skeleton of $\B$, which corresponds to working directly with the
-\emph{sizes} of finite sets, and define its constructive analogue $\PT$. This
-simpler context brings many of the issues surrounding constructive
-finiteness into focus.  We then show how to extend $\PT$ to $\BT$.
+Recall that $\B$ denotes the groupoid of finite sets and bijections,
+and $\P$ the groupoid of natural numbers and permutations.  We begin
+by discussing the relationship between $\B$ and $\P$, which is more
+interesting than it may first seem.
 
-Denote by $\P$ the category whose objects are natural numbers and
-whose morphisms $\mor m n$ are bijections $\fin m \bij \fin n$ (hence
-there are no morphisms unless $m \equiv n$).  Defining a counterpart
-to $\P$ is straightforward:
+$\P$ is a \term{skeleton} of $\B$---roughly, we may think of it as the
+result of replacing each equivalence class of isomorphic objects in
+$\B$ with a single object.  In this case, we can identify each
+equivalence class of isomorphic finite sets with a \emph{size}, the
+only property of sets which is invariant under isomorphism.
+
+It is a simple result in classical category theory that every category
+is equivalent to its skeletons.  However, after the foregoing
+discussion of cliques and anafunctors, the idea of quotienting out by
+equivalences classes of isomorphic objects ought to make us
+squeamish---and, indeed, a proof that $\B$ and $\P$ are equivalent
+requires AC.
+
+In more detail, it is easy to define a functor $\fin - : \P \to \B$
+which sends $n$ to $\fin n$ and preserves morphisms; defining an
+inverse functor $\size - : \B \to \P$ is more problematic. We can send
+each set $S$ to its size $\size S$, but we must send a bijection $S
+\bij T$ to a bijection $\fin{\size S} \bij \fin{\size T}$, and there
+is no obvious way to pick one.  If we use AC, we can pick an arbitrary
+bijection $\varphi_S : S \bij \fin{\size S}$ for each finite set $S$,
+matching up $S$ with a canonical set of size $\size S$.  Given $\alpha
+: S \bij T$ we can then construct $\xymatrix{ \fin{\size S}
+  \ar[r]^-{\varphi_S^{-1}} & S \ar[r]^\alpha & T \ar[r]^-{\varphi_T} &
+  \fin{\size T}}$.  Again, this use of AC is ``benign'' in the sense
+that any two sets of choices yield equivalent functors \todo{need to
+  double-check this, maybe add a bit more explanation}.
+
+We can avoid the use of AC by constructing an anafunctor $\size - : \B
+\to \P$ instead of a functor.  In particular, as the class of
+specifications $||\size{}||$, we choose the class of all bijections
+$\sum_{T \in \B} (T \bij \fin{\size T})$.  The function $\sigma :
+||\size{}|| \to \Ob \B$ simply forgets the chosen bijection,
+$\sigma(T,\varphi) = T$, and $\tau : ||\size{}|| \to \Ob \P$ sends
+finite sets to their size, $\tau(T,\varphi) = \size T$.  Note that
+both $\sigma$ and $\tau$ ignore $\varphi$, which is instead needed to
+define the action of $\size{}$ on morphisms.  In particular, given
+$\alpha : S \bij T$ in $\B$, we define $\sizesymb_{(S,\varphi_S),
+  (T,\varphi_T)}(\alpha) = \varphi_S^{-1} \then \alpha \then
+\varphi_T$, which can be visualized as
+\[
+\xymatrix{S \ar[d]_\alpha & \fin{\size S} \ar[l]_-{\varphi_S^{-1}}
+  \ar@@{.>}[d]^{\size \alpha} \\
+  T \ar[r]_-{\varphi_T} & \fin{\size T} }.
+\]
+Proof that $\size{}$ preserves identities and composition is given by
+the following diagrams:
+\[
+   \vcenter{
+   \xymatrix{
+     S \ar[d]_\id &
+     \fin{\size S} \ar[l]_-{\varphi_S^{-1}} \ar@@{.>}[d]^{\size \id}
+   \\
+   S \ar[r]_-{\varphi_S}
+   & \fin{\size S}
+   }
+   }
+   \qquad\qquad
+   \vcenter{
+   \xymatrix{
+     S \ar[d]_\alpha &
+     \fin{\size S} \ar[l]_-{\varphi_S^{-1}} \ar@@{.>}[d]^{\size \alpha}
+   \\
+     T \ar[d]_\beta \ar@@<.2em>[r]^-{\varphi_T} &
+     \fin{\size T} \ar@@<.2em>[l]^-{\varphi_T^{-1}}
+     \ar@@{.>}[d]^{\size \beta}
+   \\
+     U \ar[r]^-{\varphi_U} &
+     \fin{\size U}
+   }
+   }
+   =
+   \vcenter{
+     \xymatrix{
+       S \ar[d]_{\alpha \then \beta} &
+       \fin{\size S} \ar[l]_-{\varphi_S^{-1}} \ar@@{.>}[d]^{\size
+         (\alpha \then \beta)}
+     \\
+       U \ar[r]^-{\varphi_U} &
+       \fin{\size U}
+     }
+   }
+\]
+The left-hand diagram represents the definition of $\size \id$, in
+which $\varphi_S$ and its inverse cancel, resulting in the identity.
+The center diagram shows the result of composing $\size \alpha$ and
+$\size \beta$; because $\varphi_T$ cancels with $\varphi_T^{-1}$ it is
+the same as the definition of $\size (\alpha \then \beta)$ (the
+right-hand diagram).
+
+We now turn to developing counterparts to the groupoids $\P$ and $\B$
+in type theory.  A type-theoretic counterpart fo $\P$ is relatively
+straightforward.
+
 \begin{defn}
-  $\PT$ is the groupoid where (1) the objects are values of type $\N$,
-  and (2) the morphisms $\mor m n$ are equivalences of type $\Fin m \iso
+  $\PT$ is the groupoid where
+  \begin{itemize}
+  \item the objects are values of type $\N$, and
+  \item the morphisms $\mor m n$ are equivalences of type $\Fin m \iso
     \Fin n$.
+  \end{itemize}
 \end{defn}
 
 \todo{There is something funny going on here with groupoids
@@ -542,69 +711,22 @@ to $\P$ is straightforward:
   this makes.  At the very least we should mention that we are aware
   of the issues.}
 
-Often it is noted as trivial that $\P$ is equivalent to $\B$ and hence
-that working with $\P$ rather than $\B$ when convenient is
-justified. Constructively, this equivalence is not so trivial: in
-particular, showing that $\P$ and $\B$ are (strongly) equivalent
-requires the axiom of choice.  In more detail, it is easy to define a
-functor $\fin - : \P \to \B$ which sends $n$ to $\fin n$ and preserves
-morphisms; defining an inverse functor $\size - : \B \to \P$ is more
-problematic. We can send each set $S$ to its size $\size S$, but we
-must send a bijection $S \bij T$ to a bijection $\fin{\size S} \bij
-\fin{\size T}$, and we have no way to pick one: we would need to
-decide on a way to match up the elements of each set $S$ with the set
-of natural numbers $\fin{\size S}$.  It does not actually matter what
-choice we make, since the results will be isomorphic in any case.
-This is precisely where the axiom of choice comes in: we may use it to
-arbitrarily choose bijections between each set $S$ and the
-corresponding set of natural numbers $\fin{\size S}$.
-
-Several variants of the axiom of choice can be expressed within
-homotopy type theory.  A ``na\"ive'' variant, referred to as
-$\AC_\infty$, is given by
-\begin{equation} \tag{$\AC_\infty$}
-  \label{eq:ac-infty}
-  \left( \prod_{x : X} \sum_{(a : A(x))} P(x,a) \right) \iso \left(
-    \sum_{(g : \prod_{x:X} A(x))} \prod_{(x:X)} P(x,g(x)) \right).
-\end{equation}
-This variant is actually \emph{provable} within the theory; however,
-it is of little use here, since rather than just requiring a family of
-``nonempty'' sets, it actually requires, for each $x$, an explicit
-\emph{witness} $a : A(x)$ for which the property $P(x,a)$ holds.  That
-is, it requires that we have already made a choice for each $x$.
-
-A variant which corresponds more closely to standard mathematical
-practice, referred to as $\AC_{-1}$ or simply $\AC$, is
-\begin{equation} \tag{$\AC$}
-  \label{eq:AC}
-  \left( \prod_{x : X} \ptrunc{\sum_{(a : A(x))} P(x,a)} \right) \to
-    \ptrunc{\sum_{(g : \prod_{x:X} A(x))} \prod_{(x:X)} P(x,g(x))}.
-\end{equation}
-Intuitively, this says that given a family of \emph{nonempty}---\ie
-merely inhabited---sets, there merely exists a choice function.
-Although $\AC$ is not provable within the theory, it is consistent to
-assume it as an axiom.  However, as an axiom, it has no computational
-interpretation, and is therefore unsuitable for constructing a functor
-with computational content.  Moreover, even if it did have a computational
-interpretation, it would also be of limited use, since
-\todo{propositional truncation would get in the way.}
-
-Constructing a counterpart to $\B$, then, is more subtle: we wish to
-construct something equivalent to $\PT$, but without the use of $\AC$.
-Furthermore, it is not \latin{a priori} clear what it should mean,
-constructively, for a type to be finite.  There are, indeed, several
-possible answers to this question \cite{finite}. Taking our cue from
-the discussion above, we note that what was missing in trying to
-define $\size- : \B \to \P$ was a choice of bijections $S \bij
-\fin{\size S}$: such bijections can be thought of as evidence of the
-finiteness of $S$.  This is the most straightforward definition of
-constructive finiteness, and the one we adopt here.  More formally, a
-finite type is one with some natural number size $n$, and an
-equivalence between the type and $\Fin n$. That is, finite types are
-inhabitants of $\FinType$, where
+Developing a counterpart to $\B$ is more subtle.  The first order of
+business is to decide how to port the concept of a ``finite set''.
+Generally, ``a set with property X'' ports to type theory as ``a type
+paired with constructive evidence of property X''; so what is
+constructive evidence of finiteness? This is not \latin{a priori}
+clear, and indeed, there are several possible answers
+\cite{finite}. However, the discussion above, where bijections $S \bij
+\fin{\size S}$ played a prominent role, suggests that we adopt the
+simplest option, \term{cardinal-finiteness}.  A set (type) $A$ is
+\term{cardinal-finite} iff there exists some $n \in \N$ and a
+bijection $A \bij \fin n$; $n$ is called the size or cardinality of
+$A$.  In type theory, this can be encoded as
 \[ \FinType \defeq (A : \Type) \times (n : \N) \times (\Fin n \iso
 A). \]
 
+\todo{working here}
 We need to build a groupoid having such finite types as objects, and
 equivalences between them as morphisms.  Via univalence, we may
 conveniently package up such equivalences as paths.
@@ -804,4 +926,3 @@ pair of inverse equivalences in each of the following two diagrams:
   automatically an isomorphism.
 \end{proof}
 \end{prop}
-
