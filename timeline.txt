@@ -80,11 +80,10 @@ happen.
 March 18--28 (2 weeks): write (most of) Chapter 2
 March 28--April 5 (1 week): Brent in London & Leipzig
 April 7--11: put together MFPS paper
-April 14--18: incorporate MFPS paper back into Chapter 2 and finish
-April 21--May 2 (2 weeks): write Chapter 3
-  - Sometime in here: get some feedback from committee
-May (4 weeks): work out chapter 4 material
-June (4 weeks): write chapter 4, and turn material from Chapters 2 & 3 into a POPL submission?
+April 14--18: incorporate MFPS paper back into Chapter 2
+April 21--May 2 (2 weeks): finish chapter 2
+May (4 weeks): write chapter 3
+June (4 weeks): work out and write chapter 4, and turn material from Chapters 2 & 3 into a POPL submission?
 July (4 weeks): write Chapter 1 / miscellaneous / account for inevitable schedule slippage
 
-October?: defend
+October 14: defend
