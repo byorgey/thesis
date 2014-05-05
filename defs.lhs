@@ -163,6 +163,7 @@
 %% HoTT
 
 \newcommand{\ptrunc}[1]{\ensuremath{\left\||#1\right\||}}
+\newcommand{\ptruncI}[1]{\ensuremath{\left||#1\right||}}
 \newcommand{\id}{\cons{id}}
 
 \newcommand{\tygrpd}[1]{\ensuremath{\mathbf{G}(#1)}}

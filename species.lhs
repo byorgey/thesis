@@ -467,7 +467,7 @@ straight, the word ``species'' will be used for $[\B,\Set]$, and
 One generalization that will be of particular interest is a ``port''
 of species into type theory. Recall that $\BT$ denotes the
 ($\infty$-)groupoid whose objects are triples consisting of a type $A$, a
-size $n$, and an equivalence $\Fin n \iso A$, and whose morphisms are
+size $n$, and an equivalence $A \iso \Fin n$, and whose morphisms are
 paths between types.  Recall also that $\Type$ denotes the category of
 types and (well-typed) functions.
 

@@ -717,34 +717,29 @@ Generally, ``a set with property X'' ports to type theory as ``a type
 paired with constructive evidence of property X''; so what is
 constructive evidence of finiteness? This is not \latin{a priori}
 clear, and indeed, there are several possible answers
-\cite{finite}. However, the discussion above, where bijections $S \bij
+\citep{finite}. However, the discussion above, where bijections $S \bij
 \fin{\size S}$ played a prominent role, suggests that we adopt the
 simplest option, \term{cardinal-finiteness}.  A set (type) $A$ is
 \term{cardinal-finite} iff there exists some $n \in \N$ and a
 bijection $A \bij \fin n$; $n$ is called the size or cardinality of
-$A$.  In type theory, this can be encoded as
-\[ \FinType \defeq (A : \Type) \times (n : \N) \times (\Fin n \iso
-A). \]
+$A$.  Our first try at encoding this in type theory is
+\[ \FinType \defeq (A : \Type) \times (n : \N) \times (A \iso \Fin n). \]
 
-\todo{working here}
-We need to build a groupoid having such finite types as objects, and
-equivalences between them as morphisms.  Via univalence, we may
-conveniently package up such equivalences as paths.
-Unfortunately, the standard method to build an
-$\infty$-groupoid out of any
-type does not work! Consider:
-\begin{defn}
-  For a type $A$, the $\infty$-groupoid $\tygrpd{A}$ has
-  values $a : A$ as its objects, paths $a = b$ as its $1$-morphisms,
-  paths between paths as $2$-morphims, and so on.
-\end{defn}
-
+We would like to build a groupoid having such finite types as objects,
+and equivalences between them as morphisms.  Via univalence, we may
+conveniently package up such equivalences as paths.  Unfortunately,
+the standard method to build an $\infty$-groupoid out of any type does
+not work! Recall that given some type $A$, the $\infty$-groupoid
+$\tygrpd{A}$ has values $(a : A)$ as its objects, paths $a = b$ as its
+$1$-morphisms, paths between paths as $2$-morphims, and so on.
 $\tygrpd{\FinType}$ does not work as a constructive counterpart to
-$\B$, because it has only one morphism between each pair of objects.
-Intuitively, the problem is that the paths involve not just the types
-in question but also the evidence of their finiteness, so that a path
-between two finite types requires them to be finite ``in the same
-way''.
+$\B$, because it has only one morphism between each pair of objects
+($\B$, of course, has $n!$ morphisms between any two sets of size
+$n$).  Intuitively, the problem is that paths between objects in
+$\tygrpd{\FinType}$ involve not just the types in question but also
+the evidence of their finiteness, so that a path between two finite
+types requires them to be not just equivalent as types, but also
+``finite in the same way''.
 
 The situation can be pictured as shown in \pref{fig:fin-equiv}. The elements
 of types $A_1$ and $A_2$ are shown on the sides; the evidence of their
@@ -752,7 +747,7 @@ finiteness is represented by bijections between their elements and the
 elements of $\Fin n$, shown along the bottom.  The catch is that the diagram
 necessarily contains only triangles: corresponding elements of $A_1$ and $A_2$
 must correspond to the same element of $\Fin n$ on the bottom row.  Therefore,
-there are only two degrees of freedom: once the evidence of finiteness is
+there are only two degrees of freedom. Once the evidence of finiteness is
 determined, there is only one valid correspondence between $A_1$ and
 $A_2$---but there ought to be $n!$ such correspondences.
 \begin{figure}
@@ -809,55 +804,59 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
   of $p$ with $e_1$, and \todo{finish}
 \end{proof}
 
-As having paths between evidence of finiteness imposes too strong a
-constraint, we next try using the \emph{propositional truncation} of
-finiteness evidence.  That is, we consider $\tygrpd{\FinTypeT}$,
-where \[ \FinTypeT \defeq (A : \Type) \times (n : \N) \times
-\ptrunc{\Fin n \iso A}. \] A path between two inhabitants of
-$\FinTypeT$ is now unconstrained by the finiteness evidence (there is
-always a path between any two inhabitants of a propositional
-truncation), and hence equivalent to a path between their underlying
-types.  This does yield the right groupoid structure. However, we now
-have a different problem: we can only prove that $\tygrpd{\FinTypeT}$
-is equivalent to $\PT$ if we treat equivalence of categories as a mere
-proposition. The reason is that the recursion principle for
-propositional truncation only allows making use of the contained
-finiteness evidence if it is in the service of constructing an
-inhabitant of a mere proposition.  This ensures that the precise
-content of the truncation cannot ``leak''.  However, since our goal is
-to construct computationally relevant functors witnessing the
-equivalence, equivalence as a mere proposition is unsatisfactory.
+The underlying problem is that $\FinType$ does not actually do a very
+good job at encoding what classical mathematicians usually mean by
+``finite set''.  Saying that a set $A$ is finite with size $n$ does
+not typically imply there is some specific, chosen bijection $A \bij
+\fin n$, but merely that $A$ \emph{can be put} in bijection with $\fin
+n$, with no mention of a specific bijection.  This is justified by the
+fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
+good as any other.
 
-Instead, we define $\BT$ as follows:
+This suggests a better encoding of finiteness in type theory, given
+by \[ \FinTypeT \defeq (A : \Type) \times (n : \N) \times \ptrunc{A
+  \iso \Fin n}, \] making use of propositional truncation to encode
+the fact that there \emph{merely exists} an equivalence between $A$
+and $\Fin n$, but without exposing a precise choice.  This does give
+us the expected groupoid structure: since there is a path between any
+two elements of a truncated type, a path between two inhabitants
+$(S,m,\psi_S), (T,n,\psi_T)$ of $\FinTypeT$ is equivalent to a pair of
+paths $(S = T) \times (m = n)$.
 
 \begin{defn}
-Define the $\infty$-groupoid $\BT$ where
-\begin{itemize}
-\item the objects are values of type $\FinType \defeq (A : \Type) \times (n : \N)
-\times (\Fin n \iso A)$,
-\item $1$-morphisms $\mor{(A,m,i)}{(B,n,j)}$ are paths $A = B$, and
-\item higher morphisms are paths between paths, and so on.
-\end{itemize}
+  $\BT$ is defined by \[ \BT \defeq \tygrpd{\FinTypeT}, \] the
+  $\infty$-groupoid of cardinal-finite types and paths bewteen them.
 \end{defn}
 
-That is, we do not hide finiteness evidence in a propositional
-truncation, but morphisms simply ignore the finiteness evidence.  This
-may seem strange: we go to the trouble of adding extra computational
-evidence to objects, but then we turn around and say that the additional
-evidence is irrelevant after all!  However, the point is that although the
-extra evidence may be irrelevant to
-\emph{morphisms}, functors out of the category may still make use of
-it (see \pref{defn:size}).  Instead of having to make an arbitrary
-choice of isomorphism when mapping out of an object, we ``blow up''
-the category by making a separate object for each possible choice, but
-ensure that objects which differ only by this choice are isomorphic.
+Just as with $\B$ and $\P$, we cannot directly define a functor $\size
+- : \BT \to \PT$, since defining its action on morphisms would require
+a specific choice of equivalence $A \iso \Fin n$, and the objects of
+$\BT$ merely guarantee that such equivalences exist.  Instead, we can
+define an anafunctor $\size - : \BT \to \PT$, similarly to $\size - :
+\B \to \P$\footnote{We overload $\size{}$ to serve as the name of both
+  anafunctors (as well as set cardinality); this should not cause
+  confusion as they are never used in similar contexts.}.
 
-\begin{rem}
-  Note that given a morphism $e : \mor {(A,m,i)} {(B,n,j)}$, it is
-  provably the case that $m = n$.  In particular, $i \then e \then j^{-1} :
-  \Fin m \iso \Fin n$, from which we may prove $m = n$ by double
-  induction.
-\end{rem}
+\begin{defn}
+  The anafunctor $\size - : \BT \to \PT$ is given by:
+  \begin{itemize}
+  \item the class of specifications $\FinType$;
+  \item a function $\sigma : \FinType \to \BT$ which ``forgets'' the
+    equivalences by injecting them into the propositional truncation,
+    \ie \[ \sigma(S,m,\varphi) = (S, m, \ptruncI{\varphi}); \]
+  \item a function $\tau : \FinType \to \PT$ which projects out the
+    size, \[ \tau(S,m,\varphi) = m; \]
+  \item and, for $f : \mor {(S,m,\psi_S)} {(T,n,\psi_T)}$, that is, $f
+    : S \iso T$,
+    \[ \sizesymb_{(S,m,\varphi_S),(T,n,\varphi_T)}(f) =
+    \varphi_S^{-1} \then f \then \varphi_T. \]
+  \end{itemize}
+  The proof that this is a valid anafunctor is analogous to the proof
+  for the anafunctor $\B \to \P$.
+\end{defn}
+
+We can also define a functor from $\PT$ to $\BT$; together, these define
+an anaequivalence between $\PT$ and $\BT$.
 
 \begin{defn}
   We define a functor $\fin - : \PT \to \BT$ as follows: on objects,
@@ -865,40 +864,15 @@ ensure that objects which differ only by this choice are isomorphic.
   morphisms.
 \end{defn}
 
-\begin{defn} \label{defn:size}
-In the other direction, we define $\size : \BT \to \PT$ which sends
-objects $(A, m, i)$ to $m$, and sends morphisms
-$e : \mor {(A, m, i)} {(B, n, j)}$ to $i \then e \then j^{-1}$:
-\[
-  \xymatrix{\Fin m \ar@@{<->}[d]_-i & \Fin n \\ A \ar@@{<->}[r]_e & B
-    \ar@@{<->}[u]_-{j^{-1}} } \]
-The functoriality of $\size{}$ can be seen by noting the cancelling
-pair of inverse equivalences in each of the following two diagrams:
-  \[
-     \xymatrix{\Fin m \ar@@<-.4em>@@{<->}[d]_i
-         \ar@@<.4em>@@{<->}[d]^{i^{-1}}
-       \\
-         A \ar@@(dl,dr)_{\id}
-     }
-     \qquad\qquad
-     \xymatrix{
-       \Fin m \ar@@{<->}[d]_i &
-       \Fin n \ar@@<-.4em>@@{<->}[d]_j \ar@@<.4em>@@{<->}[d]^{j^{-1}} &
-       \Fin o \ar@@{<->}[d]^k
-     \\
-       A \ar@@{<->}[r]_e &
-       B \ar@@{<->}[r]_f &
-       C
-     }
-  \]
-\end{defn}
-
 \begin{prop}
-  The pair of functors $\xymatrix{\PT \ar@@<.5ex>[r]^{\fin -} & \BT
-    \ar@@<.5ex>[l]^{\size{}}}$ constitutes an equivalence
+  The pair of (ana)functors $\xymatrix{\PT \ar@@<.5ex>[r]^{\fin -} & \BT
+    \ar@@<.5ex>[l]^{\size{}}}$ constitutes an (ana)equivalence
   between the groupoids $\PT$ and $\BT$.
 
 \begin{proof}
+  \todo{Redo this proof using composition of anafunctors. Intuitively,
+    it shouldn't actually change too much but the details need to be
+    checked; also, the metavariable conventions have changed.}
   $\size{\fin -}$ is by definition the identity functor.  The
   interesting direction is $\fin{\size -}$.
   \begin{itemize}
