@@ -31,11 +31,64 @@
 \usetikzlibrary{shapes.geometric}
 
 % \usepackage{breakurl}
-\usepackage{natbib}
+\usepackage[numbers]{natbib}
 
 \usepackage{graphicx}
 \graphicspath{{images/}}
 \usepackage[outputdir=diagrams,backend=cairo,extension=pdf]{diagrams-latex}
+
+\usepackage[top=1in, bottom=1in, left=1.5in, right=1in,includefoot,paperwidth=8.5in,paperheight=11in]{geometry}
+\usepackage{setspace}
+
+\usepackage{enumitem}
+\setitemize{wide}
+
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+    pdftitle={\Title},
+    pdfauthor={Brent Yorgey},
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    bookmarksopenlevel=1,
+    hidelinks,
+    naturalnames=true,
+    pdfstartview=Fit,
+    pdfpagemode=UseOutlines,
+    pdfpagelayout=TwoPageRight
+}
+
+\usepackage{doi}
+
+\usepackage{fancyhdr}
+\lfoot[\fancyplain{}{}]{\fancyplain{}{}}
+\rfoot[\fancyplain{}{}]{\fancyplain{}{}}
+\cfoot[\fancyplain{}{\footnotesize\thepage}]{\fancyplain{}{\footnotesize\thepage}}
+\lhead[\fancyplain{}{}]{\fancyplain{}{}}
+\rhead[\fancyplain{}{}]{\fancyplain{}{}}
+\chead[\fancyplain{}{}]{\fancyplain{}{}}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+
+\newcommand{\signature}{~ \\ \underline{\hspace{20em}}}
+
+\newenvironment{pagecentered}{%
+\vspace*{\stretch{2}}%
+\begin{center}%
+\begin{minipage}{.8\textwidth}%
+}{%
+\end{minipage}%
+\end{center}%
+\vspace*{\stretch{3}}\clearpage}
+
+\newcommand{\nochapter}[1]{%
+  \refstepcounter{chapter}%
+  \addcontentsline{toc}{chapter}{#1}%
+  \markright{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[utf8x]{inputenx}
+\usepackage[polutonikogreek,english]{babel}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Declarative formatting

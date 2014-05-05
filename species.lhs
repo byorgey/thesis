@@ -1839,7 +1839,7 @@ product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
 \paragraph{Cartesian closed} If $\Lab$ is locally small and $\Str$ is
 complete and Cartesian closed, then $[\Lab,\Str]$ is also complete and
 Cartesian closed. \todo{cite
-  \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178#104178},
+  \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178\#104178},
   also check locally small thing?  Jacques asked it on MO?}  In
 particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
 (L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,

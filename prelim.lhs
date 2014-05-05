@@ -831,9 +831,10 @@ paths $(S = T) \times (m = n)$.
 Just as with $\B$ and $\P$, we cannot directly define a functor $\size
 - : \BT \to \PT$, since defining its action on morphisms would require
 a specific choice of equivalence $A \iso \Fin n$, and the objects of
-$\BT$ merely guarantee that such equivalences exist.  Instead, we can
-define an anafunctor $\size - : \BT \to \PT$, similarly to $\size - :
-\B \to \P$\footnote{We overload $\size{}$ to serve as the name of both
+$\BT$ merely guarantee that such equivalences exist, without giving
+access to any particular such equivalence.  Instead, we can define an
+anafunctor $\size - : \BT \to \PT$, similarly to $\size - : \B \to
+\P$\footnote{We overload $\size{}$ to serve as the name of both
   anafunctors (as well as set cardinality); this should not cause
   confusion as they are never used in similar contexts.}.
 

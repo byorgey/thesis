@@ -1,117 +1,185 @@
 %% -*- mode: LaTeX; compile-command: "mk" -*-
 
-\documentclass[12pt]{memoir}
+\newif \iffull \fulltrue
+\newif \ifveryfull \veryfullfalse
 
-% TODO: don't forget the stuff listed in the TODO file
-% Here is a sample format for dissertation in math.  You need to check
-% University of Pennsylvania Doctoral Dissertation Manual to adjust
-% any changes they made at the webpage:
+\DeclareFontShape{OT1}{cmr}{bx}{sc}{<-> cmbcsc10}{}
+\PassOptionsToPackage{table}{xcolor}
 
-% http://www.upenn.edu/grad/DissManual.html.
+\documentclass[12pt,oneside]{book}
 
-% This style file was used in connection with printing from printer 3one.
-% (Different printers could give you different margins.)
-
-% This sample can also be used for masters thesis, but you need to make
-% some slight changes.
+\newcommand{\Title}{COMBINATORIAL SPECIES AND LABELLED STRUCTURES}
 
 \input{defs}
 
-\setlength{\headheight}{0in}
-\setlength{\textheight}{8.5in}
-\setlength{\oddsidemargin}{0.55in}
-\setlength{\textwidth}{5.87in}
-\setlength{\headsep}{-.19in}
-
-\newif\ifdraft\drafttrue
-
-\pagestyle{plain}
-\newcommand{\doublespaced}{\renewcommand{\baselinestretch}{2}\normalfont}
-\newcommand{\singlespaced}{\renewcommand{\baselinestretch}{1}\normalfont}
-\newcommand{\draftspaced}{\ifdraft\singlespaced\else\doublespaced\fi}
-
-\frenchspacing
-
-\numberwithin{equation}{section}
-
-\doublespaced
-\def\thetitle{Combinatorial Species and Labelled Structures}
-\def\theauthor{Brent Yorgey}
-\def\theadvisor{Stephanie Weirich, Advisor}
-\def\THEAUTHOR{Brent Yorgey}
-\def\THEADVISOR{Stephanie Weirich}
-\def\theyear{2014}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\includeonly{species}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\Title}
+\author{Brent Yorgey}
 
 \begin{document}
+
+\hypersetup{pageanchor=false}
 \pagenumbering{roman}
+\pagestyle{fancy}
+\frenchspacing
+\numberwithin{equation}{section}
+
+\newcommand{\doublespaced}{\renewcommand{\baselinestretch}{2}\normalfont}
+\newcommand{\singlespaced}{\renewcommand{\baselinestretch}{1}\normalfont}
+
+\thispagestyle{empty}
+
 \doublespaced
 \large\newlength{\oldparskip}\setlength\oldparskip{\parskip}\parskip=.3in
-\thispagestyle{empty}
-\begin{center}
-\vspace*{\fill}
-\thetitle
+\begin{centering}
+  \vfill
+  {\Huge \Title} \\
+  Brent Abraham Yorgey \\
+  A DISSERTATION \\
+  in \\
+  Computer and Information Sciences
 
-\theauthor
+  \noindent\singlespaced\large
+  Presented to the Faculties of the University of Pennsylvania \\
+  in \\
+  Partial Fulfillment of the Requirements for the \\
+  Degree of Doctor of Philosophy \\
+  \doublespaced\large
+  2014 \\
+\end{centering}
 
-
-A Dissertation
-
-in
-
-Computer and Information Sciences
-\end{center}
-
-
-\noindent\singlespaced\large
-Presented to the Faculties of the University of Pennsylvania in Partial
-Fulfillment of the Requirements for the Degree of Doctor of Philosophy
-
-
-\doublespaced\large
-\begin{center}
-\theyear
-\end{center}
-
-
-\noindent\makebox[0in][l]{\rule[2ex]{3in}{.3mm}}
+\vfill
 \singlespaced
-Stephanie Weirich\\
-Supervisor of Dissertation
 
+{\small
 
-\noindent\makebox[0in][l]{\rule[2ex]{3in}{.3mm}}
-\singlespaced
-Val Tannen\\
-Graduate Group Chairperson
-\vspace*{\fill}
+\noindent
+Supervisor of Dissertation \\
+\signature \\
+Stephanie Weirich \\
+Associate Professor of CIS \\
+
+\noindent
+Graduate Group Chairperson \\
+\signature \\
+Val Tannen \\
+Professor of CIS
+
+\vspace{-0.1in}
+\noindent
+Dissertation Committee \\
+Steve Zdancewic (Associate Professor of CIS; Committee Chair) \\
+Jacques Carette (Professor of Computer Science, McMaster University \todo{check})\\
+Benjamin Pierce (Henry Salvatori Professor of CIS) \\
+Val Tannen (Professor of CIS) \\
+}
 
 \normalsize\parskip=\oldparskip
 
+\newpage
+
+\thispagestyle{empty}
+\begin{pagecentered}
+\doublespaced
+\parskip=.3in
+
+\Title \\
+COPYRIGHT \\
+2014 \\
+Brent Abraham Yorgey \bigskip
+
+\singlespaced
+\parskip=\oldparskip
+
+This work is licensed under a
+\href{http://creativecommons.org/licenses/by/4.0/}{Creative Commons
+  Attribution 4.0 International License}.  To view a copy of this
+license, visit \bigskip
+
+\url{http://creativecommons.org/licenses/by/4.0/}
+\end{pagecentered}
+
+\newpage
+
+\begin{pagecentered}
+
+\begingroup
+\selectlanguage{polutonikogreek} \large
+
+ὅς ἐστιν εἰκὼν τοῦ θεοῦ τοῦ ἀοράτου, πρωτότοκος πάσης κτίσεως, ὅτι ἐν
+αὐτῷ ἐκτίσθη τὰ πάντα ἐν τοῖς οὐρανοῖς καὶ ἐπὶ τῆς γῆς, τὰ ὁρατὰ καὶ
+τὰ ἀόρατα, εἴτε θρόνοι εἴτε κυριότητες εἴτε ἀρχαὶ εἴτε ἐξουσίαι· τὰ
+πάντα δι’ αὐτοῦ καὶ εἰς αὐτὸν ἔκτισται· καὶ αὐτός ἐστιν πρὸ πάντων καὶ
+τὰ πάντα ἐν αὐτῷ συνέστηκεν, καὶ αὐτός ἐστιν ἡ κεφαλὴ τοῦ σώματος τῆς
+ἐκκλησίας· ὅς ἐστιν ἀρχή, πρωτότοκος ἐκ τῶν νεκρῶν, ἵνα γένηται ἐν
+πᾶσιν αὐτὸς πρωτεύων, ὅτι ἐν αὐτῷ εὐδόκησεν πᾶν τὸ πλήρωμα κατοικῆσαι
+καὶ δι’ αὐτοῦ ἀποκαταλλάξαι τὰ πάντα εἰς αὐτόν, εἰρηνοποιήσας διὰ τοῦ
+αἵματος τοῦ σταυροῦ αὐτοῦ, εἴτε τὰ ἐπὶ τῆς γῆς εἴτε τὰ ἐν τοῖς
+οὐρανοῖς· \bigskip
+
+\normalsize \hfill ΠΡΟΣ ΚΟΛΟΣΣΑΕΙΣ 1.15--20
+
+\endgroup
+
+\end{pagecentered}
+
+\newpage
+
 \input{acks}
+
+\newpage
 
 \input{abstract}
 
-\newpage
 \tableofcontents
 
 \newpage
-\draftspaced
-\pagenumbering{arabic}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\listoftables
+
+\listoffigures
+
+\newpage
+
+\begin{pagecentered}
+
+\todo{Technical acknowledgements}
+
+% The technical development in this dissertation comprises three papers:
+% \citet{Greenberg12contracts} (itself an extended version
+% of~\citet{Greenberg10contracts}), an extended and corrected version of
+% \citet{Belo11fh}, and a rejected POPL 2013 submission,
+% \citet{Greenberg13space}. \\
+
+% This document is typeset in \LaTeX\ using Computer Modern.
+% %
+% There would be even more errors had I not used Sewell and Zappa
+% Nardelli's OTT tool~\cite{Sewell07ott}.  I also used Aydemir and
+% Weirich's LNGen tool~\cite{Aydemir10LNgen} for the Coq
+% development of parallel reduction in Chapter~\ref{ch:cmm}.
+
+\end{pagecentered}
+
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true}
 
 \setcounter{chapter}{-1}
+
 \include{intro}
 \include{prelim}
 \include{species}
 \include{labelled}
 \include{applications}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\nochapter{Bibliography}
+\label{ch:bib}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \bibliographystyle{plainnat}
 \bibliography{thesis}
