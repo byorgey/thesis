@@ -14,16 +14,49 @@
 \section{Basic notations}
 \label{sec:basic}
 
-\todo{$\fin n = \{0, \dots, n-1\}$.}
+The set of \term{natural numbers} is denoted $\N = \{0, 1, 2,
+\dots\}$.  The \term{size} or \term{cardinality} of a finite set $X$,
+a natural number, is denoted $\size X$ (rather than the more
+traditional $||X||$, since that notation is used as the introduction
+form for propositional truncation; see \pref{sec:HoTT}). Given a
+natural number $n \in \N$, the canonical size-$n$ prefix of the
+natural numbers is denoted $\fin n = \{0, \dots, n-1\}$.
 
-\todo{Image of a set under a function or bijection.  Function restriction.}
+Given a function $f : A \to B$, an element $b \in B$, and subsets $X
+\subseteq A$ and $Y \subseteq B$,
+\begin{itemize}
+\item $f(X) = \{ f(a) \mid a \in X \}$ denotes the image of $X$
+under $f$;
+\item $f^{-1}(b) = \{ a \in A \mid f(a) = b \}$ denotes the preimage or
+  inverse image of $b$;
+\item $f^{-1}(Y) = \Union_{b \in Y} f^{-1}(b) = \{ a \in A \mid f(a) \in Y
+  \}$ likewise denotes the preimage of an entire set.
+\end{itemize}
 
-\todo{Typography.}
+Metavariable conventions used throughout this dissertation include:
+\begin{itemize}
+\item Metavariables $f$, $g$, $h$ range over functions.
+\item Greek metavariables (especially $\alpha$, $\beta$, $\sigma$,
+  $\tau$, $\phi$, $\psi$) often range over bijections.
+\item Blackboard bold metavariables (\eg $\C$, $\D$, $\E$) range over
+  categories.
+\item Names of specific categories use boldface ($\Set$, $\Cat$,
+  $\Spe$).
+\item Names of certain type-theoretic constructs or categories use a
+  calligraphic font ($\Type$, $\BT$, $\PT$).
+\item Metavariables $K$, $L$ range over sets of labels (or, more generally, label
+  objects).
+\item Metavariables $F$, $G$, $H$ range over functors (and in particular
+  over species).
+\item Names of specific species use a sans-serif font ($\X$, $\Bag$,
+  $\List$, $\Cyc$).
+\end{itemize}
 
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
-\todo{Probably need to re-expand this section.}
+\todo{Give a general introduction to homotopy type theory. Say why it
+  makes sense to work in it.}
 
 We work with a type theory equipped with an empty type \TyZero, a unit
 type \TyOne (with inhabitant $\unit$), coproducts $A + B$ (with
@@ -78,12 +111,14 @@ interchanging them may require some work, computationally speaking.
 Thus an equality $e : A = B$ can have nontrivial computational
 content.
 
-As of yet, univalence has no direct computational interpretation, so
-using it to give a computational interpretation of species may seem
-suspect. Note, however, that \mbox{$\transport{X \mapsto X}{\ua(f)} =
-  f$}, where $\ua : (A \iso B) \to (A = B)$ denotes (one direction of)
-the univalence axiom. So univalence introduces no computational
-problems as long as applications of $\ua$ are only ultimately used via
+As of yet, univalence has no direct computational interpretation
+\todo{Need to refine this---apparently some good progress being made
+  here with ``cubical sets''}, so using it to give a computational
+interpretation of species may seem suspect. Note, however, that
+\mbox{$\transport{X \mapsto X}{\ua(f)} = f$}, where $\ua : (A \iso B)
+\to (A = B)$ denotes (one direction of) the univalence axiom. So
+univalence introduces no computational problems as long as
+applications of $\ua$ are only ultimately used via
 $\mathsf{transport}$.  Univalence allows a convenient shorthand:
 packaging up an equivalence into a path and then transporting along
 that path results in ``automatically'' inserting the equivalence and
@@ -99,14 +134,42 @@ than their existence, though the reality is more subtle.
 \section{Category theory}
 \label{sec:category-theory}
 
-Make extensive use of category theory.  Very quick overview of basics
-(categories, functors, natural transformations, functor categories,
-adjunctions).  Basic categories which will be used often: $\Set$,
-$\N$, \Type.
+This dissertation makes extensive use of category theory, which is the
+natural language in which to explore species and related concepts.  A
+full understanding of the contents of this dissertation requires an
+intermediate-level background in category theory, but a grasp of the
+basics should suffice to understand much of it.  In particular, a
+quick introduction to necessary concepts beyond the bare fundamentals
+is presented here, with useful intuition and references for further
+reading.  It is hoped that this section can serve as a useful guide
+for ``bootstrapping'' one's knowledge of category theory, for those
+readers who are so inclined.
+
+\subsection{Category theory fundamentals}
+\label{sec:ct-fundamentals}
+
+At a bare minimum, an understanding of the foundational trinity of
+category theory (categories, functors, and natural transformations) is
+assumed, along with some standard universal constructions such as
+terminal and initial objects, products, and coproducts. \todo{Link to
+  further reading about these things.}
+
+\todo{Some standard categories we will use: $\Set$, $\Cat$}
 
 Use $\forall$ notation for natural transformations. \todo{Make it so.}
 
-Bifunctors.
+The concept of \term{bifunctors} can be formalized as a two-argument
+analogue of functors; bifunctors thus map from \emph{two} categories
+to a single category.  However, the obvious definition of a bifunctor
+$B : \C,\D \to \E$ turns out to be equivalent to a regular
+(one-argument) functor $B : \C \times \D \to \E$, where $\C \times \D$
+denotes the \term{product category} of $\C$ with $\D$.  Product
+categories are given by the usual universal product construction in
+$\Cat$, the category of all (small) categories; objects in $\C \times
+\D$ are pairs of objects from $\C$ and $\D$, and likewise morphisms in
+$\C \times \D$ are pairs of morphisms from $\C$ and
+$\D$. \todo{Mention where we will make use of bifunctors, e.g. see
+  upcoming section on monoids.}
 
   \todo{Action of functor on morphisms follows from action
   on objects.  Always true when expression giving action on objects is
@@ -124,6 +187,8 @@ functor categories.  For example, \todo{finish}
   can define $A \times_C B = (a : A) \times (b : B) \times (g\ a = f\ b)$.}
 
 Equivalence of categories.
+
+Adjunctions.
 
 Enriched categories.
 
