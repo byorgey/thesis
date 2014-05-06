@@ -596,6 +596,11 @@ usage can be formalized by turning everything into an anafunctor, and
 translating functor operations and properties into corresponding
 operations and properties of anafunctors.
 
+\todo{Implementation of anafunctors in type theory: can model set of
+  specifications $||F||$ together with mapping $\sigma$ as an indexed
+  type $||F|| : \Ob \C \to \U$.  In what situations do we get
+  functoriality for free?}
+
 \subsection{Finiteness}
 \label{sec:finiteness}
 
@@ -853,7 +858,7 @@ anafunctor $\size - : \BT \to \PT$, similarly to $\size - : \B \to
     \varphi_S^{-1} \then f \then \varphi_T. \]
   \end{itemize}
   The proof that this is a valid anafunctor is analogous to the proof
-  for the anafunctor $\B \to \P$.
+  for the anafunctor $\B \to \P$. \todo{Or do we get this for free?}
 \end{defn}
 
 We can also define a functor from $\PT$ to $\BT$; together, these define
