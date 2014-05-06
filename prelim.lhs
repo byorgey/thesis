@@ -182,7 +182,9 @@ contravariantly in the interface.
 
 \begin{rem}
   Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
-  coend over the product category $\Lab \times \Lab$.
+  coend over the product category $\Lab \times \Lab$. \todo{Given
+    suitable assumptions it is also equivalent to an iterated coend
+    (cite MacLane).}
 \end{rem}
 
 \subsection{Groupoids}
@@ -598,7 +600,7 @@ operations and properties of anafunctors.
 
 \todo{Implementation of anafunctors in type theory: can model set of
   specifications $||F||$ together with mapping $\sigma$ as an indexed
-  type $||F|| : \Ob \C \to \U$.  In what situations do we get
+  type $||F|| : \Ob \C \to \Type$.  In what situations do we get
   functoriality for free?}
 
 \subsection{Finiteness}

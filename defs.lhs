@@ -40,8 +40,7 @@
 \usepackage[top=1in, bottom=1in, left=1.5in, right=1in,includefoot,paperwidth=8.5in,paperheight=11in]{geometry}
 \usepackage{setspace}
 
-\usepackage{enumitem}
-\setitemize{wide}
+% \usepackage{enumitem}
 
 \usepackage[pdftex]{hyperref}
 \hypersetup{

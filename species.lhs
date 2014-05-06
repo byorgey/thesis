@@ -270,6 +270,7 @@ shapes to be ``independent'' of the particular labels chosen.
 Intuitively, labels should be arbitrary; a species $F$ should not be
 able to ``do something different'' depending on the particular set of
 labels.  For example, we could define a mapping $B$ which
+\todo{picture(s)}
 \begin{itemize}
 \item sends the set of labels $\{a,b,c\}$ to the set of ``shapes''
   $\{I,J,K\}$,
@@ -297,14 +298,17 @@ concise definition of species:
 \begin{defn}
   \label{defn:species-cat}
   A \term{species} is a functor $F : \B \to \Set$, where $\B$ is the
-  groupoid of finite sets whose morphisms are bijections, and
-  $\Set$ is the category of sets and (total) functions.
+  groupoid of finite sets whose morphisms are bijections, and $\Set$
+  is the category of sets and (total) functions. (Even more abstractly,
+  since $\B$ is self-dual, we may say that a species is a
+  \term{presheaf} on $\B$, that is, a functor $\B^\op \to \Set$.)
 \end{defn}
 
 Reflecting the fact that the groupoid $\P$ of natural numbers and
-finite permutations is (weakly) equivalent to the groupoid $\B$, it is
-also possible to define species as families of shapes, indexed not by
-their labels but merely by their \emph{size}:
+finite permutations is equivalent to the groupoid $\B$ \todo{Haven't
+  actually established this yet\dots}, it is also possible to define
+species as families of shapes, indexed not by their labels but merely
+by their \emph{size}:
 
 \begin{defn}[Species (alternate)]
   \label{defn:species-p}
@@ -368,7 +372,8 @@ thought of as precisely those labelled by the canonical label set $[n]$.
     abbott_quotient, alti:cont-tcs, alti:lics09}).  Species can be
   seen as dual to these shapes-to-labels mappings, giving the
   \term{fiber} of each label set.  Both formulations have their
-  strengths and weaknesses.
+  strengths and weaknesses; a fuller discussion can be found in
+  \pref{sec:related-work}.
 \end{rem}
 
 \subsection{The category of species}
