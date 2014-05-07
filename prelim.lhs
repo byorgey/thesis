@@ -241,34 +241,35 @@ et al.}
 \subsection{Coends}
 \label{sec:coends}
 
-Given a bifunctor $T : \C^\op \times \C \to \D$, a \term{coend} over
-$T$, denoted $\int^C T(C,C)$, is an object of $\D$ together with some
-(di)naturality conditions.  In the specific case when the objects of
-$\D$ can be thought of as sets or types with
-``elements''\footnote{This definition can be made precise in full
-  generality (without requiring the objects of $\D$ to have
-  ``elements'') using a \emph{coequalizer}.}, the coend $\int^C
-T(C,C)$ is given by a quotient of an indexed coproduct $\left( \sum_{C
-    \in \C} T(C,C) \right) / \sim$.  Elements of the indexed coproduct
-look like pairs $(C, t)$ where $C \in \C$ and $t \in T(C,C)$. The idea
-behind the quotient is that we want to consider two pairs $(C,t)$ and
-$(C', t')$ equivalent if they are related by the functoriality of $T$.
-In particular, for each arrow $f : C \to C'$ in $\C$ and each $x \in
-T(C',C)$, we set $(C, T(f,1)\ x) \sim (C', T(1,f)\ x)$.  That is, we
-can always ``swap out $(C,t)$ for $(C',t')$'' as long as we have some
-way to map from $C$ to $C'$ and the associated values $t$ and $t'$ are
-related by the same mapping.
+Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
+$T$, denoted $\int^C T(C,C)$ or just $\int^\C T$, is an object of $\D$
+together with some (di)naturality conditions.  In the specific case
+when the objects of $\D$ can be thought of as sets or types with
+``elements'', the coend $\int^C T(C,C)$ is given by a quotient of an
+indexed coproduct $\left( \sum_{C \in \C} T(C,C) \right) / \sim$.
+Elements of the indexed coproduct look like pairs $(C, t)$ where $C
+\in \C$ and $t \in T(C,C)$. The idea behind the quotient is that we
+want to consider two pairs $(C,t)$ and $(C', t')$ equivalent if they
+are related by the functoriality of $T$.  In particular, for each
+arrow $f : C \to C'$ in $\C$ and each $x \in T(C',C)$, we set $(C,
+T(f,1)\ x) \sim (C', T(1,f)\ x)$.  That is, we can always ``swap out
+$(C,t)$ for $(C',t')$'' as long as we have some way to map from $C$ to
+$C'$ and the associated values $t$ and $t'$ are related by the same
+mapping.
 
 Intuitively, the functor $T$ can be thought of as an ``interface'';
 $(C,t)$ is then a ``module'' with ``representation type'' $C$ and
 ``implementation'' $t$.  Indeed, in Haskell, the coend of $T$ is given
 by the type \texttt{exists c.\ T c c} (or rather, by an isomorphic
 encoding, since \texttt{exists} is not actually valid Haskell snytax)
-\cite{kmett2008kan}. $T$ is required to be a bifunctor from $\C^\op
+\cite{kmett2008kan}. $T$ is required to be a functor from $\C^\op
 \times \C$ since the representation type may occur both co- and
 contravariantly in the interface.
 
-\todo{Expand.  Give formal definition in terms of coequalizer.}
+The definition of a coend can be made precise in full generality
+(without requiring the objects of $\D$ to have ``elements'') using a
+\emph{coequalizer}.  \todo{Finish.  Give formal definition in terms of
+  coequalizer.}
 
 \begin{rem}
   Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
