@@ -209,6 +209,9 @@ example, $\all {A} {A \otimes A \to \C(B, H A)}$. (As Haskell
 programmers are well aware, writing everything in point-free style
 does not necessarily improve readability.)
 
+\todo{Also use notation $A \to B$ to denote the hom set $\C(A,B)$.
+  Below, use notation $\forall$ and $\exists$ for ends and coends?}
+
 Given two categories $\C$ and $\D$, the collection of functors from
 $\C$ to $\D$ forms a category (a \term{functor category}), with
 natural transformations as morphisms.  This category is denoted by
