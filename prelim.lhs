@@ -384,8 +384,14 @@ is clearly not true of $\B$.
 
 $\B$ does, however, have monoidal structures given by Cartesian
 product and disjoint union of finite sets, even though these are not a
-categorical product or coproduct. \todo{More intuition/illustration
-  here.}  In fact, something more general is true:
+categorical product or coproduct. In particular, two bijections
+$\sigma_1 : S_1 \bij T_1$ and $\sigma_2 : S_2 \bij T_2$ naturally give
+rise to a bijection $(S_1 \times S_2) \bij (T_1 \times T_2)$ (which
+sends $(s_1, s_2)$ to $(\sigma_1(s_1), \sigma_2(s_2))$) as well as a
+bijection $(S_1 \uplus S_2) \bij (T_1 \uplus T_2)$ (which sends $\inl\
+s_1$ to $\inl(\sigma_1(s_1))$ and $\inr\ s_2$ to $\inr(
+\sigma_2(s_2))$). \todo{picture?} In fact, something more general is
+true:
 
 \begin{prop}
   Any monoid $(\otimes,1)$ on a category $\C$ restricts to a monoid
