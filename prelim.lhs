@@ -179,10 +179,6 @@ We will make use of the following standard categories:
   the terminal object in $\Cat$.
 \end{itemize}
 
-\todo{Some standard categories we will use: $\Set$, $\FinSet$, $\Cat$}
-
-Use $\forall$ notation for natural transformations. \todo{Make it so.}
-
 The concept of \term{bifunctors} can be formalized as a two-argument
 analogue of functors; bifunctors thus map from \emph{two} categories
 to a single category.  However, the obvious definition of a bifunctor
@@ -193,29 +189,62 @@ categories are given by the usual universal product construction in
 $\Cat$, the category of all (small) categories; objects in $\C \times
 \D$ are pairs of objects from $\C$ and $\D$, and likewise morphisms in
 $\C \times \D$ are pairs of morphisms from $\C$ and
-$\D$. \todo{Mention where we will make use of bifunctors, e.g. see
-  upcoming section on monoids.}
+$\D$. One place that bifunctors come up often is in the context of
+monoidal categories; see~\pref{sec:monoids}.
 
   \todo{Action of functor on morphisms follows from action
   on objects.  Always true when expression giving action on objects is
   composed of functors from groupoids; then functoriality comes for
   free too.  Later, can make connection to homotopy type theory.}
 
-Functor categories.  The notations $[\C,\D]$ and $\D^\C$ for a functor
-category will be used interchangeably, as convenient.  The notation
-$\D^\C$ is often helpful since intuition for exponents carries over to
-functor categories.  For example, \todo{finish}
+The notation $\eta : \all {A} {F A \to G A}$ will often be used to
+denote a natural transformation $\eta : \nt F G$; this notation meshes
+well with the intuition of Haskell programmers, since naturality
+corresponds to \emph{parametricity}, a property enjoyed by polymorphic
+types in Haskell~\citep{reynolds, theorems-for-free}.  It is also more
+convenient when the functors $F$ and $G$ do not already have names but
+can be readily specified by expressions, especially when those
+expressions involve $A$ more than once or in awkward positions---for
+example, $\all {A} {A \otimes A \to \C(B, H A)}$. (As Haskell
+programmers are well aware, writing everything in point-free style
+does not necessarily improve readability.)
 
-\bay{Note a category is complete iff it has pullbacks and products.
-  $\Type$ clearly has products.  It also has pullbacks: given $A
-  \stackrel{f}{\longrightarrow} C \stackrel{g}{\longleftarrow} B$, we
-  can define $A \times_C B = (a : A) \times (b : B) \times (g\ a = f\ b)$.}
+Given two categories $\C$ and $\D$, the collection of functors from
+$\C$ to $\D$ forms a category (a \term{functor category}), with
+natural transformations as morphisms.  This category is denoted by
+both of the notations $[\C,\D]$ and $\D^\C$, as convenient.  The
+notation $\D^\C$ is often helpful since intuition for exponents
+carries over to functor categories; for example, $\C^{\D + \E} \iso
+\C^\D \times \C^\E$, $(\C \times \D)^\E \iso \C^\E \times \D^\E$, and
+so on. (In fact, this is not specific to functor categories; the same
+sorts of isomorphisms hold in any bicartesian closed category.)
 
-Equivalence of categories.
+Two categories $\C$ and $\D$ are said to be \emph{equivalent} if there
+are functors $F : \C \to \D$ and $G : \D \to \C$ such that both $FG$
+and $GF$ are naturally isomorphic to the identity functor.  Note that
+the concept of \emph{isomorphism} of categories---where the functors
+$F$ and $G$ are literal inverses, with $FG$ and $GF$ both
+\emph{equal}, rather than naturally isomorphic, to the identity
+functor---is typically too strong to be of use.  Sometimes an
+alternate definition is given, where two categories are equivalent if
+there exists a functor $F : \C \to \D$ which is full and faithful (\ie
+a bijection on each hom-set) as well as \term{essentially surjective},
+that is, for every object $D \in \D$ there is some object $C \in \C$
+such that $F(C) \iso D$.  However, this definition is equivalent to
+the definition given above---that is, given such an $F$ we can
+construct a suitable $G$---only by using the axiom of choice; see
+\pref{sec:AC} for a much fuller discussion.
 
-Adjunctions.
+The topic of \term{adjunctions} is much too large to cover here; see
+\todo{references}.  For the purposes of this dissertation, the most
+important aspect of the definition to keep in mind is that a functor
+$F : \C \to \D$ is left adjoint to $G : \D \to \C$ (and $G$ right
+adjoint to $F$), denoted $F \adj G$, if and only if \[ \D(F A, B) \iso
+\C(A, G B), \] that is, if there is some natural isomorphism
+matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
+\to G B$ in $\C$.
 
-Enriched categories.
+\todo{Enriched categories.}
 
 \subsection{Monoids}
 \label{sec:monoids}
@@ -284,7 +313,11 @@ The definition of a coend can be made precise in full generality
 A \term{groupoid} is a category in which all morphisms are invertible,
 that is, for each morphism $f$ there is another morphism $f^{-1}$ for
 which $f \comp f^{-1} = id$ and $f^{-1} \comp f = id$.  Groupoids play
-a prominent role in \todo{finish; cite groupoids and stuff; HoTT; etc.}
+a prominent role in \todo{finish; cite groupoids and stuff; HoTT;
+  etc.}  Note that a one-object groupoid is just a group; conversely,
+groupoids can be thought of as ``groups with types'', where elements
+can only be composed if their types match (as opposed to a group,
+where any two elements can always be composed).
 
 Some examples:
 
@@ -293,6 +326,27 @@ Any type $T$ gives rise to a groupoid $\tygrpd{T}$ where the objects
 are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is,
 morphisms from $a$ to $b$ are paths $p : a = b$.
 \end{defn}
+
+\begin{defn}
+  $\P$ denotes the groupoid with natural numbers as objects, and
+  permutations $\fin m \bij \fin n$ as morphisms $\mor m n$.  (Of
+  course, no such permutations exist unless $m = n$.)  The type of
+  permutations on a set $S$, that is, bijections from $S$ to itself,
+  will be denoted $\perm S$.
+\end{defn}
+
+\begin{rem}
+  Note that $\P$ is isomorphic to an infinite coproduct $\coprod_{n
+    \geq 0} \S_n$, where $\S_n$ denotes the symmetric group of all
+  permutations on $n$ elements, considered as a one-object groupoid.
+  In other words, $\P$ consists of a collection of non-interacting
+  ``islands'', one for each natural number. \todo{picture?}  In
+  particular, this means that any functor $F : \P \to \C$ is
+  equivalent to a collection of independent functors $\prod_{n \geq 0}
+  \S_n \to \C$, one for each natural number.  Each functor $\S_n \to
+  \C$ is entirely independent of the others, since there are no
+  morphisms between different $\S_n$ to introduce constraints.
+\end{rem}
 
 \begin{defn}
   Any category $\C$ gives rise to a groupoid $\C^*$, called the
@@ -305,28 +359,33 @@ Checking that $\C^*$ is indeed a groupoid is left as an easy exercise.
 \begin{defn}
   We give the name $\B$ to $\FinSet^*$, that is, the groupoid whose
   objects are finite sets and whose morphisms are \emph{bijections}
-  between finite sets. \todo{intuition, picture}
+  between finite sets.
 \end{defn}
 
-\todo{Notation for permutations: $\perm{A}$}
-\todo{Define ``transitive''} \bay{Why is this todo here?}
+There is a close relationship between $\B$ and $\P$.  In the presence
+of the axiom of choice, they are equivalent; intuitively, $\P$ is what
+we get by noting that any two sets of the same size are isomorphic, so
+we ``might as well'' just forget about the elements of finite sets and
+work directly with their sizes.  However, if the axiom of choice is
+rejected, the details become much more subtle; this is addressed
+in~\pref{sec:finiteness}.
 
-$\B$ does not have products or coproducts. To see that $\B$ does not
-have coproducts, let $A, B \in \B$ be arbitrary finite sets, and
-suppose they have some coproduct $A+B$. By definition this comes with
-a diagram $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B \ar[l]_-{\iota_2}}$
-in $\B$. Since morphisms in $\B$ are bijections, this would imply that
-$A$ and $B$ are in bijection, but since $A$ and $B$ were arbitrary
-finite sets, this is absurd.  A similar argument applies in the case
-of products.  More generally, any category with all products or coproducts
-is necessarily \term{connected}, \ie has some zig-zag sequence of
-arrows connecting any two objects, and this is clearly not true of
-$\B$.
+$\B$ (and $\P$) do not have products or coproducts. To see that $\B$
+does not have coproducts, let $A, B \in \B$ be arbitrary finite sets,
+and suppose they have some coproduct $A+B$. By definition this comes
+with a diagram $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B
+  \ar[l]_-{\iota_2}}$ in $\B$. Since morphisms in $\B$ are bijections,
+this would imply that $A$ and $B$ are in bijection, but since $A$ and
+$B$ were arbitrary finite sets, this is absurd.  A similar argument
+applies in the case of products.  More generally, any category with
+all products or coproducts is necessarily \term{connected}, \ie has
+some zig-zag sequence of arrows connecting any two objects, and this
+is clearly not true of $\B$.
 
 $\B$ does, however, have monoidal structures given by Cartesian
 product and disjoint union of finite sets, even though these are not a
-categorical product or coproduct. \todo{More intuition/illustration here.}
-In fact, something more general is true:
+categorical product or coproduct. \todo{More intuition/illustration
+  here.}  In fact, something more general is true:
 
 \begin{prop}
   Any monoid $(\otimes,1)$ on a category $\C$ restricts to a monoid
@@ -980,12 +1039,11 @@ an anaequivalence between $\PT$ and $\BT$.
   \item on morphisms, $e : \mor {(A,m,i)} {(B,n,j)}$ is sent to
     $\fin{\size e} \equiv \fin{i \then e \then j^{-1}} \equiv i \then e \then j^{-1}$.
   \end{itemize}
-  We must exhibit a natural isomorphism $\alpha : \nt{Id}{\fin{\size
-      -}}$.  $\alpha_{(A,m,i)}$ must be a morphism
-  in $\BT$ from $(A,m,i)$ to $(\Fin m, m, \id)$, that is, an
-  equivalence $A \iso \Fin m$.  Therefore we define $
-  \alpha_{(A,m,i)} \defeq i^{-1}$.  Naturality of $\alpha$ is given
-  by the diagram
+  We must exhibit a natural isomorphism $\alpha : \all{L} {L \to
+    \fin{\size L}}$.  $\alpha_{(A,m,i)}$ must be a morphism in $\BT$
+  from $(A,m,i)$ to $(\Fin m, m, \id)$, that is, an equivalence $A
+  \iso \Fin m$.  Therefore we define $ \alpha_{(A,m,i)} \defeq
+  i^{-1}$.  Naturality of $\alpha$ is given by the diagram
   \[ \xymatrix{
          (A,m,i) \ar[r]^-{i^{-1}} \ar[d]_e
          &
