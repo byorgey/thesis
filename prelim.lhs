@@ -154,7 +154,32 @@ assumed, along with some standard universal constructions such as
 terminal and initial objects, products, and coproducts. \todo{Link to
   further reading about these things.}
 
-\todo{Some standard categories we will use: $\Set$, $\Cat$}
+\todo{Assume limits and colimits too? They are not quite so ``basic''
+  but there's lots of good material for learning about them.}
+
+We will make use of the following standard categories:
+\begin{itemize}
+\item $\cat{1} = \bullet$, the trivial category with a single object
+  and only the required identity morphism.
+\item $\cat{2} = \bullet \to \bullet$, the category with two objects
+  and one nontrivial morphism between them (as well as the required
+  identity morphisms).
+\item $\disc{\cat{2}} = \bullet \phantom{\to} \bullet$, the discrete
+  category with two objects and only identity morphisms. A
+  \term{discrete} category is a category with only identity morphisms;
+  $\disc{\C}$ denotes the discrete category with the objects of $\C$.
+  Also, any set can be treated as a discrete category.
+\item $\Set$, the category with sets as objects and (total) functions
+  as morphisms.
+\item $\FinSet$, like $\Set$ but with only finite sets as objects.
+\item $\Cat$, the category of all small categories (a category is
+  \term{small} if its objects and morphisms both form \emph{sets}, as
+  opposed to proper classes; considering the category of \emph{all}
+  categories gets us in trouble with Russell).  Note that $\cat{1}$ is
+  the terminal object in $\Cat$.
+\end{itemize}
+
+\todo{Some standard categories we will use: $\Set$, $\FinSet$, $\Cat$}
 
 Use $\forall$ notation for natural transformations. \todo{Make it so.}
 
