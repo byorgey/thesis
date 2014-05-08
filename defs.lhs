@@ -114,7 +114,7 @@
 \providecommand{\R}{\bbb{R}}
 \providecommand{\C}{\bbb{C}}
 
-\newcommand{\all}[2]{\forall #1.\; #2}
+\newcommand{\all}[1]{\forall #1.\;}
 
 \newcommand{\mcal}[1]{\ensuremath{\mathcal{#1}}}
 \let\Sect\S
