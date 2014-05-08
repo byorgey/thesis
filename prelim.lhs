@@ -207,10 +207,23 @@ can be readily specified by expressions, especially when those
 expressions involve $A$ more than once or in awkward positions---for
 example, $\all {A} {A \otimes A \to \C(B, H A)}$. (As Haskell
 programmers are well aware, writing everything in point-free style
-does not necessarily improve readability.)
+does not necessarily improve readability.)  This notation can be
+rigorously justified using \emph{ends}~\pref{sec:ends}.
 
-\todo{Also use notation $A \to B$ to denote the hom set $\C(A,B)$.
-  Below, use notation $\forall$ and $\exists$ for ends and coends?}
+In a similar vein, the set of morphisms between objects $A$ and $B$ in
+a category $\C$ is usually denoted $\C(A,B)$ or
+$\mathrm{Hom}_\C(A,B)$, but we will also occasionally use the notation
+$A \to B$, or $A \to_\C B$ when the category $\C$ should be explicitly
+indicated.  The same notation will be used for exponentials and
+powers.  While this certainly has the potential to introduce ambiguity
+and confusion, it has the decided benefit of playing to the intuition
+of Haskell programmers, and often makes the structure of calculations
+more apparent.  For example, \[ \eend{b} H b^{\C(a,G b)} \] can be
+instead written as the Haskell-like \[ \all b {(a \to G b) \to H
+  b}, \] where the end has been written using $\forall$, and both the
+hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.  It
+should be emphasized that this notation is perfectly rigorous, and not
+just an ``approximation'' in Haskell.
 
 Given two categories $\C$ and $\D$, the collection of functors from
 $\C$ to $\D$ forms a category (a \term{functor category}), with
@@ -270,6 +283,8 @@ in a dependent type theory---e.g. can we assume parametricity for
 functions that abstract over things classified by |*|? Cite Bernardy
 et al.}
 
+\todo{Use notation $\forall$ and $\exists$ for ends and coends?}
+
 \subsection{Coends}
 \label{sec:coends}
 
@@ -309,6 +324,11 @@ The definition of a coend can be made precise in full generality
     suitable assumptions it is also equivalent to an iterated coend
     (cite MacLane).}
 \end{rem}
+
+\subsection{Ends}
+\label{sec:ends}
+
+\todo{natural transformations as ends.  Justifies $\forall$ notation.}
 
 \subsection{Groupoids}
 \label{sec:groupoids}
@@ -429,47 +449,195 @@ Given a family of sets $\{X_i \mid i \in I\}$, an element of their
 Cartesian product is some $I$-indexed tuple $\{x_i \mid i \in I\}$
 where $x_i \in X_i$ for each $i$. Such a tuple can be thought of as a
 function (called a \emph{choice function}) which picks out some
-particular $x_i$ from each $X_i$. \todo{finish.}
+particular $x_i$ from each $X_i$.  This can be visualized (for a
+particularly small and decidedly finite case) as shown
+in~\pref{fig:ac-example}.
 
-\todo{Moved here, need to edit.}
-Several variants of the axiom of choice can be expressed within
-homotopy type theory.  A ``na\"ive'' variant, referred to as
-$\AC_\infty$, is given by
-\begin{equation} \tag{$\AC_\infty$}
-  \label{eq:ac-infty}
-  \left( \prod_{x : X} \sum_{(a : A(x))} P(x,a) \right) \iso \left(
-    \sum_{(g : \prod_{x:X} A(x))} \prod_{(x:X)} P(x,g(x)) \right).
-\end{equation}
-This variant is actually \emph{provable} within the theory; however,
-it is of little use here, since rather than just requiring a family of
-``nonempty'' sets, it actually requires, for each $x$, an explicit
-\emph{witness} $a : A(x)$ for which the property $P(x,a)$ holds.  That
-is, it requires that we have already made a choice for each $x$.
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE ParallelListComp          #-}
+{-# LANGUAGE TemplateHaskell           #-}
 
-A variant which corresponds more closely to standard mathematical
-practice, referred to as $\AC_{-1}$ or simply $\AC$, is
-\begin{equation} \tag{$\AC$}
-  \label{eq:AC}
-  \left( \prod_{x : X} \ptrunc{\sum_{(a : A(x))} P(x,a)} \right) \to
-    \ptrunc{\sum_{(g : \prod_{x:X} A(x))} \prod_{(x:X)} P(x,g(x))}.
-\end{equation}
-Intuitively, this says that given a family of \emph{nonempty}---\ie
-merely inhabited---sets, there merely exists a choice function.
-Although $\AC$ is not provable within the theory, it is consistent to
-assume it as an axiom.  However, as an axiom, it has no computational
-interpretation, and is therefore unsuitable for constructing a functor
-with computational content.  Moreover, even if it did have a computational
-interpretation, it would also be of limited use, since
-\todo{propositional truncation would get in the way.}
+import           Control.Lens                   (makeLenses, (^.))
+import           Data.Default.Class
 
-The problem with the axiom of choice is that it is non-constructive,
-in the sense that a choice function produced by AC has no real
-computational content.  AC simply postulates the \emph{existence} of a
-choice function but does not actually specify its behavior.  In the
-setting of this work, therefore, AC must be rejected. \bay{Expound on
-  this a bit?  Why must it be rejected?  Maybe somewhere else I ought
-  to clearly lay out and motivate the constructivist viewpoint
-  underlying this work.}
+import           Data.Colour.Palette.BrewerSet
+
+data SetOpts = SetOpts
+  { _setSize   :: Int
+  , _eltShape  :: Diagram B R2
+  , _highlight :: Maybe Int
+  , _eltColors :: [Colour Double]
+  , _setName   :: Name
+  }
+
+makeLenses ''SetOpts
+
+instance Default SetOpts where
+  def = SetOpts { _setSize = 3, _eltShape = circle 0.5, _highlight = Nothing, _eltColors = [black], _setName = toName () }
+
+drawSet :: SetOpts -> Diagram B R2
+drawSet opts
+  = vcat' (with & catMethod .~ Distrib & sep .~ 1.5) elts
+    # enclose 0.5 1
+    # centerY
+  where
+    elts = zipWith3 mkElt [0..] (cycle (opts ^. eltColors)) (replicate (opts ^. setSize) (opts ^. eltShape))
+    mkElt i c shp
+      || Just i == opts ^. highlight = base # lw 0.2 # lc black
+      || otherwise                   = base
+      where
+        base = shp # fc c # named ((opts ^. setName) .> i)
+
+enclose :: Double -> Double -> Diagram B R2 -> Diagram B R2
+enclose g r d = d # centerXY <> roundedRect (width d + g) (height d + g) r # lw 0.03
+
+colors :: [Kolor]
+colors = brewerSet Set1 9
+
+zipWith4 :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
+zipWith4 _ [] _ _ _ = []
+zipWith4 _ _ [] _ _ = []
+zipWith4 _ _ _ [] _ = []
+zipWith4 _ _ _ _ [] = []
+zipWith4 f (a:as) (b:bs) (c:cs) (d:ds) = f a b c d : zipWith4 f as bs cs ds
+
+sets :: [SetOpts]
+sets = zipWith4 mkSet
+  [0..]
+  [2,5,4,6,1]
+  shapes
+  selections
+
+shapes :: [Double -> Diagram B R2]
+shapes = [circle, triangle, pentagon, hexagon, (\d -> square d # rotateBy (1/8))]
+
+selections :: [Maybe Int]
+selections = (map Just [0,2,3,1,0])
+
+mkSet :: Int -> Int -> (Double -> Diagram B R2) -> Maybe Int -> SetOpts
+mkSet nm n shp hi =
+  def
+  & setSize .~ n
+  & eltColors .~ colors
+  & eltShape .~ (shp 1 # sized (Width 1))
+  & highlight .~ hi
+  & setName .~ toName nm
+
+collection :: Diagram B R2
+collection = (hcat' (with & sep .~ 1) $ map drawSet sets) # centerX  -- $
+
+choice :: Diagram B R2
+choice = (hcat' (with & sep .~ 0.5) $ zipWith3 mkSel [0::Int ..] shapes selections) # enclose 0.5 1 -- $
+  where
+    mkSel i shp (Just j) = shp 1 # sized (Width 1) # fc (cycle colors !! j) # centerXY # named ("b" .> i .> j)
+    mkSel _ _ _ = mempty
+
+dia = frame 1 $   -- $
+  vcat' (with & sep .~ 2)
+    [ collection
+    , choice
+    ]
+    # applyAll
+      [ connectOutside' aOpts (mkNm i j) ("b" .> mkNm i j)
+      || i      <- [0..5]
+      || Just j <- selections
+      ]
+
+aOpts = with & shaftStyle %~ lc grey & headColor .~ grey & headGap .~ 0.5 & headSize .~ 0.7
+
+mkNm :: Int -> Int -> Name
+mkNm i j = i .> j
+  \end{diagram}
+  \caption{The axiom of choice}
+  \label{fig:ac-example}
+\end{figure}
+
+We can express this in type theory as follows.  First, we assume we
+have some type $I$ which indexes the collection of sets; that is,
+there will be one set for each value of type $I$.  Given some type
+$A$, we can define a subset of the values of type $A$ using a
+\emph{predicate}, that is, a function $P : A \to \Type$.  For some
+particular $a : A$, applying $P$ to $a$ yields a type, which can be
+thought of as the type of evidence that $a$ is in the subset $P$;
+$a$ is in the subset if and only if $P(a)$ is inhabited.  An
+$I$-indexed collection of subsets of $A$ can then be expressed as a
+function $C : I \to A \to \Type$. In particular, $C(i,a)$ is the type
+of evidence that $a$ is in the subset indexed by $i$.  (Note that we
+could also make $A$ into a family of types indexed by $I$, that is, $A
+: I \to \star$, which makes the encoding more expressive but doesn't
+ultimately affect the subsequent discussion.)
+
+A set is nonempty if it has at least one element, so the fact that all
+the sets in $C$ are nonempty can be modeled by a dependent function
+which yields an element of $A$ for each index, along with a proof
+that it is contained in the corresponding subset:
+\[ (i : I) \to (a : A) \times C(i,a). \] An element of the Cartesian
+product of $C$ can be expressed as a function $I \to A$ that picks out
+an element for each $I$ (the choice function), together with a proof
+that the chosen elements are in the appropriate sets:
+\[ (g : I \to A) \times ((i : I) \to C(i, g(i))). \] Putting these
+together, apparently the axiom of choice can be modelled by the type
+\[ ((i : I) \to (a : A) \times C(i,a)) \to (g : I \to A) \times ((i : I)
+\to C(i, g(i))). \]
+Converting to $\Pi$ and $\Sigma$ notation and squinting actually
+gives some good insight into what is going on:
+\[ \left( \prod_{i : I} \sum_{a : A} C(i,a) \right) \to \left( \sum_{g
+    : I \to A} \prod_{i : I} C(i, g(i)) \right) \] Essentially, this
+says that we can ``turn a (dependent) product of sums into a
+(dependent) sum of products''.  This sounds a lot like distributivity,
+and indeed, the strange thing is that this is simply \emph{true}:
+implementing a function of this type is a simple exercise!  The
+intuitive idea can be grasped by implementing a non-dependent
+analogue, say, a Haskell function of type |(i -> (a,c)) -> (i -> a, i
+-> c)|.  This is quite easy to implement, and the dependent version is
+essentially no harder; only the types that get more complicated, not
+the implementation.  So what's going on here?  Why is AC so
+controversial if it is simply \emph{true} in type theory?
+
+The problem, it turns out, is that we've modelled the axiom of choice
+improperly, and it all boils down to how ``non-empty'' is defined.
+When a mathematician says ``$S$ is non-empty'', they typically don't
+actually mean ``\dots and here is an element of $S$ to prove it''.
+Instead, they literally mean ``it is *not the case* that $S$ is
+empty'', that is, assuming $S$ is empty leads to a contradiction.
+(Actually, there is something yet more subtle going on, to be
+discussed below, but this is a good first approximation.)  In
+classical logic, these viewpoints are equivalent; in constructive
+logic, however, they are very different!  In constructive logic,
+knowing that it is a contradiction for $S$ to be empty does not
+actually help you find an element of $S$.  We modelled the statement
+``this is a collection of non-empty sets'' essentially by saying
+``here is an element in each set'', but in constructive logic that is
+a much \emph{stronger} statement than simply saying that each set is
+not empty.
+
+From this point of view, we can see why the ``axiom of choice'' in the
+previous section was easy to implement: it had to produce a function
+choosing a bunch of elements, but it was given a bunch of elements to
+start. All it had to do was shuffle them around a bit.  The ``real''
+AC, on the other hand, has a much harder job: it is told some sets are
+non-empty, but without any actual elements being mentioned, and it
+then has to manufacture a bunch of elements out of thin air.  This is
+why it has to be taken as an axiom; we can also see that it doesn't
+fit very well in a constructive/computational context.  Although it is
+logically consistent to assume it as an axiom, it has no computational
+interpretation, so anything we defined using it would just get stuck
+operationally.  Since the goal of this work is explicitly to provide a
+foundation for \emph{computation}, the axiom of choice must be rejected.
+
+It is worth noting that within HoTT, the notion of a ``non-empty'' set
+can be defined in a more nuanced way.  The best way to model what
+classical mathematicians mean when they say ``$S$ is non-empty'' is
+probably not with a negation, but instead with the \emph{propositional
+  truncation} of the statement that $S$ contains an
+element~\cite[Chapter 3]{hottbook}.  This more faithfully mirrors the
+way mathematicians use it, for example, in reasoning such as ``$S$ is
+non-empty, so let $s \in S$ \dots''.  Non-emptiness does in fact imply
+an inhabitant, but such an inhabitant can only be used to prove
+propositions, not to construct values.
 
 \subsection{Unique isomorphism and generalized ``the''}
 \label{sec:generalized-the}
