@@ -13,14 +13,18 @@
 
 \begin{figure}
 \centering
-\begin{diagram}[width=200]
+\begin{diagram}[width=400]
 import SpeciesDiagrams
 dia = shapePlusData # centerXY # pad 1.1
 
 shapePlusData = hcat
-  [ octo [0..7]
+  [ octo' elt "species!"
   , strutX 2
-  , (text "+" # fontSize 3 <> phantom (square 1 :: D R2))
+  , text "=" # fontSize 3 <> phantom (square 1 :: D R2)
+  , strutX 2
+  , octo [0..7]
+  , strutX 2
+  , text "×" # fontSize 3 <> phantom (square 1 :: D R2)
   , strutX 2
   , mapping
   , strutX 2
