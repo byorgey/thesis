@@ -27,7 +27,9 @@ shapePlusData = hcat
   ]
 
 mapping = centerXY . vcat' (with & sep .~ 0.2) . map mapsto $ zip [0..7] "species!"
-mapsto (l,x) = hcat' (with & sep .~ 0.5) [lab l, mkArrow 3 mempty, elt x]
+mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
+  where
+    a = (arrow' (with & headSize .~ 1) 2 <> hrule 2) |||||| strutX 0.4
 \end{diagram}
 %$
 \caption{Data structure = shape + data} \label{fig:shape-data}
