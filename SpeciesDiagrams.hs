@@ -259,17 +259,18 @@ eltColor = blend 0.5 white lightgreen
 mloc m = text (show m) <> circle 0.8 # fc mlocColor
 elt x = text (show x) <> square 1.6 # fc eltColor
 
-arm m n r = ( mloc m # rotateBy (-r)
-          ||| hrule 1.5
-          ||| mloc n # rotateBy (-r)
-            )
-            # translateX 3
-            # rotateBy r
+arm typ m n r = ( typ m # rotateBy (-r)
+              ||| hrule 1.5
+              ||| typ n # rotateBy (-r)
+                )
+                # translateX 3
+                # rotateBy r
 
-arms elts = zipWith (\[e1,e2] r -> arm e1 e2 r) (chunksOf 2 elts) [1/8 + 0.001, 1/8+0.001 +1/4 .. 1]
+arms typ elts = zipWith (\[e1,e2] r -> arm typ e1 e2 r) (chunksOf 2 elts) [1/8 + 0.001, 1/8+0.001 +1/4 .. 1]
 
-octo elts = (mconcat (arms elts) <> circle 3) # lw 0.03
+octo' typ elts = (mconcat (arms typ elts) <> circle 3) # lw 0.03
 
+octo = octo' mloc
 
 sampleT7 = Node 3 [Node 4 (map lf [2,1,6]), Node 5 [], Node 0 [lf 7]]
   where

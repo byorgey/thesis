@@ -154,6 +154,7 @@
 \newcommand{\perm}[1]{#1!}
 \newcommand{\iso}{\simeq}
 \newcommand{\mkIso}{\rightleftharpoons}
+\newcommand{\inj}{\hookrightarrow}
 
 \newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 

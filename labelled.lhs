@@ -5,12 +5,11 @@
 \chapter{Labelled structures}
 \label{chap:labelled}
 
-\begin{itemize}
-\item Joyal's analytic functors.  Labelled structures.
-\item Operations on labelled structures.
-\item Sharing.
-\end{itemize}
-
+Now that we have a foundation for describing labelled shapes, the next
+step is to extend them into full-blown \emph{data structures} with
+mappings from labels to data.  For example, \pref{fig:shape-data}
+illustrates an example of a labelled shape together with a mapping
+from the labels to data values.
 \begin{figure}
 \centering
 \begin{diagram}[width=400]
@@ -38,18 +37,53 @@ mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
 %$
 \caption{Data structure = shape + data} \label{fig:shape-data}
 \end{figure}
+However, this must be done in a principled way.  The idea is to derive
+\todo{operations\dots from structure \dots}
 
-  One useful intuition is to think of the labels as \emph{memory
-    addresses}, which point off to some location where a data value is
-  stored. This intuition has some particularly interesting
-  consequences when it comes to operations like Cartesian product and
-  functor composition---explained in~\pref{sec:operations}---since it
-  gives us a way to model sharing (albeit in limited ways).
+% One useful intuition is to think of the labels as \emph{memory
+%   addresses}, which point off to some location where a data value is
+% stored. This intuition has some particularly interesting consequences
+% when it comes to operations like Cartesian product and functor
+% composition---explained in~\pref{sec:operations}---since it gives us a
+% way to model sharing (albeit in limited ways).
 
 
+\begin{itemize}
+\item Joyal's analytic functors.  Labelled structures.
+\item Operations on labelled structures.
+\item Sharing.
+\end{itemize}
 
 \section{Analytic functors and labelled structures}
 \label{sec:analytic}
+
+As our starting place, consider Joyal's definition of \term{analytic
+  functors}~\cite{Joyal-analytic-functors}.
+\begin{defn}
+  Given a species $F \in [\B,\Set]$, the \term{analytic functor} $\hat
+  F$ corresponding to $F$ is given by the left Kan extension of $F$
+  along the inclusion functor $\iota : \B \inj \Set$.  This can also
+  be expressed as a coend: \[ \hat F\ A = \coend{L} F\ L \times (\iota
+  L \to A). \] A functor $\Set \to \Set$ is \term{analytic} when it
+  arises in this way from some species.
+\end{defn}
+We can think of $\hat F$ as the polymorphic ``data type'' arising from
+the species $F$. Given a set $A$, a value in $\hat F\ A$ consists of
+an $L$-labelled $F$-shape together with a function (\ie a morphism in
+$\Set$) from $\iota L$ to $A$.  The coend means that the choice of a
+particular label set $L$ does not matter: any two values $f : F\ L
+\times (\iota L \to A)$ and $g : F\ L' \times (\iota L' \to A)$ are
+considered equal if there is some bijection $\sigma : L \bij L'$ which
+sends $f$ to $g$.
+
+Analytic functors have many nice properties: for example, they are
+closed under \todo{?}, and have corresponding \term{generating
+  functions} (indeed, part of the motivation of Joyal's work seems to
+have been to categorify the theory of generating functions).
+
+However, the above definition of analytic functors is specific to
+$[\B,\Set]$.  It must first be modified to apply to the generalized
+species from the previous chapter.
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}
