@@ -560,8 +560,11 @@ Note that AC is \emph{independent} of the usual set theory foundations
 that it is consistent to add either AC or its negation to ZF.  In
 particular this means that neither AC nor its negation can be proved
 from the axioms of ZF (since then adding the other would lead to
-inconsistency).  Most mathematicians work (in principle) within ZF
-extended with AC, known as ZFC.
+inconsistency).  It is somewhat controversial since it has some
+strange consequences (\eg the Banach-Tarski
+paradox~\cite{banach-tarski}), but most mathematicians have come to
+accept it, and work (in principle) within ZF extended with AC, known
+as ZFC.
 
 Now consider how to express AC in type theory.  First, we assume we
 have some type $I$ which indexes the collection of sets; that is,
