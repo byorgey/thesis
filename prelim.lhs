@@ -555,19 +555,27 @@ mkNm i j = i .> j
   \label{fig:ac-example}
 \end{figure}
 
-We can express this in type theory as follows.  First, we assume we
+Note that AC is \emph{independent} of the usual set theory foundations
+(the so-called \emph{Zermelo-Fraenkel axioms}, or ZF), in the sense
+that it is consistent to add either AC or its negation to ZF.  In
+particular this means that neither AC nor its negation can be proved
+from the axioms of ZF (since then adding the other would lead to
+inconsistency).  Most mathematicians work (in principle) within ZF
+extended with AC, known as ZFC.
+
+Now consider how to express AC in type theory.  First, we assume we
 have some type $I$ which indexes the collection of sets; that is,
 there will be one set for each value of type $I$.  Given some type
 $A$, we can define a subset of the values of type $A$ using a
 \emph{predicate}, that is, a function $P : A \to \Type$.  For some
 particular $a : A$, applying $P$ to $a$ yields a type, which can be
-thought of as the type of evidence that $a$ is in the subset $P$;
-$a$ is in the subset if and only if $P(a)$ is inhabited.  An
-$I$-indexed collection of subsets of $A$ can then be expressed as a
-function $C : I \to A \to \Type$. In particular, $C(i,a)$ is the type
-of evidence that $a$ is in the subset indexed by $i$.  (Note that we
-could also make $A$ into a family of types indexed by $I$, that is, $A
-: I \to \star$, which makes the encoding more expressive but doesn't
+thought of as the type of evidence that $a$ is in the subset $P$; $a$
+is in the subset if and only if $P(a)$ is inhabited.  An $I$-indexed
+collection of subsets of $A$ can then be expressed as a function $C :
+I \to A \to \Type$. In particular, $C(i,a)$ is the type of evidence
+that $a$ is in the subset indexed by $i$.  (Note that we could also
+make $A$ into a family of types indexed by $I$, that is, $A : I \to
+\star$, which makes the encoding more expressive but doesn't
 ultimately affect the subsequent discussion.)
 
 A set is nonempty if it has at least one element, so the fact that all
