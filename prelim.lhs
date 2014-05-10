@@ -631,13 +631,13 @@ choosing a bunch of elements, but it was given a bunch of elements to
 start. All it had to do was shuffle them around a bit.  The ``real''
 AC, on the other hand, has a much harder job: it is told some sets are
 non-empty, but without any actual elements being mentioned, and it
-then has to manufacture a bunch of elements out of thin air.  This is
-why it has to be taken as an axiom; we can also see that it doesn't
-fit very well in a constructive/computational context.  Although it is
-logically consistent to assume it as an axiom, it has no computational
-interpretation, so anything we defined using it would just get stuck
-operationally.  Since the goal of this work is explicitly to provide a
-foundation for \emph{computation}, the axiom of choice must be rejected.
+then has to manufacture a bunch of elements out of thin air.  This
+doesn't fit very well in a constructive/computational context.
+Although it is logically consistent to assume it as an axiom, it has
+no computational interpretation, so anything we defined using it would
+just get stuck operationally.  Since the goal of this work is
+explicitly to provide a foundation for \emph{computation}, the axiom
+of choice must be rejected.
 
 It is worth noting that within HoTT, the notion of a ``non-empty'' set
 can be defined in a more nuanced way.  The best way to model what
