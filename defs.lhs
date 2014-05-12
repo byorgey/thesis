@@ -115,6 +115,7 @@
 \providecommand{\C}{\bbb{C}}
 
 \newcommand{\all}[1]{\forall #1.\;}
+\newcommand{\exist}[1]{\exists #1.\;}
 
 \newcommand{\mcal}[1]{\ensuremath{\mathcal{#1}}}
 \let\Sect\S
@@ -276,8 +277,8 @@
 \newcommand{\fork}[2]{\langle #1, #2 \rangle}
 
 % ends and coends
-\newcommand{\eend}[1]{\int_{#1}}
-\newcommand{\coend}[1]{\int^{#1}}
+\newcommand{\eend}[1]{\all{#1}}
+\newcommand{\coend}[1]{\exist{#1}}
 
 \newcommand{\ran}[2]{#2 / #1}
 \newcommand{\lan}[2]{#2 \backslash #1}
