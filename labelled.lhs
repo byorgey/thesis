@@ -66,7 +66,10 @@ a (left) \term{Kan extension}.
   Given functors $F : \C \to \D$ and $J : \C \to \E$, the \term{left
     Kan extension of $F$ along $J$}, written $\lan J F$ (following
   \citet{art-and-dan}), is a functor $\D \to \E$ characterized by the
-  isomorphism \[ (\lan{J}{F} \to G) \cong (F \to G \comp J), \]
+  isomorphism
+  \begin{equation} \label{eq:lan}
+    (\lan{J}{F} \to G) \cong (F \to G \comp J),
+  \end{equation}
   natural in $G$. \todo{check this} If this exists for all $F$, then
   we may say even more succinctly that the left Kan extension functor
   $\lan J -$ is left adjoint to $- \comp J$, that is, \[ \lan J - \adj
@@ -77,12 +80,39 @@ Intuitively, if $J : \C \to \E$ is thought of as an ``embedding'' of
 $\C$ into $\E$, then $\lan J F$ can be thought of as a way of
 ``extending'' the domain of $F$ from $\C$ to $\E$ in a way compatible
 with $J$. \[ \xymatrix{\C \ar[r]^{F} \ar[d]_J & \D \\ \E \ar[ur]_{\lan
-    J F}} \] If we substitute $\lan J F$ for $G$ in the isomorphism of
-\pref{defn:lan} and take the image of $\id_{\lan J F}$, we obtain
-$\eta : F \to \lan J F \comp J$
-
+    J F}} \] If we substitute $\lan J F$ for $G$ in \pref{eq:lan} and
+take the image of $\id_{\lan J F}$, we obtain $\eta : F \to \lan J F
+\comp J$, a natural transformation sending $F$ to the embedding $J$
+followed by the extension $\lan J F$; intuitively, the existence of
+$\eta$ guarantees that $\lan J F$ has to ``act like'' $F$ on the image
+of $\C$ under $J$. \todo{2-cell picture illustrating $\eta$} Of
+course, $\lan J F$ must also be defined and functorial on all of $\E$,
+not just on the image of $C$.  These facts together justify thinking
+of $\lan J F$ as an ``extension'' of $F$.
 
 \todo{simple example(s)?}
+
+When $\D$ is cocomplete and \todo{what?}, $\lan J F$ can be
+constructed explicitly as a coend:
+\begin{equation} \label{eq:lan-coend}
+  (\lan J F)\ E = \coend{C} (J\ C \to E) \cdot F\ C.
+\end{equation}
+
+\begin{sproof}
+  \stmt{\eend{E} \left( \coend{C} (J\ C \to E) \cdot F\ C \right) \to G\ E}
+  \reason{\cong}{$(- \to X)$ turns colimits into limits}
+  \stmt{\eend{E} \eend{C} \left( (J\ C \to E) \cdot F\ C \to G\ E \right)}
+\end{sproof}
+\todo{finish proof.  Look up copowers.}
+
+\todo{Instead of merely showing the \emph{existence} of an
+  isomorphism, the above proof can in fact be interpreted as
+  constructing a specific isomorphism.  In order to aid intuition and
+  to avoid excessive formalism, we carry out this construction in
+  Haskell.}
+
+\todo{Exhibit Haskell code.  Which direction of the isomorphism do we
+  really want?}
 
 \section{Analytic functors and labelled structures}
 \label{sec:analytic}
@@ -92,9 +122,7 @@ As our starting place, consider Joyal's definition of \term{analytic
 \begin{defn}
   Given a species $F \in [\B,\Set]$, the \term{analytic functor} $\hat
   F$ corresponding to $F$ is given by the left Kan extension of $F$
-  along the inclusion functor $\iota : \B \inj \Set$.  This can also
-  be expressed as a coend: \[ \hat F\ A = \coend{L} F\ L \times (\iota
-  L \to A). \] A functor $\Set \to \Set$ is \term{analytic} when it
+  along the inclusion functor $\iota : \B \inj \Set$. A functor $\Set \to \Set$ is \term{analytic} when it
   arises in this way from some species.
 \end{defn}
 We can think of $\hat F$ as the polymorphic ``data type'' arising from
