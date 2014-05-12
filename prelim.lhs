@@ -634,8 +634,8 @@ non-empty, but without any actual elements being mentioned, and it
 then has to manufacture a bunch of elements out of thin air.  This
 doesn't fit very well in a constructive/computational context.
 Although it is logically consistent to assume it as an axiom, it has
-no computational interpretation, so anything we defined using it would
-just get stuck operationally.  Since the goal of this work is
+no computational interpretation, so anything defined in terms of it
+would just get stuck operationally.  Since the goal of this work is
 explicitly to provide a foundation for \emph{computation}, the axiom
 of choice must be rejected.
 
@@ -916,9 +916,9 @@ Anafunctors compose: given anafunctors $F_1 : \C \to \D$ and $F_2 : \D
 \to \E$, the key idea is to take a suitable \emph{product} of their
 specifications.  In particular, \todo{finish.  Reference Makkai.}
 This is actually easier to see using the abstract definition in terms
-of spans: \[ \xymatrix{ {} \ar[d] \ar[r] \pullback & ||F_2||
+of spans: \[ \xymatrix@@dr{ {} \ar[d] \ar[r] & ||F_2||
   \ar[d]_{\sigma_2} \ar[r]^{\tau_2} & \E \\ ||F_1|| \ar[d]_{\sigma_1}
-  \ar[r]^{\tau_1} & \D & \\ \C & & } \] $\Cat$ is cocomplete, and in
+  \ar[r]^{\tau_1} & \D \\ \C } \] $\Cat$ is cocomplete, and in
 particular has pullbacks, so we may construct a new anafunctor from
 $\C$ to $\E$ by taking a pullback of $\tau_1$ and $\sigma_2$ and then
 composing appropriately, as illustrated in the diagram.
