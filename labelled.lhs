@@ -54,6 +54,36 @@ However, this must be done in a principled way.  The idea is to derive
 \item Sharing.
 \end{itemize}
 
+\section{Kan extensions}
+\label{sec:kan-extensions}
+
+The definition of analytic functors makes central use of the notion of
+a (left) \term{Kan extension}.
+
+\todo{Some of this should perhaps go in the preliminaries chapter}
+
+\begin{defn} \label{defn:lan}
+  Given functors $F : \C \to \D$ and $J : \C \to \E$, the \term{left
+    Kan extension of $F$ along $J$}, written $\lan J F$ (following
+  \citet{art-and-dan}), is a functor $\D \to \E$ characterized by the
+  isomorphism \[ (\lan{J}{F} \to G) \cong (F \to G \comp J), \]
+  natural in $G$. \todo{check this} If this exists for all $F$, then
+  we may say even more succinctly that the left Kan extension functor
+  $\lan J -$ is left adjoint to $- \comp J$, that is, \[ \lan J - \adj
+  - \comp J. \]
+\end{defn}
+
+Intuitively, if $J : \C \to \E$ is thought of as an ``embedding'' of
+$\C$ into $\E$, then $\lan J F$ can be thought of as a way of
+``extending'' the domain of $F$ from $\C$ to $\E$ in a way compatible
+with $J$. \[ \xymatrix{\C \ar[r]^{F} \ar[d]_J & \D \\ \E \ar[ur]_{\lan
+    J F}} \] If we substitute $\lan J F$ for $G$ in the isomorphism of
+\pref{defn:lan} and take the image of $\id_{\lan J F}$, we obtain
+$\eta : F \to \lan J F \comp J$
+
+
+\todo{simple example(s)?}
+
 \section{Analytic functors and labelled structures}
 \label{sec:analytic}
 

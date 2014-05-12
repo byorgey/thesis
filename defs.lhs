@@ -279,6 +279,9 @@
 \newcommand{\eend}[1]{\int_{#1}}
 \newcommand{\coend}[1]{\int^{#1}}
 
+\newcommand{\ran}[2]{#2 / #1}
+\newcommand{\lan}[2]{#2 \backslash #1}
+
 % cliques
 \DeclareMathOperator{\clq}{clq}
 
