@@ -19,6 +19,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{mathtools}
 \usepackage{stmaryrd}
 \usepackage[all,cmtip,2cell]{xy}
 \UseAllTwocells
@@ -243,15 +244,18 @@
 \newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
 
 % some standard categories
-\newcommand{\Set}{\cat{Set}}   % category of sets
-\providecommand{\Cat}{}
-\renewcommand{\Cat}{\cat{Cat}} % category of (small) categories
-\newcommand{\Spe}{\cat{Spe}}   % category of species
-\newcommand{\CSpe}{\cat{CSpe}} % category of constructive species
+\newcommand{\newcategory}[1]{%
+\expandafter\providecommand\csname #1\endcsname{}\expandafter\renewcommand\csname #1\endcsname{\cat{#1}}}
+
+\newcategory{Set}     % sets and total functions
+\newcategory{FinSet}  % finite sets
+\newcategory{Cat}     % (small) categories
+\newcategory{Spe}     % species
+\newcategory{CSpe}    % constructive species
+\newcategory{Hask}    % Haskell types and functions
 
 \providecommand{\B}{\bbb{B}}
 \renewcommand{\P}{\bbb{P}}
-\providecommand{\FinSet}{\cat{FinSet}}
 
 \providecommand{\L}{}
 \renewcommand{\L}{\bbb{L}}     % category of linear orderings
@@ -280,8 +284,11 @@
 \newcommand{\eend}[1]{\all{#1}}
 \newcommand{\coend}[1]{\exist{#1}}
 
+% Kan extensions
 \newcommand{\ran}[2]{#2 / #1}
 \newcommand{\lan}[2]{#2 \backslash #1}
+\DeclareMathOperator{\Lan}{Lan}
+\DeclareMathOperator{\Ran}{Ran}
 
 % cliques
 \DeclareMathOperator{\clq}{clq}
