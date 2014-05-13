@@ -370,3 +370,17 @@ enumTrees xxs  = [ BNode x l r
              , l <- enumTrees ys
              , r <- enumTrees zs
              ]
+
+tag :: Int -> Diagram B R2 -> Diagram B R2
+tag i d = d # centerXY <> roundedRect w h r # applyStyle (tagStyles !! i)
+  where
+    w = width d + 1
+    h = height d + 1
+    r = 0.5
+
+-- TODO: update me once I switch to diagrams 1.2
+tagStyles :: [Style R2]
+tagStyles = cycle
+  [ mempty # lw 0.06 # lc green
+  , mempty # lw 0.06 # lc green # dashing [0.1,0.1] 0
+  ]

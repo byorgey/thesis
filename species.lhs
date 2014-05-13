@@ -601,14 +601,13 @@ functorial.
   \emph{either} binary trees or lists (\pref{fig:bin-plus-list}).
 \end{ex}
 
-\todo{Use color scheme to indicate tag, instead of coloring labels?}
 \begin{figure}
   \centering
-  \begin{diagram}[width=200]
+  \begin{diagram}[width=250]
 import SpeciesDiagrams
 import Data.List (permutations)
 
-dia = (hcat' (with & sep .~ 0.5) . map centerXY) (trees ++ lists)
+dia = (hcat' (with & sep .~ 0.5)) (map (tag 0) trees ++ map (tag 1) lists)
     # frame 0.5
 
 trees
@@ -632,13 +631,12 @@ lists
   $\Bin$.
 \end{ex}
 
-\todo{Definitely need to use a different color scheme here.}
 \begin{figure}
   \centering
-  \begin{diagram}[width=200]
+  \begin{diagram}[width=250]
 import SpeciesDiagrams
 
-dia = (hcat' (with & sep .~ 0.5) . map centerXY) (trees ++ trees)
+dia = (hcat' (with & sep .~ 0.5)) (map (tag 0) trees ++ map (tag 1) trees)
     # frame 0.5
 
 trees
