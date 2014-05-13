@@ -585,7 +585,15 @@ functorial.
   theory, this is simply the transport operation; that is, given a
   groupoid $B$ and a category $C$, any function $B_0 \to C_0$ extends
   to a functor $B \to C$.
-  \todo{Flesh this out some more\dots ?}
+
+  By the same token, to define a functor with an arbitrary category
+  (not necessarily a groupoid) as its domain, it suffices to define
+  its action on an object using an expression containing only
+  covariant occurrences of the object.
+
+  \todo{Flesh this out some more\dots ?  This could all be made formal
+  and precise but the idea should be clear, and it's not necessarily
+  worth it.  Could also probably find something to cite.}
 \end{rem}
 
 \begin{ex}
