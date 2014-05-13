@@ -18,7 +18,8 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{amsthm}
+%\usepackage{amsthm}
+\usepackage[amsmath,amsthm,thmmarks]{ntheorem}
 \usepackage{mathtools}
 \usepackage{stmaryrd}
 \usepackage[all,cmtip,2cell]{xy}
@@ -403,6 +404,13 @@
 %% SDG qed symbol
 
 \font\tinyfont=cmss10 scaled 375
-\let\oldqedsymbol\qedsymbol
-\renewcommand{\qedsymbol}{\rlap\oldqedsymbol{}\raise
+
+% This is for the amsthm package
+% \let\oldqedsymbol\qedsymbol
+% \renewcommand{\qedsymbol}{\rlap\oldqedsymbol{}\raise
+%   .5ex\hbox{\tinyfont \hskip .3em S\kern-.15em D\kern -.15em G}}
+
+% Now I'm using the ntheorem package with amsthm option
+\let\oldproofSymbol\proofSymbol
+\renewcommand{\proofSymbol}{\rlap\oldproofSymbol{}\raise
   .5ex\hbox{\tinyfont \hskip .3em S\kern-.15em D\kern -.15em G}}
