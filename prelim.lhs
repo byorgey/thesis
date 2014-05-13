@@ -662,8 +662,8 @@ subscribed-to \term{principle of
 of mathematical structures should be invariant under equivalence.
 This principle leads naturally to speaking of ``the'' object having
 some property, when in fact there may be many objects with the given
-property, but are all uniquely isomorphic; this cannot cause
-confusion if the principle of equivalence is in effect.
+property, but all such objects are uniquely isomorphic; this cannot
+cause confusion if the principle of equivalence is in effect.
 
 This phenomenon should be familiar to anyone who has seen simple
 universal constructions such as terminal objects or categorical
