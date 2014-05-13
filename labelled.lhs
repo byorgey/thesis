@@ -60,20 +60,22 @@ However, this must be done in a principled way.  The idea is to derive
 The definition of analytic functors makes central use of the notion of
 a (left) \term{Kan extension}.
 
-\todo{Some of this should perhaps go in the preliminaries chapter}
-
-\begin{defn} \label{defn:lan}
-  Given functors $F : \C \to \D$ and $J : \C \to \E$, the \term{left
-    Kan extension of $F$ along $J$}, written $\lan J F$ (following
-  \citet{art-and-dan}), is a functor $\D \to \E$ characterized by the
-  isomorphism
+\begin{defn} \label{defn:lan} Given functors $F : \C \to \D$ and $J :
+  \C \to \E$, the \term{left Kan extension of $F$ along $J$}, written
+  $\lan J F$\footnote{$\lan J F$ is traditionally notated
+    $\Lan_J F$.  Inspired by the corresponding notion in
+    relational algebra, Roland Backhouse suggested the notation $\ran
+    J F$ for the right Kan extension of $F$ along $J$ (traditionally
+    notated $\Ran_J F$), which was adopted by
+    \citet{art-and-dan}.  The notation $\lan J F$ is the appropriate
+    analogue for left Kan extensions.}, is a functor $\D \to \E$
+  characterized by the isomorphism
   \begin{equation} \label{eq:lan}
     (\lan{J}{F} \to G) \cong (F \to G \comp J),
   \end{equation}
-  natural in $G$. \todo{check this} If this exists for all $F$, then
-  we may say even more succinctly that the left Kan extension functor
-  $\lan J -$ is left adjoint to $- \comp J$, that is, \[ \lan J - \adj
-  - \comp J. \]
+  natural in $G$. If this exists for all $F$, then we may say even
+  more succinctly that the left Kan extension functor $\lan J -$ is
+  left adjoint to $- \comp J$, that is, \[ \lan J - \adj - \comp J. \]
 \end{defn}
 
 Intuitively, if $J : \C \to \E$ is thought of as an ``embedding'' of
@@ -92,32 +94,53 @@ of $\lan J F$ as an ``extension'' of $F$.
 
 \todo{simple example(s)?}
 
+The above gives an abstract characterization of left Kan extensions;
+under suitable conditions we can explicitly construct them.
+\begin{prop} \label{prop:Lan-coend}
 When $\D$ is cocomplete and \todo{what?}, $\lan J F$ can be
 constructed explicitly as a coend:
 \begin{equation} \label{eq:lan-coend}
   (\lan J F)\ E = \coend{C} (J\ C \to E) \cdot F\ C.
 \end{equation}
-
+\end{prop}
+\begin{proof}
+We must show $(\lan J F \to G) \cong (F \to G \comp J)$.
 \begin{sproof}
+  \stmt{\lan J F \to G}
+  \reason{\equiv}{definition}
+  \stmt{(\coend{C} (J\ C \to -) \cdot F\ C) \to G}
+  \reason{\cong}{natural transformations are ends}
   \stmt{\eend{E} \left( \coend{C} (J\ C \to E) \cdot F\ C \right) \to G\ E}
   \reason{\cong}{$(- \to X)$ turns colimits into limits}
-  \stmt{\eend{E} \eend{C} \left( (J\ C \to E) \cdot F\ C \to G\ E \right)}
+  \stmt{\eend{E} \eend{C} \left( (J\ C \to E) \cdot F\ C \to G\ E
+    \right)}
+  \reason{\cong}{universal property of copowers (generalized
+    currying)}
+  \stmt{\eend{E} \eend{C} (J\ C \to E) \to (F\ C \to G\ E)}
+  \reason{\cong}{Fubini}
+  \stmt{\eend{C} \eend{E} (J\ C \to E) \to (F\ C \to G\ E)}
+  \reason{\cong}{Yoneda}
+  \stmt{\eend{C} F\ C \to G\ (J\ C)}
+  \reason{\cong}{natural transformations are coends}
+  \stmt{F \to G \comp J}
 \end{sproof}
-\todo{finish proof.  Look up copowers.}
+\end{proof}
 
-\todo{Instead of merely showing the \emph{existence} of an
-  isomorphism, the above proof can in fact be interpreted as
-  constructing a specific isomorphism.  In order to aid intuition and
-  to avoid excessive formalism, we carry out this construction in
-  Haskell.}
+Instead of merely showing the \emph{existence} of an isomorphism, the
+above proof can in fact be interpreted as constructing a specific
+isomorphism.  Instead of doing this in the framework of the formal
+proof above, we carry out this construction in Haskell.  This is not
+as general as the above proof (in particular, it forces all the
+categories involved to be \Hask), but yields good intuition.
 
 \todo{Exhibit Haskell code.  Which direction of the isomorphism do we
   really want?}
 
-\section{Analytic functors and labelled structures}
-\label{sec:analytic}
+\section{Analytic functors}
+\label{sec:analytic-functors}
 
-As our starting place, consider Joyal's definition of \term{analytic
+With left Kan extensions under our belts, we're ready to consider
+Joyal's definition of \term{analytic
   functors}~\cite{Joyal-analytic-functors}.
 \begin{defn}
   Given a species $F \in [\B,\Set]$, the \term{analytic functor} $\hat
@@ -126,18 +149,33 @@ As our starting place, consider Joyal's definition of \term{analytic
   arises in this way from some species.
 \end{defn}
 We can think of $\hat F$ as the polymorphic ``data type'' arising from
-the species $F$. Given a set $A$, a value in $\hat F\ A$ consists of
-an $L$-labelled $F$-shape together with a function (\ie a morphism in
-$\Set$) from $\iota L$ to $A$.  The coend means that the choice of a
-particular label set $L$ does not matter: any two values $f : F\ L
-\times (\iota L \to A)$ and $g : F\ L' \times (\iota L' \to A)$ are
-considered equal if there is some bijection $\sigma : L \bij L'$ which
-sends $f$ to $g$.
+the species $F$. The construction in \pref{prop:Lan-coend} tells us
+exactly what such a data type looks like: $\hat F\ A = \coend L (\iota
+L \to A) \times F\ L$.  That is, given a set $A$, a value in $\hat F\
+A$ consists of an $L$-labelled $F$-shape together with a function (\ie
+a morphism in $\Set$) from $\iota L$ to $A$.  The coend means that the
+choice of a particular label set $L$ does not matter: any two values
+$f : (\iota L \to A) \times F\ L$ and $g : (\iota L' \to A) \times F\
+L' $ are considered equal if there is some bijection $\sigma : L \bij
+L'$ which sends $f$ to $g$.
+
+\todo{Intuition for analytic functors from universal property of left
+  Kan extension.  Use Haskell derivation from previous section.}
 
 Analytic functors have many nice properties: for example, they are
 closed under \todo{?}, and have corresponding \term{generating
   functions} (indeed, part of the motivation of Joyal's work seems to
 have been to categorify the theory of generating functions).
+
+In fact, passing from $\B$ to $\P$ \todo{finish: can see generating
+  functions emerge.}
+
+\section{Labelled structures}
+\label{sec:labelled-structures}
+
+
+\section{Generalized labelled structures}
+\label{sec:gen-labelled-structures}
 
 However, the above definition of analytic functors is specific to
 $[\B,\Set]$.  It must first be modified to apply to the generalized
