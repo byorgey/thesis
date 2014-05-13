@@ -1378,7 +1378,7 @@ dia = frame 0.2 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
   , assembly2
   , grid
   ]
-  # lw 0.05
+  # lw 0.03
   \end{diagram}
   \caption{Three views on arithmetic product of species}
   \label{fig:arithmetic-product}
