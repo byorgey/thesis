@@ -708,15 +708,14 @@ first, we turn to the formally similar operation of \emph{Cartesian
 $\Set$ also has products, given by $S \times
 T = \{ (s,t) \mid s \in S, t \in T \}$, with any one-element set as
 the identity. (We may suppose there is some canonical
-choice of one-element set, $\singleton$; this is justified since all
-one-element sets are isomorphic in \Set.)
+choice of one-element set, $\singleton$.)
 \begin{defn}
   The \term{Cartesian} or \term{Hadamard product} of species, is defined on
   objects by $ (F \times G)\ L = F\ L \times G\ L.$
 \end{defn}
 \begin{rem}
   The action of $(F \times G)$ on morphisms, functoriality, \etc are
-  omitted; the details are exactly parallel with the definition of
+  omitted; the details are exactly parallel to the definition of
   species sum, and are presented much more generally in the next
   subsection.
 \end{rem}
@@ -839,11 +838,11 @@ $\Bag$ becomes clear:
 \end{defn}
 
 \begin{rem}
-  $\Bag$ is called the \term{species of sets} since there is
-  exactly one structure on any set of labels, which can be
-  thought of as the set of labels itself, with no additional
-  structure.  In fact, as all one-element sets are isomorphic, we
-  may define $\Bag\ L = \{L\}$.
+  $\Bag$ is called the \term{species of sets} since there is exactly
+  one structure on any set of labels, which can be thought of as the
+  set of labels itself, with no additional structure.  In fact, since
+  all one-element sets are isomorphic, we may define $\Bag\ L =
+  \{L\}$.
 \end{rem}
 
 \todo{Picture for $\Bag$.}
