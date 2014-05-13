@@ -591,7 +591,7 @@ functorial.
   its action on an object using an expression containing only
   covariant occurrences of the object.
 
-  \todo{Flesh this out some more\dots ?  This could all be made formal
+  \later{Flesh this out some more\dots ?  This could all be made formal
   and precise but the idea should be clear, and it's not necessarily
   worth it.  Could also probably find something to cite.}
 \end{rem}
@@ -1067,7 +1067,7 @@ Natural transformations lift in the same way:
   inverse of $\alpha^\C$: for any $H$, $\alpha^{-1}H \cdot \alpha H =
   (\alpha^{-1} \cdot \alpha) H = id_{FH}$.
   \[ {\xymatrixcolsep{5pc} \xymatrix{ \C \ar[r]^H & \D
-     \ruppertwocell^F{\alpha} \ar[r] \rlowertwocell_F{\mathrlap{\alpha^{-1}}} & \E
+     \ruppertwocell^F{\mathrlap{\alpha}} \ar[r] \rlowertwocell_F{\mathrlap{\alpha^{-1}}} & \E
      }}
      =
      \xymatrix{ \C \ar[r]^H & \D \ar[r]^F & \E }
