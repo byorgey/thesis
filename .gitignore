@@ -11,6 +11,7 @@ Shake
 *.lof
 *.lot
 *.out
+*.thm
 
 *.tex
 !thesis.tex
