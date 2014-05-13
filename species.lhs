@@ -681,22 +681,15 @@ species sum:
 
   This nicely fits with the ``elementwise'' definition of $+$ on
   species: $(F + G)\ L = F\ L \uplus G\ L$, and likewise $(\phi +
-  \psi)_L = \phi_L \uplus \psi_L$.  \todo{there's some
-    generalization to be made here; what is it?  Is it true that any
-    functor from a groupoid need only be defined on objects, and
-    ``automatically'' acquires an action on morphisms?  Is this only
-    true if we restrict ourselves to some special term language?}
-
-  The action of $+$ on natural transformations thus reduces to the
-  elementwise action of $\uplus$ on their components.  From this it
-  follows that
+  \psi)_L = \phi_L \uplus \psi_L$.  The action of $+$ on natural
+  transformations thus reduces to the elementwise action of $\uplus$
+  on their components.  From this it follows that
   \begin{itemize}
-  \item $\phi + \psi$ is natural (because XXX), and
+  \item $\phi + \psi$ is natural (because $\phi$ and $\psi$ are), and
   \item $+$ preserves identity and composition (because $\uplus$
-    does). \qedhere
+    does).
   \end{itemize}
-
-  \todo{Argue it is symmetric.  Note strict vs. non-strict.}
+  Finally, we note that $+$ inherits the symmetry of $\uplus$.
 \end{proof}
 
 Stepping back a bit, we can see that this monoidal structure on
