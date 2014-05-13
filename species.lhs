@@ -305,10 +305,9 @@ concise definition of species:
 \end{defn}
 
 Reflecting the fact that the groupoid $\P$ of natural numbers and
-finite permutations is equivalent to the groupoid $\B$ \todo{Haven't
-  actually established this yet\dots}, it is also possible to define
-species as families of shapes, indexed not by their labels but merely
-by their \emph{size}:
+finite permutations is equivalent to the groupoid $\B$, it is also
+possible to define species as families of shapes, indexed not by their
+labels but merely by their \emph{size}:
 
 \begin{defn}[Species (alternate)]
   \label{defn:species-p}
@@ -373,7 +372,8 @@ thought of as precisely those labelled by the canonical label set $[n]$.
   seen as dual to these shapes-to-labels mappings, giving the
   \term{fiber} of each label set.  Both formulations have their
   strengths and weaknesses; a fuller discussion can be found in
-  \pref{sec:related-work}.
+  \pref{sec:related-work}. \todo{Make sure this reference gets filled
+    in.}
 \end{rem}
 
 \subsection{The category of species}
@@ -393,22 +393,25 @@ relabelling yields the same list as first relabelling and then doing
 the traversal.
 
   \begin{figure}
-    \todo{Add labels to the arrows?}
+    \later{Add labels to the arrows?}
     \centering
   \begin{diagram}[width=300]
 import Diagrams.TwoD.Layout.Tree
 import SpeciesDiagrams
+import Data.Char (ord)
 
-charLabel c = mkLeaf (text [c] # fc black <> circle 1) ()
+charLabel c = mkLeaf (text [c] # fc black <> circle 1 # fc (colors !! (ord c - ord 'a'))) ()
+cnumbered n = mkLeaf (text (show n) # fc black <> circle 1 # fc (colors !! n)) ()
+clettered n = mkLeaf (text [['a' ..] !! n] # fc black <> circle 1 # fc (colors !! n)) ()
 
 sps =
   [ drawList' charLabel "cdbafeg"      # centerXY # named "la"
-  , drawList' numbered [2,3,1,0,5,4,6] # centerXY # named "l1"
-  , wideTree numbered sampleBTree7     # centerXY # named "t1"
-  , wideTree lettered sampleBTree7     # centerXY # named "ta"
+  , drawList' cnumbered [2,3,1,0,5,4,6] # centerXY # named "l1"
+  , wideTree cnumbered sampleBTree7     # centerXY # named "t1"
+  , wideTree clettered sampleBTree7     # centerXY # named "ta"
   ]
 
-dia = decoratePath (rect 30 25) sps
+dia = decoratePath (rect 25 20) sps
     # connectOutside' (aOpts & tailGap .~ 5) "t1" "l1" -- top
     # connectOutside' (aOpts & tailGap .~ 5) "t1" "ta" -- left
     # connectOutside' aOpts "l1" "la" -- right
@@ -454,18 +457,22 @@ on).  It is enlightening to see precisely which of these properties
 are required in which situations.
 
 Along the way, by way of examples, we will also explore various
-generalizations of species (multisort, weighted, and see how they fit
-in this framework: each arises from considering particular categories
-in place of $\B$ and $\Set$.  To keep these various functor categories
-straight, the word ``species'' will be used for $[\B,\Set]$, and
-``generalized species'' (or, more specifically,
-``$[\Lab,\Str]$-species''\footnote{Not to be confused with
-  \todo{generalized species of XXX, ``$(A,B)$-species''}}) for some
-  abstract $[\Lab, \Str]$.
+generalizations of species and see how they fit in this framework:
+each arises from considering particular categories in place of $\B$
+and $\Set$.  To keep these various functor categories straight, the
+word ``species'' will be used for $[\B,\Set]$, and ``generalized
+species'' (or, more specifically,
+``$[\Lab,\Str]$-species''\footnote{Not to be confused with the
+  generalized species of~\citet{Fiore08}, who define
+  ``$(A,B)$-species'' as functors from $\B A$ (a generalization of
+  $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
+  $B$.}) for some abstract $[\Lab, \Str]$.
 
 \subsection{Species in type theory}
 \label{sec:species-in-type-theory}
 
+\todo{Come back to this and attack it on paper, figuring out how to
+  incorporate new insights re: HoTT and CT.}
 \todo{Move this up somehow, and follow it with a general description
   of the rest of the chapter, to make a nice transition into the more
   technical material on lifted monoids etc.}
@@ -509,10 +516,7 @@ product of species arises from products in $\Set$.
 
 The \emph{sum} of two species is given by their disjoint union: an $(F
 + G)$-shape is either an $F$-shape \emph{or} a $G$-shape, together
-with a tag so we can tell which (\pref{fig:sum}). Alternatively,
-thinking of species as functors in $[\P, \Set]$, we may say that an
-$(F+G)$-shape of size $n$ is either an $F$-shape of size $n$ or a
-$G$-shape of size $n$.
+with a tag so we can tell which (\pref{fig:sum}).
 
   \begin{figure}
     \centering
@@ -547,12 +551,8 @@ dia = theDia # centerXY # pad 1.1
   g)\ (\inr\ y) = \inr\ (g\ y)$.
 \end{defn}
 
-\todo{redo based on theorem about functoriality following from action
-  on objects etc.}
-
 It remains to prove that the $F + G$ defined above is actually
 functorial.
-
 \begin{proof}
   The functoriality of $F + G$ follows from that of $F$, $G$, and
   $\uplus$:
@@ -570,6 +570,23 @@ functorial.
   \stmt{(F + G)\ f \comp (F + G)\ g.}
   \end{sproof}
 \end{proof}
+
+\begin{rem}
+  More abstractly, when defining a functor with a groupoid as its
+  domain (such as $F + G$ above), it suffices to specify only its
+  action on objects, using an arbitrary expression composed of (co-
+  and contravariant) functors.  For example, $(F + G)\ L = F\ L \uplus
+  G\ L$ is defined in terms of the functors $F$, $G$, and $\uplus$.
+  In that case the action of the functor on morphisms can be derived
+  automatically by induction on the structure of the expression,
+  simply substituting the morphism in place of covariant occurrences
+  of the object, and the morphism's inverse in place of contravariant
+  occurrences.  In fact, in a HoTT-based formulation of category
+  theory, this is simply the transport operation; that is, given a
+  groupoid $B$ and a category $C$, any function $B_0 \to C_0$ extends
+  to a functor $B \to C$.
+  \todo{Flesh this out some more\dots ?}
+\end{rem}
 
 \begin{ex}
   $\Bin + \List$ is the species representing things which are

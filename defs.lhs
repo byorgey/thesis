@@ -333,6 +333,7 @@
 %% Comments
 
 \newif\ifcomments\commentstrue
+\newif\ifallcomments\allcommentsfalse
 
 \ifcomments
 \newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
@@ -340,6 +341,12 @@
 \else
 \newcommand{\authornote}[3]{}
 \newcommand{\todo}[1]{}
+\fi
+
+\ifallcomments
+\newcommand{\later}[1]{\textcolor{green}{[LATER: #1]}}
+\else
+\newcommand{\later}[1]{}
 \fi
 
 \newcommand{\bay}[1]{\authornote{blue}{BAY}{#1}}
