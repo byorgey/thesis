@@ -381,6 +381,7 @@ tag i d = d # centerXY <> roundedRect w h r # applyStyle (tagStyles !! i)
 -- TODO: update me once I switch to diagrams 1.2
 tagStyles :: [Style R2]
 tagStyles = cycle
-  [ mempty # lw 0.06 # lc green
+  [ mempty # lw 0.03
+  , mempty # lw 0.06 # lc green
   , mempty # lw 0.06 # lc green # dashing [0.1,0.1] 0
   ]

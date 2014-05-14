@@ -607,7 +607,7 @@ functorial.
 import SpeciesDiagrams
 import Data.List (permutations)
 
-dia = (hcat' (with & sep .~ 0.5)) (map (tag 0) trees ++ map (tag 1) lists)
+dia = (hcat' (with & sep .~ 0.5)) (map (tag 1) trees ++ map (tag 2) lists)
     # frame 0.5
 
 trees
@@ -636,7 +636,7 @@ lists
   \begin{diagram}[width=250]
 import SpeciesDiagrams
 
-dia = (hcat' (with & sep .~ 0.5)) (map (tag 0) trees ++ map (tag 1) trees)
+dia = (hcat' (with & sep .~ 0.5)) (map (tag 1) trees ++ map (tag 2) trees)
     # frame 0.5
 
 trees
@@ -922,47 +922,41 @@ later. First, however, we consider some examples.
   \Set$ corresponds to summing the pairs elementwise, that is, $(S_1,
   T_1) + (S_2, T_2) = (S_1 \uplus S_2, T_1 \uplus T_2)$.
 
-  \todo{Should this go in the preliminaries?} \todo{Needs a proof and
-    some pictures.}
-  When $X$ is a discrete category, the functor category $[X,\Set]$ is
-  equivalent to the slice category $\Set / X$, which gives another way
-  to think of a functor $\disc{\cat{2}} \to \Set$, namely, as a single
-  set of elements $S$ together with a function $S \to \disc{\cat{2}}$
-  which ``tags'' each element with one of two tags (``left'' or
-  ``right'', $0$ or $1$, \etc).  From this point of view, a lifted sum
-  can be thought of as a tag-preserving disjoint union.
+  Recall that when $X$ is a discrete category, the functor category
+  $[X,\Set]$ is equivalent to the slice category $\Set / X$.  This
+  gives another way to think of a functor $\disc{\cat{2}} \to \Set$,
+  namely, as a single set of elements $S$ together with a function $S
+  \to \disc{\cat{2}}$ which ``tags'' each element with one of two tags
+  (``left'' or ``right'', $0$ or $1$, \etc).  From this point of view,
+  a lifted sum can be thought of as a tag-preserving disjoint union.
 
   \todo{picture?}
 \end{ex}
 
 \begin{ex}
-  As an example in a similar vein, consider $\Lab = \disc{\N}$, the
-  discrete category with natural numbers as objects.  Functors
-  $\disc{\N} \to \Str$ are countably infinite sequences of objects
-  $[S_0, S_1, S_2, \dots]$.  One way to think of this is as a
-  collection of $\Str$-objects, one for each natural number
-  \emph{size}.  For example, if $\Str = \Set$ then the sequence of
-  sets $[S_0, S_1, S_2, \dots]$ is \dots
+  As an example in a similar vein, consider $\Lab = \N$, the discrete
+  category with natural numbers as objects.  Functors $\N \to \Str$
+  are countably infinite sequences of objects $[S_0, S_1, S_2,
+  \dots]$.  One way to think of this is as a collection of
+  $\Str$-objects, one for each natural number \emph{size}.  For
+  example, when $\Str = \Set$, a functor $\N \to \Set$ is a sequence
+  of sets $[S_0, S_1, S_2, \dots]$, where $S_i$ can be thought of as
+  some collection of objects of size $i$. (This ``size'' intuition
+  is actually fairly arbitrary at this point---the objects of $\N$ are
+  in some sense just an arbitrary countably infinite set of labels,
+  and there is no particular reason they should represent ``sizes''.
+  However, the ``size'' intuition of course carries over well to
+  species.)
 
-  \todo{working here}
-  Again, $[\disc{\N}, \Set] \cong \Set/\disc{\N}$, so functors
-  $\disc{\N} \to \Set$ can also be thought of as a single set
-  where each element has been tagged by its size. (This ``size''
-  intuition is actually fairly arbitrary at this point---the objects
-  of $\disc{\N}$ are in some sense just an arbitrary countably
-  infinite set of labels, and there is no particular reason they
-  should represent ``sizes''.  However, as we will see, this intuition
-  carries through well to subsequent examples.)
+  Again, $[\N, \Set] \cong \Set/\N$, so functors $\N \to \Set$ can
+  also be thought of as a single set $S$ along with a function $S \to
+  \N$ which gives the size of each element.
 
   Lifting a monoidal operation to countable sequences of objects
   performs a ``zip'', applying the monoidal operation between matching
   positions in the two lists: \[ [S_1, S_2, S_3, \dots] \oplus [T_1,
   T_2, T_3, \dots] = [S_1 \oplus T_1, S_2 \oplus T_2, S_3 \oplus T_3,
-  \dots] \] If $\oplus$ can be thought of as a size-preserving
-  operation---for example, disjoint union combines two collections of
-  size-$n$ things into one collection of size-$n$ things---then
-  lifting $\oplus$ combines entire size-indexed collections in a
-  size-preserving way.
+  \dots] \]
 \end{ex}
 
 \begin{ex}

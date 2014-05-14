@@ -277,9 +277,56 @@ each element of $S$ by some $x \in X$. Taking the preimage or
 collection of sets; conversely, given an $X$-indexed collection of
 sets we may take their disjoint union and construct a function
 assigning each element of the disjoint union its corresponding element
-of $X$.
+of $X$. \pref{fig:discrete-slice} illustrates the situation for $X =
+\{\mathrm{red}, \mathrm{blue}, \mathrm{green}, \mathrm{purple}\}$.
+Following the arrows from bottom to top, the diagram represents a
+functor $X \to \Set$, with each element of $X$ mapped to a set.
+Following the arrows from top to bottom, the diagram represents an
+object in $\Set/X$ consisting of a set of 12 elements and an
+assignment of a color to each.
 
-\todo{picture?}
+\todo{Can we generalize beyond $\Set$?  What if $X$ is not discrete?}
+
+\todo{Refer back to this from discussion of species definition.}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import SpeciesDiagrams
+
+fiber elts i
+  = map (\e -> text [e] <> circle 1 # lw 0.06 # lc (colors !! i)) elts
+    # vcat' (with & sep .~ 0.5)
+    # tag 0
+    # named (i :: Int)
+
+fibers =
+  zipWith fiber
+    [ "ACG"
+    , "FH"
+    , "DBI"
+    , "LEKJ"
+    ]
+    [0..]
+    # map centerXY
+    # hcat' (with & sep .~ 1)
+    # tag 0
+
+x = tag 0 (hcat' (with & sep .~ 0.5) namedDots)
+  where
+    dots      = zipWith fc colors (repeat (circle 1))
+    namedDots = zipWith named ['a' .. 'd'] dots
+
+dia =
+  vcat' (with & sep .~ 2) [ fibers, x ]
+  # applyAll (zipWith (connectOutside' aOpts) [0 :: Int .. 3] "abcd")
+  # frame 0.5
+
+aOpts = with & headSize .~ 0.7 & arrowTail .~ dart' & tailSize .~ 0.7
+  \end{diagram}
+  \caption{An element of $\Set^X$ or $\Set/X$}
+  \label{fig:discrete-slice}
+\end{figure}
 
 \paragraph{Equivalence of categories}
 
