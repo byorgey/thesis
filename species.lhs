@@ -5,6 +5,7 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
+\todo{Go through and add some back references to preliminaries chapter?}
 \todo{List contributions of this chapter somewhere?}
 \todo{Need a story for building with both color or black/white
   figures}

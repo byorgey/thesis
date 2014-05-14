@@ -201,6 +201,7 @@
 
 \newcommand{\lam}[2]{\lambda\,#1.\;#2}
 
+\newcommand{\pair}[2]{\langle #1 , #2 \rangle}
 \newcommand{\inl}{\cons{inl}}
 \newcommand{\inr}{\cons{inr}}
 \newcommand{\outl}{\cons{outl}}
@@ -208,7 +209,7 @@
 
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
 \newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
-\newcommand{\FinTypeT}{\ensuremath{\Type_{\||\text{Fin}\||}}}
+\newcommand{\FinTypeT}{\ensuremath{\Type_{\ptrunc{\text{Fin}}}}}
 \newcommand{\IsFinite}[1]{\mathsf{IsFinite}\;#1}
 \newcommand{\sizesymb}{\#}
 \newcommand{\size}[1]{\ensuremath{\sizesymb#1}}

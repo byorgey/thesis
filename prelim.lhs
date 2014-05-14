@@ -30,9 +30,6 @@ chapter as needed. On the other hand, the material in \pref{sec:AC}
 and \pref{sec:ct-hott} is somewhat less standard, and it is hoped that
 all readers, even experts, will gain something from them.
 
-\todo{Give some backward references from the rest of the text to
-  relevant descriptions here.}
-
 \section{Basic notations}
 \label{sec:basic}
 
@@ -77,45 +74,79 @@ Metavariable conventions used throughout this dissertation include:
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
-\todo{Make some paragraph headings}
+\bay{\term{Homotopy Type Theory} (HoTT).  Arose out of Voevodsky's
+  Univalent Foundations program.  There's way too much
+  to cover here, interested readers should consult the HoTT book.
+  HoTT is the right framework in which to do this work because it
+  takes isomorphism and equality very seriously.  Specific benefits,
+  to be explored later: coends are just sigma-types, i.e. no need to fiddle
+  with quotients; }
+\todo{Give a general introduction to
+    homotopy type theory. Say why it makes sense to work in it.}
 
-\todo{Give a general introduction to homotopy type theory. Say why it
-  makes sense to work in it.}
+\paragraph{Terms and types}
 
-We work with a type theory equipped with an empty type \TyZero, a unit
-type \TyOne (with inhabitant $\unit$), coproducts $A + B$ (with
-constructors $\inl$ and $\inr$), dependent pairs $(x:A) \times B(x)$,
-dependent functions $(x:A) \to B(x)$, a hierarchy of type universes
-$\Type_0$, $\Type_1$, $\Type_2$\dots (we usually omit the subscript
-from $\Type_0$), judgmental equality $A \equiv B$, and propositional
-equality $A = B$.  The theory also allows inductive definitions.  We
-use $\N : \Type_0$ to denote the type of natural numbers, and $\Fin :
-\N \to \Type_0$ the usual indexed type of canonical finite sets.
+The theory includes standard constructions such as:
+\begin{itemize}
+\item an empty type \TyZero, with no inhabitants;
+\item a unit type \TyOne, with inhabitant $\unit$;
+\item sum types $A + B$, with constructors $\inl : A \to A + B$ and
+  $\inr : B \to A + B$, as well as a $\cons{case}$ construct for doing
+  case analysis;
+\item dependent pairs $(x:A) \times B(x)$, with constructor $\pair -
+  -$ and projection functions $\pi_1 : (x:A) \times B(x) \to A$ and
+  $\pi_2 : (p : (x:A) \times B(x)) \to B(\pi_1 p)$;
+\item dependent functions $(x:A) \to B(x)$;
+\item a hierarchy of type universes $\Type_0$, $\Type_1$,
+  $\Type_2$\dots;
+\item and inductive definitions.
+\end{itemize}
+$\N : \Type_0$ denotes the inductively-defined type of natural
+numbers, and $\Fin : \N \to \Type_0$ denotes the usual indexed type of
+canonical finite sets.
 
-Although we use Agda's notation~\cite{Agda} for dependent pairs and
-functions, we occasionally use the traditional $\sum_{x : A} B(x)$ and
-$\prod_{x:A} B(x)$ for emphasis, and the
-abbreviations $A \times B$ and $A \to B$ for non-dependent pair and
-function types.
-\todo{implicit quantification?}
-% Also,
-% to reduce clutter, we sometimes make use of implicit quantification:
-% free type variables in a type---like $A$ and $B$ in $A \times (B \to
-% \N)$---are implicitly universally quantified, like $(A : \Type) \to (B
-% : \Type) \to A \times (B \to \N)$.
+Although Agda notation~\cite{Agda} is mostly used for dependent pairs
+and functions, we occasionally use the traditional notations $\sum_{x
+  : A} B(x)$ and $\prod_{x:A} B(x)$ (instead of $(x:A) \times B(x)$
+and $(x:A) \to B(x)$, respectively) for emphasis. As usual, the
+abbreviations $A \times B$ and $A \to B$ are used for non-dependent
+(\ie when $x$ does not appear free in $B$) pair and function types,
+respectively . \later{implicit quantification? Do we need this? Also,
+  to reduce clutter, we sometimes make use of implicit quantification:
+  free type variables in a type---like $A$ and $B$ in $A \times (B \to
+  \N)$---are implicitly universally quantified, like $(A : \Type) \to
+  (B : \Type) \to A \times (B \to \N)$.  }
 
-The type of \term{equivalences} between $A$ and $B$, written $A \iso
-B$, is definable in HoTT; intuitively, an equivalence is a pair of
-inverse functions $f : A \to B$ and $g : B \to A$.\footnote{The
-  precise details are more subtle \cite[chap.  4]{hottbook}, but
-  unimportant for our purposes.}  We overload the notations $\id$ and
-$\comp$ to denote the identity equivalence and equivalence composition
-respectively; we also allow equivalences of type $A \iso B$ to be
-implicitly used as functions $A \to B$ where it does not cause
-confusion.  We use the notation $\mkIso$ for constructing equivalences
-from a pair of functions. That is, if $f : A \to B$ and $g : B \to A$
-are inverse, then $f \mkIso g : A \iso B$; the proof that $f$ and $g$
-are inverse is left implicit. \todo{is this $\mkIso$ needed?}
+\paragraph{Equality}
+
+HoTT distinguishes between two different types of equality:
+\later{reference ``On the meanings of the logical constants'' or some
+  other suitable thing talking about judgments vs propositions?}
+\begin{itemize}
+\item \term{Judgmental} equality, denoted $x \equiv y$, is expressed
+  as part of the system's definition, and encompasses things like
+  basic rules of computation. For example, the application of a lambda
+  to an argument is judgmentally equal to its $\beta$-reduction.
+  Judgmental equality is reflexive, symmetric, and transitive as one
+  would expect.  Judgmental equality is a meta-property of the system;
+  it is not possible to reason about or to prove judgmental equalities
+  internally to HoTT.
+\item \term{Propositional} equality.  Given $x, y : A$, we write $x
+  =_A y$ for the proposition that $x$ and $y$ are equal (at the type
+  $A$).  The $A$ subscript may also be omitted, $x = y$, when it is
+  clear from the context. Unlike judgmental equality, where $x \equiv
+  y$ is a \term{judgment}, the propositional equality $x = y$ is a
+  \emph{type} whose inhabitants are evidence or \emph{proofs} of the
+  equality of $A$ and $B$.  Thus propositional equalities can be
+  constructed and reasoned about \emph{within} HoTT.  Inhabitants of
+  $x = y$ are often called \term{paths} from $x$ to $y$; the
+  intuition, taken from homotopy theory, is to think of paths between
+  points in a topological space.
+
+  One of the most interesting aspects of HoTT is that it is possible
+  to have (nontrivial) higher-order paths, \ie paths between paths,
+  paths between paths between paths, and so on.
+\end{itemize}
 
 The structure of HoTT guarantees that functions are always functorial with
 respect to equality. That is, if $e : x = y$ is a witness of equality between
@@ -125,35 +156,74 @@ $P(x) \to P(y)$ for any type family $P$, called the \term{transport} of $P(x)$
 along $e$ and denoted $\transport{P}{e}$, or simply $e_*$ when $P$ is clear
 from context.
 
-HoTT includes the \emph{univalence axiom} which states that an
-equivalence $A \iso B$ can be converted to the propositional equality
-$A = B$ (and vice versa).  This axiom formally encodes
-the mathematical practice of treating isomorphic things as
-identical.  In other words, $A = B$ does not mean that $A$ and $B$ are
-identical, but that they can be used interchangeably---and moreover,
-interchanging them may require some work, computationally speaking.
-Thus an equality $e : A = B$ can have nontrivial computational
-content.
+\paragraph{Equivalence and univalence}
 
-As of yet, univalence has no direct computational interpretation
-\todo{Need to refine this---apparently some good progress being made
-  here with ``cubical sets''}, so using it to give a computational
-interpretation of species may seem suspect. Note, however, that
-\mbox{$\transport{X \mapsto X}{\ua(f)} = f$}, where $\ua : (A \iso B)
-\to (A = B)$ denotes (one direction of) the univalence axiom. So
-univalence introduces no computational problems as long as
-applications of $\ua$ are only ultimately used via
-$\mathsf{transport}$.  Univalence allows a convenient shorthand:
+There is a third sort of equality, namely, \term{equivalence}.  An
+equivalence between $A$ and $B$, written $A \iso B$ is (essentially) a
+pair of functions $f : A \to B$ and $g : B \to A$, along with a proof
+that $f$ and $g$ are inverse.\footnote{The precise details are more
+  subtle \cite[chap.  4]{hottbook}, but unimportant for the purposes
+  of this work.}  $\id$ and $\comp$ denote the identity equivalence
+and equivalence composition, respectively; equivalences of type $A
+\iso B$ can be used as functions $A \to B$ where it does not cause
+confusion.
+% We use the notation $\mkIso$ for
+% constructing equivalences from a pair of functions. That is, if $f : A
+% \to B$ and $g : B \to A$ are inverse, then $f \mkIso g : A \iso B$;
+% the proof that $f$ and $g$ are inverse is left implicit. \todo{is this
+%   $\mkIso$ needed?}
+
+HoTT's other novel feature is the \emph{univalence axiom}, which
+states that equivalence is equivalent to propositional equality, that
+is, $(A \iso B) \iso (A = B)$. Converting from a propositional
+equality to an equivalence is not hard; the interesting direction is
+$\ua : (A \iso B) \to (A = B)$, which formally encodes the
+\emph{principle of equivalence}~\cite{principle-of-equivalence},
+namely, that sensible properties of mathematical objects must be
+invariant under equivalence.
+
+Propositional equality thus takes on a richer meaning.  In particular,
+$A = B$ does not mean that $A$ and $B$ are \emph{identical}, but that
+they can be used interchangeably---and moreover, interchanging them
+may require some work, computationally speaking.  Thus an equality $e
+: A = B$ can have nontrivial computational content, particularly if
+it is the result of applying $\ua$ to some equivalence.
+
+As of yet, univalence has no direct computational
+interpretation\footnote{Though as of this writing there seems to be
+  some good progress on this front via the theory of \term{cubical
+    sets}~\cite{cubical-sets}.}, so using it to give a computational
+interpretation of species may seem suspect. Note, however, that $\ua :
+(A \iso B) \to (A = B)$ satisfies the $\beta$-like law
+\mbox{$\transport{X \mapsto X}{\ua(f)} = f$}. So univalence introduces
+no computational problems as long as applications of $\ua$ are only
+ultimately used via $\mathsf{transport}$.  In particular, sticking to
+this restricted usage of $\ua$ still allows a convenient shorthand:
 packaging up an equivalence into a path and then transporting along
 that path results in ``automatically'' inserting the equivalence and
-its inverse in all the necessary places throughout the term.
+its inverse in all the necessary places throughout the
+term. \todo{Example?}
 
-\todo{Mere propositions, sets. Truncation. Recursion principle for
-  truncation, intuition. }  The propositional truncation of a type
-``squashes'' the type down to a mere proposition, by adding a path
-between every pair of inhabitants. Intuitively, this can be thought of
-as ``forgetting'' all information contained in the inhabitants other
-than their existence, though the reality is more subtle.
+\paragraph{Propositions, sets, and truncation}
+
+\todo{(Mere) propositions ($(-1)$-types). Sets ($0$-types).}
+
+The last important concept from HoTT to touch upon is
+\term{propositional truncation}.  If $A$ is a type, then $\ptrunc{A}$
+is also a type, with an introduction form $\ptruncI - : A \to
+\ptrunc{A}$ that allows injecting values of $A$ into $\ptrunc{A}$.
+The crucial difference is that in addition to being able to construct
+\emph{values} of $\ptrunc A$, there is also a way to construct
+\emph{paths} between them: in particular, for any two values $x, y :
+A$, there is a path $\ptruncI x =_{\ptrunc A} \ptruncI y$ (regardless
+of whether there are any paths $x =_A y$).  Thus, $\ptrunc A$ is a
+copy of $A$ but with all values considered equal.  The type $\ptrunc
+A$ may be thought of as representing the proposition ``$A$ is
+inhabited''; if we have an inhabitant of $\ptrunc A$, we know there
+must exist some inhabitant of $A$, but without necessarily being able
+to tell what it is.
+
+\todo{Recursion principle for truncation.}
 
 \section{Category theory}
 \label{sec:category-theory}
