@@ -352,7 +352,7 @@ thought of as precisely those labelled by the canonical label set $[n]$.
   with these definitions, because their first instinct is to think of a
   functor $\B \to \Set$ from a \emph{computational} point of view: \ie
   a species $F : \B \to \Set$, given some set of labels $L \in \B$,
-  \emph{computes} some family of structures having those labels.
+  \emph{computes} some family of shapes having those labels.
 
   However, I find this intuition unhelpful, since it places too much
   emphasis on analyzing the ``input'' set of labels, making case
@@ -837,15 +837,25 @@ $\Bag$ becomes clear:
   yielding $\singleton$, that is, $\Bag\ L = \singleton$.
 \end{defn}
 
+\begin{figure}
+  \centering
+  \begin{diagram}[width=100]
+import SpeciesDiagrams
+
+dia = tag 0 (decoratePath (pentagon 1) (map labT [0..4]))
+    # frame 0.5
+  \end{diagram}
+  \caption{The unique $\Bag\ 5$ shape}
+  \label{fig:bag}
+\end{figure}
+
 \begin{rem}
   $\Bag$ is called the \term{species of sets} since there is exactly
-  one structure on any set of labels, which can be thought of as the
-  set of labels itself, with no additional structure.  In fact, since
-  all one-element sets are isomorphic, we may define $\Bag\ L =
-  \{L\}$.
+  one shape on any set of labels, which can be thought of as the set
+  of labels itself, with no additional structure.  In
+  fact, since all one-element sets are isomorphic, we may define
+  $\Bag\ L = \{L\}$ (\pref{fig:bag}).
 \end{rem}
-
-\todo{Picture for $\Bag$.}
 
 \begin{prop}
   $(\times, \Bag)$ is a symmetric monoid on $\Spe$.
@@ -910,11 +920,17 @@ later. First, however, we consider some examples.
   $\disc{\cat{2}} \to \Set$ is a pair of sets.  In this case, taking
   the lifted sum $F + G$ of two functors $F,G : \disc{\cat{2}} \to
   \Set$ corresponds to summing the pairs elementwise, that is, $(S_1,
-  T_1) + (S_2, T_2) = (S_1 \uplus S_2, T_1 \uplus T_2)$.  Another way of
-  thinking of a functor $\disc{\cat{2}} \to \Set$ is as a single
-  collection of elements where each element is tagged with one of two
-  tags (``left'' or ``right'', $0$ or $1$, \etc).  From this point of
-  view, a lifted sum can be thought of as a tag-preserving disjoint union.
+  T_1) + (S_2, T_2) = (S_1 \uplus S_2, T_1 \uplus T_2)$.
+
+  \todo{Should this go in the preliminaries?} \todo{Needs a proof and
+    some pictures.}
+  When $X$ is a discrete category, the functor category $[X,\Set]$ is
+  equivalent to the slice category $\Set / X$, which gives another way
+  to think of a functor $\disc{\cat{2}} \to \Set$, namely, as a single
+  set of elements $S$ together with a function $S \to \disc{\cat{2}}$
+  which ``tags'' each element with one of two tags (``left'' or
+  ``right'', $0$ or $1$, \etc).  From this point of view, a lifted sum
+  can be thought of as a tag-preserving disjoint union.
 
   \todo{picture?}
 \end{ex}
@@ -926,10 +942,14 @@ later. First, however, we consider some examples.
   $[S_0, S_1, S_2, \dots]$.  One way to think of this is as a
   collection of $\Str$-objects, one for each natural number
   \emph{size}.  For example, if $\Str = \Set$ then the sequence of
-  sets $[S_0, S_1, S_2, \dots]$ can be thought of as a single
-  collection of elements with each element tagged by its size. (This
-  ``size'' intuition is actually fairly arbitrary at this point---the
-  objects of $\disc{\N}$ are in some sense just an arbitrary countably
+  sets $[S_0, S_1, S_2, \dots]$ is \dots
+
+  \todo{working here}
+  Again, $[\disc{\N}, \Set] \cong \Set/\disc{\N}$, so functors
+  $\disc{\N} \to \Set$ can also be thought of as a single set
+  where each element has been tagged by its size. (This ``size''
+  intuition is actually fairly arbitrary at this point---the objects
+  of $\disc{\N}$ are in some sense just an arbitrary countably
   infinite set of labels, and there is no particular reason they
   should represent ``sizes''.  However, as we will see, this intuition
   carries through well to subsequent examples.)
@@ -943,7 +963,6 @@ later. First, however, we consider some examples.
   size-$n$ things into one collection of size-$n$ things---then
   lifting $\oplus$ combines entire size-indexed collections in a
   size-preserving way.
-  \todo{picture}
 \end{ex}
 
 \begin{ex}
