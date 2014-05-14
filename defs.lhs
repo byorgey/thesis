@@ -254,9 +254,8 @@
 \newcategory{Spe}     % species
 \newcategory{CSpe}    % constructive species
 \newcategory{Hask}    % Haskell types and functions
-
-\providecommand{\B}{\bbb{B}}
-\renewcommand{\P}{\bbb{P}}
+\newcategory{B}
+\newcategory{P}
 
 \providecommand{\L}{}
 \renewcommand{\L}{\bbb{L}}     % category of linear orderings

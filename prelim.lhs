@@ -5,8 +5,30 @@
 \chapter{Preliminaries}
 \label{chap:prelim}
 
-\todo{Describe some big ideas here.  Give some instruction for how to
-  use this chapter.}
+The main content of this dissertation builds upon a great deal of
+mathematical formalism, particularly from set theory, category theory,
+and type theory.  To say that this chapter attempts to make the
+dissertation ``self-contained'' would be ludicrous, not to mention
+disheartening to those readers who find there are still gaps between
+this document's assumptions and their background knowledge.  Rather,
+the purpose of this chapter is to provide a brief overview of the
+necessary technical background, giving definitions, important
+intuitions, and references for further reading.  Readers who merely
+need to fill in a few gaps may find such brief treatments sufficient;
+it is hoped that readers with less background will find it a useful
+framework and source of intuition for furthering their own learning,
+making use of the provided references to read about things not covered
+here.
+
+The material in \pref{sec:basic}, \pref{sec:HoTT}, and
+\pref{sec:category-theory}, though by no means basic, is fairly
+standard, so readers with a good background in the subjects covered
+may safely skip them without too many surprises.  Even those readers
+who are not familiar with some of the material may find it more
+productive to begin reading \pref{chap:species} and refer back to this
+chapter as needed. On the other hand, the material in \pref{sec:AC}
+and \pref{sec:ct-hott} is somewhat less standard, and it is hoped that
+all readers, even experts, will gain something from them.
 
 \todo{Give some backward references from the rest of the text to
   relevant descriptions here.}
@@ -41,7 +63,7 @@ Metavariable conventions used throughout this dissertation include:
 \item Blackboard bold metavariables (\eg $\C$, $\D$, $\E$) range over
   categories.
 \item Names of specific categories use boldface ($\Set$, $\Cat$,
-  $\Spe$).
+  $\Spe$, $\B$, $\P$).
 \item Names of certain type-theoretic constructs or categories use a
   calligraphic font ($\Type$, $\BT$, $\PT$).
 \item Metavariables $K$, $L$ range over sets of labels (or, more generally, label
@@ -54,6 +76,8 @@ Metavariable conventions used throughout this dissertation include:
 
 \section{Homotopy type theory}
 \label{sec:HoTT}
+
+\todo{Make some paragraph headings}
 
 \todo{Give a general introduction to homotopy type theory. Say why it
   makes sense to work in it.}
