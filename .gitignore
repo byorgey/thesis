@@ -12,6 +12,7 @@ Shake
 *.lot
 *.out
 *.thm
+*.errors
 
 *.tex
 !thesis.tex
@@ -19,6 +20,9 @@ Shake
 !acks.tex
 thesis.pdf
 
+Test
+Test.hs
+Test.pdf
 
 .diagrams_cache
 /diagrams/*
