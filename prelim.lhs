@@ -157,6 +157,8 @@ terminal and initial objects, products, and coproducts. \todo{Link to
 \todo{Assume limits and colimits too? They are not quite so ``basic''
   but there's lots of good material for learning about them.}
 
+\paragraph{Standard categories}
+
 We will make use of the following standard categories:
 \begin{itemize}
 \item $\cat{1} = \bullet$, the trivial category with a single object
@@ -179,6 +181,8 @@ We will make use of the following standard categories:
   the terminal object in $\Cat$.
 \end{itemize}
 
+\paragraph{Bifunctors}
+
 The concept of \term{bifunctors} can be formalized as a two-argument
 analogue of functors; bifunctors thus map from \emph{two} categories
 to a single category.  However, the obvious definition of a bifunctor
@@ -197,6 +201,8 @@ monoidal categories; see~\pref{sec:monoids}.
   composed of functors from groupoids; then functoriality comes for
   free too.  Later, can make connection to homotopy type theory.}
 
+\paragraph{Natural transformations}
+
 The notation $\eta : \all {A} {F A \to G A}$ will often be used to
 denote a natural transformation $\eta : \nt F G$; this notation meshes
 well with the intuition of Haskell programmers, since naturality
@@ -208,22 +214,49 @@ expressions involve $A$ more than once or in awkward positions---for
 example, $\all {A} {A \otimes A \to \C(B, H A)}$. (As Haskell
 programmers are well aware, writing everything in point-free style
 does not necessarily improve readability.)  This notation can be
-rigorously justified using \emph{ends}~\pref{sec:ends}.
+rigorously justified using \emph{ends} (\pref{sec:ends}).
+
+\paragraph{Hom sets}
 
 In a similar vein, the set of morphisms between objects $A$ and $B$ in
 a category $\C$ is usually denoted $\C(A,B)$ or
 $\mathrm{Hom}_\C(A,B)$, but we will also occasionally use the notation
 $A \to B$, or $A \to_\C B$ when the category $\C$ should be explicitly
-indicated.  The same notation will be used for exponentials and
-powers.  While this certainly has the potential to introduce ambiguity
-and confusion, it has the decided benefit of playing to the intuition
-of Haskell programmers, and often makes the structure of calculations
-more apparent.  For example, \[ \eend{b} H b^{\C(a,G b)} \] can be
-instead written as the Haskell-like \[ \all b {(a \to G b) \to H
-  b}, \] where the end has been written using $\forall$, and both the
-hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.  It
-should be emphasized that this notation is perfectly rigorous, and not
-just an ``approximation'' in Haskell.
+indicated.  The same notation will be used for exponentials
+(\pref{sec:monoids}) and powers (\pref{sec:enriched}).  While this
+certainly has the potential to introduce ambiguity and confusion, it
+has the decided benefit of playing to the intuition of Haskell
+programmers, and often makes the structure of calculations more
+apparent.  For example, the traditional \[ \int_{b} H b^{\C(a,G b)} \]
+can be instead written as the Haskell-like \[ \eend{b} {(a \to G b)
+  \to H b}, \] where the end has been written using $\forall$, and
+both the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using
+$\to$.  It should be emphasized that this notation is perfectly
+rigorous, and not just an ``approximation'' in Haskell.
+
+\paragraph{Slice categories}
+
+Given a category $\C$ and an object $X \in \C$, the \term{slice
+  category} $\C/X$ has as its objects diagrams $C
+\stackrel{f}{\longrightarrow} X$, that is, pairs $(C,f)$ where $C \in
+\C$ and $f$ is a morphism from $C$ to $X$.  Morphisms $(C_1,f_1) \to
+(C_2,f_2)$ in $\C/X$ are morphisms $g : C_1 \to C_2$ of $\C$ which
+make the evident diagram commute:
+\[ \xymatrix{
+  C_1 \ar[rr]^g \ar[dr]_{f_1} && C_2 \ar[dl]^{f_2} \\
+  & X }
+\]
+A good intuition is to think of the morphism $f : C \to X$ as giving a
+``weight'' or ``label'' to $C$.  The slice category $\C/X$ thus
+represents objects of $\C$ ``weighted'' or ``labelled'' by $X$, with
+``weight/label-preserving maps'' as morphisms.  For example, objects
+of $\Set/\R$ are sets where each element has been assigned a real
+number weight; morphisms in $\Set/\R$ are weight-preserving functions.
+
+% There is also a dual notion of \term{coslice} categories $X/\C$, but
+% they are not needed in this dissertation.
+
+\paragraph{Functor categories}
 
 Given two categories $\C$ and $\D$, the collection of functors from
 $\C$ to $\D$ forms a category (a \term{functor category}), with
@@ -235,6 +268,21 @@ carries over to functor categories; for example, $\C^{\D + \E} \iso
 so on. (In fact, this is not specific to functor categories; the same
 sorts of isomorphisms hold in any bicartesian closed category.)
 
+When $X$ is a discrete category, the functor category $\Set^X$ is
+equivalent to the slice category $\Set / X$. In particular, a functor
+$X \to \Set$ is an $X$-indexed collection of sets, whereas an object
+of $\Set / X$ is a set $S$ with a function $f : S \to X$ labelling
+each element of $S$ by some $x \in X$. Taking the preimage or
+\term{fiber} $f^{-1}(x)$ of each $x \in X$ recovers an $X$-indexed
+collection of sets; conversely, given an $X$-indexed collection of
+sets we may take their disjoint union and construct a function
+assigning each element of the disjoint union its corresponding element
+of $X$.
+
+\todo{picture?}
+
+\paragraph{Equivalence of categories}
+
 Two categories $\C$ and $\D$ are said to be \emph{equivalent} if there
 are functors $F : \C \to \D$ and $G : \D \to \C$ such that both $FG$
 and $GF$ are naturally isomorphic to the identity functor.  Note that
@@ -245,31 +293,33 @@ functor---is typically too strong to be of use.  Sometimes an
 alternate definition is given, where two categories are equivalent if
 there exists a functor $F : \C \to \D$ which is full and faithful (\ie
 a bijection on each hom-set) as well as \term{essentially surjective},
-that is, for every object $D \in \D$ there is some object $C \in \C$
-such that $F(C) \iso D$.  However, this definition is equivalent to
-the definition given above---that is, given such an $F$ we can
+that is, for every object $D \in \D$ there exists some object $C \in
+\C$ such that $F(C) \cong D$.  However, this definition is equivalent
+to the definition given above---that is, given such an $F$ we can
 construct a suitable $G$---only by using the axiom of choice; see
 \pref{sec:AC} for a much fuller discussion.
 
+\paragraph{Adjunctions}
+
 The topic of \term{adjunctions} is much too large to cover here; see
 \todo{references}.  For the purposes of this dissertation, the most
-important aspect of the definition to keep in mind is that a functor
-$F : \C \to \D$ is left adjoint to $G : \D \to \C$ (and $G$ right
-adjoint to $F$), denoted $F \adj G$, if and only if \[ \D(F A, B) \iso
-\C(A, G B), \] that is, if there is some natural isomorphism
-matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
-\to G B$ in $\C$.
+important form of the definition to keep in mind is that a functor $F
+: \C \to \D$ is left adjoint to $G : \D \to \C$ (and $G$ right adjoint
+to $F$), denoted $F \adj G$, if and only if \[ \D(F A, B) \iso \C(A, G
+B), \] that is, if there is some natural isomorphism matching
+morphisms $F A \to B$ in the category $\D$ with morphisms $A \to G B$
+in $\C$.
 
-\todo{Enriched categories.}
+\todo{give an example or two}
 
 \subsection{Monoids}
 \label{sec:monoids}
 
-Monoids, monoidal categories.  Note we will pretend all monoidal
-categories are strict (justify).  Products and coproducts. Monoidal
-closed. Cartesian closed.
+Monoids, monoidal categories. Products and coproducts. Monoidal
+closed. Cartesian closed. \bay{We do \emph{not} pretend all monoidal
+  categories are strict since that requires AC!}
 
-\bay{How can we say that we are using ``the same'' ``product-like''
+\later{How can we say that we are using ``the same'' ``product-like''
   monoidal structure in all these different categories?  Are they
   related by monoidal functors?}
 
@@ -434,6 +484,11 @@ true:
   The fact that $1$ is an identity for $\otimes^*$, associativity, and
   the coherence conditions all follow readily from the definitions.
 \end{proof}
+
+\subsection{Enriched categories}
+\label{sec:enriched}
+
+\todo{Write me.  Basic definitions; powers and copowers.}
 
 \section{The Axiom of Choice (and how to avoid it)}
 \label{sec:AC}
@@ -944,6 +999,8 @@ operations and properties of anafunctors.
 \subsection{Finiteness}
 \label{sec:finiteness}
 
+\todo{Need to figure out how to rework this section.}
+
 Recall that $\B$ denotes the groupoid of finite sets and bijections,
 and $\P$ the groupoid of natural numbers and permutations.  We begin
 by discussing the relationship between $\B$ and $\P$, which is more
@@ -1245,3 +1302,9 @@ an anaequivalence between $\PT$ and $\BT$.
   automatically an isomorphism.
 \end{proof}
 \end{prop}
+
+\section{Category theory in HoTT}
+\label{sec:ct-hott}
+
+\todo{Basic overview of relevant material from Chapter 9 of the HoTT
+  book.}
