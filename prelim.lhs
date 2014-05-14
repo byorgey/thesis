@@ -75,14 +75,16 @@ Metavariable conventions used throughout this dissertation include:
 \label{sec:HoTT}
 
 \bay{\term{Homotopy Type Theory} (HoTT).  Arose out of Voevodsky's
-  Univalent Foundations program.  There's way too much
-  to cover here, interested readers should consult the HoTT book.
-  HoTT is the right framework in which to do this work because it
-  takes isomorphism and equality very seriously.  Specific benefits,
-  to be explored later: coends are just sigma-types, i.e. no need to fiddle
-  with quotients; }
-\todo{Give a general introduction to
-    homotopy type theory. Say why it makes sense to work in it.}
+  Univalent Foundations program.  There's way too much to cover here,
+  interested readers should consult the HoTT book.  HoTT is the right
+  framework in which to do this work because it takes isomorphism and
+  equality very seriously.  Specific benefits, to be explored later:
+  convenient transport along equivalences (coherent framework for
+  making this formal); coends are just sigma-types, i.e. no need to
+  fiddle with quotients; proptrunc is important tool for talking about
+  finiteness (and other things?); solid foundation for CT without AC}
+\todo{Give a general introduction to homotopy type theory. Say why it
+  makes sense to work in it.}
 
 \paragraph{Terms and types}
 
