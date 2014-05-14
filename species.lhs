@@ -369,9 +369,13 @@ thought of as precisely those labelled by the canonical label set $[n]$.
   the set of labels contained in them (indeed, down this path lies the
   notion of \term{containers} \citep{abbott_categories_2003,
     abbott_quotient, alti:cont-tcs, alti:lics09}).  Species can be
-  seen as dual to these shapes-to-labels mappings, giving the
-  \term{fiber} of each label set.  Both formulations have their
-  strengths and weaknesses; a fuller discussion can be found in
+  seen as roughly dual to these shapes-to-labels mappings, giving the
+  \term{fiber} of each label set.  This is parallel to the equivalence
+  between the functor category $\Set^\N$ and the slice category
+  $\Set/\N$~(see the discussion under functor categories in
+  \pref{sec:ct-fundamentals}), though the details are more subtle
+  since $\B$ is not discrete.  Both formulations have their strengths
+  and weaknesses; a fuller discussion can be found in
   \pref{sec:related-work}. \todo{Make sure this reference gets filled
     in.}
 \end{rem}
@@ -1962,6 +1966,7 @@ $F$-structure with one particular distinguished element.
 
   \begin{figure}
     \centering
+    \todo{FIX ME}
     \begin{diagram}[width=250]
 import SpeciesDiagrams
 

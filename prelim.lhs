@@ -155,7 +155,8 @@ terminal and initial objects, products, and coproducts. \todo{Link to
   further reading about these things.}
 
 \todo{Assume limits and colimits too? They are not quite so ``basic''
-  but there's lots of good material for learning about them.}
+  but there's lots of good material for learning about them.  Should
+  also mention pushouts and pullbacks somewhere.}
 
 \paragraph{Standard categories}
 
@@ -214,7 +215,7 @@ expressions involve $A$ more than once or in awkward positions---for
 example, $\all {A} {A \otimes A \to \C(B, H A)}$. (As Haskell
 programmers are well aware, writing everything in point-free style
 does not necessarily improve readability.)  This notation can be
-rigorously justified using \emph{ends} (\pref{sec:ends}).
+rigorously justified using \emph{ends} (\pref{sec:ends-coends}).
 
 \paragraph{Hom sets}
 
@@ -268,26 +269,22 @@ carries over to functor categories; for example, $\C^{\D + \E} \iso
 so on. (In fact, this is not specific to functor categories; the same
 sorts of isomorphisms hold in any bicartesian closed category.)
 
-When $X$ is a discrete category, the functor category $\Set^X$ is
-equivalent to the slice category $\Set / X$. In particular, a functor
-$X \to \Set$ is an $X$-indexed collection of sets, whereas an object
-of $\Set / X$ is a set $S$ with a function $f : S \to X$ labelling
-each element of $S$ by some $x \in X$. Taking the preimage or
-\term{fiber} $f^{-1}(x)$ of each $x \in X$ recovers an $X$-indexed
-collection of sets; conversely, given an $X$-indexed collection of
-sets we may take their disjoint union and construct a function
-assigning each element of the disjoint union its corresponding element
-of $X$. \pref{fig:discrete-slice} illustrates the situation for $X =
-\{\mathrm{red}, \mathrm{blue}, \mathrm{green}, \mathrm{purple}\}$.
-Following the arrows from bottom to top, the diagram represents a
-functor $X \to \Set$, with each element of $X$ mapped to a set.
-Following the arrows from top to bottom, the diagram represents an
-object in $\Set/X$ consisting of a set of 12 elements and an
-assignment of a color to each.
-
-\todo{Can we generalize beyond $\Set$?  What if $X$ is not discrete?}
-
-\todo{Refer back to this from discussion of species definition.}
+Given a set $X$, the functor category $\Set^X$ (considering $X$ as a
+discrete category) is equivalent to the slice category $\Set / X$. In
+particular, a functor $X \to \Set$ is an $X$-indexed collection of
+sets, whereas an object of $\Set / X$ is a set $S$ with a function $f
+: S \to X$ labelling each element of $S$ by some $x \in X$. Taking the
+preimage or \term{fiber} $f^{-1}(x)$ of each $x \in X$ recovers an
+$X$-indexed collection of sets; conversely, given an $X$-indexed
+collection of sets we may take their disjoint union and construct a
+function assigning each element of the disjoint union its
+corresponding element of $X$. \pref{fig:discrete-slice} illustrates
+the situation for $X = \{\mathrm{red}, \mathrm{blue}, \mathrm{green},
+\mathrm{purple}\}$.  Following the arrows from bottom to top, the
+diagram represents a functor $X \to \Set$, with each element of $X$
+mapped to a set.  Following the arrows from top to bottom, the diagram
+represents an object in $\Set/X$ consisting of a set of 12 elements
+and an assignment of a color to each.
 
 \begin{figure}
   \centering
@@ -370,8 +367,8 @@ closed. Cartesian closed. \bay{We do \emph{not} pretend all monoidal
   monoidal structure in all these different categories?  Are they
   related by monoidal functors?}
 
-\subsection{Ends, coends, and parametricity}
-\label{sec:parametricity}
+\subsection{Ends, coends, and Yoneda}
+\label{sec:ends-coends}
 
 \todo{Define/give intuition for ends and coends.  (Co)ends as
 (co)equializers.  Talk about connection between natural
@@ -382,8 +379,17 @@ et al.}
 
 \todo{Use notation $\forall$ and $\exists$ for ends and coends?}
 
-\subsection{Coends}
-\label{sec:coends}
+\paragraph{Ends}
+
+\todo{natural transformations as ends.  Justifies $\forall$ notation.}
+
+\paragraph{The Yoneda lemma}
+
+\todo{Yoneda.}
+
+\paragraph{Coends}
+
+\todo{fix notation}
 
 Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
 $T$, denoted $\int^C T(C,C)$ or just $\int^\C T$, is an object of $\D$
@@ -421,11 +427,6 @@ The definition of a coend can be made precise in full generality
     suitable assumptions it is also equivalent to an iterated coend
     (cite MacLane).}
 \end{rem}
-
-\subsection{Ends}
-\label{sec:ends}
-
-\todo{natural transformations as ends.  Justifies $\forall$ notation.}
 
 \subsection{Groupoids}
 \label{sec:groupoids}
