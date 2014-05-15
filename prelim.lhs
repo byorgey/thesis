@@ -74,17 +74,58 @@ Metavariable conventions used throughout this dissertation include:
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
-\bay{\term{Homotopy Type Theory} (HoTT).  Arose out of Voevodsky's
-  Univalent Foundations program.  There's way too much to cover here,
-  interested readers should consult the HoTT book.  HoTT is the right
-  framework in which to do this work because it takes isomorphism and
-  equality very seriously.  Specific benefits, to be explored later:
-  convenient transport along equivalences (coherent framework for
-  making this formal); coends are just sigma-types, i.e. no need to
-  fiddle with quotients; proptrunc is important tool for talking about
-  finiteness (and other things?); solid foundation for CT without AC}
-\todo{Give a general introduction to homotopy type theory. Say why it
-  makes sense to work in it.}
+\term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
+type theory~(MLTT)~\citep{mltt} arising out of Vladimir Voevodsky's
+Univalent Foundations program.  There is not space to give a full
+description here; in any case, given the existence of the excellent
+HoTT Book~\citep{hott-book}, such a description would be superfluous
+anyway.  Instead, it will suffice to give a brief description of the
+relevant parts of the theory, and explain the particular benefits of
+carrying out this work in the context of HoTT.
+
+Homotopy type theory, I will argue, is the \emph{right} framework in
+which to carry out the work in this dissertation.  Intuitively, this
+is because the theory of species is based centrally around groupoids
+and isomorphism---and these are topics central to homotopy type theory
+as well.  In a sense, HoTT is what results when one begins with
+Martin-L\"of type theory (MLTT) and then takes issues of equality and
+isomorphism---and in particular the principle of equivalence---very
+seriously.
+
+In more detail, some of the specific ways that the use of HoTT
+benefits this work, to be explored in more detail later, include:
+\begin{itemize}
+\item HoTT gives a convenient framework for making formal the idea of
+  ``transport'': using an isomorphism $\sigma : L_1 \bij L_2$ to
+  functorially convert objects built from $L_1$ to ones built from
+  $L_2$.  This is a fundamental operation in HoTT, and is also central
+  to the definition of species (\pref{sec:species-definition}).  In
+  fact, when constructing species with HoTT as a foundation, transport
+  simply comes ``for free''---in contrast to using set theory as a
+  foundation, in which case transport must be tediously defined (and
+  proved correct) for each new species.
+\item HoTT's rich notions of equality make it easy to define various
+  sorts of \emph{quotient types} which would be tedious to define in
+  MLTT.  In particular, this manifests in the fact that \term{coends}
+  in HoTT are just $\Sigma$-types (\pref{sec:ct-hott}).
+\item \term{Propositional truncation} (explained below) is an
+  important tool for properly modelling concepts from classical
+  mathematics in a constructive setting.  In particular we use it to
+  model the concept of \emph{finiteness} (\pref{sec:finiteness}).
+\item Homotopy type theory allows doing category theory without using
+  the Axiom of Choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
+  important in a constructive or computational setting.
+\end{itemize}
+
+Although not the main goal of this work, I hope that it can serve
+as a good example of the ``practical'' application of HoTT and its
+benefits for programming.  Much of the work on HoTT has so far been
+aimed at mathematicians---appropriately so, since they need more
+convincing---but new foundations for constructive mathematics must
+almost by necessity have profound implications for the foundations of
+programming as well~\cite{martin-lof-constructive-programming}.
+
+We begin our brief tour of HoTT with its syntax.
 
 \paragraph{Terms and types}
 
@@ -113,11 +154,11 @@ and functions, we occasionally use the traditional notations $\sum_{x
 and $(x:A) \to B(x)$, respectively) for emphasis. As usual, the
 abbreviations $A \times B$ and $A \to B$ are used for non-dependent
 (\ie when $x$ does not appear free in $B$) pair and function types,
-respectively . \later{implicit quantification? Do we need this? Also,
+respectively. \later{implicit quantification? Do we need this? Also,
   to reduce clutter, we sometimes make use of implicit quantification:
   free type variables in a type---like $A$ and $B$ in $A \times (B \to
   \N)$---are implicitly universally quantified, like $(A : \Type) \to
-  (B : \Type) \to A \times (B \to \N)$.  }
+  (B : \Type) \to A \times (B \to \N)$.}
 
 \paragraph{Equality}
 
@@ -125,13 +166,14 @@ HoTT distinguishes between two different types of equality:
 \later{reference ``On the meanings of the logical constants'' or some
   other suitable thing talking about judgments vs propositions?}
 \begin{itemize}
-\item \term{Judgmental} equality, denoted $x \equiv y$, is expressed
-  as part of the system's definition, and encompasses things like
-  basic rules of computation. For example, the application of a lambda
-  to an argument is judgmentally equal to its $\beta$-reduction.
-  Judgmental equality is reflexive, symmetric, and transitive as one
-  would expect.  Judgmental equality is a meta-property of the system;
-  it is not possible to reason about or to prove judgmental equalities
+\item \term{Judgmental} equality, denoted $x \equiv y$, is defined via
+  a collection of judgments stating when things are equal to one
+  another, and encompasses things like basic rules of computation. For
+  example, the application of a lambda term to an argument is
+  judgmentally equal to its $\beta$-reduction.  Judgmental equality is
+  reflexive, symmetric, and transitive as one would expect.
+  Judgmental equality is a meta-property of the system; it is not
+  possible to reason about or to prove judgmental equalities
   internally to HoTT.
 \item \term{Propositional} equality.  Given $x, y : A$, we write $x
   =_A y$ for the proposition that $x$ and $y$ are equal (at the type
@@ -150,25 +192,25 @@ HoTT distinguishes between two different types of equality:
   paths between paths between paths, and so on.
 \end{itemize}
 
-The structure of HoTT guarantees that functions are always functorial with
-respect to equality. That is, if $e : x = y$ is a witness of equality between
-$x$ and $y$ (informally, a ``path'' between $x$ and $y$), and $f$ is a
-function of an appropriate type, then $f(x) = f(y)$.  Given $e$ we also have
-$P(x) \to P(y)$ for any type family $P$, called the \term{transport} of $P(x)$
-along $e$ and denoted $\transport{P}{e}$, or simply $e_*$ when $P$ is clear
-from context.
+The structure of HoTT guarantees that functions are always functorial
+with respect to propositional equality. That is, if $e : x = y$ is a
+path between $x$ and $y$, and $f$ is a function of an appropriate
+type, then it is possible to construct a proof that $f(x) = f(y)$.
+Given $e : x = y$ we also have $P(x) \to P(y)$ for any type family
+$P$, called the \term{transport} of $P(x)$ along $e$ and denoted
+$\transport{P}{e}$, or simply $e_*$ when $P$ is clear from context.
 
 \paragraph{Equivalence and univalence}
 
-There is a third sort of equality, namely, \term{equivalence}.  An
-equivalence between $A$ and $B$, written $A \iso B$ is (essentially) a
-pair of functions $f : A \to B$ and $g : B \to A$, along with a proof
-that $f$ and $g$ are inverse.\footnote{The precise details are more
-  subtle \cite[chap.  4]{hottbook}, but unimportant for the purposes
-  of this work.}  $\id$ and $\comp$ denote the identity equivalence
-and equivalence composition, respectively; equivalences of type $A
-\iso B$ can be used as functions $A \to B$ where it does not cause
-confusion.
+There is also a third sort of equality, namely, \term{equivalence}.
+An equivalence between $A$ and $B$, written $A \iso B$ is
+(essentially) a pair of functions $f : A \to B$ and $g : B \to A$,
+along with a proof that $f$ and $g$ are inverse.\footnote{The precise
+  details are more subtle \cite[chap.  4]{hottbook}, but unimportant
+  for the purposes of this work.}  $\id$ and $\comp$ denote the
+identity equivalence and equivalence composition, respectively.  As a
+notational shortcut, equivalences of type $A \iso B$ can be used as
+functions $A \to B$ where it does not cause confusion.
 % We use the notation $\mkIso$ for
 % constructing equivalences from a pair of functions. That is, if $f : A
 % \to B$ and $g : B \to A$ are inverse, then $f \mkIso g : A \iso B$;
@@ -1452,3 +1494,4 @@ an anaequivalence between $\PT$ and $\BT$.
 
 \todo{Basic overview of relevant material from Chapter 9 of the HoTT
   book.}
+\todo{coends in HoTT.}
