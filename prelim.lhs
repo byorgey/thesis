@@ -246,7 +246,11 @@ this restricted usage of $\ua$ still allows a convenient shorthand:
 packaging up an equivalence into a path and then transporting along
 that path results in ``automatically'' inserting the equivalence and
 its inverse in all the necessary places throughout the
-term. \todo{Example?}
+term. For example, let $P(A) \defeq A \times (A \to B)$ and suppose $f
+: A \iso A'$, so $\ua f : A = A'$.  Then $\transport P {\ua(f)} : P(A)
+\to P(A')$, and in particular $\transport P {\ua(f)} \pair a g = \pair
+{f(a)}{g \comp f^{-1}}$, which can be derived mechanically by
+induction on the shape of $P$.
 
 \paragraph{Propositions, sets, and truncation}
 
