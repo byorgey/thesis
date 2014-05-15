@@ -265,11 +265,12 @@ The crucial difference is that in addition to being able to construct
 \emph{paths} between them: in particular, for any two values $x, y :
 A$, there is a path $\ptruncI x =_{\ptrunc A} \ptruncI y$ (regardless
 of whether there are any paths $x =_A y$).  Thus, $\ptrunc A$ is a
-copy of $A$ but with all values considered equal.  The type $\ptrunc
-A$ may be thought of as representing the proposition ``$A$ is
-inhabited''; if we have an inhabitant of $\ptrunc A$, we know there
-must exist some inhabitant of $A$, but without necessarily being able
-to tell what it is.
+copy of $A$ but with all values considered equal.  This is called the
+\term{propositional truncation} of $A$ since it evidently turns $A$
+into a proposition, namely, the proposition ``$A$ is inhabited''. If
+we have an inhabitant of $\ptrunc A$, we know there must exist some
+inhabitant of $A$, but without necessarily being able to tell what it
+is.
 
 \todo{Recursion principle for truncation.}
 
@@ -372,7 +373,8 @@ has the decided benefit of playing to the intuition of Haskell
 programmers, and often makes the structure of calculations more
 apparent.  For example, the traditional \[ \int_{b} H b^{\C(a,G b)} \]
 can be instead written as the Haskell-like \[ \eend{b} {(a \to G b)
-  \to H b}, \] where the end has been written using $\forall$, and
+  \to H b}, \] where the end has been written using $\forall$
+\todo{Need to rework a bit, haven't introduced ends yet.}, and
 both the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using
 $\to$.  It should be emphasized that this notation is perfectly
 rigorous, and not just an ``approximation'' in Haskell.
@@ -584,32 +586,9 @@ where any two elements can always be composed).
 
 Some examples:
 
-\begin{defn}
-Any type $T$ gives rise to a groupoid $\tygrpd{T}$ where the objects
-are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is,
-morphisms from $a$ to $b$ are paths $p : a = b$.
-\end{defn}
-
-\begin{defn}
-  $\P$ denotes the groupoid with natural numbers as objects, and
-  permutations $\fin m \bij \fin n$ as morphisms $\mor m n$.  (Of
-  course, no such permutations exist unless $m = n$.)  The type of
-  permutations on a set $S$, that is, bijections from $S$ to itself,
-  will be denoted $\perm S$.
-\end{defn}
-
-\begin{rem}
-  Note that $\P$ is isomorphic to an infinite coproduct $\coprod_{n
-    \geq 0} \S_n$, where $\S_n$ denotes the symmetric group of all
-  permutations on $n$ elements, considered as a one-object groupoid.
-  In other words, $\P$ consists of a collection of non-interacting
-  ``islands'', one for each natural number. \todo{picture?}  In
-  particular, this means that any functor $F : \P \to \C$ is
-  equivalent to a collection of independent functors $\prod_{n \geq 0}
-  \S_n \to \C$, one for each natural number.  Each functor $\S_n \to
-  \C$ is entirely independent of the others, since there are no
-  morphisms between different $\S_n$ to introduce constraints.
-\end{rem}
+\begin{ex}
+  \todo{Need an example here.}
+\end{ex}
 
 \begin{defn}
   Any category $\C$ gives rise to a groupoid $\C^*$, called the
@@ -1499,3 +1478,33 @@ an anaequivalence between $\PT$ and $\BT$.
 \todo{Basic overview of relevant material from Chapter 9 of the HoTT
   book.}
 \todo{coends in HoTT.}
+
+\begin{defn}
+  \todo{Explicitly mention this is in HoTT. Note we may need to
+    restrict to $0$-types or something like that.}  Any type $T$ gives
+  rise to a groupoid $\tygrpd{T}$ where the objects are values $a :
+  T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is, morphisms from $a$
+  to $b$ are paths $p : a = b$.
+\end{defn}
+
+\begin{defn}
+  \todo{Note that $\N$ is a $0$-type.}
+  $\P$ denotes the groupoid with natural numbers as objects, and
+  permutations $\fin m \bij \fin n$ as morphisms $\mor m n$.  (Of
+  course, no such permutations exist unless $m = n$.)  The type of
+  permutations on a set $S$, that is, bijections from $S$ to itself,
+  will be denoted $\perm S$.
+\end{defn}
+
+\begin{rem}
+  Note that $\P$ is isomorphic to an infinite coproduct $\coprod_{n
+    \geq 0} \S_n$, where $\S_n$ denotes the symmetric group of all
+  permutations on $n$ elements, considered as a one-object groupoid.
+  In other words, $\P$ consists of a collection of non-interacting
+  ``islands'', one for each natural number. \todo{picture?}  In
+  particular, this means that any functor $F : \P \to \C$ is
+  equivalent to a collection of independent functors $\prod_{n \geq 0}
+  \S_n \to \C$, one for each natural number.  Each functor $\S_n \to
+  \C$ is entirely independent of the others, since there are no
+  morphisms between different $\S_n$ to introduce constraints.
+\end{rem}
