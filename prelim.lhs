@@ -252,9 +252,40 @@ term. For example, let $P(A) \defeq A \times (A \to B)$ and suppose $f
 {f(a)}{g \comp f^{-1}}$, which can be derived mechanically by
 induction on the shape of $P$.
 
-\paragraph{Propositions, sets, and truncation}
+\paragraph{Propositions, sets, and $n$-types}
 
-\todo{(Mere) propositions ($(-1)$-types). Sets ($0$-types).}
+As noted previously, it is possible to have arbitrary higher-order
+path structure: paths between paths, paths between paths between
+paths, and so on.  This offers great flexibility but also introduces
+many complications.  It is therefore useful to have a vocabulary for
+explicitly talking about types with limited higher-order structure.
+
+\begin{defn}
+  A \term{proposition}, or \term{$(-1)$-type}, is a type for which any two inhabitants are
+  propositionally equal.
+\end{defn}
+
+Intuitively, the only interesting thing that can be said about a
+proposition is whether it is inhabited or not
+
+\begin{defn}
+  A type $A$ is a \term{set}, or \term{$0$-type}, if there is (up to
+  propositional equality) at most one path between any two elements;
+  that is, more formally, for any $x, y : A$ and $p, q : x = y$, there
+  is a path $p = q$.  Put another way, for any $x, y : A$, the type $x
+  = y$ is a proposition.
+\end{defn}
+
+A set can have multiple distinct inhabitants, but beyond that things
+become uninteresting.
+
+As noted above, propositions and sets are also called, respectively,
+$(-1)$-types and $0$-types.  As these names suggest, there is an
+infinite hierarchy of $n$-types (beginning at $n = -2$ for historical
+reasons) which have no interesting higher-order path structure above
+level $n$.
+
+\paragraph{Truncation}
 
 The last important concept from HoTT to touch upon is
 \term{propositional truncation}.  If $A$ is a type, then $\ptrunc{A}$
@@ -272,7 +303,15 @@ we have an inhabitant of $\ptrunc A$, we know there must exist some
 inhabitant of $A$, but without necessarily being able to tell what it
 is.
 
-\todo{Recursion principle for truncation.}
+One of the most interesting aspects of propositional truncation is its
+recursion principle: to construct a function $\ptrunc A \to P$, it
+suffices to give a function $A \to P$, but \emph{only if $P$ is a
+  proposition}.  In other words, one is allowed to ``look at'' the
+value of type $A$ hidden inside a value of $\ptrunc A$, as long as one
+``promises not to reveal the secret''.  Producing an inhabitant $P$
+cannot ``leak'' any information about the precise inhabitant $a : A$,
+since up to propositional equality there is at most one inhabitant of
+$P$. and hence no opportunity to convey information.
 
 \section{Category theory}
 \label{sec:category-theory}
