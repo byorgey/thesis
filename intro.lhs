@@ -5,6 +5,9 @@
 \chapter{Introduction}
 \label{chap:intro}
 
+\todo{Algebraic data types and extensions.}
+\todo{Principle of equivalence.}
+
 % \todo{Edit mercilessly!  Probably need to add a bunch of stuff too.
 %   Dumped here from thesis proposal introduction.}
 
