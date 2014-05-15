@@ -532,12 +532,14 @@ The topic of \term{adjunctions} is much too large to cover here; see
 \todo{references}.  For the purposes of this dissertation, the most
 important form of the definition to keep in mind is that a functor $F
 : \C \to \D$ is left adjoint to $G : \D \to \C$ (and $G$ right adjoint
-to $F$), denoted $F \adj G$, if and only if \[ \D(F A, B) \iso \C(A, G
+to $F$), denoted $F \adj G$, if and only if \[ \D(F A, B) \cong \C(A, G
 B), \] that is, if there is some natural isomorphism matching
 morphisms $F A \to B$ in the category $\D$ with morphisms $A \to G B$
 in $\C$.
 
-\todo{give an example or two}
+One example familiar to functional programmers is \emph{currying}: \[
+(A \times B \to C) \cong (A \to (B \to C)) \] This corresponds to the
+adjunction \[ (- \times B) \adj (B \to -). \]
 
 \subsection{Monoids}
 \label{sec:monoids}
