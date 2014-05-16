@@ -417,13 +417,13 @@ indicated.  The same notation will be used for exponentials
 certainly has the potential to introduce ambiguity and confusion, it
 has the decided benefit of playing to the intuition of Haskell
 programmers, and often makes the structure of calculations more
-apparent.  For example, the traditional \[ \int_{b} H b^{\C(a,G b)} \]
-can be instead written as the Haskell-like \[ \eend{b} {(a \to G b)
-  \to H b}, \] where the end has been written using $\forall$
-\todo{Need to rework a bit, haven't introduced ends yet.}, and
-both the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using
-$\to$.  It should be emphasized that this notation is perfectly
-rigorous, and not just an ``approximation'' in Haskell.
+apparent.  For example, the traditional notation \[ \int_{b} H
+b^{\C(a,G b)} \] can be instead written as the Haskell-like \[
+\eend{b} {(a \to G b) \to H b}, \] where the end
+(\pref{sec:ends-coends}) has been written using $\forall$, and both
+the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.
+It should be emphasized that this notation is perfectly rigorous, and
+not just an ``approximation'' in Haskell.
 
 \paragraph{Slice categories}
 
@@ -709,6 +709,8 @@ true:
 
 \section{The Axiom of Choice (and how to avoid it)}
 \label{sec:AC}
+
+\todo{Write about relationship to equivalence of categories.}
 
 The (in)famous \emph{Axiom of Choice} (hereafter, AC) can be
 formulated in a number of equivalent ways.  Perhaps the most
@@ -1058,12 +1060,23 @@ morphisms $\xymatrix{(I,A,u) \ar[r]^f & (J,B,v) \ar[r]^g & (K,C,q)}$.
 We need to define a collection of morphisms $\xymatrix{A_i
   \ar[r]^{h_{ik}} & C_k}$.  For any given $A_i$ and $C_k$, we have
 morphisms from $A_i$ to each of the $B_j$, and from each of the $B_j$
-to $C_k$, \todo{picture}.  If we pick some particular $B_j$, we can
-define $h_{ik} = f_{ij} \then g_{jk}$; and it's not hard to show that
-the result will be the same no matter which $B_j$ we pick, since
-everything in sight commutes.  But which $B_j$ should we pick?  In
-fact, we have to use the axiom of choice!  Again, this use of AC is
-``benign'', but it is a use nonetheless.
+to $C_k$:
+\[ \xymatrixrowsep{1.5pc}
+  \xymatrix{
+    & B_1 \ar@@<.2em>[dd] \ar@@<.4em>[r] \ar[drr] \ar@@<.2em>[ddr]
+    & B_2 \ar[l] \ar@@<.2em>[dd] \ar[dr] \ar@@<.2em>[ddl] \\
+  A \ar[ur] \ar[dr] \ar[urr] \ar[drr] &     &     & C \\
+    & B_3 \ar@@<.2em>[uu] \ar@@<-.4em>[r] \ar[urr] \ar@@<.2em>[uur]
+    & B_4 \ar[l] \ar@@<.2em>[uu] \ar[ur] \ar@@<.2em>[uul]
+  }
+\]
+\todo{fix up center diagonal arrows (shorten a bit)}
+If we pick some particular $B_j$, we can define $h_{ik} = f_{ij} \then
+g_{jk}$; and it's not hard to show that the result will be the same no
+matter which $B_j$ we pick, since everything in sight commutes.  But
+which $B_j$ should we pick?  In fact, we have to use the axiom of
+choice!  Again, this use of AC is ``benign'', but it is a use
+nonetheless.
 
 In any case, the idea is now to replace functors $\C \to \D$ with
 functors $\C \to \clq \D$, which map objects of $\C$ to entire
