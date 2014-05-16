@@ -276,9 +276,6 @@ proposition is whether it is inhabited or not
   = y$ is a proposition.
 \end{defn}
 
-A set can have multiple distinct inhabitants, but beyond that things
-become uninteresting.
-
 As noted above, propositions and sets are also called, respectively,
 $(-1)$-types and $0$-types.  As these names suggest, there is an
 infinite hierarchy of $n$-types (beginning at $n = -2$ for historical
@@ -298,20 +295,30 @@ A$, there is a path $\ptruncI x =_{\ptrunc A} \ptruncI y$ (regardless
 of whether there are any paths $x =_A y$).  Thus, $\ptrunc A$ is a
 copy of $A$ but with all values considered equal.  This is called the
 \term{propositional truncation} of $A$ since it evidently turns $A$
-into a proposition, namely, the proposition ``$A$ is inhabited''. If
-we have an inhabitant of $\ptrunc A$, we know there must exist some
-inhabitant of $A$, but without necessarily being able to tell what it
-is.
+into a proposition, which can intuitively be thought of as the
+proposition ``$A$ is inhabited''. If we have an inhabitant of $\ptrunc
+A$, we know there must exist some inhabitant of $A$, but without
+necessarily being able to tell what it is.
 
 One of the most interesting aspects of propositional truncation is its
 recursion principle: to construct a function $\ptrunc A \to P$, it
 suffices to give a function $A \to P$, but \emph{only if $P$ is a
   proposition}.  In other words, one is allowed to ``look at'' the
 value of type $A$ hidden inside a value of $\ptrunc A$, as long as one
-``promises not to reveal the secret''.  Producing an inhabitant $P$
-cannot ``leak'' any information about the precise inhabitant $a : A$,
-since up to propositional equality there is at most one inhabitant of
-$P$. and hence no opportunity to convey information.
+``promises not to reveal the secret''.  Producing an inhabitant of a
+proposition $P$ counts as such a promise, because it cannot ``leak''
+any information about the precise inhabitant $a : A$: up to
+propositional equality there is at most one inhabitant of $P$, and
+hence no opportunity to convey information.
+
+Propositional truncation is also known as $(-1)$-truncation, and is
+the bottom rung on a ladder of $n$-truncation operations.  The
+$n$-truncation $\ptrunc{A}_n$ adds all paths at level $n$, effectively
+``killing'' all higher-order path structure above that level and
+turning $A$ into an $n$-type.  For example, the $0$-truncation
+$\ptrunc{A}_0$ turns $A$ into a set, by adding paths not between
+elements $a, b : A$, but between all pairs of parallel paths $p,q : a
+= b$.
 
 \section{Category theory}
 \label{sec:category-theory}
