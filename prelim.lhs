@@ -1029,13 +1029,16 @@ A clique is a formal way of representing the informal notion of
 \end{rem}
 
 A clique can thus be visualized as an actual clique in a directed
-graph, with a unique morphism between any two objects. \todo{picture}
-Note that this is actually a \emph{commuting} diagram!
+graph, with a unique morphism between any two objects: \[
+\xymatrix{ A_1 \ar@@<.2em>[d] \ar@@<.4em>[r]
+  \ar@@<.2em>[dr]
+  & A_2 \ar[l] \ar@@<.2em>[d] \ar@@<.2em>[dl] \\
+  A_3 \ar@@<.2em>[u] \ar[r] \ar@@<.2em>[ur] &
+  A_4 \ar@@<.4em>[l] \ar@@<.2em>[u] \ar@@<.2em>[ul] }
+\]
 
 Thus, a clique represents a collection of objects in $\C$ which are
 all isomorphic, with a single chosen isomorphism between any two.
-Note that $\C$ may in fact contain \emph{other} isomorphisms between
-two objects in a clique. \todo{More intuition for why this is OK}
 
 \begin{defn}
   A morphism between two cliques $(I,A,u)$ and $(J,B,v)$
@@ -1061,16 +1064,15 @@ We need to define a collection of morphisms $\xymatrix{A_i
   \ar[r]^{h_{ik}} & C_k}$.  For any given $A_i$ and $C_k$, we have
 morphisms from $A_i$ to each of the $B_j$, and from each of the $B_j$
 to $C_k$:
-\[ \xymatrixrowsep{1.5pc}
+\[ \xymatrixrowsep{1pc}
   \xymatrix{
     & B_1 \ar@@<.2em>[dd] \ar@@<.4em>[r] \ar[drr] \ar@@<.2em>[ddr]
-    & B_2 \ar[l] \ar@@<.2em>[dd] \ar[dr] \ar@@<.2em>[ddl] \\
-  A \ar[ur] \ar[dr] \ar[urr] \ar[drr] &     &     & C \\
+    & B_2 \ar[l] \ar@@<.2em>[dd] \ar[dr]^{g_{2k}} \ar@@<.2em>[ddl] \\
+  A_i \ar[ur]^{f_{i1}} \ar[dr]_{f_{i3}} \ar[urr] \ar[drr] &     &     & C_k \\
     & B_3 \ar@@<.2em>[uu] \ar@@<-.4em>[r] \ar[urr] \ar@@<.2em>[uur]
-    & B_4 \ar[l] \ar@@<.2em>[uu] \ar[ur] \ar@@<.2em>[uul]
+    & B_4 \ar[l] \ar@@<.2em>[uu] \ar[ur]_{g_{4k}} \ar@@<.2em>[uul]
   }
 \]
-\todo{fix up center diagonal arrows (shorten a bit)}
 If we pick some particular $B_j$, we can define $h_{ik} = f_{ij} \then
 g_{jk}$; and it's not hard to show that the result will be the same no
 matter which $B_j$ we pick, since everything in sight commutes.  But
