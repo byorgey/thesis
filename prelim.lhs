@@ -627,29 +627,49 @@ A \term{groupoid} is a category in which all morphisms are invertible,
 that is, for each morphism $f$ there is another morphism $f^{-1}$ for
 which $f \comp f^{-1} = id$ and $f^{-1} \comp f = id$.  Groupoids play
 a prominent role in \todo{finish; cite groupoids and stuff; HoTT;
-  etc.}  Note that a one-object groupoid is just a group; conversely,
-groupoids can be thought of as ``groups with types'', where elements
-can only be composed if their types match (as opposed to a group,
-where any two elements can always be composed).
+  etc.}
 
-Some examples:
+Some examples of groupoids include:
 
 \begin{ex}
-  \todo{Need an example here.}
+  Any group can be thought of as a groupoid with a single element,
+  just as a monoid can be thought of as a one-object
+  category. Conversely, groupoids can be thought of as ``groups with
+  types'', where elements can only be composed if their types match
+  (in contrast to a group, where any two elements can always be
+  composed).
+\end{ex}
+
+\begin{ex}
+  The groupoid whose objects are natural numbers, and whose morphisms
+  $\mor m n$ are the invertible $m \times n$ matrices over some field,
+  with composition given by matrix multiplication. (Hence there are no
+  morphisms when $m \neq n$.)
 \end{ex}
 
 \begin{defn}
-  Any category $\C$ gives rise to a groupoid $\C^*$, called the
+  $\B$ is the groupoid whose objects are finite sets and whose
+  morphisms are bijections between finite sets.
+\end{defn}
+
+In fact, $\B$ is an instance of a more general phenomenon:
+
+\begin{defn}
+  Any category $\C$ gives rise to a groupoid $\core \C$, called the
   \term{core} of $\C$, whose objects are the objects of $\C$ and whose
   morphisms are the isomorphisms in $\C$.
 \end{defn}
 
-Checking that $\C^*$ is indeed a groupoid is left as an easy exercise.
+Checking that $\core \C$ is indeed a groupoid is left as an easy
+exercise.  Note in particular that $\B = \core{\FinSet}$.
 
 \begin{defn}
-  We give the name $\B$ to $\FinSet^*$, that is, the groupoid whose
-  objects are finite sets and whose morphisms are \emph{bijections}
-  between finite sets.
+  $\P$ is the groupoid whose objects are natural numbers and whose
+  morphisms $\mor m n$ are bijections $\fin m \bij \fin n$ (hence,
+  again, the set of morphisms $\mor m n$ is empty unless $m = n$, and
+  morphisms $\mor n n$ are permutations $\perm{\fin n}$).
+  We call $\P$ the \term{symmetric groupoid}, since it consists of the
+  coproduct $\coprod_{n \geq 0} \S_n$ of all the symmetric groups.
 \end{defn}
 
 There is a close relationship between $\B$ and $\P$.  In the presence
@@ -660,10 +680,10 @@ work directly with their sizes.  However, if the axiom of choice is
 rejected, the details become much more subtle; this is addressed
 in~\pref{sec:finiteness}.
 
-$\B$ (and $\P$) do not have products or coproducts. To see that $\B$
-does not have coproducts, let $A, B \in \B$ be arbitrary finite sets,
-and suppose they have some coproduct $A+B$. By definition this comes
-with a diagram $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B
+$\B$ (and $\P$) do not have products or coproducts. For example, to
+see that $\B$ does not have coproducts, let $A, B \in \B$ be arbitrary
+finite sets, and suppose they have some coproduct $A+B$. By definition
+this comes with a diagram $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B
   \ar[l]_-{\iota_2}}$ in $\B$. Since morphisms in $\B$ are bijections,
 this would imply that $A$ and $B$ are in bijection, but since $A$ and
 $B$ were arbitrary finite sets, this is absurd.  A similar argument
@@ -676,11 +696,11 @@ $\B$ does, however, have monoidal structures given by Cartesian
 product and disjoint union of finite sets, even though these are not a
 categorical product or coproduct. In particular, two bijections
 $\sigma_1 : S_1 \bij T_1$ and $\sigma_2 : S_2 \bij T_2$ naturally give
-rise to a bijection $(S_1 \times S_2) \bij (T_1 \times T_2)$ (which
-sends $(s_1, s_2)$ to $(\sigma_1(s_1), \sigma_2(s_2))$) as well as a
-bijection $(S_1 \uplus S_2) \bij (T_1 \uplus T_2)$ (which sends $\inl\
+rise to a bijection $(S_1 \times S_2) \bij (T_1 \times T_2)$, which
+sends $(s_1, s_2)$ to $(\sigma_1(s_1), \sigma_2(s_2))$, as well as a
+bijection $(S_1 \uplus S_2) \bij (T_1 \uplus T_2)$ which sends $\inl\
 s_1$ to $\inl(\sigma_1(s_1))$ and $\inr\ s_2$ to $\inr(
-\sigma_2(s_2))$). \todo{picture?} In fact, something more general is
+\sigma_2(s_2))$. \later{picture?} In fact, something more general is
 true:
 
 \begin{prop}
@@ -694,7 +714,7 @@ true:
   object of $\C^*$ since $\C$ and $\C^*$ have the same objects.  Given
   morphisms $\sigma$ and $\tau$ of $\C^*$, we also define \[ \sigma
   \otimes^* \tau = U \sigma \otimes U \tau, \] and note that the
-  result must be an isomorphism---hence a morphism in $\C^*$---since
+  result must be an isomorphism in $\C$---hence a morphism in $\C^*$---since
   all functors (here, $U$ and $\otimes$ in particular) preserve
   isomorphisms.
 

@@ -294,6 +294,9 @@
 % cliques
 \DeclareMathOperator{\clq}{clq}
 
+% groupoids
+\newcommand{\core}[1]{#1^*}
+
 % commutative diagrams
 \newcommand{\pushout}[1][dr]{\save*!/#1+1.2pc/#1:(1,-1)@@^{||-}\restore}
 \newcommand{\pullback}[1][dr]{\save*!/#1-1.2pc/#1:(-1,1)@@^{||-}\restore}
