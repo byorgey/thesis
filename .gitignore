@@ -30,3 +30,7 @@ Test.pdf
 /proposal/SpeciesDiagrams.hs
 /proposal/proposal.pdf
 /proposal/species.*
+
+doi.sty
+ntheorem.sty
+ntheorem.std
