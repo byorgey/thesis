@@ -1461,8 +1461,8 @@ We can now formally define arithmetic product as follows:
 
 \begin{rem}
   The similarity of this definition to the definition of partitional
-  product should be apparent: the only difference is that we have
-  substituted rectangles ($L_F,L_G \rectangle L$) for partitions
+  product should be apparent: the only difference is that rectangles
+  ($L_F,L_G \rectangle L$) have been substituted for partitions
   ($L_F,L_G \partition L$).
 \end{rem}
 
