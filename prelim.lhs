@@ -664,13 +664,32 @@ Checking that $\core \C$ is indeed a groupoid is left as an easy
 exercise.  Note in particular that $\B = \core{\FinSet}$.
 
 \begin{defn}
-  $\P$ is the groupoid whose objects are natural numbers and whose
-  morphisms $\mor m n$ are bijections $\fin m \bij \fin n$ (hence,
-  again, the set of morphisms $\mor m n$ is empty unless $m = n$, and
-  morphisms $\mor n n$ are permutations $\perm{\fin n}$).
-  We call $\P$ the \term{symmetric groupoid}, since it consists of the
-  coproduct $\coprod_{n \geq 0} \S_n$ of all the symmetric groups.
+  The \term{symmetric groupoid} $\P$ is defined as the groupoid whose
+  objects are natural numbers and whose morphisms $\mor m n$ are
+  bijections $\fin m \bij \fin n$.
 \end{defn}
+
+\begin{defn}
+  The type of permutations on a set $S$, that is, bijections from $S$
+  to itself, is denoted $\perm S$.
+\end{defn}
+
+\begin{rem}
+  Note that the set of morphisms $\mor m n$ is empty unless $m = n$,
+  and morphisms $\mor n n$ are permutations $\perm{\fin n}$.
+
+  $\P$ is called the \term{symmetric groupoid} since it is isomorphic
+  to an infinite coproduct $\coprod_{n \geq 0} \S_n$, where $\S_n$
+  denotes the symmetric \emph{group} of all permutations on $n$
+  elements, considered as a one-object groupoid.  In other words, $\P$
+  consists of a collection of non-interacting ``islands'', one for
+  each natural number. \todo{picture?}  In particular, this means that
+  any functor $F : \P \to \C$ is equivalent to a collection of
+  independent functors $\prod_{n \geq 0} \S_n \to \C$, one for each
+  natural number.  Each functor $\S_n \to \C$ is entirely independent
+  of the others, since there are no morphisms between different $\S_n$
+  to introduce constraints.
+\end{rem}
 
 There is a close relationship between $\B$ and $\P$.  In the presence
 of the axiom of choice, they are equivalent; intuitively, $\P$ is what
@@ -1248,21 +1267,41 @@ operations and properties of anafunctors.
   type $||F|| : \Ob \C \to \Type$.  In what situations do we get
   functoriality for free?}
 
-\subsection{Finiteness}
+\section{Category theory in HoTT}
+\label{sec:ct-hott}
+
+\todo{Basic overview of relevant material from Chapter 9 of the HoTT
+  book.}
+
+\begin{defn}
+  Any $1$-type $T$ gives rise to an \hott{groupoid} $\tygrpd{T}$ where the
+  objects are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that
+  is, morphisms from $a$ to $b$ are paths $p : a = b$. \todo{Prove
+    this is a groupoid.}
+\end{defn}
+
+\todo{anafunctors in HoTT.}
+
+\todo{coends in HoTT.}
+
+\section{Finiteness}
 \label{sec:finiteness}
 
-\todo{Need to figure out how to rework this section.}
+Finally, we assemble the foregoing material on anafunctors and
+category theory in HoTT into a coherent story about representing
+evidence of finiteness.
 
 Recall that $\B$ denotes the groupoid of finite sets and bijections,
 and $\P$ the groupoid of natural numbers and permutations.  We begin
 by discussing the relationship between $\B$ and $\P$, which is more
 interesting than it may first seem.
 
-$\P$ is a \term{skeleton} of $\B$---roughly, we may think of it as the
-result of replacing each equivalence class of isomorphic objects in
-$\B$ with a single object.  In this case, we can identify each
-equivalence class of isomorphic finite sets with a \emph{size}, the
-only property of sets which is invariant under isomorphism.
+In classical category theory, $\P$ is a \term{skeleton} of
+$\B$---roughly, we may think of it as the result of replacing each
+equivalence class of isomorphic objects in $\B$ with a single object.
+In this case, we can identify each equivalence class of isomorphic
+finite sets with a \emph{size}, the only property of sets which is
+invariant under isomorphism.
 
 It is a simple result in classical category theory that every category
 is equivalent to its skeletons.  However, after the foregoing
@@ -1348,48 +1387,69 @@ the same as the definition of $\size (\alpha \then \beta)$ (the
 right-hand diagram).
 
 We now turn to developing counterparts to the groupoids $\P$ and $\B$
-in type theory.  A type-theoretic counterpart fo $\P$ is relatively
-straightforward.
+in type theory.  First, a necessary lemma:
+\begin{lem} \label{lem:equiv-pres-set}
+  Equivalence preserves sets, that is, if $A$ and
+  $B$ are sets, then so is $A \iso B$.
+\end{lem}
+\begin{proof}
+  $(A \iso B) \iso ((f : A \to B) \times
+  \cons{isequiv}(f))$, where $\cons{isequiv}(f)$ is a mere proposition
+  expressing the fact that $f$ is an equivalence (\ie has a suitable
+  inverse).  This is a set since $\cons{isequiv}(f)$ is a mere
+  proposition and hence a set (\todo{cite}), $A \to B$ is a set
+  whenever $B$ is (\todo{cite}), and $\times$ takes sets to sets
+  (\todo{cite}).
+\end{proof}
 
+\begin{cor}
+  If $A$ and $B$ are sets, then so is $A = B$.
+\end{cor}
+\begin{proof}
+  Immediate from univalence and \pref{lem:equiv-pres-set}.
+\end{proof}
+
+Constructing a type-theoretic counterpart to $\P$ is
+now straightforward.
 \begin{defn}
-  $\PT$ is the groupoid where
+  $\PT$ is the \hott{groupoid} where
   \begin{itemize}
   \item the objects are values of type $\N$, and
   \item the morphisms $\mor m n$ are equivalences of type $\Fin m \iso
     \Fin n$.
   \end{itemize}
 \end{defn}
-
-\todo{There is something funny going on here with groupoids
-  vs. $\infty$-groupoids.  Should figure out how much of a difference
-  this makes.  At the very least we should mention that we are aware
-  of the issues.}
+It is easy to check that this satisfies the axioms for an
+\hott{category}, the salient points being that $\Fin m \iso \Fin n$ is
+a set by \pref{lem:equiv-pres-set}, and the equivalence of
+isomorphisms and equality is just univalence.
 
 Developing a counterpart to $\B$ is more subtle.  The first order of
 business is to decide how to port the concept of a ``finite set''.
 Generally, ``a set with property X'' ports to type theory as ``a type
-paired with constructive evidence of property X''; so what is
-constructive evidence of finiteness? This is not \latin{a priori}
-clear, and indeed, there are several possible answers
-\citep{finite}. However, the discussion above, where bijections $S \bij
-\fin{\size S}$ played a prominent role, suggests that we adopt the
-simplest option, \term{cardinal-finiteness}.  A set (type) $A$ is
+paired with constructive evidence of property X'' (or perhaps ``a
+$0$-type paired with evidence of X'', depending how seriously we want
+to take the word \emph{set}); so what is constructive evidence of
+finiteness? This is not \latin{a priori} clear, and indeed, there are
+several possible answers \citep{finite}. However, the discussion
+above, where bijections $S \bij \fin{\size S}$ played a prominent
+role, suggests that we adopt the simplest option,
+\term{cardinal-finiteness}.  A set (type) $A$ is
 \term{cardinal-finite} iff there exists some $n \in \N$ and a
 bijection $A \bij \fin n$; $n$ is called the size or cardinality of
 $A$.  Our first try at encoding this in type theory is
 \[ \FinType \defeq (A : \Type) \times (n : \N) \times (A \iso \Fin n). \]
 
 We would like to build a groupoid having such finite types as objects,
-and equivalences between them as morphisms.  Via univalence, we may
-conveniently package up such equivalences as paths.  Unfortunately,
-the standard method to build an $\infty$-groupoid out of any type does
-not work! Recall that given some type $A$, the $\infty$-groupoid
-$\tygrpd{A}$ has values $(a : A)$ as its objects, paths $a = b$ as its
-$1$-morphisms, paths between paths as $2$-morphims, and so on.
-$\tygrpd{\FinType}$ does not work as a constructive counterpart to
-$\B$, because it has only one morphism between each pair of objects
-($\B$, of course, has $n!$ morphisms between any two sets of size
-$n$).  Intuitively, the problem is that paths between objects in
+and equivalences between them as morphisms.  Recall that given some
+$1$-type $A$, the groupoid $\tygrpd{A}$ has values $(a : A)$ as its
+objects and paths $a = b$ as its morphisms.  For this to be
+applicable, we must check that $\FinType$ is a $1$-type. In fact, it
+turns out that it is a $0$-type, \ie a set---but this won't do,
+because the resulting groupoid is therefore \emph{discrete}, with at
+most one morphism between each pair of objects; $\B$, of course, has
+$n!$ distinct morphisms between any two sets of size $n$.
+Intuitively, the problem is that paths between objects in
 $\tygrpd{\FinType}$ involve not just the types in question but also
 the evidence of their finiteness, so that a path between two finite
 types requires them to be not just equivalent as types, but also
@@ -1445,17 +1505,16 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
 \end{figure}
 
 \begin{prop}
-  There is at most one morphism between any two objects of
-  $\tygrpd{\FinType}$.  That is, for any $X, Y : \FinType$,
-  if $p_1, p_2 : X = Y$ then $p_1 = p_2$.  (Using the terminology of
-  homotopy type theory, $\FinType$ is a set, \ie a $0$-type.)
+  $\FinType$ is a set, that is, for any $X, Y : \FinType$,
+  if $p_1, p_2 : X = Y$ then $p_1 = p_2$.
 \end{prop}
 
-\begin{proof}[Proof (sketch).]
+\begin{proof}[Proof (sketch)]
   A path $(A_1, n_1, e_1) = (A_2, n_2, e_2)$ is equivalent to $(p :
   A_1 = A_2) \times (q : n_1 = n_2) \times (q_*(p_*(e_1)) = e_2)$.
-  Noting that $p_*(e_1)$, in particular, is given by the composition
-  of $p$ with $e_1$, and \todo{finish}
+  The transport of $e_1$ by $p$ is given by the composition $e_1 \comp
+  (\ua^{-1}(p))^{-1}$, but this essentially means that $p$ is uniquely
+  determined by $e_1$ and $e_2$.
 \end{proof}
 
 The underlying problem is that $\FinType$ does not actually do a very
@@ -1467,19 +1526,53 @@ n$, with no mention of a specific bijection.  This is justified by the
 fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
 good as any other.
 
-This suggests a better encoding of finiteness in type theory, given
-by \[ \FinTypeT \defeq (A : \Type) \times (n : \N) \times \ptrunc{A
-  \iso \Fin n}, \] making use of propositional truncation to encode
-the fact that there \emph{merely exists} an equivalence between $A$
-and $\Fin n$, but without exposing a precise choice.  This does give
-us the expected groupoid structure: since there is a path between any
-two elements of a truncated type, a path between two inhabitants
-$(S,m,\psi_S), (T,n,\psi_T)$ of $\FinTypeT$ is equivalent to a pair of
-paths $(S = T) \times (m = n)$.
+This suggests a better encoding of finiteness in type theory, with a
+first attempt given by \[ \FinTypeT' \defeq (A : \Type) \times
+\ptrunc{(n : \N) \times (A \iso \Fin n)}, \] making use of
+propositional truncation to encode the fact that there \emph{merely
+  exists} some size $n$ and an equivalence between $A$ and $\Fin n$,
+but without exposing a precise choice.
+% This does give us the expected groupoid structure: since
+% there is a path between any two elements of a truncated type, a path
+% between two inhabitants $(S,m,\psi_S), (T,n,\psi_T)$ of $\FinTypeT$ is
+% equivalent to a pair of paths $(S = T) \times (m = n)$.
+
+We first note the following:
+\begin{prop}
+  For any type $A$, \[ \ptrunc{(n : \N) \times (A \iso \Fin n)} \iso
+  (n : \N) \times \ptrunc{A \iso \Fin n}. \]
+\end{prop}
+This says that the size $n$ of a finite type may be freely moved in
+and out of the propositional truncation.  Practically, this means we
+may freely refer to the size of a finite type without worrying about
+how it is being used.  The proof hinges on the fact that $(n : \N)
+\times \ptrunc{A \iso \Fin n}$ is a mere proposition; intuitively, if
+a type is finite at all, there is only one possible size it can have,
+so putting $n$ inside the truncation does not really hide anything.
+\begin{proof}
+  \todo{write proof, see notes}
+\end{proof}
+
+There is still one remaining problem, which is that
+$\FinTypeT'$ is not a $1$-type.  To solve this we may simply restrict
+to $0$-types $A$. This yields our final definition:
+
+\begin{defn}
+  The type of finite sets is given by \[ \FinTypeT \defeq (A : \Type)
+  \times \isSet(A) \times \isFinite(A), \] where \[ \isFinite(A)
+  \defeq \ptrunc{(n : \N) \times (A \iso \Fin n)}. \]
+\end{defn}
+We will often abuse notation and write $A : \FinTypeT$ instead of
+$(A,s,f) : \FinTypeT$ where $s : \isSet(A)$ and $f : \isFinite(A)$.
+Since $\isSet(A)$ and $\isFinite(A)$ are mere propositions, paths
+between $\FinTypeT$ values are characterized by paths between their
+underlying types. Since those types must be sets, \ie $0$-types,
+$\FinTypeT$ is consequently a $1$-type, to which $\tygrpd{-}$ may be
+applied.
 
 \begin{defn}
   $\BT$ is defined by \[ \BT \defeq \tygrpd{\FinTypeT}, \] the
-  $\infty$-groupoid of cardinal-finite types and paths bewteen them.
+  groupoid of cardinal-finite types and paths bewteen them.
 \end{defn}
 
 Just as with $\B$ and $\P$, we cannot directly define a functor $\size
@@ -1554,40 +1647,3 @@ an anaequivalence between $\PT$ and $\BT$.
   automatically an isomorphism.
 \end{proof}
 \end{prop}
-
-\section{Category theory in HoTT}
-\label{sec:ct-hott}
-
-\todo{Basic overview of relevant material from Chapter 9 of the HoTT
-  book.}
-\todo{coends in HoTT.}
-
-\begin{defn}
-  \todo{Explicitly mention this is in HoTT. Note we may need to
-    restrict to $0$-types or something like that.}  Any type $T$ gives
-  rise to a groupoid $\tygrpd{T}$ where the objects are values $a :
-  T$, and $\tygrpd{T}(a,b) \defeq a = b$, that is, morphisms from $a$
-  to $b$ are paths $p : a = b$.
-\end{defn}
-
-\begin{defn}
-  \todo{Note that $\N$ is a $0$-type.}
-  $\P$ denotes the groupoid with natural numbers as objects, and
-  permutations $\fin m \bij \fin n$ as morphisms $\mor m n$.  (Of
-  course, no such permutations exist unless $m = n$.)  The type of
-  permutations on a set $S$, that is, bijections from $S$ to itself,
-  will be denoted $\perm S$.
-\end{defn}
-
-\begin{rem}
-  Note that $\P$ is isomorphic to an infinite coproduct $\coprod_{n
-    \geq 0} \S_n$, where $\S_n$ denotes the symmetric group of all
-  permutations on $n$ elements, considered as a one-object groupoid.
-  In other words, $\P$ consists of a collection of non-interacting
-  ``islands'', one for each natural number. \todo{picture?}  In
-  particular, this means that any functor $F : \P \to \C$ is
-  equivalent to a collection of independent functors $\prod_{n \geq 0}
-  \S_n \to \C$, one for each natural number.  Each functor $\S_n \to
-  \C$ is entirely independent of the others, since there are no
-  morphisms between different $\S_n$ to introduce constraints.
-\end{rem}

@@ -223,11 +223,16 @@
 \newcommand{\ptruncI}[1]{\ensuremath{\left||#1\right||}}
 \newcommand{\id}{\cons{id}}
 
-\newcommand{\tygrpd}[1]{\ensuremath{\mathbf{G}(#1)}}
+\newcommand{\tygrpd}[1]{\ensuremath{\mathcal{G}(#1)}}
 
 \newcommand{\transport}[2]{\ensuremath{\mathsf{transport}^{#1}(#2)}}
 
-\newcommand{\ua}{\ensuremath{\mathsf{ua}}}
+\newcommand{\ua}{\msf{ua}}
+
+\newcommand{\hott}[1]{\emph{h}-#1}
+
+\newcommand{\isSet}{\msf{isSet}}
+\newcommand{\isFinite}{\msf{isFinite}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
