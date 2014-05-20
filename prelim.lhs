@@ -1270,6 +1270,8 @@ operations and properties of anafunctors.
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
 
+\todo{Add explanation of ``\hott{foo}'' terminology.}
+
 \todo{Basic overview of relevant material from Chapter 9 of the HoTT
   book.}
 
