@@ -1189,9 +1189,8 @@ support a many-to-many relationship in a database schema.
   An \term{anafunctor} $F : \C \to \D$ is defined as follows.
   \begin{itemize}
   \item There is a class $||F||$ of \term{specifications}.
-  \item There are two functions $\xymatrix{\Ob \C & ||F|| \ar[l]_{\sigma}
-      \ar[r]^{\tau} & \Ob \D}$ mapping specifications to objects of
-    $\C$ and $\D$.
+  \item There are two functions $\Span {\Ob \C} \sigma {||F||} \tau
+    {\Ob \D}$ mapping specifications to objects of $\C$ and $\D$.
   \end{itemize}
   $||F||$, $\sigma$, and $\tau$ together define a many-to-many
   relationship between objects of $\C$ and objects of $\D$.  Any
@@ -1234,8 +1233,7 @@ is somewhat less intuitive but sometimes more convenient to work with.
 
 \begin{defn} \label{defn:anafunctor-span}
   An anafunctor $F : \C \to \D$ is a category $||F||$ together with a
-  span of \emph{functors} $\xymatrix{\C & ||F|| \ar[l]_\sigma
-    \ar[r]^\tau & \D}$ where $\sigma$ is faithful, and surjective
+  span of \emph{functors} $\Span \C \sigma {||F||} \tau \D$ where $\sigma$ is faithful, and surjective
   on both objects and morphisms.
 \end{defn}
 
@@ -1247,18 +1245,18 @@ We are punning on notation a bit here: in the original definition of
 anafunctor, $||F||$ is a set and $\sigma$ and $\tau$ are functions on
 objects, whereas in this more abstract definition $||F||$ is a
 category and $\sigma$ and $\tau$ are functors.  Of course, the two are
-closely related: given a span of functors $\xymatrix{\C & \overline F
-  \ar[l]_{\overline \sigma} \ar[r]^{\overline \tau} & \D}$, we may
-simply take the objects of $\overline F$ as the class of
-specifications $||F||$, and the actions of the functors $\overline
-\sigma$ and $\overline \tau$ on objects as the functions $\sigma$ and
-$\tau$.  Conversely, given a class of specifications $||F||$ and
-functions $\sigma$ and $\tau$, we may construct the category
-$\overline F$ with $\Ob \overline F = ||F||$ and with morphisms
-$\sigma(s) \to \sigma(t)$ in $\C$ acting as morphisms $s \to t$ in
-$\overline F$.  We take $\overline \sigma$ to be $\sigma$ on objects
-and the identity on morphisms, and $\overline \tau$ maps $f : s \to t$
-in $\overline F$ to $F_{s,t}(f) : \tau(s) \to \tau(t)$ in $\D$.
+closely related: given a span of functors $\Span \C {\overline \sigma}
+{\overline F} {\overline \tau} \D$, we may simply take the objects of
+$\overline F$ as the class of specifications $||F||$, and the actions
+of the functors $\overline \sigma$ and $\overline \tau$ on objects as
+the functions $\sigma$ and $\tau$.  Conversely, given a class of
+specifications $||F||$ and functions $\sigma$ and $\tau$, we may
+construct the category $\overline F$ with $\Ob \overline F = ||F||$
+and with morphisms $\sigma(s) \to \sigma(t)$ in $\C$ acting as
+morphisms $s \to t$ in $\overline F$.  We take $\overline \sigma$ to
+be $\sigma$ on objects and the identity on morphisms, and $\overline
+\tau$ maps $f : s \to t$ in $\overline F$ to $F_{s,t}(f) : \tau(s) \to
+\tau(t)$ in $\D$.
 
 \todo{Is it worth actually going through the proof in detail?}
 
@@ -1325,8 +1323,7 @@ Recall the concise definition of an anafunctor given in
 
 \begin{repdefn}{defn:anafunctor-span}
   An anafunctor $F : \C \to \D$ is a category $||F||$ together with a
-  span of functors $\xymatrix{\C & ||F|| \ar[l]_\sigma
-    \ar[r]^\tau & \D}$ where $\sigma$ is faithful, and surjective
+  span of functors $\Span \C \sigma {||F||} \tau \D$ where $\sigma$ is faithful, and surjective
   on both objects and morphisms.
 \end{repdefn}
 
@@ -1340,8 +1337,8 @@ hom-univalence these are equivalent.  So in HoTT we may equivalently
 define:
 \begin{defn} \label{defn:anafunctor-hott}
   An \hott{anafunctor} $F : \C \to \D$ is a category $||F||$ together
-  with a span of functors $\xymatrix{\C & ||F|| \ar[l]_\sigma
-    \ar[r]^\tau & \D}$ where $\sigma$ is fully faithful and
+  with a span of functors $\Span \C \sigma {||F||} \tau \D$
+  where $\sigma$ is fully faithful and
   essentially surjective.
 \end{defn}
 
@@ -1358,9 +1355,22 @@ made precise as follows:
   \Ana(\C,\D). \]
 \end{prop}
 \begin{proof}
-  \todo{Prove me.  Define functions back and forth in the obvious way;
-  the composite in one direction is evidently the identity, the other
-  way is not much harder, and just requires noting some things about
+  We must define functions in both directions, and show they are
+  inverse.
+
+  ($\Longrightarrow$) The functor $F : \C \to \D$ is sent to the span
+  $\Span \C {1_\C} \C F B$. Clearly $1_\C$ is fully faithful and
+  essentially surjective, so this is a valid anafunctor.
+
+  ($\Longleftarrow$) The anafunctor $\Span \C \sigma {||F||} \tau \D$
+  is sent to the functor $\sigma^{-1} \then \tau : \C \to \D$.
+
+  Round-tripping a functor through an anafunctor is clearly the
+  identity; the interesting direction is to show that \[ \Span \C
+  \sigma {||F||} \tau \D \] is equal to \[ \Span \C {1_\C} \C
+  {\sigma^{-1} \then \tau} \D. \]
+
+  \todo{Finish. Just requires noting some things about
   transport and so on.}
 \end{proof}
 

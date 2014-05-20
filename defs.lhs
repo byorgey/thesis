@@ -328,6 +328,9 @@
 \newcommand{\pushout}[1][dr]{\save*!/#1+1.2pc/#1:(1,-1)@@^{||-}\restore}
 \newcommand{\pullback}[1][dr]{\save*!/#1-1.2pc/#1:(-1,1)@@^{||-}\restore}
 
+% spans
+\newcommand{\Span}[5]{\xymatrix{#1 & #3 \ar[l]_{#2} \ar[r]^{#4} & #5}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species
 
