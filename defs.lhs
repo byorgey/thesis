@@ -199,6 +199,9 @@
 \providecommand{\True}{}
 \renewcommand{\True}{\cons{T}}
 
+\newcommand{\zero}{\msf{O}}
+\newcommand{\suc}[1]{\msf{S}\ #1}
+
 \newcommand{\lam}[2]{\lambda\,#1.\;#2}
 
 \newcommand{\pair}[2]{\langle #1 , #2 \rangle}

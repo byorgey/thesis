@@ -1531,13 +1531,10 @@ first attempt given by \[ \FinTypeT' \defeq (A : \Type) \times
 \ptrunc{(n : \N) \times (A \iso \Fin n)}, \] making use of
 propositional truncation to encode the fact that there \emph{merely
   exists} some size $n$ and an equivalence between $A$ and $\Fin n$,
-but without exposing a precise choice.
-% This does give us the expected groupoid structure: since
-% there is a path between any two elements of a truncated type, a path
-% between two inhabitants $(S,m,\psi_S), (T,n,\psi_T)$ of $\FinTypeT$ is
-% equivalent to a pair of paths $(S = T) \times (m = n)$.
-
-We first note the following:
+but without exposing a precise choice.  The finiteness evidence is now
+irrelevant to paths in $\FinTypeT'$, since there is always a path
+between any two elements of a truncated type.  We also note the
+following:
 \begin{prop}
   For any type $A$, \[ \ptrunc{(n : \N) \times (A \iso \Fin n)} \iso
   (n : \N) \times \ptrunc{A \iso \Fin n}. \]
@@ -1545,17 +1542,64 @@ We first note the following:
 This says that the size $n$ of a finite type may be freely moved in
 and out of the propositional truncation.  Practically, this means we
 may freely refer to the size of a finite type without worrying about
-how it is being used.  The proof hinges on the fact that $(n : \N)
-\times \ptrunc{A \iso \Fin n}$ is a mere proposition; intuitively, if
-a type is finite at all, there is only one possible size it can have,
-so putting $n$ inside the truncation does not really hide anything.
+how it is being used (in contrast, the value of the equivalence $A
+\iso \Fin n$ may only be used in constructing mere propositions).
+The proof hinges on the fact that $(n : \N) \times \ptrunc{A \iso \Fin
+  n}$ is a mere proposition; intuitively, if a type is finite at all,
+there is only one possible size it can have, so putting $n$ inside the
+truncation does not really hide anything.
 \begin{proof}
-  \todo{write proof, see notes}
+  We must exhibit a pair of inverse functions between the given types.
+  A function from right to left is given by \[ f(n, \ptruncI e) =
+  \ptruncI{(n,e)}, \] where pattern matching on $\ptruncI e :
+  \ptrunc{A \iso \Fin n}$ is shorthand for an application of the
+  recursion principle for propositional truncation.  Recall that this
+  recursion principle only applies in the case that the result is a
+  mere proposition; in this case, the result is itself a propositional
+  truncation which is a mere proposition by construction.
+
+  In the other direction, define \[ g(\ptruncI{(n, e)}) = (n,\ptruncI
+  e), \] which is clearly inverse to $f$.  It remains only to show
+  that the implicit use of recursion for propositional truncation is
+  justified, \ie that $(n : \N) \times \ptrunc{A
+    \iso \Fin n}$ is a mere proposition.
+
+  We must show that any two values $(n_1, e_1), (n_2, e_2) : (n : \N)
+  \times \ptrunc{A \iso \Fin n}$ are propositionally equal.  Since
+  $e_1$ and $e_2$ are mere propositions, it suffices to show that $n_1
+  = n_2$.  This equality is itself a mere proposition ($\N$ is a set,
+  which follows from its induction principle), so we may apply the
+  recursion principle for propositional truncation to $e_1$ and $e_2$,
+  giving us equivalences $A \iso \Fin n_1$ and $A \iso \Fin n_2$ to
+  work with.  By symmetry and transitivity, $\Fin n_1 \iso \Fin n_2$.
+  This implies $n_1 = n_2$, by double induction on $n_1$ and $n_2$:
+  \begin{itemize}
+  \item If both $n_1$ and $n_2$ are zero, the result is immediate.
+  \item The case when one is zero and the other a successor is
+    impossible.  In particular, taking the
+    equivalence in the appropriate direction gives a function $\Fin
+    (\suc \dots) \to \Fin \zero$, which can be used to produce an
+    element of $\Fin \zero = \bot$, from which anything follows.
+  \item In the case when both are a successor, we have
+    $\Fin{(\suc{n_1'})} \iso \Fin{(\suc{n_2'})}$, which is equivalent
+    to $\top + \Fin{n_1'} \iso \top + \Fin{n_2'}$.  If we can conclude
+    that $\Fin{n_1'} \iso \Fin{n_2'}$, the inductive hypothesis then
+    yields $n_1' = n_2'$, from which $\suc{n_1'} = \suc{n_2}'$ follows
+    immediately.  The implication $(\top + \Fin{n_1'} \iso \top +
+    \Fin{n_2'}) \to (\Fin{n_1'} \iso \Fin{n_2'})$ is true, but not
+    quite as straightforward to show as one might think! In
+    particular, the equivalence may not match the $\top$ values with
+    each other, so some nontrivial shuffling must be done to construct
+    a matching between the elements of $\Fin{n_1'}$ and $\Fin{n_2'}$.
+    This may be accomplished via the \term{Gordon complementary
+      bijection principle}. \todo{more on which later??}
+  \end{itemize}
 \end{proof}
 
-There is still one remaining problem, which is that
-$\FinTypeT'$ is not a $1$-type.  To solve this we may simply restrict
-to $0$-types $A$. This yields our final definition:
+There is still one remaining problem, which is that $\FinTypeT'$ is
+not a $1$-type, and hence $\tygrpd{-}$ does not apply. To solve this
+we may simply restrict to $0$-types $A$. This yields our final
+definition:
 
 \begin{defn}
   The type of finite sets is given by \[ \FinTypeT \defeq (A : \Type)
@@ -1567,8 +1611,7 @@ $(A,s,f) : \FinTypeT$ where $s : \isSet(A)$ and $f : \isFinite(A)$.
 Since $\isSet(A)$ and $\isFinite(A)$ are mere propositions, paths
 between $\FinTypeT$ values are characterized by paths between their
 underlying types. Since those types must be sets, \ie $0$-types,
-$\FinTypeT$ is consequently a $1$-type, to which $\tygrpd{-}$ may be
-applied.
+$\FinTypeT$ is consequently a $1$-type.
 
 \begin{defn}
   $\BT$ is defined by \[ \BT \defeq \tygrpd{\FinTypeT}, \] the
