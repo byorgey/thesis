@@ -26,9 +26,10 @@ standard, so readers with a good background in the subjects covered
 may safely skip them without too many surprises.  Even those readers
 who are not familiar with some of the material may find it more
 productive to begin reading \pref{chap:species} and refer back to this
-chapter as needed. On the other hand, the material in \pref{sec:AC}
-and \pref{sec:ct-hott} is somewhat less standard, and it is hoped that
-all readers, even experts, will gain something from them.
+chapter as needed. On the other hand, the material in
+\Sect\Sect\ref{sec:AC}--\ref{sec:finiteness} is somewhat less
+standard, and it is hoped that all readers, even experts, will gain
+something from them.
 
 \section{Basic notations}
 \label{sec:basic}
@@ -78,10 +79,10 @@ Metavariable conventions used throughout this dissertation include:
 type theory~(MLTT)~\citep{mltt} arising out of Vladimir Voevodsky's
 Univalent Foundations program.  There is not space to give a full
 description here; in any case, given the existence of the excellent
-HoTT Book~\citep{hott-book}, such a description would be superfluous
-anyway.  Instead, it will suffice to give a brief description of the
-relevant parts of the theory, and explain the particular benefits of
-carrying out this work in the context of HoTT.
+HoTT Book~\citep{hott-book}, such a description would be superfluous.
+Instead, it will suffice to give a brief description of the relevant
+parts of the theory, and explain the particular benefits of carrying
+out this work in the context of HoTT.
 
 Homotopy type theory, I will argue, is the \emph{right} framework in
 which to carry out the work in this dissertation.  Intuitively, this
@@ -333,6 +334,15 @@ is presented here, with useful intuition and references for further
 reading.  It is hoped that this section can serve as a useful guide
 for ``bootstrapping'' one's knowledge of category theory, for those
 readers who are so inclined.
+
+This section presents traditional category theory as founded on set
+theory, to make it easy for readers to correlate it with existing
+literature.  However, as explained in \pref{sec:ct-hott} and as
+evidenced throughout this work, HoTT makes a much better foundation
+for category theory than set theory does! \pref{sec:ct-hott}
+highlights the most significant differences and advantages of
+HoTT-based category theory; most of the other definitions and
+inutition carry over essentially unchanged.
 
 \subsection{Category theory fundamentals}
 \label{sec:ct-fundamentals}
