@@ -75,6 +75,11 @@ Metavariable conventions used throughout this dissertation include:
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
+\todo{Why is HoTT so great?  Gives you precise control over
+  propositional equality (via HITs and univalence).  In intensional
+  type theories you can reflect judgmental equality into the language
+  but still don't have any control over it.  Setoids, etc.}
+
 \term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
 type theory~(MLTT)~\citep{mltt} arising out of Vladimir Voevodsky's
 Univalent Foundations program.  There is not space to give a full
