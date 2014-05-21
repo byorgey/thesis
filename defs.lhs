@@ -277,6 +277,8 @@
 \newcommand{\nt}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
 \newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
 
+\newcommand{\Hom}[3][]{#2 \to_{#1} #3}
+
 % some standard categories
 \newcommand{\newcategory}[1]{%
 \expandafter\providecommand\csname #1\endcsname{}\expandafter\renewcommand\csname #1\endcsname{\cat{#1}}}

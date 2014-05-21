@@ -75,11 +75,6 @@ Metavariable conventions used throughout this dissertation include:
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
-\todo{Why is HoTT so great?  Gives you precise control over
-  propositional equality (via HITs and univalence).  In intensional
-  type theories you can reflect judgmental equality into the language
-  but still don't have any control over it.  Setoids, etc.}
-
 \term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
 type theory (MLTT)~\citep{martin1975intuitionistic,
   martin1984intuitionistic} arising out of Vladimir Voevodsky's
@@ -384,16 +379,17 @@ inutition carry over essentially unchanged.
 At a bare minimum, an understanding of the foundational trinity of
 category theory (categories, functors, and natural transformations) is
 assumed, along with some standard universal constructions such as
-terminal and initial objects, products, and coproducts. \todo{Link to
-  further reading about these things.}
-
-\todo{Assume limits and colimits too? They are not quite so ``basic''
-  but there's lots of good material for learning about them.  Should
-  also mention pushouts and pullbacks somewhere.}
+terminal and initial objects, products, and coproducts. For an
+introduction to these concepts (and a much more leisurely introduction
+to those sketched below), the reader should consult one of the many
+excellent references on the subject \citep{lawvere2009conceptual,
+  awodey2006category, pierce1991basic, barr1990category,
+  mac1998categories}.
 
 \paragraph{Standard categories}
 
-We will make use of the following standard categories:
+We begin by listing some standard categories which will appear
+throughout this work.
 \begin{itemize}
 \item $\cat{1} = \bullet$, the trivial category with a single object
   and only the required identity morphism.
@@ -430,31 +426,29 @@ $\C \times \D$ are pairs of morphisms from $\C$ and
 $\D$. One place that bifunctors come up often is in the context of
 monoidal categories; see~\pref{sec:monoids}.
 
-  \todo{Action of functor on morphisms follows from action
-  on objects.  Always true when expression giving action on objects is
-  composed of functors from groupoids; then functoriality comes for
-  free too.  Later, can make connection to homotopy type theory.}
-
 \paragraph{Natural transformations}
 
 The notation $\eta : \all {A} {F A \to G A}$ will often be used to
 denote a natural transformation $\eta : \nt F G$; this notation meshes
 well with the intuition of Haskell programmers, since naturality
 corresponds to \emph{parametricity}, a property enjoyed by polymorphic
-types in Haskell~\citep{reynolds, theorems-for-free}.  It is also more
-convenient when the functors $F$ and $G$ do not already have names but
-can be readily specified by expressions, especially when those
-expressions involve $A$ more than once or in awkward positions---for
-example, $\all {A} {A \otimes A \to \C(B, H A)}$. (As Haskell
-programmers are well aware, writing everything in point-free style
-does not necessarily improve readability.)  This notation can be
-rigorously justified using \emph{ends} (\pref{sec:ends-coends}).
+types in Haskell~\citep{reynolds1983types, wadler1989free}.  It is
+also more convenient when the functors $F$ and $G$ do not already have
+names but can be readily specified by expressions, especially when
+those expressions involve $A$ more than once or in awkward
+positions\footnote{As Haskell programmers are well aware, writing
+  everything in point-free style does not necessarily improve
+  readability!}---for example, $\all {A} {A \otimes A \to \C(B, H
+  A)}$.  This notation can be rigorously justified using \emph{ends};
+see \pref{sec:ends-coends}.
 
 \paragraph{Hom sets}
 
+\todo{Use a different notation for exponents and powers?  Also, decide
+re: notation for functor categories.}
 In a similar vein, the set of morphisms between objects $A$ and $B$ in
 a category $\C$ is usually denoted $\C(A,B)$ or
-$\mathrm{Hom}_\C(A,B)$, but we will also occasionally use the notation
+$\mathrm{Hom}_\C(A,B)$, but I will also occasionally use the notation
 $A \to B$, or $A \to_\C B$ when the category $\C$ should be explicitly
 indicated.  The same notation will be used for exponentials
 (\pref{sec:monoids}) and powers (\pref{sec:enriched}).  While this
@@ -476,7 +470,7 @@ Given a category $\C$ and an object $X \in \C$, the \term{slice
 \stackrel{f}{\longrightarrow} X$, that is, pairs $(C,f)$ where $C \in
 \C$ and $f$ is a morphism from $C$ to $X$.  Morphisms $(C_1,f_1) \to
 (C_2,f_2)$ in $\C/X$ are morphisms $g : C_1 \to C_2$ of $\C$ which
-make the evident diagram commute:
+make the relevant diagram commute:
 \[ \xymatrix{
   C_1 \ar[rr]^g \ar[dr]_{f_1} && C_2 \ar[dl]^{f_2} \\
   & X }
@@ -561,13 +555,18 @@ aOpts = with & headSize .~ 0.7 & arrowTail .~ dart' & tailSize .~ 0.7
 
 \paragraph{Equivalence of categories}
 
+\todo{Expand this discussion a bit: list three (four?) definitions,
+  say why they are different, discuss them, and then note they are all
+  the same in HoTT.}
 Two categories $\C$ and $\D$ are said to be \emph{equivalent} if there
 are functors $F : \C \to \D$ and $G : \D \to \C$ such that both $FG$
 and $GF$ are naturally isomorphic to the identity functor.  Note that
 the concept of \emph{isomorphism} of categories---where the functors
 $F$ and $G$ are literal inverses, with $FG$ and $GF$ both
 \emph{equal}, rather than naturally isomorphic, to the identity
-functor---is typically too strong to be of use.  Sometimes an
+functor---is ``evil'', in the sense that it violates the principle of
+equivalence.  That is, it distinguishes between isomorphic things (in
+this case, functors).  Sometimes an
 alternate definition is given, where two categories are equivalent if
 there exists a functor $F : \C \to \D$ which is full and faithful (\ie
 a bijection on each hom-set) as well as \term{essentially surjective},
@@ -579,14 +578,14 @@ construct a suitable $G$---only by using the axiom of choice; see
 
 \paragraph{Adjunctions}
 
-The topic of \term{adjunctions} is much too large to cover here; see
-\todo{references}.  For the purposes of this dissertation, the most
-important form of the definition to keep in mind is that a functor $F
-: \C \to \D$ is left adjoint to $G : \D \to \C$ (and $G$ right adjoint
-to $F$), denoted $F \adj G$, if and only if \[ \D(F A, B) \cong \C(A, G
-B), \] that is, if there is some natural isomorphism matching
-morphisms $F A \to B$ in the category $\D$ with morphisms $A \to G B$
-in $\C$.
+The topic of \term{adjunctions} is much too large to adequately cover
+here.  For the purposes of this dissertation, the most important form
+of the definition to keep in mind is that a functor $F : \C \to \D$ is
+\term{left adjoint} to $G : \D \to \C$ (and $G$ \term{right adjoint}
+to $F$), notated $F \adj G$, if and only if \[ \Hom[\D]{F A}{B} \cong
+\Hom[\C]{A}{G B}, \] that is, if there is some natural isomorphism
+matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
+\to G B$ in $\C$.
 
 One example familiar to functional programmers is \emph{currying}: \[
 (A \times B \to C) \cong (A \to (B \to C)) \] This corresponds to the
@@ -1298,6 +1297,7 @@ Every functor $F : \C \to \D$ can be trivially turned into an
 anafunctor: we take $\overline F = \Ob \C$, $\sigma$ the
 identity functor, and $\tau = F$.
 
+\todo{Need to say what a pullback is}
 Anafunctors compose: given anafunctors $F_1 : \C \to \D$ and $F_2 : \D
 \to \E$, the key idea is to take a suitable \emph{product} of their
 specifications.  In particular, \todo{finish.  Reference Makkai.}

@@ -1825,6 +1825,7 @@ discrete category on two objects, a functor $\disc{\cat{2}} \to \Set$
 is just an ordered pair of sets. $\Delta_L (X)$ is the $L$-indexed
 tuple containing identical copies of $X$.
 
+\todo{Need to say what limits and colimits are.}
 The fact that $\Set$ has all limits and colimits is equivalent to
 saying that for any category $J$, the diagonal functor $\Delta_J :
 \Set \to \Set^J$ always has (respectively) a right and left
