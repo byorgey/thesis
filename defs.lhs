@@ -217,8 +217,10 @@
 \providecommand{\True}{}
 \renewcommand{\True}{\cons{T}}
 
-\newmsf{zero}
+\newcommand{\zero}{\msf{O}}
 \newcommand{\suc}[1]{\msf{S}\ #1}
+\newcommand{\fzero}{\msf{FO}}
+\newcommand{\fsuc}{\msf{FS}}
 
 \newcommand{\lam}[2]{\lambda\,#1.\;#2}
 

@@ -81,13 +81,14 @@ Metavariable conventions used throughout this dissertation include:
   but still don't have any control over it.  Setoids, etc.}
 
 \term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
-type theory~(MLTT)~\citep{mltt} arising out of Vladimir Voevodsky's
-Univalent Foundations program.  There is not space to give a full
-description here; in any case, given the existence of the excellent
-HoTT Book~\citep{hott-book}, such a description would be superfluous.
-Instead, it will suffice to give a brief description of the relevant
-parts of the theory, and explain the particular benefits of carrying
-out this work in the context of HoTT.
+type theory (MLTT)~\citep{martin1975intuitionistic,
+  martin1984intuitionistic} arising out of Vladimir Voevodsky's
+Univalent Foundations program~\citep{voevodskyFoundations}.  There is
+not space to give a full description here; in any case, given the
+existence of the excellent HoTT Book~\citep{hottbook}, such a
+description would be superfluous.  Instead, it will suffice to give a
+brief description of the relevant parts of the theory, and explain the
+particular benefits of carrying out this work in the context of HoTT.
 
 Homotopy type theory, I will argue, is the \emph{right} framework in
 which to carry out the work in this dissertation.  Intuitively, this
@@ -110,10 +111,14 @@ benefits this work, to be explored in more detail later, include:
   simply comes ``for free''---in contrast to using set theory as a
   foundation, in which case transport must be tediously defined (and
   proved correct) for each new species.
-\item HoTT's rich notions of equality make it easy to define various
-  sorts of \emph{quotient types} which would be tedious to define in
-  MLTT.  In particular, this manifests in the fact that \term{coends}
-  in HoTT are just $\Sigma$-types (\pref{sec:ct-hott}).
+\item The \term{univalence axiom} and \term{higher inductive types}
+  make for a rich notion of propositional equality, over which the
+  ``user'' has a relatively high degree of control.  For example,
+  using higher inductive types, it is easy to define various sorts of
+  \emph{quotient types} which would be tedious to define and work with
+  in MLTT.  For example, one particular manifestation of this general
+  idea is the fact that \term{coends} in HoTT are just $\Sigma$-types
+  (\pref{sec:ct-hott}).
 \item \term{Propositional truncation} (explained below) is an
   important tool for properly modelling concepts from classical
   mathematics in a constructive setting.  In particular we use it to
@@ -129,7 +134,7 @@ benefits for programming.  Much of the work on HoTT has so far been
 aimed at mathematicians---appropriately so, since they need more
 convincing---but new foundations for constructive mathematics must
 almost by necessity have profound implications for the foundations of
-programming as well~\cite{martin-lof-constructive-programming}.
+programming as well~\cite{martin1982constructive}.
 
 We begin our brief tour of HoTT with its syntax.
 
@@ -145,21 +150,27 @@ The theory includes standard constructions such as:
 \item dependent pairs $(x:A) \times B(x)$, with constructor $\pair -
   -$ and projection functions $\pi_1 : (x:A) \times B(x) \to A$ and
   $\pi_2 : (p : (x:A) \times B(x)) \to B(\pi_1 p)$;
-\item dependent functions $(x:A) \to B(x)$;
+\item dependent functions $(x:A) \to B(x)$; and
 \item a hierarchy of type universes $\Type_0$, $\Type_1$,
-  $\Type_2$\dots;
-\item and inductive definitions.
+  $\Type_2$\dots.
 \end{itemize}
-$\N : \Type_0$ denotes the inductively-defined type of natural
-numbers, and $\Fin : \N \to \Type_0$ denotes the usual indexed type of
-canonical finite sets.
+Following standard practice, universe level subscripts will usually be
+omitted, with $\Type$ being understood to represent whatever universe
+level is appropriate.
+
+HoTT also allows inductive definitions.  For example, $\N :
+\Type_0$ denotes the inductively-defined type of natural numbers, with
+constructors $\zero : \N$ and $\suc : \N \to \N$, and $\Fin : \N \to
+\Type_0$ denotes the usual indexed type of canonical finite sets, with
+constructors $\fzero : \Fin (\suc n)$ and $\fsuc : \Fin n \to \Fin
+(\suc n)$.
 
 Although Agda notation~\cite{Agda} is mostly used for dependent pairs
-and functions, we occasionally use the traditional notations $\sum_{x
-  : A} B(x)$ and $\prod_{x:A} B(x)$ (instead of $(x:A) \times B(x)$
-and $(x:A) \to B(x)$, respectively) for emphasis. As usual, the
-abbreviations $A \times B$ and $A \to B$ are used for non-dependent
-(\ie when $x$ does not appear free in $B$) pair and function types,
+and functions, the traditional notations $\sum_{x : A} B(x)$ and
+$\prod_{x:A} B(x)$ (instead of $(x:A) \times B(x)$ and $(x:A) \to
+B(x)$, respectively) are sometimes used for emphasis. As usual, the
+abbreviations $A \times B$ and $A \to B$ denote non-dependent (\ie
+when $x$ does not appear free in $B$) pair and function types,
 respectively. \later{implicit quantification? Do we need this? Also,
   to reduce clutter, we sometimes make use of implicit quantification:
   free type variables in a type---like $A$ and $B$ in $A \times (B \to
@@ -193,18 +204,21 @@ HoTT distinguishes between two different types of equality:
   intuition, taken from homotopy theory, is to think of paths between
   points in a topological space.
 
-  One of the most interesting aspects of HoTT is that it is possible
-  to have (nontrivial) higher-order paths, \ie paths between paths,
-  paths between paths between paths, and so on.
+  Note that it is possible (and often useful!) to have nontrivial
+  higher-order paths, \ie paths between paths, paths between paths
+  between paths, and so on.
 \end{itemize}
 
 The structure of HoTT guarantees that functions are always functorial
 with respect to propositional equality. That is, if $e : x = y$ is a
 path between $x$ and $y$, and $f$ is a function of an appropriate
-type, then it is possible to construct a proof that $f(x) = f(y)$.
-Given $e : x = y$ we also have $P(x) \to P(y)$ for any type family
-$P$, called the \term{transport} of $P(x)$ along $e$ and denoted
+type, then it is possible to construct a proof that $f(x) = f(y)$ (or
+a suitable analogue in the case that $f$ has a dependent type).  Given
+$e : x = y$ we also have $P(x) \to P(y)$ for any type family $P$,
+called the \term{transport} of $P(x)$ along $e$ and denoted
 $\transport{P}{e}$, or simply $e_*$ when $P$ is clear from context.
+For example, if $e : A = B$ then $\transport{X \mapsto X \times (X \to
+  C)}{e} : A \times (A \to C) \to B \times (B \to C)$.
 
 \paragraph{Equivalence and univalence}
 
@@ -213,44 +227,51 @@ An equivalence between $A$ and $B$, written $A \iso B$ is
 (essentially) a pair of functions $f : A \to B$ and $g : B \to A$,
 along with a proof that $f$ and $g$ are inverse.\footnote{The precise
   details are more subtle \cite[chap.  4]{hottbook}, but unimportant
-  for the purposes of this work.}  $\id$ and $\comp$ denote the
-identity equivalence and equivalence composition, respectively.  As a
-notational shortcut, equivalences of type $A \iso B$ can be used as
-functions $A \to B$ where it does not cause confusion.
+  for the purposes of this work.  The key takeaway is that $A \iso B$
+  both implies and is implied by the existence of an inverse pair of
+  functions, although this does not make a good \emph{definition} of
+  equivalence because of problems with coherence of higher paths.}
+$\id$ and $\comp$ denote the identity equivalence and equivalence
+composition, respectively.  As a notational shortcut, equivalences of
+type $A \iso B$ can be used as functions $A \to B$ where it does not
+cause confusion.
 
-HoTT's other novel feature is the \emph{univalence axiom}, which
-states that equivalence is equivalent to propositional equality, that
-is, $(A \iso B) \iso (A = B)$. Converting from a propositional
-equality to an equivalence is not hard; the interesting direction is
-$\ua : (A \iso B) \to (A = B)$, which formally encodes the
-\emph{principle of equivalence}~\cite{principle-of-equivalence},
-namely, that sensible properties of mathematical objects must be
-invariant under equivalence.
+HoTT's main novel feature is the \emph{univalence axiom}, which states
+that equivalence is equivalent to propositional equality, that is, $(A
+\iso B) \iso (A = B)$. One direction, $(A = B) \to (A \iso B)$,
+follows easily from the properties of equality; the interesting
+direction, which must be taken as an axiom, is $\ua : (A \iso B) \to
+(A = B)$, which formally encodes the \emph{principle of
+  equivalence}~\cite{principle-of-equivalence}, namely, that sensible
+properties of mathematical objects must be invariant under
+equivalence.  Putting univalence together with transport means that
+equivalent values are completely interchangeable.
 
-Propositional equality thus takes on a richer meaning.  In particular,
-$A = B$ does not mean that $A$ and $B$ are \emph{identical}, but that
-they can be used interchangeably---and moreover, interchanging them
-may require some work, computationally speaking.  Thus an equality $e
-: A = B$ can have nontrivial computational content, particularly if
-it is the result of applying $\ua$ to some equivalence.
+Propositional equality thus takes on a meaning richer than the usual
+conception of equality.  In particular, $A = B$ does not mean that $A$
+and $B$ are \emph{identical}, but that they can be used
+interchangeably---and moreover, interchanging them may require some
+work, computationally speaking.  Thus an equality $e : A = B$ can have
+nontrivial computational content, particularly if it is the result of
+applying $\ua$ to some equivalence.
 
 As of yet, univalence has no direct computational
 interpretation\footnote{Though as of this writing there seems to be
   some good progress on this front via the theory of \term{cubical
-    sets}~\cite{cubical-sets}.}, so using it to give a computational
-interpretation of species may seem suspect. Note, however, that $\ua :
-(A \iso B) \to (A = B)$ satisfies the $\beta$-like law
-\mbox{$\transport{X \mapsto X}{\ua(f)} = f$}. So univalence introduces
-no computational problems as long as applications of $\ua$ are only
-ultimately used via $\mathsf{transport}$.  In particular, sticking to
-this restricted usage of $\ua$ still allows a convenient shorthand:
-packaging up an equivalence into a path and then transporting along
-that path results in ``automatically'' inserting the equivalence and
-its inverse in all the necessary places throughout the
-term. For example, let $P(A) \defeq A \times (A \to B)$ and suppose $f
-: A \iso A'$, so $\ua f : A = A'$.  Then $\transport P {\ua(f)} : P(A)
-\to P(A')$, and in particular $\transport P {\ua(f)} \pair a g = \pair
-{f(a)}{g \comp f^{-1}}$, which can be derived mechanically by
+    sets}~\cite{bezem2014model}.}, so using it to give a computational
+interpretation of species may seem suspect. Note, however, that $\ua$
+satisfies the $\beta$-like law \mbox{$\transport{X \mapsto X}{\ua(f)}
+  = f$}. So univalence introduces no computational problems as long as
+applications of $\ua$ are only ultimately used via
+$\mathsf{transport}$.  In particular, sticking to this restricted
+usage of $\ua$ still allows a convenient shorthand: packaging up an
+equivalence into a path and then transporting along that path results
+in ``automatically'' inserting the equivalence and its inverse in all
+the necessary places throughout the term. For example, let $P(X)
+\defeq X \times (X \to C)$ as in the previous example, and suppose $e
+: A \iso B$, so $\ua\ e : A = B$.  Then $\transport P {\ua(e)} : P(A)
+\to P(B)$, and in particular $\transport P {\ua(e)} \pair a g = \pair
+{e(a)}{g \comp e^{-1}}$, which can be derived mechanically by
 induction on the shape of $P$.
 
 \paragraph{Propositions, sets, and $n$-types}
@@ -267,7 +288,13 @@ explicitly talking about types with limited higher-order structure.
 \end{defn}
 
 Intuitively, the only interesting thing that can be said about a
-proposition is whether it is inhabited or not
+proposition is whether it is inhabited or not. Although it may have
+many \emph{syntactically} different inhabitants, they are all equal
+and hence internally indistinguishable.  Such types are called
+``propositions'' since they model the way one usually thinks of
+propositions in, say, first-order logic. There is no value in
+distinguishing the different possible proofs of a proposition; what
+counts is only whether or not the proposition is provable at all.
 
 \begin{defn}
   A type $A$ is a \term{set}, or \term{$0$-type}, if there is (up to
@@ -276,12 +303,20 @@ proposition is whether it is inhabited or not
   is a path $p = q$.  Put another way, for any $x, y : A$, the type $x
   = y$ is a proposition.
 \end{defn}
+Most ``standard'' inductive types, \eg \N, \Fin n, and so on, are
+sets, which can be proved via their induction principles.
 
 As noted above, propositions and sets are also called, respectively,
 $(-1)$-types and $0$-types.  As these names suggest, there is an
 infinite hierarchy of $n$-types (beginning at $n = -2$ for historical
 reasons) which have no interesting higher-order path structure above
-level $n$.
+level $n$.  As an example of a $1$-type, consider the type of all
+sets, \[ \msf{Set} \defeq (A : \Type) \times \isSet(A), \] where
+$\isSet(A) \defeq (x,y:A) \to (p,q:x = y) \to (p = q)$ is the
+proposition that $A$ is a set.  Given two elements $A, B : \msf{Set}$
+it is not the case that all paths $A = B$ are equal; such paths
+correspond to bijections between $A$ and $B$, and there may be many
+such bijections.
 
 \paragraph{Truncation}
 
@@ -292,11 +327,10 @@ is also a type, with an introduction form $\ptruncI - : A \to
 The crucial difference is that in addition to being able to construct
 \emph{values} of $\ptrunc A$, there is also a way to construct
 \emph{paths} between them: in particular, for any two values $x, y :
-A$, there is a path $\ptruncI x =_{\ptrunc A} \ptruncI y$ (regardless
-of whether there are any paths $x =_A y$).  Thus, $\ptrunc A$ is a
-copy of $A$ but with all values considered equal.  This is called the
-\term{propositional truncation} of $A$ since it evidently turns $A$
-into a proposition, which can intuitively be thought of as the
+\ptrunc A$, there is a path $x =_{\ptrunc A} y$.  Thus, $\ptrunc A$ is
+a copy of $A$ but with all values considered equal.  This is called
+the \term{propositional truncation} of $A$ since it evidently turns
+$A$ into a proposition, which can intuitively be thought of as the
 proposition ``$A$ is inhabited''. If we have an inhabitant of $\ptrunc
 A$, we know there must exist some inhabitant of $A$, but without
 necessarily being able to tell what it is.
@@ -308,9 +342,9 @@ suffices to give a function $A \to P$, but \emph{only if $P$ is a
 value of type $A$ hidden inside a value of $\ptrunc A$, as long as one
 ``promises not to reveal the secret''.  Producing an inhabitant of a
 proposition $P$ counts as such a promise, because it cannot ``leak''
-any information about the precise inhabitant $a : A$: up to
-propositional equality there is at most one inhabitant of $P$, and
-hence no opportunity to convey information.
+any information about the precise inhabitant $a : A$. This is because,
+up to propositional equality, there is at most one inhabitant of $P$,
+and hence no opportunity to convey information.
 
 Propositional truncation is also known as $(-1)$-truncation, and is
 the bottom rung on a ladder of $n$-truncation operations.  The
