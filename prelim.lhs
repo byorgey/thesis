@@ -26,9 +26,10 @@ standard, so readers with a good background in the subjects covered
 may safely skip them without too many surprises.  Even those readers
 who are not familiar with some of the material may find it more
 productive to begin reading \pref{chap:species} and refer back to this
-chapter as needed. On the other hand, the material in \pref{sec:AC}
-and \pref{sec:ct-hott} is somewhat less standard, and it is hoped that
-all readers, even experts, will gain something from them.
+chapter as needed. On the other hand, the material in
+\Sect\Sect\ref{sec:AC}--\ref{sec:finiteness} is somewhat less
+standard, and it is hoped that all readers, even experts, will gain
+something from them.
 
 \section{Basic notations}
 \label{sec:basic}
@@ -83,10 +84,10 @@ Metavariable conventions used throughout this dissertation include:
 type theory~(MLTT)~\citep{mltt} arising out of Vladimir Voevodsky's
 Univalent Foundations program.  There is not space to give a full
 description here; in any case, given the existence of the excellent
-HoTT Book~\citep{hott-book}, such a description would be superfluous
-anyway.  Instead, it will suffice to give a brief description of the
-relevant parts of the theory, and explain the particular benefits of
-carrying out this work in the context of HoTT.
+HoTT Book~\citep{hott-book}, such a description would be superfluous.
+Instead, it will suffice to give a brief description of the relevant
+parts of the theory, and explain the particular benefits of carrying
+out this work in the context of HoTT.
 
 Homotopy type theory, I will argue, is the \emph{right} framework in
 which to carry out the work in this dissertation.  Intuitively, this
@@ -216,11 +217,6 @@ along with a proof that $f$ and $g$ are inverse.\footnote{The precise
 identity equivalence and equivalence composition, respectively.  As a
 notational shortcut, equivalences of type $A \iso B$ can be used as
 functions $A \to B$ where it does not cause confusion.
-% We use the notation $\mkIso$ for
-% constructing equivalences from a pair of functions. That is, if $f : A
-% \to B$ and $g : B \to A$ are inverse, then $f \mkIso g : A \iso B$;
-% the proof that $f$ and $g$ are inverse is left implicit. \todo{is this
-%   $\mkIso$ needed?}
 
 HoTT's other novel feature is the \emph{univalence axiom}, which
 states that equivalence is equivalent to propositional equality, that
@@ -338,6 +334,15 @@ is presented here, with useful intuition and references for further
 reading.  It is hoped that this section can serve as a useful guide
 for ``bootstrapping'' one's knowledge of category theory, for those
 readers who are so inclined.
+
+This section presents traditional category theory as founded on set
+theory, to make it easy for readers to correlate it with existing
+literature.  However, as explained in \pref{sec:ct-hott} and as
+evidenced throughout this work, HoTT makes a much better foundation
+for category theory than set theory does! \pref{sec:ct-hott}
+highlights the most significant differences and advantages of
+HoTT-based category theory; most of the other definitions and
+inutition carry over essentially unchanged.
 
 \subsection{Category theory fundamentals}
 \label{sec:ct-fundamentals}
@@ -754,7 +759,8 @@ true:
 \section{The Axiom of Choice (and how to avoid it)}
 \label{sec:AC}
 
-\todo{Write about relationship to equivalence of categories.}
+\todo{Note at the outset that this is in set theory; becomes better in
+  HoTT.}
 
 The (in)famous \emph{Axiom of Choice} (hereafter, AC) can be
 formulated in a number of equivalent ways.  Perhaps the most
@@ -957,6 +963,8 @@ would just get stuck operationally.  Since the goal of this work is
 explicitly to provide a foundation for \emph{computation}, the axiom
 of choice must be rejected.
 
+\todo{Note that in HoTT, AC implies LEM!}
+
 It is worth noting that within HoTT, the notion of a ``non-empty'' set
 can be defined in a more nuanced way.  The best way to model what
 classical mathematicians mean when they say ``$S$ is non-empty'' is
@@ -1044,6 +1052,12 @@ The right way around this use of AC is to generalize functors to
 \term{cliques} is presented first---cliques come close to being a way
 around AC, and although they don't completely surmount the problem in
 the end, they offer some good intuition for understanding anafunctors.
+
+\subsection{AC and equivalence of categories}
+\label{sec:AC-equivalence}
+
+\todo{Write about relationship of AC, equivalence, and fully faithful
+  essentially surjective functors.}
 
 \subsection{Cliques}
 \label{sec:cliques}
@@ -1153,6 +1167,9 @@ instead to \term{anafunctors}.
 \subsection{Anafunctors}
 \label{sec:anafunctors}
 
+\todo{Use different metavariables for functions/functors composing an
+  anafunctor.}
+
 The basic idea of an anafunctor is similar to that of a functor $\C
 \to \clq \D$---it represents a functor whose ``values are specified
 only up to unique isomorphsim''.  In fact, anafunctors $\C \to \D$ and
@@ -1168,13 +1185,12 @@ relationship between objects in the source and target categories, in
 exactly the same way that a ``junction table'' must be added to
 support a many-to-many relationship in a database schema.
 
-\begin{defn}
+\begin{defn} \label{defn:anafunctor}
   An \term{anafunctor} $F : \C \to \D$ is defined as follows.
   \begin{itemize}
   \item There is a class $||F||$ of \term{specifications}.
-  \item There are two functions $\xymatrix{\Ob \C & ||F|| \ar[l]_{\sigma}
-      \ar[r]^{\tau} & \Ob \D}$ mapping specifications to objects of
-    $\C$ and $\D$.
+  \item There are two functions $\Span {\Ob \C} \sigma {||F||} \tau
+    {\Ob \D}$ mapping specifications to objects of $\C$ and $\D$.
   \end{itemize}
   $||F||$, $\sigma$, and $\tau$ together define a many-to-many
   relationship between objects of $\C$ and objects of $\D$.  Any
@@ -1215,29 +1231,34 @@ isomorphic objects in $\D$.
 There is an alternative, equivalent definition of anafunctors, which
 is somewhat less intuitive but sometimes more convenient to work with.
 
-\begin{defn}
+\begin{defn} \label{defn:anafunctor-span}
   An anafunctor $F : \C \to \D$ is a category $||F||$ together with a
-  span of \emph{functors} $\xymatrix{\C & ||F|| \ar[l]_\sigma
-    \ar[r]^\tau & \D}$, such that $\sigma$ is faithful, and surjective
+  span of \emph{functors} $\Span \C \sigma {||F||} \tau \D$ where $\sigma$ is faithful, and surjective
   on both objects and morphisms.
 \end{defn}
+
+\todo{Highlight that it has to be \emph{strictly} surjective on
+  objects; difference to usual notion of a fully faithful and
+  essentially surjective functor.}
 
 We are punning on notation a bit here: in the original definition of
 anafunctor, $||F||$ is a set and $\sigma$ and $\tau$ are functions on
 objects, whereas in this more abstract definition $||F||$ is a
 category and $\sigma$ and $\tau$ are functors.  Of course, the two are
-closely related: given a span of functors $\xymatrix{\C & \overline F
-  \ar[l]_{\overline \sigma} \ar[r]^{\overline \tau} & \D}$, we may
-simply take the objects of $\overline F$ as the class of
-specifications $||F||$, and the actions of the functors $\overline
-\sigma$ and $\overline \tau$ on objects as the functions $\sigma$ and
-$\tau$.  Conversely, given a class of specifications $||F||$ and
-functions $\sigma$ and $\tau$, we may construct the category
-$\overline F$ with $\Ob \overline F = ||F||$ and with morphisms
-$\sigma(s) \to \sigma(t)$ in $\C$ acting as morphisms $s \to t$ in
-$\overline F$.  We take $\overline \sigma$ to be $\sigma$ on objects
-and the identity on morphisms, and $\overline \tau$ maps $f : s \to t$
-in $\overline F$ to $F_{s,t}(f) : \tau(s) \to \tau(t)$ in $\D$.
+closely related: given a span of functors $\Span \C {\overline \sigma}
+{\overline F} {\overline \tau} \D$, we may simply take the objects of
+$\overline F$ as the class of specifications $||F||$, and the actions
+of the functors $\overline \sigma$ and $\overline \tau$ on objects as
+the functions $\sigma$ and $\tau$.  Conversely, given a class of
+specifications $||F||$ and functions $\sigma$ and $\tau$, we may
+construct the category $\overline F$ with $\Ob \overline F = ||F||$
+and with morphisms $\sigma(s) \to \sigma(t)$ in $\C$ acting as
+morphisms $s \to t$ in $\overline F$.  We take $\overline \sigma$ to
+be $\sigma$ on objects and the identity on morphisms, and $\overline
+\tau$ maps $f : s \to t$ in $\overline F$ to $F_{s,t}(f) : \tau(s) \to
+\tau(t)$ in $\D$.
+
+\todo{Is it worth actually going through the proof in detail?}
 
 Every functor $F : \C \to \D$ can be trivially turned into an
 anafunctor: we take $\overline F = \Ob \C$, $\sigma$ the
@@ -1267,11 +1288,6 @@ usage can be formalized by turning everything into an anafunctor, and
 translating functor operations and properties into corresponding
 operations and properties of anafunctors.
 
-\todo{Implementation of anafunctors in type theory: can model set of
-  specifications $||F||$ together with mapping $\sigma$ as an indexed
-  type $||F|| : \Ob \C \to \Type$.  In what situations do we get
-  functoriality for free?}
-
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
 
@@ -1287,9 +1303,83 @@ operations and properties of anafunctors.
     this is a groupoid.}
 \end{defn}
 
-\todo{anafunctors in HoTT.}
+\subsection{Coends in HoTT}
+\label{sec:coends-hott}
 
-\todo{coends in HoTT.}
+\todo{Write me.}
+
+\subsection{Anafunctors in HoTT}
+\label{sec:anafunctors-hott}
+
+We first \todo{XXX}
+
+\todo{(Adjoint) equivalence of categories.}
+
+\todo{Fully faithful and essentially surjective functors are
+  equivalent to (adjoint) equivalence of categories, without AC.}
+
+Recall the concise definition of an anafunctor given in
+\pref{sec:anafunctors}:
+
+\begin{repdefn}{defn:anafunctor-span}
+  An anafunctor $F : \C \to \D$ is a category $||F||$ together with a
+  span of functors $\Span \C \sigma {||F||} \tau \D$ where $\sigma$ is faithful, and surjective
+  on both objects and morphisms.
+\end{repdefn}
+
+Porting this definition to HoTT is straightforward.  However, because
+of hom-univalence, there is no difference between a \emph{strictly}
+surjective functor and an \emph{essentially} surjective one.  Strict
+surjectivity of a functor $F : \C \to \D$ on objects requires that for
+every $D : \D$ there is some $C : \C$ such that $F\ C = D$, whereas
+essential surjectivity requires $F\ C \cong D$; in the presence of
+hom-univalence these are equivalent.  So in HoTT we may equivalently
+define:
+\begin{defn} \label{defn:anafunctor-hott}
+  An \hott{anafunctor} $F : \C \to \D$ is a category $||F||$ together
+  with a span of functors $\Span \C \sigma {||F||} \tau \D$
+  where $\sigma$ is fully faithful and
+  essentially surjective.
+\end{defn}
+
+However, recall that in HoTT, a fully faithful and essentially
+surjective functor automatically gives rise to an equivalence of
+categories.  So there is some functor $\sigma^{-1}$ which can be
+composed with $\tau$, yielding a functor between $\C$ and $\D$. In
+fact, the concept of anafunctor is technically unnecessary in HoTT,
+made precise as follows:
+\begin{prop}
+  \hott{functors} and \hott{anafunctors} are equivalent; that is, if
+  $\Fun(\C,\D)$ denotes the type of functors from $\C$ to $\D$, and
+  $\Ana(\C,\D)$ the type of anafunctors, then \[ \Fun(\C,\D) \iso
+  \Ana(\C,\D). \]
+\end{prop}
+\begin{proof}
+  We must define functions in both directions, and show they are
+  inverse.
+
+  ($\Longrightarrow$) The functor $F : \C \to \D$ is sent to the span
+  $\Span \C {1_\C} \C F B$. Clearly $1_\C$ is fully faithful and
+  essentially surjective, so this is a valid anafunctor.
+
+  ($\Longleftarrow$) The anafunctor $\Span \C \sigma {||F||} \tau \D$
+  is sent to the functor $\sigma^{-1} \then \tau : \C \to \D$.
+
+  Round-tripping a functor through an anafunctor is clearly the
+  identity; the interesting direction is to show that \[ \Span \C
+  \sigma {||F||} \tau \D \] is equal to \[ \Span \C {1_\C} \C
+  {\sigma^{-1} \then \tau} \D. \]
+
+  \todo{Finish. Just requires noting some things about
+  transport and so on.}
+\end{proof}
+
+Although anafunctors are thus technically superfluous, they can still
+be a useful tool for getting a handle on certain equivalences, as
+shown in the following section.
+
+\todo{Give a very simple example of equivalent categories where it's
+  not obvious how to define a functor, and go through anafunctor construction?}
 
 \section{Finiteness}
 \label{sec:finiteness}
@@ -1297,6 +1387,8 @@ operations and properties of anafunctors.
 Finally, we assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about representing
 evidence of finiteness.
+
+\todo{We start by telling the story in set theory.}
 
 Recall that $\B$ denotes the groupoid of finite sets and bijections,
 and $\P$ the groupoid of natural numbers and permutations.  We begin
@@ -1330,6 +1422,10 @@ matching up $S$ with a canonical set of size $\size S$.  Given $\alpha
   \fin{\size T}}$.  Again, this use of AC is ``benign'' in the sense
 that any two sets of choices yield equivalent functors \todo{need to
   double-check this, maybe add a bit more explanation}.
+
+\todo{Explain how to avoid AC using well-ordering of hereditarily
+  finite sets.  But this does not have a natural counterpart in a
+  structural set theory or in type theory.}
 
 We can avoid the use of AC by constructing an anafunctor $\size - : \B
 \to \P$ instead of a functor.  In particular, as the class of
@@ -1428,8 +1524,8 @@ now straightforward.
 \end{defn}
 It is easy to check that this satisfies the axioms for an
 \hott{category}, the salient points being that $\Fin m \iso \Fin n$ is
-a set by \pref{lem:equiv-pres-set}, and the equivalence of
-isomorphisms and equality is just univalence.
+a set by \pref{lem:equiv-pres-set}, and hom-univalence is just
+univalence.
 
 Developing a counterpart to $\B$ is more subtle.  The first order of
 business is to decide how to port the concept of a ``finite set''.
@@ -1625,16 +1721,28 @@ $\FinTypeT$ is consequently a $1$-type.
   groupoid of cardinal-finite types and paths bewteen them.
 \end{defn}
 
-Just as with $\B$ and $\P$, we cannot directly define a functor $\size
-- : \BT \to \PT$, since defining its action on morphisms would require
-a specific choice of equivalence $A \iso \Fin n$, and the objects of
-$\BT$ merely guarantee that such equivalences exist, without giving
-access to any particular such equivalence.  Instead, we can define an
-anafunctor $\size - : \BT \to \PT$, similarly to $\size - : \B \to
-\P$\footnote{We overload $\size{}$ to serve as the name of both
-  anafunctors (as well as set cardinality); this should not cause
-  confusion as they are never used in similar contexts.}.
+\begin{defn}
+  We can easily define a functor $\fin - : \PT \to \BT$: on objects,
+  it sends $n$ to $\Fin n$, along with proofs that it is a set and
+  finite (using the identity equivalence for the latter).  On
+  morphisms, it sends $f : \Fin m \iso \Fin n$ to $\ua\ f : \Fin m =
+  \Fin n$.
+\end{defn}
 
+However, it is not at all obvious how to directly define a functor
+$\size - : \BT \to \PT$. Just as with $\B \to \P$, defining its action
+on morphisms requires a specific choice of equivalence $A \iso \Fin
+n$. The objects of $\BT$ contain such equivalences, in the proofs of
+finiteness, but they are propositionally truncated; the type of
+functors $\BT \to \PT$ is decidedly not a mere proposition, so it
+seems the recursion principle for truncation does not apply.
+
+We can, however, define an anafunctor $\size - : \BT \to \PT$,
+similarly to $\size - : \B \to \P$\footnote{We overload $\size{}$ to
+  serve as the name of both anafunctors (as well as set cardinality);
+  this should not cause confusion as they are never used in similar
+  contexts.}.
+\todo{Redo this to use the span definition.}
 \begin{defn}
   The anafunctor $\size - : \BT \to \PT$ is given by:
   \begin{itemize}
@@ -1651,15 +1759,6 @@ anafunctor $\size - : \BT \to \PT$, similarly to $\size - : \B \to
   \end{itemize}
   The proof that this is a valid anafunctor is analogous to the proof
   for the anafunctor $\B \to \P$. \todo{Or do we get this for free?}
-\end{defn}
-
-We can also define a functor from $\PT$ to $\BT$; together, these define
-an anaequivalence between $\PT$ and $\BT$.
-
-\begin{defn}
-  We define a functor $\fin - : \PT \to \BT$ as follows: on objects,
-  $\fin n \defeq (\Fin n, n, \id)$, and $\fin -$ is the identity on
-  morphisms.
 \end{defn}
 
 \begin{prop}

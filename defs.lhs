@@ -32,6 +32,8 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 
+\usepackage[]{showkeys}
+
 % \usepackage{breakurl}
 \usepackage[numbers]{natbib}
 
@@ -127,6 +129,8 @@
 \newcommand{\Sym}{\mcal S}
 
 \newcommand{\msf}[1]{\ensuremath{\mathsf{#1}}\xspace}
+\newcommand{\newmsf}[1]{%
+\expandafter\providecommand\csname #1\endcsname{}\expandafter\renewcommand\csname #1\endcsname{\msf{#1}}}
 
 \newcommand{\param}{\mathord{-}}
 
@@ -162,7 +166,7 @@
 \newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 
 % axiom of choice
-\newcommand{\AC}{\msf{AC}}
+\newmsf{AC}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Theorems etc.
@@ -173,12 +177,24 @@
 \newtheorem{cor}[thm]{Corollary}
 
 \theoremstyle{definition}
+
+\makeatletter
+\newtheorem*{rep@@theorem}{\protect\rep@@title}
+\newcommand{\newreptheorem}[2]{%
+\newenvironment{rep#1}[1]{%
+ \def\rep@@title{#2 \ref*{##1}}%
+ \begin{rep@@theorem}}%
+ {\end{rep@@theorem}}}
+\makeatother
+
 \newtheorem{defn}[thm]{Definition}
+\newreptheorem{defn}{Definition}
 
 \theoremstyle{remark}
 \newtheorem*{rem}{Remark}
 \newtheorem*{ex}{Example}
 \newtheorem*{nota}{Notation}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Type theory
@@ -199,7 +215,7 @@
 \providecommand{\True}{}
 \renewcommand{\True}{\cons{T}}
 
-\newcommand{\zero}{\msf{O}}
+\newmsf{zero}
 \newcommand{\suc}[1]{\msf{S}\ #1}
 
 \newcommand{\lam}[2]{\lambda\,#1.\;#2}
@@ -230,12 +246,15 @@
 
 \newcommand{\transport}[2]{\ensuremath{\mathsf{transport}^{#1}(#2)}}
 
-\newcommand{\ua}{\msf{ua}}
+\newmsf{ua}
 
 \newcommand{\hott}[1]{\emph{h}-#1}
 
-\newcommand{\isSet}{\msf{isSet}}
-\newcommand{\isFinite}{\msf{isFinite}}
+\newmsf{isSet}
+\newmsf{isFinite}
+
+\newmsf{Fun}
+\newmsf{Ana}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
@@ -308,6 +327,9 @@
 % commutative diagrams
 \newcommand{\pushout}[1][dr]{\save*!/#1+1.2pc/#1:(1,-1)@@^{||-}\restore}
 \newcommand{\pullback}[1][dr]{\save*!/#1-1.2pc/#1:(-1,1)@@^{||-}\restore}
+
+% spans
+\newcommand{\Span}[5]{\xymatrix{#1 & #3 \ar[l]_{#2} \ar[r]^{#4} & #5}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species
