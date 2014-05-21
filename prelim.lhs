@@ -1368,8 +1368,15 @@ made precise as follows:
   Round-tripping a functor through an anafunctor is clearly the
   identity; the interesting direction is to show that \[ \Span \C
   \sigma {||F||} \tau \D \] is equal to \[ \Span \C {1_\C} \C
-  {\sigma^{-1} \then \tau} \D. \]  First, $||F|| = \C$ since $\sigma$
+  {\sigma^{-1} \then \tau} \D. \] First, $||F|| = \C$ since $\sigma$
   is an equivalence, and equivalent categories are equal \todo{cite}.
+  Next, we need to show equality of the functors involved, \emph{when
+    appropriately transported by the path $||F|| = \C$}, which in this
+  case is ultimately constructed from the equivalence $\sigma$.
+  Transporting the domain of a functor by an equivalence of categories
+  is given by precomposition with the inverse of the equivalence, so
+  $\sigma_*(\sigma) = \sigma^{-1} \then \sigma = 1_\C$ and
+  $\sigma_*(\tau) = \sigma^{-1} \then \tau$ as desired.
 \end{proof}
 
 Although anafunctors are thus technically superfluous, they can still
