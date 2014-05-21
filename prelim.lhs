@@ -1298,7 +1298,7 @@ operations and properties of anafunctors.
 
 \begin{defn}
   Any $1$-type $T$ gives rise to an \hott{groupoid} $\tygrpd{T}$ where the
-  objects are values $a : T$, and $\tygrpd{T}(a,b) \defeq a = b$, that
+  objects are values $a : T$, and $\hom_{\tygrpd{T}}(a,b) \defeq a = b$, that
   is, morphisms from $a$ to $b$ are paths $p : a = b$. \todo{Prove
     this is a groupoid.}
 \end{defn}
@@ -1359,7 +1359,7 @@ made precise as follows:
   inverse.
 
   ($\Longrightarrow$) The functor $F : \C \to \D$ is sent to the span
-  $\Span \C {1_\C} \C F B$. Clearly $1_\C$ is fully faithful and
+  $\Span \C {1_\C} \C F \D$. Clearly $1_\C$ is fully faithful and
   essentially surjective, so this is a valid anafunctor.
 
   ($\Longleftarrow$) The anafunctor $\Span \C \sigma {||F||} \tau \D$
@@ -1368,10 +1368,8 @@ made precise as follows:
   Round-tripping a functor through an anafunctor is clearly the
   identity; the interesting direction is to show that \[ \Span \C
   \sigma {||F||} \tau \D \] is equal to \[ \Span \C {1_\C} \C
-  {\sigma^{-1} \then \tau} \D. \]
-
-  \todo{Finish. Just requires noting some things about
-  transport and so on.}
+  {\sigma^{-1} \then \tau} \D. \]  First, $||F|| = \C$ since $\sigma$
+  is an equivalence, and equivalent categories are equal \todo{cite}.
 \end{proof}
 
 Although anafunctors are thus technically superfluous, they can still

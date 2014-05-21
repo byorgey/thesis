@@ -248,11 +248,12 @@
 
 \newmsf{ua}
 
-\newcommand{\hott}[1]{\emph{h}-#1}
+\newcommand{\hott}[1]{\textit{h}-#1}
 
 \newmsf{isSet}
 \newmsf{isFinite}
 
+\newmsf{hom}
 \newmsf{Fun}
 \newmsf{Ana}
 

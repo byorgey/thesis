@@ -477,16 +477,15 @@ species'' (or, more specifically,
 \label{sec:species-in-type-theory}
 
 \todo{Come back to this and attack it on paper, figuring out how to
-  incorporate new insights re: HoTT and CT.}
-\todo{Move this up somehow, and follow it with a general description
-  of the rest of the chapter, to make a nice transition into the more
-  technical material on lifted monoids etc.}
-One generalization that will be of particular interest is a ``port''
-of species into type theory. Recall that $\BT$ denotes the
-($\infty$-)groupoid whose objects are triples consisting of a type $A$, a
-size $n$, and an equivalence $A \iso \Fin n$, and whose morphisms are
-paths between types.  Recall also that $\Type$ denotes the category of
-types and (well-typed) functions.
+  incorporate new insights re: HoTT and CT.}  \todo{Move this up
+  somehow, and follow it with a general description of the rest of the
+  chapter, to make a nice transition into the more technical material
+  on lifted monoids etc.}  One generalization that will be of
+particular interest is a ``port'' of species into type theory. Recall
+that $\BT$ denotes the groupoid whose objects are triples consisting
+of a type $A$, a size $n$, and the propositional truncation of an
+equivalence $A \iso \Fin n$.  Recall also that \todo{fix this: $\Type$
+  denotes the category of types and (well-typed) functions.}
 
 \begin{defn}
   A \term{constructive species} is a functor $F : \BT \to \Type$.  We
