@@ -2,6 +2,7 @@
 
 \newif \iffull \fulltrue
 \newif \ifveryfull \veryfullfalse
+\input{iflvn}
 
 \DeclareFontShape{OT1}{cmr}{bx}{sc}{<-> cmbcsc10}{}
 \PassOptionsToPackage{table}{xcolor}
@@ -106,6 +107,7 @@ The complete source code for this document is available from \bigskip
 
 \begin{pagecentered}
 
+\ifgreek
 % see http://www.guyrutenberg.com/culmus-latex/ ?
 %
 % \begingroup
@@ -133,6 +135,7 @@ The complete source code for this document is available from \bigskip
 \normalsize \hfill ΠΡΟΣ ΚΟΛΟΣΣΑΕΙΣ 1.15--20
 
 \endgroup
+\fi
 
 \end{pagecentered}
 
