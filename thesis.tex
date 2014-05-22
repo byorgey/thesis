@@ -1,13 +1,12 @@
 %% -*- mode: LaTeX; compile-command: "mk" -*-
 
-\newif \iffull \fulltrue
-\newif \ifveryfull \veryfullfalse
+\newif \ifdraft \drafttrue
 \input{iflvn}
 
 \DeclareFontShape{OT1}{cmr}{bx}{sc}{<-> cmbcsc10}{}
 \PassOptionsToPackage{table}{xcolor}
 
-\documentclass[12pt,oneside]{book}
+\documentclass[12pt,oneside,draft]{book}
 
 \newcommand{\Title}{COMBINATORIAL SPECIES AND LABELLED STRUCTURES}
 

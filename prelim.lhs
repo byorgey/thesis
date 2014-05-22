@@ -76,14 +76,14 @@ Metavariable conventions used throughout this dissertation include:
 \label{sec:HoTT}
 
 \term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
-type theory (MLTT)~\citep{martin1975intuitionistic,
-  martin1984intuitionistic} arising out of Vladimir Voevodsky's
-Univalent Foundations program~\citep{voevodskyFoundations}.  There is
-not space to give a full description here; in any case, given the
-existence of the excellent HoTT Book~\citep{hottbook}, such a
-description would be superfluous.  Instead, it will suffice to give a
-brief description of the relevant parts of the theory, and explain the
-particular benefits of carrying out this work in the context of HoTT.
+type theory~\citep{martin1975intuitionistic, martin1984intuitionistic}
+arising out of Vladimir Voevodsky's Univalent Foundations
+program~\citep{voevodskyFoundations}.  There is not space to give a
+full description here; in any case, given the existence of the
+excellent HoTT Book~\citep{hottbook}, such a description would be
+superfluous.  Instead, it will suffice to give a brief description of
+the relevant parts of the theory, and explain the particular benefits
+of carrying out this work in the context of HoTT.
 
 Homotopy type theory, I will argue, is the \emph{right} framework in
 which to carry out the work in this dissertation.  Intuitively, this
