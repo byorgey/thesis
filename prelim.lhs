@@ -555,26 +555,50 @@ aOpts = with & headSize .~ 0.7 & arrowTail .~ dart' & tailSize .~ 0.7
 
 \paragraph{Equivalence of categories}
 
-\todo{Expand this discussion a bit: list three (four?) definitions,
-  say why they are different, discuss them, and then note they are all
-  the same in HoTT.}
-Two categories $\C$ and $\D$ are said to be \emph{equivalent} if there
-are functors $F : \C \to \D$ and $G : \D \to \C$ such that both $FG$
-and $GF$ are naturally isomorphic to the identity functor.  Note that
-the concept of \emph{isomorphism} of categories---where the functors
-$F$ and $G$ are literal inverses, with $FG$ and $GF$ both
-\emph{equal}, rather than naturally isomorphic, to the identity
-functor---is ``evil'', in the sense that it violates the principle of
-equivalence.  That is, it distinguishes between isomorphic things (in
-this case, functors).  Sometimes an
-alternate definition is given, where two categories are equivalent if
-there exists a functor $F : \C \to \D$ which is full and faithful (\ie
-a bijection on each hom-set) as well as \term{essentially surjective},
-that is, for every object $D \in \D$ there exists some object $C \in
-\C$ such that $F(C) \cong D$.  However, this definition is equivalent
-to the definition given above---that is, given such an $F$ we can
-construct a suitable $G$---only by using the axiom of choice; see
-\pref{sec:AC} for a much fuller discussion.
+In category theory founded in set theory, there are quite a few
+different definitions of equivalence between categories.  Ultimately,
+this comes down to the fact, alluded to earlier, that set theory does
+not make a very good foundation for category theory.  In particular,
+when working in set theory, one has to work hard to maintain the
+principle of equivalence.
+\begin{defn} \label{defn:cat-iso}
+  Two categories $\C$ and $\D$ are said to be \term{isomorphic} if
+  there are inverse functors $\BackForth \C F G \D$, \ie with $GF =
+  1_\C$ and $FG = 1_\D$.
+\end{defn}
+Unfortunately, this definition violates the principle of equivalence,
+since, for example, $GF$ might be \emph{isomorphic} to $1_\C$ without
+being \emph{equal} to it.  Isomorphism of categories is thus not a
+very useful concept; usually the following concept is used instead:
+\begin{defn} \label{defn:cat-equiv}
+  An \term{equivalence} between $\C$
+  and $\D$ is given by functors $\BackForth \C F G \D$ which are
+  inverse up to natural isomorphism, that is, $GF \cong 1_\C$ and $FG
+  \cong 1_\D$.
+\end{defn}
+
+In set theory, a function has an inverse if it is both injective and
+surjective.  By analogy, another definition of equivalence is often
+given, which for the sake of clarity we will refer to as
+\term{one-sided equivalence}:
+
+\begin{defn} \label{defn:cat-one-sided-equiv}
+  $\C$ is \term{one-sided equivalent} to $\D$ if there is a functor $F
+  : \C \to \D$ which is full and faithful (\ie a bijection on each
+  hom-set) as well as \term{essentially surjective}, that is, for
+  every object $D \in \D$ there exists some object $C \in \C$ such
+  that $F(C) \cong D$.
+\end{defn}
+
+It is not hard to show that every equivalence is a one-sided
+equivalence.  However, showing that a one-sided equivalence is an
+equivalence requires the axiom of choic; intuitively, the problem is
+that there is no canonical way to choose the action of the inverse
+functor $G$. A much fuller discussion is given in \pref{sec:AC}, but
+it's worth mentioning one of the punchlines now: in category theory
+founded in HoTT rather than in set theory, the three definitions given
+above are all simply equivalent, without violating the principle of
+equivalence and without any need for AC!
 
 \paragraph{Adjunctions}
 
@@ -1839,9 +1863,9 @@ similarly to $\size - : \B \to \P$\footnote{We overload $\size{}$ to
 \end{defn}
 
 \begin{prop}
-  The pair of (ana)functors $\xymatrix{\PT \ar@@<.5ex>[r]^{\fin -} & \BT
-    \ar@@<.5ex>[l]^{\size{}}}$ constitutes an (ana)equivalence
-  between the groupoids $\PT$ and $\BT$.
+  The pair of (ana)functors $\BackForth \PT {\fin -} {\size{}} \BT$
+  constitutes an (ana)equivalence between the groupoids $\PT$ and
+  $\BT$.
 
 \begin{proof}
   \todo{Redo this proof using composition of anafunctors. Intuitively,
