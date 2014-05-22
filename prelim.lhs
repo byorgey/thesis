@@ -594,9 +594,36 @@ adjunction \[ (- \times B) \adj (B \to -). \]
 \subsection{Monoids}
 \label{sec:monoids}
 
-Monoids, monoidal categories. Products and coproducts. Monoidal
-closed. Cartesian closed. \bay{We do \emph{not} pretend all monoidal
-  categories are strict since that requires AC!}
+Recall that a \term{monoid} is a set $S$ equipped with an associative
+binary operation $\mappend : S \times S \to S$ and a distinguished
+element $\mempty : S$ which is an identity for $\mappend$.  A
+\term{monoidal category} is one with a ``monoid on objects'', that is,
+a binary operation on objects and an identity object, with the
+associativity and identity laws expressed via natural isomorphisms.
+\begin{defn}
+  A \term{monoidal category} is a category $\C$ equipped with
+  \begin{itemize}
+  \item a bifunctor $\otimes : \C \times \C \to \C$;
+  \item a distinguished object $I \in \C$;
+  \item a natural isomorphism $\alpha : \all{ABC}{(A \otimes B)
+      \otimes C \cong A \otimes (B \otimes C)}$; and
+  \item natural isomorphisms $\lambda : \all{A}{I \otimes A \cong
+      A}$ and $\rho : \all{A}{A \otimes I \cong A}$.
+  \end{itemize}
+  $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
+  ``coherence axioms'', which ensure that parallel isomorphisms
+  constructed from $\alpha$, $\lambda$, and $\rho$ are always equal.
+\end{defn}
+
+Note that a category can be monoidal in more than one way.  For
+example, both Cartesian product and disjoint union are monoidal
+structures on $\Set$.  In fact, as we will see in \pref{chap:species},
+the category of species is monoidal in at least six different ways!
+
+\todo{ Monoids, monoidal categories. Products and coproducts. Monoidal
+  closed. Cartesian closed. Strict monoidal categories and AC.}
+\bay{We do \emph{not} pretend all monoidal categories are strict since
+  that requires AC!}
 
 \later{How can we say that we are using ``the same'' ``product-like''
   monoidal structure in all these different categories?  Are they
@@ -1346,6 +1373,17 @@ operations and properties of anafunctors.
 \label{sec:anafunctors-hott}
 
 We first \todo{XXX}
+
+One might na\"ively expect the definition of equivalence
+
+\begin{defn}[foo]
+  
+\end{defn}
+
+\begin{defn}
+  A functor $F : \C \to \D$ is an \term{(adjoint) equivalence} when it
+  is left adjoint to a functor $G : \D \to \C$, and 
+\end{defn}
 
 \todo{(Adjoint) equivalence of categories.}
 
