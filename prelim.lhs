@@ -639,15 +639,31 @@ associativity and identity laws expressed via natural isomorphisms.
   constructed from $\alpha$, $\lambda$, and $\rho$ are always equal.
 \end{defn}
 
-Note that a category can be monoidal in more than one way.  For
-example, both Cartesian product and disjoint union are monoidal
-structures on $\Set$.  In fact, as we will see in \pref{chap:species},
-the category of species is monoidal in at least six different ways!
+Note that a category can be monoidal in more than one way.  In fact,
+as we will see in \pref{chap:species}, the category of species is
+monoidal in at least six different ways!  Another example is $\Set$,
+which has both Cartesian product and disjoint union as monoidal
+structures.  More generally, categories with products (together with a
+terminal object) and/or coproducts (together with an initial object) are
+always monoidal.
 
-\todo{ Monoids, monoidal categories. Products and coproducts. Monoidal
-  closed. Cartesian closed. Strict monoidal categories and AC.}
-\bay{We do \emph{not} pretend all monoidal categories are strict since
-  that requires AC!}
+There are many variants on the basic theme of monoidal categories; a
+few of the most important, for the purposes of this dissertation, are
+given here:
+
+\begin{defn}
+  A monoidal category is \term{symmetric} if there is additionally a
+  natural isomorphism $\gamma : \all{AB}{A \otimes B \cong B \otimes
+    A}$.
+\end{defn}
+
+\begin{defn}
+  A monoidal category is \term{closed} if there is \todo{finish}
+\end{defn}
+
+\todo{Monoidal closed. Cartesian closed. Strict monoidal categories
+  and AC.}  \bay{We do \emph{not} pretend all monoidal categories are
+  strict since that requires AC!}
 
 \later{How can we say that we are using ``the same'' ``product-like''
   monoidal structure in all these different categories?  Are they
