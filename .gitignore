@@ -14,6 +14,8 @@ Shake
 *.thm
 *.errors
 
+*.agdai
+
 *.tex
 !thesis.tex
 !abstract.tex
