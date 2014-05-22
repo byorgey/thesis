@@ -615,7 +615,7 @@ One example familiar to functional programmers is \emph{currying}: \[
 (A \times B \to C) \cong (A \to (B \to C)) \] This corresponds to the
 adjunction \[ (- \times B) \adj (B \to -). \]
 
-\subsection{Monoids}
+\subsection{Monoidal categories}
 \label{sec:monoids}
 
 Recall that a \term{monoid} is a set $S$ equipped with an associative
@@ -637,15 +637,24 @@ associativity and identity laws expressed via natural isomorphisms.
   $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
   ``coherence axioms'', which ensure that parallel isomorphisms
   constructed from $\alpha$, $\lambda$, and $\rho$ are always equal.
+
+  We often write $(\C,\otimes,I)$ when we wish to emphasize the choice
+  of a monoidal functor and identity object for a monoidal category $\C$.
 \end{defn}
 
-Note that a category can be monoidal in more than one way.  In fact,
-as we will see in \pref{chap:species}, the category of species is
-monoidal in at least six different ways!  Another example is $\Set$,
-which has both Cartesian product and disjoint union as monoidal
-structures.  More generally, categories with products (together with a
-terminal object) and/or coproducts (together with an initial object) are
-always monoidal.
+Note that $\otimes$ is not just a function on objects, but a
+\emph{bifunctor}, so there must also be a way to combine morphisms $f
+: \mor {A_1} {A_2}$ and $g : \mor {B_1} {B_2}$ into a morphism $f
+\otimes g : \mor {A_1 \otimes B_1} {A_2 \otimes B_2}$ which respects
+identities and composition.
+
+Note also that a category can be monoidal in more than one way.  In
+fact, as we will see in \pref{chap:species}, the category of species
+is monoidal in at least six different ways!  Another example is
+$\Set$, which has both Cartesian product and disjoint union as
+monoidal structures.  More generally, categories with products
+(together with a terminal object) and/or coproducts (together with an
+initial object) are always monoidal.
 
 There are many variants on the basic theme of monoidal categories; a
 few of the most important, for the purposes of this dissertation, are
@@ -657,13 +666,32 @@ given here:
     A}$.
 \end{defn}
 
+For example, $\Set$ is symmetric monoidal under both Cartesian product
+and disjoint union. As an example of a non-symmetric monoidal
+category, consider the functor category $[\C,\C]$, with the monoid given
+by composition of functors.
+
 \begin{defn}
-  A monoidal category is \term{closed} if there is \todo{finish}
+  A monoidal category $\C$ is \term{closed} if there some bifunctor $[-,-]
+  : \C^\op \times \C \to \C$ such that there is a natural
+  isomorphism \[ \all{ABC}{\Hom {A \otimes B} C \cong \Hom A
+    {[B,C]}}, \] that is, $- \otimes B$ is left adjoint to $[B,-]$.
 \end{defn}
 
-\todo{Monoidal closed. Cartesian closed. Strict monoidal categories
-  and AC.}  \bay{We do \emph{not} pretend all monoidal categories are
-  strict since that requires AC!}
+$(\Set, \times)$ is closed: $[B,C]$ is defined as the set of
+functions from $B$ to $C$, and the required isomorphism is currying.
+Categories, like $\Set$, which are closed with respect to the
+categorical product are called \term{Cartesian closed}.
+
+\begin{defn}
+  A \term{strict} monoidal category is one in which $\alpha$,
+  $\lambda$, and $\rho$ are \emph{equalities} rather than natural
+  isomorphisms.  It is often remarked that every monoidal category is
+  equivalent to some strict one (for example, using the theory of
+  cliques~\cite{joyal1991geometry}, explained in \pref{sec:cliques}),
+  which is used to justify the pretense that every monoidal category
+  is strict; however, proving this requires the axiom of choice.
+\end{defn}
 
 \later{How can we say that we are using ``the same'' ``product-like''
   monoidal structure in all these different categories?  Are they
