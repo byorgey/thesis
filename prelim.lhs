@@ -678,10 +678,17 @@ by composition of functors.
     {[B,C]}}, \] that is, $- \otimes B$ is left adjoint to $[B,-]$.
 \end{defn}
 
-$(\Set, \times)$ is closed: $[B,C]$ is defined as the set of
-functions from $B$ to $C$, and the required isomorphism is currying.
+$(\Set, \times)$ is closed: $[B,C]$ is defined as the set of functions
+from $B$ to $C$, and the required isomorphism is currying.
 Categories, like $\Set$, which are closed with respect to the
-categorical product are called \term{Cartesian closed}.
+categorical product are called \term{Cartesian closed}.  Intuitively,
+Cartesian closed categories are those which can ``internalize''
+arrows, with objects that ``act like'' sets of morphisms.  Put another
+way, Cartesian closed categories are those with ``first-class
+morphisms''.  Functional programmers are familiar with this idea: in a
+language with first-class functions, the class of functions
+(morphisms) between two given types (objects) is itself a type
+(object).
 
 \begin{defn}
   A \term{strict} monoidal category is one in which $\alpha$,
@@ -884,15 +891,21 @@ true:
 
 \todo{Write me.  Basic definitions; powers and copowers.}
 
-\section{The Axiom of Choice (and how to avoid it)}
+\section{The axiom of choice (and how to avoid it)}
 \label{sec:AC}
 
-\todo{Note at the outset that this is in set theory; becomes better in
-  HoTT.}
+The (in)famous \emph{axiom of choice} (hereafter, AC) plays a central
+role in much of modern mathematics.  In a constructive setting,
+however, it is problematic.  Much effort has been expended trying to
+avoid it \citep{makkai, FOLDS, voevodsky}; in a sense, this can be
+seen as one of the goals of the univalent foundations program.
+In \label{sec:anafunctors-hott} we will see how HoTT indeed provides
+an excellent AC-free foundation for the mathematics we want to do.
+First, however, we give an introduction to AC and related issues in
+set theory.
 
-The (in)famous \emph{Axiom of Choice} (hereafter, AC) can be
-formulated in a number of equivalent ways.  Perhaps the most
-well-known is
+The axiom of choice can be formulated in a number of equivalent ways.
+Perhaps the most well-known is
 \begin{equation}
   \label{eq:ac1} \tag{AC}
   \text{The Cartesian product of any collection of non-empty sets is non-empty.}
@@ -1013,15 +1026,15 @@ that it is consistent to add either AC or its negation to ZF.  In
 particular this means that neither AC nor its negation can be proved
 from the axioms of ZF (since then adding the other would lead to
 inconsistency).  It is somewhat controversial since it has some
-strange consequences (\eg the Banach-Tarski
-paradox~\cite{banach-tarski}), but most mathematicians have come to
-accept it, and work (in principle) within ZF extended with AC, known
-as ZFC.
+strange consequences, \eg the Banach-Tarski
+paradox~\cite{banach-tarski}.  However, most mathematicians have come
+to accept it, and work (in principle) within ZF extended with AC,
+known as ZFC.
 
-Now consider how to express AC in type theory.  First, we assume we
-have some type $I$ which indexes the collection of sets; that is,
-there will be one set for each value of type $I$.  Given some type
-$A$, we can define a subset of the values of type $A$ using a
+Consider how to express AC in type theory.  First, we assume we have
+some type $I$ which indexes the collection of sets; that is, there
+will be one set for each value of type $I$.  Given some type $A$, we
+can define a subset of the values of type $A$ using a
 \emph{predicate}, that is, a function $P : A \to \Type$.  For some
 particular $a : A$, applying $P$ to $a$ yields a type, which can be
 thought of as the type of evidence that $a$ is in the subset $P$; $a$
@@ -1084,14 +1097,12 @@ start. All it had to do was shuffle them around a bit.  The ``real''
 AC, on the other hand, has a much harder job: it is told some sets are
 non-empty, but without any actual elements being mentioned, and it
 then has to manufacture a bunch of elements out of thin air.  This
-doesn't fit very well in a constructive/computational context.
-Although it is logically consistent to assume it as an axiom, it has
-no computational interpretation, so anything defined in terms of it
-would just get stuck operationally.  Since the goal of this work is
-explicitly to provide a foundation for \emph{computation}, the axiom
-of choice must be rejected.
-
-\todo{Note that in HoTT, AC implies LEM!}
+already doesn't seem to fit very well in a constructive/computational
+context; but even more to the point, it turns out that the axiom of
+choice implies the law of excluded middle (LEM)
+\citep{diaconescu1975axiom, goodman1978choice}!  Working as we are in
+a type theory based on intuitionistic logic, we must therefore reject
+the axiom of choice.
 
 It is worth noting that within HoTT, the notion of a ``non-empty'' set
 can be defined in a more nuanced way.  The best way to model what
@@ -1119,6 +1130,7 @@ some property, when in fact there may be many objects with the given
 property, but all such objects are uniquely isomorphic; this cannot
 cause confusion if the principle of equivalence is in effect.
 
+\later{Rewrite this a bit based on feedback from blog post comments.}
 This phenomenon should be familiar to anyone who has seen simple
 universal constructions such as terminal objects or categorical
 products.  For example, an object $1 \in \C$ is called \term{terminal}
@@ -1682,10 +1694,13 @@ finiteness? This is not \latin{a priori} clear, and indeed, there are
 several possible answers \citep{finite}. However, the discussion
 above, where bijections $S \bij \fin{\size S}$ played a prominent
 role, suggests that we adopt the simplest option,
-\term{cardinal-finiteness}.  A set (type) $A$ is
-\term{cardinal-finite} iff there exists some $n \in \N$ and a
-bijection $A \bij \fin n$; $n$ is called the size or cardinality of
-$A$.  Our first try at encoding this in type theory is
+\term{cardinal-finiteness}.
+\begin{defn}
+  A set (type) $A$ is \term{cardinal-finite} iff there exists some $n
+  \in \N$ and a bijection $A \bij \fin n$; $n$ is called the size or
+  cardinality of $A$.
+\end{defn}
+Our first try at encoding this in type theory is
 \[ \FinType \defeq (A : \Type) \times (n : \N) \times (A \iso \Fin n). \]
 
 We would like to build a groupoid having such finite types as objects,
@@ -1695,7 +1710,7 @@ objects and paths $a = b$ as its morphisms.  For this to be
 applicable, we must check that $\FinType$ is a $1$-type. In fact, it
 turns out that it is a $0$-type, \ie a set---but this won't do,
 because the resulting groupoid is therefore \emph{discrete}, with at
-most one morphism between each pair of objects; $\B$, of course, has
+most one morphism between each pair of objects. $\B$, of course, has
 $n!$ distinct morphisms between any two sets of size $n$.
 Intuitively, the problem is that paths between objects in
 $\tygrpd{\FinType}$ involve not just the types in question but also
