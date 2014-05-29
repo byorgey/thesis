@@ -119,7 +119,7 @@ benefits this work, to be explored in more detail later, include:
   mathematics in a constructive setting.  In particular we use it to
   model the concept of \emph{finiteness} (\pref{sec:finiteness}).
 \item Homotopy type theory allows doing category theory without using
-  the Axiom of Choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
+  the axiom of choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
   important in a constructive or computational setting.
 \end{itemize}
 
@@ -592,7 +592,7 @@ given, which for the sake of clarity we will refer to as
 
 It is not hard to show that every equivalence is a one-sided
 equivalence.  However, showing that a one-sided equivalence is an
-equivalence requires the axiom of choic; intuitively, the problem is
+equivalence requires the axiom of choice; intuitively, the problem is
 that there is no canonical way to choose the action of the inverse
 functor $G$. A much fuller discussion is given in \pref{sec:AC}, but
 it's worth mentioning one of the punchlines now: in category theory
@@ -956,9 +956,6 @@ drawSet opts
       where
         base = shp # fc c # named ((opts ^. setName) .> i)
 
-enclose :: Double -> Double -> Diagram B R2 -> Diagram B R2
-enclose g r d = d # centerXY <> roundedRect (width d + g) (height d + g) r # lw 0.03
-
 colors :: [Kolor]
 colors = brewerSet Set1 9
 
@@ -1099,10 +1096,10 @@ non-empty, but without any actual elements being mentioned, and it
 then has to manufacture a bunch of elements out of thin air.  This
 already doesn't seem to fit very well in a constructive/computational
 context; but even more to the point, it turns out that the axiom of
-choice implies the law of excluded middle (LEM)
-\citep{diaconescu1975axiom, goodman1978choice}!  Working as we are in
-a type theory based on intuitionistic logic, we must therefore reject
-the axiom of choice.
+choice implies the law of excluded middle \citep{diaconescu1975axiom,
+  goodman1978choice}, \citep[Theorem 10.1.14]{hottbook}!  Working as
+we are in a type theory based on intuitionistic logic, we must
+therefore reject the axiom of choice.
 
 It is worth noting that within HoTT, the notion of a ``non-empty'' set
 can be defined in a more nuanced way.  The best way to model what
@@ -1121,14 +1118,13 @@ propositions, not to construct values.
 In category theory, one is typically interested in specifying objects
 only \emph{up to unique isomorphism}.  In fact, definitions which make
 use of actual \emph{equality} on objects are sometimes referred to
-(half-jokingly) as \emph{evil}.  More positively, the widely
-subscribed-to \term{principle of
-  equivalence}~\cite{principle-of-equivalence} states that properties
-of mathematical structures should be invariant under equivalence.
-This principle leads naturally to speaking of ``the'' object having
-some property, when in fact there may be many objects with the given
-property, but all such objects are uniquely isomorphic; this cannot
-cause confusion if the principle of equivalence is in effect.
+(half-jokingly) as \emph{evil}.  More positively, the principle of
+equivalence states that properties of mathematical structures should
+be invariant under equivalence.  This principle leads naturally to
+speaking of ``the'' object having some property, when in fact there
+may be many objects with the given property, but all such objects are
+uniquely isomorphic; this cannot cause confusion if the principle of
+equivalence is in effect.
 
 \later{Rewrite this a bit based on feedback from blog post comments.}
 This phenomenon should be familiar to anyone who has seen simple
@@ -1187,17 +1183,73 @@ the difference between different choices (as long as we refrain from
 evil).  Unfortunately, even such ``benign'' use of AC still poses a
 problem for computation.
 
-The right way around this use of AC is to generalize functors to
-\term{anafunctors}, which are presented below.  The theory of
-\term{cliques} is presented first---cliques come close to being a way
-around AC, and although they don't completely surmount the problem in
-the end, they offer some good intuition for understanding anafunctors.
-
 \subsection{AC and equivalence of categories}
 \label{sec:AC-equivalence}
 
-\todo{Write about relationship of AC, equivalence, and fully faithful
-  essentially surjective functors.}
+Another place AC shows up in category theory, as hinted in
+\pref{sec:ct-fundamentals}, is in relation to equivalence of
+categories.  Recall the two different notions of equivalence:
+
+\begin{repdefn}{defn:cat-equiv}
+  An \term{equivalence} between $\C$
+  and $\D$ is given by functors $\BackForth \C F G \D$ which are
+  inverse up to natural isomorphism, that is, $GF \cong 1_\C$ and $FG
+  \cong 1_\D$.
+\end{repdefn}
+
+\begin{repdefn}{defn:cat-one-sided-equiv}
+  $\C$ is \term{one-sided equivalent} to $\D$ if there is a functor $F
+  : \C \to \D$ which is full and faithful (\ie a bijection on each
+  hom-set) as well as \term{essentially surjective}, that is, for
+  every object $D \in \D$ there exists some object $C \in \C$ such
+  that $F(C) \cong D$.
+\end{repdefn}
+
+Every equivalence is a one-sided equivalence, but to prove every
+one-sided equivalence is an equivalence requires AC.  In more detail,
+suppose $F : \C \to \D$ is fully faithful and essentially surjective.
+To construct an equivalence between $\C$ and $\D$, we must define a
+functor $G : \D \to \C$ and show it is inverse to $F$ (up to natural
+isomorphism).  However, to define $G$ we must give its action on each
+object $D \in \D$, that is, a function $\Ob \D \to \Ob \C$.  We know
+that for each $D \in \D$ there \emph{exists} some object $C \in \C$
+with $F\ C \cong D$; that is, $\{ \{ C \in \C \mid F\ C \cong D \}
+\mid D \in \D \}$ is a collection of nonempty sets.  However, in a
+non-constructive logic, knowing these sets are nonempty does not
+actually give us any objects; we must use the axiom of choice to yield
+a choice function $\Ob \D \to \Ob \C$, which we can use as the object
+mapping of the functor $G$.  In fact, the association goes deeper yet:
+it turns out that the statement
+\begin{equation}
+  \text{every fully faithful, essentially surjective functor is an
+    equivalence} \tag{FFES} \label{eq:ffes-eqv}
+\end{equation}
+not only requires AC, but is \emph{equivalent} to it
+\citep{cat-equivalence-AC}!
+
+In theory, this poses no particular problems; if we want to avoid AC
+we can just stick to the inverse-functors definition of equivalence.
+In practice, however, it is often much easier to define a single
+functor and prove it has the right properties than it is to produce a
+pair of inverse functors. It would be a shame to lose \eqref{eq:ffes-eqv} as a
+tool for constructing equivalences, especially since it seems like it
+really ``ought to'' work---in the sense that the use of AC is
+``benign'', as discussed previously.
+
+One may therefore ask whether there is a slightly different framework
+in which we may recover (something like) \eqref{eq:ffes-eqv}, without
+requiring AC.  There are two main approaches.  The first is to
+generalize functors, using either cliques (\pref{sec:cliqes}) or
+anafunctors (\pref{sec:anafunctors}).  The second, to be explored
+later, is to generalize the notion of equality---this is the approach
+taken by HoTT.
+
+The theory of \term{cliques} is presented first---cliques come close
+to being a way around AC, and although they don't completely surmount
+the problem in the end, they offer some good intuition for
+understanding \term{anafunctors}, presented in
+\pref{sec:anafunctors}.  Later, \pref{sec:anafunctors-hott} will
+present these concepts as they arise in HoTT.
 
 \subsection{Cliques}
 \label{sec:cliques}
@@ -1216,7 +1268,7 @@ A clique is a formal way of representing the informal notion of
   \end{itemize}
   such that for all $i,j,k \in I$,
   \begin{itemize}
-  \item $u_{ii} = id_{A_i}$, and
+  \item $u_{ii} = \id_{A_i}$, and
   \item $u_{ij} \then u_{jk} = u_{ik}$.
   \end{itemize}
 \end{defn}
@@ -1294,140 +1346,241 @@ This gets rid of the need for AC in defining such functors.  However,
 we have only succeeded in postponing the problem a bit, since defining
 composition in $\clq \D$ requires AC.  It is also somewhat cumbersome
 to replace $\D$ by $\clq \D$ in this way.  To make it tenable, one
-would likely end up defining a new notion of ``clique functor'' $F :
-\C \stackrel{\clq{}}{\to} \D$ given by a regular functor $\C \to \clq
-\D$, and showing that these clique functors ``act like'' functors (\ie
-can be composed, have a suitable notion of natural transformations,
-\etc).
-
-In fact, this idea of generalizing functors is the right one, but
-instead of generalizing them to ``clique functors'' we generalize
-instead to \term{anafunctors}.
+would define a new notion of ``clique functor'' $F : \C
+\stackrel{\clq{}}{\to} \D$ given by a regular functor $\C \to \clq
+\D$, and show that these clique functors ``act like'' functors in
+suitable ways.  For example, it is easy to see that any regular
+functor $\C \to \D$ can be made into a trivial functor $\C \to \clq
+\D$, by sending each $C \in \C$ to the singleton clique containing
+only $F(C)$.  One can also show that clique functors can be composed,
+have a suitable notion of natural transformations between them,
+and so on\footnote{In fact, $\clq{-}$ turns out to be a (2-)monad, and the
+  category of clique functors is its Kleisli category
+  \citep{nlab-clique}.}. However, there is an alternative, equivalent
+formuation of ``clique functors'', namely, \term{anafunctors}, which
+do not require AC to define.
 
 \subsection{Anafunctors}
 \label{sec:anafunctors}
 
-\todo{Use different metavariables for functions/functors composing an
-  anafunctor.}
+\todo{Prove/explain relationship with cliques?}
 
-The basic idea of an anafunctor is similar to that of a functor $\C
-\to \clq \D$---it represents a functor whose ``values are specified
-only up to unique isomorphsim''.  In fact, anafunctors $\C \to \D$ and
-functors $\C \to \clq \D$ are \todo{equivalent? with AC? check
-  this\dots}, though this is far from apparent, and anafunctors are
-nicer to work with.  Every functor is trivially an anafunctor, and in
-the presence of AC, anafunctors ``collapse'' to regular functors.
-Moreover, anafunctors possess many of the same properties as functors
-\todo{like what?}
-
+As an intuition for anafunctors it is helpful to keep in mind the
+equivalent concept of functors $\C \to \clq \D$---both represent
+functors whose ``values are specified only up to unique isomorphsim''.
+Such functors represent a many-to-many relationship between objects of
+$\C$ and objects of $\D$.  Normal functors may map multiple objects of
+$\C$ to the same object in $\D$; the novel aspect is the ability to
+have a single object of $\C$ correspond to multiple objects of $\D$.
 The key idea is to add a class of ``specifications'' which mediate the
 relationship between objects in the source and target categories, in
 exactly the same way that a ``junction table'' must be added to
-support a many-to-many relationship in a database schema.
+support a many-to-many relationship in a database schema.  This is
+illustrated in \pref{fig:junction-table}. On the left is a
+many-to-many relation between a set of shapes and a set of numbers.
+On the right, this relation has been mediated by a ``junction table''
+containing a set of ``specifications''---in this case, each
+specification is simply a pair of a shape and a number---together with
+two mappings (one-to-many relations) from the specifications to both of
+the original sets, such that a specification maps to a shape $s$ and
+number $n$ if and only if $s$ and $n$ were originally related.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import           Control.Arrow                  ((&&&))
+import           Data.Maybe                     (fromMaybe)
+
+drawTable :: IsName n => [(n, Diagram B R2)] -> Diagram B R2
+drawTable = centerY . vcat . map (\(l, d) -> enbox d # named l)
+
+enbox :: Diagram B R2 -> Diagram B R2
+enbox d = d # centerXY # sizedAs r # scale 0.6 <> r
+  where
+    r :: Diagram B R2
+    r = rect 1.618 1
+
+table1 = zip ["A","B","C"]
+  [ circle 1
+  , triangle 1
+  , square 1
+  ]
+
+table2 = map ((id &&& ((<> square 1 # lw 0) . text)) . show) [1..4]
+
+relation =
+  [ ("A", "1")
+  , ("A", "2")
+  , ("B", "1")
+  , ("B", "2")
+  , ("B", "3")
+  , ("C", "4")
+  ]
+
+drawRelation t1 t2 rel
+  = hcat' (with & sep .~ 2.5) [drawTable t1, drawTable t2]
+  # applyAll
+    [connectOutside a b || (a,b) <- rel]
+
+drawJunction t1 t2 rel
+  = hcat' (with & sep .~ 2.5) [drawTable t1, drawTable junction, drawTable t2]
+  # applyAll
+    ([connectOutside r (fst r) || r <- rel] ++ [connectOutside r (snd r) || r <- rel])
+  where
+    junction = [ (r, junctionDia r) || r <- rel ]
+    junctionDia (a,b)
+      = hcat' (with & sep .~ 0.5) [lookup' a t1 # centerXY # sized (Dims 1 1), lookup' b t2 # centerXY # sized (Dims 1 1)]
+    lookup' x y = fromMaybe mempty (lookup x y)
+
+dia =
+  hcat' (with & sep .~ 4)
+    [ drawRelation table1 table2 relation
+    , drawJunction table1 table2 relation
+    ]
+  # frame 0.5
+  \end{diagram}
+  \caption{Representing a many-to-many relationship via a junction table}
+  \label{fig:junction-table}
+\end{figure}
 
 \begin{defn} \label{defn:anafunctor}
   An \term{anafunctor} $F : \C \to \D$ is defined as follows.
   \begin{itemize}
-  \item There is a class $||F||$ of \term{specifications}.
-  \item There are two functions $\Span {\Ob \C} \sigma {||F||} \tau
-    {\Ob \D}$ mapping specifications to objects of $\C$ and $\D$.
+  \item There is a class $S$ of \term{specifications}.
+  \item There are two functions $\Span {\Ob \C} {\lana{F}} {S}
+    {\rana{F}} {\Ob \D}$ mapping specifications to objects of $\C$ and
+    $\D$.
   \end{itemize}
-  $||F||$, $\sigma$, and $\tau$ together define a many-to-many
-  relationship between objects of $\C$ and objects of $\D$.  Any
-  normal functor may map multiple objects of $\C$ to the same object
-  in $\D$; the novel aspect is the ability to have a single object of
-  $\C$ correspond to multiple objects of $\D$.
-
+  $S$, $\lana{F}$, and $\rana{F}$ together define a many-to-many
+  relationship between objects of $\C$ and objects of $\D$.
   $D \in \D$ is called a \term{specified value of $F$ at $C$} if there
-  is some specification $s \in ||F||$ such that $\sigma(s) = C$ and
-  $\tau(s) = D$, in which case we write $F_s(C) = D$.  Moreover, $D$
+  is some specification $s \in S$ such that $\lana{F}(s) = C$ and
+  $\rana{F}(s) = D$, in which case we write $F_s(C) = D$.  Moreover, $D$
   is \term{a value of $F$ at $C$} (not necessarily a \emph{specified}
   one) if there is some $s$ for which $D \cong F_s(C)$.
 
-  The name of the game now is to impose additional conditions which
-  ensure that $F$ ``acts like'' a regular functor $\C \to \D$.
+  The idea now is to impose additional conditions which ensure that
+  $F$ ``acts like'' a regular functor $\C \to \D$.
   \begin{itemize}
   \item Functors are defined on all objects; so we require each object
     of $\C$ to have at least one specification $s$ which corresponds
-    to it---that is, $\sigma$ must be surjective.
+    to it---that is, $\lana{F}$ must be surjective.
   \item Functors transport morphisms as well as objects.  For each
-    $s,t \in ||F||$ and each $f : \sigma(s) \to \sigma(t)$ in $\C$,
-    there must be a morphism $F_{s,t}(f) : F_s(\sigma(s)) \to
-    F_t(\sigma(t))$ in $\D$. \todo{picture}
-  \item Functors preserve identities: for each $s \in ||F||$ we should
-    have $F_{s,s}(id_{\sigma(s)}) = id_{\tau(s)}$. \todo{picture}
+    $s,t \in S$ and each $f : \lana{F}(s) \to \lana{F}(t)$ in $\C$,
+    there must be a morphism $F_{s,t}(f) : F_s(\lana{F}(s)) \to
+    F_t(\lana{F}(t))$ in $\D$:
+    \begin{center}
+      \begin{diagram}[width=150]
+import SpeciesDiagrams
+
+dia =
+  hcat' (with & sep .~ 2)
+    [ objs "CD"
+    , objs "st"
+    , objs "PQ"
+    ]
+  # applyAll [ connectOutside' aOpts x y || [x,y] <- ["CD", "PQ", "sC", "sP", "tD", "tQ"] ]
+  # frame 0.5
+
+aOpts = with & gap .~ 0.2
+      \end{diagram}
+    \end{center}
+  \item Functors preserve identities: for each $s \in S$ we should
+    have $F_{s,s}(\id_{\lana{F}(s)}) = \id_{\rana{F}(s)}$.
   \item Finally, functors preserve composition: for all $s,t,u \in
-    ||F||$, $f : \sigma(s) \to \sigma(t)$, and $g : \sigma(t) \to
-    \sigma(u)$, it must be the case that $F_{s,u}(f \then g) =
-    F_{s,t}(f) \then F_{t,u}(g)$. \todo{picture}
+    S$, $f : \lana{F}(s) \to \lana{F}(t)$, and $g : \lana{F}(t) \to
+    \lana{F}(u)$, it must be the case that $F_{s,u}(f \then g) =
+    F_{s,t}(f) \then F_{t,u}(g)$:
+    \begin{center}
+      \begin{diagram}[width=150]
+import SpeciesDiagrams
+
+dia =
+  hcat' (with & sep .~ 2)
+    [ objs "CDE"
+    , objs "stu"
+    , objs "PQR"
+    ]
+  # applyAll [ connectOutside' aOpts x y || [x,y] <- ["CD", "DE", "PQ", "QR", "sC", "sP", "tD", "tQ", "uE", "uR"] ]
+  # frame 0.5
+
+aOpts = with & gap .~ 0.2
+      \end{diagram}
+    \end{center}
   \end{itemize}
 \end{defn}
 
-Note that if $s,t \in ||F||$ with $\sigma(s) = \sigma(t) = C$, then
-$F_{s,t}(id_C) \then F_{t,s}(id_C) = F_{s,s}(id_C) = id_{\tau(s)}$, so
-each object of $\C$ really does map to an equivalence class of
-isomorphic objects in $\D$.
+\begin{rem}
+  Our initial intuition was that an anafunctor should map objects of
+  $\C$ to equivalence classes of objects in $\D$.  This may not be
+  immediately apparent from the definition, but is in fact the
+  case. In particular, the identity morphism $\id_C$ maps to
+  isomorphisms between specified values of $C$; that is, under the
+  action of an anafunctor, an object $C$ together with its identity
+  morphism ``blow up'' into a clique.  To see this, let $s,t \in S$ be
+  two different specifications corresponding to $C$, that is,
+  $\lana{F}(s) = \lana{F}(t) = C$. Then by preservation of composition
+  and identities, we have \[ F_{s,t}(\id_C) \then F_{t,s}(\id_C) =
+  F_{s,s}(\id_C \then \id_C) = F_{s,s}(\id_C) = \id_{\rana{F}(s)}, \] so
+  $F_{s,t}(\id_C)$ and $F_{t,s}(\id_C)$ constitute an isomorphism
+  between $F_S(C)$ and $F_t(C)$.
+\end{rem}
 
 There is an alternative, equivalent definition of anafunctors, which
-is somewhat less intuitive but sometimes more convenient to work with.
+is somewhat less intuitive but usually more convenient to work with.
 
-\begin{defn} \label{defn:anafunctor-span}
-  An anafunctor $F : \C \to \D$ is a category $||F||$ together with a
-  span of \emph{functors} $\Span \C \sigma {||F||} \tau \D$ where $\sigma$ is faithful, and surjective
-  on both objects and morphisms.
+\begin{defn} \label{defn:anafunctor-span} An anafunctor $F : \C \to
+  \D$ is a category $\Spec$ together with a span of \emph{functors}
+  $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$ where $\lana{F}$ is
+  fully faithful, and (strictly) surjective on objects.
 \end{defn}
 
-\todo{Highlight that it has to be \emph{strictly} surjective on
-  objects; difference to usual notion of a fully faithful and
-  essentially surjective functor.}
+\begin{rem}
+  Note that in this definition, $\lana{F}$ must be \emph{strictly}
+  (as opposed to \emph{essentially}) surjective on objects, that is,
+  for every $C \in \C$ there is some $S \in \Spec$ such that
+  $\lana{F}(S) = C$, rather than only requiring $\lana{F}(S) \cong
+  C$.  Given this strict surjectivity on objects, it is equivalent to
+  require $\lana F$ to be full, as in the definition above, or to be
+  (strictly) surjective on the class of all morphisms.
+\end{rem}
 
 We are punning on notation a bit here: in the original definition of
-anafunctor, $||F||$ is a set and $\sigma$ and $\tau$ are functions on
-objects, whereas in this more abstract definition $||F||$ is a
-category and $\sigma$ and $\tau$ are functors.  Of course, the two are
-closely related: given a span of functors $\Span \C {\overline \sigma}
-{\overline F} {\overline \tau} \D$, we may simply take the objects of
-$\overline F$ as the class of specifications $||F||$, and the actions
-of the functors $\overline \sigma$ and $\overline \tau$ on objects as
-the functions $\sigma$ and $\tau$.  Conversely, given a class of
-specifications $||F||$ and functions $\sigma$ and $\tau$, we may
-construct the category $\overline F$ with $\Ob \overline F = ||F||$
-and with morphisms $\sigma(s) \to \sigma(t)$ in $\C$ acting as
-morphisms $s \to t$ in $\overline F$.  We take $\overline \sigma$ to
-be $\sigma$ on objects and the identity on morphisms, and $\overline
-\tau$ maps $f : s \to t$ in $\overline F$ to $F_{s,t}(f) : \tau(s) \to
-\tau(t)$ in $\D$.
-
-\todo{Is it worth actually going through the proof in detail?}
+anafunctor, $S$ is a set and $\lana{F}$ and $\rana{F}$ are functions on
+objects, whereas in this more abstract definition $\Spec$ is a
+category and $\lana{F}$ and $\rana{F}$ are functors.  Of course, the two
+are closely related: given a span of functors $\Span \C {\lana{F}}
+{\Spec} {\rana{F}} \D$, we may simply take the objects of
+$\Spec$ as the class of specifications $S$, and the actions of the
+functors $\lana{F}$ and $\rana{F}$ on objects as the functions
+from specifications to objects of $\C$ and $\D$.  Conversely, given a
+class of specifications $S$ and functions $\lana{F}$ and $\rana{F}$, we
+may construct the category $\Spec$ with $\Ob \Spec = S$ and with
+morphisms $\lana{F}(s) \to \lana{F}(t)$ in $\C$ acting as morphisms $s
+\to t$ in $\Spec$.  From $\Spec$ to $\C$, we construct the functor given by $\lana{F}$ on
+objects and the identity on morphisms, and the other functor maps $f :
+s \to t$ in $\Spec$ to $F_{s,t}(f) : \rana{F}(s) \to \rana{F}(t)$ in $\D$.
 
 Every functor $F : \C \to \D$ can be trivially turned into an
-anafunctor: we take $\overline F = \Ob \C$, $\sigma$ the
-identity functor, and $\tau = F$.
+anafunctor \[ \Span \C \Id \C F \D. \] Anafunctors also compose:
+given anafunctors $F : \C \to \D$ and $G : \D \to \E$, the key idea is
+to take a suitable \emph{product} of their specifications.  In
+particular, \todo{finish.  Reference Makkai.}  The same thing can be
+defined at a higher level in terms of spans: \[
+\xymatrix@@dr{ {} \ar[d]_{\lana F'} \ar[r]^{\rana G'} & \bbb{T} \ar[d]_{\lana G}
+  \ar[r]^{\rana G} & \E \\ \Spec \ar[d]_{\lana F} \ar[r]^{\rana F} &
+  \D \\ \C } \] $\Cat$ is cocomplete, and in particular has pullbacks,
+so we may construct a new anafunctor from $\C$ to $\E$ by taking a
+pullback of $\rana F$ and $\lana G$ and then composing appropriately,
+as illustrated in the diagram. \todo{Prove this works.}
 
-\todo{Need to say what a pullback is}
-Anafunctors compose: given anafunctors $F_1 : \C \to \D$ and $F_2 : \D
-\to \E$, the key idea is to take a suitable \emph{product} of their
-specifications.  In particular, \todo{finish.  Reference Makkai.}
-This is actually easier to see using the abstract definition in terms
-of spans: \[ \xymatrix@@dr{ {} \ar[d] \ar[r] & ||F_2||
-  \ar[d]_{\sigma_2} \ar[r]^{\tau_2} & \E \\ ||F_1|| \ar[d]_{\sigma_1}
-  \ar[r]^{\tau_1} & \D \\ \C } \] $\Cat$ is cocomplete, and in
-particular has pullbacks, so we may construct a new anafunctor from
-$\C$ to $\E$ by taking a pullback of $\tau_1$ and $\sigma_2$ and then
-composing appropriately, as illustrated in the diagram.
-
-\todo{State a few other ways in which anafunctors ``act like''
-  functors; handwave at general theorem stating something about their
-  equivalence.} \todo{Do we need to discuss saturated anafunctors?
-  Maybe that only comes up in working out the precise details of
-  equivalence between functors and anafunctors?}
-
-We are therefore justified in ``mixing and matching'' functors and
+One is therefore justified in ``mixing and matching'' functors and
 anafunctors as convenient, but discussing them all as if they were
 regular functors (except when defining a particular anafunctor).  Such
 usage can be formalized by turning everything into an anafunctor, and
 translating functor operations and properties into corresponding
-operations and properties of anafunctors.
+operations and properties of anafunctors.  However, as we will see, if
+we found everything in HoTT, this becomes unnecessary.
 
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
@@ -1452,17 +1605,19 @@ operations and properties of anafunctors.
 \subsection{Anafunctors in HoTT}
 \label{sec:anafunctors-hott}
 
+\todo{Cliques in HoTT too?}
+
 We first \todo{XXX}
 
 One might na\"ively expect the definition of equivalence
 
 \begin{defn}[foo]
-  
+
 \end{defn}
 
 \begin{defn}
   A functor $F : \C \to \D$ is an \term{(adjoint) equivalence} when it
-  is left adjoint to a functor $G : \D \to \C$, and 
+  is left adjoint to a functor $G : \D \to \C$, and
 \end{defn}
 
 \todo{(Adjoint) equivalence of categories.}
@@ -1474,9 +1629,7 @@ Recall the concise definition of an anafunctor given in
 \pref{sec:anafunctors}:
 
 \begin{repdefn}{defn:anafunctor-span}
-  An anafunctor $F : \C \to \D$ is a category $||F||$ together with a
-  span of functors $\Span \C \sigma {||F||} \tau \D$ where $\sigma$ is faithful, and surjective
-  on both objects and morphisms.
+ \todo{fill me in again}
 \end{repdefn}
 
 Porting this definition to HoTT is straightforward.  However, because
@@ -1487,17 +1640,16 @@ every $D : \D$ there is some $C : \C$ such that $F\ C = D$, whereas
 essential surjectivity requires $F\ C \cong D$; in the presence of
 hom-univalence these are equivalent.  So in HoTT we may equivalently
 define:
-\begin{defn} \label{defn:anafunctor-hott}
-  An \hott{anafunctor} $F : \C \to \D$ is a category $||F||$ together
-  with a span of functors $\Span \C \sigma {||F||} \tau \D$
-  where $\sigma$ is fully faithful and
-  essentially surjective.
+\begin{defn} \label{defn:anafunctor-hott} An \hott{anafunctor} $F : \C
+  \to \D$ is a category $\Spec$ together with a span of functors
+  $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$, where $\lana{F}$ is
+  fully faithful and essentially surjective.
 \end{defn}
 
 However, recall that in HoTT, a fully faithful and essentially
 surjective functor automatically gives rise to an equivalence of
-categories.  So there is some functor $\sigma^{-1}$ which can be
-composed with $\tau$, yielding a functor between $\C$ and $\D$. In
+categories.  So there is some functor $\lana{F}^{-1}$ which can be
+composed with $\rana{F}$, yielding a functor between $\C$ and $\D$. In
 fact, the concept of anafunctor is technically unnecessary in HoTT,
 made precise as follows:
 \begin{prop}
@@ -1514,21 +1666,21 @@ made precise as follows:
   $\Span \C {1_\C} \C F \D$. Clearly $1_\C$ is fully faithful and
   essentially surjective, so this is a valid anafunctor.
 
-  ($\Longleftarrow$) The anafunctor $\Span \C \sigma {||F||} \tau \D$
-  is sent to the functor $\sigma^{-1} \then \tau : \C \to \D$.
+  ($\Longleftarrow$) The anafunctor $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$
+  is sent to the functor $\lana{F}^{-1} \then \rana{F} : \C \to \D$.
 
   Round-tripping a functor through an anafunctor is clearly the
   identity; the interesting direction is to show that \[ \Span \C
-  \sigma {||F||} \tau \D \] is equal to \[ \Span \C {1_\C} \C
-  {\sigma^{-1} \then \tau} \D. \] First, $||F|| = \C$ since $\sigma$
+  {\lana{F}} {\Spec} {\rana{F}} \D \] is equal to \[ \Span \C {1_\C} \C
+  {\lana{F}^{-1} \then \rana{F}} \D. \] First, $\Spec = \C$ since $\lana{F}$
   is an equivalence, and equivalent categories are equal \todo{cite}.
   Next, we need to show equality of the functors involved, \emph{when
-    appropriately transported by the path $||F|| = \C$}, which in this
-  case is ultimately constructed from the equivalence $\sigma$.
+    appropriately transported by the path $\Spec = \C$}, which in this
+  case is ultimately constructed from the equivalence $\lana{F}$.
   Transporting the domain of a functor by an equivalence of categories
   is given by precomposition with the inverse of the equivalence, so
-  $\sigma_*(\sigma) = \sigma^{-1} \then \sigma = 1_\C$ and
-  $\sigma_*(\tau) = \sigma^{-1} \then \tau$ as desired.
+  $\lana{F}_*(\lana{F}) = \lana{F}^{-1} \then \lana{F} = 1_\C$ and
+  $\lana{F}_*(\rana{F}) = \lana{F}^{-1} \then \rana{F}$ as desired.
 \end{proof}
 
 Although anafunctors are thus technically superfluous, they can still

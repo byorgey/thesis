@@ -183,7 +183,7 @@ A \term{species} $F$ is a pair of mappings which
 \end{itemize}
 satisfying the following functoriality conditions:
 \begin{itemize}
-\item $F\ id_L = id_{F L}$, and
+\item $F\ \id_L = \id_{F L}$, and
 \item $F\ (\sigma \circ \tau) = F\ \sigma \circ F\ \tau$.
 \end{itemize}
 \end{defn}
@@ -289,7 +289,7 @@ prevents this sort of definition.  Indeed, this definition is not
 functorial.  Though it does preserve identities, it does not preserve
 composition: consider, for example, a bijection $\sigma : \{a,b,c\}
 \bij \{1,2,3\}$ (it does not matter which).  Then $B (\sigma \comp
-\sigma^{-1}) = id_{\{P,Q\}}$, but $B \sigma \comp B \sigma^{-1}$ is
+\sigma^{-1}) = \id_{\{P,Q\}}$, but $B \sigma \comp B \sigma^{-1}$ is
 the constantly $P$ endofunction on $\{P,Q\}$.  This example is
 somewhat egregious; the reader may enjoy formulating more subtly wrong
 mappings and showing why they do not satisfy functoriality.
@@ -1033,7 +1033,7 @@ the functor category $\Str^\Lab$.
   \[ \xymatrix{ \C \rtwocell^G_H{\alpha} & \D \ar[r]^F & \E. } \]
   $F^\C$ preserves identities since
   \[ \xymatrix{ \C \ar[r]^G & \D \ar[r]^F & \E } \]
-  can be seen as both $F id_G$ and $id_{FG}$, and it preserves
+  can be seen as both $F \id_G$ and $\id_{FG}$, and it preserves
   composition since
   \[ \xymatrixrowsep{1pc}
      \xymatrix{ \C \ruppertwocell{\alpha} \rlowertwocell{\beta} \ar[r]
@@ -1082,7 +1082,7 @@ Natural transformations lift in the same way:
   \]
   If $\alpha$ is an isomorphism, then $(\alpha^{-1})^\C$ is the
   inverse of $\alpha^\C$: for any $H$, $\alpha^{-1}H \cdot \alpha H =
-  (\alpha^{-1} \cdot \alpha) H = id_{FH}$.
+  (\alpha^{-1} \cdot \alpha) H = \id_{FH}$.
   \[ {\xymatrixcolsep{5pc} \xymatrix{ \C \ar[r]^H & \D
      \ruppertwocell^F{\mathrlap{\alpha}} \ar[r] \rlowertwocell_F{\mathrlap{\alpha^{-1}}} & \E
      }}

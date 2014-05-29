@@ -385,3 +385,13 @@ tagStyles = cycle
   , mempty # lw 0.06 # lc green
   , mempty # lw 0.06 # lc green # dashing [0.1,0.1] 0
   ]
+
+--------------------------------------------------
+
+enclose :: Double -> Double -> Diagram B R2 -> Diagram B R2
+enclose g r d = d # centerXY <> roundedRect (width d + g) (height d + g) r # lw 0.03
+
+objs :: IsName n => [n] -> Diagram B R2
+objs = enclose 1 1 . vcat' (with & sep .~ 1.5) . (map (\n -> dot # named n))
+  where
+    dot = circle 0.1 # fc black

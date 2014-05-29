@@ -244,7 +244,6 @@
 
 \newcommand{\ptrunc}[1]{\ensuremath{\left\||#1\right\||}}
 \newcommand{\ptruncI}[1]{\ensuremath{\left||#1\right||}}
-\newcommand{\id}{\cons{id}}
 
 \newcommand{\tygrpd}[1]{\ensuremath{\mathcal{G}(#1)}}
 
@@ -278,6 +277,8 @@
 \newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
 
 \newcommand{\Hom}[3][]{#2 \to_{#1} #3}
+\newcommand{\id}{\ensuremath{\mathit{id}}}
+\newcommand{\Id}{\ensuremath{\mathit{Id}}}
 
 % some standard categories
 \newcommand{\newcategory}[1]{%
@@ -303,6 +304,11 @@
 % generic categories
 \newcommand{\D}{\bbb{D}}
 \newcommand{\E}{\bbb{E}}
+
+% anafunctors
+\newcommand{\Spec}{\bbb{S}}
+\newcommand{\lana}[1]{\overleftarrow{#1}}
+\newcommand{\rana}[1]{\overrightarrow{#1}}
 
 % adjunctions
 \newcommand{\adj}{\dashv}
@@ -335,7 +341,7 @@
 \newcommand{\pushout}[1][dr]{\save*!/#1+1.2pc/#1:(1,-1)@@^{||-}\restore}
 \newcommand{\pullback}[1][dr]{\save*!/#1-1.2pc/#1:(-1,1)@@^{||-}\restore}
 
-\newcommand{\Span}[5]{\xymatrix{#1 & #3 \ar[l]_{#2} \ar[r]^{#4} & #5}}
+\newcommand{\Span}[5]{\xymatrix{#1 & #3 \ar[l]_-{#2} \ar[r]^-{#4} & #5}}
 \newcommand{\BackForth}[4]{\xymatrix{#1 \ar@@<.5ex>[r]^{#2} & #4 \ar@@<.5ex>[l]^{#3}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
