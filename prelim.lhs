@@ -306,7 +306,7 @@ $(-1)$-types and $0$-types.  As these names suggest, there is an
 infinite hierarchy of $n$-types (beginning at $n = -2$ for historical
 reasons) which have no interesting higher-order path structure above
 level $n$.  As an example of a $1$-type, consider the type of all
-sets, \[ \msf{Set} \defeq (A : \Type) \times \isSet(A), \] where
+sets, \[ \SetT \defeq (A : \Type) \times \isSet(A), \] where
 $\isSet(A) \defeq (x,y:A) \to (p,q:x = y) \to (p = q)$ is the
 proposition that $A$ is a set.  Given two elements $A, B : \msf{Set}$
 it is not the case that all paths $A = B$ are equal; such paths
@@ -1274,8 +1274,12 @@ A clique is a formal way of representing the informal notion of
 \end{defn}
 
 \begin{rem}
-  Note that the last two conditions together imply $u_{ij} =
-  u_{ji}^{-1}$, since $u_{ij} \then u_{ji} = u_{ii} = id$.
+  There are two things worth pointing out about this definition.
+  First, note that the same object may occur multiple times in the
+  collection $A$---that is, multiple different values of $I$ may index
+  the same object of $\C$.  Second, note that the last two conditions
+  together imply $u_{ij} = u_{ji}^{-1}$, since $u_{ij} \then u_{ji} =
+  u_{ii} = id$.
 \end{rem}
 
 A clique can thus be visualized as an actual clique in a directed
@@ -1362,8 +1366,6 @@ do not require AC to define.
 
 \subsection{Anafunctors}
 \label{sec:anafunctors}
-
-\todo{Prove/explain relationship with cliques?}
 
 As an intuition for anafunctors it is helpful to keep in mind the
 equivalent concept of functors $\C \to \clq \D$---both represent
@@ -1532,7 +1534,7 @@ is somewhat less intuitive but usually more convenient to work with.
 \begin{defn} \label{defn:anafunctor-span} An anafunctor $F : \C \to
   \D$ is a category $\Spec$ together with a span of \emph{functors}
   $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$ where $\lana{F}$ is
-  fully faithful, and (strictly) surjective on objects.
+  fully faithful and (strictly) surjective on objects.
 \end{defn}
 
 \begin{rem}
@@ -1562,17 +1564,28 @@ objects and the identity on morphisms, and the other functor maps $f :
 s \to t$ in $\Spec$ to $F_{s,t}(f) : \rana{F}(s) \to \rana{F}(t)$ in $\D$.
 
 Every functor $F : \C \to \D$ can be trivially turned into an
-anafunctor \[ \Span \C \Id \C F \D. \] Anafunctors also compose:
-given anafunctors $F : \C \to \D$ and $G : \D \to \E$, the key idea is
-to take a suitable \emph{product} of their specifications.  In
-particular, \todo{finish.  Reference Makkai.}  The same thing can be
-defined at a higher level in terms of spans: \[
-\xymatrix@@dr{ {} \ar[d]_{\lana F'} \ar[r]^{\rana G'} & \bbb{T} \ar[d]_{\lana G}
-  \ar[r]^{\rana G} & \E \\ \Spec \ar[d]_{\lana F} \ar[r]^{\rana F} &
-  \D \\ \C } \] $\Cat$ is cocomplete, and in particular has pullbacks,
-so we may construct a new anafunctor from $\C$ to $\E$ by taking a
-pullback of $\rana F$ and $\lana G$ and then composing appropriately,
-as illustrated in the diagram. \todo{Prove this works.}
+anafunctor \[ \Span \C \Id \C F \D. \] Anafunctors also compose.
+Given compatible anafunctors $F : \Span \C {\lana F} S {\rana F} \D$
+and $G : \Span \D {\lana G} T {\rana G} \E$, consider the action of
+their composite on objects: each object of $\C$ may map to multiple
+objects of $\E$, via objects of $\D$.  Each such mapping is specified
+by an element $s \in S$ together with an element $t \in T$, such that
+both $s$ and $t$ correspond to the same element of $\D$.  That is, we
+may take $\{ (s,t) \mid s \in S, t \in T, \rana{F}(s) = \lana{G}(t)
+\}$ as the set of specifications for the composite $F \then G$, with
+$\lana{F \then G}(s,t) = \lana{F}(s)$ and $\rana{F \then G}(s,t) =
+\rana{G}(t)$. On morphisms, $(F \then G)_{(s,t),(u,v)}(f) =
+G_{t,v}(F_{s,u}(f))$.  It is not hard to check that this satisfies the
+anafunctor laws.
+
+The same thing can also be defined at a higher level in terms of
+spans: \[ \xymatrix@@dr{ \Spec \times_\D \bbb{T} \ar[d]_{\lana F'}
+  \ar[r]^{\rana G'} & \bbb{T} \ar[d]_{\lana G} \ar[r]^{\rana G} & \E
+  \\ \Spec \ar[d]_{\lana F} \ar[r]^{\rana F} & \D \\ \C } \] $\Cat$ is
+cocomplete, and in particular has pullbacks, so we may construct a new
+anafunctor from $\C$ to $\E$ by taking a pullback of $\rana F$ and
+$\lana G$ and then composing appropriately, as illustrated in the
+diagram.
 
 One is therefore justified in ``mixing and matching'' functors and
 anafunctors as convenient, but discussing them all as if they were
@@ -1585,21 +1598,151 @@ we found everything in HoTT, this becomes unnecessary.
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
 
-\todo{Add explanation of ``\hott{foo}'' terminology.}
+As hinted earlier, category theory works much more nicely when founded
+in HoTT instead of set theory.  Intuitively, the main reason is that
+in set theory the only notion of equality (extensional equality of
+sets) is too impoverished---one really wants to work up to
+\emph{isomorphism} rather than literal equality, and the mismatch
+between isomorphism and strict equality introduces all sorts of
+difficulties and extra work.  In contrast, via the univalence axiom,
+HoTT has a very rich notion of equality that is able to encompass
+isomorphism in categories.
 
-\todo{Basic overview of relevant material from Chapter 9 of the HoTT
-  book.}
+This section lays out a few relevant definitions along with some
+intuition and commentary.  A fuller treatment may be found in Chapter
+9 of the HoTT book~\citep{hottbook}.  Generally, ``\hott{widget}'' is
+used to refer to widgets as defined in HoTT, to distinguish from
+widgets as defined in set theory.
+
+We begin with the definition of a \term{precategory}.
+
+\begin{defn}
+  A \term{precategory} $\CT$ consists of
+  \begin{itemize}
+  \item A type $\CT_0 : \Type$ of objects (we often write simply
+    $c : \CT$ instead of $c : \CT_0$);
+  \item a function $- \homsymb - : \CT \to \CT \to \SetT$ associating
+    a \emph{set} ($0$-type) of morphisms to each pair of objects (we
+    often write $\hom[\CT] X Y$ to indicate the precategory being
+    referenced, especially when multiple precategories are under
+    consideration);
+  \item a function $\idT : (X : \CT) \to (\hom X X)$ associating
+    an identity morphism to each object;
+  \item a function $- \then - : (X,Y,Z : \CT) \to (\hom X Y) \to
+    (\hom Y Z) \to (\hom X Z)$; and
+  \item proofs of the identity and associativity laws.
+  \end{itemize}
+\end{defn}
+
+\begin{rem}
+  Note how well the idea of types fits the definition: in the usual
+  set-theoretic definition of a category, one must resort to awkward
+  constructions like saying that composition is a partial function,
+  with $f \then g$ being defined only when $\mathrm{tgt}(f) =
+  \mathrm{src}(g)$.
+
+  The restriction that $\hom X Y$ is a \emph{set}, \ie a $0$-type
+  (rather than an arbitrary type) is important: otherwise one runs
+  into problems with coherence of the identity and associativity laws,
+  and extra laws become necessary.  Down this path lies $n$-categories
+  or even $(\infty,1)$-categories, but to model traditional
+  ($1$-)categories, it suffices for $\hom X Y$ to be a $0$-type.  In
+  particular, this means that the identity and associativity laws,
+  being equalities between elements of a $0$-type, are themselves
+  $(-1)$-types, \ie mere propositions.
+\end{rem}
+
+One might wonder why the term \term{precategory} is used for something
+that is evidently a straightforward port of the definition of a
+category from set theory into HoTT.  The problem is that this
+definition suffers from problems similar to the one in set theory:
+there is not necessarily a strong enough connection between
+isomorphism and equality.  This is remedied in the definition of an
+\hott{category}.
+
+\begin{defn}
+  An \term{isomorphism} in $\CT$ is a morphism $f : \hom X Y$
+  together with a morphism $g : \hom Y X$ such that $f \then g =
+  \idT_X$ and $g \then f = \idT_Y$.  We write $X \cong Y$ for the type
+  of isomorphisms between $X$ and $Y$.
+\end{defn}
+
+\begin{rem}
+  Note the distinction between $X \cong Y$, the type of isomorphisms
+  between $X$ and $Y$ as objects in the precategory $\CT$, and $X \iso
+  Y$, the type of equivalences between the types $X$ and $Y$.  The
+  latter consists of a pair of inverse functions; the former of a pair
+  of inverse \emph{morphisms} (which may or may not be functions).
+\end{rem}
+
+It is not hard to show, by path induction, that equality implies
+isomorphism: we call this $\idtoiso : (X = Y) \to (X \cong Y)$.
+However, the other direction is not automatic.  Note it does not follow
+from univalence, due to the distinction between $X \cong Y$ and $X \iso
+Y$. However, it has a very similar flavor to univalence, and we add it
+as a requirement of an \hott{category}.
+
+\begin{defn}
+  An \term{\hott{category}} is a precategory $\CT$ together with the
+  additional univalence-like axiom, for all $X,Y : \CT$, \[ (X \cong
+  Y) \iso (X = Y). \] We write $\isotoid : (X \cong Y) \to (X = Y)$
+  for the left-to-right direction of the equivalence.
+\end{defn}
+
+An \hott{groupoid} is an \hott{category} where every morphism is an
+isomorphism. The following example will play an important role later.
 
 \begin{defn}
   Any $1$-type $T$ gives rise to an \hott{groupoid} $\tygrpd{T}$ where the
-  objects are values $a : T$, and $\hom_{\tygrpd{T}}(a,b) \defeq a = b$, that
-  is, morphisms from $a$ to $b$ are paths $p : a = b$. \todo{Prove
-    this is a groupoid.}
+  objects are values $a : T$, and $\hom[\tygrpd{T}] a b \defeq a = b$, that
+  is, morphisms from $a$ to $b$ are paths $p : a = b$.
+\end{defn}
+
+\begin{proof}
+  Identity morphisms, composition, the identity laws, associativity,
+  and the fact that every morphism is an isomorphism all follow
+  directly from properties of propositional equality.  $\isotoid$ in
+  this case is just univalence.
+\end{proof}
+
+The definitions of \hott{functors} and \hott{natural transformations}
+are straightforward ports of their usual definitions in set theory.
+
+\begin{defn}
+  An \hott{functor} $F$ between (pre)categories $\CT$
+  and $\DT$ is a pair of functions
+  \begin{itemize}
+  \item $F_0 : \CT_0 \to \DT_0$
+  \item $F_1 : (X,Y : \CT) \to (\hom[\CT] X Y) \to (\hom[\DT] {F_0(X)} {F_0(Y)})$
+  \end{itemize}
+  together with proofs of the functor laws,
+  \begin{itemize}
+  \item $(X : \CT) \to (F_1(\idT_X) = \idT_{F_0(X)})$, and
+  \item $(X,Y,Z : \CT) \to (f : \hom[\CT] X Y) \to (g : \hom[\CT] Y Z)
+    \to (F_1(f \then g) = F_1(f) \then F_1(g))$.
+  \end{itemize}
+\end{defn}
+
+As is standard, we often write $F\ X$ and $F\ f$ instead of $F_0(X)$
+and $F_1(f)$.
+
+\begin{defn}
+  An \hott{natural transformation} $\gamma$ between functors $F,G :
+  \CT \to \DT$ is a family of morphisms
+  \begin{itemize}
+  \item $\gamma_X : \hom[\DT] {F\ X} {G\ X}$
+  \end{itemize}
+  for each $X : \CT$, satisfying
+  \begin{itemize}
+  \item $(X,Y : \CT) \to (f : \hom[\CT] X Y) \to (\gamma_X \then G f
+    = F f \then \gamma_Y)$.
+  \end{itemize}
 \end{defn}
 
 \subsection{Coends in HoTT}
 \label{sec:coends-hott}
 
+\bay{Where should this section go?}
 \todo{Write me.}
 
 \subsection{Anafunctors in HoTT}
@@ -1607,18 +1750,13 @@ we found everything in HoTT, this becomes unnecessary.
 
 \todo{Cliques in HoTT too?}
 
+Porting anafunctors to HoTT is enlightening.
 We first \todo{XXX}
 
 One might na\"ively expect the definition of equivalence
 
-\begin{defn}[foo]
-
-\end{defn}
-
-\begin{defn}
-  A functor $F : \C \to \D$ is an \term{(adjoint) equivalence} when it
-  is left adjoint to a functor $G : \D \to \C$, and
-\end{defn}
+\bay{Don't bother explaining exact definition; refer to HoTT book.
+  The adjunction doesn't really come into play here.}
 
 \todo{(Adjoint) equivalence of categories.}
 
@@ -1629,63 +1767,72 @@ Recall the concise definition of an anafunctor given in
 \pref{sec:anafunctors}:
 
 \begin{repdefn}{defn:anafunctor-span}
- \todo{fill me in again}
+  An anafunctor $F : \C \to \D$ is a category $\Spec$ together with a
+  span of \emph{functors} $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$
+  where $\lana{F}$ is fully faithful and (strictly) surjective on
+  objects.
 \end{repdefn}
 
-Porting this definition to HoTT is straightforward.  However, because
-of hom-univalence, there is no difference between a \emph{strictly}
-surjective functor and an \emph{essentially} surjective one.  Strict
-surjectivity of a functor $F : \C \to \D$ on objects requires that for
-every $D : \D$ there is some $C : \C$ such that $F\ C = D$, whereas
-essential surjectivity requires $F\ C \cong D$; in the presence of
-hom-univalence these are equivalent.  So in HoTT we may equivalently
-define:
-\begin{defn} \label{defn:anafunctor-hott} An \hott{anafunctor} $F : \C
-  \to \D$ is a category $\Spec$ together with a span of functors
-  $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$, where $\lana{F}$ is
+Porting this definition to HoTT is straightforward.  However, in the
+presence of $\isotoid$, there is no difference between a
+\emph{strictly} surjective functor and an \emph{essentially}
+surjective one.  Strict surjectivity of a functor $F : \C \to \D$ on
+objects requires that for every $D : \D$ there is some $C : \C$ such
+that $F\ C = D$, whereas essential surjectivity requires $F\ C \cong
+D$; in the presence of $\isotoid$ these are equivalent.  So in HoTT we
+may equivalently define:
+\begin{defn} \label{defn:anafunctor-hott} An \hott{anafunctor} $F : \CT
+  \to \DT$ is a category $\ST$ together with a span of functors
+  $\Span \CT {\lana{F}} \ST {\rana{F}} \DT$, where $\lana{F}$ is
   fully faithful and essentially surjective.
 \end{defn}
 
 However, recall that in HoTT, a fully faithful and essentially
 surjective functor automatically gives rise to an equivalence of
 categories.  So there is some functor $\lana{F}^{-1}$ which can be
-composed with $\rana{F}$, yielding a functor between $\C$ and $\D$. In
-fact, the concept of anafunctor is technically unnecessary in HoTT,
-made precise as follows:
+composed with $\rana{F}$, yielding a functor from $\CT$ to $\DT$. In
+fact, the concept of an anafunctor between categories is technically
+superfluous:
 \begin{prop}
-  \hott{functors} and \hott{anafunctors} are equivalent; that is, if
-  $\Fun(\C,\D)$ denotes the type of functors from $\C$ to $\D$, and
-  $\Ana(\C,\D)$ the type of anafunctors, then \[ \Fun(\C,\D) \iso
-  \Ana(\C,\D). \]
+  \hott{functors} and \hott{anafunctors} between categories are
+  equivalent; that is, if $\Fun(\CT,\DT)$ denotes the type of functors
+  from $\CT$ to $\DT$, and $\Ana(\CT,\DT)$ the type of anafunctors,
+  then \[ \Fun(\CT,\DT) \iso \Ana(\CT,\DT). \]
 \end{prop}
 \begin{proof}
   We must define functions in both directions, and show they are
   inverse.
 
-  ($\Longrightarrow$) The functor $F : \C \to \D$ is sent to the span
-  $\Span \C {1_\C} \C F \D$. Clearly $1_\C$ is fully faithful and
-  essentially surjective, so this is a valid anafunctor.
+  ($\Longrightarrow$) The functor $F : \CT \to \DT$ is sent to the
+  span $\Span \CT {1_\CT} \CT F \DT$. Clearly $1_\CT$ is fully
+  faithful and essentially surjective, so this is a valid anafunctor.
 
-  ($\Longleftarrow$) The anafunctor $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$
-  is sent to the functor $\lana{F}^{-1} \then \rana{F} : \C \to \D$.
+  ($\Longleftarrow$) The anafunctor $\Span \CT {\lana{F}} {\ST}
+  {\rana{F}} \DT$ is sent to the functor $\lana{F}^{-1} \then \rana{F}
+  : \CT \to \DT$.
 
   Round-tripping a functor through an anafunctor is clearly the
-  identity; the interesting direction is to show that \[ \Span \C
-  {\lana{F}} {\Spec} {\rana{F}} \D \] is equal to \[ \Span \C {1_\C} \C
-  {\lana{F}^{-1} \then \rana{F}} \D. \] First, $\Spec = \C$ since $\lana{F}$
-  is an equivalence, and equivalent categories are equal \todo{cite}.
-  Next, we need to show equality of the functors involved, \emph{when
-    appropriately transported by the path $\Spec = \C$}, which in this
-  case is ultimately constructed from the equivalence $\lana{F}$.
-  Transporting the domain of a functor by an equivalence of categories
-  is given by precomposition with the inverse of the equivalence, so
-  $\lana{F}_*(\lana{F}) = \lana{F}^{-1} \then \lana{F} = 1_\C$ and
-  $\lana{F}_*(\rana{F}) = \lana{F}^{-1} \then \rana{F}$ as desired.
+  identity; the interesting direction is to show that \[ \Span \CT
+  {\lana{F}} {\ST} {\rana{F}} \DT \] is equal to \[ \Span \CT
+  {1_\CT} \CT {\lana{F}^{-1} \then \rana{F}} \DT. \] First, $\ST =
+  \CT$ since $\lana{F}$ is an equivalence, and equivalent categories
+  are equal \todo{cite}.  Next, we need to show equality of the
+  functors involved, \emph{when appropriately transported by the path
+    $\ST = \CT$}, which in this case is ultimately constructed from
+  the equivalence $\lana{F}$.  Transporting the domain of a functor by
+  an equivalence of categories is given by precomposition with the
+  inverse of the equivalence, so $\lana{F}_*(\lana{F}) = \lana{F}^{-1}
+  \then \lana{F} = 1_\CT$ and $\lana{F}_*(\rana{F}) = \lana{F}^{-1}
+  \then \rana{F}$ as desired.
 \end{proof}
 
-Although anafunctors are thus technically superfluous, they can still
-be a useful tool for getting a handle on certain equivalences, as
-shown in the following section.
+\begin{rem}
+  Note that the result does not, in general, hold when $\CT$ and $\DT$
+  are only precategories.
+\end{rem}
+Although anafunctors between categories are technically unnecessary,
+they can still be a useful tool for getting a handle on certain
+equivalences, as shown in the following section.
 
 \todo{Give a very simple example of equivalent categories where it's
   not obvious how to define a functor, and go through anafunctor construction?}

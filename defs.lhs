@@ -256,9 +256,21 @@
 \newmsf{isSet}
 \newmsf{isFinite}
 
-\newmsf{hom}
 \newmsf{Fun}
 \newmsf{Ana}
+
+\newcommand{\homsymb}{\Rightarrow}
+\providecommand{\hom}{}
+\renewcommand{\hom}[3][]{#2 \homsymb_{#1} #3}
+
+\newcommand{\CT}{\mcal{C}}
+\newcommand{\DT}{\mcal{D}}
+\newcommand{\ST}{\mcal{S}}
+\newcommand{\SetT}{\msf{Set}}
+\newcommand{\idT}{\msf{id}}
+
+\newmsf{idtoiso}
+\newmsf{isotoid}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory

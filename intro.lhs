@@ -6,7 +6,10 @@
 \label{chap:intro}
 
 \bay{Big themes: Algebraic data types and extensions. Principle of
-  equivalence. Set theory vs type theory, constructive foundations.}
+  equivalence. Set theory vs type theory, constructive foundations.
+  Note that this dissertation sits in a somewhat awkward place, with
+  feet in both the worlds of set theory and type theory; hopefully it
+  can serve as a bridge.}
 
 % \todo{Edit mercilessly!  Probably need to add a bunch of stuff too.
 %   Dumped here from thesis proposal introduction.}
