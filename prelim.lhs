@@ -1837,21 +1837,17 @@ equivalences, as shown in the following section.
 \todo{Give a very simple example of equivalent categories where it's
   not obvious how to define a functor, and go through anafunctor construction?}
 
-\section{Finiteness}
+\section{Finiteness in set theory}
 \label{sec:finiteness}
 
-Finally, we assemble the foregoing material on anafunctors and
+Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about representing
-evidence of finiteness.
-
-\todo{We start by telling the story in set theory.}
+evidence of finiteness, first using set-theoretic foundations, and
+then in HoTT.
 
 Recall that $\B$ denotes the groupoid of finite sets and bijections,
-and $\P$ the groupoid of natural numbers and permutations.  We begin
-by discussing the relationship between $\B$ and $\P$, which is more
-interesting than it may first seem.
-
-In classical category theory, $\P$ is a \term{skeleton} of
+and $\P$ the groupoid of natural numbers and permutations.  In
+classical category theory, $\P$ is a \term{skeleton} of
 $\B$---roughly, we may think of it as the result of replacing each
 equivalence class of isomorphic objects in $\B$ with a single object.
 In this case, we can identify each equivalence class of isomorphic
@@ -1869,19 +1865,35 @@ In more detail, it is easy to define a functor $\fin - : \P \to \B$
 which sends $n$ to $\fin n$ and preserves morphisms; defining an
 inverse functor $\size - : \B \to \P$ is more problematic. We can send
 each set $S$ to its size $\size S$, but we must send a bijection $S
-\bij T$ to a bijection $\fin{\size S} \bij \fin{\size T}$, and there
-is no obvious way to pick one.  If we use AC, we can pick an arbitrary
-bijection $\varphi_S : S \bij \fin{\size S}$ for each finite set $S$,
-matching up $S$ with a canonical set of size $\size S$.  Given $\alpha
-: S \bij T$ we can then construct $\xymatrix{ \fin{\size S}
-  \ar[r]^-{\varphi_S^{-1}} & S \ar[r]^\alpha & T \ar[r]^-{\varphi_T} &
-  \fin{\size T}}$.  Again, this use of AC is ``benign'' in the sense
-that any two sets of choices yield equivalent functors \todo{need to
-  double-check this, maybe add a bit more explanation}.
+\bij T$ to a permutation $\fin{\size S} \bij \fin{\size T}$, and there
+is no obvious way to pick one.  For example, suppose $S =
+\{\text{cat}, \text{dog}, \text{moose}\}$ and $T =
+\{
+\begin{diagram}[width=10]
+  dia = circle 1 # lw 0.03 # frame 0.1
+\end{diagram}
+,
+\begin{diagram}[width=10]
+  dia = triangle 1 # centerXY # lw 0.03 # frame 0.1
+\end{diagram}
+,
+\begin{diagram}[width=10]
+  dia = square 1 # lw 0.03 # frame 0.1
+\end{diagram}
+\}$.  Given a bijection matching each animal with its favorite
+shape\footnote{The details are left as an exercise for the reader.},
+it must be sent to a permutation on $\{0,1,2\}$---but there is no
+canonical relationship between these natural numbers and either
+animals or shapes.
 
-\todo{Explain how to avoid AC using well-ordering of hereditarily
-  finite sets.  But this does not have a natural counterpart in a
-  structural set theory or in type theory.}
+Using AC, we can choose an arbitrary bijection $\varphi_S : S \bij
+\fin{\size S}$ for each finite set $S$, matching up $S$ with a
+canonical set of size $\size S$. Given $\alpha : S \bij T$ we can then
+construct $\xymatrix{ \fin{\size S} \ar[r]^-{\varphi_S^{-1}} & S
+  \ar[r]^\alpha & T \ar[r]^-{\varphi_T} & \fin{\size T}}$.  As is
+familiar by now, this use of AC is ``benign'' in the sense that any
+two sets of choices yield equivalent functors; it thus yields a
+well-defined functor but has no computational interpretation.
 
 We can avoid the use of AC by constructing an anafunctor $\size - : \B
 \to \P$ instead of a functor.  In particular, as the class of
@@ -1944,6 +1956,52 @@ The center diagram shows the result of composing $\size \alpha$ and
 $\size \beta$; because $\varphi_T$ cancels with $\varphi_T^{-1}$ it is
 the same as the definition of $\size (\alpha \then \beta)$ (the
 right-hand diagram).
+
+Beforeturning to HoTT, it should be noted that there is an alternate
+way around the use of AC in this particular case, using the theory of
+\term{hereditarily finite} sets.
+\begin{defn}
+  A \term{hereditarily finite} set is a finite set, all of whose
+  elements are hereditarily finite.
+\end{defn}
+This definition gets off the ground since the empty set is vacuously
+hereditarily finite.  As is usual in set theory, this definition is
+interpreted recursively, so there cannot be any infinitely descending
+membership chains.  Hereditarily finite sets can thus be seen as
+finitely-branching, finite-depth trees.
+
+Now consider the groupoid $\cat{H}$ obtained by replacing ``finite''
+with ``hereditarily finite'' in the definition of $\B$.  That is, the
+elements of $\cat{H}$ are hereditarily finite sets, and the morphisms
+are bijections.  Replacing $\B$ by $\cat{H}$ in the definition of
+species is really no great loss, since we are interested in modelling
+sets of ``labels'', and there is no particular reason to have labels
+modelled by infinite sets.
+
+Unlike the class of all sets, however, the class of all hereditarily
+finite sets (normally written $V_\omega$) has a well-ordering.  For
+example, to order two hereditarily finite sets, we can first
+inductively sort their elements, and then do a lexicographic
+comparison.  This means that every hereditarily finite set has an
+induced ordering on its elements, since they are themselves
+hereditarily finite. In other words, picking a well-ordering of
+$V_\omega$ is like making a ``global'' choice of orderings, assigning
+a canonical bijection $S \bij \fin{\size S}$ for every hereditarily
+finite set $S$.
+
+However, this construction is somewhat arbitrary, and has no natural
+counterpart in type theory, or indeed in a structural set theory.  The
+concept of hereditary finiteness only makes sense in a material set
+theory such as ZF.  To determine the canonical ordering on, say,
+$\{\text{dog}, \text{cat}, \text{moose}\}$, we need to know the
+precise identity of the set used to encode each animal---but,
+intuitively, knowing their precise encoding as sets violates the
+principle of equivalence, since there may be many possible encodings
+with the right properties.  Using a well-ordering on $V_\omega$ to
+avoid AC in this case is therefore little more than a curiosity.
+
+\section{Finiteness in HoTT}
+\label{sec:finiteness-hott}
 
 We now turn to developing counterparts to the groupoids $\P$ and $\B$
 in type theory.  First, a necessary lemma:
