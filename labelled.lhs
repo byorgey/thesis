@@ -162,6 +162,9 @@ L'$ which sends $f$ to $g$.
 \todo{Intuition for analytic functors from universal property of left
   Kan extension.  Use Haskell derivation from previous section.}
 
+\todo{Note that $(F \comp \X)\ 0$ yields $\hat F$. --- from Todd
+  Trimble's ``notes on the Lie Operad''.}
+
 Analytic functors have many nice properties: for example, they are
 closed under \todo{?}, and have corresponding \term{generating
   functions} (indeed, part of the motivation of Joyal's work seems to
