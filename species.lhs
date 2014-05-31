@@ -1519,6 +1519,11 @@ convolution requires
   have coends over $\Lab$.
 \end{itemize}
 
+\todo{Note that any small category can be seen as $V$-enriched, for
+  symmetric monoidal (closed?) $V$, by composing $hom$ with functor
+  $\Set \to V$ that sends $U$ to $U$-indexed product of $I$.  Does
+  this assume AC or anything?}
+
 Note that any monoidal structures will do; in particular there is no
 requirement that $\oplus$ be ``sum-like'' or $\otimes$
 ``product-like'', though that is indeed the case for partitional
