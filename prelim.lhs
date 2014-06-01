@@ -27,7 +27,7 @@ may safely skip them without too many surprises.  Even those readers
 who are not familiar with some of the material may find it more
 productive to begin reading \pref{chap:species} and refer back to this
 chapter as needed. On the other hand, the material in
-\Sect\Sect\ref{sec:AC}--\ref{sec:finiteness} is somewhat less
+\Sect\Sect\ref{sec:AC}--\ref{sec:finiteness-hott} is somewhat less
 standard, and it is hoped that all readers, even experts, will gain
 something from them.
 
@@ -117,7 +117,7 @@ benefits this work, to be explored in more detail later, include:
 \item \term{Propositional truncation} (explained below) is an
   important tool for properly modelling concepts from classical
   mathematics in a constructive setting.  In particular we use it to
-  model the concept of \emph{finiteness} (\pref{sec:finiteness}).
+  model the concept of \emph{finiteness} (\pref{sec:finiteness-hott}).
 \item Homotopy type theory allows doing category theory without using
   the axiom of choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
   important in a constructive or computational setting.
@@ -842,7 +842,7 @@ we get by noting that any two sets of the same size are isomorphic, so
 we ``might as well'' just forget about the elements of finite sets and
 work directly with their sizes.  However, if the axiom of choice is
 rejected, the details become much more subtle; this is addressed
-in~\pref{sec:finiteness}.
+in~\pref{sec:finiteness-sets}.
 
 $\B$ (and $\P$) do not have products or coproducts. For example, to
 see that $\B$ does not have coproducts, let $A, B \in \B$ be arbitrary
@@ -1639,13 +1639,14 @@ We begin with the definition of a \term{precategory}.
   set-theoretic definition of a category, one must resort to awkward
   constructions like saying that composition is a partial function,
   with $f \then g$ being defined only when $\mathrm{tgt}(f) =
-  \mathrm{src}(g)$.
+  \mathrm{src}(g)$.  Here, the same idea is expressed simply as the
+  type of the composition operator.
 
   The restriction that $\hom X Y$ is a \emph{set}, \ie a $0$-type
   (rather than an arbitrary type) is important: otherwise one runs
   into problems with coherence of the identity and associativity laws,
   and extra laws become necessary.  Down this path lies $n$-categories
-  or even $(\infty,1)$-categories, but to model traditional
+  or even $(\infty,1)$-categories; but to model traditional
   ($1$-)categories, it suffices for $\hom X Y$ to be a $0$-type.  In
   particular, this means that the identity and associativity laws,
   being equalities between elements of a $0$-type, are themselves
@@ -1672,19 +1673,22 @@ isomorphism and equality.  This is remedied in the definition of an
   between $X$ and $Y$ as objects in the precategory $\CT$, and $X \iso
   Y$, the type of equivalences between the types $X$ and $Y$.  The
   latter consists of a pair of inverse functions; the former of a pair
-  of inverse \emph{morphisms} (which may or may not be functions).
+  of inverse \emph{morphisms}.  Morphisms, of course, need not be
+  functions, and moreover, objects need not be types.
 \end{rem}
 
-It is not hard to show, by path induction, that equality implies
-isomorphism: we call this $\idtoiso : (X = Y) \to (X \cong Y)$.
-However, the other direction is not automatic.  Note it does not follow
-from univalence, due to the distinction between $X \cong Y$ and $X \iso
-Y$. However, it has a very similar flavor to univalence, and we add it
-as a requirement of an \hott{category}.
+It is immediate, by path induction and the fact that $\idT_X$ is an
+isomorphism, that equality implies isomorphism: we call this $\idtoiso
+: (X = Y) \to (X \cong Y)$.  However, the other direction is not
+automatic.  Note it does not follow from univalence, due to the
+distinction between $X \cong Y$ and $X \iso Y$. However, it has a very
+similar flavor to univalence, and matches the intuition that one
+should always work up to isomorphism in a category.  It is therefore
+added as a requirement of an \hott{category}.
 
 \begin{defn}
   An \term{\hott{category}} is a precategory $\CT$ together with the
-  additional univalence-like axiom, for all $X,Y : \CT$, \[ (X \cong
+  additional univalence-like axiom that for all $X,Y : \CT$, \[ (X \cong
   Y) \iso (X = Y). \] We write $\isotoid : (X \cong Y) \to (X = Y)$
   for the left-to-right direction of the equivalence.
 \end{defn}
@@ -1694,15 +1698,15 @@ isomorphism. The following example will play an important role later.
 
 \begin{defn}
   Any $1$-type $T$ gives rise to an \hott{groupoid} $\tygrpd{T}$ where the
-  objects are values $a : T$, and $\hom[\tygrpd{T}] a b \defeq a = b$, that
+  objects are values $a : T$, and $\hom a b \defeq a = b$, that
   is, morphisms from $a$ to $b$ are paths $p : a = b$.
 \end{defn}
 
 \begin{proof}
   Identity morphisms, composition, the identity laws, associativity,
   and the fact that every morphism is an isomorphism all follow
-  directly from properties of propositional equality.  $\isotoid$ in
-  this case is just univalence.
+  directly from properties of propositional equality.  Since
+  isomorphisms are already paths, $\isotoid$ is just the identity.
 \end{proof}
 
 The definitions of \hott{functors} and \hott{natural transformations}
@@ -1739,106 +1743,14 @@ and $F_1(f)$.
   \end{itemize}
 \end{defn}
 
-\subsection{Coends in HoTT}
+\subsection{Coends}
 \label{sec:coends-hott}
 
 \bay{Where should this section go?}
 \todo{Write me.}
 
-\subsection{Anafunctors in HoTT}
-\label{sec:anafunctors-hott}
-
-\todo{Cliques in HoTT too?}
-
-Porting anafunctors to HoTT is enlightening.
-We first \todo{XXX}
-
-One might na\"ively expect the definition of equivalence
-
-\bay{Don't bother explaining exact definition; refer to HoTT book.
-  The adjunction doesn't really come into play here.}
-
-\todo{(Adjoint) equivalence of categories.}
-
-\todo{Fully faithful and essentially surjective functors are
-  equivalent to (adjoint) equivalence of categories, without AC.}
-
-Recall the concise definition of an anafunctor given in
-\pref{sec:anafunctors}:
-
-\begin{repdefn}{defn:anafunctor-span}
-  An anafunctor $F : \C \to \D$ is a category $\Spec$ together with a
-  span of \emph{functors} $\Span \C {\lana{F}} {\Spec} {\rana{F}} \D$
-  where $\lana{F}$ is fully faithful and (strictly) surjective on
-  objects.
-\end{repdefn}
-
-Porting this definition to HoTT is straightforward.  However, in the
-presence of $\isotoid$, there is no difference between a
-\emph{strictly} surjective functor and an \emph{essentially}
-surjective one.  Strict surjectivity of a functor $F : \C \to \D$ on
-objects requires that for every $D : \D$ there is some $C : \C$ such
-that $F\ C = D$, whereas essential surjectivity requires $F\ C \cong
-D$; in the presence of $\isotoid$ these are equivalent.  So in HoTT we
-may equivalently define:
-\begin{defn} \label{defn:anafunctor-hott} An \hott{anafunctor} $F : \CT
-  \to \DT$ is a category $\ST$ together with a span of functors
-  $\Span \CT {\lana{F}} \ST {\rana{F}} \DT$, where $\lana{F}$ is
-  fully faithful and essentially surjective.
-\end{defn}
-
-However, recall that in HoTT, a fully faithful and essentially
-surjective functor automatically gives rise to an equivalence of
-categories.  So there is some functor $\lana{F}^{-1}$ which can be
-composed with $\rana{F}$, yielding a functor from $\CT$ to $\DT$. In
-fact, the concept of an anafunctor between categories is technically
-superfluous:
-\begin{prop}
-  \hott{functors} and \hott{anafunctors} between categories are
-  equivalent; that is, if $\Fun(\CT,\DT)$ denotes the type of functors
-  from $\CT$ to $\DT$, and $\Ana(\CT,\DT)$ the type of anafunctors,
-  then \[ \Fun(\CT,\DT) \iso \Ana(\CT,\DT). \]
-\end{prop}
-\begin{proof}
-  We must define functions in both directions, and show they are
-  inverse.
-
-  ($\Longrightarrow$) The functor $F : \CT \to \DT$ is sent to the
-  span $\Span \CT {1_\CT} \CT F \DT$. Clearly $1_\CT$ is fully
-  faithful and essentially surjective, so this is a valid anafunctor.
-
-  ($\Longleftarrow$) The anafunctor $\Span \CT {\lana{F}} {\ST}
-  {\rana{F}} \DT$ is sent to the functor $\lana{F}^{-1} \then \rana{F}
-  : \CT \to \DT$.
-
-  Round-tripping a functor through an anafunctor is clearly the
-  identity; the interesting direction is to show that \[ \Span \CT
-  {\lana{F}} {\ST} {\rana{F}} \DT \] is equal to \[ \Span \CT
-  {1_\CT} \CT {\lana{F}^{-1} \then \rana{F}} \DT. \] First, $\ST =
-  \CT$ since $\lana{F}$ is an equivalence, and equivalent categories
-  are equal \todo{cite}.  Next, we need to show equality of the
-  functors involved, \emph{when appropriately transported by the path
-    $\ST = \CT$}, which in this case is ultimately constructed from
-  the equivalence $\lana{F}$.  Transporting the domain of a functor by
-  an equivalence of categories is given by precomposition with the
-  inverse of the equivalence, so $\lana{F}_*(\lana{F}) = \lana{F}^{-1}
-  \then \lana{F} = 1_\CT$ and $\lana{F}_*(\rana{F}) = \lana{F}^{-1}
-  \then \rana{F}$ as desired.
-\end{proof}
-
-\begin{rem}
-  Note that the result does not, in general, hold when $\CT$ and $\DT$
-  are only precategories.
-\end{rem}
-Although anafunctors between categories are technically unnecessary,
-they can still be a useful tool for getting a handle on certain
-equivalences, as shown in the following section.
-
-\todo{Give a very simple example of equivalent categories where it's
-  not obvious how to define a functor, and go through anafunctor construction?}
-
 \section{Finiteness in set theory}
-\label{sec:finiteness}
+\label{sec:finiteness-sets}
 
 Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about representing
@@ -1886,10 +1798,15 @@ it must be sent to a permutation on $\{0,1,2\}$---but there is no
 canonical relationship between these natural numbers and either
 animals or shapes.
 
-Using AC, we can choose an arbitrary bijection $\varphi_S : S \bij
-\fin{\size S}$ for each finite set $S$, matching up $S$ with a
-canonical set of size $\size S$. Given $\alpha : S \bij T$ we can then
-construct $\xymatrix{ \fin{\size S} \ar[r]^-{\varphi_S^{-1}} & S
+More abstractly, $\fin - : \P \to \B$ is fully faithful and
+essentially surjective (every finite set is in bijection with $\fin n$
+for some $n$); this yields an equivalence of categories (and hence an
+inverse functor $\size - : \B \to \P$) only in the presence of AC.
+
+Concretely, we can use AC to choose an arbitrary bijection $\varphi_S
+: S \bij \fin{\size S}$ for each finite set $S$, matching up $S$ with
+a canonical set of size $\size S$. Given $\alpha : S \bij T$ we can
+then construct $\xymatrix{ \fin{\size S} \ar[r]^-{\varphi_S^{-1}} & S
   \ar[r]^\alpha & T \ar[r]^-{\varphi_T} & \fin{\size T}}$.  As is
 familiar by now, this use of AC is ``benign'' in the sense that any
 two sets of choices yield equivalent functors; it thus yields a
@@ -1897,10 +1814,10 @@ well-defined functor but has no computational interpretation.
 
 We can avoid the use of AC by constructing an anafunctor $\size - : \B
 \to \P$ instead of a functor.  In particular, as the class of
-specifications $||\size{}||$, we choose the class of all bijections
+specifications $S_{\size{}}$, we choose the class of all bijections
 $\sum_{T \in \B} (T \bij \fin{\size T})$.  The function $\sigma :
-||\size{}|| \to \Ob \B$ simply forgets the chosen bijection,
-$\sigma(T,\varphi) = T$, and $\tau : ||\size{}|| \to \Ob \P$ sends
+S_{\size{}} \to \Ob \B$ simply forgets the chosen bijection,
+$\sigma(T,\varphi) = T$, and $\tau : S_{size{}} \to \Ob \P$ sends
 finite sets to their size, $\tau(T,\varphi) = \size T$.  Note that
 both $\sigma$ and $\tau$ ignore $\varphi$, which is instead needed to
 define the action of $\size{}$ on morphisms.  In particular, given
@@ -1957,7 +1874,7 @@ $\size \beta$; because $\varphi_T$ cancels with $\varphi_T^{-1}$ it is
 the same as the definition of $\size (\alpha \then \beta)$ (the
 right-hand diagram).
 
-Beforeturning to HoTT, it should be noted that there is an alternate
+Before returning to HoTT, it should be noted that there is an alternate
 way around the use of AC in this particular case, using the theory of
 \term{hereditarily finite} sets.
 \begin{defn}
@@ -2004,19 +1921,18 @@ avoid AC in this case is therefore little more than a curiosity.
 \label{sec:finiteness-hott}
 
 We now turn to developing counterparts to the groupoids $\P$ and $\B$
-in type theory.  First, a necessary lemma:
+in type theory.  First, a few necessary lemmas:
 \begin{lem} \label{lem:equiv-pres-set}
   Equivalence preserves sets, that is, if $A$ and
   $B$ are sets, then so is $A \iso B$.
 \end{lem}
 \begin{proof}
-  $(A \iso B) \iso ((f : A \to B) \times
-  \cons{isequiv}(f))$, where $\cons{isequiv}(f)$ is a mere proposition
-  expressing the fact that $f$ is an equivalence (\ie has a suitable
-  inverse).  This is a set since $\cons{isequiv}(f)$ is a mere
-  proposition and hence a set (\todo{cite}), $A \to B$ is a set
-  whenever $B$ is (\todo{cite}), and $\times$ takes sets to sets
-  (\todo{cite}).
+  $(A \iso B) \iso ((f : A \to B) \times \cons{isequiv}(f))$, where
+  $\cons{isequiv}(f)$ is a mere proposition expressing the fact that
+  $f$ is an equivalence (\ie has a suitable inverse).  This is a set
+  since $\cons{isequiv}(f)$ is a mere proposition (and hence a set),
+  $A \to B$ is a set whenever $B$ is, and $\times$ takes sets to sets
+  \citep[Lemma 3.3.4, Examples 3.1.5 and 3.1.6]{hottbook}.
 \end{proof}
 
 \begin{cor}
@@ -2024,6 +1940,37 @@ in type theory.  First, a necessary lemma:
 \end{cor}
 \begin{proof}
   Immediate from univalence and \pref{lem:equiv-pres-set}.
+\end{proof}
+
+\begin{lem} \label{lem:fin-iso-equal}
+  For all $n_1, n_2 : \N$, if $\Fin{n_1} \iso \Fin{n_2}$ then $n_1 =
+  n_2$.
+\end{lem}
+\begin{proof}
+  The proof is by double induction on $n_1$ and $n_2$.
+  \begin{itemize}
+  \item If both $n_1$ and $n_2$ are zero, the result is immediate.
+  \item The case when one is zero and the other a successor is
+    impossible.  In particular, taking the
+    equivalence in the appropriate direction gives a function $\Fin
+    (\suc \dots) \to \Fin \zero$, which can be used to produce an
+    element of $\Fin \zero = \bot$, from which anything follows.
+  \item In the case when both are a successor, we have
+    $\Fin{(\suc{n_1'})} \iso \Fin{(\suc{n_2'})}$, which is equivalent
+    to $\top + \Fin{n_1'} \iso \top + \Fin{n_2'}$.  If we can conclude
+    that $\Fin{n_1'} \iso \Fin{n_2'}$, the inductive hypothesis then
+    yields $n_1' = n_2'$, from which $\suc{n_1'} = \suc{n_2}'$ follows
+    immediately.  The implication $(\top + \Fin{n_1'} \iso \top +
+    \Fin{n_2'}) \to (\Fin{n_1'} \iso \Fin{n_2'})$ is true, but not
+    quite as straightforward to show as one might think! In
+    particular, an equivalence $(\top + \Fin{n_1'} \iso \top +
+    \Fin{n_2'})$ may not match the $\top$ values with each other, so
+    some nontrivial shuffling must be done to construct a matching
+    between the elements of $\Fin{n_1'}$ and $\Fin{n_2'}$.
+    \todo{picture of the situation.} This may be accomplished via the
+    \term{Gordon complementary bijection principle}. \todo{more on
+      which later??}
+  \end{itemize}
 \end{proof}
 
 Constructing a type-theoretic counterpart to $\P$ is
@@ -2038,8 +1985,8 @@ now straightforward.
 \end{defn}
 It is easy to check that this satisfies the axioms for an
 \hott{category}, the salient points being that $\Fin m \iso \Fin n$ is
-a set by \pref{lem:equiv-pres-set}, and hom-univalence is just
-univalence.
+a set by \pref{lem:equiv-pres-set}, and $\isotoid$ follows from
+\pref{lem:fin-iso-equal}.
 
 Developing a counterpart to $\B$ is more subtle.  The first order of
 business is to decide how to port the concept of a ``finite set''.
@@ -2105,8 +2052,8 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
       # centerXY # pad 1.2
       # flip appends
         [ (unit_Y                  , text' 4 "Fin n")
-        , (unit_Y # rotateBy (-1/3), text' 4 "L₁"   )
-        , (unit_Y # rotateBy (1/3) , text' 4 "L₂"   )
+        , (unit_Y # rotateBy (-1/3), text' 4 "A₁"   )
+        , (unit_Y # rotateBy (1/3) , text' 4 "A₂"   )
         ]
   where
     fin = mkList n dot (`xor` 1) # centerXY
@@ -2146,15 +2093,14 @@ n$, with no mention of a specific bijection.  This is justified by the
 fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
 good as any other.
 
-This suggests a better encoding of finiteness in type theory, with a
-first attempt given by \[ \FinTypeT' \defeq (A : \Type) \times
-\ptrunc{(n : \N) \times (A \iso \Fin n)}, \] making use of
-propositional truncation to encode the fact that there \emph{merely
-  exists} some size $n$ and an equivalence between $A$ and $\Fin n$,
-but without exposing a precise choice.  The finiteness evidence is now
-irrelevant to paths in $\FinTypeT'$, since there is always a path
-between any two elements of a truncated type.  We also note the
-following:
+This suggests a better encoding of finiteness in type theory, \[
+\FinTypeT' \defeq (A : \Type) \times \ptrunc{(n : \N) \times (A \iso
+  \Fin n)}, \] making use of propositional truncation to encode the
+fact that there \emph{merely exists} some size $n$ and an equivalence
+between $A$ and $\Fin n$, but without exposing a precise choice.  The
+finiteness evidence is now irrelevant to paths in $\FinTypeT'$, since
+there is always a path between any two elements of a truncated type.
+We also note the following:
 \begin{prop}
   For any type $A$, \[ \ptrunc{(n : \N) \times (A \iso \Fin n)} \iso
   (n : \N) \times \ptrunc{A \iso \Fin n}. \]
@@ -2187,39 +2133,19 @@ truncation does not really hide anything.
   We must show that any two values $(n_1, e_1), (n_2, e_2) : (n : \N)
   \times \ptrunc{A \iso \Fin n}$ are propositionally equal.  Since
   $e_1$ and $e_2$ are mere propositions, it suffices to show that $n_1
-  = n_2$.  This equality is itself a mere proposition ($\N$ is a set,
-  which follows from its induction principle), so we may apply the
-  recursion principle for propositional truncation to $e_1$ and $e_2$,
-  giving us equivalences $A \iso \Fin n_1$ and $A \iso \Fin n_2$ to
-  work with.  By symmetry and transitivity, $\Fin n_1 \iso \Fin n_2$.
-  This implies $n_1 = n_2$, by double induction on $n_1$ and $n_2$:
-  \begin{itemize}
-  \item If both $n_1$ and $n_2$ are zero, the result is immediate.
-  \item The case when one is zero and the other a successor is
-    impossible.  In particular, taking the
-    equivalence in the appropriate direction gives a function $\Fin
-    (\suc \dots) \to \Fin \zero$, which can be used to produce an
-    element of $\Fin \zero = \bot$, from which anything follows.
-  \item In the case when both are a successor, we have
-    $\Fin{(\suc{n_1'})} \iso \Fin{(\suc{n_2'})}$, which is equivalent
-    to $\top + \Fin{n_1'} \iso \top + \Fin{n_2'}$.  If we can conclude
-    that $\Fin{n_1'} \iso \Fin{n_2'}$, the inductive hypothesis then
-    yields $n_1' = n_2'$, from which $\suc{n_1'} = \suc{n_2}'$ follows
-    immediately.  The implication $(\top + \Fin{n_1'} \iso \top +
-    \Fin{n_2'}) \to (\Fin{n_1'} \iso \Fin{n_2'})$ is true, but not
-    quite as straightforward to show as one might think! In
-    particular, the equivalence may not match the $\top$ values with
-    each other, so some nontrivial shuffling must be done to construct
-    a matching between the elements of $\Fin{n_1'}$ and $\Fin{n_2'}$.
-    This may be accomplished via the \term{Gordon complementary
-      bijection principle}. \todo{more on which later??}
-  \end{itemize}
+  = n_2$.  This equality is itself a mere proposition (since $\N$ is a
+  set, which follows from its induction principle), so we may apply
+  the recursion principle for propositional truncation to $e_1$ and
+  $e_2$, giving us equivalences $A \iso \Fin n_1$ and $A \iso \Fin
+  n_2$ to work with.  By symmetry and transitivity, $\Fin n_1 \iso
+  \Fin n_2$, and thus $n_1 = n_2$ by \pref{lem:fin-iso-equal}.
 \end{proof}
 
 There is still one remaining problem, which is that $\FinTypeT'$ is
 not a $1$-type, and hence $\tygrpd{-}$ does not apply. To solve this
-we may simply restrict to $0$-types $A$. This yields our final
-definition:
+we may simply restrict to $0$-types $A$ (which is arguably a more
+faithful encoding of the situation in set theory anyway). This yields
+our final definition:
 
 \begin{defn}
   The type of finite sets is given by \[ \FinTypeT \defeq (A : \Type)
@@ -2254,62 +2180,34 @@ finiteness, but they are propositionally truncated; the type of
 functors $\BT \to \PT$ is decidedly not a mere proposition, so it
 seems the recursion principle for truncation does not apply.
 
-We can, however, define an anafunctor $\size - : \BT \to \PT$,
-similarly to $\size - : \B \to \P$\footnote{We overload $\size{}$ to
-  serve as the name of both anafunctors (as well as set cardinality);
-  this should not cause confusion as they are never used in similar
-  contexts.}.
-\todo{Redo this to use the span definition.}
-\begin{defn}
-  The anafunctor $\size - : \BT \to \PT$ is given by:
-  \begin{itemize}
-  \item the class of specifications $\FinType$;
-  \item a function $\sigma : \FinType \to \BT$ which ``forgets'' the
-    equivalences by injecting them into the propositional truncation,
-    \ie \[ \sigma(S,m,\varphi) = (S, m, \ptruncI{\varphi}); \]
-  \item a function $\tau : \FinType \to \PT$ which projects out the
-    size, \[ \tau(S,m,\varphi) = m; \]
-  \item and, for $f : \mor {(S,m,\psi_S)} {(T,n,\psi_T)}$, that is, $f
-    : S \iso T$,
-    \[ \sizesymb_{(S,m,\varphi_S),(T,n,\varphi_T)}(f) =
-    \varphi_S^{-1} \then f \then \varphi_T. \]
-  \end{itemize}
-  The proof that this is a valid anafunctor is analogous to the proof
-  for the anafunctor $\B \to \P$. \todo{Or do we get this for free?}
-\end{defn}
+However, all is not lost!  We could try porting the concept of
+anafunctor into HoTT, but it turns out that there is a better way.  We
+first highlight some relevant results proved in the HoTT book.
 
-\begin{prop}
-  The pair of (ana)functors $\BackForth \PT {\fin -} {\size{}} \BT$
-  constitutes an (ana)equivalence between the groupoids $\PT$ and
-  $\BT$.
+\todo{Stuff about equivalence here.  Write out on paper what should be
+  included.}
 
-\begin{proof}
-  \todo{Redo this proof using composition of anafunctors. Intuitively,
-    it shouldn't actually change too much but the details need to be
-    checked; also, the metavariable conventions have changed.}
-  $\size{\fin -}$ is by definition the identity functor.  The
-  interesting direction is $\fin{\size -}$.
-  \begin{itemize}
-  \item On objects, $\fin{\size {(A,m,i)}} \equiv \fin{m} \equiv (\Fin
-    m, m, \id)$, and
-  \item on morphisms, $e : \mor {(A,m,i)} {(B,n,j)}$ is sent to
-    $\fin{\size e} \equiv \fin{i \then e \then j^{-1}} \equiv i \then e \then j^{-1}$.
-  \end{itemize}
-  We must exhibit a natural isomorphism $\alpha : \all{L} {L \to
-    \fin{\size L}}$.  $\alpha_{(A,m,i)}$ must be a morphism in $\BT$
-  from $(A,m,i)$ to $(\Fin m, m, \id)$, that is, an equivalence $A
-  \iso \Fin m$.  Therefore we define $ \alpha_{(A,m,i)} \defeq
-  i^{-1}$.  Naturality of $\alpha$ is given by the diagram
-  \[ \xymatrix{
-         (A,m,i) \ar[r]^-{i^{-1}} \ar[d]_e
-         &
-         (\Fin m, m, \id) \ar[d]^{i \then e \then j^{-1}}
-       \\
-         (B,n,j) \ar[r]_-{j^{-1}} & (\Fin n, n, \id)
-     }
-  \]
-  which commutes by inspection.  Finally, we note that any natural
-  transformation between functors whose codomain is a groupoid is
-  automatically an isomorphism.
-\end{proof}
-\end{prop}
+Now, we can show that $\fin -$ is fully faithful and essentially
+surjective.  The fact that $\fin -$ is full and faithful follows from
+univalence.  To see that it is essentially surjective, we must show
+that for each $S : \BT$, there merely exists some $n : \PT$ such that
+$\fin n \cong S$---but this is exactly the content of the $\isFinite$
+proof embedded in $S$.  Therefore, by \pref{prop:XXX}, $\fin -$ is an
+equivalence of categories, and in particular it has an inverse (up to
+natural isomorphism) which we call $\size : \BT \to \PT$.
+
+What does $\size$ look like, computationally speaking?  \todo{Actually
+  go through construction?}  In fact, it does precisely what we
+thought was not allowed---its action on morphisms works by extracting
+concrete equivalences out of the finiteness proofs in the objects of
+$\BT$ and using them to construct the required permutation, just as in
+the construction of the anafunctor $\size : \B \to \P$ in
+\pref{sec:finiteness-sets}.  The apparent contradiction is resolved by
+noting that although the type of \emph{all} functors $\BT \to \PT$ is
+not a mere proposition, we are not interested in constructing
+\emph{any old} functor, but rather a very specific one, namely, an
+inverse to $\fin - : \PT \to \BT$---and the inverse exists uniquely.
+
+\todo{more intuition here about trick with adding extra stuff to
+  uniquely characterize something in order to construct it using stuff
+  hidden in truncation.}
