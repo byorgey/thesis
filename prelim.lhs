@@ -930,6 +930,8 @@ import           Data.Default.Class
 
 import           Data.Colour.Palette.BrewerSet
 
+import           SpeciesDiagrams (enclose)
+
 data SetOpts = SetOpts
   { _setSize   :: Int
   , _eltShape  :: Diagram B R2
@@ -1964,14 +1966,76 @@ in type theory.  First, a few necessary lemmas:
     \Fin{n_2'}) \to (\Fin{n_1'} \iso \Fin{n_2'})$ is true, but not
     quite as straightforward to show as one might think! In
     particular, an equivalence $(\top + \Fin{n_1'} \iso \top +
-    \Fin{n_2'})$ may not match the $\top$ values with each other, so
-    some nontrivial shuffling must be done to construct a matching
-    between the elements of $\Fin{n_1'}$ and $\Fin{n_2'}$.
-    \todo{picture of the situation.} This may be accomplished via the
-    \term{Gordon complementary bijection principle}. \todo{more on
-      which later??}
+    \Fin{n_2'})$ may not match the $\top$ values with each other.  As
+    illustrated in \pref{fig:gcbp-Maybe}, given $e : (\top +
+    \Fin{n_1'} \iso \top + \Fin{n_2'})$, it suffices to define
+    $e'(e^{-1}\ \unit) = e\ \unit$, with the rest of $e' : \Fin{n_1'}
+    \iso \Fin{n_2'}$ defined as a restriction of $e$.  This
+    construction corresponds more generally to the \term{Gordon
+      complementary bijection principle}~\citep{gcbp}, to be discussed
+    in more detail in \pref{sec:gcbp}.
   \end{itemize}
 \end{proof}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+fin_ = zipWith named [1 :: Int ..] (replicate 5 (square 1))
+
+fin x = hcat (x ||> fin_)
+
+t_ = named (0 :: Int) (square 1)
+
+tfin x =
+  hcat' (with & sep .~ 0.5)
+    [ (x ||> t_)
+    , text "+" <> square 1 # lw 0
+    , fin x
+    ]
+
+ht = 3
+
+dashSty = dashing [0.1,0.1] 0
+
+bij = [ ((0, 1), Just dashSty)
+      , ((1, 2), Nothing)
+      , ((2, 3), Nothing)
+      , ((3, 0), Just dashSty)
+      , ((4, 5), Nothing)
+      , ((5, 4), Nothing)
+      ]
+
+tfin_e =
+  vcat' (with & sep .~ ht)
+  [tfin 'A', tfin 'B']
+  # applyAll
+    [ conn sty ('A' .> (x :: Int)) ('B' .> (y :: Int)) || ((x,y), sty) <- bij ]
+
+fin_e =
+  vcat' (with & sep .~ ht)
+  [fin 'A', fin 'B']
+  # applyAll
+    [ conn sty ('A' .> (x :: Int)) ('B' .> (y :: Int))
+    || ((x,y), sty) <- filter (\((x,y), _) -> x /= 0 && y /= 0) bij ++ [((3,1), Just (lc red . lw 0.05))]
+    ]
+
+conn msty x y = connect' aOpts x y
+  where
+    aOpts
+      || Just sty <- msty = basicOpts & shaftStyle %~ sty
+      || otherwise        = basicOpts
+    basicOpts = with & arrowHead .~ spike & arrowTail .~ spike'
+
+dia = hcat' (with & sep .~ 2)
+  [ tfin_e # centerY
+  , text "⇒" # fontSize 1.5 <> square 1 # lw 0
+  , fin_e # centerY
+  ]
+  # frame 0.5
+  \end{diagram}
+  \caption{Eliminating $\top$ from both sides of an equivalence}
+  \label{fig:gcbp-Maybe}
+\end{figure}
 
 Constructing a type-theoretic counterpart to $\P$ is
 now straightforward.
@@ -2164,6 +2228,16 @@ $\FinTypeT$ is consequently a $1$-type.
   groupoid of cardinal-finite types and paths bewteen them.
 \end{defn}
 
+It is worth pointing out that with this definition of $\BT$, we have
+ended up with something akin to the category of specifications
+$\Spec_{\size{}}$ used to define the anafunctor $\size : \B \to \P$ in
+\pref{sec:finiteness-sets}, rather than something corresponding
+directly and na\"ively to $\B$ itself. The main difference is that
+$\BT$ uses a propositional truncation to ``hide'' the explicit choice
+of finiteness evidence.
+
+We now turn to the equivalence of $\PT$ and $\BT$.
+
 \begin{defn}
   We can easily define a functor $\fin - : \PT \to \BT$: on objects,
   it sends $n$ to $\Fin n$, along with proofs that it is a set and
@@ -2173,7 +2247,7 @@ $\FinTypeT$ is consequently a $1$-type.
 \end{defn}
 
 However, it is not at all obvious how to directly define a functor
-$\size - : \BT \to \PT$. Just as with $\B \to \P$, defining its action
+$\size : \BT \to \PT$. Just as with $\B \to \P$, defining its action
 on morphisms requires a specific choice of equivalence $A \iso \Fin
 n$. The objects of $\BT$ contain such equivalences, in the proofs of
 finiteness, but they are propositionally truncated; the type of
@@ -2181,33 +2255,138 @@ functors $\BT \to \PT$ is decidedly not a mere proposition, so it
 seems the recursion principle for truncation does not apply.
 
 However, all is not lost!  We could try porting the concept of
-anafunctor into HoTT, but it turns out that there is a better way.  We
-first highlight some relevant results proved in the HoTT book.
+anafunctor into HoTT, but it turns out that there is a better way.
+Recall that in set theory, every fully faithful, essentially
+surjective functor is an equivalence \emph{if and only if} the axiom
+of choice holds.  In HoTT the situation turns out much better, thanks
+to the richer notion of equality and the extra axiom associated with a
+category.
 
-\todo{Stuff about equivalence here.  Write out on paper what should be
-  included.}
+\begin{lem}
+  $\fin - : \PT \to \BT$ is full and faithful.
+\end{lem}
+\begin{proof}
+  For any $m, n : \PT$, we must exhibit an equivalence between
+  $(\hom[\PT] m n) \equiv (\Fin m \iso \Fin n)$ and $\hom[\BT] {\fin
+    m} {\fin n} \equiv (\fin m = \fin n) \iso (\Fin m = \Fin
+  n)$---such an equivalence is given by univalence.
+\end{proof}
 
-Now, we can show that $\fin -$ is fully faithful and essentially
-surjective.  The fact that $\fin -$ is full and faithful follows from
-univalence.  To see that it is essentially surjective, we must show
-that for each $S : \BT$, there merely exists some $n : \PT$ such that
-$\fin n \cong S$---but this is exactly the content of the $\isFinite$
-proof embedded in $S$.  Therefore, by \pref{prop:XXX}, $\fin -$ is an
-equivalence of categories, and in particular it has an inverse (up to
-natural isomorphism) which we call $\size : \BT \to \PT$.
+There are two relevant notions of essential surjectivity:
 
-What does $\size$ look like, computationally speaking?  \todo{Actually
-  go through construction?}  In fact, it does precisely what we
+\begin{defn}
+  A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
+  \term{split essentially surjective} if for each object $D : \DT$
+  there \emph{constructively} exists an object $C : \CT$ such that $F\
+  C \cong D$. That is, \[ \msf{splitEssSurj}(F) \defeq (D : \DT) \to (C :
+  \CT) \times (F\ C \cong D). \]
+\end{defn}
+
+\begin{defn}
+  A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
+  \term{essentially surjective} if for each object $D : \DT$ there
+  \emph{merely} exists an object $C : \CT$ such that $F\ C \cong D$. That
+  is, \[ \msf{essSurj}(F) \defeq (D : \DT) \to \ptrunc{ (C : \CT)
+    \times (F\ C \cong D) }. \]
+\end{defn}
+
+It turns out that being split essentially surjective is a rather
+strong notion.  In particular:
+
+\begin{prop}
+  For any precategories $\CT$ and $\DT$ and a functor $F : \CT \to
+  \DT$, $F$ is fully faithful and split essentially surjective if and
+  only if it is an equivalence.
+\end{prop}
+\begin{proof}
+  See the HoTT book~\citep[Lemma 9.4.5]{hottbook}.  Intuitively, the
+  \emph{split} essential surjectivity gives us exactly what we need to
+  unambiguously \emph{construct} an inverse functor $G : \DT \to \CT$:
+  the action of $G$ on $D : \DT$ is defined to be the $C$---which
+  exists constructively---such that $F\ C \cong D$.
+\end{proof}
+
+That is, a fully faithful, essentially surjective functor is an
+equivalence given AC; a fully faithful, \emph{split} essentially
+surjective functor is an equivalence \emph{without} AC.
+
+\begin{prop}
+  $\fin -$ is essentially surjective.
+\end{prop}
+\begin{proof}
+  Given $(S,s,f) : \BT$, we must show that there merely exists some $n
+  : \PT$ such that $\fin n \cong S$---but this is precisely the
+  content of the $\isFinite$ proof $f$.
+\end{proof}
+
+On the other hand, it would seem that $\fin -$ is not split
+essentially surjective, since that would require extracting finiteness
+proofs from the propositional truncation, which is not allowed in
+general.  However:
+
+\begin{prop}[\protect{\citep[Lemma 9.4.7]{hottbook}}]
+  If $F : \CT \to \DT$ is fully faithful and $\CT$ is a category, then
+  for any $D : \DT$ the type $(C : \CT) \times (F\ C \cong D)$ is a
+  mere proposition.
+\end{prop}
+
+\begin{proof}[Proof (sketch)]
+  From $F\ C \cong D$ and $F\ C' \cong D$ we derive $F\ C \cong F\
+  C'$, and thus $C \cong C'$ (since $F$ is fully faithful), and $C =
+  C'$ (since $\CT$ is a category).  The transport of the isomorphism
+  $(F\ C \cong D)$ along this derived path $C = C'$ is precisely the
+  isomorphism $(F\ C' \cong D)$.
+\end{proof}
+
+Intuitively, for a fully faithful functor $F : \CT \to \DT$ out of a
+category $\CT$, there is ``only one way'' for some object $D : \DT$ to
+be isomorphic to the image of an object of $\CT$.  That is, if it is
+isomorphic to the image of multiple objects of $\CT$, then those
+objects must in fact be equal.
+
+This brings us to the punchline:
+
+\begin{cor}
+  If $\CT$ is a category, a fully faithful functor $F : \CT \to \DT$
+  is essentially surjective if and only if it is split essentially surjective.
+\end{cor}
+
+Thus, since $\fin -$ is a fully faithful and essentially surjective
+functor out of a category, it is in fact \emph{split} essentially
+surjective and thus an equivalence.  In particular, it has an inverse
+(up to natural isomorphism) which we call $\size : \BT \to \PT$.
+
+The larger intuition here is about an answer to the question: when can
+one define a function $\ptrunc{A} \to B$, when $B$ is \emph{not} a
+mere proposition?  When $B$ is a mere proposition, it suffices to give
+a function $A \to B$.  On the other hand, if $B$ is not a mere
+proposition, it may seem that there is no useful way to construct a
+function $\ptrunc{A} \to B$.  However, this is not true: if one can
+\emph{uniquely characterize} a particular value of $B$---that is,
+create a mere proposition $(b : B) \times Q(b)$---one can then define
+a function $\ptrunc{A} \to (b : B) \times Q(b)$ out of a function $A \to
+(b : B) \times Q(b)$, and finally project out the $B$ to obtain a
+function $\ptrunc A \to B$.  This ``trick'' is detailed in the HoTT
+book~\citep[\Sect 3.9]{hottbook}; Exercise 3.19 is an excellent
+exercise that also affords some good intuition for this phenomenon.
+
+Computationally speaking, $\size : \BT \to \PT$ does precisely what we
 thought was not allowed---its action on morphisms works by extracting
 concrete equivalences out of the finiteness proofs in the objects of
 $\BT$ and using them to construct the required permutation, just as in
 the construction of the anafunctor $\size : \B \to \P$ in
-\pref{sec:finiteness-sets}.  The apparent contradiction is resolved by
-noting that although the type of \emph{all} functors $\BT \to \PT$ is
-not a mere proposition, we are not interested in constructing
-\emph{any old} functor, but rather a very specific one, namely, an
-inverse to $\fin - : \PT \to \BT$---and the inverse exists uniquely.
+\pref{sec:finiteness-sets}.  Indeed, we are not allowed to project
+finiteness evidence out from the propositional truncation when
+defining \emph{arbitrary} functors $\BT \to \PT$.  However, we are not
+interested in constructing \emph{any old} functor, but rather a very
+specific one, namely, an inverse to $\fin - : \PT \to \BT$---and the
+inverse is uniquely determined.  In essence, the construction of
+$\size$ proceeds by first constructing a function paired with a proof
+that, together with $\fin -$, it forms an equivalence---altogether a
+mere proposition---and then projecting out the functor.
 
-\todo{more intuition here about trick with adding extra stuff to
-  uniquely characterize something in order to construct it using stuff
-  hidden in truncation.}
+When working with species as founded in HoTT, therefore, we are fully
+justified in working with them as functors from finite sets of labels,
+or from natural number sizes, as convenient---the equivalence $\BT
+\cong \PT$ is entirely constructive and allows species to be
+converted back and forth between the two views.
