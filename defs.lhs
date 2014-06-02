@@ -271,6 +271,8 @@
 
 \newmsf{idtoiso}
 \newmsf{isotoid}
+\newmsf{qinv}
+\newmsf{isequiv}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory

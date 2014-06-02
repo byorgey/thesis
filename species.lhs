@@ -481,11 +481,57 @@ species'' (or, more specifically,
   somehow, and follow it with a general description of the rest of the
   chapter, to make a nice transition into the more technical material
   on lifted monoids etc.}  One generalization that will be of
-particular interest is a ``port'' of species into type theory. Recall
-that $\BT$ denotes the groupoid whose objects are triples consisting
-of a type $A$, a size $n$, and the propositional truncation of an
-equivalence $A \iso \Fin n$.  Recall also that \todo{fix this: $\Type$
-  denotes the category of types and (well-typed) functions.}
+particular interest is a ``port'' of species into HoTT. Recall that
+$\BT$ denotes the \hott{groupoid} whose objects consist of a set $A$
+along with a proof that $A$ is finite, that is, the propositional
+truncation of a size $n : \N$ paired with an equivalence $A \iso \Fin
+n$, and whose morphisms are paths.  Recall also that $\PT$ denotes the
+\hott{groupoid} whose objects are natural numbers and whose morphisms
+$\mor m n$ are equivalences $\Fin m \iso \Fin n$.
+
+\begin{defn}[\citep{hottbook}, Examples 9.1.5 and 9.1.7]
+  Let $\ST$ denote the \hott{category} of sets, that is, the category
+  whose objects are \emph{sets} and whose morphisms are functions $A
+  \to B$.
+\end{defn}
+\begin{proof}
+  This category is defined in the HoTT book in examples 9.1.5 and
+  9.1.7, and explored extensively in Chapter 10.  However, the proof
+  given in Example 9.1.7 leaves out some details, and it is worth
+  spelling out the construction here.
+
+  Of course, identity morphisms are given by the identity function,
+  and morphism composition by function composition, so the identity
+  and associativity laws are satisfied. The definition also satisfies
+  the requirement that the type of morphisms is a set, since $A \to B$
+  is a set whenever $B$ is.
+
+  Finally, suppose $A \cong B$, that is, there are functions $f : A
+  \to B$ and $g : B \to A$ such that $f \comp g = \id_B$ and $g \comp
+  f = \id_A$.  It is not \latin{a priori} obvious that this is the
+  same as an equivalence $A \iso B$---indeed, it turns out to be so
+  only because $A$ and $B$ are sets.  Technically, this defines a
+  \term{quasi-inverse} between $A$ and $B$, that is, $(A \cong B) \iso
+  (f : A \to B) \times \qinv(f)$, where $\qinv(f) \defeq (g : B \to A)
+  \times (f \comp g = \id_B) \times (g \comp f = \id_A)$. On the other
+  hand, $(A \iso B) \iso (f : A \to B) \times \isequiv(f)$.  The
+  precise definition of $\isequiv(f)$ can be found in Chapter 4 of the
+  HoTT book; for the present purpose, it suffices to say that although
+  $\qinv(f)$ and $\isequiv(f)$ are \emph{logically} equivalent (that
+  is, each implies the other), $\isequiv(f)$ is always a mere
+  proposition but in general $\qinv(f)$ may not be.  However, in the
+  specific case that $A$ and $B$ are sets, $\qinv(f)$ is indeed a mere
+  proposition: by Lemma 4.1.4 in the HoTT book, if $\qinv(f)$ is
+  inhabited then it is equivalent to $(x:A) \to (x = x)$, which is a
+  mere proposition by function extensionality and the fact that $A$ is
+  a set.  Therefore, $\qinv(f) \iso \isequiv(f)$, so we have $(A
+  \cong B) \iso (A \iso B) \iso (A = B)$ by univalence.
+\end{proof}
+
+\todo{change LaTeX commands for iso, equiv, etc.}
+
+\todo{fix this: $\Type$ denotes the category of types and
+  (well-typed) functions.}
 
 \begin{defn}
   A \term{constructive species} is a functor $F : \BT \to \Type$.  We
