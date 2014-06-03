@@ -474,10 +474,10 @@ concise definition of species:
   \term{presheaf} on $\B$, that is, a functor $\B^\op \to \Set$.)
 \end{defn}
 
-Reflecting the fact that the groupoid $\P$ of natural numbers and
-finite permutations is equivalent to the groupoid $\B$, it is also
-possible to define species as families of shapes, indexed not by their
-labels but merely by their \emph{size}:
+In a classical context, given AC, the groupoid $\P$ of natural numbers
+and finite permutations is equivalent to the groupoid $\B$, so it is
+also possible to define species as families of shapes indexed not by
+their labels but merely by their \emph{size}:
 
 \begin{defn}[Species (alternate)]
   \label{defn:species-p}
@@ -498,10 +498,10 @@ thought of as precisely those labelled by the canonical label set $[n]$.
   is actually no great restriction: requiring each \emph{particular}
   set of shapes $F\ L$ to be finite is not at all the same thing as
   requiring the \emph{entire family} of shapes, $\uplus_{n \in \N} F\
-  n$, to be finite!  Typically, even in the cases that computer
-  scientists care about, each individual $F\ n$ is finite but the
-  entire family is not---that is, a type may have infinitely many
-  inhabitants but only finitely many of a given size.
+  n$, to be finite.  Typically, even in the cases that programmers
+  care about, each individual $F\ n$ is finite but the entire family
+  is not---that is, a type may have infinitely many inhabitants but
+  only finitely many of a given size.
 \end{rem}
 
 \begin{rem}
@@ -511,9 +511,9 @@ thought of as precisely those labelled by the canonical label set $[n]$.
   of $F$ guarantees that $F\ \sigma$ is a bijection as well. In
   particular, $(F\ \sigma)^{-1} = F\ (\sigma^{-1})$, since $F\ \sigma
   \comp F\ (\sigma^{-1}) = F\ (\sigma \comp \sigma^{-1}) = F\ id =
-  id$, and similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.  So
-  (given the restriction that $F\ n$ be finite) one could, and some
-  authors do, define species as endofunctors $F : \B \to \B$ with no
+  id$, and similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.
+  Given the restriction that $F\ n$ be finite, one could---and some
+  authors do---define species as endofunctors $F : \B \to \B$ with no
   loss of expressivity.
 \end{rem}
 
@@ -650,76 +650,33 @@ species'' (or, more specifically,
   chapter, to make a nice transition into the more technical material
   on lifted monoids etc.}  One generalization that will be of
 particular interest is a ``port'' of species into HoTT. Recall that
-$\BT$ denotes the \hott{groupoid} whose objects consist of a set $A$
-along with a proof that $A$ is finite, that is, the propositional
-truncation of a size $n : \N$ paired with an equivalence $A \iso \Fin
-n$, and whose morphisms are paths.  Recall also that $\PT$ denotes the
+$\BT$ denotes the \hott{groupoid} with the object type \[ \FinTypeT
+\defeq (A : \Type) \times \isSet(A) \times \isFinite(A), \] where \[
+\isFinite(A) \defeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}, \]
+with morphisms given by paths.  Recall also that $\PT$ denotes the
 \hott{groupoid} whose objects are natural numbers and whose morphisms
-$\mor m n$ are equivalences $\Fin m \iso \Fin n$.
-
-\begin{defn}[\citep{hottbook}, Examples 9.1.5 and 9.1.7]
-  Let $\ST$ denote the \hott{category} of sets, that is, the category
-  whose objects are \emph{sets} and whose morphisms are functions $A
-  \to B$.
-\end{defn}
-\begin{proof}
-  This category is defined in the HoTT book in examples 9.1.5 and
-  9.1.7, and explored extensively in Chapter 10.  However, the proof
-  given in Example 9.1.7 leaves out some details, and it is worth
-  spelling out the construction here.
-
-  Of course, identity morphisms are given by the identity function,
-  and morphism composition by function composition, so the identity
-  and associativity laws are satisfied. The definition also satisfies
-  the requirement that the type of morphisms is a set, since $A \to B$
-  is a set whenever $B$ is.
-
-  Finally, suppose $A \cong B$, that is, there are functions $f : A
-  \to B$ and $g : B \to A$ such that $f \comp g = \id_B$ and $g \comp
-  f = \id_A$.  It is not \latin{a priori} obvious that this is the
-  same as an equivalence $A \iso B$---indeed, it turns out to be so
-  only because $A$ and $B$ are sets.  Technically, this defines a
-  \term{quasi-inverse} between $A$ and $B$, that is, $(A \cong B) \iso
-  (f : A \to B) \times \qinv(f)$, where $\qinv(f) \defeq (g : B \to A)
-  \times (f \comp g = \id_B) \times (g \comp f = \id_A)$. On the other
-  hand, $(A \iso B) \iso (f : A \to B) \times \isequiv(f)$.  The
-  precise definition of $\isequiv(f)$ can be found in Chapter 4 of the
-  HoTT book; for the present purpose, it suffices to say that although
-  $\qinv(f)$ and $\isequiv(f)$ are \emph{logically} equivalent (that
-  is, each implies the other), $\isequiv(f)$ is always a mere
-  proposition but in general $\qinv(f)$ may not be.  However, in the
-  specific case that $A$ and $B$ are sets, $\qinv(f)$ is indeed a mere
-  proposition: by Lemma 4.1.4 in the HoTT book, if $\qinv(f)$ is
-  inhabited then it is equivalent to $(x:A) \to (x = x)$, which is a
-  mere proposition by function extensionality and the fact that $A$ is
-  a set.  Therefore, $\qinv(f) \iso \isequiv(f)$, so we have $(A
-  \cong B) \iso (A \iso B) \iso (A = B)$ by univalence.
-\end{proof}
-
-\todo{change LaTeX commands for iso, equiv, etc.}
-
-\todo{fix this: $\Type$ denotes the category of types and
-  (well-typed) functions.}
+$\mor m n$ are equivalences $\Fin m \equiv \Fin n$, and that $\ST$
+denotes the \hott{category} of $0$-types (sets) and functions.
 
 \begin{defn}
-  A \term{constructive species} is a functor $F : \BT \to \Type$.  We
-  use $\CSpe = [\BT,\Type]$ to refer to the category of constructive
+  A \term{constructive species} is a functor $F : \BT \to \ST$.  We
+  use $\CSpe = [\BT,\ST]$ to refer to the category of constructive
   species.
 \end{defn}
 
 Another one of the major goals of this chapter is to argue that this
 is an appropriate encoding of species within homotopy type theory.
 Note that this cannot be directly justified by showing that
-$[\B,\Set]$ and $[\BT,\Type]$ are categorically equivalent.  In fact,
+$[\B,\Set]$ and $[\BT,\ST]$ are categorically equivalent.  In fact,
 that is unlikely to be true, since $\Set$ is ``too big'': there are
 many sets that do not correspond to any type definable in type theory.
 
 However, most working mathematicians do not actually make use of such
 ``exotic'' sets;  the constructions they care about
 are typically those which can indeed be encoded in type theory.  In
-order to justify $[\BT, \Type]$ as a constructive counterpart to $[\B,
+order to justify $[\BT, \ST]$ as a constructive counterpart to $[\B,
 \Set]$, therefore, we must look at what operations and constructions
-are typically carried out on $[\B, \Set]$, and show that $[\BT,\Type]$
+are typically carried out on $[\B, \Set]$, and show that $[\BT,\ST]$
 supports them as well.
 
 \section{Lifted monoids: sum and Cartesian product}

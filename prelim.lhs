@@ -1715,6 +1715,50 @@ isomorphism. The following example will play an important role later.
   isomorphisms are already paths, $\isotoid$ is just the identity.
 \end{proof}
 
+Another important example is ana analogue to the usual category \Set
+of sets and functions.
+
+\begin{defn}[\citep{hottbook}, Examples 9.1.5 and 9.1.7]
+  Let $\ST$ denote the \hott{category} of sets, that is, the category
+  whose objects are $0$-types, \ie sets, and whose morphisms are
+  functions $A \to B$.
+\end{defn}
+\begin{proof}
+  This category is defined in the HoTT book in examples 9.1.5 and
+  9.1.7, and explored extensively in Chapter 10.  However, the proof
+  given in Example 9.1.7 leaves out some details, and it is worth
+  spelling out the construction here.
+
+  Of course, identity morphisms are given by the identity function,
+  and morphism composition by function composition, so the identity
+  and associativity laws are satisfied. The definition also satisfies
+  the requirement that the type of morphisms is a set, since $A \to B$
+  is a set whenever $B$ is.
+
+  Finally, suppose $A \iso B$, that is, there are functions $f : A \to
+  B$ and $g : B \to A$ such that $f \comp g = \id_B$ and $g \comp f =
+  \id_A$.  It is not \latin{a priori} obvious that this is the same as
+  an equivalence $A \equiv B$---indeed, it turns out to be so only
+  because $A$ and $B$ are sets.  Technically, $(A \iso B)$ constitutes
+  a \term{quasi-inverse} between $A$ and $B$, that is, $(A \iso B)
+  \equiv (f : A \to B) \times \qinv(f)$, where $\qinv(f) \defeq (g : B
+  \to A) \times (f \comp g = \id_B) \times (g \comp f = \id_A)$. On
+  the other hand, $(A \equiv B) \equiv (f : A \to B) \times
+  \isequiv(f)$.  The precise definition of $\isequiv(f)$ can be found
+  in Chapter 4 of the HoTT book; for the present purpose, it suffices
+  to say that although $\qinv(f)$ and $\isequiv(f)$ are
+  \emph{logically} equivalent (that is, each implies the other),
+  $\isequiv(f)$ is always a mere proposition but in general $\qinv(f)$
+  may not be.  However, in the specific case that $A$ and $B$ are
+  sets, $\qinv(f)$ is indeed a mere proposition: by Lemma 4.1.4 in the
+  HoTT book, if $\qinv(f)$ is inhabited then it is equivalent to
+  $(x:A) \to (x = x)$, which is a mere proposition by function
+  extensionality and the fact that $A$ is a set.  Therefore $\qinv(f)
+  \equiv \isequiv(f)$, since logically equivalent mere propositions
+  are equivalent, and we have $(A \iso B) \equiv (A \equiv B) \equiv
+  (A = B)$ by univalence.
+\end{proof}
+
 The definitions of \hott{functors} and \hott{natural transformations}
 are straightforward ports of their usual definitions in set theory.
 
