@@ -161,9 +161,13 @@
 
 \newcommand{\bij}{\stackrel{\sim}{\longrightarrow}}
 \newcommand{\perm}[1]{#1!}
-\newcommand{\iso}{\simeq}
 \newcommand{\mkIso}{\rightleftharpoons}
 \newcommand{\inj}{\hookrightarrow}
+\let\oldequiv\equiv
+\newcommand{\jeq}{\oldequiv}          % judgmental equality
+\newcommand{\defeq}{\mathrel{:\jeq}}  % definitional equality
+\renewcommand{\equiv}{\simeq}         % homotopy equivalence
+\newcommand{\iso}{\cong}              % isomorphism in a category
 
 \newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 
@@ -202,7 +206,6 @@
 %% Type theory
 
 \newcommand{\universe}{\mcal{U}}
-\newcommand{\defeq}{\mathrel{:\equiv}}
 \newcommand{\dep}[1]{\prod_{#1}}
 \newcommand{\fun}[1]{\lambda #1.\ }
 

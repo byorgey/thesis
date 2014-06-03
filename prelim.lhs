@@ -178,7 +178,7 @@ HoTT distinguishes between two different types of equality:
 \later{reference ``On the meanings of the logical constants'' or some
   other suitable thing talking about judgments vs propositions?}
 \begin{itemize}
-\item \term{Judgmental} equality, denoted $x \equiv y$, is defined via
+\item \term{Judgmental} equality, denoted $x \jeq y$, is defined via
   a collection of judgments stating when things are equal to one
   another, and encompasses things like basic rules of computation. For
   example, the application of a lambda term to an argument is
@@ -190,7 +190,7 @@ HoTT distinguishes between two different types of equality:
 \item \term{Propositional} equality.  Given $x, y : A$, we write $x
   =_A y$ for the proposition that $x$ and $y$ are equal (at the type
   $A$).  The $A$ subscript may also be omitted, $x = y$, when it is
-  clear from the context. Unlike judgmental equality, where $x \equiv
+  clear from the context. Unlike judgmental equality, where $x \jeq
   y$ is a \term{judgment}, the propositional equality $x = y$ is a
   \emph{type} whose inhabitants are evidence or \emph{proofs} of the
   equality of $A$ and $B$.  Thus propositional equalities can be
@@ -218,24 +218,24 @@ For example, if $e : A = B$ then $\transport{X \mapsto X \times (X \to
 \paragraph{Equivalence and univalence}
 
 There is also a third sort of equality, namely, \term{equivalence}.
-An equivalence between $A$ and $B$, written $A \iso B$ is
+An equivalence between $A$ and $B$, written $A \equiv B$ is
 (essentially) a pair of functions $f : A \to B$ and $g : B \to A$,
 along with a proof that $f$ and $g$ are inverse.\footnote{The precise
   details are more subtle \cite[chap.  4]{hottbook}, but unimportant
-  for the purposes of this work.  The key takeaway is that $A \iso B$
+  for the purposes of this work.  The key takeaway is that $A \equiv B$
   both implies and is implied by the existence of an inverse pair of
   functions, although this does not make a good \emph{definition} of
   equivalence because of problems with coherence of higher paths.}
 $\id$ and $\comp$ denote the identity equivalence and equivalence
 composition, respectively.  As a notational shortcut, equivalences of
-type $A \iso B$ can be used as functions $A \to B$ where it does not
+type $A \equiv B$ can be used as functions $A \to B$ where it does not
 cause confusion.
 
 HoTT's main novel feature is the \emph{univalence axiom}, which states
 that equivalence is equivalent to propositional equality, that is, $(A
-\iso B) \iso (A = B)$. One direction, $(A = B) \to (A \iso B)$,
+\equiv B) \equiv (A = B)$. One direction, $(A = B) \to (A \equiv B)$,
 follows easily from the properties of equality; the interesting
-direction, which must be taken as an axiom, is $\ua : (A \iso B) \to
+direction, which must be taken as an axiom, is $\ua : (A \equiv B) \to
 (A = B)$, which formally encodes the \emph{principle of
   equivalence}~\cite{principle-of-equivalence}, namely, that sensible
 properties of mathematical objects must be invariant under
@@ -264,7 +264,7 @@ equivalence into a path and then transporting along that path results
 in ``automatically'' inserting the equivalence and its inverse in all
 the necessary places throughout the term. For example, let $P(X)
 \defeq X \times (X \to C)$ as in the previous example, and suppose $e
-: A \iso B$, so $\ua\ e : A = B$.  Then $\transport P {\ua(e)} : P(A)
+: A \equiv B$, so $\ua\ e : A = B$.  Then $\transport P {\ua(e)} : P(A)
 \to P(B)$, and in particular $\transport P {\ua(e)} \pair a g = \pair
 {e(a)}{g \comp e^{-1}}$, which can be derived mechanically by
 induction on the shape of $P$.
@@ -492,8 +492,8 @@ $\C$ to $\D$ forms a category (a \term{functor category}), with
 natural transformations as morphisms.  This category is denoted by
 both of the notations $[\C,\D]$ and $\D^\C$, as convenient.  The
 notation $\D^\C$ is often helpful since intuition for exponents
-carries over to functor categories; for example, $\C^{\D + \E} \iso
-\C^\D \times \C^\E$, $(\C \times \D)^\E \iso \C^\E \times \D^\E$, and
+carries over to functor categories; for example, $\C^{\D + \E} \equiv
+\C^\D \times \C^\E$, $(\C \times \D)^\E \equiv \C^\E \times \D^\E$, and
 so on. (In fact, this is not specific to functor categories; the same
 sorts of isomorphisms hold in any bicartesian closed category.)
 
@@ -573,8 +573,8 @@ very useful concept; usually the following concept is used instead:
 \begin{defn} \label{defn:cat-equiv}
   An \term{equivalence} between $\C$
   and $\D$ is given by functors $\BackForth \C F G \D$ which are
-  inverse up to natural isomorphism, that is, $GF \cong 1_\C$ and $FG
-  \cong 1_\D$.
+  inverse up to natural isomorphism, that is, $GF \iso 1_\C$ and $FG
+  \iso 1_\D$.
 \end{defn}
 
 In set theory, a function has an inverse if it is both injective and
@@ -587,7 +587,7 @@ given, which for the sake of clarity we will refer to as
   : \C \to \D$ which is full and faithful (\ie a bijection on each
   hom-set) as well as \term{essentially surjective}, that is, for
   every object $D \in \D$ there exists some object $C \in \C$ such
-  that $F(C) \cong D$.
+  that $F(C) \iso D$.
 \end{defn}
 
 It is not hard to show that every equivalence is a one-sided
@@ -606,13 +606,13 @@ The topic of \term{adjunctions} is much too large to adequately cover
 here.  For the purposes of this dissertation, the most important form
 of the definition to keep in mind is that a functor $F : \C \to \D$ is
 \term{left adjoint} to $G : \D \to \C$ (and $G$ \term{right adjoint}
-to $F$), notated $F \adj G$, if and only if \[ \Hom[\D]{F A}{B} \cong
+to $F$), notated $F \adj G$, if and only if \[ \Hom[\D]{F A}{B} \iso
 \Hom[\C]{A}{G B}, \] that is, if there is some natural isomorphism
 matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
 \to G B$ in $\C$.
 
 One example familiar to functional programmers is \emph{currying}: \[
-(A \times B \to C) \cong (A \to (B \to C)) \] This corresponds to the
+(A \times B \to C) \iso (A \to (B \to C)) \] This corresponds to the
 adjunction \[ (- \times B) \adj (B \to -). \]
 
 \subsection{Monoidal categories}
@@ -630,9 +630,9 @@ associativity and identity laws expressed via natural isomorphisms.
   \item a bifunctor $\otimes : \C \times \C \to \C$;
   \item a distinguished object $I \in \C$;
   \item a natural isomorphism $\alpha : \all{ABC}{(A \otimes B)
-      \otimes C \cong A \otimes (B \otimes C)}$; and
-  \item natural isomorphisms $\lambda : \all{A}{I \otimes A \cong
-      A}$ and $\rho : \all{A}{A \otimes I \cong A}$.
+      \otimes C \iso A \otimes (B \otimes C)}$; and
+  \item natural isomorphisms $\lambda : \all{A}{I \otimes A \iso
+      A}$ and $\rho : \all{A}{A \otimes I \iso A}$.
   \end{itemize}
   $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
   ``coherence axioms'', which ensure that parallel isomorphisms
@@ -662,7 +662,7 @@ given here:
 
 \begin{defn}
   A monoidal category is \term{symmetric} if there is additionally a
-  natural isomorphism $\gamma : \all{AB}{A \otimes B \cong B \otimes
+  natural isomorphism $\gamma : \all{AB}{A \otimes B \iso B \otimes
     A}$.
 \end{defn}
 
@@ -674,7 +674,7 @@ by composition of functors.
 \begin{defn}
   A monoidal category $\C$ is \term{closed} if there some bifunctor $[-,-]
   : \C^\op \times \C \to \C$ such that there is a natural
-  isomorphism \[ \all{ABC}{\Hom {A \otimes B} C \cong \Hom A
+  isomorphism \[ \all{ABC}{\Hom {A \otimes B} C \iso \Hom A
     {[B,C]}}, \] that is, $- \otimes B$ is left adjoint to $[B,-]$.
 \end{defn}
 
@@ -1199,8 +1199,8 @@ categories.  Recall the two different notions of equivalence:
 \begin{repdefn}{defn:cat-equiv}
   An \term{equivalence} between $\C$
   and $\D$ is given by functors $\BackForth \C F G \D$ which are
-  inverse up to natural isomorphism, that is, $GF \cong 1_\C$ and $FG
-  \cong 1_\D$.
+  inverse up to natural isomorphism, that is, $GF \iso 1_\C$ and $FG
+  \iso 1_\D$.
 \end{repdefn}
 
 \begin{repdefn}{defn:cat-one-sided-equiv}
@@ -1208,7 +1208,7 @@ categories.  Recall the two different notions of equivalence:
   : \C \to \D$ which is full and faithful (\ie a bijection on each
   hom-set) as well as \term{essentially surjective}, that is, for
   every object $D \in \D$ there exists some object $C \in \C$ such
-  that $F(C) \cong D$.
+  that $F(C) \iso D$.
 \end{repdefn}
 
 Every equivalence is a one-sided equivalence, but to prove every
@@ -1219,7 +1219,7 @@ functor $G : \D \to \C$ and show it is inverse to $F$ (up to natural
 isomorphism).  However, to define $G$ we must give its action on each
 object $D \in \D$, that is, a function $\Ob \D \to \Ob \C$.  We know
 that for each $D \in \D$ there \emph{exists} some object $C \in \C$
-with $F\ C \cong D$; that is, $\{ \{ C \in \C \mid F\ C \cong D \}
+with $F\ C \iso D$; that is, $\{ \{ C \in \C \mid F\ C \iso D \}
 \mid D \in \D \}$ is a collection of nonempty sets.  However, in a
 non-constructive logic, knowing these sets are nonempty does not
 actually give us any objects; we must use the axiom of choice to yield
@@ -1465,7 +1465,7 @@ dia =
   is some specification $s \in S$ such that $\lana{F}(s) = C$ and
   $\rana{F}(s) = D$, in which case we write $F_s(C) = D$.  Moreover, $D$
   is \term{a value of $F$ at $C$} (not necessarily a \emph{specified}
-  one) if there is some $s$ for which $D \cong F_s(C)$.
+  one) if there is some $s$ for which $D \iso F_s(C)$.
 
   The idea now is to impose additional conditions which ensure that
   $F$ ``acts like'' a regular functor $\C \to \D$.
@@ -1547,7 +1547,7 @@ is somewhat less intuitive but usually more convenient to work with.
   Note that in this definition, $\lana{F}$ must be \emph{strictly}
   (as opposed to \emph{essentially}) surjective on objects, that is,
   for every $C \in \C$ there is some $S \in \Spec$ such that
-  $\lana{F}(S) = C$, rather than only requiring $\lana{F}(S) \cong
+  $\lana{F}(S) = C$, rather than only requiring $\lana{F}(S) \iso
   C$.  Given this strict surjectivity on objects, it is equivalent to
   require $\lana F$ to be full, as in the definition above, or to be
   (strictly) surjective on the class of all morphisms.
@@ -1670,13 +1670,13 @@ isomorphism and equality.  This is remedied in the definition of an
 \begin{defn}
   An \term{isomorphism} in $\CT$ is a morphism $f : \hom X Y$
   together with a morphism $g : \hom Y X$ such that $f \then g =
-  \idT_X$ and $g \then f = \idT_Y$.  We write $X \cong Y$ for the type
+  \idT_X$ and $g \then f = \idT_Y$.  We write $X \iso Y$ for the type
   of isomorphisms between $X$ and $Y$.
 \end{defn}
 
 \begin{rem}
-  Note the distinction between $X \cong Y$, the type of isomorphisms
-  between $X$ and $Y$ as objects in the precategory $\CT$, and $X \iso
+  Note the distinction between $X \iso Y$, the type of isomorphisms
+  between $X$ and $Y$ as objects in the precategory $\CT$, and $X \equiv
   Y$, the type of equivalences between the types $X$ and $Y$.  The
   latter consists of a pair of inverse functions; the former of a pair
   of inverse \emph{morphisms}.  Morphisms, of course, need not be
@@ -1685,17 +1685,17 @@ isomorphism and equality.  This is remedied in the definition of an
 
 It is immediate, by path induction and the fact that $\idT_X$ is an
 isomorphism, that equality implies isomorphism: we call this $\idtoiso
-: (X = Y) \to (X \cong Y)$.  However, the other direction is not
+: (X = Y) \to (X \iso Y)$.  However, the other direction is not
 automatic.  Note it does not follow from univalence, due to the
-distinction between $X \cong Y$ and $X \iso Y$. However, it has a very
+distinction between $X \iso Y$ and $X \equiv Y$. However, it has a very
 similar flavor to univalence, and matches the intuition that one
 should always work up to isomorphism in a category.  It is therefore
 added as a requirement of an \hott{category}.
 
 \begin{defn}
   An \term{\hott{category}} is a precategory $\CT$ together with the
-  additional univalence-like axiom that for all $X,Y : \CT$, \[ (X \cong
-  Y) \iso (X = Y). \] We write $\isotoid : (X \cong Y) \to (X = Y)$
+  additional univalence-like axiom that for all $X,Y : \CT$, \[ (X \iso
+  Y) \equiv (X = Y). \] We write $\isotoid : (X \iso Y) \to (X = Y)$
   for the left-to-right direction of the equivalence.
 \end{defn}
 
@@ -1930,10 +1930,10 @@ We now turn to developing counterparts to the groupoids $\P$ and $\B$
 in type theory.  First, a few necessary lemmas:
 \begin{lem} \label{lem:equiv-pres-set}
   Equivalence preserves sets, that is, if $A$ and
-  $B$ are sets, then so is $A \iso B$.
+  $B$ are sets, then so is $A \equiv B$.
 \end{lem}
 \begin{proof}
-  $(A \iso B) \iso ((f : A \to B) \times \cons{isequiv}(f))$, where
+  $(A \equiv B) \equiv ((f : A \to B) \times \cons{isequiv}(f))$, where
   $\cons{isequiv}(f)$ is a mere proposition expressing the fact that
   $f$ is an equivalence (\ie has a suitable inverse).  This is a set
   since $\cons{isequiv}(f)$ is a mere proposition (and hence a set),
@@ -1949,7 +1949,7 @@ in type theory.  First, a few necessary lemmas:
 \end{proof}
 
 \begin{lem} \label{lem:fin-iso-equal}
-  For all $n_1, n_2 : \N$, if $\Fin{n_1} \iso \Fin{n_2}$ then $n_1 =
+  For all $n_1, n_2 : \N$, if $\Fin{n_1} \equiv \Fin{n_2}$ then $n_1 =
   n_2$.
 \end{lem}
 \begin{proof}
@@ -1962,19 +1962,19 @@ in type theory.  First, a few necessary lemmas:
     (\suc \dots) \to \Fin \zero$, which can be used to produce an
     element of $\Fin \zero = \bot$, from which anything follows.
   \item In the case when both are a successor, we have
-    $\Fin{(\suc{n_1'})} \iso \Fin{(\suc{n_2'})}$, which is equivalent
-    to $\top + \Fin{n_1'} \iso \top + \Fin{n_2'}$.  If we can conclude
-    that $\Fin{n_1'} \iso \Fin{n_2'}$, the inductive hypothesis then
+    $\Fin{(\suc{n_1'})} \equiv \Fin{(\suc{n_2'})}$, which is equivalent
+    to $\top + \Fin{n_1'} \equiv \top + \Fin{n_2'}$.  If we can conclude
+    that $\Fin{n_1'} \equiv \Fin{n_2'}$, the inductive hypothesis then
     yields $n_1' = n_2'$, from which $\suc{n_1'} = \suc{n_2}'$ follows
-    immediately.  The implication $(\top + \Fin{n_1'} \iso \top +
-    \Fin{n_2'}) \to (\Fin{n_1'} \iso \Fin{n_2'})$ is true, but not
+    immediately.  The implication $(\top + \Fin{n_1'} \equiv \top +
+    \Fin{n_2'}) \to (\Fin{n_1'} \equiv \Fin{n_2'})$ is true, but not
     quite as straightforward to show as one might think! In
-    particular, an equivalence $(\top + \Fin{n_1'} \iso \top +
+    particular, an equivalence $(\top + \Fin{n_1'} \equiv \top +
     \Fin{n_2'})$ may not match the $\top$ values with each other.  As
     illustrated in \pref{fig:gcbp-Maybe}, given $e : (\top +
-    \Fin{n_1'} \iso \top + \Fin{n_2'})$, it suffices to define
+    \Fin{n_1'} \equiv \top + \Fin{n_2'})$, it suffices to define
     $e'(e^{-1}\ \unit) = e\ \unit$, with the rest of $e' : \Fin{n_1'}
-    \iso \Fin{n_2'}$ defined as a restriction of $e$.  This
+    \equiv \Fin{n_2'}$ defined as a restriction of $e$.  This
     construction corresponds more generally to the \term{Gordon
       complementary bijection principle}~\citep{gcbp}, to be discussed
     in more detail in \pref{sec:gcbp}.
@@ -2047,12 +2047,12 @@ now straightforward.
   $\PT$ is the \hott{groupoid} where
   \begin{itemize}
   \item the objects are values of type $\N$, and
-  \item the morphisms $\mor m n$ are equivalences of type $\Fin m \iso
+  \item the morphisms $\mor m n$ are equivalences of type $\Fin m \equiv
     \Fin n$.
   \end{itemize}
 \end{defn}
 It is easy to check that this satisfies the axioms for an
-\hott{category}, the salient points being that $\Fin m \iso \Fin n$ is
+\hott{category}, the salient points being that $\Fin m \equiv \Fin n$ is
 a set by \pref{lem:equiv-pres-set}, and $\isotoid$ follows from
 \pref{lem:fin-iso-equal}.
 
@@ -2073,7 +2073,7 @@ role, suggests that we adopt the simplest option,
   cardinality of $A$.
 \end{defn}
 Our first try at encoding this in type theory is
-\[ \FinType \defeq (A : \Type) \times (n : \N) \times (A \iso \Fin n). \]
+\[ \FinType \defeq (A : \Type) \times (n : \N) \times (A \equiv \Fin n). \]
 
 We would like to build a groupoid having such finite types as objects,
 and equivalences between them as morphisms.  Recall that given some
@@ -2162,7 +2162,7 @@ fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
 good as any other.
 
 This suggests a better encoding of finiteness in type theory, \[
-\FinTypeT' \defeq (A : \Type) \times \ptrunc{(n : \N) \times (A \iso
+\FinTypeT' \defeq (A : \Type) \times \ptrunc{(n : \N) \times (A \equiv
   \Fin n)}, \] making use of propositional truncation to encode the
 fact that there \emph{merely exists} some size $n$ and an equivalence
 between $A$ and $\Fin n$, but without exposing a precise choice.  The
@@ -2170,15 +2170,15 @@ finiteness evidence is now irrelevant to paths in $\FinTypeT'$, since
 there is always a path between any two elements of a truncated type.
 We also note the following:
 \begin{prop}
-  For any type $A$, \[ \ptrunc{(n : \N) \times (A \iso \Fin n)} \iso
-  (n : \N) \times \ptrunc{A \iso \Fin n}. \]
+  For any type $A$, \[ \ptrunc{(n : \N) \times (A \equiv \Fin n)} \equiv
+  (n : \N) \times \ptrunc{A \equiv \Fin n}. \]
 \end{prop}
 This says that the size $n$ of a finite type may be freely moved in
 and out of the propositional truncation.  Practically, this means we
 may freely refer to the size of a finite type without worrying about
 how it is being used (in contrast, the value of the equivalence $A
-\iso \Fin n$ may only be used in constructing mere propositions).
-The proof hinges on the fact that $(n : \N) \times \ptrunc{A \iso \Fin
+\equiv \Fin n$ may only be used in constructing mere propositions).
+The proof hinges on the fact that $(n : \N) \times \ptrunc{A \equiv \Fin
   n}$ is a mere proposition; intuitively, if a type is finite at all,
 there is only one possible size it can have, so putting $n$ inside the
 truncation does not really hide anything.
@@ -2186,7 +2186,7 @@ truncation does not really hide anything.
   We must exhibit a pair of inverse functions between the given types.
   A function from right to left is given by \[ f(n, \ptruncI e) =
   \ptruncI{(n,e)}, \] where pattern matching on $\ptruncI e :
-  \ptrunc{A \iso \Fin n}$ is shorthand for an application of the
+  \ptrunc{A \equiv \Fin n}$ is shorthand for an application of the
   recursion principle for propositional truncation.  Recall that this
   recursion principle only applies in the case that the result is a
   mere proposition; in this case, the result is itself a propositional
@@ -2196,16 +2196,16 @@ truncation does not really hide anything.
   e), \] which is clearly inverse to $f$.  It remains only to show
   that the implicit use of recursion for propositional truncation is
   justified, \ie that $(n : \N) \times \ptrunc{A
-    \iso \Fin n}$ is a mere proposition.
+    \equiv \Fin n}$ is a mere proposition.
 
   We must show that any two values $(n_1, e_1), (n_2, e_2) : (n : \N)
-  \times \ptrunc{A \iso \Fin n}$ are propositionally equal.  Since
+  \times \ptrunc{A \equiv \Fin n}$ are propositionally equal.  Since
   $e_1$ and $e_2$ are mere propositions, it suffices to show that $n_1
   = n_2$.  This equality is itself a mere proposition (since $\N$ is a
   set, which follows from its induction principle), so we may apply
   the recursion principle for propositional truncation to $e_1$ and
-  $e_2$, giving us equivalences $A \iso \Fin n_1$ and $A \iso \Fin
-  n_2$ to work with.  By symmetry and transitivity, $\Fin n_1 \iso
+  $e_2$, giving us equivalences $A \equiv \Fin n_1$ and $A \equiv \Fin
+  n_2$ to work with.  By symmetry and transitivity, $\Fin n_1 \equiv
   \Fin n_2$, and thus $n_1 = n_2$ by \pref{lem:fin-iso-equal}.
 \end{proof}
 
@@ -2218,7 +2218,7 @@ our final definition:
 \begin{defn}
   The type of finite sets is given by \[ \FinTypeT \defeq (A : \Type)
   \times \isSet(A) \times \isFinite(A), \] where \[ \isFinite(A)
-  \defeq \ptrunc{(n : \N) \times (A \iso \Fin n)}. \]
+  \defeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}. \]
 \end{defn}
 We will often abuse notation and write $A : \FinTypeT$ instead of
 $(A,s,f) : \FinTypeT$ where $s : \isSet(A)$ and $f : \isFinite(A)$.
@@ -2246,13 +2246,13 @@ We now turn to the equivalence of $\PT$ and $\BT$.
   We can easily define a functor $\fin - : \PT \to \BT$: on objects,
   it sends $n$ to $\Fin n$, along with proofs that it is a set and
   finite (using the identity equivalence for the latter).  On
-  morphisms, it sends $f : \Fin m \iso \Fin n$ to $\ua\ f : \Fin m =
+  morphisms, it sends $f : \Fin m \equiv \Fin n$ to $\ua\ f : \Fin m =
   \Fin n$.
 \end{defn}
 
 However, it is not at all obvious how to directly define a functor
 $\size : \BT \to \PT$. Just as with $\B \to \P$, defining its action
-on morphisms requires a specific choice of equivalence $A \iso \Fin
+on morphisms requires a specific choice of equivalence $A \equiv \Fin
 n$. The objects of $\BT$ contain such equivalences, in the proofs of
 finiteness, but they are propositionally truncated; the type of
 functors $\BT \to \PT$ is decidedly not a mere proposition, so it
@@ -2271,8 +2271,8 @@ category.
 \end{lem}
 \begin{proof}
   For any $m, n : \PT$, we must exhibit an equivalence between
-  $(\hom[\PT] m n) \equiv (\Fin m \iso \Fin n)$ and $\hom[\BT] {\fin
-    m} {\fin n} \equiv (\fin m = \fin n) \iso (\Fin m = \Fin
+  $(\hom[\PT] m n) \jeq (\Fin m \equiv \Fin n)$ and $\hom[\BT] {\fin
+    m} {\fin n} \jeq (\fin m = \fin n) \equiv (\Fin m = \Fin
   n)$---such an equivalence is given by univalence.
 \end{proof}
 
@@ -2282,16 +2282,16 @@ There are two relevant notions of essential surjectivity:
   A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
   \term{split essentially surjective} if for each object $D : \DT$
   there \emph{constructively} exists an object $C : \CT$ such that $F\
-  C \cong D$. That is, \[ \msf{splitEssSurj}(F) \defeq (D : \DT) \to (C :
-  \CT) \times (F\ C \cong D). \]
+  C \iso D$. That is, \[ \msf{splitEssSurj}(F) \defeq (D : \DT) \to (C :
+  \CT) \times (F\ C \iso D). \]
 \end{defn}
 
 \begin{defn}
   A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
   \term{essentially surjective} if for each object $D : \DT$ there
-  \emph{merely} exists an object $C : \CT$ such that $F\ C \cong D$. That
+  \emph{merely} exists an object $C : \CT$ such that $F\ C \iso D$. That
   is, \[ \msf{essSurj}(F) \defeq (D : \DT) \to \ptrunc{ (C : \CT)
-    \times (F\ C \cong D) }. \]
+    \times (F\ C \iso D) }. \]
 \end{defn}
 
 It turns out that being split essentially surjective is a rather
@@ -2307,7 +2307,7 @@ strong notion.  In particular:
   \emph{split} essential surjectivity gives us exactly what we need to
   unambiguously \emph{construct} an inverse functor $G : \DT \to \CT$:
   the action of $G$ on $D : \DT$ is defined to be the $C$---which
-  exists constructively---such that $F\ C \cong D$.
+  exists constructively---such that $F\ C \iso D$.
 \end{proof}
 
 That is, a fully faithful, essentially surjective functor is an
@@ -2319,7 +2319,7 @@ surjective functor is an equivalence \emph{without} AC.
 \end{prop}
 \begin{proof}
   Given $(S,s,f) : \BT$, we must show that there merely exists some $n
-  : \PT$ such that $\fin n \cong S$---but this is precisely the
+  : \PT$ such that $\fin n \iso S$---but this is precisely the
   content of the $\isFinite$ proof $f$.
 \end{proof}
 
@@ -2330,16 +2330,16 @@ general.  However:
 
 \begin{prop}[\protect{\citep[Lemma 9.4.7]{hottbook}}]
   If $F : \CT \to \DT$ is fully faithful and $\CT$ is a category, then
-  for any $D : \DT$ the type $(C : \CT) \times (F\ C \cong D)$ is a
+  for any $D : \DT$ the type $(C : \CT) \times (F\ C \iso D)$ is a
   mere proposition.
 \end{prop}
 
 \begin{proof}[Proof (sketch)]
-  From $F\ C \cong D$ and $F\ C' \cong D$ we derive $F\ C \cong F\
-  C'$, and thus $C \cong C'$ (since $F$ is fully faithful), and $C =
+  From $F\ C \iso D$ and $F\ C' \iso D$ we derive $F\ C \iso F\
+  C'$, and thus $C \iso C'$ (since $F$ is fully faithful), and $C =
   C'$ (since $\CT$ is a category).  The transport of the isomorphism
-  $(F\ C \cong D)$ along this derived path $C = C'$ is precisely the
-  isomorphism $(F\ C' \cong D)$.
+  $(F\ C \iso D)$ along this derived path $C = C'$ is precisely the
+  isomorphism $(F\ C' \iso D)$.
 \end{proof}
 
 Intuitively, for a fully faithful functor $F : \CT \to \DT$ out of a
@@ -2392,5 +2392,5 @@ mere proposition---and then projecting out the functor.
 When working with species as founded in HoTT, therefore, we are fully
 justified in working with them as functors from finite sets of labels,
 or from natural number sizes, as convenient---the equivalence $\BT
-\cong \PT$ is entirely constructive and allows species to be
+\iso \PT$ is entirely constructive and allows species to be
 converted back and forth between the two views.

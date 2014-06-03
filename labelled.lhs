@@ -71,7 +71,7 @@ a (left) \term{Kan extension}.
     analogue for left Kan extensions.}, is a functor $\D \to \E$
   characterized by the isomorphism
   \begin{equation} \label{eq:lan}
-    (\lan{J}{F} \to G) \cong (F \to G \comp J),
+    (\lan{J}{F} \to G) \iso (F \to G \comp J),
   \end{equation}
   natural in $G$. If this exists for all $F$, then we may say even
   more succinctly that the left Kan extension functor $\lan J -$ is
@@ -104,24 +104,24 @@ constructed explicitly as a coend:
 \end{equation}
 \end{prop}
 \begin{proof}
-We must show $(\lan J F \to G) \cong (F \to G \comp J)$.
+We must show $(\lan J F \to G) \iso (F \to G \comp J)$.
 \begin{sproof}
   \stmt{\lan J F \to G}
-  \reason{\equiv}{definition}
+  \reason{\jeq}{definition}
   \stmt{(\coend{C} (J\ C \to -) \cdot F\ C) \to G}
-  \reason{\cong}{natural transformations are ends}
+  \reason{\iso}{natural transformations are ends}
   \stmt{\eend{E} \left( \coend{C} (J\ C \to E) \cdot F\ C \right) \to G\ E}
-  \reason{\cong}{$(- \to X)$ turns colimits into limits}
+  \reason{\iso}{$(- \to X)$ turns colimits into limits}
   \stmt{\eend{E} \eend{C} \left( (J\ C \to E) \cdot F\ C \to G\ E
     \right)}
-  \reason{\cong}{universal property of copowers (generalized
+  \reason{\iso}{universal property of copowers (generalized
     currying)}
   \stmt{\eend{E} \eend{C} (J\ C \to E) \to (F\ C \to G\ E)}
-  \reason{\cong}{Fubini}
+  \reason{\iso}{Fubini}
   \stmt{\eend{C} \eend{E} (J\ C \to E) \to (F\ C \to G\ E)}
-  \reason{\cong}{Yoneda}
+  \reason{\iso}{Yoneda}
   \stmt{\eend{C} F\ C \to G\ (J\ C)}
-  \reason{\cong}{natural transformations are coends}
+  \reason{\iso}{natural transformations are coends}
   \stmt{F \to G \comp J}
 \end{sproof}
 \end{proof}
@@ -199,9 +199,9 @@ One introduces a labelled $(F \sprod G)$-shape by pairing a labelled
 $F$-shape and a labelled $G$-shape, using a label set isomorphic to
 the coproduct of the two label types:
 \begin{align*}
-  - \sprod_- - &: (\under{L_1} + \under{L_2} \iso \under{L}) \to F\ L_1
+  - \sprod_- - &: (\under{L_1} + \under{L_2} \equiv \under{L}) \to F\ L_1
   \to G\ L_2 \to (F \sprod G)\ L \\
-  - \lab{\sprod}_- - &: (\under{L_1} + \under{L_2} \iso \under{L}) \to \LStr F {L_1} A \to \LStr G {L_2} A \to
+  - \lab{\sprod}_- - &: (\under{L_1} + \under{L_2} \equiv \under{L}) \to \LStr F {L_1} A \to \LStr G {L_2} A \to
   \LStr {F \sprod G} L A
 \end{align*}
 We use here (and for the rest of the paper) the notational convention that
@@ -217,14 +217,14 @@ in mathematical notation.
 
 As an example, we may now encode the standard algebraic data type of
 lists, represented by the inductively-defined species satisfying
-$\List \iso \One + (\X \sprod \List)$ (for convenience, in what
+$\List \equiv \One + (\X \sprod \List)$ (for convenience, in what
 follows we leave implicit the constructor witnessing this
 equivalence).  We can then define the usual constructors $\cons{nil}$
 and $\cons{cons}$ as follows:
 \begin{align*}
   &\cons{nil} : \LStr{\List}{\Fin 0} A \\
   &\cons{nil} \defeq \lab{\inl} \lab{\One} \\
-  &\cons{cons} : A \to \LStr \List L A \to (\Fin 1 + \under L \iso
+  &\cons{cons} : A \to \LStr \List L A \to (\Fin 1 + \under L \equiv
   \under{L'}) \to \LStr \List {L'} A \\
   &\cons{cons}\ a\ (|shape|,|elts|)\ e \defeq (\inr\ (\cons{x} \sprod_e
   |shape|), |append|\ e\ (|allocate|\ (\lambda x. a))\ |elts|)
@@ -244,7 +244,7 @@ in which the list elements are stored in memory.  For lists, this is
 not very interesting, and we would typically use a variant $\cons{cons'}
 : A \to \LStr \List L A \to \LStr \List {\cons{inc}(L)} A$ making use of a
 canonical construction $\cons{inc}(-) : \FinType \to \FinType$ with
-$\Fin 1 + \under L \iso \under{\cons{inc}(L)}$.
+$\Fin 1 + \under L \equiv \under{\cons{inc}(L)}$.
 
 \section{Sharing}
 \label{sec:sharing}

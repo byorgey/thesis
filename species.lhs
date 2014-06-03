@@ -1047,7 +1047,7 @@ still consists of an \emph{ordered} pair of shapes.
 
 There is also a species, usually called $\Bag$, which is an identity
 element for Cartesian product.  Considering that we should have $(\Bag
-\times G)\ L = \Bag\ L \times G\ L \iso G\ L$, the proper definition of
+\times G)\ L = \Bag\ L \times G\ L \equiv G\ L$, the proper definition of
 $\Bag$ becomes clear:
 
 \begin{defn}
@@ -1166,7 +1166,7 @@ later. First, however, we consider some examples.
   However, the ``size'' intuition of course carries over well to
   species.)
 
-  Again, $[\N, \Set] \cong \Set/\N$, so functors $\N \to \Set$ can
+  Again, $[\N, \Set] \iso \Set/\N$, so functors $\N \to \Set$ can
   also be thought of as a single set $S$ along with a function $S \to
   \N$ which gives the size of each element.
 
@@ -1179,7 +1179,7 @@ later. First, however, we consider some examples.
 
 \begin{ex}
   Up until now we have mostly considered examples with $\Str = \Set$,
-  but any monoidal category will do.  $\Type$ works similarly to
+  but any monoidal category will do.  $\ST$ works similarly to
   $\Set$, for example, with disjoint union of sets replaced by
   coproduct of types.  \todo{Give an example with some non-set-like
     monoidal category.}
@@ -1203,18 +1203,18 @@ later. First, however, we consider some examples.
 \end{ex}
 
 \begin{ex}
-  In $\Type$, the coproduct of two types $A$ and $B$ is given by their
+  In $\ST$, the coproduct of two types $A$ and $B$ is given by their
   sum, $A + B$, with the void type $\TyZero$ serving as the identity.
   We may thus lift this coproduct structure to the functor category
-  $[\BT, \Type]$---or indeed to any $[\Lab, \Type]$, since no
+  $[\BT, \ST]$---or indeed to any $[\Lab, \ST]$, since no
   requirements are imposed on the domain category.
 \end{ex}
 
 \begin{ex}
-  Similarly, categorical products in $\Type$ are given by product
+  Similarly, categorical products in $\ST$ are given by product
   types $A \times B$, with the unit type $\TyOne$ as the identity.
-  This then lifts to products on $[\BT,\Type]$ (or, again, any
-  $[\Lab,\Type]$) which serve as an analogue of Cartesian product of
+  This then lifts to products on $[\BT,\ST]$ (or, again, any
+  $[\Lab,\ST]$) which serve as an analogue of Cartesian product of
   species.
 \end{ex}
 
@@ -1335,8 +1335,8 @@ already show that symmetry and distributivity are preserved:
 
 \begin{proof}
   Symmetry is given by a natural isomorphism $\all {X Y} {X \otimes Y
-  \iso Y \otimes X}$. By \pref{thm:lift-expressions}, this lifts to a natural isomorphism
-  $\all {F G} {F \otimes^\Lab G \iso G \otimes^\Lab F}$.
+  \equiv Y \otimes X}$. By \pref{thm:lift-expressions}, this lifts to a natural isomorphism
+  $\all {F G} {F \otimes^\Lab G \equiv G \otimes^\Lab F}$.
 \end{proof}
 
 \begin{prop}
@@ -1364,13 +1364,13 @@ showing that lifting preserves adjunctions.
 \end{lem}
 
 \begin{proof}
-  Since $F \adj G$, assume we have $\gamma_{A,B} : \E(FA, B) \cong
+  Since $F \adj G$, assume we have $\gamma_{A,B} : \E(FA, B) \iso
   \D(A, GB)$.  To show $F^\C \adj G^\C$, we must define a natural
-  isomorphism $\gamma^\C_{H,J} : \E^\C(F \comp H, J) \cong \D^\C(H, G
+  isomorphism $\gamma^\C_{H,J} : \E^\C(F \comp H, J) \iso \D^\C(H, G
   \comp J)$.  Given $\phi \in \E^\C(FH,J)$, that is, $\phi : \nt {FH}
   J : \C \to \E$, and an object $C \in \C$, define \[
   \gamma^\C_{H,J}(\phi)_C = \gamma_{HC,JC}(\phi_C). \]  Note that
-  $\gamma_{HC,JC} : \E(FHC,JC) \cong \D(HC,GJC)$, so it sends $\phi_C
+  $\gamma_{HC,JC} : \E(FHC,JC) \iso \D(HC,GJC)$, so it sends $\phi_C
   : FHC \to JC$ to a morphism $HC \to GJC$, as required.
 
   From the fact that $\gamma$ is an isomorphism it thus follows
@@ -1392,7 +1392,7 @@ showing that lifting preserves adjunctions.
   Consider a category $\Str$ with coproducts, given by a bifunctor $+
   : \Str \times \Str \to \Str$.  Lifting yields a functor $+^\Lab :
   (\Str \times \Str)^\Lab \to \Str^\Lab$.  Note that $(\Str \times
-  \Str)^\Lab \cong \Str^\Lab \times \Str^\Lab$, so we may consider
+  \Str)^\Lab \iso \Str^\Lab \times \Str^\Lab$, so we may consider
   $+^\Lab$ as a bifunctor $\Str^\Lab \times \Str^\Lab \to \Str^\Lab$.
 
   There is \latin{a priori} no guarantee that $+^\Lab$ has any special
@@ -1405,8 +1405,8 @@ showing that lifting preserves adjunctions.
     standard.}  Since lifting preserves adjunctions
   (\pref{lem:lift-adj}), we must have $+^\Lab \adj \Delta^\Lab$. But
   note we have $\Delta^\Lab : \Str^\Lab \to (\Str \times \Str)^\Lab
-  \cong \Str^\Lab \times \Str^\Lab$, with $\Delta^\Lab (F) = \Delta
-  \comp F \cong (F,F)$, so in fact $\Delta^\Lab$ is the diagonal
+  \iso \Str^\Lab \times \Str^\Lab$, with $\Delta^\Lab (F) = \Delta
+  \comp F \iso (F,F)$, so in fact $\Delta^\Lab$ is the diagonal
   functor on $\Str^\Lab$.  Hence $+^\Lab$, being left adjoint to the
   diagonal functor, is indeed a coproduct on $\Str^\Lab$.
 
@@ -1527,7 +1527,7 @@ dia
 
 The identity for partitional product should evidently be some species
 $\One$ such that \[ (\One \cdot G)\ L = \left(\biguplus_{L_F,L_G
-    \partition L} \One\ L_F \times G\ L_G \right) \iso G\ L. \] The only
+    \partition L} \One\ L_F \times G\ L_G \right) \equiv G\ L. \] The only
 way for this isomorphism to hold naturally in $L$ is if $\One\
 \varnothing = \singleton$ (yielding a summand of $G\ L$ when
 $\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
@@ -1680,7 +1680,7 @@ We can now formally define arithmetic product as follows:
 
 An identity element for arithmetic product should be some species $\X$
 such that \[ (\X \aprod G)\ L = \left(\biguplus_{L_\X, L_G \rectangle L} \X\
-L_\X \times G\ L_G\right) \cong G\ L. \] Thus we want $\X\ L_\X = \singleton$
+L_\X \times G\ L_G\right) \iso G\ L. \] Thus we want $\X\ L_\X = \singleton$
 when $L_\X, L \rectangle L$ and $\X\ L_\X = \varnothing$ otherwise.
 Consider $L_\X, L \rectangle L$.  Of course, $L$ does not have the
 right type to be one side of a rectangle on itself, but it is
@@ -1822,7 +1822,7 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \begin{ex}
   Although $\B$ and $\P$ are equivalent, it is still instructive to
   work out the general definition in the case of $\P$, particulary
-  because, as we have seen, proving $\B \cong \P$ requires the axiom
+  because, as we have seen, proving $\B \iso \P$ requires the axiom
   of choice.
 
   We find that $\P$ has not just one but \emph{many} monoidal
@@ -1895,9 +1895,9 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \end{ex}
 
 \begin{ex}
-  We now verify that $\BT$ and $\Type$ have the right properties, so
+  We now verify that $\BT$ and $\ST$ have the right properties, so
   that partitional and arithmetic product are well-defined on
-  $[\BT,\Type]$-species.
+  $[\BT,\ST]$-species.
   \begin{itemize}
   \item Like $\B$, there are monoidal structures on $\BT$
     corresponding to the coproduct and product of types. As with $\P$,
@@ -1908,22 +1908,22 @@ embedding, that is, $j(L) = \Lab(-,L)$.
     combines their finiteness evidence into corresponding evidence for
     the combined type, via some function $\oplus_{\Fin{}} : \IsFinite
     A \to \IsFinite B \to \IsFinite (A \oplus B)$.  Any such function,
-    in combination with a monoid $\oplus$ on $\Type$, gives rise to a
+    in combination with a monoid $\oplus$ on $\ST$, gives rise to a
     valid monoid on $\FinType$, since \todo{finish}
-  \item $\BT$ is indeed enriched over $\Type$, since the class of
+  \item $\BT$ is indeed enriched over $\ST$, since the class of
     arrows between $(A,m,i)$ and $(B,n,j)$ is given by the type $A
-    \iso B$.
+    \equiv B$.
   \item We have already seen that there is a symmetric monoidal
-    structure on $\Type$ given by the product of types.
+    structure on $\ST$ given by the product of types.
   \item The last condition is the most interesting: we need to say
-    what a coend over $\BT$ is in $\Type$. In fact, in this case a
+    what a coend over $\BT$ is in $\ST$. In fact, in this case a
     coend is just a $\Sigma$-type!  This is because the morphisms in
     $\BT$ are paths, and hence the required identifications between
     inhabitants of the $\Sigma$-type are already present---they are
     induced by transport of paths in $\BT$. \todo{flesh out more}
   \end{itemize}
 
-  Given $F,G \in [\BT,\Type]$, and picking some particular sum-like
+  Given $F,G \in [\BT,\ST]$, and picking some particular sum-like
   monoid $\oplus$ on $\BT$, we can instantiate the definition
   of Day convolution to get
   \[ (F \cdot G)\ L = \sum_{L_F, L_G} F\ L_F \times G\ L_G \times
@@ -2100,7 +2100,7 @@ Cartesian closed. \todo{cite
 particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
 (L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,
 $\B$, $\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and
-$\Type$ are complete and Cartesian closed, so $[\B,\Set]$, $[\P,\Set]$,
+$\ST$ are complete and Cartesian closed, so $[\B,\Set]$, $[\P,\Set]$,
 $[\BT,\Set]$, and $[\PT,\Set]$ are all complete and Cartesian closed
 as well.
 
@@ -2110,24 +2110,24 @@ as well.
   notation below.}
 
 Let's unpack this result a bit in the specific case of $[\PT,
-\Type]$.  Ends in $\Type$ are given by (parametric) universal
+\ST]$.  Ends in $\ST$ are given by (parametric) universal
 quantification, and indexed products are $\Pi$-types; hence, we
 have
 \begin{align*}
 (H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
-       &= \all {(m : \N)} {(\Fin m \iso \Fin n) \to G_n \to H_n} \\
-       &\iso (\Fin n \iso \Fin n) \to G_n \to H_n
+       &= \all {(m : \N)} {(\Fin m \equiv \Fin n) \to G_n \to H_n} \\
+       &\equiv (\Fin n \equiv \Fin n) \to G_n \to H_n
 \end{align*}
-where the final isomorphism follows since $(\Fin m \iso \Fin n)$ is
+where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
 only inhabited when $m = n$.
 
 Being Cartesian closed means there is an adjunction $- \times G \adj
 -^G$ between products and exponentials, which yields a natural
-isomorphism \[ [\PT,\Type](F \times G, H) \iso [\PT,\Type](F,H^G) \]
-Expanding morphisms of the functor category $[\PT, \Type]$ as natural
+isomorphism \[ [\PT,\ST](F \times G, H) \equiv [\PT,\ST](F,H^G) \]
+Expanding morphisms of the functor category $[\PT, \ST]$ as natural
 transformations and the definition of $H^G$ derived above, this
-yields \[ \left( \all n {(F \times G)_n \to H_n} \right) \iso \left(
-  \all n {F_n \to (\Fin n \iso \Fin n) \to G_n \to H_n} \right). \]
+yields \[ \left( \all n {(F \times G)_n \to H_n} \right) \equiv \left(
+  \all n {F_n \to (\Fin n \equiv \Fin n) \to G_n \to H_n} \right). \]
 Intuitively, this says that a size-polymorphic function that takes a
 Cartesian product shape $F \times G$ and yields another species $H$ is
 isomorphic to a size-polymorphic function that takes a triple of an
@@ -2158,7 +2158,7 @@ convenient to talk about \emph{sets} of labels rather than having to
 work with the canonical set $\{0, \dots, n-1\}$ all the time.  This is
 quite a special property of $\B$; for example, $\Set$ is certainly not
 equivalent to any small categories. The same argument shows that
-$[\BT, \Type]$ is Cartesian closed as well.
+$[\BT, \ST]$ is Cartesian closed as well.
 
 \section{Differentiation}
 \label{sec:differentiation}
