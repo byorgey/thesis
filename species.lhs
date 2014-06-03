@@ -17,16 +17,15 @@ unified theory of \term{combinatorial structures} or \term{shapes}.
 It was originally intended as a unified framework for algebraically
 describing combinatorial structures of interest, and in particular one
 which gave new justification and a unifying context for an existing
-body of techniques involving \term{generating functions}. It is hoped
-that the beautiful theory of generating functions will also prove a
-rich seam of material to mine for computational significance. However,
-that is left to future work; this dissertation instead focuses on the
-idea of \term{labels}.
+body of techniques involving \term{generating functions}. The
+connection to generating functions will be explored in more detail in
+\pref{chap:labelled}.
 
-One of Joyal's great insights in formulating the theory of species was
-to take the notion of \emph{labelled} structures as fundamental, and
-to build other notions (such as \emph{unlabelled} structures) on top
-of it.  Species fundamentally describe labelled objects; for example,
+In the process of generalizing the theory of generating functions, one
+of Joyal's great insights in formulating the theory of species was to
+take the notion of \emph{labelled} structures as fundamental, and to
+build other notions (such as \emph{unlabelled} structures) on top of
+it.  Species fundamentally describe labelled objects; for example,
 \pref{fig:example-labelled} shows two representative examples, a
 labelled tree and a labelled ``octopus''.  In these examples the
 integers $\{0, \dots, 7\}$ are used as labels, but in general, labels
@@ -142,24 +141,195 @@ treeStructures
     \label{fig:binary-trees}
     %$
   \end{figure}
-  Algebraically, such trees can be described by \[ \Bin = \One + \X
-  \cdot \Bin \cdot \Bin. \]
+  Algebraically, such trees can be described by \[ \Bin = \One + \Bin
+  \cdot \X \cdot \Bin. \]
 \end{ex}
 
-\todo{More examples: Cycles, bags, permutations.}
+\begin{ex}
+  The species $\Bag$ of \term{sets} describes shapes consisting simply of an
+  unordered collection of unique labels, with no other structure
+  imposed.  There is exactly one such shape for any set of labels, as
+  illustrated in \pref{fig:sets}.
 
-  In a computational context, it is important to keep in mind the
-  distinction between \emph{labels} and \emph{data}, or more generally
-  between \emph{labelled shapes} and \emph{labelled (data)
-    structures}.  Labels are merely names for locations where data can
-  be stored; data structures contain data associated with each label,
-  whereas labelled shapes have no data, only labels.  Put more
-  intuitively, species shapes are ``form without content''.  As a
-  concrete example, the numbers in \pref{fig:example-labelled} are not
-  data being stored in the structures, but merely labels for the
-  locations.  To talk about a data structure, one must also specify a
-  mapping from locations to data; this will be made precise
-  in~\pref{chap:labelled}.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=200]
+import SpeciesDiagrams
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..3])
+  , mkArrow 2 (txt "E")
+  , unord (map labT [0..3])
+  ]
+  # centerXY
+  # pad 1.1
+    \end{diagram}
+    \caption{The species $\Bag$ of sets}
+    \label{fig:sets}
+    %$
+  \end{figure}
+\end{ex}
+
+\begin{ex}
+  The species $\msf{Mob}$ of \emph{mobiles} consists of non-empty binary trees
+  where each node has exactly zero or two subtrees, and sibling
+  subtrees are considered to be ``unordered'', as illustrated in
+  \pref{fig:mobiles}.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import           Data.List.Split                (chunksOf)
+import           Data.Maybe                     (fromJust)
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..4])
+  , mkArrow 2 (txt "Mob")
+  , mobiles # scale 0.5
+  ]
+  # centerXY
+  # pad 1.1
+
+enumMobiles :: [a] -> [BTree a]
+enumMobiles []  = []
+enumMobiles [x] = [BNode x Empty Empty]
+enumMobiles xxs
+  = [ BNode x l r
+    || (x, (x':xs))  <- select xxs
+    ,  (ys,zs) <- subsets xs
+    ,  l <- enumMobiles (x':ys)
+    ,  r <- enumMobiles zs
+    ]
+
+drawMobile
+  = renderTree id corner . fromJust
+  . symmLayoutBin' (with & slHSep .~ 1.5)
+  where
+    corner p q = strokeLocTrail (fromOffsets [project unitY v, project unitX v] `at` p)
+      where
+        v = q .-. p
+
+mobiles
+  = centerXY
+  . vcat' (with & sep .~ 0.5)
+  . map (centerX . hcat' (with & sep .~ 0.5))
+  . chunksOf 10
+  . map (drawMobile . fmap labT)
+  . enumMobiles
+  $ [0..4]
+    \end{diagram}
+    \caption{The species $\msf{Mob}$ of mobiles}
+    \label{fig:mobiles}
+    %$
+  \end{figure}
+  Algebraically, \[ \msf{Mob} = \X + \X \cdot (\Bag_2 \comp
+  \msf{Mob}), \] that is, a mobile is either a single label, or a
+  label together with an unordered pair of mobiles.
+\end{ex}
+
+\begin{ex}
+  The species \Cyc of \term{cycles}, illustrated in \pref{fig:cycles},
+  describes shapes that consist of an ordered cycle of labels.  One
+  way to think of the species of cycles is as a quotient of the
+  species of lists, where two lists are considered equivalent if one
+  is a cyclic rotation of the other.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import SpeciesDiagrams
+import Data.List
+import Data.List.Split
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..3])
+  , mkArrow 2 (txt "C")
+  , cycleStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+cycles [] = []
+cycles (x:xs) = map (x:) (permtuations xs)
+
+cycleStructures
+  = centerXY
+  . hcat' (with & sep .~ 0.7)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 2
+  . map ((\l -> cyc' l 0.8) . map labT)
+  . cycles
+  $ [0..3]
+    \end{diagram}
+    \caption{The species $\Cyc$ of cycles}
+    \label{fig:cycles}
+    %$
+  \end{figure}
+\end{ex}
+
+\begin{ex}
+  The species \Perm of \term{permutations} is illustrated in
+  \pref{fig:permutations}.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import           Data.List
+import           Data.List.Split
+import qualified Math.Combinatorics.Multiset    as MS
+import           SpeciesDiagrams
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..3])
+  , mkArrow 2 (txt "S")
+  , permStructures
+  ]
+  # centerXY
+  # pad 1.1
+
+parts :: [a] -> [[[a]]]
+parts = map (map MS.toList . MS.toList) . MS.partitions . MS.fromDistinctList
+
+cycles [] = []
+cycles (x:xs) = map (x:) (permutations xs)
+
+perms :: [a] -> [[[a]]]
+perms = concatMap (mapM cycles) . parts
+
+drawPerm = hcat' (with & sep .~ 0.2) . map ((\l -> cyc' l 0.8) . map labT)
+
+permStructures
+  = centerXY
+  . hcat' (with & sep .~ 1)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 6
+  . map drawPerm
+  . perms
+  $ [0..3]
+    \end{diagram}
+    \caption{The species $\Perm$ of permutations}
+    \label{fig:permutations}
+    %$
+  \end{figure}
+  Algebraically, it can be described by \[ \Perm = \Bag_+ \comp
+  \Cyc. \]
+\end{ex}
+
+In a computational context, it is important to keep in mind the
+distinction between \emph{labels} and \emph{data}, or more generally
+between \emph{labelled shapes} and \emph{labelled (data)
+  structures}.  Labels are merely names for locations where data can
+be stored; data structures contain data associated with each label,
+whereas labelled shapes have no data, only labels.  Put more
+intuitively, species shapes are ``form without content''.  As a
+concrete example, the numbers in \pref{fig:example-labelled} are not
+data being stored in the structures, but merely labels for the
+locations.  To talk about a data structure, one must also specify a
+mapping from locations to data; this will be made precise
+in~\pref{chap:labelled}.
 
 \section{Definition}
 \label{sec:species-definition}

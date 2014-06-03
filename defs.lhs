@@ -371,6 +371,7 @@
 \newcommand{\Par}{\Sp{Par}}
 \newcommand{\Bag}{\Sp{E}}
 \newcommand{\Cyc}{\Sp{C}}
+\newcommand{\Perm}{\Sp{S}}
 \newcommand{\Bin}{\Sp{B}}
 
 \newcommand{\Zero}{\msf{0}}
