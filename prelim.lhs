@@ -520,7 +520,7 @@ and an assignment of a color to each.
 import SpeciesDiagrams
 
 fiber elts i
-  = map (\e -> text [e] <> circle 1 # lw 0.06 # lc (colors !! i)) elts
+  = map (\e -> text [e] <> circle 1 # lc (colors !! i)) elts
     # vcat' (with & sep .~ 0.5)
     # tag 0
     # named (i :: Int)
@@ -547,7 +547,7 @@ dia =
   # applyAll (zipWith (connectOutside' aOpts) [0 :: Int .. 3] "abcd")
   # frame 0.5
 
-aOpts = with & headSize .~ 0.7 & arrowTail .~ dart' & tailSize .~ 0.7
+aOpts = with & arrowTail .~ dart'
   \end{diagram}
   \caption{An element of $\Set^X$ or $\Set/X$}
   \label{fig:discrete-slice}
@@ -918,6 +918,7 @@ particular $x_i$ from each $X_i$.  This can be visualized (for a
 particularly small and decidedly finite case) as shown
 in~\pref{fig:ac-example}.
 
+\todo{See diagrams-lib issue 193.}
 \begin{figure}
   \centering
   \begin{diagram}[width=200]
@@ -953,7 +954,7 @@ drawSet opts
   where
     elts = zipWith3 mkElt [0..] (cycle (opts ^. eltColors)) (replicate (opts ^. setSize) (opts ^. eltShape))
     mkElt i c shp
-      || Just i == opts ^. highlight = base # lw 0.2 # lc black
+      || Just i == opts ^. highlight = base # lw veryThick # lc black
       || otherwise                   = base
       where
         base = shp # fc c # named ((opts ^. setName) .> i)
@@ -1010,7 +1011,10 @@ dia = frame 1 $   -- $
       || Just j <- selections
       ]
 
-aOpts = with & shaftStyle %~ lc grey & headColor .~ grey & headGap .~ 0.5 & headSize .~ 0.7
+aOpts = with & shaftStyle %~ lc grey
+             & headTexture .~ solid grey
+             & headGap .~ Local 0.7
+             & headLength .~ Local 1
 
 mkNm :: Int -> Int -> Name
 mkNm i j = i .> j
@@ -1410,7 +1414,7 @@ table1 = zip ["A","B","C"]
   , square 1
   ]
 
-table2 = map ((id &&& ((<> square 1 # lw 0) . text)) . show) [1..4]
+table2 = map ((id &&& ((<> square 1 # lw none) . text)) . show) [1..4]
 
 relation =
   [ ("A", "1")
@@ -1486,7 +1490,7 @@ dia =
   # applyAll [ connectOutside' aOpts x y || [x,y] <- ["CD", "PQ", "sC", "sP", "tD", "tQ"] ]
   # frame 0.5
 
-aOpts = with & gap .~ 0.2
+aOpts = with & gap .~ Local 0.2
       \end{diagram}
     \end{center}
   \item Functors preserve identities: for each $s \in S$ we should
@@ -1508,7 +1512,7 @@ dia =
   # applyAll [ connectOutside' aOpts x y || [x,y] <- ["CD", "DE", "PQ", "QR", "sC", "sP", "tD", "tQ", "uE", "uR"] ]
   # frame 0.5
 
-aOpts = with & gap .~ 0.2
+aOpts = with & gap .~ Local 0.2
       \end{diagram}
     \end{center}
   \end{itemize}
@@ -1784,15 +1788,15 @@ is no obvious way to pick one.  For example, suppose $S =
 \{\text{cat}, \text{dog}, \text{moose}\}$ and $T =
 \{
 \begin{diagram}[width=10]
-  dia = circle 1 # lw 0.03 # frame 0.1
+  dia = circle 1 # frame 0.1
 \end{diagram}
 ,
 \begin{diagram}[width=10]
-  dia = triangle 1 # centerXY # lw 0.03 # frame 0.1
+  dia = triangle 1 # centerXY # frame 0.1
 \end{diagram}
 ,
 \begin{diagram}[width=10]
-  dia = square 1 # lw 0.03 # frame 0.1
+  dia = square 1 # frame 0.1
 \end{diagram}
 \}$.  Given a bijection matching each animal with its favorite
 shape\footnote{The details are left as an exercise for the reader.},
@@ -1989,13 +1993,13 @@ t_ = named (0 :: Int) (square 1)
 tfin x =
   hcat' (with & sep .~ 0.5)
     [ (x ||> t_)
-    , text "+" <> square 1 # lw 0
+    , text "+" <> square 1 # lw none
     , fin x
     ]
 
 ht = 3
 
-dashSty = dashing [0.1,0.1] 0
+dashSty = dashingG [0.1,0.1] 0
 
 bij = [ ((0, 1), Just dashSty)
       , ((1, 2), Nothing)
@@ -2016,7 +2020,7 @@ fin_e =
   [fin 'A', fin 'B']
   # applyAll
     [ conn sty ('A' .> (x :: Int)) ('B' .> (y :: Int))
-    || ((x,y), sty) <- filter (\((x,y), _) -> x /= 0 && y /= 0) bij ++ [((3,1), Just (lc red . lw 0.05))]
+    || ((x,y), sty) <- filter (\((x,y), _) -> x /= 0 && y /= 0) bij ++ [((3,1), Just (lc red))]
     ]
 
 conn msty x y = connect' aOpts x y
@@ -2028,7 +2032,7 @@ conn msty x y = connect' aOpts x y
 
 dia = hcat' (with & sep .~ 2)
   [ tfin_e # centerY
-  , text "⇒" # fontSize 1.5 <> square 1 # lw 0
+  , text "⇒" # fontSizeL 1.5 <> square 1 # lw none
   , fin_e # centerY
   ]
   # frame 0.5

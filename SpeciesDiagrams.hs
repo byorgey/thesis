@@ -47,10 +47,10 @@ type EdgeLabel = P2 -> P2 -> Diagram B R2
 sLabels :: [EdgeLabel]
 sLabels =
   [ connStyle mempty
-  , connStyle $ (mempty # lw 0.05)
-  , connStyle $ (mempty # dashing [0.1,0.1] 0)
-  , connStyle $ (mempty # dashing [0.05,0.15] 0)
-  , connStyle $ (mempty # dashing [0.05,0.05,0.1,0.05] 0)
+  , connStyle $ (mempty # lw veryThick)
+  , connStyle $ (mempty # dashingG [0.1,0.1] 0)
+  , connStyle $ (mempty # dashingG [0.05,0.15] 0)
+  , connStyle $ (mempty # dashingG [0.05,0.05,0.1,0.05] 0)
   , \p q -> let v = 0.03 *^ normalized (perp (q .-. p))
             in ((p .+^ v) ~~ (q .+^ v)) <> ((p .-^ v) ~~ (q .-^ v))
   ]
@@ -65,7 +65,7 @@ leafData :: Int -> Diagram B R2
 leafData i = (aLabels !! i) # sized (Dims labR labR) # fc black <> square (labR*1.5) # fc white
 
 text' :: Double -> String -> Diagram B R2
-text' d s = (stroke $ textSVG' (TextOpts s lin INSIDE_H KERN False d d)) # fc black # lw 0
+text' d s = (stroke $ textSVG' (TextOpts s lin INSIDE_H KERN False d d)) # fc black # lw none
 
 labT :: Int -> Diagram B R2
 labT n = text' 1.5 (show n) # scale labR <> lab n
@@ -77,7 +77,7 @@ lab' :: (TrailLike b, Transformable b, HasStyle b, V b ~ R2) => Colour Double ->
 lab' c = circle labR
        # fc white
        # lc c
-       # lw (labR / 5)
+       # lwG (labR / 5)
 
 cyc :: [Int] -> Double -> Diagram B R2
 cyc labs r = cyc' (map lab labs) r
@@ -101,7 +101,7 @@ cyc' labs r
                  # rotate endAngle
                  # fc black
                )
-               # lw (labR / 10)
+               # lwG (labR / 10)
              )
   startAngle = (labR + arrowGap)/r @@ rad
   endAngle   = (tau/fromIntegral n @@ rad) ^-^ startAngle
@@ -141,14 +141,14 @@ pointings []     = []
 pointings (x:xs) = (Pointed x : map Plain xs) : map (Plain x :) (pointings xs)
 
 elimArrow :: Diagram B R2
-elimArrow = (hrule 2 # lw 0.03)
+elimArrow = hrule 2
         ||| eqTriangle 0.2 # rotateBy (-1/4) # fc black
 
 mkArrow :: Double -> Diagram B R2 -> Diagram B R2
 mkArrow len l =
   ( l
     ===
-    (arrow len # lw 0.03 # translateX (-len/2) <> rect len 0.2 # lw 0)
+    (arrow len # translateX (-len/2) <> rect len 0.2 # lw none)
   )
   # alignB
 
@@ -181,7 +181,7 @@ drawSpN' _  (Lab (Left n))    = lab n # scale 0.5
 drawSpN' tr (Lab (Right t))   = (drawSpN' tr (Leaf Nothing) ||| strutX (labR/2) ||| text' 0.3 t) # transform tr
 drawSpN' _  (Leaf Nothing)  = circle (labR/2) # fc black
 drawSpN' _  (Leaf (Just d)) = d
-drawSpN' _  Hole              = circle (labR/2) # lw (labR / 10) # fc white
+drawSpN' _  Hole              = circle (labR/2) # lwG (labR / 10) # fc white
 drawSpN' tr Point             = drawSpN' tr (Leaf Nothing) <> drawSpN' tr Hole # scale 1.7
 drawSpN' tr (Sp s f) = ( arc ((3/4 @@ turn) ^-^ f^/2) ((3/4 @@ turn) ^+^ f^/2) # scale 0.3
                        |||
@@ -199,7 +199,7 @@ drawSpN :: SpN -> Diagram B R2
 drawSpN = drawSpN' mempty
 
 drawSpE :: (t, P2) -> ((Maybe EdgeLabel, SpN), P2) -> Diagram B R2
-drawSpE (_,p) ((_,Hole),q) = (p ~~ q) # dashing [0.05,0.05] 0
+drawSpE (_,p) ((_,Hole),q) = (p ~~ q) # dashingG [0.05,0.05] 0
 drawSpE (_,p) ((Just f,_), q) = f p q
 drawSpE (_,p) (_,q) = p ~~ q
 
@@ -220,7 +220,7 @@ struct n x = drawSpT (struct' n x)
            # centerXY
 
 struct' :: Int -> String -> SpT
-struct' n x = struct'' n (text' 1 x <> rect 2 1 # lw 0)
+struct' n x = struct'' n (text' 1 x <> rect 2 1 # lw none)
 
 struct'' :: Int -> Diagram B R2 -> SpT
 struct'' n d = nd d (replicate n (lf (Leaf Nothing)))
@@ -232,7 +232,7 @@ linOrd ls =
   $ map labT ls & _head %~ named "head" & _last %~ named "last"
 
 unord :: (Monoid' b, Semigroup b, TrailLike b, Alignable b, Transformable b, HasStyle b, Juxtaposable b, HasOrigin b, Enveloped b, V b ~ R2) => [b] -> b
-unord [] = circle 1 # lw 0.1 # lc gray
+unord [] = circle 1 # lc gray
 unord ds = elts # centerXY
            <> roundedRect w (mh + s*2) ((mh + s*2) / 5)
   where
@@ -248,7 +248,7 @@ enRect :: (Semigroup a, TrailLike a, Alignable a, Enveloped a, HasOrigin a, V a 
 enRect d = roundedRect (w+0.5) (h+0.5) 0.5 <> d # centerXY
   where (w,h) = size2D d
 
-txt x = text x <> square 1 # lw 0
+txt x = text x <> square 1 # lw none
 
 ------------------------------------------------------------
 -- Some specific constructions
@@ -268,7 +268,7 @@ arm typ m n r = ( typ m # rotateBy (-r)
 
 arms typ elts = zipWith (\[e1,e2] r -> arm typ e1 e2 r) (chunksOf 2 elts) [1/8 + 0.001, 1/8+0.001 +1/4 .. 1]
 
-octo' typ elts = (mconcat (arms typ elts) <> circle 3) # lw 0.03
+octo' typ elts = (mconcat (arms typ elts) <> circle 3)
 
 octo = octo' mloc
 
@@ -281,7 +281,6 @@ tree = renderTree
          mloc
          (~~)
          (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7)
-       # lw 0.03
 
 drawBinTree' :: SymmLayoutOpts (Diagram B R2) -> BTree (Diagram B R2) -> Diagram B R2
 drawBinTree' opts
@@ -341,11 +340,8 @@ wideTree n
   . symmLayoutBin' (with & slVSep .~ 4 & slHSep .~ 6)
 
 mkLeaf
-  :: ( InnerSpace v, HasLinearMap v
-     , Floating (Scalar v), Ord (Scalar v)
-     , Semigroup m, IsName n
-     )
-  => QDiagram b v m -> n -> QDiagram b v m
+  :: ( Semigroup m, IsName n )
+  => QDiagram b R2 m -> n -> QDiagram b R2 m
 mkLeaf shp n = shp # fc white # named n
 
 numbered :: Show a => a -> Diagram B R2
@@ -378,18 +374,18 @@ tag i d = d # centerXY <> roundedRect w h r # applyStyle (tagStyles !! i)
     h = height d + 1
     r = 0.5
 
--- TODO: update me once I switch to diagrams 1.2
+
 tagStyles :: [Style R2]
 tagStyles = cycle
-  [ mempty # lw 0.03
-  , mempty # lw 0.06 # lc green
-  , mempty # lw 0.06 # lc green # dashing [0.1,0.1] 0
+  [ mempty
+  , mempty # lw veryThick # lc green
+  , mempty # lw veryThick # lc green # dashingG [0.1,0.1] 0
   ]
 
 --------------------------------------------------
 
 enclose :: Double -> Double -> Diagram B R2 -> Diagram B R2
-enclose g r d = d # centerXY <> roundedRect (width d + g) (height d + g) r # lw 0.03
+enclose g r d = d # centerXY <> roundedRect (width d + g) (height d + g) r
 
 objs :: IsName n => [n] -> Diagram B R2
 objs = enclose 1 1 . vcat' (with & sep .~ 1.5) . (map (\n -> dot # named n))

@@ -19,11 +19,11 @@ dia = shapePlusData # centerXY # pad 1.1
 shapePlusData = hcat
   [ octo' elt "species!"
   , strutX 2
-  , text "=" # fontSize 3 <> phantom (square 1 :: D R2)
+  , text "=" # fontSizeL 3 <> phantom (square 1 :: D R2)
   , strutX 2
   , octo [0..7]
   , strutX 2
-  , text "×" # fontSize 3 <> phantom (square 1 :: D R2)
+  , text "×" # fontSizeL 3 <> phantom (square 1 :: D R2)
   , strutX 2
   , mapping
   , strutX 2
@@ -32,7 +32,7 @@ shapePlusData = hcat
 mapping = centerXY . vcat' (with & sep .~ 0.2) . map mapsto $ zip [0..7] "species!"
 mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
   where
-    a = (arrow' (with & headSize .~ 1) 2 <> hrule 2) |||||| strutX 0.4
+    a = (arrow' (with & headLength .~ Local 1) 2 <> hrule 2) |||||| strutX 0.4
 \end{diagram}
 %$
 \caption{Data structure = shape + data} \label{fig:shape-data}

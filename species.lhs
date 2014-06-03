@@ -253,7 +253,7 @@ dia =
   # pad 1.1
 
 cycles [] = []
-cycles (x:xs) = map (x:) (permtuations xs)
+cycles (x:xs) = map (x:) (permutations xs)
 
 cycleStructures
   = centerXY
@@ -386,7 +386,7 @@ linkedTrees = hcat' (with & sep .~ 0.5) [t1, t2]
   where
     conn i = connectOutside'
       (with & arrowShaft .~ selectShaft i
-            & shaftStyle %~ dashing [0.05,0.05] 0
+            & shaftStyle %~ dashingG [0.05,0.05] 0
             & arrowHead .~ noHead
       )
       i (sig i)
@@ -400,14 +400,14 @@ drawSig n sig = hcat' (with & sep .~ 0.1) (map drawOne [0..(n-1)])
   where
     drawOne i = vcat
       [ mkNamedNode id show i
-      , vrule 1 # dashing [0.05,0.05] 0
+      , vrule 1 # dashingG [0.05,0.05] 0
       , mkNamedNode sig ((:[]) . sig) i ]
 
 dia = hcat' (with & sep .~ 3)
   [ drawSig 5 sig # centerXY # named "sig"
   , linkedTrees   # centerXY # named "trees"
   ]
-  # connectOutside' (with & gap .~ 0.5) "sig" "trees"
+  # connectOutside' (with & gap .~ Local 0.5) "sig" "trees"
   # frame 0.5
   \end{diagram}
   \caption{Relabelling} \label{fig:relabelling}
@@ -441,7 +441,6 @@ shapes to be ``independent'' of the particular labels chosen.
 Intuitively, labels should be arbitrary; a species $F$ should not be
 able to ``do something different'' depending on the particular set of
 labels.  For example, we could define a mapping $B$ which
-\todo{picture(s)}
 \begin{itemize}
 \item sends the set of labels $\{a,b,c\}$ to the set of ``shapes''
   $\{I,J,K\}$,
@@ -587,14 +586,13 @@ sps =
   ]
 
 dia = decoratePath (rect 25 20) sps
-    # connectOutside' (aOpts & tailGap .~ 5) "t1" "l1" -- top
-    # connectOutside' (aOpts & tailGap .~ 5) "t1" "ta" -- left
+    # connectOutside' (aOpts & tailGap .~ Local 5) "t1" "l1" -- top
+    # connectOutside' (aOpts & tailGap .~ Local 5) "t1" "ta" -- left
     # connectOutside' aOpts "l1" "la" -- right
-    # connectOutside' (aOpts & tailGap .~ 5) "ta" "la" -- bottom
-    # lw 0.05
+    # connectOutside' (aOpts & tailGap .~ Local 5) "ta" "la" -- bottom
     # frame 1
 
-aOpts = with & gap .~ 3 & headSize .~ 1.5
+aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
   \end{diagram}
   %$
     \caption{Inorder traversal is natural}
@@ -1000,9 +998,9 @@ listOnTree = wideTree (mkLeaf (circle 1)) sampleBTree7
     cStr :: Int -> Int -> Diagram B R2 -> Diagram B R2
     cStr   = connectOutside' superASty
 
-superASty   = with & shaftStyle %~ dashing [0.3,0.3] 0 . lw 0.2
+superASty   = with & shaftStyle %~ dashingG [0.3,0.3] 0 . lw veryThick
                    & arrowHead .~ tri
-                   & headSize .~ 1
+                   & headLength .~ Local 1
 
 treeOnList = drawList (mkLeaf (circle 1)) 7
   # top 1 0
@@ -1027,7 +1025,7 @@ treeOnList = drawList (mkLeaf (circle 1)) 7
 super = (hcat' (with & sep .~ 5) . map centerXY) [listOnTree, treeOnList]
 
 dia
-  = frame 0.5 . centerXY . lw 0.1
+  = frame 0.5 . centerXY . lw thick
   . vcat' (with & sep .~ 4) . map centerXY
   $
   [ numbering
@@ -1483,7 +1481,7 @@ numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
     numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
 
 dia
-  = frame 0.5 . centerXY . lw 0.1
+  = frame 0.5 . centerXY . lw thick
   . vcat' (with & sep .~ 4) . map centerXY
   $
   [ numbering
@@ -1626,7 +1624,6 @@ dia = frame 0.2 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
   , assembly2
   , grid
   ]
-  # lw 0.03
   \end{diagram}
   \caption{Three views on arithmetic product of species}
   \label{fig:arithmetic-product}
@@ -2192,7 +2189,7 @@ $F$-structure with one particular distinguished element.
     \begin{diagram}[width=250]
 import SpeciesDiagrams
 
-theDia = drawSpT (struct'' 5 ((text "F" <> rect 1 1 # lw 0) |||||| circle 0.2 # fc black # translateY 0.2)) # centerXY
+theDia = drawSpT (struct'' 5 ((text "F" <> rect 1 1 # lw none) |||||| circle 0.2 # fc black # translateY 0.2)) # centerXY
          ||||||
          strutX 1
          ||||||
