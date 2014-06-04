@@ -38,6 +38,7 @@ import SpeciesDiagrams
 dia = hcat [tree # centerXY, strutX 4, octo [0..7]]
     # centerXY
     # pad 1.1
+    # lwO 0.7
 \end{diagram}
 \caption{Representative labelled shapes} \label{fig:example-labelled}
 \end{figure}
@@ -80,6 +81,7 @@ dia =
   ]
   # centerXY
   # pad 1.1
+  # lwO 0.7
 
 listStructures
   = centerXY
@@ -125,6 +127,7 @@ dia =
   ]
   # centerXY
   # pad 1.1
+  # lwO 0.7
 
 nil = square 0.2 # fc black
 
@@ -164,6 +167,7 @@ dia =
   ]
   # centerXY
   # pad 1.1
+  # lwO 0.7
     \end{diagram}
     \caption{The species $\Bag$ of sets}
     \label{fig:sets}
@@ -192,6 +196,7 @@ dia =
   ]
   # centerXY
   # pad 1.1
+  # lwO 0.7
 
 enumMobiles :: [a] -> [BTree a]
 enumMobiles []  = []
@@ -251,6 +256,7 @@ dia =
   ]
   # centerXY
   # pad 1.1
+  # lwO 0.7
 
 cycles [] = []
 cycles (x:xs) = map (x:) (permutations xs)
@@ -289,6 +295,7 @@ dia =
   ]
   # centerXY
   # pad 1.1
+  # lwO 0.7
 
 parts :: [a] -> [[[a]]]
 parts = map (map MS.toList . MS.toList) . MS.partitions . MS.fromDistinctList
@@ -409,6 +416,7 @@ dia = hcat' (with & sep .~ 3)
   ]
   # connectOutside' (with & gap .~ Local 0.5) "sig" "trees"
   # frame 0.5
+  # lwO 0.7
   \end{diagram}
   \caption{Relabelling} \label{fig:relabelling}
 \end{figure}
@@ -591,6 +599,7 @@ dia = decoratePath (rect 25 20) sps
     # connectOutside' aOpts "l1" "la" -- right
     # connectOutside' (aOpts & tailGap .~ Local 5) "ta" "la" -- bottom
     # frame 1
+    # lwO 0.7
 
 aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
   \end{diagram}
@@ -955,8 +964,8 @@ listOnTree = wideTree (mkLeaf (circle 1)) sampleBTree7
     cStr :: Int -> Int -> Diagram B R2 -> Diagram B R2
     cStr   = connectOutside' superASty
 
-superASty   = with & shaftStyle %~ dashingG [0.3,0.3] 0 . lw veryThick
-                   & arrowHead .~ tri
+superASty   = with & shaftStyle %~ dashingG [0.3,0.3] 0 . lw medium
+                   & arrowHead .~ spike
                    & headLength .~ Local 1
 
 treeOnList = drawList (mkLeaf (circle 1)) 7
@@ -982,7 +991,7 @@ treeOnList = drawList (mkLeaf (circle 1)) 7
 super = (hcat' (with & sep .~ 5) . map centerXY) [listOnTree, treeOnList]
 
 dia
-  = frame 0.5 . centerXY . lw thick
+  = frame 0.5 . centerXY . lwO 0.7
   . vcat' (with & sep .~ 4) . map centerXY
   $
   [ numbering
@@ -1438,7 +1447,7 @@ numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
     numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
 
 dia
-  = frame 0.5 . centerXY . lw thick
+  = frame 0.5 . lwO 0.7 . centerXY
   . vcat' (with & sep .~ 4) . map centerXY
   $
   [ numbering
@@ -1576,7 +1585,7 @@ list2 nd = hcat' (with & sep .~ 1 & catMethod .~ Distrib)
   where
     aSty = with & arrowHead .~ noHead
 
-dia = frame 0.2 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
+dia = frame 0.2 . lwO 0.7 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
   [ assembly1 # scale 1.3
   , assembly2
   , grid
@@ -2122,7 +2131,7 @@ $[\BT, \ST]$ is Cartesian closed as well.
 
 The \term{derivative} $F'$ of a species $F$ is defined by \[ F'[U] =
 F[U \union \{\star\}], \] where $\star$ is some new distinguished
-label not already present in $U$.  The transport of relabelings along
+label not already present in $U$.  The transport of relabellings along
 the derivative is defined as expected, leaving the distinguished
 label alone and transporting the others.
 
