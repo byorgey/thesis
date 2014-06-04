@@ -546,6 +546,7 @@ dia =
   vcat' (with & sep .~ 2) [ fibers, x ]
   # applyAll (zipWith (connectOutside' aOpts) [0 :: Int .. 3] "abcd")
   # frame 0.5
+  # lwO 0.7
 
 aOpts = with & arrowTail .~ dart'
   \end{diagram}
@@ -997,10 +998,12 @@ collection = (hcat' (with & sep .~ 1) $ map drawSet sets) # centerX  -- $
 choice :: Diagram B R2
 choice = (hcat' (with & sep .~ 0.5) $ zipWith3 mkSel [0::Int ..] shapes selections) # enclose 0.5 1 -- $
   where
-    mkSel i shp (Just j) = shp 1 # sized (Width 1) # fc (cycle colors !! j) # centerXY # named ("b" .> i .> j)
+    mkSel i shp (Just j)
+      = (shp 1 # sized (Dims 1 1) # centerXY <> phantom (square 1 :: D R2))
+        # fc (cycle colors !! j) # named ("b" .> i .> j)
     mkSel _ _ _ = mempty
 
-dia = frame 1 $   -- $
+dia = lwO 0.7 . frame 1 $   -- $
   vcat' (with & sep .~ 2)
     [ collection
     , choice
@@ -1013,8 +1016,8 @@ dia = frame 1 $   -- $
 
 aOpts = with & shaftStyle %~ lc grey
              & headTexture .~ solid grey
-             & headGap .~ Local 0.7
-             & headLength .~ Local 1
+             & headGap .~ Local 0.5
+             & headLength .~ Local 0.5
 
 mkNm :: Int -> Int -> Name
 mkNm i j = i .> j
@@ -1446,6 +1449,7 @@ dia =
     , drawJunction table1 table2 relation
     ]
   # frame 0.5
+  # lwO 0.7
   \end{diagram}
   \caption{Representing a many-to-many relationship via a junction table}
   \label{fig:junction-table}
@@ -1489,8 +1493,9 @@ dia =
     ]
   # applyAll [ connectOutside' aOpts x y || [x,y] <- ["CD", "PQ", "sC", "sP", "tD", "tQ"] ]
   # frame 0.5
+  # lwO 0.7
 
-aOpts = with & gap .~ Local 0.2
+aOpts = with & gaps .~ Local 0.2 & headLength .~ Local 0.4
       \end{diagram}
     \end{center}
   \item Functors preserve identities: for each $s \in S$ we should
@@ -1511,8 +1516,9 @@ dia =
     ]
   # applyAll [ connectOutside' aOpts x y || [x,y] <- ["CD", "DE", "PQ", "QR", "sC", "sP", "tD", "tQ", "uE", "uR"] ]
   # frame 0.5
+  # lwO 0.7
 
-aOpts = with & gap .~ Local 0.2
+aOpts = with & gaps .~ Local 0.2 & headLength .~ Local 0.4
       \end{diagram}
     \end{center}
   \end{itemize}
@@ -2043,7 +2049,7 @@ tfin x =
 
 ht = 3
 
-dashSty = dashingG [0.1,0.1] 0
+dashSty = dashingG [0.1,0.1] 0 . lc red
 
 bij = [ ((0, 1), Just dashSty)
       , ((1, 2), Nothing)
@@ -2064,7 +2070,7 @@ fin_e =
   [fin 'A', fin 'B']
   # applyAll
     [ conn sty ('A' .> (x :: Int)) ('B' .> (y :: Int))
-    || ((x,y), sty) <- filter (\((x,y), _) -> x /= 0 && y /= 0) bij ++ [((3,1), Just (lc red))]
+    || ((x,y), sty) <- filter (\((x,y), _) -> x /= 0 && y /= 0) bij ++ [((3,1), Just (lc red . lw thick))]
     ]
 
 conn msty x y = connect' aOpts x y
@@ -2072,7 +2078,7 @@ conn msty x y = connect' aOpts x y
     aOpts
       || Just sty <- msty = basicOpts & shaftStyle %~ sty
       || otherwise        = basicOpts
-    basicOpts = with & arrowHead .~ spike & arrowTail .~ spike'
+    basicOpts = with & arrowHead .~ noHead
 
 dia = hcat' (with & sep .~ 2)
   [ tfin_e # centerY
@@ -2080,6 +2086,7 @@ dia = hcat' (with & sep .~ 2)
   , fin_e # centerY
   ]
   # frame 0.5
+  # lwO 0.7
   \end{diagram}
   \caption{Eliminating $\top$ from both sides of an equivalence}
   \label{fig:gcbp-Maybe}
@@ -2167,6 +2174,7 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
         , (unit_Y # rotateBy (-1/3), text' 4 "A₁"   )
         , (unit_Y # rotateBy (1/3) , text' 4 "A₂"   )
         ]
+      # lwO 0.7
   where
     fin = mkList n dot (`xor` 1) # centerXY
     l1  = mkList n dot id # centerXY
