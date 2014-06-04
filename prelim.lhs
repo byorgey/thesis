@@ -5,6 +5,9 @@
 \chapter{Preliminaries}
 \label{chap:prelim}
 
+\todo{Explicitly discuss categorical monoids in HoTT. Note that strict
+  vs non-strict monoids is a non-issue.}
+
 The main content of this dissertation builds upon a great deal of
 mathematical formalism, particularly from set theory, category theory,
 and type theory.  To say that this chapter attempts to make the
