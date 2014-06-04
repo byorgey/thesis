@@ -20,7 +20,7 @@ main = shake shakeOptions $ do
         e <- doesFileExist input
         when e $ do
           need [input]
-          system' lhs2TeX $ ["--poly", "-o", output] ++ [input]
+          cmd "lhs2TeX --poly -o" [output] [input]
 
     "*.pdf" *> \output -> do
         let input = replaceExtension output "tex"
@@ -30,10 +30,11 @@ main = shake shakeOptions $ do
         pkgs <- getDirectoryFiles "" ["*.sty"]
         need pkgs
 
-        system' pdflatex $ ["--enable-write18", input]
-        system' pdflatex $ ["--enable-write18", input]
-        system' bibtex [dropExtension input]
-        system' pdflatex $ ["--enable-write18", input]
+        () <- cmd [pdflatex] "--enable-write18" [input]
+        () <- cmd [pdflatex] "--enable-write18" [input]
+        () <- cmd [bibtex] [dropExtension input]
+        () <- cmd [pdflatex] "--enable-write18" [input]
+        return ()
 
 isInclude = liftA2 (||) ("\\include" `isPrefixOf`) ("\\input" `isPrefixOf`) . dropWhile isSpace
 
