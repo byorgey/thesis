@@ -259,8 +259,8 @@ interpretation\footnote{Though as of this writing there seems to be
   some good progress on this front via the theory of \term{cubical
     sets}~\cite{bezem2014model}.}, so using it to give a computational
 interpretation of species may seem suspect. Note, however, that $\ua$
-satisfies the $\beta$-like law \mbox{$\transport{X \mapsto X}{\ua(f)}
-  = f$}. So univalence introduces no computational problems as long as
+satisfies the $\beta$ law \mbox{$\transport{X \mapsto X}{\ua(f)} =
+  f$}. So univalence introduces no computational problems as long as
 applications of $\ua$ are only ultimately used via
 $\mathsf{transport}$.  In particular, sticking to this restricted
 usage of $\ua$ still allows a convenient shorthand: packaging up an
@@ -268,9 +268,9 @@ equivalence into a path and then transporting along that path results
 in ``automatically'' inserting the equivalence and its inverse in all
 the necessary places throughout the term. For example, let $P(X)
 \defeq X \times (X \to C)$ as in the previous example, and suppose $e
-: A \equiv B$, so $\ua\ e : A = B$.  Then $\transport P {\ua(e)} : P(A)
-\to P(B)$, and in particular $\transport P {\ua(e)} \pair a g = \pair
-{e(a)}{g \comp e^{-1}}$, which can be derived mechanically by
+: A \equiv B$, so $\ua\ e : A = B$.  Then $\transport P {\ua(e)} :
+P(A) \to P(B)$, and in particular $\transport P {\ua(e)} \pair a g =
+\pair {e(a)}{g \comp e^{-1}}$, which can be derived mechanically by
 induction on the shape of $P$.
 
 \paragraph{Propositions, sets, and $n$-types}
@@ -833,13 +833,80 @@ exercise.  Note in particular that $\B = \core{\FinSet}$.
   denotes the symmetric \emph{group} of all permutations on $n$
   elements, considered as a one-object groupoid.  In other words, $\P$
   consists of a collection of non-interacting ``islands'', one for
-  each natural number. \todo{picture?}  In particular, this means that
-  any functor $F : \P \to \C$ is equivalent to a collection of
-  independent functors $\prod_{n \geq 0} \S_n \to \C$, one for each
-  natural number.  Each functor $\S_n \to \C$ is entirely independent
-  of the others, since there are no morphisms between different $\S_n$
-  to introduce constraints.
+  each natural number, as illustrated in~\pref{fig:groupoid-P}.  In
+  particular, this means that any functor $F : \P \to \C$ is
+  equivalent to a collection of functors $\prod_{n \geq 0} \S_n \to
+  \C$, one for each natural number.  Each functor $\S_n \to \C$ is
+  entirely independent of the others, since there are no morphisms
+  between different $\S_n$ to introduce constraints.
 \end{rem}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=400]
+import Data.List (permutations)
+import           Diagrams.TwoD.Path.Metafont
+import Control.Lens ((^.))
+
+-- map a vertical line from 0 to h to a trail.
+along :: Double -> Located (Trail R2) -> Deformation R2
+along h tr = Deformation $ \p ->
+  let t       = ((p ^. _y) / h)
+      trailPt = tr `atParam` t
+      normal  = tr `normalAtParam` t
+  in  trailPt .+^ ((p ^. _x) *^ normal)
+
+track :: Located (Trail R2)
+track = ((vrule 2 # reverseTrail <> arc (0 @@@@ turn) (1/2 @@@@ turn) # reverseTrail <> vrule 2) `at` origin)
+      # scaleX 0.8
+
+drawPerm ht off = mconcat . zipWith drawStrand [0..]
+  where
+    xPos :: Integer -> Double
+    xPos = (off*) . fromIntegral
+    drawStrand :: Integer -> Integer -> Path R2
+    drawStrand i j = metafont $
+      (xPos i ^& 0)
+        .- leaving unitY <> arriving unitY -.
+      (xPos i ^& (ht * 2 / 5))
+        .--.
+      (xPos j ^& (ht * 3 / 5))
+        .- leaving unitY <> arriving unitY -.
+      endpt (xPos j ^& ht)
+
+strokePerm :: Path R2 -> Diagram B R2
+strokePerm = mconcat . map strokeLocTrail . pathTrails
+
+dot = circle 0.5 # fc black
+
+flower 0 = circle 0.5 # dashingG [0.1,0.1] 0
+flower n = permutations [0 .. n-1]
+  # map (drawPerm 5 0.3)
+  # map centerX
+  # map (deform' 0.001 (along 5 track))
+  # map centerXY
+  # map strokePerm
+  # map (translateY (flowerRadius n))
+  # zipWith rotateBy [0, 1/factorial n ..]
+  # mconcat
+  # atop (centerXY $ hcat' (with & sep .~ 0.2) (replicate (fromIntegral n) dot))
+  # frame 1
+
+flowerRadius 1 = 3
+flowerRadius 2 = 3
+flowerRadius 3 = 4
+flowerRadius 4 = 10
+
+ellipsis = hcat' (with & sep .~ 0.6) (replicate 3 (circle 0.1 # fc black))
+
+factorial :: Integer -> Double
+factorial n = fromIntegral $ product [1 .. n]
+
+dia = hcat' (with & sep .~ 2) (map flower [0..3] ++ [ellipsis]) # frame 0.5
+  \end{diagram}
+  \caption{The groupoid $\P$}
+  \label{fig:groupoid-P}
+\end{figure}
 
 There is a close relationship between $\B$ and $\P$.  In the presence
 of the axiom of choice, they are equivalent; intuitively, $\P$ is what
