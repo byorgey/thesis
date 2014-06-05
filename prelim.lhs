@@ -845,8 +845,9 @@ exercise.  Note in particular that $\B = \core{\FinSet}$.
   \centering
   \begin{diagram}[width=400]
 import Data.List (permutations)
-import           Diagrams.TwoD.Path.Metafont
+import Diagrams.TwoD.Path.Metafont
 import Control.Lens ((^.))
+import SpeciesDiagrams
 
 -- map a vertical line from 0 to h to a trail.
 along :: Double -> Located (Trail R2) -> Deformation R2
@@ -874,12 +875,14 @@ drawPerm ht off = mconcat . zipWith drawStrand [0..]
         .- leaving unitY <> arriving unitY -.
       endpt (xPos j ^& ht)
 
+styles = zipWith (\c sty -> sty . lc c) colors [lwO 0.5, lwO 1, dashingL [0.3, 0.1] 0]
+
 strokePerm :: Path R2 -> Diagram B R2
-strokePerm = mconcat . map strokeLocTrail . pathTrails
+strokePerm = mconcat . zipWith (\sty t -> strokeLocTrail t # sty) styles . pathTrails
 
-dot = circle 0.5 # fc black
+dot = circle 0.5
 
-flower 0 = circle 0.5 # dashingG [0.1,0.1] 0
+flower 0 = dot # dashingG [0.1,0.1] 0
 flower n = permutations [0 .. n-1]
   # map (drawPerm 5 0.3)
   # map centerX
@@ -889,7 +892,11 @@ flower n = permutations [0 .. n-1]
   # map (translateY (flowerRadius n))
   # zipWith rotateBy [0, 1/factorial n ..]
   # mconcat
-  # atop (centerXY $ hcat' (with & sep .~ 0.2) (replicate (fromIntegral n) dot))
+  # atop
+    ( hcat' (with & sep .~ 0.2)
+        (zipWith fc colors (replicate (fromIntegral n) dot # lw none))
+      # centerXY
+    )
   # frame 1
 
 flowerRadius 1 = 3
@@ -902,7 +909,7 @@ ellipsis = hcat' (with & sep .~ 0.6) (replicate 3 (circle 0.1 # fc black))
 factorial :: Integer -> Double
 factorial n = fromIntegral $ product [1 .. n]
 
-dia = hcat' (with & sep .~ 2) (map flower [0..3] ++ [ellipsis]) # frame 0.5
+dia = hcat' (with & sep .~ 2) (map flower [0..3] ++ [ellipsis]) # frame 0.5 # lwO 0.7
   \end{diagram}
   \caption{The groupoid $\P$}
   \label{fig:groupoid-P}
