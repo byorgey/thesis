@@ -23,6 +23,7 @@ framework and source of intuition for furthering their own learning,
 making use of the provided references to read about things not covered
 here.
 
+\todo{Redo this based on splitting out another chapter.}
 The material in \pref{sec:basic}, \pref{sec:HoTT}, and
 \pref{sec:category-theory}, though by no means basic, is fairly
 standard, so readers with a good background in the subjects covered
