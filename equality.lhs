@@ -2,10 +2,9 @@
 
 %include polycode.fmt
 
-\chapter{Finiteness}
-\label{chap:finiteness}
+\chapter{Equality}
+\label{chap:equality}
 
-\todo{Better chapter title?}
 \todo{Write an introduction to this chapter.}
 
 \section{The axiom of choice (and how to avoid it)}
