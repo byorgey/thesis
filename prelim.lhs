@@ -560,12 +560,15 @@ aOpts = with & arrowTail .~ dart'
 
 \paragraph{Equivalence of categories}
 
+When are two categories ``the same''?
 In category theory founded in set theory, there are quite a few
-different definitions of equivalence between categories.  Ultimately,
+different definitions of ``sameness'' for categories.  Ultimately,
 this comes down to the fact, alluded to earlier, that set theory does
 not make a very good foundation for category theory.  In particular,
 when working in set theory, one has to work hard to maintain the
 principle of equivalence.
+
+A na\"ive first attempt is as follows:
 \begin{defn} \label{defn:cat-iso}
   Two categories $\C$ and $\D$ are said to be \term{isomorphic} if
   there are inverse functors $\BackForth \C F G \D$, \ie with $GF =
@@ -582,10 +585,11 @@ very useful concept; usually the following concept is used instead:
   \iso 1_\D$.
 \end{defn}
 
-In set theory, a function has an inverse if it is both injective and
-surjective.  By analogy, another definition of equivalence is often
-given, which for the sake of clarity we will refer to as
-\term{one-sided equivalence}:
+In set theory, a function is a bijection---that is, an isomorphism of
+sets---if and only if it is both injective and surjective.  By
+analogy, one might wonder what properties a functor $F : \mathbb{C}
+\to \mathbb{D}$ must have in order to be one half of an equivalence.
+This leads to the following definition:
 
 \begin{defn} \label{defn:cat-one-sided-equiv}
   $\C$ is \term{one-sided equivalent} to $\D$ if there is a functor $F
