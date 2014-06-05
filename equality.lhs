@@ -7,6 +7,9 @@
 
 \todo{Write an introduction to this chapter.}
 
+\todo{Definitional equality. Leibniz equality. Judgmental
+  equality. Equivalence.  Principle of equivalence.}
+
 \section{The axiom of choice (and how to avoid it)}
 \label{sec:AC}
 
