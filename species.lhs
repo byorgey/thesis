@@ -1952,16 +1952,60 @@ is the (two-sided) identity for $\comp$ as well, since an $F$-shape
 containing singletons and a singleton $F$-shape are both isomorphic to
 an $F$-shape.
 
+\todo{talk about requirement that $G(0) = 0$.}
+
 \begin{ex}
-  As an example, we may define the species $\Par$ of set partitions
-  by \[ \Par = \E \comp \E_+.\] \todo{picture + more commentary}
+  As an example, we may define the species $\Par$ of \term{set
+    partitions}, illustrated in \pref{fig:partitions},
+  by \[ \Par = \Bag \comp \Bag_+.\]  That is, a set partition is a set
+  of \emph{non-empty} sets.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=400]
+import           Data.List
+import           Data.List.Split
+import qualified Math.Combinatorics.Multiset    as MS
+import           SpeciesDiagrams
+
+dia =
+  hcat' (with & sep .~ 0.5)
+  [ unord (map labT [0..3])
+  , mkArrow 2 (txt "Par")
+  , partStructures
+  ]
+  # centerXY
+  # pad 1.1
+  # lwO 0.7
+
+parts :: [a] -> [[[a]]]
+parts = map (map MS.toList . MS.toList) . MS.partitions . MS.fromDistinctList
+
+drawPart = alignL . hcat' (with & sep .~ 0.2) . map (unord . map labT)
+
+partStructures
+  = centerXY
+  . hcat' (with & sep .~ 1)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 5
+  . map drawPart
+  . parts
+  $ [0..3]
+    \end{diagram}
+    \caption{The species $\Par$ of partitions}
+    \label{fig:partitions}
+    %$
+  \end{figure}
+
+Similarly, the species $\Perm$ of permutations is given by $\Perm = \Bag \comp
+\Cyc$, a set of \emph{cycles} (note that cycles are non-empty by definition).
+
 \end{ex}
 
 \begin{ex}
   The species $\Sp{R}$ of nonempty $n$-ary (``rose'') trees, with data
   stored at internal nodes, may be defined by the recursive species
-  equation \[ \Sp{R} = \X \sprod (\L \comp \Sp{R}). \] \todo{picture +
-    more commentary}
+  equation \[ \Sp{R} = \X \sprod (\List \comp \Sp{R}). \] \todo{picture +
+    more commentary.  Just a single example tree?}
 \end{ex}
 
 \begin{ex}
@@ -1969,6 +2013,8 @@ an $F$-shape.
   the leaves, may be defined by \[ \Sp{P} = \X + (\Sp{P} \comp
   \X^2). \] \todo{picture + more commentary}
 \end{ex}
+
+\todo{Need a story for unlabelled species??}
 
 \subsection{Generalized composition}
 \label{sec:generalized-composition}

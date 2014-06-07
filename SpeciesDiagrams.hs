@@ -148,7 +148,7 @@ mkArrow :: Double -> Diagram B R2 -> Diagram B R2
 mkArrow len l =
   ( l
     ===
-    (arrow len # translateX (-len/2) <> rect len 0.2 # lw none)
+    (arrow len # translateX (-len/2) <> rect len 0.5 # lw none)
   )
   # alignB
 
@@ -248,7 +248,7 @@ enRect :: (Semigroup a, TrailLike a, Alignable a, Enveloped a, HasOrigin a, V a 
 enRect d = roundedRect (w+0.5) (h+0.5) 0.5 <> d # centerXY
   where (w,h) = size2D d
 
-txt x = text x <> square 1 # lw none
+txt x = text x # fontSizeO 10 <> square 1 # lw none
 
 ------------------------------------------------------------
 -- Some specific constructions
