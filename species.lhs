@@ -1113,8 +1113,6 @@ later. First, however, we consider some examples.
   \to \disc{\cat{2}}$ which ``tags'' each element with one of two tags
   (``left'' or ``right'', $0$ or $1$, \etc).  From this point of view,
   a lifted sum can be thought of as a tag-preserving disjoint union.
-
-  \todo{picture?}
 \end{ex}
 
 \begin{ex}
@@ -1147,7 +1145,7 @@ later. First, however, we consider some examples.
   Up until now we have mostly considered examples with $\Str = \Set$,
   but any monoidal category will do.  $\ST$ works similarly to
   $\Set$, for example, with disjoint union of sets replaced by
-  coproduct of types.  \todo{Give an example with some non-set-like
+  coproduct of types.  \later{Give an example with some non-set-like
     monoidal category.}
 \end{ex}
 
@@ -1184,7 +1182,7 @@ later. First, however, we consider some examples.
   species.
 \end{ex}
 
-\todo{give some examples with other categories. $1/\Set$,
+\later{give some examples with other categories. $1/\Set$,
   \ie\ pointed sets with smash product? $\cat{Vect}$?}
 
 For completeness, we now turn to a detailed and fully general
@@ -1223,7 +1221,7 @@ the functor category $\Str^\Lab$.
      \xymatrix{ \C \ruppertwocell{\alpha} \ar[r] & \D \ar[r]^F & \E \\
                 \C \rlowertwocell{\beta} \ar[r] & \D \ar[r]_F & \E }
      }
-  \] \bay{Improve this picture with composition symbols?}
+  \] \later{Improve this picture with composition symbols?}
   by the interchange law for horizontal and vertical composition.
 \end{proof}
 
@@ -1346,7 +1344,13 @@ showing that lifting preserves adjunctions.
     Intuitively I believe it really is ``straightforward'' but getting
     the details straight is tricky.  Is this just an application of
     the previous lemma about lifting natural transformations?  It
-    might be, but if so it would require a bit of unfolding to see it.}
+    might be, but if so it would require a bit of unfolding to see
+    it.} \bay{Note this fact (actually, the dual, involving
+    precomposition) is in Hinze ``Art and Dan'' paper, where it is
+    used to construct right Kan extensions.  Should look and see if
+    there's any intuition/proof technique that can be ported
+    here. Indeed, the proof is given on pages 17--18, using string
+    diagrams!}
 \end{proof}
 
 \begin{prop}
@@ -1515,7 +1519,9 @@ $\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
   like |data Unit a = Unit|.
 \end{rem}
 
-\todo{Examples.  Pairs, lists, trees, $X \cdot E$.}
+\todo{Examples.  Pairs, lists, trees, $X \cdot E$.} \bay{But $\X$
+  hasn't been introduced yet\dots put examples later, after arithmetic
+  product section?  Have a separate section of examples?}
 
 \subsection{Arithmetic product}
 \label{sec:arithmetic-product}
@@ -1683,7 +1689,7 @@ arithmetic product arise from \emph{Day convolution}, applied to
 different monoidal structures on $\B$.
 
 The essential idea, first described by Brian
-Day~\cite{day-convolution}, is to construct a monoidal structure on a
+Day~\cite{day1970closed}, is to construct a monoidal structure on a
 functor category $[\Lab^\op, \Str]$ based primarily on a monoidal
 structure on the \emph{domain} category $\Lab$.  In particular, Day
 convolution requires
@@ -1710,8 +1716,8 @@ product.
 
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G \in
-  [\Lab^\op, \Str]$ is given by the coend \[ F \oast G = \coend{L_F, L_G}
-  F\ L_F \otimes G\ L_G \otimes \Lab(-, L_F \oplus L_G). \]
+  [\Lab^\op, \Str]$ is given by the coend \[ (F \oast G)\ L = \coend{L_F, L_G}
+  F\ L_F \otimes G\ L_G \otimes (\Hom[\Lab]{L}{L_F \oplus L_G}). \]
 \end{defn}
 
 \begin{rem}
@@ -1809,7 +1815,7 @@ embedding, that is, $j(L) = \Lab(-,L)$.
     m)} \to \perm{(\Fin n)} \to \perm{(\Fin (m+n))}$, we can recover
   $\varphi$ by passing some transitive bijection (say, $\lam{i}{(i +
     1) \bmod m}$) as the first argument to $q$, and $\id$ as the
-  second---the resulting permutation will increment those indices
+  second---the resulting permutation will modify those indices
   which are matched with $\Fin m$, and fix those matched with $\Fin
   n$. \todo{picture?}
 
