@@ -57,6 +57,8 @@ under $f$;
   \}$ likewise denotes the preimage of an entire set.
 \end{itemize}
 
+\todo{definitional equality}
+
 Metavariable conventions used throughout this dissertation include:
 \begin{itemize}
 \item Metavariables $f$, $g$, $h$ range over functions.
@@ -267,7 +269,7 @@ usage of $\ua$ still allows a convenient shorthand: packaging up an
 equivalence into a path and then transporting along that path results
 in ``automatically'' inserting the equivalence and its inverse in all
 the necessary places throughout the term. For example, let $P(X)
-\defeq X \times (X \to C)$ as in the previous example, and suppose $e
+\hdefeq X \times (X \to C)$ as in the previous example, and suppose $e
 : A \equiv B$, so $\ua\ e : A = B$.  Then $\transport P {\ua(e)} :
 P(A) \to P(B)$, and in particular $\transport P {\ua(e)} \pair a g =
 \pair {e(a)}{g \comp e^{-1}}$, which can be derived mechanically by
@@ -310,8 +312,8 @@ $(-1)$-types and $0$-types.  As these names suggest, there is an
 infinite hierarchy of $n$-types (beginning at $n = -2$ for historical
 reasons) which have no interesting higher-order path structure above
 level $n$.  As an example of a $1$-type, consider the type of all
-sets, \[ \SetT \defeq (A : \Type) \times \isSet(A), \] where
-$\isSet(A) \defeq (x,y:A) \to (p,q:x = y) \to (p = q)$ is the
+sets, \[ \SetT \hdefeq (A : \Type) \times \isSet(A), \] where
+$\isSet(A) \hdefeq (x,y:A) \to (p,q:x = y) \to (p = q)$ is the
 proposition that $A$ is a set.  Given two elements $A, B : \msf{Set}$
 it is not the case that all paths $A = B$ are equal; such paths
 correspond to bijections between $A$ and $B$, and there may be many
@@ -356,6 +358,9 @@ elements $a, b : A$, but between all pairs of parallel paths $p,q : a
 
 \section{Category theory}
 \label{sec:category-theory}
+
+\todo{Note notation for natural transformations---sometimes use $\nt F
+  G$, sometimes just $F \to G$.}
 
 This dissertation makes extensive use of category theory, which is the
 natural language in which to explore species and related concepts.  A

@@ -165,7 +165,8 @@
 \newcommand{\inj}{\hookrightarrow}
 \let\oldequiv\equiv
 \newcommand{\jeq}{\oldequiv}          % judgmental equality
-\newcommand{\defeq}{\mathrel{:\jeq}}  % definitional equality
+\newcommand{\defeq}{\stackrel{\vartriangle}{=}}
+\newcommand{\hdefeq}{\mathrel{:\jeq}}  % definitional equality in HoTT
 \renewcommand{\equiv}{\simeq}         % homotopy equivalence
 \newcommand{\iso}{\cong}              % isomorphism in a category
 

@@ -616,6 +616,7 @@ aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
 \section{Generalized species}
 \label{sec:constructive-species}
 
+
 In many ways, $[\B, \Set]$ as the definition of species is too
 specific and restrictive.  For example, one of the big motivations for
 this work is to use species as a basis for computation, but ideally
@@ -648,59 +649,56 @@ species'' (or, more specifically,
   generalized species of~\citet{Fiore08}, who define
   ``$(A,B)$-species'' as functors from $\B A$ (a generalization of
   $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
-  $B$.}) for some abstract $[\Lab, \Str]$.
+  $B$.}) for some abstract $[\Lab, \Str]$.  Each of the following
+section begins by defining a particular species operation in
+$[\B,\Set]$, then generalizes it to arbitrary functor categories
+$[\Lab,\Str]$, and exhibits a number of examples in particular functor
+categories.
 
 \subsection{Species in type theory}
 \label{sec:species-in-type-theory}
 
-\todo{Come back to this and attack it on paper, figuring out how to
-  incorporate new insights re: HoTT and CT.}  \todo{Move this up
-  somehow, and follow it with a general description of the rest of the
-  chapter, to make a nice transition into the more technical material
-  on lifted monoids etc.}  One generalization that will be of
-particular interest is a ``port'' of species into HoTT. Recall that
-$\BT$ denotes the \hott{groupoid} with the object type \[ \FinTypeT
-\defeq (A : \Type) \times \isSet(A) \times \isFinite(A), \] where \[
-\isFinite(A) \defeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}, \]
-with morphisms given by paths.  Recall also that $\PT$ denotes the
-\hott{groupoid} whose objects are natural numbers and whose morphisms
-$\mor m n$ are equivalences $\Fin m \equiv \Fin n$, and that $\ST$
-denotes the \hott{category} of $0$-types (sets) and functions.
+One generalization that will be of particular interest is a ``port''
+of species into HoTT. Recall that $\BT$ denotes the \hott{groupoid}
+with the object type \[ \FinTypeT \defeq (A : \Type) \times \isSet(A)
+\times \isFinite(A), \] where \[ \isFinite(A) \defeq \ptrunc{(n : \N)
+  \times (A \equiv \Fin n)}, \] with morphisms given by paths.  Recall
+also that $\PT$ denotes the \hott{groupoid} whose objects are natural
+numbers and whose morphisms $\mor m n$ are equivalences $\Fin m \equiv
+\Fin n$, and that $\ST$ denotes the \hott{category} of $0$-types
+(sets) and functions.
 
 \begin{defn}
-  A \term{constructive species} is a functor $F : \BT \to \ST$.  We
-  use $\CSpe = [\BT,\ST]$ to refer to the category of constructive
-  species.
+  A \term{constructive species} is an \hott{functor} $F : \BT \to
+  \ST$.  We use $\CSpe = [\BT,\ST]$ to refer to the \hott{category} of
+  constructive species.
 \end{defn}
 
 Another one of the major goals of this chapter is to argue that this
 is an appropriate encoding of species within homotopy type theory.
 Note that this cannot be directly justified by showing that
-$[\B,\Set]$ and $[\BT,\ST]$ are categorically equivalent.  In fact,
-that is unlikely to be true, since $\Set$ is ``too big'': there are
-many sets that do not correspond to any type definable in type theory.
+$[\B,\Set]$ and $[\BT,\ST]$ are categorically equivalent; this does
+not even make sense since they live in entirely different foundational
+frameworks.
 
-However, most working mathematicians do not actually make use of such
-``exotic'' sets;  the constructions they care about
-are typically those which can indeed be encoded in type theory.  In
-order to justify $[\BT, \ST]$ as a constructive counterpart to $[\B,
-\Set]$, therefore, we must look at what operations and constructions
-are typically carried out on $[\B, \Set]$, and show that $[\BT,\ST]$
-supports them as well.
+Rather, one way we can justify $[\BT, \ST]$ as a constructive
+counterpart to $[\B, \Set]$ is to consider the operations and
+constructions that are typically carried out on $[\B, \Set]$, and show
+that $[\BT,\ST]$ supports them as well.
 
 \section{Lifted monoids: sum and Cartesian product}
 
-Two of the simplest operations on species are the \emph{sum} and
-\emph{Cartesian product}.  As we will see, these operations are
-structurally analogous: the only difference is that species sum arises
-from coproducts in $\Set$ (disjoint union), whereas the Cartesian
-product of species arises from products in $\Set$.
+Two of the simplest operations on species are \emph{sum} and
+\emph{Cartesian product}.  These operations are structurally
+analogous: the only difference is that species sum arises from
+coproducts in $\Set$ (disjoint union), whereas the Cartesian product
+of species arises from products in $\Set$.
 
 \subsection{Species sum}
 
 The \emph{sum} of two species is given by their disjoint union: an $(F
 + G)$-shape is either an $F$-shape \emph{or} a $G$-shape, together
-with a tag so we can tell which (\pref{fig:sum}).
+with a tag to distinguish them (\pref{fig:sum}).
 
   \begin{figure}
     \centering
@@ -731,8 +729,8 @@ dia = theDia # centerXY # pad 1.1
   where $\uplus$ denotes disjoint union (coproduct) of sets, and on
   morphisms by \[ (F + G)\ \sigma \defeq F\ \sigma \uplus G\
   \sigma, \] where $\uplus$ is considered as a bifunctor in the
-  evident way: $(f \uplus g)\ (\inl\ x) = \inl\ (f\ x)$ and $(f \uplus
-  g)\ (\inr\ y) = \inr\ (g\ y)$.
+  evident way: $(f \uplus g)\ (\inl\ x) \defeq \inl\ (f\ x)$ and $(f \uplus
+  g)\ (\inr\ y) \defeq \inr\ (g\ y)$.
 \end{defn}
 
 It remains to prove that the $F + G$ defined above is actually
@@ -748,7 +746,7 @@ functorial.
   \stmt{F\ (f \comp g) \uplus G\ (f \comp g)}
   \reason{=}{$F$, $G$ functors}
   \stmt{(F\ f \comp F\ g) \uplus (G\ f \comp G\ g)}
-  \reason{=}{$\uplus$ functor}
+  \reason{=}{$\uplus$ bifunctor}
   \stmt{(F\ f \uplus G\ f) \comp (F\ g \uplus G\ g)}
   \reason{=}{$+$ definition}
   \stmt{(F + G)\ f \comp (F + G)\ g.}
@@ -765,10 +763,10 @@ functorial.
   automatically by induction on the structure of the expression,
   simply substituting the morphism in place of covariant occurrences
   of the object, and the morphism's inverse in place of contravariant
-  occurrences.  In fact, in a HoTT-based formulation of category
-  theory, this is simply the transport operation; that is, given a
-  groupoid $B$ and a category $C$, any function $B_0 \to C_0$ extends
-  to a functor $B \to C$.
+  occurrences.  In fact, in category theory as founded in HoTT, this
+  is simply the transport operation; that is, given an \hott{groupoid} $B$ and
+  a (pre)category $C$, any function $B_0 \to C_0$ extends to a functor $B
+  \to C$.
 
   By the same token, to define a functor with an arbitrary category
   (not necessarily a groupoid) as its domain, it suffices to define
@@ -781,8 +779,8 @@ functorial.
 \end{rem}
 
 \begin{ex}
-  $\Bin + \List$ is the species representing things which are
-  \emph{either} binary trees or lists (\pref{fig:bin-plus-list}).
+  $\Bin + \List$ is the species of shapes which are \emph{either}
+  binary trees or lists (\pref{fig:bin-plus-list}).
 \end{ex}
 
 \begin{figure}
@@ -897,12 +895,11 @@ choice of one-element set, $\singleton$.)
   The \term{Cartesian} or \term{Hadamard product} of species, is defined on
   objects by $ (F \times G)\ L = F\ L \times G\ L.$
 \end{defn}
-\begin{rem}
-  The action of $(F \times G)$ on morphisms, functoriality, \etc are
-  omitted; the details are exactly parallel to the definition of
-  species sum, and are presented much more generally in the next
-  subsection.
-\end{rem}
+The action of $(F \times G)$ on morphisms, functoriality, \etc are
+omitted; the details are exactly parallel to the definition of
+species sum, and are presented much more generally in the next
+subsection.
+
 An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
 on \emph{the same set of labels}.  There are several ways to think
 about this situation, as illustrated in \pref{fig:Cartesian-product}.
@@ -1139,14 +1136,6 @@ later. First, however, we consider some examples.
   positions in the two lists: \[ [S_1, S_2, S_3, \dots] \oplus [T_1,
   T_2, T_3, \dots] = [S_1 \oplus T_1, S_2 \oplus T_2, S_3 \oplus T_3,
   \dots] \]
-\end{ex}
-
-\begin{ex}
-  Up until now we have mostly considered examples with $\Str = \Set$,
-  but any monoidal category will do.  $\ST$ works similarly to
-  $\Set$, for example, with disjoint union of sets replaced by
-  coproduct of types.  \later{Give an example with some non-set-like
-    monoidal category.}
 \end{ex}
 
 \begin{ex}
@@ -1806,12 +1795,83 @@ embedding, that is, $j(L) = \Lab(-,L)$.
   ways to do this---in fact, one for every choice of \[ \varphi : \Fin
   m \uplus \Fin n \bij \Fin (m + n), \] which specifies how to embed
   $\{0, \dots, m-1\}$ and $\{0, \dots, n-1\}$ into $\{0, \dots,
-  m+n-1\}$.  \todo{picture}
+  m+n-1\}$.
 
   Given such a $\varphi$, we may construct \[ \Fin (m+n)
   \stackrel{\varphi^{-1}}{\bij} \Fin m \uplus \Fin n \stackrel{\sigma
     \uplus \tau}{\bij} \Fin m \uplus \Fin n \stackrel{\varphi}{\bij}
-  \Fin (m+n). \] Conversely, given some functorial $q : \perm{(\Fin
+  \Fin (m+n), \] as illustrated in \pref{fig:sumiso}.
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+{-# LANGUAGE DeriveDataTypeable         #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
+import           Data.Bits
+import           Data.List                      (find)
+import           Data.Maybe                     (fromJust)
+import           Data.Typeable
+import           Data.Universe.Instances.Base
+import           Diagrams.Prelude               hiding (tau)
+
+column
+  = vcat' (with & sep .~ 1)
+  . zipWith (||>) ['a' ..]
+  . map (\n -> vcat (zipWith named [0 :: Index ..] (replicate n (square 1))))
+
+newtype Index = Index Int
+  deriving (Eq, Ord, Show, Read, Real, Num, Integral, Bits, Enum, Typeable)
+
+instance IsName Index
+
+instance Universe Index where
+  universe = map Index [0..]
+
+phi :: Either Index Index -> Index
+phi (Left 0) = 1
+phi (Left 1) = 3
+phi (Left 2) = 4
+phi (Left 3) = 6
+phi (Right 0) = 0
+phi (Right 1) = 2
+phi (Right 2) = 5
+
+sigma :: Index -> Index
+sigma = (`xor` 1)
+
+tau :: Index -> Index
+tau = (`mod` 3) . succ
+
+either2Name :: Either Index Index -> Name
+either2Name (Left i) = 'a' .> i
+either2Name (Right i) = 'b' .> i
+
+inverse :: (Universe a, Eq b) => (a -> b) -> (b -> a)
+inverse f b = fromJust (find ((==b) . f) universe)
+
+dia =
+  (hcat' (with & sep .~ 2) . map centerY $ -- $
+     [ 'A' ||> column [7]
+     , 'B' ||> column [4,3]
+     , 'C' ||> column [4,3]
+     , 'D' ||> column [7]
+     ]
+   )
+   # applyAll [connect' aOpts ('A' .> 'a' .> i) ('B' .> n) || i <- [0..6], let n = either2Name (inverse phi i) ]
+   # applyAll [connect' aOpts ('B' .> 'a' .> i) ('C' .> 'a' .> sigma i) || i <- [0..3] ]
+   # applyAll [connect' aOpts ('B' .> 'b' .> i) ('C' .> 'b' .> tau i) || i <- [0..3] ]
+   # applyAll [connect' aOpts ('C' .> n) ('D' .> 'a' .> i) || i <- [0..6], let n = either2Name (inverse phi i) ]
+   # frame 0.5
+
+aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
+    \end{diagram}
+    \caption{$\Fin (m+n) \bij \Fin m \uplus \Fin n \bij \Fin m \uplus
+      \Fin n \bij \Fin (m+n)$}
+    \label{fig:sumiso}
+  \end{figure}
+
+  Conversely, given some functorial $q : \perm{(\Fin
     m)} \to \perm{(\Fin n)} \to \perm{(\Fin (m+n))}$, we can recover
   $\varphi$ by passing some transitive bijection (say, $\lam{i}{(i +
     1) \bmod m}$) as the first argument to $q$, and $\id$ as the
@@ -1869,7 +1929,8 @@ embedding, that is, $j(L) = \Lab(-,L)$.
 \begin{ex}
   We now verify that $\BT$ and $\ST$ have the right properties, so
   that partitional and arithmetic product are well-defined on
-  $[\BT,\ST]$-species.
+  $[\BT,\ST]$-species. \todo{Have to redo this given new definitions
+    of $\BT$ and $\ST$.}
   \begin{itemize}
   \item Like $\B$, there are monoidal structures on $\BT$
     corresponding to the coproduct and product of types. As with $\P$,
@@ -1882,9 +1943,10 @@ embedding, that is, $j(L) = \Lab(-,L)$.
     A \to \IsFinite B \to \IsFinite (A \oplus B)$.  Any such function,
     in combination with a monoid $\oplus$ on $\ST$, gives rise to a
     valid monoid on $\FinType$, since \todo{finish}
-  \item $\BT$ is indeed enriched over $\ST$, since the class of
-    arrows between $(A,m,i)$ and $(B,n,j)$ is given by the type $A
-    \equiv B$.
+  \item $\BT$ can indeed be seen as enriched over $\ST$, since by
+    univalence, paths $A = B$ are equivalent to equivalences $A \equiv
+    B$, and by \pref{lem:equiv-pres-set}, $A \equiv B$ is a set when
+    $A$ and $B$ are.
   \item We have already seen that there is a symmetric monoidal
     structure on $\ST$ given by the product of types.
   \item The last condition is the most interesting: we need to say
