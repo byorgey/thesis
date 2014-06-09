@@ -13,6 +13,8 @@
 \newcommand{\mappend}{\diamond}
 \newcommand{\mempty}{\varepsilon}
 
+\renewcommand{\onelinecomment}[1]{--- {#1}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Package imports
 

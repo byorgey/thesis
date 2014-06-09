@@ -2,6 +2,8 @@
 
 %include thesis.fmt
 
+%format iota = "\iota"
+
 \chapter{Labelled structures}
 \label{chap:labelled}
 
@@ -116,13 +118,14 @@ As a Haskell type, this construction corresponds to
 data Lan j f a where
   Lan :: (f c, j c -> a) -> Lan j f a
 \end{spec}
-Of course, this type is quite a bit less general than the abstract
-definition given above---in particular, it instantiates $\C$, $\D$,
-and $\E$ all to \Hask.  However, it is still quite useful for gaining
-intuition.  Note that |c| is existentially quantified; recall that in
-Haskell this corresponds to a coend.  Note also that the copower
-(which in general relates two different categories) turns into simple
-pairing.
+The @kan-extensions@ package~\citep{kmett-kan-extensions-hackage}
+contains a similar definition. Of course, this type is quite a bit
+less general than the abstract definition given above---in particular,
+it instantiates $\C$, $\D$, and $\E$ all to \Hask.  However, it is
+still quite useful for gaining intuition.  Note that |c| is
+existentially quantified; recall that in Haskell this corresponds to a
+coend.  Note also that the copower (which in general relates two
+different categories) turns into simple pairing.
 
 We now turn to a proof of \pref{prop:Lan-coend}.
 \begin{proof}
@@ -152,16 +155,24 @@ Instead of merely showing the \emph{existence} of an isomorphism, the
 above proof can in fact be interpreted as constructing a specific
 isomorphism: each step has some constructive justification, and the
 final isomorphism is the composition of all the steps.  However,
-instead of formally expounding this isomorphism, it is useful to
-instead carry out the construction in Haskell, using the type |Lan|
-defined above.  This brings out the essential components of the proof
-without getting too bogged down in abstraction.
-
+instead of formally expounding this isomorphism, it is useful to carry
+out the construction in Haskell, using the type |Lan| defined
+above. This brings out the essential components of the proof without
+getting too bogged down in abstraction.  The code corresponding to the
+backwards direction of the proof is shown in \pref{fig:lan-coend-Hask}
+(note that it requires the |GADTs| and |RankNTypes|
+extensions~\citep{GADTs, RankNTypes})\footnote{As evidenced by the
+  @kan-extensions@ package~\citep{kmett-kan-extensions-hackage}, the
+  implementation of this constructive proof in Haskell can be
+  considerably simplified, but at the expense of obscuring the
+  connection to the original abstract proof given above.} The code for
+the forward direction is similar, and it is the backwards direction
+which will be of particular use later.
+\begin{figure}
+  \centering
 \begin{spec}
-{-# LANGUAGE RankNTypes #-}
-
 lanAdjoint :: Functor g => (forall c. f c -> g (j c)) -> (forall a. Lan j f a -> g a)
-lanAdjoint g = homL (uncurry (yoneda' g))
+lanAdjoint h = homL (uncurry (yoneda' h))
   where
     -- Turn a forall outside an arrow into an existential to the left
     -- of the arrow
@@ -172,18 +183,25 @@ lanAdjoint g = homL (uncurry (yoneda' g))
     yoneda :: Functor f => f c -> (forall a. (c -> a) -> f a)
     yoneda fc h = fmap h fc
 
-    -- A particular instantiation of the Yoneda lemma.  This needs to
-    -- be declared and given a type signature, since there are higher-rank
-    -- types involved and GHC is not able to infer them.
-    yoneda' :: Functor g => (forall c. f c -> g (j c)) -> (forall c. f c -> (forall a. (j c -> a) -> g a))
+    -- A particular instantiation of |yoneda|. This needs to be
+    -- declared and given a type signature, since there are higher-
+    -- rank types involved which GHC is not able to infer.
+    yoneda'  ::  Functor g
+             =>  (forall c. f c ->  g (j c)                        )
+             ->  (forall c. f c ->  (forall a. (j c -> a) -> g a)  )
     yoneda' h fc = yoneda (h fc)
 \end{spec}
+  \caption{Proof of \pref{prop:Lan-coend} in Haskell}
+  \label{fig:lan-coend-Hask}
+\end{figure}
 
 \section{Analytic functors}
 \label{sec:analytic-functors}
 
-With left Kan extensions under our belts, we're ready to consider
-Joyal's definition of \term{analytic
+\todo{Apparently the terminology ``analytic'' is not due to Joyal; see
+  \url{http://en.wikipedia.org/wiki/Calculus_of_functors}.}
+
+We are now ready to consider Joyal's definition of \term{analytic
   functors}~\cite{Joyal-analytic-functors}.
 \begin{defn}
   Given a species $F \in [\B,\Set]$, the \term{analytic functor} $\hat
@@ -193,8 +211,8 @@ Joyal's definition of \term{analytic
 \end{defn}
 We can think of $\hat F$ as the polymorphic ``data type'' arising from
 the species $F$. The construction in \pref{prop:Lan-coend} tells us
-exactly what such a data type looks like: $\hat F\ A = \coend L (\iota
-L \to A) \times F\ L$.  That is, given a set $A$, a value in $\hat F\
+exactly what such a data type looks like: \[ \hat F\ A = \coend L (\iota
+L \to A) \times F\ L. \]  That is, given a set $A$, a value in $\hat F\
 A$ consists of an $L$-labelled $F$-shape together with a function (\ie
 a morphism in $\Set$) from $\iota L$ to $A$.  The coend means that the
 choice of a particular label set $L$ does not matter: any two values
@@ -202,19 +220,68 @@ $f : (\iota L \to A) \times F\ L$ and $g : (\iota L' \to A) \times F\
 L' $ are considered equal if there is some bijection $\sigma : L \bij
 L'$ which sends $f$ to $g$.
 
-\todo{Intuition for analytic functors from universal property of left
-  Kan extension.  Use Haskell derivation from previous section.}
+To gain some intuition for analytic functors, it is helpful to
+simplify the isomorphism constructed in \pref{fig:lan-coend-Hask}.  We
+identify both $\B$ and $\Set$ with \Hask---formally dubious but close
+enough for intuition---and thus the inclusion functor $\iota : \B \to
+\Set$ becomes the identity.  Let |h :: forall c. f c -> g c| be an
+arbitrary natural transformation from |f| to |g = g . iota|, which
+should be thought of as a morphism between species, that is, between
+functors $\B \to \Set$.  |lanAdjoint| turns such species morphisms
+into polymorphic functions (that is, natural transformations between
+$\Set \to \Set$ functors) from |Lan iota f a| to |g a|.  In
+particular, let |Lan (sp,m)| be a value of type |Lan iota f a|,
+containing, for some label type |c|, a shape |sp : f c| and a mapping
+|m : iota c -> a|.  Then |lanAdjoint h (Lan (sp,m)) :: g a|, and we
+can carry out the following simplication just by unfolding
+definitions:
+\begin{sproof}
+  \stmt{|lanAdjoint h (Lan (sp,m))|}
+  \reason{=}{definition of |lanAdjoint|}
+  \stmt{|homL (uncurry (yoneda' h)) (Lan (sp,m))|}
+  \reason{=}{definition of |homL|}
+  \stmt{|uncurry (yoneda' h) (sp,m)|}
+  \reason{=}{definition of |uncurry|}
+  \stmt{|yoneda' h sp m|}
+  \reason{=}{definition of |yoneda'|}
+  \stmt{|yoneda (h sp) m|}
+  \reason{=}{definition of |yoneda|}
+  \stmt{|fmap m (h sp)|.}
+\end{sproof}
+This can be interpreted as follows: given the species morphism |h| out
+of the species $F$, it is turned into a function out of the
+corresponding analytic functor $\hat F$ by applying it to the
+underlying shape, and then functorially applying the associated data
+mapping.  Note in particular that |lanAdjoint| is an
+\emph{isomorphism}, which means that \emph{every} polymorphic function
+out of an analytic functor arises in this way.  That is, every
+polymorphic function out of $\hat F\ A$ is ``just a reshaping'': it is
+equivalent to a process consisting of splitting $\hat F\ A$ into a
+labelled shape and a mapping from labels to data, followed by a
+``reshaping''---an application some species morphism to the
+shape---and concluding with re-combining the new shape with the data
+mapping.
 
-\todo{Note that $(F \comp \X)\ 0$ yields $\hat F$. --- from Todd
-  Trimble's ``notes on the Lie Operad''.}
+In the light of this intuition, it is instructive to consider what
+functors in $[\Set, \Set]$ are \emph{not} analytic. \todo{Finish.
+  Come up with some examples!}
+
+\todo{What is the relationship with ``shapely types''?}
 
 Analytic functors have many nice properties: for example, they are
-closed under \todo{?}, and have corresponding \term{generating
-  functions} (indeed, part of the motivation of Joyal's work seems to
-have been to categorify the theory of generating functions).
-
-In fact, passing from $\B$ to $\P$ \todo{finish: can see generating
-  functions emerge.}
+closed under sums, products, and composition.  They also have
+corresponding \term{generating functions} (indeed, part of the
+motivation of Joyal's work seems to have been to categorify the theory
+of generating functions).  In fact, passing from $\B$ to $\P$, suppose
+we have a species $F : \P \to \Set$; then the analytic functor $\hat
+F$ is given by \[ \hat F\ A = \coend{(n:\N)} (\iota n \to A) \times F\
+n, \] where $\iota : \P \to \Set$ in this case sends the natural
+number $n$ to the set $\fin n$.  Note that functions $\fin n \to A$
+are in bijection with the $n$-fold product $A^n$, so $\hat F\ A$ may
+equivalently be expressed as \[ \hat F\ A = \coend{(n:\N)} F\ n \times
+A^n. \] \todo{Simplify coend.  Equivalence induced by arbitrary
+  permutations of $n$, so we can squint and suggestively write it as a
+  sum if we introduce a factor of $1/n!$.}
 
 \section{Labelled structures}
 \label{sec:labelled-structures}
