@@ -361,6 +361,7 @@ elements $a, b : A$, but between all pairs of parallel paths $p,q : a
 
 \todo{Note notation for natural transformations---sometimes use $\nt F
   G$, sometimes just $F \to G$.}
+\todo{Add section about \Hask}
 
 This dissertation makes extensive use of category theory, which is the
 natural language in which to explore species and related concepts.  A

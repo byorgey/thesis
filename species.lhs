@@ -9,8 +9,6 @@
 \todo{List contributions of this chapter somewhere?}
 \todo{Need a story for building with both color or black/white
   figures}
-\todo{Include example of bounded tree width graphs somewhere.}
-\todo{Include $\Cat$-valued species as an example.}
 
 The theory of combinatorial species, introduced by \citet{joyal}, is a
 unified theory of \term{combinatorial structures} or \term{shapes}.
@@ -2315,7 +2313,12 @@ dia = theDia # centerXY # pad 1.1
   \end{figure}
 
 
-\section{Multisort species}
+\section{Examples}
+\label{sec:examples}
+
+\todo{Write an introduction here.}
+
+\subsection{Multisort species}
 \label{sec:multisort}
 
 \todo{General introduction to the concept of multisort species, and
@@ -2402,7 +2405,7 @@ the notion of multisort species defined in \citet{bll}.
   interpreting lists using coproduct from underlying category\dots
   where does that come from?}
 
-\section{Weighted species}
+\subsection{Weighted species}
 \label{sec:weighted}
 
 \todo{General explanation and intuition for weighted species, and usual definition.}
@@ -2452,8 +2455,21 @@ $A$. \todo{Finish this proof.}
 
 \todo{Give some examples.}
 
-\section{$\L$-species}
+\subsection{$\L$-species}
+
+\subsection{Other examples}
+
+\todo{$\Cat$-valued species.}
+\todo{Vector species.}
+\todo{Species from category of partial bijections/prisms.}
+
+\subsection{Example species}
+\label{sec:example-species}
+
+\todo{Bounded tree width graphs}
 
 \section{Unlabelled species}
 
-\todo{Unlabelled structures, equivalence classes, and HITs}
+\todo{Unlabelled structures, equivalence classes, and HITs} \bay{Where
+  should this go?}
+
