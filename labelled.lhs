@@ -6,10 +6,10 @@
 \label{chap:labelled}
 
 Now that we have a foundation for describing labelled shapes, the next
-step is to extend them into full-blown \emph{data structures} with
-mappings from labels to data.  For example, \pref{fig:shape-data}
-illustrates an example of a labelled shape together with a mapping
-from the labels to data values.
+step is to extend them into full-blown \emph{data structures} by
+adjoining mappings from labels to data.  For example,
+\pref{fig:shape-data} illustrates an example of a labelled shape
+together with a mapping from the labels to data values.
 \begin{figure}
 \centering
 \begin{diagram}[width=400]
@@ -37,39 +37,43 @@ mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
 %$
 \caption{Data structure = shape + data} \label{fig:shape-data}
 \end{figure}
-However, this must be done in a principled way.  The idea is to derive
-\todo{operations\dots from structure \dots}
-
-% One useful intuition is to think of the labels as \emph{memory
-%   addresses}, which point off to some location where a data value is
-% stored. This intuition has some particularly interesting consequences
-% when it comes to operations like Cartesian product and functor
-% composition---explained in~\pref{sec:operations}---since it gives us a
-% way to model sharing (albeit in limited ways).
-
-
-\begin{itemize}
-\item Joyal's analytic functors.  Labelled structures.
-\item Operations on labelled structures.
-\item Sharing.
-\end{itemize}
+However, this must be done in a principled way which allows deriving
+properties of labelled structures from corresponding properties of
+labelled shapes.  This chapter begins with an overview of \term{Kan
+  extensions} (\pref{sec:kan-extensions}) and uses them to define
+\term{analytic functors} (\pref{sec:analytic-functors}), which provide
+the theoretical basis for extending labelled shapes to labelled
+structures.  \todo{Continue this description/outline once the rest of
+  the chapter shakes out.}
 
 \section{Kan extensions}
 \label{sec:kan-extensions}
 
-The definition of analytic functors makes central use of the notion of
-a (left) \term{Kan extension}.
+The definition of analytic functors, given in
+\pref{sec:analytic-functors}, makes central use of the notion of a
+(left) \term{Kan extension}.  This section defines Kan extensions and
+provides some useful intuition for understanding them in this
+context. For more details, see \citet{mac1998categories} \todo{insert
+  page number/chapter reference}; for
+some good intuition with a computational bent, see \citet{hinze2012kan}.
 
 \begin{defn} \label{defn:lan} Given functors $F : \C \to \D$ and $J :
   \C \to \E$, the \term{left Kan extension of $F$ along $J$}, written
-  $\lan J F$\footnote{$\lan J F$ is traditionally notated
-    $\Lan_J F$.  Inspired by the corresponding notion in
-    relational algebra, Roland Backhouse suggested the notation $\ran
-    J F$ for the right Kan extension of $F$ along $J$ (traditionally
-    notated $\Ran_J F$), which was adopted by
-    \citet{art-and-dan}.  The notation $\lan J F$ is the appropriate
-    analogue for left Kan extensions.}, is a functor $\D \to \E$
-  characterized by the isomorphism
+  $\lan J F$\footnote{$\lan J F$ is traditionally notated $\Lan_J F$.
+    Inspired by the corresponding notion in relational algebra, Roland
+    Backhouse suggested the notation $\ran J F$ for the right Kan
+    extension of $F$ along $J$, which was adopted by
+    \citet{hinze2012kan}.  This notation is a bit more perspicuous
+    than the traditional notation $\Ran_J F$, especially with respect
+    to the accompanying computation ($\beta$) and reflection ($\eta$)
+    laws.  Unfortunately, there is not quite a satisfactory parallel
+    in the case of left Kan extensions.  In relational algebra, the
+    notations $A / P$ and $P \backslash A$ are used for the right
+    adjoints to pre- and post-composition, respectively; whereas we
+    want notations for the left and right adjoints of precomposition.
+    I nevertheless adopt the notation $\lan J F$ for left Kan
+    extensions, and hope this does not cause confusion.}, is a functor
+  $\D \to \E$ characterized by the isomorphism
   \begin{equation} \label{eq:lan}
     (\lan{J}{F} \to G) \iso (F \to G \comp J),
   \end{equation}
@@ -81,16 +85,20 @@ a (left) \term{Kan extension}.
 Intuitively, if $J : \C \to \E$ is thought of as an ``embedding'' of
 $\C$ into $\E$, then $\lan J F$ can be thought of as a way of
 ``extending'' the domain of $F$ from $\C$ to $\E$ in a way compatible
-with $J$. \[ \xymatrix{\C \ar[r]^{F} \ar[d]_J & \D \\ \E \ar[ur]_{\lan
-    J F}} \] If we substitute $\lan J F$ for $G$ in \pref{eq:lan} and
-take the image of $\id_{\lan J F}$, we obtain $\eta : F \to \lan J F
+with $J$. \[ \xymatrix{\C \ar[dr]^{F} \ar[d]_J \\ \E \ar[r]_{\lan J F}
+  & \D } \] If we substitute $\lan J F$ for $G$ in \pref{eq:lan} and
+take the image of $\id_{\lan J F}$, we obtain $\eta : F \to (\lan J F)
 \comp J$, a natural transformation sending $F$ to the embedding $J$
-followed by the extension $\lan J F$; intuitively, the existence of
+followed by the extension $\lan J F$. Intuitively, the existence of
 $\eta$ guarantees that $\lan J F$ has to ``act like'' $F$ on the image
 of $\C$ under $J$. \todo{2-cell picture illustrating $\eta$} Of
 course, $\lan J F$ must also be defined and functorial on all of $\E$,
 not just on the image of $C$.  These facts together justify thinking
-of $\lan J F$ as an ``extension'' of $F$.
+of $\lan J F$ as an ``extension'' of $F$.  Note also that substituting
+$G \comp J$ for $F$ in \pref{eq:lan} and taking the image of
+$\id_{G\comp J}$ under the inverse yields $\varepsilon : \lan J {(G
+  \comp J)} \to G$, which can be thought of as a computation or
+reduction rule.
 
 \todo{simple example(s)?}
 
@@ -103,12 +111,26 @@ constructed explicitly as a coend:
   (\lan J F)\ E = \coend{C} (J\ C \to E) \cdot F\ C.
 \end{equation}
 \end{prop}
+As a Haskell type, this construction corresponds to
+\begin{spec}
+data Lan j f a where
+  Lan :: (f c, j c -> a) -> Lan j f a
+\end{spec}
+Of course, this type is quite a bit less general than the abstract
+definition given above---in particular, it instantiates $\C$, $\D$,
+and $\E$ all to \Hask.  However, it is still quite useful for gaining
+intuition.  Note that |c| is existentially quantified; recall that in
+Haskell this corresponds to a coend.  Note also that the copower
+(which in general relates two different categories) turns into simple
+pairing.
+
+We now turn to a proof of \pref{prop:Lan-coend}.
 \begin{proof}
-We must show $(\lan J F \to G) \iso (F \to G \comp J)$.
+We must show $(\nt {\lan J F} G) \iso (\nt F {G \comp J})$.
 \begin{sproof}
-  \stmt{\lan J F \to G}
+  \stmt{\nt {\lan J F} G}
   \reason{\jeq}{definition}
-  \stmt{(\coend{C} (J\ C \to -) \cdot F\ C) \to G}
+  \stmt{\nt {(\coend{C} (J\ C \to -) \cdot F\ C)} G}
   \reason{\iso}{natural transformations are ends}
   \stmt{\eend{E} \left( \coend{C} (J\ C \to E) \cdot F\ C \right) \to G\ E}
   \reason{\iso}{$(- \to X)$ turns colimits into limits}
@@ -121,20 +143,41 @@ We must show $(\lan J F \to G) \iso (F \to G \comp J)$.
   \stmt{\eend{C} \eend{E} (J\ C \to E) \to (F\ C \to G\ E)}
   \reason{\iso}{Yoneda}
   \stmt{\eend{C} F\ C \to G\ (J\ C)}
-  \reason{\iso}{natural transformations are coends}
-  \stmt{F \to G \comp J}
+  \reason{\iso}{natural transformations are ends}
+  \stmt{\nt F {G \comp J}}
 \end{sproof}
 \end{proof}
 
 Instead of merely showing the \emph{existence} of an isomorphism, the
 above proof can in fact be interpreted as constructing a specific
-isomorphism.  Instead of doing this in the framework of the formal
-proof above, we carry out this construction in Haskell.  This is not
-as general as the above proof (in particular, it forces all the
-categories involved to be \Hask), but yields good intuition.
+isomorphism: each step has some constructive justification, and the
+final isomorphism is the composition of all the steps.  However,
+instead of formally expounding this isomorphism, it is useful to
+instead carry out the construction in Haskell, using the type |Lan|
+defined above.  This brings out the essential components of the proof
+without getting too bogged down in abstraction.
 
-\todo{Exhibit Haskell code.  Which direction of the isomorphism do we
-  really want?}
+\begin{spec}
+{-# LANGUAGE RankNTypes #-}
+
+lanAdjoint :: Functor g => (forall c. f c -> g (j c)) -> (forall a. Lan j f a -> g a)
+lanAdjoint g = homL (uncurry (yoneda' g))
+  where
+    -- Turn a forall outside an arrow into an existential to the left
+    -- of the arrow
+    homL :: (forall a c. (f c, j c -> a) -> g a) -> (forall a. Lan j f a -> g a)
+    homL h (Lan (fc, jc_a)) = h (fc, jc_a)
+
+    -- One direction of the Yoneda lemma.
+    yoneda :: Functor f => f c -> (forall a. (c -> a) -> f a)
+    yoneda fc h = fmap h fc
+
+    -- A particular instantiation of the Yoneda lemma.  This needs to
+    -- be declared and given a type signature, since there are higher-rank
+    -- types involved and GHC is not able to infer them.
+    yoneda' :: Functor g => (forall c. f c -> g (j c)) -> (forall c. f c -> (forall a. (j c -> a) -> g a))
+    yoneda' h fc = yoneda (h fc)
+\end{spec}
 
 \section{Analytic functors}
 \label{sec:analytic-functors}

@@ -345,7 +345,7 @@
 
 % Kan extensions
 \newcommand{\ran}[2]{#2 / #1}
-\newcommand{\lan}[2]{#2 \backslash #1}
+\newcommand{\lan}[2]{#1 \backslash #2}
 \DeclareMathOperator{\Lan}{Lan}
 \DeclareMathOperator{\Ran}{Ran}
 

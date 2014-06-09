@@ -4,7 +4,7 @@
 module KanExtensions where
 
 data Lan f x a where
-  Lan :: (x c) -> (f c -> a) -> Lan f x a
+  Lan :: (x c, f c -> a) -> Lan f x a
 
 -- one direction of the Yoneda lemma
 yonedaR :: (forall a. (c -> a) -> f a) -> f c
@@ -15,10 +15,10 @@ yonedaL f g = fmap g f
 
 -- hom(-,a) turns colimits into limits
 homL1 :: (forall a. Lan f x a -> g a) -> (forall a c. (x c, f c -> a) -> g a)
-homL1 l (xa,fca) = l (Lan xa fca)
+homL1 l (xa,fca) = l (Lan (xa, fca))
 
 homL2 :: (forall a c. (x c, f c -> a) -> g a) -> (forall a. Lan f x a -> g a)
-homL2 g (Lan xc fca) = g (xc, fca)
+homL2 g (Lan (xc, fca)) = g (xc, fca)
 
 -- apply the Yoneda lemma on the RHS of the hom
 step3R :: (forall c. x c -> (forall a. (f c -> a) -> g a)) -> (forall c. x c -> g (f c))
@@ -46,8 +46,21 @@ lanAdjointR l = step3R (curry (homL1 l)) -- fmap yoneda (curry (homL l . swap))
   Hmm, I don't quite get it.  Let's do the other direction.
 -}
 
-lanAdjointL :: Functor g => (forall c. x c -> g (f c)) -> (forall a. Lan f x a -> g a)
-lanAdjointL g = homL2 (uncurry (step3L g))
+-- lanAdjointL :: Functor g => (forall c. x c -> g (f c)) -> (forall a. Lan f x a -> g a)
+-- lanAdjointL g = homL2 (uncurry (step3L g))
+
+lanAdjoint :: Functor g => (forall c. f c -> g (j c)) -> (forall a. Lan j f a -> g a)
+lanAdjoint g = homL (uncurry (yoneda' g))
+  where
+    homL :: (forall a c. (f c, j c -> a) -> g a) -> (forall a. Lan j f a -> g a)
+    homL h (Lan (fc, jc_a)) = h (fc, jc_a)
+
+    yoneda' :: Functor g => (forall c. f c -> g (j c)) -> (forall c. f c -> (forall a. (j c -> a) -> g a))
+    yoneda' h fc = yoneda (h fc)
+
+    yoneda :: Functor f => f c -> (forall a. (c -> a) -> f a)
+    yoneda fc h = fmap h fc
+
 
 {-
 
