@@ -566,30 +566,65 @@ aOpts = with & arrowTail .~ dart'
 
 \paragraph{Equivalence of categories}
 
-When are two categories ``the same''?
-In category theory founded in set theory, there are quite a few
-different definitions of ``sameness'' for categories.  Ultimately,
-this comes down to the fact, alluded to earlier, that set theory does
-not make a very good foundation for category theory.  In particular,
-when working in set theory, one has to work hard to maintain the
-principle of equivalence.
+When are two categories ``the same''?  In traditional category theory,
+founded on set theory, there are quite a few different definitions of
+``sameness'' for categories.  Ultimately, this comes down to the fact,
+alluded to earlier, that set theory does not make a very good
+foundation for category theory.  There are many different notions of
+``equality'' (isomorphism, equivalence, \dots), and they often do not
+correspond to the underlying equality on sets, so one must carefully
+pick and choose which notions of equality to use in which situations
+(and some choices might be better than others!).  Many concepts come
+with ``strict'' and ``weak'' variants, depending on which version of
+equality is being used.  Maintaining the principle of equivalence in
+this setting requires hard work and vigilence.
 
 A na\"ive first attempt is as follows:
 \begin{defn} \label{defn:cat-iso}
-  Two categories $\C$ and $\D$ are said to be \term{isomorphic} if
-  there are inverse functors $\BackForth \C F G \D$, \ie with $GF =
+  Two categories $\C$ and $\D$ are \term{isomorphic} if
+  there are inverse functors $\BackForth \C F G \D$, such that $GF =
   1_\C$ and $FG = 1_\D$.
 \end{defn}
-Unfortunately, this definition violates the principle of equivalence,
-since, for example, $GF$ might be \emph{isomorphic} to $1_\C$ without
-being \emph{equal} to it.  Isomorphism of categories is thus not a
-very useful concept; usually the following concept is used instead:
-\begin{defn} \label{defn:cat-equiv}
-  An \term{equivalence} between $\C$
-  and $\D$ is given by functors $\BackForth \C F G \D$ which are
-  inverse up to natural isomorphism, that is, $GF \iso 1_\C$ and $FG
-  \iso 1_\D$.
+This definition has the right idea in general, but it is subtly
+flawed.  In fact, it is somewhat ``evil'', in that it talks about
+\emph{equality} of functors ($GF$ and $FG$ must be \emph{equal to} the
+identity).  However, two functors $H$ and $J$ can be isomorphic
+without being equal, if there is a natural isomorphism between
+them---that is, a pair of natural transformations $\phi : \nt H J$ and
+$\psi : \nt J H$ such that $\phi \circ \psi$ and $\psi \circ \phi$ are
+both equal to the identity natural transformation.\footnote{The astute
+  reader may well ask: but how do we know \emph{this} is a non-evil
+  definition of isomorphism between \emph{functors}?  Is it turtles
+  all the way down (up)?  This is a subtle point, but it turns out
+  that it is not evil to talk about equality of natural
+  transformations, since for the usual notion of category there is no
+  higher structure after natural transformations, \ie no nontrivial
+  morphisms (and hence no nontrivial isomorphisms) between natural
+  transformations.} For example, consider the functors given
+by the Haskell types
+\begin{spec}
+data Rose a = Node a [Rose a]
+data Fork a = Leaf a | Fork (Fork a) (Fork a)
+\end{spec}
+These are obviously not \emph{equal}, but they are isomorphic, in the
+sense that there are natural transformations, \ie polymorphic
+functions, |rose2fork :: forall a. Rose a -> Fork a| and |fork2rose ::
+forall a. Fork a -> Rose a| such that |rose2fork . fork2rose === id|
+and |fork2rose . rose2fork === id| \citep{yorgey-2010-species}.
+
+Here, then, is a better definition:
+\begin{defn} \label{defn:cat-equiv} Categories $\C$ and $\D$ are
+  \term{equivalent} if there are functors $\BackForth \C F G \D$ which
+  are inverse up to natural isomorphism, that is, there are natural
+  isomorphisms $GF \iso 1_\C$ and $FG \iso 1_\D$.
 \end{defn}
+
+So the compositions of the functors $F$ and $G$ do not \emph{literally}
+have to be the identity functor, but only (naturally) \emph{isomorphic} to
+it.  This does turn out to be a well-behaved notion of sameness for
+categories \bay{(although you'll have to take my word for it)}.
+
+\todo{working here, re-incorporating blog post into this section}
 
 In set theory, a function is a bijection---that is, an isomorphism of
 sets---if and only if it is both injective and surjective.  By
