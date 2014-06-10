@@ -75,32 +75,35 @@ some good intuition with a computational bent, see \citet{hinze2012kan}.
     want notations for the left and right adjoints of precomposition.
     I nevertheless adopt the notation $\lan J F$ for left Kan
     extensions, and hope this does not cause confusion.}, is a functor
-  $\D \to \E$ characterized by the isomorphism
+  $\E \to \D$ characterized by the isomorphism
   \begin{equation} \label{eq:lan}
-    (\lan{J}{F} \to G) \iso (F \to G \comp J),
+    (\nt {\lan{J}{F}} G) \iso (\nt F {G \comp J}),
   \end{equation}
-  natural in $G$. If this exists for all $F$, then we may say even
-  more succinctly that the left Kan extension functor $\lan J -$ is
-  left adjoint to $- \comp J$, that is, \[ \lan J - \adj - \comp J. \]
+  natural in $G$. (Note that the left-hand side consists of natural
+  transformations between functors $\E \to \D$, whereas the right-hand
+  side are between functors $\C \to \D$.) If this isomorphism exists
+  for all $F$, then we may say even more succinctly that the left Kan
+  extension functor $\lan J -$ is left adjoint to the precomposition
+  functor $- \comp J$.
 \end{defn}
 
-Intuitively, if $J : \C \to \E$ is thought of as an ``embedding'' of
-$\C$ into $\E$, then $\lan J F$ can be thought of as a way of
-``extending'' the domain of $F$ from $\C$ to $\E$ in a way compatible
-with $J$. \[ \xymatrix{\C \ar[dr]^{F} \ar[d]_J \\ \E \ar[r]_{\lan J F}
-  & \D } \] If we substitute $\lan J F$ for $G$ in \pref{eq:lan} and
-take the image of $\id_{\lan J F}$, we obtain $\eta : F \to (\lan J F)
-\comp J$, a natural transformation sending $F$ to the embedding $J$
-followed by the extension $\lan J F$. Intuitively, the existence of
-$\eta$ guarantees that $\lan J F$ has to ``act like'' $F$ on the image
-of $\C$ under $J$. \todo{2-cell picture illustrating $\eta$} Of
-course, $\lan J F$ must also be defined and functorial on all of $\E$,
-not just on the image of $C$.  These facts together justify thinking
-of $\lan J F$ as an ``extension'' of $F$.  Note also that substituting
-$G \comp J$ for $F$ in \pref{eq:lan} and taking the image of
-$\id_{G\comp J}$ under the inverse yields $\varepsilon : \lan J {(G
-  \comp J)} \to G$, which can be thought of as a computation or
-reduction rule.
+The situation can be pictured as shown below: \[ \xymatrix{\C
+  \ar[dr]^{F} \ar[d]_J \\ \E \ar[r]_{\lan J F} & \D } \] Intuitively,
+if $J : \C \to \E$ is thought of as an ``embedding'' of $\C$ into
+$\E$, then $\lan J F$ can be thought of as a way of ``extending'' the
+domain of $F$ from $\C$ to $\E$ in a way compatible with $J$. If we
+substitute $\lan J F$ for $G$ in \pref{eq:lan} and take the image of
+$\id_{\lan J F}$, we obtain $\eta : F \to (\lan J F) \comp J$, a
+natural transformation sending $F$ to the embedding $J$ followed by
+the extension $\lan J F$. Intuitively, the existence of $\eta$
+guarantees that $\lan J F$ has to ``act like'' $F$ on the image of
+$\C$ under $J$. \todo{2-cell picture illustrating $\eta$} Of course,
+$\lan J F$ must also be defined and functorial on all of $\E$, not
+just on the image of $C$.  These facts together justify thinking of
+$\lan J F$ as an ``extension'' of $F$.  Note also that substituting $G
+\comp J$ for $F$ in \pref{eq:lan} and taking the image of $\id_{G\comp
+  J}$ under the inverse yields $\varepsilon : \lan J {(G \comp J)} \to
+G$, which can be thought of as a computation or reduction rule.
 
 \todo{simple example(s)?}
 
@@ -139,8 +142,7 @@ We must show $(\nt {\lan J F} G) \iso (\nt F {G \comp J})$.
   \reason{\iso}{$(- \to X)$ turns colimits into limits}
   \stmt{\eend{E} \eend{C} \left( (J\ C \to E) \cdot F\ C \to G\ E
     \right)}
-  \reason{\iso}{universal property of copowers (generalized
-    currying)}
+  \reason{\iso}{copowers (generalized currying)}
   \stmt{\eend{E} \eend{C} (J\ C \to E) \to (F\ C \to G\ E)}
   \reason{\iso}{Fubini}
   \stmt{\eend{C} \eend{E} (J\ C \to E) \to (F\ C \to G\ E)}
@@ -198,21 +200,21 @@ lanAdjoint h = homL (uncurry (yoneda' h))
 \section{Analytic functors}
 \label{sec:analytic-functors}
 
-\todo{Apparently the terminology ``analytic'' is not due to Joyal; see
+\todo{Apparently the terminology ``analytic'' is not due to Joyal? See
   \url{http://en.wikipedia.org/wiki/Calculus_of_functors}.}
 
 We are now ready to consider Joyal's definition of \term{analytic
   functors}~\cite{Joyal-analytic-functors}.
 \begin{defn}
-  Given a species $F \in [\B,\Set]$, the \term{analytic functor} $\hat
+  Given a species $F \in [\B,\Set]$, the \term{analytic functor} $\analytic
   F$ corresponding to $F$ is given by the left Kan extension of $F$
   along the inclusion functor $\iota : \B \inj \Set$. A functor $\Set \to \Set$ is \term{analytic} when it
   arises in this way from some species.
 \end{defn}
-We can think of $\hat F$ as the polymorphic ``data type'' arising from
+We can think of $\analytic F$ as the polymorphic ``data type'' arising from
 the species $F$. The construction in \pref{prop:Lan-coend} tells us
-exactly what such a data type looks like: \[ \hat F\ A = \coend L (\iota
-L \to A) \times F\ L. \]  That is, given a set $A$, a value in $\hat F\
+exactly what such a data type looks like: \[ \analytic F\ A = \coend L (\iota
+L \to A) \times F\ L. \]  That is, given a set $A$, a value in $\analytic F\
 A$ consists of an $L$-labelled $F$-shape together with a function (\ie
 a morphism in $\Set$) from $\iota L$ to $A$.  The coend means that the
 choice of a particular label set $L$ does not matter: any two values
@@ -220,21 +222,25 @@ $f : (\iota L \to A) \times F\ L$ and $g : (\iota L' \to A) \times F\
 L' $ are considered equal if there is some bijection $\sigma : L \bij
 L'$ which sends $f$ to $g$.
 
-To gain some intuition for analytic functors, it is helpful to
-simplify the isomorphism constructed in \pref{fig:lan-coend-Hask}.  We
-identify both $\B$ and $\Set$ with \Hask---formally dubious but close
-enough for intuition---and thus the inclusion functor $\iota : \B \to
-\Set$ becomes the identity.  Let |h :: forall c. f c -> g c| be an
-arbitrary natural transformation from |f| to |g = g . iota|, which
-should be thought of as a morphism between species, that is, between
-functors $\B \to \Set$.  |lanAdjoint| turns such species morphisms
-into polymorphic functions (that is, natural transformations between
-$\Set \to \Set$ functors) from |Lan iota f a| to |g a|.  In
-particular, let |Lan (sp,m)| be a value of type |Lan iota f a|,
-containing, for some label type |c|, a shape |sp : f c| and a mapping
-|m : iota c -> a|.  Then |lanAdjoint h (Lan (sp,m)) :: g a|, and we
-can carry out the following simplication just by unfolding
-definitions:
+Moreover, the natural isomorphism \pref{eq:lan} in this case
+becomes \[ (\nt {\analytic F} G) \iso (\nt F {G \iota}), \] that is,
+the natural maps (\ie parametrically polymorphic functions) out of
+$\analytic F$ are in one-to-one correspondence with species morphisms
+out of $F$.  The isomorphism constructed in \pref{fig:lan-coend-Hask}
+can give us some insight into the computational content of this
+correspondence.  We identify both $\B$ and $\Set$ with
+\Hask---formally dubious but close enough for intuition---and thus the
+inclusion functor $\iota : \B \to \Set$ becomes the identity.  Let |h
+:: forall c. f c -> g c| be an arbitrary natural transformation from
+|f| to |g = g . iota|, which should be thought of as a morphism
+between species, that is, between functors $\B \to \Set$.
+|lanAdjoint| turns such species morphisms into polymorphic functions
+(that is, natural transformations between $\Set \to \Set$ functors)
+from |Lan iota f a| to |g a|.  In particular, let |Lan (sp,m)| be a
+value of type |Lan iota f a|, containing, for some label type |c|, a
+shape |sp : f c| and a mapping |m : iota c -> a|.  Then |lanAdjoint h
+(Lan (sp,m)) :: g a|, and we can carry out the following simplication
+just by unfolding definitions:
 \begin{sproof}
   \stmt{|lanAdjoint h (Lan (sp,m))|}
   \reason{=}{definition of |lanAdjoint|}
@@ -250,13 +256,13 @@ definitions:
 \end{sproof}
 This can be interpreted as follows: given the species morphism |h| out
 of the species $F$, it is turned into a function out of the
-corresponding analytic functor $\hat F$ by applying it to the
+corresponding analytic functor $\analytic F$ by applying it to the
 underlying shape, and then functorially applying the associated data
 mapping.  Note in particular that |lanAdjoint| is an
 \emph{isomorphism}, which means that \emph{every} polymorphic function
 out of an analytic functor arises in this way.  That is, every
-polymorphic function out of $\hat F\ A$ is ``just a reshaping'': it is
-equivalent to a process consisting of splitting $\hat F\ A$ into a
+polymorphic function out of $\analytic F\ A$ is ``just a reshaping'': it is
+equivalent to a process consisting of splitting $\analytic F\ A$ into a
 labelled shape and a mapping from labels to data, followed by a
 ``reshaping''---an application some species morphism to the
 shape---and concluding with re-combining the new shape with the data
@@ -273,19 +279,28 @@ closed under sums, products, and composition.  They also have
 corresponding \term{generating functions} (indeed, part of the
 motivation of Joyal's work seems to have been to categorify the theory
 of generating functions).  In fact, passing from $\B$ to $\P$, suppose
-we have a species $F : \P \to \Set$; then the analytic functor $\hat
-F$ is given by \[ \hat F\ A = \coend{(n:\N)} (\iota n \to A) \times F\
+we have a species $F : \P \to \Set$; then the analytic functor $\analytic
+F$ is given by \[ \analytic F\ A = \coend{(n:\N)} (\iota n \to A) \times F\
 n, \] where $\iota : \P \to \Set$ in this case sends the natural
 number $n$ to the set $\fin n$.  Note that functions $\fin n \to A$
-are in bijection with the $n$-fold product $A^n$, so $\hat F\ A$ may
-equivalently be expressed as \[ \hat F\ A = \coend{(n:\N)} F\ n \times
-A^n. \] \todo{Simplify coend.  Equivalence induced by arbitrary
-  permutations of $n$, so we can squint and suggestively write it as a
-  sum if we introduce a factor of $1/n!$.}
+are in bijection with the $n$-fold product $A^n$, so $\analytic F\ A$ may
+equivalently be expressed as \[ \analytic F\ A = \coend{(n:\N)} F\ n \times
+A^n. \] The coend, in this case, is a quotient by permutations on
+$\fin n$, which act on $F\ n \times A^n$ by permuting the elements of
+the $n$-fold product.  We may therefore suggestively (if informally)
+write
+\[ \analytic F\ A = \sum_{n : \N} F\ n \times \frac{A^n}{n!} \] which very
+strongly resembles the \term{exponential generating function}
+associated to the species $F$, \[ F(x) = \sum_{n \geq 0} ||F\ n||
+\times \frac{x^n}{n!}. \] Of course, the resemblance is no
+accident! \todo{Explain formal connection?}
 
 \section{Labelled structures}
 \label{sec:labelled-structures}
 
+\todo{Define by removing coend.  Results in a bifunctor: need only a
+  single label type parameter since $\B$ is a groupoid.}
+todo{Come up with some notation.}
 
 \section{Generalized labelled structures}
 \label{sec:gen-labelled-structures}
@@ -293,6 +308,10 @@ A^n. \] \todo{Simplify coend.  Equivalence induced by arbitrary
 However, the above definition of analytic functors is specific to
 $[\B,\Set]$.  It must first be modified to apply to the generalized
 species from the previous chapter.
+
+\todo{Generalize.  Need two label type parameters for positive and
+  negative occurrences?  \emph{e.g.} can we use category
+  of partial bijections, \ie prisms?}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}

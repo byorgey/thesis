@@ -397,6 +397,11 @@
 \newcommand{\Lab}{\mathfrak{L}}
 \newcommand{\Str}{\mathfrak{S}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Analytic functors
+
+\newcommand{\analytic}[1]{\hat{#1}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Comments
 
