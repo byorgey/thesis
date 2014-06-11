@@ -268,27 +268,41 @@ labelled shape and a mapping from labels to data, followed by a
 shape---and concluding with re-combining the new shape with the data
 mapping.
 
-In the light of this intuition, it is instructive to consider what
-functors in $[\Set, \Set]$ are \emph{not} analytic. \todo{Finish.
-  Come up with some examples!}
+Such a reshaping only has access to the labelled shape, and not to the
+values of type $A$, so it obviously cannot depend on them; however,
+this is not surprising, since this property is already implied by
+naturality.  More interesting is the fact that the set of labels must
+be finite. \bay{this means intuitively that infinite data structures
+  are not analytic---there are not enough labels.  e.g. streams.  for
+  any finite number of labels, there are polymorphic functions out of
+  streams that can't be represented (e.g. with $k$ labels, take the
+  $k+1$st stream element).}
+
+\todo{Should this be included?  If so, where should it go?  Joyal
+  characterized analytic functors as those which preserve filtered
+  colimits, cofiltered limits, and weak pullbacks.  Define filtered
+  categories, filtered colimits.  Show the functor $(-)^\N$
+  (corresponding to infinite streams) does not preserve filtered
+  colimits---consider $\N$ as the filtered colimit over the diagram of
+  finite subsets of $\N$ and inclusion maps.}
 
 \todo{What is the relationship with ``shapely types''?}
 
 Analytic functors have many nice properties: for example, they are
-closed under sums, products, and composition.  They also have
-corresponding \term{generating functions} (indeed, part of the
-motivation of Joyal's work seems to have been to categorify the theory
-of generating functions).  In fact, passing from $\B$ to $\P$, suppose
-we have a species $F : \P \to \Set$; then the analytic functor $\analytic
-F$ is given by \[ \analytic F\ A = \coend{(n:\N)} (\iota n \to A) \times F\
-n, \] where $\iota : \P \to \Set$ in this case sends the natural
-number $n$ to the set $\fin n$.  Note that functions $\fin n \to A$
-are in bijection with the $n$-fold product $A^n$, so $\analytic F\ A$ may
-equivalently be expressed as \[ \analytic F\ A = \coend{(n:\N)} F\ n \times
-A^n. \] The coend, in this case, is a quotient by permutations on
-$\fin n$, which act on $F\ n \times A^n$ by permuting the elements of
-the $n$-fold product.  We may therefore suggestively (if informally)
-write
+closed under sums, products, composition, and least fixed points.
+They also have corresponding \term{generating functions} (indeed, part
+of the motivation of Joyal's work seems to have been to categorify the
+theory of generating functions).  In fact, passing from $\B$ to $\P$,
+suppose we have a species $F : \P \to \Set$; then the analytic functor
+$\analytic F$ is given by \[ \analytic F\ A = \coend{(n:\N)} (\iota n
+\to A) \times F\ n, \] where $\iota : \P \to \Set$ in this case sends
+the natural number $n$ to the set $\fin n$.  Note that functions $\fin
+n \to A$ are in bijection with the $n$-fold product $A^n$, so
+$\analytic F\ A$ may equivalently be expressed as \[ \analytic F\ A =
+\coend{(n:\N)} F\ n \times A^n. \] The coend, in this case, is a
+quotient by permutations on $\fin n$, which act on $F\ n \times A^n$
+by permuting the elements of the $n$-fold product.  We may therefore
+suggestively (if informally) write
 \[ \analytic F\ A = \sum_{n : \N} F\ n \times \frac{A^n}{n!} \] which very
 strongly resembles the \term{exponential generating function}
 associated to the species $F$, \[ F(x) = \sum_{n \geq 0} ||F\ n||
