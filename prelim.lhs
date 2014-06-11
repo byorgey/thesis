@@ -81,6 +81,8 @@ Metavariable conventions used throughout this dissertation include:
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
+\todo{Need to add a discussion of path induction.}
+
 \term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
 type theory~\citep{martin1975intuitionistic, martin1984intuitionistic}
 arising out of Vladimir Voevodsky's Univalent Foundations
@@ -622,33 +624,12 @@ Here, then, is a better definition:
 So the compositions of the functors $F$ and $G$ do not \emph{literally}
 have to be the identity functor, but only (naturally) \emph{isomorphic} to
 it.  This does turn out to be a well-behaved notion of sameness for
-categories \bay{(although you'll have to take my word for it)}.
+categories. \bay{(although you'll have to take my word for it)}.
 
-\todo{working here, re-incorporating blog post into this section}
-
-In set theory, a function is a bijection---that is, an isomorphism of
-sets---if and only if it is both injective and surjective.  By
-analogy, one might wonder what properties a functor $F : \mathbb{C}
-\to \mathbb{D}$ must have in order to be one half of an equivalence.
-This leads to the following definition:
-
-\begin{defn} \label{defn:cat-one-sided-equiv}
-  $\C$ is \term{one-sided equivalent} to $\D$ if there is a functor $F
-  : \C \to \D$ which is full and faithful (\ie a bijection on each
-  hom-set) as well as \term{essentially surjective}, that is, for
-  every object $D \in \D$ there exists some object $C \in \C$ such
-  that $F(C) \iso D$.
-\end{defn}
-
-It is not hard to show that every equivalence is a one-sided
-equivalence.  However, showing that a one-sided equivalence is an
-equivalence requires the axiom of choice; intuitively, the problem is
-that there is no canonical way to choose the action of the inverse
-functor $G$. A much fuller discussion is given in \pref{sec:AC}, but
-it's worth mentioning one of the punchlines now: in category theory
-founded in HoTT rather than in set theory, the three definitions given
-above are all simply equivalent, without violating the principle of
-equivalence and without any need for AC!
+There is much more to say about equivalence of categories;
+\pref{sec:AC} picks up the thread with a much fuller discussion of the
+relationships among equivalence of categories, equality, the axiom of
+choice, and classical versus constructive logic.
 
 \paragraph{Adjunctions}
 

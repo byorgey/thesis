@@ -315,74 +315,155 @@ problem for computation.
 
 Another place AC shows up in category theory, as hinted in
 \pref{sec:ct-fundamentals}, is in relation to equivalence of
-categories.  Recall the two different notions of equivalence:
+categories.  In fact, the underlying issue is the same, that is,
+functors defined only up to unique isomorphism; equivalence of
+categories is just a particularly important instantiation.
 
+Recall, from \pref{sec:ct-fundamentals}, the definition of equivalence
+of categories:
 \begin{repdefn}{defn:cat-equiv}
   An \term{equivalence} between $\C$
   and $\D$ is given by functors $\BackForth \C F G \D$ which are
   inverse up to natural isomorphism, that is, $GF \iso 1_\C$ and $FG
   \iso 1_\D$.
 \end{repdefn}
+In set theory, a function is a bijection---that is, an isomorphism of
+sets---if and only if it is both injective and surjective.  By
+analogy, one might wonder what properties a functor $F : \C \to \D$
+must have in order to be one half of an equivalence.  This leads to
+the following definition:
 
-\begin{repdefn}{defn:cat-one-sided-equiv}
-  $\C$ is \term{one-sided equivalent} to $\D$ if there is a functor $F
+\begin{defn} \label{defn:protoequiv}
+  $\C$ is \term{protoequivalent} to $\D$ if there is a functor $F
   : \C \to \D$ which is full and faithful (\ie a bijection on each
   hom-set) as well as \term{essentially surjective}, that is, for
   every object $D \in \D$ there exists some object $C \in \C$ such
   that $F(C) \iso D$.
-\end{repdefn}
+\end{defn}
 
-Every equivalence is a one-sided equivalence, but to prove every
-one-sided equivalence is an equivalence requires AC.  In more detail,
-suppose $F : \C \to \D$ is fully faithful and essentially surjective.
-To construct an equivalence between $\C$ and $\D$, we must define a
-functor $G : \D \to \C$ and show it is inverse to $F$ (up to natural
-isomorphism).  However, to define $G$ we must give its action on each
-object $D \in \D$, that is, a function $\Ob \D \to \Ob \C$.  We know
-that for each $D \in \D$ there \emph{exists} some object $C \in \C$
-with $F\ C \iso D$; that is, $\{ \{ C \in \C \mid F\ C \iso D \}
-\mid D \in \D \}$ is a collection of nonempty sets.  However, in a
-non-constructive logic, knowing these sets are nonempty does not
-actually give us any objects; we must use the axiom of choice to yield
-a choice function $\Ob \D \to \Ob \C$, which we can use as the object
-mapping of the functor $G$.  In fact, the association goes deeper yet:
-it turns out that the statement
+Intuitively, this says that $F$ ``embeds'' an entire copy of $\C$ into
+$\D$ (the ``full and faithful'' part of the definition), and that
+every object of $D$ which is not directly in the image of $F$ is
+isomorphic to one that is.  So every object of $\D$ is ``included'' in
+the image of $\C$, at least up to isomorphism (which is supposed to be
+all that matters).
+
+So, are equivalence and protoequivalence the same thing? In one
+direction, it is not too hard to show that every equivalence is a
+protoequivalence: if $F$ and $G$ are inverse up to natural
+isomorphism, then they must be fully faithful and essentially
+surjective.  It would be nice if the converse were also true: in that
+case, in order to prove two categories equivalent, it would suffice to
+construct a single functor $F$ from one to the other, and show that
+$F$ has the requisite properties.  This often ends up being more
+convenient than explicitly constructing two functors and showing they
+are inverse.  However, it turns out that the converse is provable
+\emph{only} if one accepts the axiom of choice!\footnote{At this point
+  I should note that ``protoequivalence'' is not standard terminology,
+  and now it should be clear why: there is no need for a separate term
+  if one accepts the axiom of choice.}  To get an intuitive sense for
+why this is, suppose $F : \C \to \D$ is fully faithful and essentially
+surjective.  To construct an equivalence between $\C$ and $\D$
+requires defining a functor $G : \D \to \C$ which is inverse to $F$
+(up to natural isomorphism).  However, to define $G$ we must give its
+action on each object $D \in \D$, that is, we must exhibit a function
+$\Ob \D \to \Ob \C$.  We know that for each $D \in \D$ there
+\emph{exists} some object $C \in \C$ with $F\ C \iso D$. That is, \[
+\{ \left\{ C \in \C \mid F\ C \iso D \} \mid D \in \D \right\} \] is a
+collection of nonempty sets.  However, in a non-constructive logic,
+knowing these sets are nonempty does not actually give us any objects.
+Instead, we must use the axiom of choice, which yields a choice
+function $\Ob \D \to \Ob \C$, and this function can serve as the
+object mapping of the functor $G$.
+
+So AC is required to prove that every protoequivalence is an
+equivalence.  In fact, the association goes deeper yet: it turns out
+that the statement
 \begin{equation}
-  \text{every fully faithful, essentially surjective functor is an
-    equivalence} \tag{FFES} \label{eq:ffes-eqv}
+  \text{every protoequivalence is an equivalence} \tag{AP} \label{eq:AP-eqv}
 \end{equation}
-not only requires AC, but is \emph{equivalent} to it
-\citep{cat-equivalence-AC}!
+(let's call this the ``Axiom of Protoequivalence'', or AP) not only
+requires AC, but is \emph{equivalent} to it, in the sense that AC is
+derivable given AP as an exiom \citep{cat-equivalence-AC}!
 
-In theory, this poses no particular problems; if we want to avoid AC
-we can just stick to the inverse-functors definition of equivalence.
-In practice, however, it is often much easier to define a single
-functor and prove it has the right properties than it is to produce a
-pair of inverse functors. It would be a shame to lose \eqref{eq:ffes-eqv} as a
-tool for constructing equivalences, especially since it seems like it
-really ``ought to'' work---in the sense that the use of AC is
-``benign'', as discussed previously.
+On purely intuitive grounds, however, it still ``feels'' like AP
+``ought to be'' true.  The particular choice of functor $G : \D \to
+\C$ ``doesn't matter'', since it makes no difference up to
+isomorphism.  One is therefore left in the awkward position of having
+two logically equivalent statements which it seems ``ought to be''
+respectively affirmed and rejected.
 
-One may therefore ask whether there is a slightly different framework
-in which we may recover (something like) \eqref{eq:ffes-eqv}, without
-requiring AC.  There are two main approaches.  The first is to
-generalize functors, using either cliques (\pref{sec:cliqes}) or
-anafunctors (\pref{sec:anafunctors}).  The second, to be explored
-later, is to generalize the notion of equality---this is the approach
-taken by HoTT.
+Obviously this is not a tenable state of affairs; there are (at least)
+four options for resolving the situation.
 
-The theory of \term{cliques} is presented first---cliques come close
-to being a way around AC, and although they don't completely surmount
-the problem in the end, they offer some good intuition for
-understanding \term{anafunctors}, presented in
-\pref{sec:anafunctors}.  Later, \pref{sec:anafunctors-hott} will
-present these concepts as they arise in HoTT.
+\begin{enumerate}
+\item If one is feeling particularly rational, one can simply say,
+  ``Since AC and AP are equivalent, and I reject AC, I must therefore
+  reject AP as well; my \emph{feelings} about it are irrelevant.''
+\end{enumerate}
+
+This is a perfectly sensible and workable approach.  It's important to
+highlight, therefore, that the ``problem'' is in some sense more a
+\emph{philosophical} problem than a \emph{technical} one.  One can
+perfectly well adopt the above solution and continue to do category
+theory; it just may not be the ``nicest'' (a philosophical rather than
+technical notion!) way to do it.
+
+There are also, however, several more creative options:
+
+\begin{enumerate}[resume]
+\item In a classical setting, one can avoid AC and affirm (an analogue
+  of) AP by generalizing the notion of functor to that of
+  \term{anafunctor}~\cite{makkai1996avoiding}.  Essentially, an
+  anafunctor is a functor ``defined only up to unique isomorphism''.
+  It turns out that the appropriate analogue of AP, where ``functor''
+  has been replaced by ``anafunctor'', is indeed true---and neither
+  requires nor implies AC.  Anafunctors ``act like'' functors in a
+  sufficiently strong sense that one can simply do category theory
+  using anafunctors in place of functors.  However, one also has to
+  replace natural transformations with ``ananatural transformations'',
+  and so on, and it quickly gets rather fiddly.  Anafunctors are
+  defined and discussed in more detail in \pref{sec:anafunctors}.
+
+\item In a constructive setting, a witness of essential surjectivity
+  is necessarily a function which gives an \emph{actual witness} $C
+  \in \C$, along with a proof that $F\ C \cong D$, for each $D \in
+  \D$.  In other words, a constructive witness of essential
+  surjectivity is already a ``choice function'', and an inverse
+  functor $G$ can be defined directly, with no need to invoke AC and
+  no need for anafunctors.  So in constructive logic, AP is simply
+  true.  However, this version of ``essential surjectivity'' is rather
+  strong, in that it forces you to make choices you might prefer not
+  to make: for each $D \in \D$ there might be many isomorphic $C \in
+  \C$ to choose from, with no ``canonical'' choice, and it is annoying
+  (again, a philosophical rather than technical consideration!) to be
+  forced to choose one.
+
+\item Instead of generalizing functors, a more direct solution is to
+  \emph{generalize the notion of equality}.  After all, what really
+  seems to be at the heart of all these problems is differing notions
+  of equality (\ie equality of sets, isomorphism, equivalence \dots).
+  In fact, this is precisely what is done in HoTT. \bay{As a
+    historical note
+    \url{http://byorgey.wordpress.com/2014/05/13/unique-isomorphism-and-generalized-the/\#comment-13123},
+    it seems that the original work on anafunctors is part of the same
+    intellectual thread that led to the development of HoTT.}  It
+  turns out that if one builds up suitable notions of category theory
+  on top of HoTT instead of set theory, then AP is true, without the
+  need for AC, and even with a \emph{weaker} version of essential
+  surjectivity that corresponds more closely to essential surjectivity
+  in classical logic, using propositional truncation to encode the
+  classical notion of existence. This is discussed in more detail
+  in \pref{sec:ct-hott}.
+\end{enumerate}
 
 \subsection{Cliques}
 \label{sec:cliques}
 
-A clique is a formal way of representing the informal notion of
-``equivalence class of uniquely isomorphic objects''.
+As a preface to anafunctors, we begin with a brief outline of the
+theory of \term{cliques}, which are a formal way of representing the
+informal notion of ``equivalence class of uniquely isomorphic
+objects''. \todo{say something else here?}
 
 \begin{defn}
   A \term{clique} $(I,A,u)$ in a category
