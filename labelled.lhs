@@ -284,7 +284,8 @@ be finite. \bay{this means intuitively that infinite data structures
   categories, filtered colimits.  Show the functor $(-)^\N$
   (corresponding to infinite streams) does not preserve filtered
   colimits---consider $\N$ as the filtered colimit over the diagram of
-  finite subsets of $\N$ and inclusion maps.}
+  finite subsets of $\N$ and inclusion maps. See
+  \url{http://mathoverflow.net/questions/171452/examples-of-functors-mathbfset-to-mathbfset-which-are-not-analytic}.}
 
 \todo{What is the relationship with ``shapely types''?}
 
