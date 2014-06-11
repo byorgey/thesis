@@ -421,6 +421,9 @@ throughout this work.
   opposed to proper classes; considering the category of \emph{all}
   categories gets us in trouble with Russell).  Note that $\cat{1}$ is
   the terminal object in $\Cat$.
+\item $\Grp$, the category of groups and group homomorphisms.
+\item $\Vect_K$, the category of vector spaces over the field $K$,
+  together with linear maps.
 \end{itemize}
 
 \paragraph{Bifunctors}

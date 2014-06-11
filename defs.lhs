@@ -305,6 +305,8 @@
 
 \newcategory{Set}     % sets and total functions
 \newcategory{FinSet}  % finite sets
+\newcategory{Grp}     % groups
+\newcategory{Vect}    % vector spaces
 \newcategory{Cat}     % (small) categories
 \newcategory{Spe}     % species
 \newcategory{CSpe}    % constructive species
@@ -317,6 +319,8 @@
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
+
+\newcommand{\FinNSub}{\cat{Fin}\N_{\subseteq}}
 
 \newcommand{\fin}[1]{\ensuremath{[#1]}}
 
@@ -361,7 +365,9 @@
 \newcommand{\pullback}[1][dr]{\save*!/#1-1.2pc/#1:(-1,1)@@^{||-}\restore}
 
 \newcommand{\Span}[5]{\xymatrix{#1 & #3 \ar[l]_-{#2} \ar[r]^-{#4} & #5}}
+\newcommand{\Cospan}[5]{\xymatrix{#1 \ar[r]_-{#2} & #3  & #5 \ar[l]^-{#4}}}
 \newcommand{\BackForth}[4]{\xymatrix{#1 \ar@@<.5ex>[r]^{#2} & #4 \ar@@<.5ex>[l]^{#3}}}
+\newcommand{\Parallel}[4]{\xymatrix{#1 \ar@@<.5ex>[r]^{#2} \ar@@<-.5ex>[r]_{#3} & #4 }}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Species

@@ -269,32 +269,30 @@ shape---and concluding with re-combining the new shape with the data
 mapping.
 
 Such a reshaping only has access to the labelled shape, and not to the
-values of type $A$, so it obviously cannot depend on them; however,
+values of type $A$, so it obviously cannot depend on them. However,
 this is not surprising, since this property is already implied by
 naturality.  More interesting is the fact that the set of labels must
-be finite. \bay{this means intuitively that infinite data structures
-  are not analytic---there are not enough labels.  e.g. streams.  for
-  any finite number of labels, there are polymorphic functions out of
-  streams that can't be represented (e.g. with $k$ labels, take the
-  $k+1$st stream element).}
-
-\todo{Should this be included?  If so, where should it go?  Joyal
-  characterized analytic functors as those which preserve filtered
-  colimits, cofiltered limits, and weak pullbacks.  Define filtered
-  categories, filtered colimits.  Show the functor $(-)^\N$
-  (corresponding to infinite streams) does not preserve filtered
-  colimits---consider $\N$ as the filtered colimit over the diagram of
-  finite subsets of $\N$ and inclusion maps. See
-  \url{http://mathoverflow.net/questions/171452/examples-of-functors-mathbfset-to-mathbfset-which-are-not-analytic}.}
+be finite. This means, intuitively, that functors corresponding to
+infinite data structures are not analytic.  It is not possible to
+represent all possible natural maps out of an infinite data structure
+by natural maps out of structures containing only a finite number of
+labels.  This is proved more formally in \pref{sec:analytic-finite}.
 
 \todo{What is the relationship with ``shapely types''?}
 
 Analytic functors have many nice properties: for example, they are
-closed under sums, products, composition, and least fixed points.
-They also have corresponding \term{generating functions} (indeed, part
-of the motivation of Joyal's work seems to have been to categorify the
-theory of generating functions).  In fact, passing from $\B$ to $\P$,
-suppose we have a species $F : \P \to \Set$; then the analytic functor
+closed under sums, products, composition, and least fixed
+points. \todo{cite. Joyal?} \todo{Expand.  Give a bit more
+  context/justification.}
+
+\subsection{Analytic functors and generating functions}
+\label{sec:analytic-generating}
+
+Another nice property of analytic functors is that they have
+corresponding \term{generating functions} (indeed, part of the
+motivation of Joyal's work seems to have been to categorify the theory
+of generating functions).  In fact, passing from $\B$ to $\P$, suppose
+we have a species $F : \P \to \Set$; then the analytic functor
 $\analytic F$ is given by \[ \analytic F\ A = \coend{(n:\N)} (\iota n
 \to A) \times F\ n, \] where $\iota : \P \to \Set$ in this case sends
 the natural number $n$ to the set $\fin n$.  Note that functions $\fin
@@ -309,6 +307,112 @@ strongly resembles the \term{exponential generating function}
 associated to the species $F$, \[ F(x) = \sum_{n \geq 0} ||F\ n||
 \times \frac{x^n}{n!}. \] Of course, the resemblance is no
 accident! \todo{Explain formal connection?}
+
+\subsection{Analytic functors and finiteness}
+\label{sec:analytic-finite}
+
+Joyal~\cite{Joyal86} characterized analytic functors as those which
+preserve \term{filtered colimits}, \term{cofiltered limits}, and
+\term{weak pullbacks}.  It is instructive to use this characterization
+as a lens to consider some examples of functors which are \emph{not}
+analytic.
+
+\begin{defn}
+  A \term{filtered} category $\C$ is one which ``has all finite
+  cocones'', that is, for any finite collection of objects and morphisms
+  in $\C$, there is some object $C \in \C$ with morphisms from all the
+  objects in the collection to $C$, such that all the relevant triangles
+  commute.
+
+  Equivalently, a filtered category is one for which
+  \begin{itemize}
+  \item there exists at least one object;
+  \item any two objects $C_1, C_2 \in \C$ have an ``upper bound'',
+    that is, an object $C_3$ with morphisms \[ \Cospan {C_1} {} {C_3}
+    {} {C_2}; \]
+  \item any two parallel morphisms $\Parallel {C_1} f g {C_2}$ also
+    have an ``upper bound'', that is, another morphism \[
+    \xymatrix{C_1 \ar@@<.5ex>[r]^{f} \ar@@<-.5ex>[r]_{g} & C_2
+      \ar[r]^h & C_3} \] such that $f \then h = g \then h$.
+  \end{itemize}
+  These binary upper bound operations on objects and morphisms may be
+  used to inductively ``build up'' cocones for arbitrary diagrams in
+  $\C$.
+\end{defn}
+
+This can be seen as a ``categorification'' of the notion of a
+\term{directed set} (also known as a \term{filtered set}), a preorder
+in which any two elements have an upper bound.  Categories can be seen
+as generalizations of preorders in which multiple morphisms are
+allowed between each pair of objects, so the above definition has to
+extend the idea of pairwise upper bounds to apply to parallel
+morphisms as well as objects; in a preorder there are no parallel
+morphisms so this does not come up.
+
+\begin{ex}
+  Any category with a terminal object is filtered: the terminal object
+  may be taken as the upper bound of any two objects, and the unique
+  morphism to the terminal object as the upper bound of any two
+  parallel morphisms.
+\end{ex}
+
+\begin{ex}
+  The poset $(\N,\leq)$, considered as a category whose objects are
+  natural numbers, with morphisms $m \leq n$, is a filtered
+  category. The upper bound of any two objects is their maximum, and
+  there are no parallel morphisms to consider.
+
+  \[ \xymatrix{0 \ar[r] & 1 \ar[r] & 2 \ar[r] & 3 \ar[r] & \dots} \]
+
+  \todo{Historically, this was one of the main examples from which the
+    idea of filtered categories was generalized.  Iterated limits,
+    etc.}
+\end{ex}
+
+ \todo{Some example of a filtered category with nontrivial
+    parallel morphisms, which is not cocomplete?}
+
+\begin{ex}
+  Consider the category $\FinNSub$ whose objects are finite subsets of
+  $\N$ and whose morphisms are inclusion maps.  That is, whenever $S
+  \subseteq T$ there is a single morphism $\iota_{ST} : S \to T$
+  defined by $\iota_{ST}(s) = s$.  Since this is a nonempty preorder,
+  it suffices to note that any two finite sets $S$ and $T$ have $S
+  \union T$ as an upper bound.
+\end{ex}
+
+\begin{ex}
+  Filtered categories are also a generalization of finitely cocomplete
+  categories, \ie categories having all finite colimits.  In
+  particular, categories having all finite colimits can be
+  characterized as those having an initial object, all binary
+  coproducts, and all coequalizers: these are exactly parallel to the
+  three criteria given above for filtered categories, with an extra
+  ``universal property'' corresponding to each (for example, the
+  binary coproduct of two objects is an upper bound along with a
+  universal property).
+
+  Therefore, any (finitely) cocomplete category is automatically
+  filtered: for example, $\Set$, $\Grp$, and $\Vect$.
+\end{ex}
+
+Recall that a \term{diagram} in $\C$ is a functor $\I \to \C$ from
+some ``index category'' $\I$, which determines the ``shape'' of
+diagrams in $\C$.
+
+\begin{defn}
+  A \term{filtered diagram} in $\C$ is a functor $\I \to \C$ from a
+  filtered index category $\I$.
+\end{defn}
+
+That is, a filtered diagram is a diagram that ``looks like'' \todo{finish}
+
+\begin{defn}
+  A \term{filtered colimit} is a colimit of a filtered diagram
+\end{defn}
+
+\todo{ 
+  \url{http://mathoverflow.net/questions/171452/examples-of-functors-mathbfset-to-mathbfset-which-are-not-analytic}.}
 
 \section{Labelled structures}
 \label{sec:labelled-structures}
