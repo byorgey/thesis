@@ -1619,7 +1619,7 @@ proposition, it may seem that there is no useful way to construct a
 function $\ptrunc{A} \to B$.  However, this is not true: if one can
 \emph{uniquely characterize} a particular value of $B$---that is,
 create a mere proposition $(b : B) \times Q(b)$---one can then define
-a function $\ptrunc{A} \to (b : B) \times Q(b)$ out of a function $A \to
+a function $\ptrunc{A} \to (b : B) \times Q(b)$ from a function $A \to
 (b : B) \times Q(b)$, and finally project out the $B$ to obtain a
 function $\ptrunc A \to B$.  This ``trick'' is detailed in the HoTT
 book~\citep[\Sect 3.9]{hottbook}; Exercise 3.19 is an excellent
@@ -1636,7 +1636,7 @@ defining \emph{arbitrary} functors $\BT \to \PT$.  However, we are not
 interested in constructing \emph{any old} functor, but rather a very
 specific one, namely, an inverse to $\fin - : \PT \to \BT$---and the
 inverse is uniquely determined.  In essence, the construction of
-$\size$ proceeds by first constructing a function paired with a proof
+$\size$ proceeds by first constructing a functor paired with a proof
 that, together with $\fin -$, it forms an equivalence---altogether a
 mere proposition---and then projecting out the functor.
 
