@@ -492,6 +492,9 @@ many distinct elements.  Thus $F\ (\colim \FinNSub) \ncong \colim
 (F\ \FinNSub)$, and we conclude that $F$ is not analytic since it does
 not preserve filtered colimits.
 
+\todo{Give a bit more intuition about this example.  Mention other
+  examples.}
+
 \section{Labelled structures}
 \label{sec:labelled-structures}
 
