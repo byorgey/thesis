@@ -9,6 +9,7 @@
 \todo{List contributions of this chapter somewhere?}
 \todo{Need a story for building with both color or black/white
   figures}
+\todo{Put back in discussion of equivalence vs equipotence of species?}
 
 The theory of combinatorial species, introduced by \citet{joyal}, is a
 unified theory of \term{combinatorial structures} or \term{shapes}.
@@ -2312,6 +2313,7 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:pointing}
   \end{figure}
 
+\todo{Put cardinality restriction back in.}
 
 \section{Examples}
 \label{sec:examples}
