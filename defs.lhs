@@ -328,6 +328,9 @@
 \newcommand{\D}{\bbb{D}}
 \newcommand{\E}{\bbb{E}}
 
+% limits and colimits
+\DeclareMathOperator{\colim}{colim}
+
 % anafunctors
 \newcommand{\Spec}{\bbb{S}}
 \newcommand{\lana}[1]{\overleftarrow{#1}}
