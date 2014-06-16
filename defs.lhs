@@ -384,15 +384,19 @@
 \newcommand{\T}{\Sp{T}}
 \newcommand{\Par}{\Sp{Par}}
 \newcommand{\Bag}{\Sp{E}}
+\newcommand{\Rubbish}{\bigcirc}
 \newcommand{\Cyc}{\Sp{C}}
 \newcommand{\Perm}{\Sp{S}}
 \newcommand{\Bin}{\Sp{B}}
+\newcommand{\Der}{\Sp{Der}}
 
 \newcommand{\Zero}{\msf{0}}
 \newcommand{\One}{\msf{1}}
 
 \newcommand{\sprod}{\cdot}
 \newcommand{\fcomp}{\mathbin{\square}}
+
+\newcommand{\pointed}[1]{\ensuremath{{#1}^{\bullet}}}
 
 \providecommand{\comp}{\circ}
 

@@ -631,6 +631,11 @@ dia = vcat' (with & sep .~ 5)
 
 \section{Other stuff}
 
+\todo{Discuss variant of $\Bag$ which stores no data.}
+
+\todo{Discuss decomposition of structures using category of partial
+  isomorphisms for labels?}
+
 \todo{Examples. Bounded tree width.  Generic programming.}
 
 \todo{Apply combinatorics?  e.g. generating trees.  Random generation,
