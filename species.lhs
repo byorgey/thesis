@@ -657,6 +657,8 @@ categories.
 \subsection{Species in type theory}
 \label{sec:species-in-type-theory}
 
+\todo{Mention encoding primitive species as HITs somewhere.}
+
 One generalization that will be of particular interest is a ``port''
 of species into HoTT. Recall that $\BT$ denotes the \hott{groupoid}
 with the object type \[ \FinTypeT \defeq (A : \Type) \times \isSet(A)
