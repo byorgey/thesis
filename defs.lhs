@@ -258,6 +258,7 @@
 
 \newcommand{\hott}[1]{\textit{h}-#1}
 
+\newmsf{refl}
 \newmsf{isSet}
 \newmsf{isFinite}
 

@@ -81,8 +81,6 @@ Metavariable conventions used throughout this dissertation include:
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
-\todo{Need to add a discussion of path induction.}
-
 \term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
 type theory~\citep{martin1975intuitionistic, martin1984intuitionistic}
 arising out of Vladimir Voevodsky's Univalent Foundations
@@ -100,44 +98,7 @@ and isomorphism---and these are topics central to homotopy type theory
 as well.  In a sense, HoTT is what results when one begins with
 Martin-L\"of type theory (MLTT) and then takes issues of equality and
 isomorphism---and in particular the principle of equivalence---very
-seriously.
-
-In more detail, some of the specific ways that the use of HoTT
-benefits this work, to be explored in more detail later, include:
-\begin{itemize}
-\item HoTT gives a convenient framework for making formal the idea of
-  ``transport'': using an isomorphism $\sigma : L_1 \bij L_2$ to
-  functorially convert objects built from $L_1$ to ones built from
-  $L_2$.  This is a fundamental operation in HoTT, and is also central
-  to the definition of species (\pref{sec:species-definition}).  In
-  fact, when constructing species with HoTT as a foundation, transport
-  simply comes ``for free''---in contrast to using set theory as a
-  foundation, in which case transport must be tediously defined (and
-  proved correct) for each new species.
-\item The \term{univalence axiom} and \term{higher inductive types}
-  make for a rich notion of propositional equality, over which the
-  ``user'' has a relatively high degree of control.  For example,
-  using higher inductive types, it is easy to define various sorts of
-  \emph{quotient types} which would be tedious to define and work with
-  in MLTT.  For example, one particular manifestation of this general
-  idea is the fact that \term{coends} in HoTT are just $\Sigma$-types
-  (\pref{sec:ct-hott}).
-\item \term{Propositional truncation} (explained below) is an
-  important tool for properly modelling concepts from classical
-  mathematics in a constructive setting.  In particular we use it to
-  model the concept of \emph{finiteness} (\pref{sec:finiteness-hott}).
-\item Homotopy type theory allows doing category theory without using
-  the axiom of choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
-  important in a constructive or computational setting.
-\end{itemize}
-
-Although not the main goal of this work, I hope that it can serve
-as a good example of the ``practical'' application of HoTT and its
-benefits for programming.  Much of the work on HoTT has so far been
-aimed at mathematicians---appropriately so, since they need more
-convincing---but new foundations for constructive mathematics must
-almost by necessity have profound implications for the foundations of
-programming as well~\cite{martin1982constructive}.
+seriously, generalizing equality to isomorphism in a coherent way.
 
 We begin our brief tour of HoTT with its syntax.
 
@@ -168,17 +129,18 @@ constructors $\zero : \N$ and $\suc : \N \to \N$, and $\Fin : \N \to
 constructors $\fzero : \Fin (\suc n)$ and $\fsuc : \Fin n \to \Fin
 (\suc n)$.
 
-Although Agda notation~\cite{Agda} is mostly used for dependent pairs
-and functions, the traditional notations $\sum_{x : A} B(x)$ and
-$\prod_{x:A} B(x)$ (instead of $(x:A) \times B(x)$ and $(x:A) \to
-B(x)$, respectively) are sometimes used for emphasis. As usual, the
-abbreviations $A \times B$ and $A \to B$ denote non-dependent (\ie
-when $x$ does not appear free in $B$) pair and function types,
-respectively. \later{implicit quantification? Do we need this? Also,
-  to reduce clutter, we sometimes make use of implicit quantification:
-  free type variables in a type---like $A$ and $B$ in $A \times (B \to
-  \N)$---are implicitly universally quantified, like $(A : \Type) \to
-  (B : \Type) \to A \times (B \to \N)$.}
+Although Agda notation~\cite{Agda} is mostly used in this dissertation
+for dependent pairs and functions, the traditional notations $\sum_{x
+  : A} B(x)$ and $\prod_{x:A} B(x)$ (instead of $(x:A) \times B(x)$
+and $(x:A) \to B(x)$, respectively) are sometimes used for
+emphasis. As usual, the abbreviations $A \times B$ and $A \to B$
+denote non-dependent (\ie when $x$ does not appear free in $B$) pair
+and function types, respectively. \later{implicit quantification? Do
+  we need this? Also, to reduce clutter, we sometimes make use of
+  implicit quantification: free type variables in a type---like $A$
+  and $B$ in $A \times (B \to \N)$---are implicitly universally
+  quantified, like $(A : \Type) \to (B : \Type) \to A \times (B \to
+  \N)$.}
 
 \paragraph{Equality}
 
@@ -192,36 +154,77 @@ HoTT distinguishes between two different types of equality:
   example, the application of a lambda term to an argument is
   judgmentally equal to its $\beta$-reduction.  Judgmental equality is
   reflexive, symmetric, and transitive as one would expect.
-  Judgmental equality is a meta-property of the system; it is not
+  Note, however, that judgmental equality is not reflected as a
+  proposition in the logical interpretation of types, so it is not
   possible to reason about or to prove judgmental equalities
   internally to HoTT.
 \item \term{Propositional} equality.  Given $x, y : A$, we write $x
   =_A y$ for the proposition that $x$ and $y$ are equal (at the type
   $A$).  The $A$ subscript may also be omitted, $x = y$, when it is
-  clear from the context. Unlike judgmental equality, where $x \jeq
-  y$ is a \term{judgment}, the propositional equality $x = y$ is a
-  \emph{type} whose inhabitants are evidence or \emph{proofs} of the
-  equality of $A$ and $B$.  Thus propositional equalities can be
-  constructed and reasoned about \emph{within} HoTT.  Inhabitants of
-  $x = y$ are often called \term{paths} from $x$ to $y$; the
-  intuition, taken from homotopy theory, is to think of paths between
-  points in a topological space.
+  clear from the context. Unlike judgmental equality, where $x \jeq y$
+  is a \term{judgment}, the propositional equality $x = y$ is a
+  \emph{type} (or a \emph{proposition}) whose inhabitants are evidence
+  or \emph{proofs} of the equality of $A$ and $B$.  Thus propositional
+  equalities can be constructed and reasoned about \emph{within} HoTT.
+  Inhabitants of $x = y$ are often called \term{paths} from $x$ to
+  $y$; the intuition, taken from homotopy theory, is to think of paths
+  between points in a topological space.  The important point about
+  this intuition is that a path from a point $x$ to a point $y$ does
+  not witness the fact that $x$ and $y$ are literally the \emph{same}
+  point, but rather specifies a \emph{process} for getting from one to
+  the other.  As we will see, the analogue of this intuition in type
+  theory is the fact that a path of type $x = y$ can have
+  \emph{nontrivial computational content} specifying how to convert
+  between $x$ and $y$.
 
   Note that it is possible (and often useful!) to have nontrivial
   higher-order paths, \ie paths between paths, paths between paths
   between paths, and so on.
 \end{itemize}
 
-The structure of HoTT guarantees that functions are always functorial
-with respect to propositional equality. That is, if $e : x = y$ is a
-path between $x$ and $y$, and $f$ is a function of an appropriate
-type, then it is possible to construct a proof that $f(x) = f(y)$ (or
-a suitable analogue in the case that $f$ has a dependent type).  Given
-$e : x = y$ we also have $P(x) \to P(y)$ for any type family $P$,
-called the \term{transport} of $P(x)$ along $e$ and denoted
-$\transport{P}{e}$, or simply $e_*$ when $P$ is clear from context.
-For example, if $e : A = B$ then $\transport{X \mapsto X \times (X \to
-  C)}{e} : A \times (A \to C) \to B \times (B \to C)$.
+\paragraph{Path induction}
+
+To make use of a path $p : x = y$, one may use the induction principle
+for paths, or \term{path induction}.  Path induction applies when is
+trying to prove a statement of the form
+\begin{equation} \label{eq:path-ind-form}
+\all {x,y} {(p : x = y) \to
+  P(p,x,y)}.
+\end{equation}
+There is also an equivalent induction principle, \term{based path
+  induction}, which applies when proving a statement of the form \[
+\all x {(x = y) \to P x}, \] where $y$ is fixed.  Crucially, however,
+neither can be used to prove statements of the form $(x = y) \to P$
+where both $x$ and $y$ are fixed.
+
+For the precise details of (based) path induction, see the HoTT
+book~\cite{hottbook}; the simple intuition suffices for this work: to
+prove \ref{eq:path-ind-form} it suffices to assume that $p$ is $\refl$
+and that $x$ and $y$ are literally the same, \ie it suffices to prove
+$P(\refl,x,x)$ for an arbitrary $x$.
+
+It is important to note that this does \emph{not} imply all paths are
+equal to \refl!  It simply expresses that all paths must suitably
+``act like'' \refl, inasmuch as proving a statement holds for \refl is
+enough to guarantee that it will hold for all paths, no matter how
+they are derived or what their computational content.
+
+Path induction has some immediate consequences.  First, it guarantees
+that functions are always functorial with respect to propositional
+equality. That is, if $e : x = y$ is a path between $x$ and $y$, and
+$f$ is a function of an appropriate type, then it is possible to
+construct a proof that $f(x) = f(y)$ (or a suitable analogue in the
+case that $f$ has a dependent type).  Indeed, this is not hard to
+prove via path induction: it suffices to show that one can construct a
+proof of $f(x) = f(x)$ in the case that $e$ is \refl, which is easily
+done using \refl again.  Given $e : x = y$ we also have $P(x) \to
+P(y)$ for any type family $P$, called the \term{transport} of $P(x)$
+along $e$ and denoted $\transport{P}{e}$, or simply $e_*$ when $P$ is
+clear from context.  For example, if $e : A = B$ then $\transport{X
+  \mapsto X \times (X \to C)}{e} : A \times (A \to C) \to B \times (B
+\to C)$.  Transport also follows easily from path induction: it
+suffices to note that $\idT : P(x) \to P(x)$ in the case when $e =
+\refl$.
 
 \paragraph{Equivalence and univalence}
 
@@ -357,6 +360,52 @@ turning $A$ into an $n$-type.  For example, the $0$-truncation
 $\ptrunc{A}_0$ turns $A$ into a set, by adding paths not between
 elements $a, b : A$, but between all pairs of parallel paths $p,q : a
 = b$.
+
+\subsection{Why HoTT?}
+\label{sec:why-hott}
+
+In the context of this dissertation, homotopy type theory is much more
+than just a convenient choice of concrete type theory to work in.  It
+is, in fact, quite central to this work.  It is therefore appropriate
+to conclude with a summary of specific ways that this work benefits
+from its use.  Many of these points are explored in more detail later
+in the dissertation.
+\begin{itemize}
+\item HoTT gives a convenient framework for making formal the idea of
+  ``transport'': using an isomorphism $\sigma : L_1 \bij L_2$ to
+  functorially convert objects built from $L_1$ to ones built from
+  $L_2$.  This is a fundamental operation in HoTT, and is also central
+  to the definition of species (\pref{sec:species-definition}).  In
+  fact, when constructing species with HoTT as a foundation, transport
+  simply comes ``for free''---in contrast to using set theory as a
+  foundation, in which case transport must be tediously defined (and
+  proved correct) for each new species.
+\item The \term{univalence axiom} and \term{higher inductive types}
+  make for a rich notion of propositional equality, over which the
+  ``user'' has a relatively high degree of control.  For example,
+  using higher inductive types, it is easy to define various sorts of
+  \emph{quotient types} which would be tedious to define and work with
+  in MLTT.  For example, one particular manifestation of this general
+  idea is the fact that \term{coends} in HoTT are just $\Sigma$-types
+  (\pref{sec:ct-hott}).
+\item \term{Propositional truncation} (explained below) is an
+  important tool for properly modelling concepts from classical
+  mathematics in a constructive setting.  In particular we use it to
+  model the concept of \emph{finiteness} (\pref{sec:finiteness-hott}).
+\item Homotopy type theory allows doing category theory without using
+  the axiom of choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
+  essential in a constructive or computational setting.
+\end{itemize}
+
+Although not its main goal, I hope that this work can serve as a
+good example of the ``practical'' application of HoTT and its benefits
+for programming.  Much of the work on HoTT has so far been aimed at
+mathematicians rather than computer scientists---appropriately so,
+since mathematicians tend to be more skeptical of type theory in
+general and constructive foundations in particular. However, new
+foundations for constructive mathematics must almost by necessity have
+profound implications for the foundations of programming as
+well~\cite{martin1982constructive}.
 
 \section{Category theory}
 \label{sec:category-theory}
