@@ -579,8 +579,9 @@ As an intuition for anafunctors it is helpful to keep in mind the
 equivalent concept of functors $\C \to \clq \D$---both represent
 functors whose ``values are specified only up to unique isomorphsim''.
 Such functors represent a many-to-many relationship between objects of
-$\C$ and objects of $\D$.  Normal functors may map multiple objects of
-$\C$ to the same object in $\D$; the novel aspect is the ability to
+$\C$ and objects of $\D$.  Normal functors, as with any function, may
+of course map multiple objects of
+$\C$ to the same object in $\D$.  The novel aspect is the ability to
 have a single object of $\C$ correspond to multiple objects of $\D$.
 The key idea is to add a class of ``specifications'' which mediate the
 relationship between objects in the source and target categories, in
@@ -677,9 +678,10 @@ dia =
     of $\C$ to have at least one specification $s$ which corresponds
     to it---that is, $\lana{F}$ must be surjective.
   \item Functors transport morphisms as well as objects.  For each
-    $s,t \in S$ and each $f : \lana{F}(s) \to \lana{F}(t)$ in $\C$,
-    there must be a morphism $F_{s,t}(f) : F_s(\lana{F}(s)) \to
-    F_t(\lana{F}(t))$ in $\D$:
+    $s,t \in S$ (the middle of the below diagram) and each $f :
+    \lana{F}(s) \to \lana{F}(t)$ in $\C$ (the left-hand side below),
+    there must be a morphism $F_{s,t}(f) : \rana{F}(s) \to
+    \rana{F}(t)$ in $\D$ (the right-hand side):
     \begin{center}
       \begin{diagram}[width=150]
 import SpeciesDiagrams
@@ -700,8 +702,8 @@ aOpts = with & gaps .~ Local 0.2 & headLength .~ Local 0.4
   \item Functors preserve identities: for each $s \in S$ we should
     have $F_{s,s}(\id_{\lana{F}(s)}) = \id_{\rana{F}(s)}$.
   \item Finally, functors preserve composition: for all $s,t,u \in
-    S$, $f : \lana{F}(s) \to \lana{F}(t)$, and $g : \lana{F}(t) \to
-    \lana{F}(u)$, it must be the case that $F_{s,u}(f \then g) =
+    S$ (in the middle below), $f : \lana{F}(s) \to \lana{F}(t)$, and $g : \lana{F}(t) \to
+    \lana{F}(u)$ (the left side below), it must be the case that $F_{s,u}(f \then g) =
     F_{s,t}(f) \then F_{t,u}(g)$:
     \begin{center}
       \begin{diagram}[width=150]
@@ -779,9 +781,12 @@ anafunctor \[ \Span \C \Id \C F \D. \] Anafunctors also compose.
 Given compatible anafunctors $F : \Span \C {\lana F} S {\rana F} \D$
 and $G : \Span \D {\lana G} T {\rana G} \E$, consider the action of
 their composite on objects: each object of $\C$ may map to multiple
-objects of $\E$, via objects of $\D$.  Each such mapping is specified
-by an element $s \in S$ together with an element $t \in T$, such that
-both $s$ and $t$ correspond to the same element of $\D$.  That is, we
+objects of $\E$, via objects of $\D$.  Each such mapping corresponds
+to a zig-zag path \[ \xymatrix@@dr{ & t & E \\ s & D \\ C } \]  In
+order to \emph{specify} such a path it suffices to give the pair
+$(s,t)$, which determines $C$, $D$, and $E$.  Note, however, that not
+every pair in $S \times T$ corresponds to a valid path, but only those
+which agree on the middle object $D \in \D$.  Thus, we
 may take $\{ (s,t) \mid s \in S, t \in T, \rana{F}(s) = \lana{G}(t)
 \}$ as the set of specifications for the composite $F \then G$, with
 $\lana{F \then G}(s,t) = \lana{F}(s)$ and $\rana{F \then G}(s,t) =
@@ -798,13 +803,22 @@ anafunctor from $\C$ to $\E$ by taking a pullback of $\rana F$ and
 $\lana G$ and then composing appropriately, as illustrated in the
 diagram.
 
-One is therefore justified in ``mixing and matching'' functors and
-anafunctors as convenient, but discussing them all as if they were
-regular functors (except when defining a particular anafunctor).  Such
-usage can be formalized by turning everything into an anafunctor, and
-translating functor operations and properties into corresponding
-operations and properties of anafunctors.  However, as we will see, if
-we found everything in HoTT, this becomes unnecessary.
+One can go on to define ananatural transformations between
+anafunctors, and show that together these constitute a $2$-category
+$\mathbf{AnaCat}$ which is analogous to the usual $2$-category of
+(small) categories, functors, and natural transformations; in
+particular, there is a fully faithful embedding of $\mathbf{Cat}$ into
+$\mathbf{AnaCat}$, which moreover is an equivalence if AC holds.
+
+To work in category theory based on set theory and classical logic,
+while avoiding AC, one is therefore justified in ``mixing and
+matching'' functors and anafunctors as convenient, but discussing them
+all as if they were regular functors (except when defining a
+particular anafunctor).  Such usage can be formalized by turning
+everything into an anafunctor, and translating functor operations and
+properties into corresponding operations and properties of
+anafunctors.  However, as we will see, by founding category theory on
+HoTT instead of category theory, this becomes unnecessary.
 
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
@@ -1006,6 +1020,9 @@ and $F_1(f)$.
 
 \section{Finiteness in set theory}
 \label{sec:finiteness-sets}
+
+\todo{Should discuss somewhere why it is so important to discuss all
+  this stuff with P, B, and finiteness.}
 
 Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about representing
