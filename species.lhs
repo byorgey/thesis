@@ -1547,6 +1547,7 @@ dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
     \end{diagram}
     \caption{Permutation = fixpoints $\times$ derangement}
     \label{fig:perm-der}
+    \todo{Improve this figure.}
   \end{figure}
   That is, algebraically, \[ \Perm = \Bag \cdot \Der. \] This does not
   directly give us an expression for $\Der$; there is no notion of
@@ -1704,10 +1705,15 @@ We can now formally define arithmetic product as follows:
   obtained by starting with the species of matrices and ``gluing''
   along one or both edges by turning lists $\List$ into cycles $\Cyc$.
   In particular, $\Sp{Cyl} = \List \aprod \Cyc$ is the species of
-  \term{cylinders}, and $\Sp{Tor} = \Cyc \aprod \Cyc$ is the species
-  of \term{tori}. \todo{Say more\dots ?}
+  (oriented) \term{cylinders}, and $\Sp{Tor} = \Cyc \aprod \Cyc$ is
+  the species of (oriented) \term{tori}.
 
-  \todo{Klein bottles? Cross-caps?}
+  Although species corresponding to Klein bottles and real projective
+  planes (which arise from gluing the edges of a square with one or
+  both pairs of edges given a half-twist before gluing, respectively)
+  certainly exist, it does not seem they can be constructed using
+  $\aprod$, since in those cases the actions of the symmetric group
+  along the two axes are not independent.
 \end{ex}
 
 \begin{ex}
