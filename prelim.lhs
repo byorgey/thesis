@@ -233,14 +233,14 @@ An equivalence between $A$ and $B$, written $A \equiv B$ is
 (essentially) a pair of functions $f : A \to B$ and $g : B \to A$,
 along with a proof that $f$ and $g$ are inverse.\footnote{The precise
   details are more subtle \cite[chap.  4]{hottbook}, but unimportant
-  for the purposes of this work.  The key takeaway is that $A \equiv B$
-  both implies and is implied by the existence of an inverse pair of
-  functions, although this does not make a good \emph{definition} of
-  equivalence because of problems with coherence of higher paths.}
-$\id$ and $\comp$ denote the identity equivalence and equivalence
-composition, respectively.  As a notational shortcut, equivalences of
-type $A \equiv B$ can be used as functions $A \to B$ where it does not
-cause confusion.
+  for the purposes of this work.  The key takeaway is that $A \equiv
+  B$ both implies and is implied by the existence of an inverse pair
+  of functions, although this does not make a good \emph{definition}
+  of equivalence because of problems with coherence of higher paths.}
+The identity equivalence is denoted by $\id$, and the composition of
+$h : B \equiv C$ and $k : A \equiv B$ by $h \comp k : A \equiv C$.  As
+a notational shortcut, equivalences of type $A \equiv B$ can be used
+as functions $A \to B$ where it does not cause confusion.
 
 HoTT's main novel feature is the \emph{univalence axiom}, which states
 that equivalence is equivalent to propositional equality, that is, $(A
