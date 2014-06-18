@@ -37,7 +37,6 @@ particular $x_i$ from each $X_i$.  This can be visualized (for a
 particularly small and decidedly finite case) as shown
 in~\pref{fig:ac-example}.
 
-\todo{See diagrams-lib issue 193.}
 \begin{figure}
   \centering
   \begin{diagram}[width=200]

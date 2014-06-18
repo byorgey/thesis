@@ -1,6 +1,9 @@
 %% -*- mode: LaTeX; compile-command: "mk" -*-
 
 %include polycode.fmt
+%include forall.fmt
+
+%format === = "\oldequiv"
 
 \chapter{Preliminaries}
 \label{chap:prelim}
@@ -129,7 +132,7 @@ constructors $\zero : \N$ and $\suc : \N \to \N$, and $\Fin : \N \to
 constructors $\fzero : \Fin (\suc n)$ and $\fsuc : \Fin n \to \Fin
 (\suc n)$.
 
-Although Agda notation~\cite{Agda} is mostly used in this dissertation
+Although Agda notation~\citep{Agda} is mostly used in this dissertation
 for dependent pairs and functions, the traditional notations $\sum_{x
   : A} B(x)$ and $\prod_{x:A} B(x)$ (instead of $(x:A) \times B(x)$
 and $(x:A) \to B(x)$, respectively) are sometimes used for
@@ -198,7 +201,7 @@ neither can be used to prove statements of the form $(x = y) \to P$
 where both $x$ and $y$ are fixed.
 
 For the precise details of (based) path induction, see the HoTT
-book~\cite{hottbook}; the simple intuition suffices for this work: to
+book~\citep{hottbook}; the simple intuition suffices for this work: to
 prove \ref{eq:path-ind-form} it suffices to assume that $p$ is $\refl$
 and that $x$ and $y$ are literally the same, \ie it suffices to prove
 $P(\refl,x,x)$ for an arbitrary $x$.
@@ -248,7 +251,7 @@ that equivalence is equivalent to propositional equality, that is, $(A
 follows easily from the properties of equality; the interesting
 direction, which must be taken as an axiom, is $\ua : (A \equiv B) \to
 (A = B)$, which formally encodes the \emph{principle of
-  equivalence}~\cite{principle-of-equivalence}, namely, that sensible
+  equivalence}~\citep{principle-of-equivalence}, namely, that sensible
 properties of mathematical objects must be invariant under
 equivalence.  Putting univalence together with transport means that
 equivalent values are completely interchangeable.
@@ -264,7 +267,7 @@ applying $\ua$ to some equivalence.
 As of yet, univalence has no direct computational
 interpretation\footnote{Though as of this writing there seems to be
   some good progress on this front via the theory of \term{cubical
-    sets}~\cite{bezem2014model}.}, so using it to give a computational
+    sets}~\citep{bezem2014model}.}, so using it to give a computational
 interpretation of species may seem suspect. Note, however, that $\ua$
 satisfies the $\beta$ law \mbox{$\transport{X \mapsto X}{\ua(f)} =
   f$}. So univalence introduces no computational problems as long as
@@ -408,7 +411,7 @@ since mathematicians tend to be more skeptical of type theory in
 general and constructive foundations in particular. However, new
 foundations for constructive mathematics must almost by necessity have
 profound implications for the foundations of programming as
-well~\cite{martin1982constructive}.
+well~\citep{martin1982constructive}.
 
 \section{Category theory}
 \label{sec:category-theory}
@@ -666,7 +669,7 @@ data Fork a = Leaf a | Fork (Fork a) (Fork a)
 These are obviously not \emph{equal}, but they are isomorphic, in the
 sense that there are natural transformations, \ie polymorphic
 functions, |rose2fork :: forall a. Rose a -> Fork a| and |fork2rose ::
-forall a. Fork a -> Rose a| such that |rose2fork . fork2rose === id|
+forall a. Fork a -> Rose a|, such that |rose2fork . fork2rose === id|
 and |fork2rose . rose2fork === id| \citep{yorgey-2010-species}.
 
 Here, then, is a better definition:
@@ -679,7 +682,7 @@ Here, then, is a better definition:
 So the compositions of the functors $F$ and $G$ do not \emph{literally}
 have to be the identity functor, but only (naturally) \emph{isomorphic} to
 it.  This does turn out to be a well-behaved notion of sameness for
-categories. \bay{(although you'll have to take my word for it)}.
+categories. \todo{citation, or pointer to further reading.}
 
 There is much more to say about equivalence of categories;
 \pref{sec:AC} picks up the thread with a much fuller discussion of the
@@ -697,19 +700,21 @@ to $F$), notated $F \adj G$, if and only if \[ \Hom[\D]{F A}{B} \iso
 matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
 \to G B$ in $\C$.
 
-One example familiar to functional programmers is \emph{currying}: \[
-(A \times B \to C) \iso (A \to (B \to C)) \] This corresponds to the
+One example familiar to functional programmers is \emph{currying}, \[
+(A \times B \to C) \iso (A \to (B \to C)), \] which corresponds to the
 adjunction \[ (- \times B) \adj (B \to -). \]
 
 \subsection{Monoidal categories}
 \label{sec:monoids}
 
 Recall that a \term{monoid} is a set $S$ equipped with an associative
-binary operation $\mappend : S \times S \to S$ and a distinguished
-element $\mempty : S$ which is an identity for $\mappend$.  A
-\term{monoidal category} is one with a ``monoid on objects'', that is,
-a binary operation on objects and an identity object, with the
-associativity and identity laws expressed via natural isomorphisms.
+binary operation \[ \mappend : S \times S \to S \] and a distinguished
+element $\mempty : S$ which is an identity for $\mappend$. (See, for
+example, \citet{yorgey2012monoids} for a discussion of monoids in the
+context of Haskell.)  A \term{monoidal category} is one with a
+``monoid on objects'', that is, a binary operation on objects and an
+identity object, with the associativity and identity laws expressed
+via natural isomorphisms.
 \begin{defn}
   A \term{monoidal category} is a category $\C$ equipped with
   \begin{itemize}
@@ -722,7 +727,9 @@ associativity and identity laws expressed via natural isomorphisms.
   \end{itemize}
   $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
   ``coherence axioms'', which ensure that parallel isomorphisms
-  constructed from $\alpha$, $\lambda$, and $\rho$ are always equal.
+  constructed from $\alpha$, $\lambda$, and $\rho$ are always equal;
+  for details, see \citet[p. XXX]{mac1998categories} \todo{fill in page or
+    section number}.
 
   We often write $(\C,\otimes,I)$ when we wish to emphasize the choice
   of a monoidal functor and identity object for a monoidal category $\C$.
@@ -760,8 +767,8 @@ by composition of functors.
 \begin{defn}
   A monoidal category $\C$ is \term{closed} if there some bifunctor $[-,-]
   : \C^\op \times \C \to \C$ such that there is a natural
-  isomorphism \[ \all{ABC}{\Hom {A \otimes B} C \iso \Hom A
-    {[B,C]}}, \] that is, $- \otimes B$ is left adjoint to $[B,-]$.
+  isomorphism \[ \all{ABC}{(\Hom {A \otimes B} C) \iso (\Hom A
+    {[B,C]})}, \] that is, $- \otimes B$ is left adjoint to $[B,-]$.
 \end{defn}
 
 $(\Set, \times)$ is closed: $[B,C]$ is defined as the set of functions
@@ -781,7 +788,7 @@ language with first-class functions, the class of functions
   $\lambda$, and $\rho$ are \emph{equalities} rather than natural
   isomorphisms.  It is often remarked that every monoidal category is
   equivalent to some strict one (for example, using the theory of
-  cliques~\cite{joyal1991geometry}, explained in \pref{sec:cliques}),
+  cliques~\citep{joyal1991geometry}, explained in \pref{sec:cliques}),
   which is used to justify the pretense that every monoidal category
   is strict; however, proving this requires the axiom of choice.
 \end{defn}
@@ -833,9 +840,13 @@ mapping.
 Intuitively, the functor $T$ can be thought of as an ``interface'';
 $(C,t)$ is then a ``module'' with ``representation type'' $C$ and
 ``implementation'' $t$.  Indeed, in Haskell, the coend of $T$ is given
-by the type \texttt{exists c.\ T c c} (or rather, by an isomorphic
-encoding, since \texttt{exists} is not actually valid Haskell snytax)
-\cite{kmett2008kan}. $T$ is required to be a functor from $\C^\op
+by the type \texttt{exists c.\ T c c} \citep{kmett2008kan}---or
+rather, by an isomorphic encoding such as
+\begin{spec}
+data Coend t where
+  Coend :: t c c -> Coend t
+\end{spec}
+since \texttt{exists} is not actually valid Haskell syntax. $T$ is required to be a functor from $\C^\op
 \times \C$ since the representation type may occur both co- and
 contravariantly in the interface.
 
