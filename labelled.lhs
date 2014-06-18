@@ -129,7 +129,8 @@ existentially quantified; recall that in Haskell this corresponds to a
 coend.  Note also that the copower (which in general relates two
 different categories) turns into simple pairing.
 
-We now turn to a proof of \pref{prop:Lan-coend}.
+We now turn to a proof of \pref{prop:Lan-coend}. \todo{Need to mention
+  Fubini somewhere.}
 \begin{proof}
 We must show $(\nt {\lan J F} G) \iso (\nt F {G \comp J})$.
 \begin{sproof}
@@ -141,7 +142,7 @@ We must show $(\nt {\lan J F} G) \iso (\nt F {G \comp J})$.
   \reason{\iso}{$(- \to X)$ turns colimits into limits}
   \stmt{\eend{E} \eend{C} \left( (J\ C \to E) \cdot F\ C \to G\ E
     \right)}
-  \reason{\iso}{copowers (generalized currying)}
+  \reason{\iso}{currying}
   \stmt{\eend{E} \eend{C} (J\ C \to E) \to (F\ C \to G\ E)}
   \reason{\iso}{Fubini}
   \stmt{\eend{C} \eend{E} (J\ C \to E) \to (F\ C \to G\ E)}
@@ -153,22 +154,22 @@ We must show $(\nt {\lan J F} G) \iso (\nt F {G \comp J})$.
 \end{proof}
 
 Instead of merely showing the \emph{existence} of an isomorphism, the
-above proof can in fact be interpreted as constructing a specific
-isomorphism: each step has some constructive justification, and the
-final isomorphism is the composition of all the steps.  However,
-instead of formally expounding this isomorphism, it is useful to carry
-out the construction in Haskell, using the type |Lan| defined
-above. This brings out the essential components of the proof without
-getting too bogged down in abstraction.  The code corresponding to the
-backwards direction of the proof is shown in \pref{fig:lan-coend-Hask}
-(note that it requires the |GADTs| and |RankNTypes|
-extensions~\citep{GADTs, RankNTypes})\footnote{As evidenced by the
-  @kan-extensions@ package~\citep{kmett-kan-extensions-hackage}, the
-  implementation of this constructive proof in Haskell can be
-  considerably simplified, but at the expense of obscuring the
-  connection to the original abstract proof given above.} The code for
-the forward direction is similar, and it is the backwards direction
-which will be of particular use later.
+above proof can in fact be interpreted as constructing a specific one:
+each step has some constructive justification, and the final
+isomorphism is the composition of all the steps.  However, instead of
+formally expounding this isomorphism, it is useful to carry out the
+construction in Haskell, using the type |Lan| defined above. This
+brings out the essential components of the proof without getting too
+bogged down in abstraction.  The code corresponding to the backwards
+direction of the proof is shown in \pref{fig:lan-coend-Hask} (note
+that it requires the |GADTs| and |RankNTypes| extensions~\citep{GADTs,
+  RankNTypes}).\footnote{As evidenced by the @kan-extensions@
+  package~\citep{kmett-kan-extensions-hackage}, the implementation of
+  this constructive proof in Haskell can be considerably simplified,
+  but at the expense of obscuring the connection to the original
+  abstract proof given above.} The code for the forward direction is
+similar, and it is the backwards direction which will be of particular
+use later.
 \begin{figure}
   \centering
 \begin{spec}
@@ -203,13 +204,16 @@ lanAdjoint h = homL (uncurry (yoneda' h))
   \url{http://en.wikipedia.org/wiki/Calculus_of_functors}.}
 
 We are now ready to consider Joyal's definition of \term{analytic
-  functors}~\cite{Joyal-analytic-functors}.
-\begin{defn}
-  Given a species $F \in [\B,\Set]$, the \term{analytic functor} $\analytic
-  F$ corresponding to $F$ is given by the left Kan extension of $F$
-  along the inclusion functor $\iota : \B \inj \Set$. A functor $\Set \to \Set$ is \term{analytic} when it
+  functors}~\citep{Joyal86}.
+\begin{defn}[Joyal]
+  Given a species $F \in [\B,\Set]$, the \term{analytic functor}
+  $\analytic F$ corresponding to $F$ is given by $\lan \iota F$, the
+  left Kan extension of $F$ along the inclusion functor $\iota : \B
+  \inj \Set$. A functor $\Set \to \Set$ is \term{analytic} when it
   arises in this way from some species.
 \end{defn}
+\[ \xymatrix{\B
+  \ar[dr]^{F} \ar@@{_{(}->}[d]_\iota \\ \Set \ar[r]_{\analytic F} & \Set } \]
 We can think of $\analytic F$ as the polymorphic ``data type'' arising from
 the species $F$. The construction in \pref{prop:Lan-coend} tells us
 exactly what such a data type looks like: \[ \analytic F\ A = \coend L (\iota
@@ -221,7 +225,7 @@ $f : (\iota L \to A) \times F\ L$ and $g : (\iota L' \to A) \times F\
 L' $ are considered equal if there is some bijection $\sigma : L \bij
 L'$ which sends $f$ to $g$.
 
-Moreover, the natural isomorphism \pref{eq:lan} in this case
+Moreover, the natural isomorphism \eqref{eq:lan} in this case
 becomes \[ (\nt {\analytic F} G) \iso (\nt F {G \iota}), \] that is,
 the natural maps (\ie parametrically polymorphic functions) out of
 $\analytic F$ are in one-to-one correspondence with species morphisms
@@ -238,8 +242,8 @@ between species, that is, between functors $\B \to \Set$.
 from |Lan iota f a| to |g a|.  In particular, let |Lan (sp,m)| be a
 value of type |Lan iota f a|, containing, for some label type |c|, a
 shape |sp : f c| and a mapping |m : iota c -> a|.  Then |lanAdjoint h
-(Lan (sp,m)) :: g a|, and we can carry out the following simplication
-just by unfolding definitions:
+(Lan (sp,m))| has type |g a|, and we can carry out the following
+simplication just by unfolding definitions:
 \begin{sproof}
   \stmt{|lanAdjoint h (Lan (sp,m))|}
   \reason{=}{definition of |lanAdjoint|}
@@ -288,50 +292,53 @@ points. \todo{cite. Joyal?} \todo{Expand.  Give a bit more
 \label{sec:analytic-generating}
 
 Another nice property of analytic functors is that they have
-corresponding \term{generating functions} (indeed, part of the
-motivation of Joyal's work seems to have been to categorify the theory
-of generating functions).  In fact, passing from $\B$ to $\P$, suppose
-we have a species $F : \P \to \Set$; then the analytic functor
-$\analytic F$ is given by \[ \analytic F\ A = \coend{(n:\N)} (\iota n
-\to A) \times F\ n, \] where $\iota : \P \to \Set$ in this case sends
-the natural number $n$ to the set $\fin n$.  Note that functions $\fin
-n \to A$ are in bijection with the $n$-fold product $A^n$, so
-$\analytic F\ A$ may equivalently be expressed as \[ \analytic F\ A =
-\coend{(n:\N)} F\ n \times A^n. \] The coend, in this case, is a
-quotient by permutations on $\fin n$, which act on $F\ n \times A^n$
-by permuting the elements of the $n$-fold product.  We may therefore
-suggestively (if informally) write
-\[ \analytic F\ A = \sum_{n : \N} F\ n \times \frac{A^n}{n!} \] which very
-strongly resembles the \term{exponential generating function}
+corresponding \term{generating functions} (indeed, a big part of the
+motivation of Joyal's work seems to have been to categorify the
+existing theory of generating functions).  In fact, passing from $\B$
+to $\P$, suppose we have a species $F : \P \to \Set$; then the
+analytic functor $\analytic F$ is given by \[ \analytic F\ A =
+\coend{(n:\N)} (\iota n \to A) \times F\ n, \] where $\iota : \P \to
+\Set$ in this case sends the natural number $n$ to the set $\fin n$.
+Note that functions $\fin n \to A$ are in bijection with the $n$-fold
+product $A^n$, so $\analytic F\ A$ may equivalently be expressed as \[
+\analytic F\ A = \coend{(n:\N)} F\ n \times A^n. \] The coend, in this
+case, is a quotient by permutations on $\fin n$, which act on $F\ n
+\times A^n$ by permuting the elements of the $n$-fold product.  So
+each value of the coend is an equivalence class of $n!$ pairs, one for
+each possible permutation of $A^n$. We may therefore suggestively (if
+informally) write
+\[ \analytic F\ A = \sum_{n : \N} F\ n \times \frac{A^n}{n!} \] which
+very strongly resembles the \term{exponential generating function}
 associated to the species $F$, \[ F(x) = \sum_{n \geq 0} ||F\ n||
-\times \frac{x^n}{n!}. \] Of course, the resemblance is no
-accident! \todo{Explain formal connection?}
+\times \frac{x^n}{n!}. \] Of course, the resemblance is no accident;
+this gives a glimpse of the sense in which analytic functors are said
+to be a categorification of such generating functions. \todo{Explain
+  formally?}
 
 \subsection{Analytic functors and finiteness}
 \label{sec:analytic-finite}
 
-Joyal~\cite{Joyal86} characterized analytic functors as those which
+\citet{Joyal86} characterized analytic functors as those which
 preserve \term{filtered colimits}, \term{cofiltered limits}, and
 \term{weak pullbacks}.  It is instructive to use this characterization
 as a lens to consider some examples of functors which are \emph{not}
 analytic.
 
 \begin{defn}
-  A \term{filtered} category $\C$ \todo{cite ``classification of
-    accessible categories''} is one which ``has all finite cocones'',
-  that is, for any finite collection of objects and morphisms in $\C$,
-  there is some object $C \in \C$ with morphisms from all the objects
-  in the collection to $C$, such that all the relevant triangles
-  commute.
+  A \term{filtered} category $\C$ \citep{adamek2002classification} is
+  one which ``has all finite cocones'', that is, for any finite
+  collection of objects and morphisms in $\C$, there is some object $C
+  \in \C$ with morphisms from all the objects in the collection to
+  $C$, such that all the relevant triangles commute.
 
-  Equivalently, a filtered category is one for which
+  Equivalently, and more simply, a filtered category is one for which
   \begin{itemize}
   \item there exists at least one object;
   \item any two objects $C_1, C_2 \in \C$ have an ``upper bound'',
     that is, an object $C_3$ with morphisms \[ \Cospan {C_1} {} {C_3}
     {} {C_2}; \]
-  \item any two parallel morphisms $\Parallel {C_1} f g {C_2}$ also
-    have an ``upper bound'', that is, another morphism \[
+  \item and finally, any two parallel morphisms $\Parallel {C_1} f g
+    {C_2}$ also have an ``upper bound'', that is, another morphism \[
     \xymatrix{C_1 \ar@@<.5ex>[r]^{f} \ar@@<-.5ex>[r]_{g} & C_2
       \ar[r]^h & C_3} \] such that $f \then h = g \then h$.
   \end{itemize}
@@ -483,34 +490,83 @@ numbers.
 Now consider where $F$ sends the diagram $\FinNSub$.  $F$ sends each
 finite set $S \subset \N$ to the set of infinite streams of $S$
 values, $S^\N$, and it sends each inclusion $S \inj T$ to the
-inclusion $S^\N \inj T^\N$.  The colimit of this new diagram $F\
-\FinNSub$ is not $\N^\N$, the set of streams of natural numbers, but
-instead the set of \emph{finitely supported} streams of natural
+inclusion $S^\N \inj T^\N$.  However, the colimit of this new diagram
+$F( \FinNSub)$ is not $\N^\N$, the set of streams of natural numbers,
+but instead the set of \emph{finitely supported} streams of natural
 numbers, that is, the set of all streams which contain only finitely
-many distinct elements.  Thus $F\ (\colim \FinNSub) \ncong \colim
-(F\ \FinNSub)$, and we conclude that $F$ is not analytic since it does
-not preserve filtered colimits.
+many distinct elements.  Thus $F\ (\colim \FinNSub) \ncong \colim (F\
+\FinNSub)$, and we conclude that $F$ is not analytic since it does not
+preserve filtered colimits.
 
-\todo{Give a bit more intuition about this example.  Mention other
-  examples.}
+\later{Give a bit more intuition about this example.}
+
+Another example\footnote{Also due to \citet{trimble-not-analytic}.} is
+given by the covariant power set functor $P : \Set \to \Set$, which
+sends each set $A$ to its power set $P(A)$, the set of all subsets of
+$A$, and sends each function $f : A \to B$ to the function $P(f) :
+P(A) \to P(B)$ which gives the image of a subset of $A$ under $f$.
+$P(\N)$ is the set of all (finite and infinite) subsets of $\N$, but
+$\colim P(\FinNSub)$ is the set of all \emph{finite} subsets of $\N$.
+Note, however, that the covariant finite powerset functor $FP : \Set
+\to \Set$, which sends each set $A$ to the set of all its
+\emph{finite} subsets, is analytic; it corresponds to the species
+$\Bag^2$ (or, more accurately, to $\Bag \cdot \Rubbish$).
+
+\subsection{Analytic functors in HoTT}
+\label{sec:analytic-functors-hott}
+
+The definition of analytic functors ports almost unchanged into
+homotopy type theory: we merely replace the set-theoretic categories
+$\B$ and $\Set$ with the homotopy-theoretic $\BT$ and $\ST$,
+respectively.  Then we have
+\begin{defn}
+Given an \hott{functor} $F : \BT \to \ST$, the analytic \hott{functor}
+$\analytic F : \ST \to \ST$ is defined as $\analytic F \hdefeq \lan
+\iota F$, where $\iota : \BT \inj \ST$ is the evident injection.
+\end{defn}
+Note that the definition of a Kan extension needs no modification; we
+simply use the appropriate notions of natural isomorphism and
+adjunction as defined in HoTT.
+
+Again, Kan extensions can be explicitly constructed via coends, and we
+have \[ \analytic F\ A = \coend L (\hom[\ST] {\iota\ L} A) \times F\
+L. \]  Recalling that coends in HoTT are just $\Sigma$-types, and that
+morphisms in $\ST$ are functions, we have \[ \analytic F\ A = \sum_{L
+  : \BT} (\iota\ L \to A) \times F\ L. \]
 
 \section{Labelled structures}
 \label{sec:labelled-structures}
 
-\todo{Define by removing coend.  Results in a bifunctor: need only a
-  single label type parameter since $\B$ is a groupoid.}
-todo{Come up with some notation.}
+$\analytic F$ thus represents the ``data type'' corresponding to the
+species $F$, whose values consist of a labelled $F$-shape paired with
+a map assigning a data value to each label.  It will be convenient,
+however, to be able to explicitly work with label types.
 
-\section{Generalized labelled structures}
-\label{sec:gen-labelled-structures}
+\newcommand{\lab}[1]{\langle #1 \rangle}
+\newcommand{\LStr}[3]{{\lab #1}_{#2}\ {#3}}
 
-However, the above definition of analytic functors is specific to
-$[\B,\Set]$.  It must first be modified to apply to the generalized
-species from the previous chapter.
+\begin{defn}
+  Given a species $F$, the type of \term{labelled structures} over $F$
+  is a bifunctor $\lab F : \B \times \Set \to \Set$,
+  defined by \[ \LStr F L A = (\iota L \to A) \times F\ L. \]
+\end{defn}
 
+We evidently have $\analytic F\ A = \coend L \LStr F L A$, that is,
+labelled structures are obtained from analytic functors by ``taking
+the coend off'', exposing the set of labels as a parameter.
+
+Note that the same definition applies equally well in HoTT, replacing
+$\B$ and $\Set$ with $\BT$ and $\ST$.  Note, however, that
+functoriality of $\lab F$ in the labels depends crucially on $\B$ (and
+$\BT$) being groupoids, since $L$ appears both co- and contravariantly
+in the definition of $\LStr F L A$.
+
+To generalize labelled structures to $[\Lab,\Str]$-species where
+$\Lab$ is not a groupoid,
 \todo{Generalize.  Need two label type parameters for positive and
   negative occurrences?  \emph{e.g.} can we use category
-  of partial bijections, \ie prisms?}
+  of partial bijections, \ie prisms?} \bay{Wait and see whether/how we
+  actually end up needing this.}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}
@@ -520,8 +576,6 @@ species from the previous chapter.
 %%% XXX remove me
 \newcommand{\under}[1]{\floor{#1}}
 \newcommand{\lift}[1]{\ceil{#1}}
-\newcommand{\lab}[1]{\langle #1 \rangle}
-\newcommand{\LStr}[3]{#1 #2 #3}
 
 One introduces a labelled $(F \sprod G)$-shape by pairing a labelled
 $F$-shape and a labelled $G$-shape, using a label set isomorphic to

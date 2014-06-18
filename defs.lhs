@@ -413,7 +413,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analytic functors
 
-\newcommand{\analytic}[1]{\hat{#1}}
+\newcommand{\analytic}[1]{\widehat{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Comments
