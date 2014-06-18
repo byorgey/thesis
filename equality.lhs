@@ -16,12 +16,12 @@
 The (in)famous \emph{axiom of choice} (hereafter, AC) plays a central
 role in much of modern mathematics.  In a constructive setting,
 however, it is problematic.  Much effort has been expended trying to
-avoid it \citep{makkai, FOLDS, voevodsky}; in a sense, this can be
-seen as one of the goals of the univalent foundations program.
-In \label{sec:anafunctors-hott} we will see how HoTT indeed provides
-an excellent AC-free foundation for the mathematics we want to do.
-First, however, we give an introduction to AC and related issues in
-set theory.
+avoid it \citep{makkai1996avoiding, FOLDS, voevodskyFoundations}; in a
+sense, this can be seen as one of the goals of the univalent
+foundations program.  In \pref{sec:anafunctors-hott} we will see how
+HoTT indeed provides an excellent AC-free foundation for the
+mathematics we want to do.  First, however, we give an introduction to
+AC and related issues in set theory.
 
 The axiom of choice can be formulated in a number of equivalent ways.
 Perhaps the most well-known is
