@@ -38,7 +38,7 @@
 \usepackage[]{showkeys}
 
 % \usepackage{breakurl}
-\usepackage[numbers]{natbib}
+\usepackage{natbib}
 
 \usepackage{graphicx}
 \graphicspath{{images/}}
