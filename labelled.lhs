@@ -562,11 +562,10 @@ $\BT$) being groupoids, since $L$ appears both co- and contravariantly
 in the definition of $\LStr F L A$.
 
 To generalize labelled structures to $[\Lab,\Str]$-species where
-$\Lab$ is not a groupoid,
-\todo{Generalize.  Need two label type parameters for positive and
-  negative occurrences?  \emph{e.g.} can we use category
-  of partial bijections, \ie prisms?} \bay{Wait and see whether/how we
-  actually end up needing this.}
+$\Lab$ is not a groupoid, \todo{Generalize.  Need two label type
+  parameters for positive and negative occurrences?  \emph{e.g.} can
+  we use category of partial bijections, \ie prisms?} \bay{Wait and
+  see whether/how we actually end up needing this.}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}
