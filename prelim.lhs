@@ -313,8 +313,12 @@ counts is only whether or not the proposition is provable at all.
   is a path $p = q$.  Put another way, for any $x, y : A$, the type $x
   = y$ is a proposition.
 \end{defn}
-``Standard'' inductive types, \eg \N, \Fin n, and so on, are sets,
-although proving this takes a bit of work. See the HoTT book for
+``Standard'' inductive types such as \N, \Fin n, and so on, are sets,
+although proving this takes a bit of work. Generally, one shows via
+induction that paths between elements of the type are equivalent to an
+indexed type given by $\TyZero$ when the elements are different and
+$\TyOne$ when they are the same; $\TyZero$ and $\TyOne$ are mere
+propositions and hence so is the type of paths. See the HoTT book for
 proofs in the particular case of \N, which can be adapted to other
 inductive types as well~\citep[\Sect 2.13, Example 3.1.4, \Sect
 7.2]{hottbook}.
