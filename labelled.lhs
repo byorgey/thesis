@@ -54,9 +54,9 @@ The definition of analytic functors, given in
 \pref{sec:analytic-functors}, makes central use of the notion of a
 (left) \term{Kan extension}.  This section defines Kan extensions and
 provides some useful intuition for understanding them in this
-context. For more details, see \citet{mac1998categories} \todo{insert
-  page number/chapter reference}; for
-some good intuition with a computational bent, see \citet{hinze2012kan}.
+context. For more details, see \citet[Chapter X]{mac1998categories};
+for some good intuition with a computational bent, see
+\citet{hinze2012kan}.
 
 \begin{defn} \label{defn:lan} Given functors $F : \C \to \D$ and $J :
   \C \to \E$, the \term{left Kan extension of $F$ along $J$}, written
