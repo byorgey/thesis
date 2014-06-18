@@ -105,7 +105,7 @@ seriously, generalizing equality to isomorphism in a coherent way.
 
 We begin our brief tour of HoTT with its syntax.
 
-\paragraph{Terms and types}
+\subsection{Terms and types}
 
 The theory includes standard constructions such as:
 \begin{itemize}
@@ -145,7 +145,7 @@ and function types, respectively. \later{implicit quantification? Do
   quantified, like $(A : \Type) \to (B : \Type) \to A \times (B \to
   \N)$.}
 
-\paragraph{Equality}
+\subsection{Equality}
 
 HoTT distinguishes between two different types of equality:
 \later{reference ``On the meanings of the logical constants'' or some
@@ -185,7 +185,7 @@ HoTT distinguishes between two different types of equality:
   between paths, and so on.
 \end{itemize}
 
-\paragraph{Path induction}
+\subsection{Path induction}
 
 To make use of a path $p : x = y$, one may use the induction principle
 for paths, or \term{path induction}.  Path induction applies when is
@@ -229,7 +229,7 @@ clear from context.  For example, if $e : A = B$ then $\transport{X
 suffices to note that $\idT : P(x) \to P(x)$ in the case when $e =
 \refl$.
 
-\paragraph{Equivalence and univalence}
+\subsection{Equivalence and univalence}
 
 There is also a third sort of equality, namely, \term{equivalence}.
 An equivalence between $A$ and $B$, written $A \equiv B$ is
@@ -283,7 +283,8 @@ P(A) \to P(B)$, and in particular $\transport P {\ua(e)} \pair a g =
 \pair {e(a)}{g \comp e^{-1}}$, which can be derived mechanically by
 induction on the shape of $P$.
 
-\paragraph{Propositions, sets, and $n$-types}
+\subsection{Propositions, sets, and $n$-types}
+\label{sec:n-types}
 
 As noted previously, it is possible to have arbitrary higher-order
 path structure: paths between paths, paths between paths between
@@ -292,8 +293,8 @@ many complications.  It is therefore useful to have a vocabulary for
 explicitly talking about types with limited higher-order structure.
 
 \begin{defn}
-  A \term{proposition}, or \term{$(-1)$-type}, is a type for which any two inhabitants are
-  propositionally equal.
+  A \term{proposition}, or \term{$(-1)$-type}, is a type for which any
+  two inhabitants are propositionally equal.
 \end{defn}
 
 Intuitively, the only interesting thing that can be said about a
@@ -330,7 +331,7 @@ it is not the case that all paths $A = B$ are equal; such paths
 correspond to bijections between $A$ and $B$, and there may be many
 such bijections.
 
-\paragraph{Truncation}
+\subsection{Truncation}
 
 The last important concept from HoTT to touch upon is
 \term{propositional truncation}.  If $A$ is a type, then $\ptrunc{A}$
