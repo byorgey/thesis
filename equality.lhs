@@ -1020,8 +1020,8 @@ and $F_1(f)$.
 \section{Finiteness in set theory}
 \label{sec:finiteness-sets}
 
-\todo{Should discuss somewhere why it is so important to discuss all
-  this stuff with P, B, and finiteness.}
+\todo{Should explain somewhere why elucidating the relation between B
+  and P is so important.}
 
 Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about representing
@@ -1656,6 +1656,7 @@ $\size$ proceeds by first constructing a functor paired with a proof
 that, together with $\fin -$, it forms an equivalence---altogether a
 mere proposition---and then projecting out the functor.
 
+\todo{Haven't actually defined species yet.}
 When working with species as founded in HoTT, therefore, we are fully
 justified in working with them as functors from finite sets of labels,
 or from natural number sizes, as convenient---the equivalence $\BT
