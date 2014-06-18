@@ -318,10 +318,11 @@ as a lens to consider some examples of functors which are \emph{not}
 analytic.
 
 \begin{defn}
-  A \term{filtered} category $\C$ is one which ``has all finite
-  cocones'', that is, for any finite collection of objects and morphisms
-  in $\C$, there is some object $C \in \C$ with morphisms from all the
-  objects in the collection to $C$, such that all the relevant triangles
+  A \term{filtered} category $\C$ \todo{cite ``classification of
+    accessible categories''} is one which ``has all finite cocones'',
+  that is, for any finite collection of objects and morphisms in $\C$,
+  there is some object $C \in \C$ with morphisms from all the objects
+  in the collection to $C$, such that all the relevant triangles
   commute.
 
   Equivalently, a filtered category is one for which
@@ -364,6 +365,11 @@ morphisms so this does not come up.
 
   \[ \xymatrix{0 \ar[r] & 1 \ar[r] & 2 \ar[r] & 3 \ar[r] & \dots} \]
 
+  Note that filteredness only requires that every \emph{finite}
+  collection of objects have an upper bound; in particular, in this example it is
+  not true of \emph{infinite} collections of objects.  For example,
+  the set of all even numbers has no natural number upper bound.
+
   \todo{Historically, this was one of the main examples from which the
     idea of filtered categories was generalized.  Iterated limits,
     etc.}
@@ -402,17 +408,92 @@ diagrams in $\C$.
 
 \begin{defn}
   A \term{filtered diagram} in $\C$ is a functor $\I \to \C$ from a
-  filtered index category $\I$.
+  filtered index category $\I$.  A \term{filtered colimit} is a
+  colimit of a filtered diagram.
 \end{defn}
 
-That is, a filtered diagram is a diagram that ``looks like'' \todo{finish}
+That is, a filtered diagram in $\C$ is a diagram that ``looks like'' a
+filtered category ``sitting inside'' $\C$.  A filtered colimit is
+then just a normal colimit which happens to be taken over a filtered
+diagram.
 
-\begin{defn}
-  A \term{filtered colimit} is a colimit of a filtered diagram
-\end{defn}
+\begin{ex}
+  Let $F : \C \to \C$ be an endofunctor on the category $\C$. Suppose
+  $\C$ contains an initial object $0$, and let $!$ denote the unique
+  morphism $0 \to C$.  Then consider the diagram \[ \xymatrix{ 0
+    \ar[r]^{!} & F 0 \ar[r]^{F !} & F^2 0 \ar[r]^{F^2 !} & F^3 0
+    \ar[r] & \dots} \] The colimit of this diagram is the fixed point
+  $\mu F$, and is a filtered colimit since the diagram has the
+  filtered poset $(\N, \leq)$ as its index category.
+\end{ex}
 
-\todo{ 
-  \url{http://mathoverflow.net/questions/171452/examples-of-functors-mathbfset-to-mathbfset-which-are-not-analytic}.}
+\begin{ex}
+  Pushouts are an example of colimits which are \emph{not} filtered,
+  since pushouts are colimits over a span $\Span X {} Z {} Y$, which
+  is not filtered ($X$ and $Y$ have no upper bound).
+\end{ex}
+
+\begin{ex}
+  Recall the filtered poset $\FinNSub$ introduced earlier, consisting
+  of finite subsets of $\N$ and inclusion maps.  The inclusion functor
+  $\FinNSub \inj \Set$ allows viewing $\FinNSub$ as a diagram in
+  $\Set$, and we consider the (filtered) colimit of this diagram,
+  which must consist of some set $S$ along with maps from all the
+  finite subsets of $\N$ into $S$, which commute with the inclusion
+  maps among the finite subsets of $\N$.  In fact, it suffices to take
+  $\N$ itself, together with the inclusion maps from each finite
+  subset of $\N$ into $\N$.  Intuitively, $\N$ arises here as the
+  disjoint union of all finite subsets of $\N$, quotiented by the
+  relationships induced by all the inclusion maps---which collapses
+  the disjointness, resulting in a simple union of all finite subsets.
+
+  To show that this is universal, suppose \todo{finish.}
+\end{ex}
+
+Now consider the functor $F \defeq (-)^\N : \Set \to \Set$, which
+sends the set $A$ to the set $A^\N$ of functions from $\N$ to
+$A$.\footnote{This example is due to \citet{trimble-not-analytic}.}
+The claim is that $F$ is not analytic, and in particular that it does
+not preserve the filtered colimit of $\FinNSub$, discussed above.  As
+we will see, the ``problem'' is that $F$ corresponds to an
+\emph{infinite} data type, \ie one which can contain infinitely many
+$A$ values.  In particular, $F$ corresponds to the data type of \emph{infinite
+  streams}: a function $\N \to A$ can be thought of as an infinite
+stream of $A$ values, where the value of the function at $n$ gives the
+value of $A$ located at position $n$ in the stream.
+
+We also consider how $F$ acts on inclusion maps.  The action of $F$ on
+morphisms is given by postcomposition, so $F$ sends the inclusion
+$\iota : S \inj T$ to $\iota \comp - : S^\N \to T^\N$, which is also
+an inclusion map: it sends the stream $s : \N \to S$ to the stream
+$\iota \comp s : \N \to T$, consisting of the application of $\iota$
+to every element in $s$.  That is, $\iota \comp -$ does not actually
+modify any values of a stream, but simply codifies the observation
+that whenever $S \subseteq T$, a stream containing only values from
+$S$ may also be thought of as a stream containing only values from $T$
+(which simply happens not to include any values from $T - S$).
+
+We saw above that the colimit of $\FinNSub$, considered as a diagram
+in $\Set$, is $\N$ (together with the obvious inclusion maps to $\N$
+from each finite subset).  $F$ sends $\N$ to $\N^\N$, the type of
+infinite streams of natural numbers.  $F$ also sends each inclusion
+map $S \inj \N$ to the inclusion $S^\N \inj \N^\N$, which allows a
+stream of $S$ values to be ``upgraded'' to a stream of natural
+numbers.
+
+Now consider where $F$ sends the diagram $\FinNSub$.  $F$ sends each
+finite set $S \subset \N$ to the set of infinite streams of $S$
+values, $S^\N$, and it sends each inclusion $S \inj T$ to the
+inclusion $S^\N \inj T^\N$.  The colimit of this new diagram $F\
+\FinNSub$ is not $\N^\N$, the set of streams of natural numbers, but
+instead the set of \emph{finitely supported} streams of natural
+numbers, that is, the set of all streams which contain only finitely
+many distinct elements.  Thus $F\ (\colim \FinNSub) \ncong \colim
+(F\ \FinNSub)$, and we conclude that $F$ is not analytic since it does
+not preserve filtered colimits.
+
+\todo{Give a bit more intuition about this example.  Mention other
+  examples.}
 
 \section{Labelled structures}
 \label{sec:labelled-structures}
@@ -549,6 +630,11 @@ dia = vcat' (with & sep .~ 5)
 \todo{Write me}
 
 \section{Other stuff}
+
+\todo{Discuss variant of $\Bag$ which stores no data.}
+
+\todo{Discuss decomposition of structures using category of partial
+  isomorphisms for labels?}
 
 \todo{Examples. Bounded tree width.  Generic programming.}
 

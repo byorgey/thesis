@@ -9,6 +9,7 @@
 \todo{List contributions of this chapter somewhere?}
 \todo{Need a story for building with both color or black/white
   figures}
+\todo{Put back in discussion of equivalence vs equipotence of species?}
 
 The theory of combinatorial species, introduced by \citet{joyal}, is a
 unified theory of \term{combinatorial structures} or \term{shapes}.
@@ -655,6 +656,8 @@ categories.
 
 \subsection{Species in type theory}
 \label{sec:species-in-type-theory}
+
+\todo{Mention encoding primitive species as HITs somewhere.}
 
 One generalization that will be of particular interest is a ``port''
 of species into HoTT. Recall that $\BT$ denotes the \hott{groupoid}
@@ -1503,12 +1506,66 @@ $\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
 \begin{rem}
   The unit species denotes a sort of ``trivial'' or ``leaf'' structure
   containing no labels.  Intuitively, it corresponds to a Haskell type
-  like |data Unit a = Unit|.
+  like
+  \begin{spec}
+    data Unit a = Unit
+  \end{spec}
 \end{rem}
 
-\todo{Examples.  Pairs, lists, trees, $X \cdot E$.} \bay{But $\X$
-  hasn't been introduced yet\dots put examples later, after arithmetic
-  product section?  Have a separate section of examples?}
+\begin{ex}
+  The following example is due to Joyal~\cite{joyal}. Recall that
+  $\Perm$ denotes the species of permutations.  Consider the species
+  $\Der$ of \term{derangements}, that is, permutations which have no
+  fixed points.  It is not possible, in general, to directly express
+  species using a ``filter'' operation, as in, ``all $F$-structures
+  satisfying predicate $P$''.  However, it is possible to get a handle
+  on $\Der$ in a more constructive manner by noting that every
+  permutation can be canonically decomposed as a set of fixed points
+  paired with a derangement on the rest of the elements
+  (\pref{fig:perm-der}). \later{Improve this diagram.}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           SpeciesDiagrams
+
+dot = circle 0.2 # fc black
+
+selfLoop d = d # named () # connectPerim' opts () () (3/8 @@@@ turn) (1/8 @@@@ turn)
+  where
+    opts = with & arrowShaft .~ arc (7/8 @@@@ turn) (5/8 @@@@ turn) # reverseTrail
+
+fps = unord (replicate 3 (dot # selfLoop))
+
+cycs :: Diagram B R2
+cycs =
+  hcat' (with & sep .~ 0.5)
+  [ cyc' (replicate 3 dot) 0.8
+  , cyc' (replicate 2 dot) 0.8
+  ]
+
+dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
+    \end{diagram}
+    \caption{Permutation = fixpoints $\times$ derangement}
+    \label{fig:perm-der}
+    \todo{Improve this figure.}
+  \end{figure}
+  That is, algebraically, \[ \Perm = \Bag \cdot \Der. \] This does not
+  directly give us an expression for $\Der$; there is no notion of
+  multiplicative inverse for species\footnote{Multiplicative inverses
+    can in fact be defined for suitable \emph{virtual}
+    species~\citep[Chapter 3]{bll}.  However, virtual species are
+    beyond the scope of this dissertation.}.  However, this is still a
+  useful characterization of derangements.  For example, passing to
+  exponential generating functions \todo{Need to make sure these have
+    been mentioned.}, the above equation becomes \[ \frac{1}{1-x} =
+  e^x \cdot \Der(x), \] which yields $\Der(x) = e^{-x}/(1-x)$, even
+  though we cannot make direct combinatorial sense out of $\Der =
+  \Perm / \Bag$.
+\end{ex}
+
+\begin{ex}
+  \todo{Another example?}
+\end{ex}
 
 \subsection{Arithmetic product}
 \label{sec:arithmetic-product}
@@ -1637,6 +1694,32 @@ We can now formally define arithmetic product as follows:
   ($L_F,L_G \partition L$).
 \end{rem}
 
+\begin{ex}
+  $\Sp{Mat} = \List \aprod \List$ is the species of
+  \emph{matrices}. \todo{Say more. Picture?}
+\end{ex}
+
+\begin{ex}
+  Just as topological cylinders and tori may be obtained by gluing the
+  edges of a square, species corresponding to cylinders or tori may be
+  obtained by starting with the species of matrices and ``gluing''
+  along one or both edges by turning lists $\List$ into cycles $\Cyc$.
+  In particular, $\Sp{Cyl} = \List \aprod \Cyc$ is the species of
+  (oriented) \term{cylinders}, and $\Sp{Tor} = \Cyc \aprod \Cyc$ is
+  the species of (oriented) \term{tori}.
+
+  Although species corresponding to Klein bottles and real projective
+  planes (which arise from gluing the edges of a square with one or
+  both pairs of edges given a half-twist before gluing, respectively)
+  certainly exist, it does not seem they can be constructed using
+  $\aprod$, since in those cases the actions of the symmetric group
+  along the two axes are not independent.
+\end{ex}
+
+\begin{ex}
+  \todo{More examples?}
+\end{ex}
+
 An identity element for arithmetic product should be some species $\X$
 such that \[ (\X \aprod G)\ L = \left(\biguplus_{L_\X, L_G \rectangle L} \X\
 L_\X \times G\ L_G\right) \iso G\ L. \] Thus we want $\X\ L_\X = \singleton$
@@ -1663,9 +1746,85 @@ This leads to the following definition:
   \]
 \end{defn}
 
-\todo{More intuitive ideas about $\X$.}
+\begin{rem}
+  Like the unit species $\One$, the singleton species $\X$ denotes a
+  sort of ``leaf'' structure; however, instead of being a trivial leaf
+  structure with no labels, it contains a single label, that is, it
+  marks the spot where a single piece of data can go.  Intuitively, it corresponds
+  to the Haskell data type
+  \begin{spec}
+    data X a = X a
+  \end{spec}
+\end{rem}
 
-\todo{Examples. $\List \aprod \List$.}
+Species corresponding to a wide variety of standard data structures
+can be defined using $\X$.
+
+\begin{ex}
+  The species of \term{ordered pairs} is given by $\X \cdot \X$.  Since there
+  is only an $\X$-structure on a single label, and product partitions
+  labels, there are only $(\X \cdot \X)$-structures on label sets of
+  cardinality $2$, and there are two such structures, one for each
+  ordering of the two labels. \todo{picture?}
+
+  More generally, $\X^n = \underbrace{\X \cdot \dots \cdot \X}_n$ is the
+  species of \term{ordered $n$-tuples}; there are exactly $n!$
+  $(\X^n)$-structures on $n$ labels, and none on label sets of any
+  other size.
+\end{ex}
+
+\begin{ex}
+  Recall that $\List$ denotes the species of lists, \ie linear
+  orderings.  Besides the interpretation of recursion, to be explored
+  in \todo{where?}, we have now seen all the necessary pieces to
+  understand the algebraic definition of $\List$: \[ \List = \One + \X
+  \cdot \List. \] That is, a list structure is either the trivial
+  structure on zero labels, or a single label paired with a list
+  structure on the remainder of the labels.  We also have $\List =
+  \One + \X + \X^2 + \X^3 + \dots$.
+\end{ex}
+
+\begin{ex}
+  Similarly, recall that the species $\Bin$ of \term{binary trees} is
+  given by \[ \Bin = \One + \Bin \cdot \X \cdot \Bin. \]
+\end{ex}
+
+\begin{ex}
+  The species $\X \cdot \Bag$ is variously known as the species of
+  \term{pointed sets} (which may be denoted $\pointed{\Bag}$) or the
+  species of \term{elements} (denoted $\varepsilon$).  $(\X \cdot
+  \Bag)$-structures consist of a single distinguished label paired
+  with an unstructured collection of any number of remaining
+  labels. There are thus $n$ such structures on each label set of
+  cardinality $n$, one for each label.
+
+  The two different names result from the fact that we may ``care
+  about'' the labels in a $\Bag$-structure or not---that is, when
+  considering data structures built on top of species, $\Bag$ may
+  correspond either to a bag data structure, or instead to a ``sink''
+  where we throw labels to which we do not wish to associated any
+  data. This makes no difference from a purely combinatorial point of
+  view---for example, there are the same number of $(\X \cdot
+  \Bag)$-structures on $n$ labels whether we ``care about'' the labels
+  in the $\Bag$-structures or not---but the associated data structures
+  are certainly different.
+
+  To emphasize the difference, we will write $\Rubbish$ for the
+  variant of $\Bag$ where we ``do not care'' about the labels, and
+  continue to write $\Bag$ when we do.  Thus, $\X \cdot \Bag$ is the
+  species of pointed sets, whose associated data structures store a
+  bag of elements with one element distinguished, whereas $\X \cdot
+  \Rubbish$ is the species of elements, whose associated data
+  structures store just a single data element corresponding to a
+  single chosen label.
+\end{ex}
+
+\begin{ex}
+  Likewise, $\Bag \cdot \Bag$ is the species of \term{binary
+    partitions}, whereas $\Bag \cdot \Rubbish$ is the species of
+  \term{subsets}; they are combinatorially equivalent but differ in
+  their realization as data structures.
+\end{ex}
 
 \subsection{Day convolution}
 \label{sec:day-convolution}
@@ -2312,6 +2471,7 @@ dia = theDia # centerXY # pad 1.1
     \label{fig:pointing}
   \end{figure}
 
+\todo{Put cardinality restriction back in.}
 
 \section{Examples}
 \label{sec:examples}

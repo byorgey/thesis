@@ -101,7 +101,6 @@ cyc' labs r
                  # rotate endAngle
                  # fc black
                )
-               # lwG (labR / 10)
              )
   startAngle = (labR + arrowGap)/r @@ rad
   endAngle   = (tau/fromIntegral n @@ rad) ^-^ startAngle
