@@ -628,9 +628,7 @@ aOpts = with & arrowTail .~ dart'
 
 When are two categories ``the same''?  In traditional category theory,
 founded on set theory, there are quite a few different definitions of
-``sameness'' for categories.  Ultimately, this comes down to the fact,
-alluded to earlier, that set theory does not make a very good
-foundation for category theory.  There are many different notions of
+``sameness'' for categories.  There are many different notions of
 ``equality'' (isomorphism, equivalence, \dots), and they often do not
 correspond to the underlying equality on sets, so one must carefully
 pick and choose which notions of equality to use in which situations
@@ -711,12 +709,12 @@ Recall that a \term{monoid} is a set $S$ equipped with an associative
 binary operation \[ \mappend : S \times S \to S \] and a distinguished
 element $\mempty : S$ which is an identity for $\mappend$. (See, for
 example, \citet{yorgey2012monoids} for a discussion of monoids in the
-context of Haskell.)  A \term{monoidal category} is one with a
-``monoid on objects'', that is, a binary operation on objects and an
-identity object, with the associativity and identity laws expressed
-via natural isomorphisms.
+context of Haskell.)  A \term{monoidal category} is the appropriate
+``categorification'' of the concept of a monoid, \ie with the set $S$
+replaced by category, the binary operation by a bifunctor, and the
+equational laws by natural isomorphisms.
 \begin{defn}
-  A \term{monoidal category} is a category $\C$ equipped with
+  Formally, a \term{monoidal category} is a category $\C$ equipped with
   \begin{itemize}
   \item a bifunctor $\otimes : \C \times \C \to \C$;
   \item a distinguished object $I \in \C$;
@@ -728,7 +726,7 @@ via natural isomorphisms.
   $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
   ``coherence axioms'', which ensure that parallel isomorphisms
   constructed from $\alpha$, $\lambda$, and $\rho$ are always equal;
-  for details, see \citet[p. XXX]{mac1998categories} \todo{fill in page or
+  for details, see \citet[Chapter VII]{mac1998categories} \todo{fill in page or
     section number}.
 
   We often write $(\C,\otimes,I)$ when we wish to emphasize the choice

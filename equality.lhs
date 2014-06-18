@@ -241,6 +241,9 @@ propositions, not to construct values.
 \subsection{Unique isomorphism and generalized ``the''}
 \label{sec:generalized-the}
 
+\todo{Make the link between ``the'' and ``definite description'' (aka iota,
+as well as Hilbert's choice operator, epsilon).}
+
 In category theory, one is typically interested in specifying objects
 only \emph{up to unique isomorphism}.  In fact, definitions which make
 use of actual \emph{equality} on objects are sometimes referred to
@@ -252,7 +255,8 @@ may be many objects with the given property, but all such objects are
 uniquely isomorphic; this cannot cause confusion if the principle of
 equivalence is in effect.
 
-\later{Rewrite this a bit based on feedback from blog post comments.}
+\later{Rewrite this a bit based on feedback from blog post
+  comments. Also Jacques says it is not that useful.}
 This phenomenon should be familiar to anyone who has seen simple
 universal constructions such as terminal objects or categorical
 products.  For example, an object $1 \in \C$ is called \term{terminal}
