@@ -309,8 +309,11 @@ counts is only whether or not the proposition is provable at all.
   is a path $p = q$.  Put another way, for any $x, y : A$, the type $x
   = y$ is a proposition.
 \end{defn}
-Most ``standard'' inductive types, \eg \N, \Fin n, and so on, are
-sets, which can be proved via their induction principles.
+``Standard'' inductive types, \eg \N, \Fin n, and so on, are sets,
+although proving this takes a bit of work. See the HoTT book for
+proofs in the particular case of \N, which can be adapted to other
+inductive types as well~\citep[\Sect 2.13, Example 3.1.4, \Sect
+7.2]{hottbook}.
 
 As noted above, propositions and sets are also called, respectively,
 $(-1)$-types and $0$-types.  As these names suggest, there is an
