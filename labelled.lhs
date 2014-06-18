@@ -164,7 +164,7 @@ bogged down in abstraction.  The code corresponding to the backwards
 direction of the proof is shown in \pref{fig:lan-coend-Hask} (note
 that it requires the |GADTs| and |RankNTypes| extensions~\citep{GADTs,
   RankNTypes}).\footnote{As evidenced by the @kan-extensions@
-  package~\citep{kmett-kan-extensions-hackage}, the implementation of
+  package~\citep{kmett-kan-extensions}, the implementation of
   this constructive proof in Haskell can be considerably simplified,
   but at the expense of obscuring the connection to the original
   abstract proof given above.} The code for the forward direction is
