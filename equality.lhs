@@ -926,7 +926,7 @@ isomorphism. The following example will play an important role later.
 
 \begin{defn}
   Any $1$-type $T$ gives rise to an \hott{groupoid} $\tygrpd{T}$ where the
-  objects are values $a : T$, and $\hom a b \defeq a = b$, that
+  objects are values $a : T$, and $\hom a b \hdefeq (a = b)$, that
   is, morphisms from $a$ to $b$ are paths $p : a = b$.
 \end{defn}
 
@@ -963,7 +963,7 @@ of sets and functions.
   an equivalence $A \equiv B$---indeed, it turns out to be so only
   because $A$ and $B$ are sets.  Technically, $(A \iso B)$ constitutes
   a \term{quasi-inverse} between $A$ and $B$, that is, $(A \iso B)
-  \equiv (f : A \to B) \times \qinv(f)$, where $\qinv(f) \defeq (g : B
+  \equiv (f : A \to B) \times \qinv(f)$, where $\qinv(f) \hdefeq (g : B
   \to A) \times (f \comp g = \id_B) \times (g \comp f = \id_A)$. On
   the other hand, $(A \equiv B) \equiv (f : A \to B) \times
   \isequiv(f)$.  The precise definition of $\isequiv(f)$ can be found
@@ -1343,7 +1343,7 @@ role, suggests that we adopt the simplest option,
   cardinality of $A$.
 \end{defn}
 Our first try at encoding this in type theory is
-\[ \FinType \defeq (A : \Type) \times (n : \N) \times (A \equiv \Fin n). \]
+\[ \FinType \hdefeq (A : \Type) \times (n : \N) \times (A \equiv \Fin n). \]
 
 We would like to build a groupoid having such finite types as objects,
 and equivalences between them as morphisms.  Recall that given some
@@ -1433,7 +1433,7 @@ fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
 good as any other.
 
 This suggests a better encoding of finiteness in type theory, \[
-\FinTypeT' \defeq (A : \Type) \times \ptrunc{(n : \N) \times (A \equiv
+\FinTypeT' \hdefeq (A : \Type) \times \ptrunc{(n : \N) \times (A \equiv
   \Fin n)}, \] making use of propositional truncation to encode the
 fact that there \emph{merely exists} some size $n$ and an equivalence
 between $A$ and $\Fin n$, but without exposing a precise choice.  The
@@ -1486,10 +1486,10 @@ we may simply restrict to $0$-types $A$ (which is arguably a more
 faithful encoding of the situation in set theory anyway). This yields
 our final definition:
 
-\begin{defn}
-  The type of finite sets is given by \[ \FinTypeT \defeq (A : \Type)
+\begin{defn} \label{defn:FinTypeT}
+  The type of finite sets is given by \[ \FinTypeT \hdefeq (A : \Type)
   \times \isSet(A) \times \isFinite(A), \] where \[ \isFinite(A)
-  \defeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}. \]
+  \hdefeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}. \]
 \end{defn}
 We will often abuse notation and write $A : \FinTypeT$ instead of
 $(A,s,f) : \FinTypeT$ where $s : \isSet(A)$ and $f : \isFinite(A)$.
@@ -1499,7 +1499,7 @@ underlying types. Since those types must be sets, \ie $0$-types,
 $\FinTypeT$ is consequently a $1$-type.
 
 \begin{defn}
-  $\BT$ is defined by \[ \BT \defeq \tygrpd{\FinTypeT}, \] the
+  $\BT$ is defined by \[ \BT \hdefeq \tygrpd{\FinTypeT}, \] the
   groupoid of cardinal-finite types and paths bewteen them.
 \end{defn}
 
@@ -1561,7 +1561,7 @@ There are two relevant notions of essential surjectivity:
   A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
   \term{essentially surjective} if for each object $D : \DT$ there
   \emph{merely} exists an object $C : \CT$ such that $F\ C \iso D$. That
-  is, \[ \msf{essSurj}(F) \defeq (D : \DT) \to \ptrunc{ (C : \CT)
+  is, \[ \msf{essSurj}(F) \hdefeq (D : \DT) \to \ptrunc{ (C : \CT)
     \times (F\ C \iso D) }. \]
 \end{defn}
 
