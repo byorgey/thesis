@@ -1511,31 +1511,32 @@ directly and na\"ively to $\B$ itself. The main difference is that
 $\BT$ uses a propositional truncation to ``hide'' the explicit choice
 of finiteness evidence.
 
-We now turn to the equivalence of $\PT$ and $\BT$.
+We now turn to the equivalence of $\PT$ and $\BT$, with a goal of
+defining inverse functors $\fin - : \PT \to \BT$ and $\size : \BT \to
+\PT$.  We begin with $\fin -$.
 
 \begin{defn}
-  We can easily define a functor $\fin - : \PT \to \BT$: on objects,
-  it sends $n$ to $\Fin n$, along with proofs that it is a set and
-  finite (using the identity equivalence for the latter).  On
-  morphisms, it sends $f : \Fin m \equiv \Fin n$ to $\ua\ f : \Fin m =
-  \Fin n$.
+  The functor $\fin - : \PT \to \BT$ is defined as follows; the
+  essential idea is to send the natural number $n$ to the canonical
+  finite set $\Fin n$, and permutations to paths.
+  \begin{itemize}
+  \item On objects, $\fin n \hdefeq (\Fin n, s, \ptruncI{(n, \id)})$,
+    where $s$ is a proof that $\Fin n$ is a set\footnote{Again,
+      producing such a proof is nontrivial but standard; see the
+      discussion in \pref{sec:n-types}.}, and $\id : \Fin n \equiv
+    \Fin n$ witnesses the finiteness of $\Fin n$.
+  \item Recall that a morphism $\psi : \hom[\PT] m n$ is an
+    equivalence $\psi : \Fin m \equiv \Fin n$. Thus $\ua\ \psi : \Fin
+    m = \Fin n$, and we define $\fin \psi \hdefeq u\ (\ua\ \psi) :
+    \fin m = \fin n$, where $u$ is some function witnessing the fact,
+    mentioned immediately following \pref{defn:FinTypeT}, that paths
+    in $\FinTypeT$ are characterized by paths between their underlying
+    types.
+  \end{itemize}
 \end{defn}
 
-However, it is not at all obvious how to directly define a functor
-$\size : \BT \to \PT$. Just as with $\B \to \P$, defining its action
-on morphisms requires a specific choice of equivalence $A \equiv \Fin
-n$. The objects of $\BT$ contain such equivalences, in the proofs of
-finiteness, but they are propositionally truncated; the type of
-functors $\BT \to \PT$ is decidedly not a mere proposition, so it
-seems the recursion principle for truncation does not apply.
-
-However, all is not lost!  We could try porting the concept of
-anafunctor into HoTT, but it turns out that there is a better way.
-Recall that in set theory, every fully faithful, essentially
-surjective functor is an equivalence \emph{if and only if} the axiom
-of choice holds.  In HoTT the situation turns out much better, thanks
-to the richer notion of equality and the extra axiom associated with a
-category.
+Before turning to $\size : \BT \to \PT$, we note the following
+property of $\fin -$:
 
 \begin{lem}
   $\fin - : \PT \to \BT$ is full and faithful.
@@ -1547,13 +1548,29 @@ category.
   n)$---such an equivalence is given by univalence.
 \end{proof}
 
-There are two relevant notions of essential surjectivity:
+On the other hand, it is not at all obvious how to directly define a
+functor $\size : \BT \to \PT$. Just as with $\B \to \P$, defining its
+action on morphisms requires a specific choice of equivalence $A
+\equiv \Fin n$. The objects of $\BT$ contain such equivalences, in the
+proofs of finiteness, but they are propositionally truncated; the type
+of functors $\BT \to \PT$ is decidedly not a mere proposition, so it
+seems the recursion principle for truncation does not apply.
+
+However, all is not lost!  We could try porting the concept of
+anafunctor into HoTT, but it turns out that there is a better way.
+Recall that in set theory, every fully faithful, essentially
+surjective functor is an equivalence \emph{if and only if} the axiom
+of choice holds.  In HoTT the situation turns out much better, thanks
+to the richer notion of equality and the extra axiom associated with a
+category.
+
+First, there are two relevant notions of essential surjectivity:
 
 \begin{defn}
   A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
   \term{split essentially surjective} if for each object $D : \DT$
   there \emph{constructively} exists an object $C : \CT$ such that $F\
-  C \iso D$. That is, \[ \msf{splitEssSurj}(F) \defeq (D : \DT) \to (C :
+  C \iso D$. That is, \[ \msf{splitEssSurj}(F) \hdefeq (D : \DT) \to (C :
   \CT) \times (F\ C \iso D). \]
 \end{defn}
 
@@ -1574,7 +1591,7 @@ strong notion.  In particular:
   only if it is an equivalence.
 \end{prop}
 \begin{proof}
-  See the HoTT book~\citep[Lemma 9.4.5]{hottbook}.  Intuitively, the
+  See the HoTT book~\citeyearpar[Lemma 9.4.5]{hottbook}.  Intuitively, the
   \emph{split} essential surjectivity gives us exactly what we need to
   unambiguously \emph{construct} an inverse functor $G : \DT \to \CT$:
   the action of $G$ on $D : \DT$ is defined to be the $C$---which
@@ -1599,7 +1616,7 @@ essentially surjective, since that would require extracting finiteness
 proofs from the propositional truncation, which is not allowed in
 general.  However:
 
-\begin{prop}[\protect{\citep[Lemma 9.4.7]{hottbook}}]
+\begin{prop}[HoTT book, Lemma 9.4.7]
   If $F : \CT \to \DT$ is fully faithful and $\CT$ is a category, then
   for any $D : \DT$ the type $(C : \CT) \times (F\ C \iso D)$ is a
   mere proposition.
