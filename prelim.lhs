@@ -335,6 +335,9 @@ it is not the case that all paths $A = B$ are equal; such paths
 correspond to bijections between $A$ and $B$, and there may be many
 such bijections.
 
+Note that $\isSet(A)$ itself is always a mere proposition for any type
+$A$ (see Lemma 3.3.5 in the HoTT book).
+
 \subsection{Truncation}
 
 The last important concept from HoTT to touch upon is
