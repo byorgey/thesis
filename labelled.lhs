@@ -42,11 +42,10 @@ mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
 However, this must be done in a principled way which allows deriving
 properties of labelled structures from corresponding properties of
 labelled shapes.  This chapter begins with an overview of \term{Kan
-  extensions} (\pref{sec:kan-extensions}) and uses them to define
-\term{analytic functors} (\pref{sec:analytic-functors}), which provide
-the theoretical basis for extending labelled shapes to labelled
-structures.  \todo{Continue this description/outline once the rest of
-  the chapter shakes out.}
+  extensions} (\pref{sec:kan-extensions}) and \term{analytic functors}
+(\pref{sec:analytic-functors}), which provide the theoretical basis
+for extending labelled shapes to labelled structures.  \todo{Continue
+  this description/outline once the rest of the chapter shakes out.}
 
 \section{Kan extensions}
 \label{sec:kan-extensions}
