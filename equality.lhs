@@ -236,7 +236,7 @@ element~\cite[Chapter 3]{hottbook}.  This more faithfully mirrors the
 way mathematicians use it, for example, in reasoning such as ``$S$ is
 non-empty, so let $s \in S$ \dots''.  Non-emptiness does in fact imply
 an inhabitant, but such an inhabitant can only be used to prove
-propositions, not to construct values.
+propositions.
 
 \subsection{Unique isomorphism and generalized ``the''}
 \label{sec:generalized-the}
@@ -245,17 +245,17 @@ propositions, not to construct values.
 as well as Hilbert's choice operator, epsilon).}
 
 In category theory, one is typically interested in specifying objects
-only \emph{up to unique isomorphism}.  In fact, definitions which make
-use of actual \emph{equality} on objects are sometimes referred to
-(half-jokingly) as \emph{evil}.  More positively, the principle of
-equivalence states that properties of mathematical structures should
-be invariant under equivalence.  This principle leads naturally to
-speaking of ``the'' object having some property, when in fact there
-may be many objects with the given property, but all such objects are
-uniquely isomorphic; this cannot cause confusion if the principle of
-equivalence is in effect.
+only \emph{up to (unique) isomorphism}.  In fact, definitions which
+make use of actual \emph{equality} on objects are sometimes referred
+to (half-jokingly) as \emph{evil}.  More positively, the
+\term{principle of equivalence} states that properties of mathematical
+structures should be invariant under isomorphism.  This principle
+leads naturally to speaking of ``the'' object having some property,
+when in fact there may be many objects with the given property, but
+all such objects are uniquely isomorphic; this cannot cause confusion
+if the principle of equivalence is in effect.
 
-\later{Rewrite this a bit based on feedback from blog post
+\todo{Rewrite this a bit based on feedback from blog post
   comments. Also Jacques says it is not that useful.}
 This phenomenon should be familiar to anyone who has seen simple
 universal constructions such as terminal objects or categorical
@@ -462,6 +462,8 @@ There are also, however, several more creative options:
 
 \subsection{Cliques}
 \label{sec:cliques}
+
+\todo{Give some history, background, references etc.}
 
 As a preface to anafunctors, we begin with a brief outline of the
 theory of \term{cliques}, which are a formal way of representing the
@@ -1026,6 +1028,7 @@ and $F_1(f)$.
 
 \todo{Should explain somewhere why elucidating the relation between B
   and P is so important.}
+\todo{Say something about how this is novel material?}
 
 Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about representing
@@ -1159,7 +1162,7 @@ way around the use of AC in this particular case, using the theory of
 This definition gets off the ground since the empty set is vacuously
 hereditarily finite.  As is usual in set theory, this definition is
 interpreted recursively, so there cannot be any infinitely descending
-membership chains.  Hereditarily finite sets can thus be seen as
+membership chains.  Hereditarily finite sets can thus be identified with
 finitely-branching, finite-depth trees.
 
 Now consider the groupoid $\cat{H}$ obtained by replacing ``finite''
@@ -1167,8 +1170,8 @@ with ``hereditarily finite'' in the definition of $\B$.  That is, the
 elements of $\cat{H}$ are hereditarily finite sets, and the morphisms
 are bijections.  Replacing $\B$ by $\cat{H}$ in the definition of
 species is really no great loss, since we are interested in modelling
-sets of ``labels'', and there is no particular reason to have labels
-modelled by infinite sets.
+finite sets of ``labels'', and there is no particular reason to have
+individual labels modelled by infinite sets.
 
 Unlike the class of all sets, however, the class of all hereditarily
 finite sets (normally written $V_\omega$) has a well-ordering.  For
@@ -1186,11 +1189,9 @@ counterpart in type theory, or indeed in a structural set theory.  The
 concept of hereditary finiteness only makes sense in a material set
 theory such as ZF.  To determine the canonical ordering on, say,
 $\{\text{dog}, \text{cat}, \text{moose}\}$, we need to know the
-precise identity of the set used to encode each animal---but,
-intuitively, knowing their precise encoding as sets violates the
-principle of equivalence, since there may be many possible encodings
-with the right properties.  Using a well-ordering on $V_\omega$ to
-avoid AC in this case is therefore little more than a curiosity.
+precise identity of the set used to encode each animal---but knowing
+their precise encoding as sets violates the principle of equivalence,
+since there may be many possible encodings with the right properties.
 
 \section{Finiteness in HoTT}
 \label{sec:finiteness-hott}
@@ -1231,22 +1232,23 @@ in type theory.  First, a few necessary lemmas:
     (\suc \dots) \to \Fin \zero$, which can be used to produce an
     element of $\Fin \zero = \bot$, from which anything follows.
   \item In the case when both are a successor, we have
-    $\Fin{(\suc{n_1'})} \equiv \Fin{(\suc{n_2'})}$, which is equivalent
-    to $\top + \Fin{n_1'} \equiv \top + \Fin{n_2'}$.  If we can conclude
-    that $\Fin{n_1'} \equiv \Fin{n_2'}$, the inductive hypothesis then
-    yields $n_1' = n_2'$, from which $\suc{n_1'} = \suc{n_2}'$ follows
-    immediately.  The implication $(\top + \Fin{n_1'} \equiv \top +
-    \Fin{n_2'}) \to (\Fin{n_1'} \equiv \Fin{n_2'})$ is true, but not
-    quite as straightforward to show as one might think! In
-    particular, an equivalence $(\top + \Fin{n_1'} \equiv \top +
-    \Fin{n_2'})$ may not match the $\top$ values with each other.  As
-    illustrated in \pref{fig:gcbp-Maybe}, given $e : (\top +
-    \Fin{n_1'} \equiv \top + \Fin{n_2'})$, it suffices to define
-    $e'(e^{-1}\ \unit) = e\ \unit$, with the rest of $e' : \Fin{n_1'}
-    \equiv \Fin{n_2'}$ defined as a restriction of $e$.  This
-    construction corresponds more generally to the \term{Gordon
-      complementary bijection principle}~\citep{gcbp}, to be discussed
-    in more detail in \pref{sec:gcbp}.
+    $\Fin{(\suc{n_1'})} \equiv \Fin{(\suc{n_2'})}$, which is
+    equivalent to $\top + \Fin{n_1'} \equiv \top + \Fin{n_2'}$.  If we
+    can conclude that $\Fin{n_1'} \equiv \Fin{n_2'}$, the inductive
+    hypothesis then yields $n_1' = n_2'$, from which $\suc{n_1'} =
+    \suc{n_2}'$ follows immediately.  The implication $(\top +
+    \Fin{n_1'} \equiv \top + \Fin{n_2'}) \to (\Fin{n_1'} \equiv
+    \Fin{n_2'})$ is true, but not quite as straightforward to show as
+    one might think! In particular, an equivalence $(\top + \Fin{n_1'}
+    \equiv \top + \Fin{n_2'})$ may not match the $\top$ values with
+    each other.  As illustrated in \pref{fig:gcbp-Maybe}, given $e :
+    (\top + \Fin{n_1'} \equiv \top + \Fin{n_2'})$, it suffices to
+    define $e'(e^{-1}\ \unit) = e\ \unit$, with the rest of $e' :
+    \Fin{n_1'} \equiv \Fin{n_2'}$ defined as a restriction of
+    $e$. \todo{Formal proof that the resulting $e'$ is an
+      equivalence?}  This construction corresponds more generally to
+    the \term{Gordon complementary bijection principle}~\citep{gcbp},
+    to be discussed in more detail in \pref{sec:gcbp}.
   \end{itemize}
 \end{proof}
 
@@ -1310,6 +1312,14 @@ dia = hcat' (with & sep .~ 2)
   \caption{Eliminating $\top$ from both sides of an equivalence}
   \label{fig:gcbp-Maybe}
 \end{figure}
+
+\begin{rem}
+  It is a bit strange that the above proof has so much computational
+  content, manipulating equivalences, \etc, when the end goal is to
+  prove an equality of the form $n_1 = n_2$, a mere
+  proposition. \todo{Not sure if there is a better proof; or, explain
+    why the given proof is necessary.}
+\end{rem}
 
 Constructing a type-theoretic counterpart to $\P$ is
 now straightforward.
