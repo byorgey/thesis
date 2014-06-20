@@ -676,7 +676,7 @@ These are obviously not \emph{equal}, but they are isomorphic, in the
 sense that there are natural transformations, \ie polymorphic
 functions, |rose2fork :: forall a. Rose a -> Fork a| and |fork2rose ::
 forall a. Fork a -> Rose a|, such that |rose2fork . fork2rose === id|
-and |fork2rose . rose2fork === id| \citep{yorgey-2010-species}.
+and |fork2rose . rose2fork === id| \citep{yorgey-2010-species, hinze2010reason}.
 
 Here, then, is a better definition:
 \begin{defn} \label{defn:cat-equiv} Categories $\C$ and $\D$ are
