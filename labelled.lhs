@@ -614,10 +614,11 @@ partial bijection trivially by setting $|embed| = f$ and $|project|
 simply using bijections as if they were partial bijections when
 convenient.
 
-\begin{lem}
+\begin{prop}
   \todo{identity partial bij.}
-\end{lem}
+\end{prop}
 
+\begin{prop}
 In addition, note that partial bijections compose, that
 is, we have $- \comp - : (B \subseteq C) \to (A \subseteq B) \to (A
 \subseteq C)$, implemented in the obvious way.  Combining the two
@@ -629,6 +630,11 @@ equivalence.\todo{Update this footnote.}\footnote{Happily, using the Haskell \te
   \emph{prisms}) are such that equivalences simply \emph{are} partial
   equivalences, and they compose as one would expect (albeit
   ``backwards''), using the standard function composition operator.}
+\end{prop}
+
+\begin{prop}
+  \todo{Partial bijections form an \hott{category}.}
+\end{prop}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}
