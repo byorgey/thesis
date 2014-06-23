@@ -28,13 +28,15 @@ inj₂-inj {A} {B} def = cong proj
 
 -- Proving this special case might be more straightforward then GCBP
 -- in all its generality.
+--
+-- Or... maybe not.  It's certainly tedious.
 lemma : ∀ {A B : Set} → ((⊤ ⊎ A) ≃ (⊤ ⊎ B)) → (A ≃ B)
 lemma {A} {B} ⊤⊎A≃⊤⊎B = record
   { to = A→B
   ; is-equivalence = λ b → (B→A b , A→B∘B→A b) , preimgPf b
   }
   where
-    open _≃_ ⊤⊎A≃⊤⊎B using (to; from; injective; right-inverse-of)
+    open _≃_ ⊤⊎A≃⊤⊎B using (to; from; injective; right-inverse-of; left-inverse-of)
     A→B : A → B
     A→B a with inspect (to (inj₂ a))
     A→B a | inj₂ b  with-≡ _  = b
@@ -49,20 +51,44 @@ lemma {A} {B} ⊤⊎A≃⊤⊎B = record
     ...     | inj₂ a  with-≡ _   = a
     ...     | inj₁ tt with-≡ eq₂ = ⊎-disjoint (_≃_.injective (inverse ⊤⊎A≃⊤⊎B) (trans eq₂ (sym eq₁)))
 
+    -- ugh!!!  And that's only *one* direction...  Would need to come
+    -- up with a much nicer theory & way of organizing these things...
+    -- (for example, A→B and B→A are entirely symmetric but that
+    -- doesn't go into their definitions so we don't get to exploit
+    -- it).
     A→B∘B→A : (b : B) → A→B (B→A b) ≡ b
     A→B∘B→A b with inspect (from (inj₂ b))
     A→B∘B→A b | inj₂ a with-≡ _ with inspect (to (inj₂ a))
-    A→B∘B→A b | inj₂ a with-≡ _ | inj₁ tt with-≡ eq₁ with inspect (to (inj₁ tt))
-    A→B∘B→A b | inj₂ a with-≡ _ | inj₁ tt with-≡ eq₁ | inj₁ tt with-≡ eq₂ = ⊎-disjoint (injective (trans eq₂ (sym eq₁)))
-    A→B∘B→A b | inj₂ a with-≡ eq₃ | inj₁ tt with-≡ eq₂ | inj₂ b' with-≡ eq₁ = {!!}
+    A→B∘B→A b | inj₂ a with-≡ _ | inj₁ tt with-≡ _ with inspect (to (inj₁ tt))
+    A→B∘B→A b | inj₂ a with-≡ _   | inj₁ tt with-≡ eq₁ | inj₁ tt with-≡ eq₂ = ⊎-disjoint (injective (trans eq₂ (sym eq₁)))
+    A→B∘B→A b | inj₂ a with-≡ eq₃ | inj₁ tt with-≡ eq₂ | inj₂ _  with-≡ _
+      = ⊎-disjoint
+          (trans (sym (subst (λ x → to x ≡ inj₁ tt) (sym eq₃) eq₂))
+           (right-inverse-of (inj₂ b)))
     A→B∘B→A b | inj₂ a with-≡ eq₁ | inj₂ b' with-≡ eq₂
       = inj₂-inj b (trans (sym eq₂) (subst (λ x → to x ≡ inj₂ b) eq₁ (right-inverse-of (inj₂ b))))
-    A→B∘B→A b | inj₁ tt with-≡ eq₁ with inspect (from (inj₁ tt))
-    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₁ x with-≡ eq₂ = {!!}
-    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₂ y with-≡ eq₂ = {!!}
+    A→B∘B→A b | inj₁ tt with-≡ _ with inspect (from (inj₁ tt))
+    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₁ tt with-≡ eq₂ = ⊎-disjoint (_≃_.injective (inverse ⊤⊎A≃⊤⊎B) (trans eq₂ (sym eq₁)))
+    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₂ a  with-≡ eq₂ with inspect (to (inj₂ a))
+    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₂ a  with-≡ eq₂ | inj₂ y  with-≡ eq₃
+      = ⊎-disjoint
+          (trans (sym (right-inverse-of (inj₁ tt)))
+           (subst (λ x → to x ≡ inj₂ y) (sym eq₂) eq₃))
+    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₂ a  with-≡ eq₂ | inj₁ tt with-≡ eq₃ with inspect (to (inj₁ tt))
+    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₂ a with-≡ eq₂ | inj₁ tt with-≡ eq₃ | inj₁ tt with-≡ eq₄
+      = ⊎-disjoint
+          (trans (sym (left-inverse-of (inj₁ tt)))
+           (subst (λ x → from x ≡ inj₂ a) (sym eq₄) eq₂))
+    A→B∘B→A b | inj₁ tt with-≡ eq₁ | inj₂ a with-≡ eq₂ | inj₁ tt with-≡ eq₃ | inj₂ y  with-≡ eq₄
+      = inj₂-inj b
+          (sym
+           (trans (sym (right-inverse-of (inj₂ b)))
+            (subst (λ x → to x ≡ inj₂ y) (sym eq₁) eq₄)))
 
     preimgPf : (b : B) → (b⁻¹ : A→B ⁻¹ b) → ((B→A b , A→B∘B→A b) ≡ b⁻¹)
-    preimgPf = {!!}
+    preimgPf b b⁻¹ with inspect (from (inj₂ b))
+    preimgPf b (a' , a'≡) | inj₂ a with-≡ eq₁ = {!!}
+    preimgPf b b⁻¹ | inj₁ tt with-≡ eq₁ = {!!}
 
 gcbp : ∀ {A B A' B' : Set} → ((A ⊎ A') ≃ (B ⊎ B')) → (A ≃ B) → (A' ≃ B')
 gcbp {A} {B} {A'} {B'} A⊎A'≃B⊎B' A≃B = record
