@@ -542,8 +542,8 @@ species $F$, whose values consist of a labelled $F$-shape paired with
 a map assigning a data value to each label.  It will be convenient,
 however, to be able to explicitly work with label types.
 
-\newcommand{\lab}[1]{\langle #1 \rangle}
-\newcommand{\LStr}[3]{{\lab #1}_{#2}\ {#3}}
+\subsection{Simple labelled structures}
+\label{sec:simple-labelled}
 
 \begin{defn}
   Given a species $F$, the type of \term{labelled structures} over $F$
@@ -554,18 +554,81 @@ however, to be able to explicitly work with label types.
 We evidently have $\analytic F\ A = \coend L \LStr F L A$, that is,
 labelled structures are obtained from analytic functors by ``taking
 the coend off'', exposing the set of labels as a parameter.
+$\LStr F L -$ is clearly functorial.  Note, however, that $L$ appears
+both co- and contravariantly, so $\LStr F - A$ is functorial only if
+$\Lab$ is a groupoid, in which case $\LStr F \sigma A = (\iota
+(\sigma^{-1}) \to A) \times F \sigma$.
 
 Note that the same definition applies equally well in HoTT, replacing
-$\B$ and $\Set$ with $\BT$ and $\ST$.  Note, however, that
-functoriality of $\lab F$ in the labels depends crucially on $\B$ (and
-$\BT$) being groupoids, since $L$ appears both co- and contravariantly
-in the definition of $\LStr F L A$.
+$\B$ and $\Set$ with $\BT$ and $\ST$.
+
+\subsection{Generalized labelled structures}
+\label{sec:generalized-labelled}
 
 To generalize labelled structures to $[\Lab,\Str]$-species where
-$\Lab$ is not a groupoid, \todo{Generalize.  Need two label type
-  parameters for positive and negative occurrences?  \emph{e.g.} can
-  we use category of partial bijections, \ie prisms?} \bay{Wait and
-  see whether/how we actually end up needing this.}
+$\Lab$ is not a groupoid, we must split the parameter $L$ into two,
+one each for the contravariant and covariant occurrences: \[ \GLStr F
+K L A \defeq (\iota K \to A) \times F\ L. \]
+
+\subsection{Partial isomorphisms}
+\label{sec:subsets}
+
+\todo{Terminology.  Bijections and equivalences are the same for sets.}
+
+As a larger running example, we develop the category of finite sets
+and \term{partial bijections}, $\BSub$, and use it as a category of
+labels to define a generalized notion of \term{partial species}.  The
+development will be carried out in HoTT, though it works equally well
+in set theory.
+
+The basic idea is to introduce a type of evidence witnessing the fact
+that one set ($0$-type) is a ``subset'' of another, written $A
+\subseteq B$.\footnote{There should be no problem in generalizing
+  partial bijections to partial equivalences which work over any
+  types, using an appropriate notion of partial adjoint equivalences.
+  However, there is no need for such generalization in the present
+  work, so we stick to the simpler case of $0$-types.} Of course there
+is no subtyping in HoTT, so there is no literal sense in which one
+type can be a subset of another. However, the situation can be
+modelled as follows.
+
+\begin{defn}
+  A \term{partial bijection} $A \subseteq B$ between two sets $A$ and
+  $B$ is given by:
+\begin{itemize}
+\item a function $|embed| : A \to B$,
+\item a function $|project| : B \to \TyOne + A$,
+\item a proof that $|project . embed| = \cons{inr}$, and
+\item a proof that for all $b : B$, if $|project b| = \cons{inr}(a)$
+  then |embed a = b|.
+\end{itemize}
+\end{defn}
+
+That is, $A \subseteq B$ witnesses that there is a $1$-$1$
+correspondence between all the elements of $A$ and \emph{some}
+(possibly all) of the elements of $B$.  \todo{picture}
+
+Note that a bijection $f \mkIso g : A \bij B$ can be made into a
+partial bijection trivially by setting $|embed| = f$ and $|project|
+= \cons{inr} \comp g$.  We will not bother to note the conversion,
+simply using bijections as if they were partial bijections when
+convenient.
+
+\begin{lem}
+  \todo{identity partial bij.}
+\end{lem}
+
+In addition, note that partial bijections compose, that
+is, we have $- \comp - : (B \subseteq C) \to (A \subseteq B) \to (A
+\subseteq C)$, implemented in the obvious way.  Combining the two
+previous observations, we can compose an equivalence with a partial
+equivalence (or the other way around) to obtain another partial
+equivalence.\todo{Update this footnote.}\footnote{Happily, using the Haskell \texttt{lens} library
+  \cite{lens}, this all works out automatically: the representations
+  of equivalences and partial bijections (which \texttt{lens} calls
+  \emph{prisms}) are such that equivalences simply \emph{are} partial
+  equivalences, and they compose as one would expect (albeit
+  ``backwards''), using the standard function composition operator.}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}

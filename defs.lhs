@@ -320,6 +320,7 @@
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
+\newcommand{\BSub}{\mcal{B}_{\subseteq}}
 
 \newcommand{\FinNSub}{\cat{Fin}\N_{\subseteq}}
 
@@ -414,6 +415,10 @@
 %% Analytic functors
 
 \newcommand{\analytic}[1]{\widehat{#1}}
+
+\newcommand{\lab}[1]{\langle #1 \rangle}
+\newcommand{\LStr}[3]{{\lab #1}_{#2}\ {#3}}
+\newcommand{\GLStr}[4]{{\lab #1}^{#2}_{#3}\ {#4}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Comments
