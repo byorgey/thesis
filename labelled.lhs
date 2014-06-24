@@ -593,44 +593,54 @@ type can be a subset of another. However, the situation can be
 modelled as follows.
 
 \begin{defn}
-  A \term{partial bijection} $A \subseteq B$ between two sets $A$ and
+  A \term{partial bijection} $f : A \subseteq B$ between two sets $A$ and
   $B$ is given by:
 \begin{itemize}
-\item a function $|embed| : A \to B$,
-\item a function $|project| : B \to \TyOne + A$,
-\item a proof that $|project . embed| = \cons{inr}$, and
-\item a proof that for all $b : B$, if $|project b| = \cons{inr}(a)$
-  then |embed a = b|.
+\item an embedding function $f : A \to B$ (in a slight abuse of
+  notation, the same name is used to refer to
+  the embedding function as well as the partial bijection as a whole),
+  \todo{Actually need some notation for this.}
+\item a projection function $\project f : B \to \TyOne + A$,
+\end{itemize}
+together with proofs of the properties
+\begin{itemize}
+\item $\project f \comp f = \inr$, and
+\item for all $b : B$, if $\project f(b) = \inr(a)$
+  then $f(a) = b$.
 \end{itemize}
 \end{defn}
 
 That is, $A \subseteq B$ witnesses that there is a $1$-$1$
 correspondence between all the elements of $A$ and \emph{some}
-(possibly all) of the elements of $B$.  \todo{picture}
+(possibly all) of the elements of $B$.  \todo{picture} This concept is
+also known as a \term{prism} in the Haskell \pkg{lens}
+library~\cite{lens}.
 
-Note that a bijection $f \mkIso g : A \bij B$ can be made into a
-partial bijection trivially by setting $|embed| = f$ and $|project|
-= \cons{inr} \comp g$.  We will not bother to note the conversion,
-simply using bijections as if they were partial bijections when
-convenient.
-
-\begin{prop}
-  \todo{identity partial bij.}
-\end{prop}
+Note that a bijection $f : A \bij B$ can be made into a partial
+bijection $h : A \subseteq B$ trivially by setting $h = f$ and
+$\project h = \inr \comp f^{-1}$.  We will not bother to note the
+conversion, simply using bijections as if they were partial bijections
+when convenient.
 
 \begin{prop}
-In addition, note that partial bijections compose, that
-is, we have $- \comp - : (B \subseteq C) \to (A \subseteq B) \to (A
-\subseteq C)$, implemented in the obvious way.  Combining the two
-previous observations, we can compose an equivalence with a partial
-equivalence (or the other way around) to obtain another partial
-equivalence.\todo{Update this footnote.}\footnote{Happily, using the Haskell \texttt{lens} library
-  \cite{lens}, this all works out automatically: the representations
-  of equivalences and partial bijections (which \texttt{lens} calls
-  \emph{prisms}) are such that equivalences simply \emph{are} partial
-  equivalences, and they compose as one would expect (albeit
-  ``backwards''), using the standard function composition operator.}
+  Partial bijections compose, that is, there is an associative
+  operation \[ - \comp - : (B \subseteq C) \to (A \subseteq B) \to (A
+  \subseteq C). \]
 \end{prop}
+
+\begin{proof}
+  We set $f \comp g = f \comp g$ \todo{notation}
+\end{proof}
+
+Combining the two previous observations, we can compose an equivalence
+with a partial equivalence (or the other way around) to obtain another
+partial equivalence.\footnote{In fact, using the \pkg{lens}
+  library---and more generally, using a van Laarhoven formulation of
+  lenses~\cite{XXX}---this all works out automatically: the
+  representations of bijections (isomorphisms) and partial bijections
+  (prisms) are such that the former simply \emph{are} the latter, and
+  they compose as one would expect (albeit ``backwards''), using the
+  standard function composition operator.}
 
 \begin{prop}
   \todo{Partial bijections form an \hott{category}.}

@@ -15,6 +15,8 @@
 
 \renewcommand{\onelinecomment}[1]{--- {#1}}
 
+\newcommand{\pkg}[1]{\texttt{#1}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Package imports
 
@@ -203,7 +205,6 @@
 \newtheorem*{ex}{Example}
 \newtheorem*{nota}{Notation}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Type theory
 
@@ -279,6 +280,8 @@
 \newmsf{isotoid}
 \newmsf{qinv}
 \newmsf{isequiv}
+
+\newcommand{\project}[1]{\overline{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
