@@ -671,7 +671,7 @@ library~\citep{lens}.
 \end{prop}
 
 \begin{proof}
-  \todo{Write proof}
+  \todo{Write proof.}
 \end{proof}
 
 Note that a bijection $f : A \bij B$ can be made into a partial
