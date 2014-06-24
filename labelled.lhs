@@ -3,6 +3,7 @@
 %include thesis.fmt
 
 %format iota = "\iota"
+%format <=<  = "<\!\!=\!\!<"
 
 \chapter{Labelled structures}
 \label{chap:labelled}
@@ -202,6 +203,9 @@ lanAdjoint h = homL (uncurry (yoneda' h))
 
 \todo{Apparently the terminology ``analytic'' is not due to Joyal? See
   \url{http://en.wikipedia.org/wiki/Calculus_of_functors}.}
+
+\todo{Introduce definition as functors having a Taylor series first
+  (like Joyal)?}
 
 We are now ready to consider Joyal's definition of \term{analytic
   functors}~\citep{Joyal86}.
@@ -570,16 +574,23 @@ $\Lab$ is not a groupoid, we must split the parameter $L$ into two,
 one each for the contravariant and covariant occurrences: \[ \GLStr F
 K L A \defeq (\iota K \to A) \times F\ L. \]
 
-\subsection{Partial isomorphisms}
-\label{sec:subsets}
-
-\todo{Terminology.  Bijections and equivalences are the same for sets.}
+\subsection{Partial bijections}
+\label{sec:partial-bijections}
 
 As a larger running example, we develop the category of finite sets
 and \term{partial bijections}, $\BSub$, and use it as a category of
 labels to define a generalized notion of \term{partial species}.  The
 development will be carried out in HoTT, though it works equally well
 in set theory.
+
+\begin{rem}
+  A \term{bijection} in HoTT is taken to be a pair of inverse
+  functions. Recall that in general, this may not be the same as an
+  \emph{equivalence}, although in the specific case of sets
+  ($0$-types) the notions of bijection and equivalence do coincide.
+  The following discussion sticks mostly to the terminology of
+  ``bijections'' but may occasionally mention ``equivalences'' as well.
+\end{rem}
 
 The basic idea is to introduce a type of evidence witnessing the fact
 that one set ($0$-type) is a ``subset'' of another, written $A
@@ -596,17 +607,16 @@ modelled as follows.
   A \term{partial bijection} $f : A \subseteq B$ between two sets $A$ and
   $B$ is given by:
 \begin{itemize}
-\item an embedding function $f : A \to B$ (in a slight abuse of
-  notation, the same name is used to refer to
-  the embedding function as well as the partial bijection as a whole),
-  \todo{Actually need some notation for this.}
+\item an embedding function $\embed f : A \to B$ (in a slight abuse of
+  notation, we will often simply use $f$, rather than $\embed f$, to
+  refer to the embedding function),
 \item a projection function $\project f : B \to \TyOne + A$,
 \end{itemize}
 together with proofs of the properties
 \begin{itemize}
-\item $\project f \comp f = \inr$, and
+\item $\project f \comp \embed f = \inr$, and
 \item for all $b : B$, if $\project f(b) = \inr(a)$
-  then $f(a) = b$.
+  then $\embed f(a) = b$.
 \end{itemize}
 \end{defn}
 
@@ -614,13 +624,7 @@ That is, $A \subseteq B$ witnesses that there is a $1$-$1$
 correspondence between all the elements of $A$ and \emph{some}
 (possibly all) of the elements of $B$.  \todo{picture} This concept is
 also known as a \term{prism} in the Haskell \pkg{lens}
-library~\cite{lens}.
-
-Note that a bijection $f : A \bij B$ can be made into a partial
-bijection $h : A \subseteq B$ trivially by setting $h = f$ and
-$\project h = \inr \comp f^{-1}$.  We will not bother to note the
-conversion, simply using bijections as if they were partial bijections
-when convenient.
+library~\citep{lens}.
 
 \begin{prop}
   Partial bijections compose, that is, there is an associative
@@ -629,22 +633,61 @@ when convenient.
 \end{prop}
 
 \begin{proof}
-  We set $f \comp g = f \comp g$ \todo{notation}
+  \todo{Pictorial proof}
+
+  We set $\embed{(f \comp g)} = \embed f \comp \embed g$ and
+  $\project{(f \comp g)} = \project g \kcomp \project f$, where $h
+  \kcomp k = |join| \comp (\TyOne + h) \comp k$ denotes Kleisli
+  composition for the $\TyOne + -$ monad (\ie |(<=<) :: (b -> Maybe c)
+  -> (a -> Maybe b) -> (a -> Maybe c)| in Haskell). \todo{Need to
+    preface this Kleisli stuff somehwere, establish notation, and so
+    on. In preliminaries.}
+
+  To show the required round-trip properties we reason as follows.  First,
+  \begin{sproof}
+    \stmt{\project {(f \comp g)} \comp \embed {(f \comp g)}}
+    \reason{=}{definition}
+    \stmt{(\project g \kcomp \project f) \comp \embed f \comp \embed
+      g}
+    \reason{=}{Kleisli composition}
+    \stmt{|join| \comp (\TyOne + \project g) \comp \project f \comp
+      \embed f \comp \embed g}
+    \reason{=}{$f$ is a partial bijection}
+    \stmt{|join| \comp (\TyOne + \project g) \comp \inr \comp \embed
+      g}
+    \reason{=}{\todo{reason}}
+    \stmt{|join| \comp \inr \comp \project g \comp \embed g}
+    \reason{=}{$g$ is a partial bijection}
+    \stmt{|join| \comp \inr \comp \inr}
+    \reason{=}{\todo{reason}}
+    \stmt{\inr}
+  \end{sproof}
+  In the other direction, suppose $\project {(f \comp g)}(b) =
+  \inr(a)$. \todo{finish proof}
 \end{proof}
 
-Combining the two previous observations, we can compose an equivalence
-with a partial equivalence (or the other way around) to obtain another
-partial equivalence.\footnote{In fact, using the \pkg{lens}
-  library---and more generally, using a van Laarhoven formulation of
+\begin{prop}
+  Partial bijections form an \hott{category}, with sets as objects.
+\end{prop}
+
+\begin{proof}
+  \todo{Write proof}
+\end{proof}
+
+Note that a bijection $f : A \bij B$ can be made into a partial
+bijection $h : A \subseteq B$ trivially by setting $h = f$ and
+$\project h = \inr \comp f^{-1}$, and moreover that this is a
+homomorphism with respect to composition; that is, the category of
+bijections embeds into the category of partial bijections as a
+subcategory.  We will usually not bother to note the conversion,
+simply using bijections as if they were partial bijections when
+convenient.\footnote{In fact, using the \pkg{lens} library---and more
+  generally, using a van Laarhoven formulation of
   lenses~\cite{XXX}---this all works out automatically: the
   representations of bijections (isomorphisms) and partial bijections
   (prisms) are such that the former simply \emph{are} the latter, and
   they compose as one would expect (albeit ``backwards''), using the
   standard function composition operator.}
-
-\begin{prop}
-  \todo{Partial bijections form an \hott{category}.}
-\end{prop}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}

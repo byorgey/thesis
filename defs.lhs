@@ -140,6 +140,7 @@
 \newcommand{\param}{\mathord{-}}
 
 \newcommand{\comp}{\mathbin{\circ}}
+\newcommand{\kcomp}{\mathbin{\bullet}}
 \newcommand{\union}{\cup}
 \newcommand{\Union}{\bigcup}
 \newcommand{\intersect}{\cap}
@@ -281,7 +282,8 @@
 \newmsf{qinv}
 \newmsf{isequiv}
 
-\newcommand{\project}[1]{\overline{#1}}
+\newcommand{\embed}[1]{#1^{\to}}
+\newcommand{\project}[1]{#1^{\leftarrow}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
