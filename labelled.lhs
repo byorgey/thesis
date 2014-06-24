@@ -635,59 +635,96 @@ library~\citep{lens}.
 \begin{proof}
   \todo{Pictorial proof}
 
-  We set $\embed{(f \comp g)} = \embed f \comp \embed g$ and
-  $\project{(f \comp g)} = \project g \kcomp \project f$, where $h
+  We set $\embed{(g \comp f)} = \embed g \comp \embed f$ and
+  $\project{(g \comp f)} = \project f \kcomp \project g$, where $h
   \kcomp k = |join| \comp (\TyOne + h) \comp k$ denotes Kleisli
   composition for the $\TyOne + -$ monad (\ie |(<=<) :: (b -> Maybe c)
   -> (a -> Maybe b) -> (a -> Maybe c)| in Haskell). \todo{Need to
     preface this Kleisli stuff somehwere, establish notation, and so
-    on. In preliminaries.}
+    on. In preliminaries.}  Associativity thus follows from the
+  associativity of function composition and Kleisli composition.
 
   To show the required round-trip properties we reason as follows.  First,
   \begin{sproof}
-    \stmt{\project {(f \comp g)} \comp \embed {(f \comp g)}}
+    \stmt{\project {(g \comp f)} \comp \embed {(g \comp f)}}
     \reason{=}{definition}
-    \stmt{(\project g \kcomp \project f) \comp \embed f \comp \embed
-      g}
+    \stmt{(\project f \kcomp \project g) \comp \embed g \comp \embed
+      f}
     \reason{=}{Kleisli composition}
-    \stmt{|join| \comp (\TyOne + \project g) \comp \project f \comp
-      \embed f \comp \embed g}
-    \reason{=}{$f$ is a partial bijection}
-    \stmt{|join| \comp (\TyOne + \project g) \comp \inr \comp \embed
-      g}
-    \reason{=}{\todo{reason}}
-    \stmt{|join| \comp \inr \comp \project g \comp \embed g}
+    \stmt{|join| \comp (\TyOne + \project f) \comp \project g \comp
+      \embed g \comp \embed f}
     \reason{=}{$g$ is a partial bijection}
+    \stmt{|join| \comp (\TyOne + \project f) \comp \inr \comp \embed
+      f}
+    \reason{=}{\todo{reason}}
+    \stmt{|join| \comp \inr \comp \project f \comp \embed f}
+    \reason{=}{$f$ is a partial bijection}
     \stmt{|join| \comp \inr \comp \inr}
     \reason{=}{\todo{reason}}
     \stmt{\inr}
   \end{sproof}
-  In the other direction, suppose $\project {(f \comp g)}(b) =
-  \inr(a)$. \todo{finish proof}
+  In the other direction,
+  \begin{sproof}
+    \stmt{\project {(g \comp f)}(c) = \inr(a)}
+    \reason{\iff}{definition}
+    \stmt{(\project f \kcomp \project g)(c) = \inr(a)}
+    \reason{\iff}{Kleisli composition}
+    \stmt{(|join| \comp (\TyOne + \project f) \comp \project g)(c) =
+      \inr(a)}
+    \reason{\iff}{case analysis on output of |join|}
+    \stmt{((\TyOne + \project f) \comp \project g)(c) =
+      \inr (\inr(a))}
+    \reason{\iff}{\todo{reason}}
+    \stmt{\exist b (\project g(c) = \inr(b)) \land (\project f(b) =
+      \inr(a))}
+    \reason{\iff}{$f$ and $g$ are partial bijections}
+    \stmt{\exist b (\embed g(b) = c) \land (\embed f(a) = b)}
+    \reason{\iff}{substitution}
+    \stmt{\embed g(\embed f(a)) = c}
+    \reason{\iff}{definition}
+    \stmt{\embed{(g \comp f)}(a) = c}
+  \end{sproof}
 \end{proof}
 
 \begin{prop}
-  Partial bijections form an \hott{category}, with sets as objects.
+  Partial bijections form an \hott{category}, $\BSub$, with sets as
+  objects.
 \end{prop}
 
 \begin{proof}
-  \todo{Write proof.}
+  The identity morphism $\id : A \subseteq A$ is given by $\embed \id
+  = \id$ and $\project \id = \inr$.  The identity laws follow from the
+  fact that $\id$ is the identity for function composition, and $\inr$
+  is the identity for Kleisli composition.
+
+  $\BSub$ is thus a precategory.  It remains only to show that
+  isomorphism is equivalent to equality.  An isomorphism $A \iso B$ is
+  given by $f : A \subseteq B$ and $g : B \subseteq A$ such that $f
+  \comp g = \id = g \comp f$.  Note that we have $\embed f : A \to B$
+  and $\embed g : B \to A$ with $\embed f \comp \embed g = \embed{(f
+    \comp g)} = \embed \id = \id$, and likewise for $\embed g \comp
+  \embed f$.  Thus, $\embed f$ and $\embed g$ constitute a bijection
+  $A \bij B$; since $A$ and $B$ are sets, this is the same as an
+  equivalence $A \equiv B$, and hence by univalence an equality $A =
+  B$.
 \end{proof}
 
-Note that a bijection $f : A \bij B$ can be made into a partial
-bijection $h : A \subseteq B$ trivially by setting $h = f$ and
-$\project h = \inr \comp f^{-1}$, and moreover that this is a
-homomorphism with respect to composition; that is, the category of
-bijections embeds into the category of partial bijections as a
-subcategory.  We will usually not bother to note the conversion,
-simply using bijections as if they were partial bijections when
-convenient.\footnote{In fact, using the \pkg{lens} library---and more
-  generally, using a van Laarhoven formulation of
-  lenses~\cite{XXX}---this all works out automatically: the
-  representations of bijections (isomorphisms) and partial bijections
-  (prisms) are such that the former simply \emph{are} the latter, and
-  they compose as one would expect (albeit ``backwards''), using the
-  standard function composition operator.}
+\begin{rem}
+  Note that a bijection $f : A \bij B$ can be made into a partial
+  bijection $h : A \subseteq B$ trivially by setting $h = f$ and
+  $\project h = \inr \comp f^{-1}$, and moreover that this is a
+  homomorphism with respect to composition; that is, the category of
+  bijections embeds into the category of partial bijections as a
+  subcategory.  We will usually not bother to note the conversion,
+  simply using bijections as if they were partial bijections when
+  convenient.\footnote{In fact, using the \pkg{lens} library---and
+    more generally, using a van Laarhoven formulation of
+    lenses~\cite{XXX}---this all works out automatically: the
+    representations of bijections (isomorphisms) and partial
+    bijections (prisms) are such that the former simply \emph{are} the
+    latter, and they compose as one would expect (albeit
+    ``backwards''), using the standard function composition operator.}
+\end{rem}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}
