@@ -2,8 +2,10 @@
 
 %include polycode.fmt
 
-\chapter{Equality}
+\chapter{Equality and Finiteness}
 \label{chap:equality}
+
+\todo{cite my blog posts}
 
 \todo{Write an introduction to this chapter.}
 
