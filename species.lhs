@@ -2096,8 +2096,8 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     with \emph{objects}.  A monoidal operation on $\BT$ does not
     simply combine two types into their coproduct or product, but also
     combines their finiteness evidence into corresponding evidence for
-    the combined type, via some function $\oplus_{\Fin{}} : \IsFinite
-    A \to \IsFinite B \to \IsFinite (A \oplus B)$.  Any such function,
+    the combined type, via some function $\oplus_{\Fin{}} : \isFinite
+    A \to \isFinite B \to \isFinite (A \oplus B)$.  Any such function,
     in combination with a monoid $\oplus$ on $\ST$, gives rise to a
     valid monoid on $\FinType$, since \todo{finish}
   \item $\BT$ can indeed be seen as enriched over $\ST$, since by

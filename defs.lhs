@@ -237,15 +237,6 @@
 \newcommand{\outl}{\cons{outl}}
 \newcommand{\outr}{\cons{outr}}
 
-\newcommand{\Type}{\ensuremath{\mathcal{U}}}
-\newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
-\newcommand{\FinTypeT}{\ensuremath{\Type_{\ptrunc{\text{Fin}}}}}
-\newcommand{\IsFinite}[1]{\mathsf{IsFinite}\;#1}
-\newcommand{\sizesymb}{\#}
-\newcommand{\size}[1]{\ensuremath{\sizesymb#1}}
-
-\newcommand{\Fin}[1]{\ensuremath{\cons{Fin}\ #1}}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% HoTT
 
@@ -287,6 +278,15 @@
 
 \newmsf{pInv}
 \newmsf{Injective}
+
+\newcommand{\Type}{\ensuremath{\mathcal{U}}}
+\newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
+\newcommand{\FinTypeT}{\ensuremath{\Type_{\ptrunc{\text{Fin}}}}}
+\newcommand{\FinSetT}{\ensuremath{\SetT_{\ptrunc{\text{Fin}}}}}
+\newcommand{\sizesymb}{\#}
+\newcommand{\size}[1]{\ensuremath{\sizesymb#1}}
+
+\newcommand{\Fin}[1]{\ensuremath{\cons{Fin}\ #1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory

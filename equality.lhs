@@ -1445,11 +1445,11 @@ fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
 good as any other.
 
 This suggests a better encoding of finiteness in type theory, \[
-\FinTypeT' \hdefeq (A : \Type) \times \ptrunc{(n : \N) \times (A \equiv
+\FinTypeT \hdefeq (A : \Type) \times \ptrunc{(n : \N) \times (A \equiv
   \Fin n)}, \] making use of propositional truncation to encode the
 fact that there \emph{merely exists} some size $n$ and an equivalence
 between $A$ and $\Fin n$, but without exposing a precise choice.  The
-finiteness evidence is now irrelevant to paths in $\FinTypeT'$, since
+finiteness evidence is now irrelevant to paths in $\FinTypeT$, since
 there is always a path between any two elements of a truncated type.
 We also note the following:
 \begin{prop}
@@ -1492,27 +1492,27 @@ truncation does not really hide anything.
   \Fin n_2$, and thus $n_1 = n_2$ by \pref{lem:fin-iso-equal}.
 \end{proof}
 
-There is still one remaining problem, which is that $\FinTypeT'$ is
+There is still one remaining problem, which is that $\FinTypeT$ is
 not a $1$-type, and hence $\tygrpd{-}$ does not apply. To solve this
 we may simply restrict to $0$-types $A$ (which is arguably a more
 faithful encoding of the situation in set theory anyway). This yields
 our final definition:
 
-\begin{defn} \label{defn:FinTypeT}
-  The type of finite sets is given by \[ \FinTypeT \hdefeq (A : \Type)
+\begin{defn} \label{defn:FinSetT}
+  The type of finite sets is given by \[ \FinSetT \hdefeq (A : \Type)
   \times \isSet(A) \times \isFinite(A), \] where \[ \isFinite(A)
   \hdefeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}. \]
 \end{defn}
-We will often abuse notation and write $A : \FinTypeT$ instead of
-$(A,s,f) : \FinTypeT$ where $s : \isSet(A)$ and $f : \isFinite(A)$.
+We will often abuse notation and write $A : \FinSetT$ instead of
+$(A,s,f) : \FinSetT$ where $s : \isSet(A)$ and $f : \isFinite(A)$.
 Since $\isSet(A)$ and $\isFinite(A)$ are mere propositions, paths
-between $\FinTypeT$ values are characterized by paths between their
+between $\FinSetT$ values are characterized by paths between their
 underlying types. Since those types must be sets, \ie $0$-types,
-$\FinTypeT$ is consequently a $1$-type.
+$\FinSetT$ is consequently a $1$-type.
 
 \begin{defn}
-  $\BT$ is defined by \[ \BT \hdefeq \tygrpd{\FinTypeT}, \] the
-  groupoid of cardinal-finite types and paths bewteen them.
+  $\BT$ is defined by \[ \BT \hdefeq \tygrpd{\FinSetT}, \] the
+  groupoid of cardinal-finite sets and paths bewteen them.
 \end{defn}
 
 It is worth pointing out that with this definition of $\BT$, we have
@@ -1541,8 +1541,8 @@ defining inverse functors $\fin - : \PT \to \BT$ and $\size : \BT \to
     equivalence $\psi : \Fin m \equiv \Fin n$. Thus $\ua\ \psi : \Fin
     m = \Fin n$, and we define $\fin \psi \hdefeq u\ (\ua\ \psi) :
     \fin m = \fin n$, where $u$ is some function witnessing the fact,
-    mentioned immediately following \pref{defn:FinTypeT}, that paths
-    in $\FinTypeT$ are characterized by paths between their underlying
+    mentioned immediately following \pref{defn:FinSetT}, that paths
+    in $\FinSetT$ are characterized by paths between their underlying
     types.
   \end{itemize}
 \end{defn}
