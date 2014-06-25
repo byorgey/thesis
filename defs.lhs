@@ -285,6 +285,9 @@
 \newcommand{\embed}[1]{#1^{\to}}
 \newcommand{\project}[1]{#1^{\leftarrow}}
 
+\newmsf{pInv}
+\newmsf{Injective}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Category theory
 
@@ -325,7 +328,8 @@
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
-\newcommand{\BSub}{\mcal{B}_{\subseteq}}
+\newcommand{\SSub}{\ST_{\subseteq}}
+\newcommand{\BSub}{\BT_{\subseteq}}
 
 \newcommand{\FinNSub}{\cat{Fin}\N_{\subseteq}}
 

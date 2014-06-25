@@ -577,9 +577,14 @@ K L A \defeq (\iota K \to A) \times F\ L. \]
 \subsection{Partial bijections}
 \label{sec:partial-bijections}
 
-As a larger running example, we develop the category of finite sets
-and \term{partial bijections}, $\BSub$, and use it as a category of
-labels to define a generalized notion of \term{partial species}.  The
+\todo{This needs to be moved! Where?  To Equality chapter?  Or to end
+  of species chapter?}
+
+As a larger running example, we develop the theory of finite sets and
+\term{partial bijections}, bijection-like functions which are allowed
+to be partial in one direction.  Such partial bijections form a
+category, $\BSub$, which we put to work as the category of labels for
+generalized notion of species (\todo{forward reference}).  The
 development will be carried out in HoTT, though it works equally well
 in set theory.
 
@@ -601,7 +606,10 @@ that one set ($0$-type) is a ``subset'' of another, written $A
   work, so we stick to the simpler case of $0$-types.} Of course there
 is no subtyping in HoTT, so there is no literal sense in which one
 type can be a subset of another. However, the situation can be
-modelled as follows.
+modelled using constructive evidence for the embedding of one type
+into another.  In order to focus the discussion, we begin with partial
+bijections between arbitrary sets, and only later restrict to finite
+ones.
 
 \begin{defn}
   A \term{partial bijection} $f : A \subseteq B$ between two sets $A$ and
@@ -639,6 +647,19 @@ dia = hcat' (with & sep .~ 3) [mkSet [0 :: Int .. 3], mkSet "abcdef"]
   \caption{A typical partial bijection}
   \label{fig:partial-bijection}
 \end{figure}
+
+As an aid in discussing partial bijections we define $\pInv(f)$ which
+together with $f : A \to B$ constitutes a partial bijection $A
+\subseteq B$.
+
+\begin{defn}
+  A \term{partial inverse} $\pInv(f)$ to $f : A \to B$ is defined so
+  that \[ (A \subseteq B) = (f : A \to B) \times \pInv(f), \] that
+  is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (g \comp f =
+  \inr) \times (\forall a b. (g(b) = \inr(a)) \to (f(a) = b)). \]
+\end{defn}
+
+We now turn to the category structure on partial bijections.
 
 \begin{prop}
   Partial bijections compose, that is, there is an associative
@@ -720,7 +741,10 @@ dia = hcat' (with & sep .~ 2)
     \reason{\iff}{case analysis}
     \stmt{((\TyOne + \project f) \comp \project g)(c) =
       \inr (\inr(a))}
-    \reason{\iff}{\todo{reason}}
+    \reason{\iff}{coproducts}
+    \stmt{([\inl, \inr \comp \project f] \comp \project g)(c) =
+      \inr (\inr(a))}
+    \reason{\iff}{case analysis}
     \stmt{\exist b (\project g(c) = \inr(b)) \land (\project f(b) =
       \inr(a))}
     \reason{\iff}{$f$ and $g$ are partial bijections}
@@ -733,7 +757,7 @@ dia = hcat' (with & sep .~ 2)
 \end{proof}
 
 \begin{prop}
-  Partial bijections form an \hott{category}, $\BSub$, with sets as
+  Partial bijections form an \hott{category}, $\SSub$, with sets as
   objects.
 \end{prop}
 
@@ -772,11 +796,74 @@ dia = hcat' (with & sep .~ 2)
     ``backwards''), using the standard function composition operator.}
 \end{rem}
 
+\todo{section heading?}
+
+Finally, we turn to the theory of partial bijections on \emph{finite}
+sets. \todo{First, for finite sets, partial bijections can be more
+  simply characterized as injective functions; seems ``obvious'' but
+  we have to be able to recover the computational content in the
+  backwards direction.  Finiteness evidence is propositionally
+  truncated.  Basic idea is that for a given function, its partial
+  inverse is uniquely determined.}
+
+\begin{defn}
+  An \term{injection} $A \inj B$ in HoTT is defined in the obvious way:
+  \[ A \inj B \hdefeq (f : A \to B) \times \msf{Injective}(f), \]
+  where \[ \Injective(f) \hdefeq ((a_1, a_2 : A) \to (f\ a_1 = f\ a_2)
+  \to (a_1 = a_2)). \]
+\end{defn}
+
+\begin{rem}
+  Note that $\Injective(f)$ is a mere proposition, since \todo{why?}.
+\end{rem}
+
+\begin{lem}
+  Every partial bijection is an injection, that is, $(A \subseteq B)
+  \to (A \inj B)$.
+\end{lem}
+
+\begin{proof}
+  \todo{transcribe}
+\end{proof}
+
+\begin{lem}
+  $\pInv(f)$ is a mere proposition.
+\end{lem}
+
+\begin{proof}
+  \todo{transcribe}
+\end{proof}
+
+\begin{lem}
+  Every injective function is a partial bijection, that is, $(A \inj
+  B) \to (A \subseteq B)$.
+\end{lem}
+
+\begin{proof}
+  \todo{Prove.}
+\end{proof}
+
+\begin{prop}
+  $(A \inj B) \equiv (A \subseteq B)$
+\end{prop}
+
+\begin{proof}
+  \todo{Previous lemmas, note compositions in both directions are the
+    identity.  Only need to worry about given functions since
+    accompanying stuff are mere props.}
+\end{proof}
+
+\todo{GCBP etc.}
+
 \subsection{Partial species}
 \label{sec:partial-species}
 
-We can define \term{partial species} as functors in the functor
-category $[\BSub, \ST]$.
+In a combinatorial setting, one is primarily interested in
+\emph{counting} \todo{finish.  Computationally we want to model
+  partiality.  Give some motivating examples.}
+
+We define \term{partial species} as functors in the functor category
+$[\BSub, \ST]$.
 
 \todo{Explain functoriality.  Mapping from existing
   species. ``Rubbish''.}
