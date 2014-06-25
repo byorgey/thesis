@@ -611,20 +611,19 @@ into another.  In order to focus the discussion, we begin with partial
 bijections between arbitrary sets, and only later restrict to finite
 ones.
 
-\begin{defn}
+\begin{defn} \label{defn:pbij}
   A \term{partial bijection} $f : A \subseteq B$ between two sets $A$
-  and $B$ is given by: \todo{Can this be formulated as an adjunction?
-    See proof of \pref{lem:inj-is-pbij}\dots}
+  and $B$ is given by:
 \begin{itemize}
 \item an embedding function $\embed f : A \to B$ (in a slight abuse of
   notation, we will often simply use $f$, rather than $\embed f$, to
   refer to the embedding function),
 \item a projection function $\project f : B \to \TyOne + A$,
 \end{itemize}
-together with proofs of the properties
+together with two round-trip laws:
 \begin{itemize}
 \item $\project f \comp \embed f = \inr$, and
-\item for all $b : B$, if $\project f\ b = \inr\ a$
+\item for all $a: A$ and $b : B$, if $\project f\ b = \inr\ a$
   then $\embed f\ a = b$.
 \end{itemize}
 \end{defn}
@@ -635,6 +634,40 @@ correspondence between all the elements of $A$ and \emph{some}
 \pref{fig:partial-bijection}. This concept is also known as a
 \term{prism} in the Haskell \pkg{lens} library~\citep{lens}.
 
+There is also a more elegant, though perhaps less intuitive,
+formulation of the round-trip laws in \pref{defn:pbij}.
+
+\begin{prop} \label{prop:rt-adj} The round-trip laws given in
+  \pref{defn:pbij} are equivalent to
+  \begin{equation} \label{eq:rt-adj}
+    \all {a b} (\embed f\ a = b) \leftrightarrow (\inr\ a = \project f\ b).
+  \end{equation}
+\end{prop}
+
+\begin{proof}
+  Since the laws in question are all mere propositions, it suffices to
+  show that they are logically equivalent; moreover, since the
+  right-to-left direction of \eqref{eq:rt-adj} is precisely the second
+  round-trip law, it suffices to show that the left-to-right direction
+  is logically equivalent to the first round-trip law.  In one direction,
+  \eqref{eq:rt-adj} implies the first round-trip law, by setting $b =
+  \embed f\ a$. Conversely,
+  \begin{sproof}
+    \stmt{\embed f\ a = b}
+    \reason{\implies}{apply $\project f$ to both sides}
+    \stmt{\project f\ (\embed f\ a) = \project f\ b}
+    \reason{\iff}{first round-trip law}
+    \stmt{\inr\ a = \project f\ b.}
+  \end{sproof}
+\end{proof}
+
+\begin{rem}
+  The formula in \pref{prop:rt-adj} is exceedingly reminiscent of an
+  adjunction.  However, it is not clear whether there is a suitable
+  sense in which it can actually be seen as one.
+\end{rem}
+
+
 \begin{figure}
   \centering
   \begin{diagram}[width=150]
@@ -642,8 +675,14 @@ import           SpeciesDiagrams
 
 dia = hcat' (with & sep .~ 3) [mkSet [0 :: Int .. 3], mkSet "abcdef"]
   # drawPBij pb1
+  # applyAll (map toTop "cf")
   # lwO 0.7
   # frame 0.5
+
+toTop n = withName n $ \s ->  -- $
+  let topPt = location s .+^ (1.2 *^ unitX)
+      aOpts = pBijAOpts & arrowTail .~ noTail & shaftStyle %~ dashingL [2,2] 0
+  in  atop ((arrowBetween' aOpts (location s) topPt) <> text "⊤" # scale 0.3 # moveTo topPt)
   \end{diagram}
   \caption{A typical partial bijection}
   \label{fig:partial-bijection}
@@ -656,8 +695,8 @@ together with $f : A \to B$ constitutes a partial bijection $A
 \begin{defn}
   A \term{partial inverse} $\pInv(f)$ to $f : A \to B$ is defined so
   that \[ (A \subseteq B) = (f : A \to B) \times \pInv(f), \] that
-  is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (g \comp f =
-  \inr) \times (\all {a b} (g\ b = \inr\ a) \to (f\ a = b)). \]
+  is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (\all {a b}
+  (f\ a = b) \lequiv (\inr\ a = g\ b)). \]
 \end{defn}
 
 We now turn to the category structure on partial bijections.
@@ -698,63 +737,30 @@ dia = hcat' (with & sep .~ 2)
   one shown in \pref{fig:partial-bij-compose}.
 
   More formally, we set $\embed{(g \comp f)} = \embed g \comp \embed f$ and
-  $\project{(g \comp f)} = \project f \kcomp \project g$, where $h
-  \kcomp k$ denotes Kleisli composition for the $\TyOne + -$ monad
+  $\project{(g \comp f)} = \project f \kcomp \project g$, where $-
+  \kcomp -$ denotes Kleisli composition for the $\TyOne + -$ monad
   (\ie |(<=<) :: (b -> Maybe c) -> (a -> Maybe b) -> (a -> Maybe c)|
   in Haskell). Associativity thus follows from the associativity of
   function composition and Kleisli composition.
 
-  Recall that $h \kcomp k = \mu \comp (\TyOne + h) \comp k$, and that
-  $\mu = [\inl, [\inl, \inr]] : \TyOne + (\TyOne + A) \to \TyOne + A$.
-  To show the required round-trip properties we reason as follows.
-  First,
+  \todo{Need to explain |=<<| somewhere.}
+
+  To show the required round-trip property we reason as follows.
   \begin{sproof}
-    \stmt{\project {(g \comp f)} \comp \embed {(g \comp f)}}
-    \reason{=}{definition}
-    \stmt{(\project f \kcomp \project g) \comp \embed g \comp \embed
-      f}
-    \reason{=}{Kleisli composition}
-    \stmt{\mu \comp (\TyOne + \project f) \comp \project g \comp
-      \embed g \comp \embed f}
-    \reason{=}{$g$ is a partial bijection}
-    \stmt{\mu \comp (\TyOne + \project f) \comp \inr \comp \embed
-      f}
-    \reason{=}{coproducts}
-    \stmt{\mu \comp \inr \comp \project f \comp \embed f}
-    \reason{=}{$f$ is a partial bijection}
-    \stmt{\mu \comp \inr \comp \inr}
-    \reason{=}{definition}
-    \stmt{[\inl, [\inl, \inr]] \comp \inr \comp \inr}
-    \reason{=}{coproducts, twice}
-    \stmt{\inr}
-  \end{sproof}
-  In the other direction,
-  \begin{sproof}
-    \stmt{\project {(g \comp f)}\ c = \inr\ a}
-    \reason{\iff}{definition}
-    \stmt{(\project f \kcomp \project g)\ c = \inr\ a}
-    \reason{\iff}{Kleisli composition}
-    \stmt{(\mu \comp (\TyOne + \project f) \comp \project g)\ c =
-      \inr\ a}
-    \reason{\iff}{definition}
-    \stmt{([\inl, [\inl, \inr]] \comp (\TyOne + \project f) \comp
-      \project g)\ c =
-      \inr\ a}
-    \reason{\iff}{case analysis}
-    \stmt{((\TyOne + \project f) \comp \project g)\ c =
-      \inr\ (\inr\ a)}
-    \reason{\iff}{coproducts}
-    \stmt{([\inl, \inr \comp \project f] \comp \project g)\ c =
-      \inr\ (\inr\ a)}
-    \reason{\iff}{case analysis}
-    \stmt{\exist b (\project g\ c = \inr\ b) \land (\project f\ b =
-      \inr\ a)}
-    \reason{\iff}{$f$ and $g$ are partial bijections}
-    \stmt{\exist b (\embed g\ b = c) \land (\embed f\ a = b)}
-    \reason{\iff}{substitution}
-    \stmt{\embed g\ (\embed f\ a) = c}
-    \reason{\iff}{definition}
     \stmt{\embed{(g \comp f)}\ a = c}
+    \reason{\iff}{definition}
+    \stmt{(\embed g \comp \embed f)\ a = c}
+    \reason{\iff}{take $b = \embed f\ a$}
+    \stmt{\exist b \embed f\ a = b \land \embed g\ b = c}
+    \reason{\iff}{round-trip laws for $f$ and $g$}
+    \stmt{\exist b \inr\ a = \project f\ b \land \inr\ b = \project g\
+      c}
+    \reason{\iff}{definition of |=<<|; case analysis}
+    \stmt{\inr\ a = \project f |=<<| \project g\ c}
+    \reason{\iff}{Kleisli composition}
+    \stmt{\inr\ a = (\project f \kcomp \project g)\ c}
+    \reason{\iff}{definition}
+    \stmt{\inr\ a = \project {(g \comp f)}\ c}
   \end{sproof}
 \end{proof}
 
@@ -804,21 +810,25 @@ Finally, we turn to the theory of partial bijections on \emph{finite}
 sets. In the case of finite sets, it turns out that partial bijections
 $A \subseteq B$ can be more simply characterized as injective
 functions $A \inj B$.  This might seem ``obvious'', and indeed, it is
-straightforward in a classical setting.  However, to produce a partial
-bijection from an injection, we must be able to recover the
+straightforward in a classical setting.  One direction, namely,
+converting a partial bijection into an injection, is straightforward
+in HoTT as well (\pref{lem:pbij-is-inj}). However, to produce a
+partial bijection from an injection, we must be able to recover the
 computational content of the backwards direction, and this depends on
 the ability to enumerate the elements of $A$.  Recall that the
 computational evidence for the finiteness of $A$ is propositionally
-truncated, so it is not \latin{a priori} obvious that we are allowed
-do this.  However, given a function $f : A \to B$, its partial inverse
-(if any exists) is uniquely determined independently of the precise
-evidence for the finiteness of $A$, so such evidence may be used in
-the construction of a partial inverse.
+truncated (\pref{defn:FinSetT}), so it is not \latin{a priori} obvious
+that we are allowed do this.  However, given a function $f : A \to B$,
+its partial inverse (if any exists) is uniquely determined,
+independent of the evidence for the finiteness of $A$
+(\pref{lem:pinv-mere-prop}), so such evidence may be used in the
+construction of a partial inverse (\pref{lem:inj-is-pbij}).
 
-\begin{defn} \label{defn:injection}
-  An \term{injection} $A \inj B$ in HoTT is defined in the obvious way:
-  \[ A \inj B \hdefeq (f : A \to B) \times \msf{Injective}(f), \]
-  where \[ \isInjective(f) \hdefeq (a_1, a_2 : A) \to (f\ a_1 = f\ a_2)
+\begin{defn} \label{defn:injection} The type of \term{injections} $A
+  \inj B$ is defined in HoTT analogously to the usual definition in
+  set theory:
+  \[ A \inj B \hdefeq (f : A \to B) \times \isInjective(f), \]
+  where \[ \isInjective(f) \hdefeq \prod_{a_1, a_2 : A} (f\ a_1 = f\ a_2)
   \to (a_1 = a_2). \]
 \end{defn}
 
@@ -840,7 +850,7 @@ the construction of a partial inverse.
   injective:
   \begin{sproof}
     \stmt{\embed f\ a_1 = \embed f\ a_2}
-    \reason{\iff}{apply $\project f$ to both sides}
+    \reason{\implies}{apply $\project f$ to both sides}
     \stmt{\project f\ (\embed f\ a_1) = \project f\ (\embed f\ a_2)}
     \reason{\iff}{$f$ is a partial bijection}
     \stmt{\inr\ a_1 = \inr\ a_2}
@@ -855,33 +865,30 @@ the construction of a partial inverse.
 \end{lem}
 
 \begin{proof}
-  Let $(g, p, q), (g', p', q') : \pInv(f)$.  That is, $g, g' : B
+  Let $(g, p), (g', p') : \pInv(f)$.  That is, $g, g' : B
   \to \TyOne + A$, and
   \begin{itemize}
-  \item $p : g \comp f = \inr$,
-  \item $p' : g' \comp f = \inr$,
-  \item $q : \all {a b} (g\ b = \inr\ a) \to (f\ a = b)$, and
-  \item $q' : \all {a b} (g'\ b = \inr\ a) \to (f\ a = b)$.
+  \item $p : \all {a b} (f\ a = b) \lequiv (\inr\ a = g\ b) $, and
+  \item $p' : \all {a b} (f\ a = b) \lequiv (\inr\ a = g'\ b)$.
   \end{itemize}
-  We must show that $(g, p, q) = (g', p', q')$.  To this end we
+  We must show that $(g, p) = (g', p')$.  To this end we
   first show $g = g'$.  By function extensionality it suffices to show
   that $g\ b = g'\ b$ for arbitrary $b : B$.  We proceed by case
   analysis on $g\ b$ and $g'\ b$:
   \begin{itemize}
   \item If $g\ b = g'\ b = \inl\ \unit$ we are done.
   \item Next, suppose $g\ b = \inr\ a$ and $g'\ b = \inr\ a'$.  Then
-    by $q$ and $q'$ we have $f\ a = b = f\ a'$, whence $a = a'$
+    by $p$ and $p'$ we have $f\ a = b = f\ a'$, whence $a = a'$
     since by \pref{lem:pbij-is-inj} we know $f$ is injective.
   \item Finally, suppose $g\ b = \inr\ a$ and $g'\ b = \inl\ \unit$
-    (the other case is symmetric).  In that case $f\ a = b$ by $q$,
-    and hence, substituting, $g'\ (f\ a) = \inl\ \unit$.  However, by
-    $p'$ we know $g'\ (f\ a) = \inr\ a$, a contradiction.
+    (the other case is symmetric).  In that case $f\ a = b$ by $p$,
+    and hence, substituting, $g'\ (f\ a) = \inl\ \unit$.  However,
+    recall that $p'$ implies $g'\ (f\ a) = \inr\ a$, a contradiction.
   \end{itemize}
 
   Letting $r : g = g'$ denote the equality just constructed, we
-  complete the argument by noting that $r_*(p) = p'$ and $r_*(q) =
-  q'$, since in both cases we have parallel paths between elements of
-  a set.
+  complete the argument by noting that $r_*(p)$ and $p'$ are parallel
+  paths between elements of a set, and hence equal.
 \end{proof}
 
 \begin{lem} \label{lem:inj-is-pbij}
@@ -902,24 +909,16 @@ the construction of a partial inverse.
   b$.  If such a $k$ exists, yield $\inr\ (\varphi^{-1}\ k)$; otherwise,
   yield $\inl\ \unit$.
 
-  It suffices now to show that
-  \begin{equation} \label{eq:characterize-proj-h}
-    \all {a b} (\embed h\ a = b) \leftrightarrow (\project h\ b = \inr\ a)
-  \end{equation}
-  Indeed, the required partial bijection laws follow directly from
-  \pref{eq:characterize-proj-h}: the second law is exactly the
-  right-to-left direction of \eqref{eq:characterize-proj-h}, and the
-  first law follows by setting $b = \embed h\ a$.
-
-  To establish \pref{eq:characterize-proj-h}, we reason as follows.
+  Finally, we establish the round-trip law $\all {a b} (\embed h\ a = b)
+  \leftrightarrow (\inr\ a = \project h\ b)$.
   \begin{itemize}
-  \item[$(\longrightarrow)$] Suppose $\embed h\ a = b$.  Then
+  \item[$(\rightarrow)$] Suppose $\embed h\ a = b$.  Then
     $\project h\ b$ will certainly find some $k : \Fin n$ with
     $\embed h\ (\varphi^{-1}\ k) = b$, and thus $\project h\ b = \inr\
     (\varphi^{-1}\ k)$; since $\embed h$ is injective it must actually be
     the case that $\varphi^{-1}\ k = a$.
-  \item[$(\longleftarrow)$] This direction follows directly from the
-    definition of $\project h$.
+  \item[$(\leftarrow)$] This follows directly from the definition
+    of $\project h$.
   \end{itemize}
 \end{proof}
 
@@ -965,9 +964,11 @@ In a combinatorial setting, one is primarily interested in
 We define \term{partial species} as functors $F : \BSub \to \ST$.
 
 \todo{Explain functoriality.  Mapping from existing
-  species. ``Rubbish''.}
+  species. ``Rubbish'' and relationship with $\Rubbish$.}
 
-\todo{Labelled structures with partial species.}
+\todo{Combinatorics of partial species, \eg generating functions?}
+
+\todo{Labelled structures with partial species; memory layout.}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}
@@ -1084,11 +1085,6 @@ dia = vcat' (with & sep .~ 5)
 \todo{Write me}
 
 \section{Other stuff}
-
-\todo{Discuss variant of $\Bag$ which stores no data.}
-
-\todo{Discuss decomposition of structures using category of partial
-  isomorphisms for labels?}
 
 \todo{Examples. Bounded tree width.  Generic programming.}
 

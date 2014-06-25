@@ -406,8 +406,9 @@ fromRel rs = PBij (map fst rs) (fromJust . flip lookup rs)
 drawPBij :: (IsName a, IsName b) => PBij a b -> Diagram B R2 -> Diagram B R2
 drawPBij (PBij as f) = applyAll [ conn a (f a) | a <- as ]
   where
-    conn x y = connect' aOpts x y
-    aOpts = with & gaps .~ Local 0.3 & headLength .~ Local 0.3
+    conn x y = connect' pBijAOpts x y
+
+pBijAOpts = with & arrowTail .~ spike' & gaps .~ Local 0.3 & lengths .~ Local 0.3
 
 mkSet names
   = enclose 0.5 1

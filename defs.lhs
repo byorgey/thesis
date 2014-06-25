@@ -170,9 +170,10 @@
 \let\oldequiv\equiv
 \newcommand{\jeq}{\oldequiv}          % judgmental equality
 \newcommand{\defeq}{\stackrel{\vartriangle}{=}}
-\newcommand{\hdefeq}{\mathrel{:\jeq}}  % definitional equality in HoTT
+\newcommand{\hdefeq}{\mathrel{:\jeq}} % definitional equality in HoTT
 \renewcommand{\equiv}{\simeq}         % homotopy equivalence
 \newcommand{\iso}{\cong}              % isomorphism in a category
+\newcommand{\lequiv}{\leftrightarrow} % logical equivalence
 
 \newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 

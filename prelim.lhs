@@ -8,6 +8,8 @@
 \chapter{Preliminaries}
 \label{chap:prelim}
 
+\todo{mention logical equivalence.}
+
 \todo{Explicitly discuss categorical monoids in HoTT. Note that strict
   vs non-strict monoids is a non-issue.}
 
