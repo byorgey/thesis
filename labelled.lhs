@@ -623,8 +623,8 @@ ones.
 together with proofs of the properties
 \begin{itemize}
 \item $\project f \comp \embed f = \inr$, and
-\item for all $b : B$, if $\project f(b) = \inr(a)$
-  then $\embed f(a) = b$.
+\item for all $b : B$, if $\project f\ b = \inr\ a$
+  then $\embed f\ a = b$.
 \end{itemize}
 \end{defn}
 
@@ -656,7 +656,7 @@ together with $f : A \to B$ constitutes a partial bijection $A
   A \term{partial inverse} $\pInv(f)$ to $f : A \to B$ is defined so
   that \[ (A \subseteq B) = (f : A \to B) \times \pInv(f), \] that
   is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (g \comp f =
-  \inr) \times (\forall a b. (g(b) = \inr(a)) \to (f(a) = b)). \]
+  \inr) \times (\all {a b} (g\ b = \inr\ a) \to (f\ a = b)). \]
 \end{defn}
 
 We now turn to the category structure on partial bijections.
@@ -729,30 +729,31 @@ dia = hcat' (with & sep .~ 2)
   \end{sproof}
   In the other direction,
   \begin{sproof}
-    \stmt{\project {(g \comp f)}(c) = \inr(a)}
+    \stmt{\project {(g \comp f)}\ c = \inr\ a}
     \reason{\iff}{definition}
-    \stmt{(\project f \kcomp \project g)(c) = \inr(a)}
+    \stmt{(\project f \kcomp \project g)\ c = \inr\ a}
     \reason{\iff}{Kleisli composition}
-    \stmt{(\mu \comp (\TyOne + \project f) \comp \project g)(c) =
-      \inr(a)}
+    \stmt{(\mu \comp (\TyOne + \project f) \comp \project g)\ c =
+      \inr\ a}
     \reason{\iff}{definition}
-    \stmt{([\inl, [\inl, \inr]] \comp (\TyOne + \project f) \comp \project g)(c) =
-      \inr(a)}
+    \stmt{([\inl, [\inl, \inr]] \comp (\TyOne + \project f) \comp
+      \project g)\ c =
+      \inr\ a}
     \reason{\iff}{case analysis}
-    \stmt{((\TyOne + \project f) \comp \project g)(c) =
-      \inr (\inr(a))}
+    \stmt{((\TyOne + \project f) \comp \project g)\ c =
+      \inr\ (\inr\ a)}
     \reason{\iff}{coproducts}
-    \stmt{([\inl, \inr \comp \project f] \comp \project g)(c) =
-      \inr (\inr(a))}
+    \stmt{([\inl, \inr \comp \project f] \comp \project g)\ c =
+      \inr\ (\inr\ a)}
     \reason{\iff}{case analysis}
-    \stmt{\exist b (\project g(c) = \inr(b)) \land (\project f(b) =
-      \inr(a))}
+    \stmt{\exist b (\project g\ c = \inr\ b) \land (\project f\ b =
+      \inr\ a)}
     \reason{\iff}{$f$ and $g$ are partial bijections}
-    \stmt{\exist b (\embed g(b) = c) \land (\embed f(a) = b)}
+    \stmt{\exist b (\embed g\ b = c) \land (\embed f\ a = b)}
     \reason{\iff}{substitution}
-    \stmt{\embed g(\embed f(a)) = c}
+    \stmt{\embed g\ (\embed f\ a) = c}
     \reason{\iff}{definition}
-    \stmt{\embed{(g \comp f)}(a) = c}
+    \stmt{\embed{(g \comp f)}\ a = c}
   \end{sproof}
 \end{proof}
 
