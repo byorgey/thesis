@@ -799,22 +799,33 @@ dia = hcat' (with & sep .~ 2)
 \todo{section heading?}
 
 Finally, we turn to the theory of partial bijections on \emph{finite}
-sets. \todo{First, for finite sets, partial bijections can be more
-  simply characterized as injective functions; seems ``obvious'' but
-  we have to be able to recover the computational content in the
-  backwards direction.  Finiteness evidence is propositionally
-  truncated.  Basic idea is that for a given function, its partial
-  inverse is uniquely determined.}
+sets. In the case of finite sets, it turns out that partial bijections
+$A \subseteq B$ can be more simply characterized as injective
+functions $A \inj B$.  This might seem ``obvious'', and indeed, it is
+straightforward in a classical setting.  However, to produce a partial
+bijection from an injection, we must be able to recover the
+computational content of the backwards direction, and this depends on
+the ability to enumerate the elements of $A$.  Recall that the
+computational evidence for the finiteness of $A$ is propositionally
+truncated, so it is not \latin{a priori} obvious that we are allowed
+do this.  However, given a function $f : A \to B$, its partial inverse
+(if any exists) is uniquely determined independently of the precise
+evidence for the finiteness of $A$, so such evidence may be used in
+the construction of a partial inverse.
 
 \begin{defn}
   An \term{injection} $A \inj B$ in HoTT is defined in the obvious way:
   \[ A \inj B \hdefeq (f : A \to B) \times \msf{Injective}(f), \]
-  where \[ \Injective(f) \hdefeq ((a_1, a_2 : A) \to (f\ a_1 = f\ a_2)
-  \to (a_1 = a_2)). \]
+  where \[ \Injective(f) \hdefeq (a_1, a_2 : A) \to (f\ a_1 = f\ a_2)
+  \to (a_1 = a_2). \]
 \end{defn}
 
 \begin{rem}
-  Note that $\Injective(f)$ is a mere proposition, since \todo{why?}.
+  Note that $\Injective(f)$ is a mere proposition when $A$ is a set.
+  Given $i, j : \Injective(f)$, for all $a_1, a_2 : A$ and $e : f\ a_1
+  = f\ a_2$, we have $i\ a_1\ a_2\ e = j\ a_1\ a_2\ e$ (since they are
+  parallel paths between elements of a set) and hence $i = j$ by
+  function extensionality.
 \end{rem}
 
 \begin{lem}
@@ -823,7 +834,15 @@ sets. \todo{First, for finite sets, partial bijections can be more
 \end{lem}
 
 \begin{proof}
-  \todo{transcribe}
+  Let $f : A \subseteq B$.  Then $\embed f : A \to B$ is
+  injective:
+  \begin{sproof}
+    \stmt{\embed f\ a_1 = \embed f\ a_2}
+    \reason{\iff}{apply $\project f$ to both sides}
+    \stmt{\project f\ (\embed f\ a_1) = \project f\ (\embed f\ a_2)}
+    \reason{\iff}{$f$ is a partial bijection}
+    \stmt{\inr\ a_1 = \inr\ a_2}
+  \end{sproof}
 \end{proof}
 
 \begin{lem}
