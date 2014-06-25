@@ -390,3 +390,41 @@ objs :: IsName n => [n] -> Diagram B R2
 objs = enclose 1 1 . vcat' (with & sep .~ 1.5) . (map (\n -> dot # named n))
   where
     dot = circle 0.1 # fc black
+
+--------------------------------------------------
+-- Partial bijections
+
+data PBij a b where
+  PBij :: [a] -> (a -> b) -> PBij a b
+
+pbComp :: PBij b c -> PBij a b -> PBij a c
+pbComp (PBij _ f) (PBij as g) = PBij as (f . g)
+
+fromRel :: Eq a => [(a,b)] -> PBij a b
+fromRel rs = PBij (map fst rs) (fromJust . flip lookup rs)
+
+drawPBij :: (IsName a, IsName b) => PBij a b -> Diagram B R2 -> Diagram B R2
+drawPBij (PBij as f) = applyAll [ conn a (f a) | a <- as ]
+  where
+    conn x y = connect' aOpts x y
+    aOpts = with & gaps .~ Local 0.3 & headLength .~ Local 0.3
+
+mkSet names
+  = enclose 0.5 1
+  . vcat' (with & sep .~ 0.5)
+  . zipWith named names
+  $ repeat dot
+  where
+    dot = circle 0.2 # fc black
+
+
+pb1 :: PBij Int Char
+pb1 = fromRel
+  [ (0, 'd')
+  , (1, 'a')
+  , (2, 'b')
+  , (3, 'e')
+  ]
+
+pb2 :: PBij Int Int
+pb2 = fromRel [ (100, 3), (101, 2) ]

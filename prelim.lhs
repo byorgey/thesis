@@ -520,6 +520,11 @@ positions\footnote{As Haskell programmers are well aware, writing
   A)}$.  This notation can be rigorously justified using \emph{ends};
 see \pref{sec:ends-coends}.
 
+\paragraph{Sums and products}
+
+\todo{Definitions?  Notation for universal morphisms; link to
+  Haskell.  Note $\beta$ laws and so on.}
+
 \paragraph{Hom sets}
 
 \todo{Use a different notation for exponents and powers?  Also, decide
@@ -709,6 +714,13 @@ matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
 One example familiar to functional programmers is \emph{currying}, \[
 (A \times B \to C) \iso (A \to (B \to C)), \] which corresponds to the
 adjunction \[ (- \times B) \adj (B \to -). \]
+
+\paragraph{Monads}
+
+Monads are familiar to many, and do not play a very important role in
+this work, so only a few words need to be said.
+
+\todo{monad basics. Kleisli category.}
 
 \subsection{Monoidal categories}
 \label{sec:monoids}

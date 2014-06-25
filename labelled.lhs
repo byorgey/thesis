@@ -622,9 +622,23 @@ together with proofs of the properties
 
 That is, $A \subseteq B$ witnesses that there is a $1$-$1$
 correspondence between all the elements of $A$ and \emph{some}
-(possibly all) of the elements of $B$.  \todo{picture} This concept is
-also known as a \term{prism} in the Haskell \pkg{lens}
-library~\citep{lens}.
+(possibly all) of the elements of $B$, as pictured in
+\pref{fig:partial-bijection}. This concept is also known as a
+\term{prism} in the Haskell \pkg{lens} library~\citep{lens}.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=150]
+import           SpeciesDiagrams
+
+dia = hcat' (with & sep .~ 3) [mkSet [0 :: Int .. 3], mkSet "abcdef"]
+  # drawPBij pb1
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{A typical partial bijection}
+  \label{fig:partial-bijection}
+\end{figure}
 
 \begin{prop}
   Partial bijections compose, that is, there is an associative
@@ -632,35 +646,64 @@ library~\citep{lens}.
   \subseteq C). \]
 \end{prop}
 
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import SpeciesDiagrams
+
+sets = [mkSet [100 :: Int, 101], mkSet [0 :: Int .. 3], mkSet "abcdef"]
+
+composite = hcat' (with & sep .~ 3) sets
+  # drawPBij pb1 # drawPBij pb2
+
+result = hcat' (with & sep .~ 3) [sets !! 0, sets !! 2]
+  # drawPBij (pbComp pb1 pb2)
+
+dia = hcat' (with & sep .~ 2)
+  [ composite
+  , text "="
+  , result
+  ]
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{Composition of partial bijections}
+  \label{fig:partial-bij-compose}
+\end{figure}
+
 \begin{proof}
-  \todo{Pictorial proof}
+  This can be intuitively grasped by studying a diagram such as the
+  one shown in \pref{fig:partial-bij-compose}.
 
-  We set $\embed{(g \comp f)} = \embed g \comp \embed f$ and
+  More formally, we set $\embed{(g \comp f)} = \embed g \comp \embed f$ and
   $\project{(g \comp f)} = \project f \kcomp \project g$, where $h
-  \kcomp k = |join| \comp (\TyOne + h) \comp k$ denotes Kleisli
-  composition for the $\TyOne + -$ monad (\ie |(<=<) :: (b -> Maybe c)
-  -> (a -> Maybe b) -> (a -> Maybe c)| in Haskell). \todo{Need to
-    preface this Kleisli stuff somehwere, establish notation, and so
-    on. In preliminaries.}  Associativity thus follows from the
-  associativity of function composition and Kleisli composition.
+  \kcomp k$ denotes Kleisli composition for the $\TyOne + -$ monad
+  (\ie |(<=<) :: (b -> Maybe c) -> (a -> Maybe b) -> (a -> Maybe c)|
+  in Haskell). Associativity thus follows from the associativity of
+  function composition and Kleisli composition.
 
-  To show the required round-trip properties we reason as follows.  First,
+  Recall that $h \kcomp k = \mu \comp (\TyOne + h) \comp k$, and that
+  $\mu = [\inl, [\inl, \inr]] : \TyOne + (\TyOne + A) \to \TyOne + A$.
+  To show the required round-trip properties we reason as follows.
+  First,
   \begin{sproof}
     \stmt{\project {(g \comp f)} \comp \embed {(g \comp f)}}
     \reason{=}{definition}
     \stmt{(\project f \kcomp \project g) \comp \embed g \comp \embed
       f}
     \reason{=}{Kleisli composition}
-    \stmt{|join| \comp (\TyOne + \project f) \comp \project g \comp
+    \stmt{\mu \comp (\TyOne + \project f) \comp \project g \comp
       \embed g \comp \embed f}
     \reason{=}{$g$ is a partial bijection}
-    \stmt{|join| \comp (\TyOne + \project f) \comp \inr \comp \embed
+    \stmt{\mu \comp (\TyOne + \project f) \comp \inr \comp \embed
       f}
-    \reason{=}{\todo{reason}}
-    \stmt{|join| \comp \inr \comp \project f \comp \embed f}
+    \reason{=}{coproducts}
+    \stmt{\mu \comp \inr \comp \project f \comp \embed f}
     \reason{=}{$f$ is a partial bijection}
-    \stmt{|join| \comp \inr \comp \inr}
-    \reason{=}{\todo{reason}}
+    \stmt{\mu \comp \inr \comp \inr}
+    \reason{=}{definition}
+    \stmt{[\inl, [\inl, \inr]] \comp \inr \comp \inr}
+    \reason{=}{coproducts, twice}
     \stmt{\inr}
   \end{sproof}
   In the other direction,
@@ -669,9 +712,12 @@ library~\citep{lens}.
     \reason{\iff}{definition}
     \stmt{(\project f \kcomp \project g)(c) = \inr(a)}
     \reason{\iff}{Kleisli composition}
-    \stmt{(|join| \comp (\TyOne + \project f) \comp \project g)(c) =
+    \stmt{(\mu \comp (\TyOne + \project f) \comp \project g)(c) =
       \inr(a)}
-    \reason{\iff}{case analysis on output of |join|}
+    \reason{\iff}{definition}
+    \stmt{([\inl, [\inl, \inr]] \comp (\TyOne + \project f) \comp \project g)(c) =
+      \inr(a)}
+    \reason{\iff}{case analysis}
     \stmt{((\TyOne + \project f) \comp \project g)(c) =
       \inr (\inr(a))}
     \reason{\iff}{\todo{reason}}
@@ -725,6 +771,17 @@ library~\citep{lens}.
     latter, and they compose as one would expect (albeit
     ``backwards''), using the standard function composition operator.}
 \end{rem}
+
+\subsection{Partial species}
+\label{sec:partial-species}
+
+We can define \term{partial species} as functors in the functor
+category $[\BSub, \ST]$.
+
+\todo{Explain functoriality.  Mapping from existing
+  species. ``Rubbish''.}
+
+\todo{Labelled structures with partial species.}
 
 \section{Operations on labelled structures}
 \label{sec:labelled-operations}
