@@ -277,7 +277,7 @@
 \newcommand{\project}[1]{#1^{\leftarrow}}
 
 \newmsf{pInv}
-\newmsf{Injective}
+\newmsf{isInjective}
 
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
 \newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}

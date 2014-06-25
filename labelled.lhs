@@ -612,8 +612,9 @@ bijections between arbitrary sets, and only later restrict to finite
 ones.
 
 \begin{defn}
-  A \term{partial bijection} $f : A \subseteq B$ between two sets $A$ and
-  $B$ is given by:
+  A \term{partial bijection} $f : A \subseteq B$ between two sets $A$
+  and $B$ is given by: \todo{Can this be formulated as an adjunction?
+    See proof of \pref{lem:inj-is-pbij}\dots}
 \begin{itemize}
 \item an embedding function $\embed f : A \to B$ (in a slight abuse of
   notation, we will often simply use $f$, rather than $\embed f$, to
@@ -814,22 +815,22 @@ do this.  However, given a function $f : A \to B$, its partial inverse
 evidence for the finiteness of $A$, so such evidence may be used in
 the construction of a partial inverse.
 
-\begin{defn}
+\begin{defn} \label{defn:injection}
   An \term{injection} $A \inj B$ in HoTT is defined in the obvious way:
   \[ A \inj B \hdefeq (f : A \to B) \times \msf{Injective}(f), \]
-  where \[ \Injective(f) \hdefeq (a_1, a_2 : A) \to (f\ a_1 = f\ a_2)
+  where \[ \isInjective(f) \hdefeq (a_1, a_2 : A) \to (f\ a_1 = f\ a_2)
   \to (a_1 = a_2). \]
 \end{defn}
 
 \begin{rem}
-  Note that $\Injective(f)$ is a mere proposition when $A$ is a set.
-  Given $i, j : \Injective(f)$, for all $a_1, a_2 : A$ and $e : f\ a_1
+  Note that $\isInjective(f)$ is a mere proposition when $A$ is a set.
+  Given $i, j : \isInjective(f)$, for all $a_1, a_2 : A$ and $e : f\ a_1
   = f\ a_2$, we have $i\ a_1\ a_2\ e = j\ a_1\ a_2\ e$ (since they are
   parallel paths between elements of a set) and hence $i = j$ by
   function extensionality.
 \end{rem}
 
-\begin{lem}
+\begin{lem} \label{lem:pbij-is-inj}
   Every partial bijection is an injection, that is, $(A \subseteq B)
   \to (A \inj B)$.
 \end{lem}
@@ -843,37 +844,116 @@ the construction of a partial inverse.
     \stmt{\project f\ (\embed f\ a_1) = \project f\ (\embed f\ a_2)}
     \reason{\iff}{$f$ is a partial bijection}
     \stmt{\inr\ a_1 = \inr\ a_2}
+    \reason{\iff}{$\inr$ is injective}
+    \stmt{a_1 = a_2}
   \end{sproof}
 \end{proof}
 
-\begin{lem}
-  $\pInv(f)$ is a mere proposition.
+\begin{lem} \label{lem:pinv-mere-prop}
+  If $A$ and $B$ are sets and $f : A \to B$, then $\pInv(f)$ is a mere
+  proposition.
 \end{lem}
 
 \begin{proof}
-  \todo{transcribe}
+  Let $(g, p, q), (g', p', q') : \pInv(f)$.  That is, $g, g' : B
+  \to \TyOne + A$, and
+  \begin{itemize}
+  \item $p : g \comp f = \inr$,
+  \item $p' : g' \comp f = \inr$,
+  \item $q : \all {a b} (g\ b = \inr\ a) \to (f\ a = b)$, and
+  \item $q' : \all {a b} (g'\ b = \inr\ a) \to (f\ a = b)$.
+  \end{itemize}
+  We must show that $(g, p, q) = (g', p', q')$.  To this end we
+  first show $g = g'$.  By function extensionality it suffices to show
+  that $g\ b = g'\ b$ for arbitrary $b : B$.  We proceed by case
+  analysis on $g\ b$ and $g'\ b$:
+  \begin{itemize}
+  \item If $g\ b = g'\ b = \inl\ \unit$ we are done.
+  \item Next, suppose $g\ b = \inr\ a$ and $g'\ b = \inr\ a'$.  Then
+    by $q$ and $q'$ we have $f\ a = b = f\ a'$, whence $a = a'$
+    since by \pref{lem:pbij-is-inj} we know $f$ is injective.
+  \item Finally, suppose $g\ b = \inr\ a$ and $g'\ b = \inl\ \unit$
+    (the other case is symmetric).  In that case $f\ a = b$ by $q$,
+    and hence, substituting, $g'\ (f\ a) = \inl\ \unit$.  However, by
+    $p'$ we know $g'\ (f\ a) = \inr\ a$, a contradiction.
+  \end{itemize}
+
+  Letting $r : g = g'$ denote the equality just constructed, we
+  complete the argument by noting that $r_*(p) = p'$ and $r_*(q) =
+  q'$, since in both cases we have parallel paths between elements of
+  a set.
 \end{proof}
 
-\begin{lem}
-  Every injective function is a partial bijection, that is, $(A \inj
-  B) \to (A \subseteq B)$.
+\begin{lem} \label{lem:inj-is-pbij}
+  If $A$ is a finite set and $B$ a set with decidable equality,
+  then \[ (A \inj B) \to (A \subseteq B). \]
 \end{lem}
 
 \begin{proof}
-  \todo{Prove.}
+  Let $f : A \to B$ be an injective function; we must construct $h : A
+  \subseteq B$.  First, we set $\embed h = f$.  It remains to
+  construct $\pInv(\embed h)$, which is a mere proposition by
+  \pref{lem:pinv-mere-prop}.  Thus, by the recursion principle for
+  propositional truncation, we are justified in using the constructive
+  evidence of $A$'s finiteness, that is, its cardinality $n : \N$ and
+  equivalence $\varphi : A \equiv \Fin n$.  We define $\project h : B \to
+  \TyOne + A$ on an input $b : B$ as follows: by recursion on $n$,
+  find the smallest $k : \Fin n$ such that $\embed h\ (\varphi^{-1}\ k) =
+  b$.  If such a $k$ exists, yield $\inr\ (\varphi^{-1}\ k)$; otherwise,
+  yield $\inl\ \unit$.
+
+  It suffices now to show that
+  \begin{equation} \label{eq:characterize-proj-h}
+    \all {a b} (\embed h\ a = b) \leftrightarrow (\project h\ b = \inr\ a)
+  \end{equation}
+  Indeed, the required partial bijection laws follow directly from
+  \pref{eq:characterize-proj-h}: the second law is exactly the
+  right-to-left direction of \eqref{eq:characterize-proj-h}, and the
+  first law follows by setting $b = \embed h\ a$.
+
+  To establish \pref{eq:characterize-proj-h}, we reason as follows.
+  \begin{itemize}
+  \item[$(\longrightarrow)$] Suppose $\embed h\ a = b$.  Then
+    $\project h\ b$ will certainly find some $k : \Fin n$ with
+    $\embed h\ (\varphi^{-1}\ k) = b$, and thus $\project h\ b = \inr\
+    (\varphi^{-1}\ k)$; since $\embed h$ is injective it must actually be
+    the case that $\varphi^{-1}\ k = a$.
+  \item[$(\longleftarrow)$] This direction follows directly from the
+    definition of $\project h$.
+  \end{itemize}
 \end{proof}
+
+\todo{Remark about finiteness and decidable equality.  Add it to
+  equality chapter.}
 
 \begin{prop}
-  $(A \inj B) \equiv (A \subseteq B)$
+  For $A$ a finite set and $B$ a set with decidable equality,
+  \[ (A \inj B) \equiv (A \subseteq B). \]
 \end{prop}
 
 \begin{proof}
-  \todo{Previous lemmas, note compositions in both directions are the
-    identity.  Only need to worry about given functions since
-    accompanying stuff are mere props.}
+  \pref{lem:pbij-is-inj} and \pref{lem:inj-is-pbij} establish
+  functions in both directions.  It is easy to see that they act as
+  the identity on the underlying $f : A \to B$ functions, and the
+  remaining components are mere propositions by
+  \pref{lem:pinv-mere-prop} and the remark following
+  \pref{defn:injection}.  Thus the functions defined by
+  \pref{lem:pbij-is-inj} and \pref{lem:inj-is-pbij} are inverse.
 \end{proof}
 
-\todo{GCBP etc.}
+\subsection{The Gordon complementary bijection principle}
+
+\begin{prop}[Gordon complementary bijection principle]
+  For finite sets $A_1$, $A_2$, $B_1$, and $B_2$, if $A_1 + B_1
+  \equiv A_2 + B_2$ and $B_1 \equiv B_2$, then $A_1 \equiv A_2$.
+\end{prop}
+
+\todo{Explain intuition.  Can use some text from half-written blog
+  post.}
+
+\begin{proof}
+  \todo{Figure out a good constructive proof!}
+\end{proof}
 
 \subsection{Partial species}
 \label{sec:partial-species}
@@ -882,8 +962,7 @@ In a combinatorial setting, one is primarily interested in
 \emph{counting} \todo{finish.  Computationally we want to model
   partiality.  Give some motivating examples.}
 
-We define \term{partial species} as functors in the functor category
-$[\BSub, \ST]$.
+We define \term{partial species} as functors $F : \BSub \to \ST$.
 
 \todo{Explain functoriality.  Mapping from existing
   species. ``Rubbish''.}
