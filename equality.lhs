@@ -1329,7 +1329,7 @@ now straightforward.
   $\PT$ is the \hott{groupoid} where
   \begin{itemize}
   \item the objects are values of type $\N$, and
-  \item the morphisms $\mor m n$ are equivalences of type $\Fin m \equiv
+  \item the morphisms $\hom m n$ are equivalences of type $\Fin m \equiv
     \Fin n$.
   \end{itemize}
 \end{defn}
@@ -1527,7 +1527,7 @@ We now turn to the equivalence of $\PT$ and $\BT$, with a goal of
 defining inverse functors $\fin - : \PT \to \BT$ and $\size : \BT \to
 \PT$.  We begin with $\fin -$.
 
-\begin{defn}
+\begin{defn} \label{defn:functor-fin}
   The functor $\fin - : \PT \to \BT$ is defined as follows; the
   essential idea is to send the natural number $n$ to the canonical
   finite set $\Fin n$, and permutations to paths.
@@ -1597,7 +1597,7 @@ First, there are two relevant notions of essential surjectivity:
 It turns out that being split essentially surjective is a rather
 strong notion.  In particular:
 
-\begin{prop}
+\begin{prop} \label{prop:splitEssSurj-equiv}
   For any precategories $\CT$ and $\DT$ and a functor $F : \CT \to
   \DT$, $F$ is fully faithful and split essentially surjective if and
   only if it is an equivalence.
@@ -1650,15 +1650,18 @@ objects must in fact be equal.
 
 This brings us to the punchline:
 
-\begin{cor}
+\begin{cor} \label{cor:essSurj-splitEssSurj}
   If $\CT$ is a category, a fully faithful functor $F : \CT \to \DT$
   is essentially surjective if and only if it is split essentially surjective.
 \end{cor}
 
-Thus, since $\fin -$ is a fully faithful and essentially surjective
+\begin{cor} \label{cor:BT-iso-PT}
+Since $\fin -$ is a fully faithful and essentially surjective
 functor out of a category, it is in fact \emph{split} essentially
 surjective and thus an equivalence.  In particular, it has an inverse
-(up to natural isomorphism) which we call $\size : \BT \to \PT$.
+(up to natural isomorphism) which we call $\size : \BT \to \PT$, and
+thus \[ \BT \iso \PT. \]
+\end{cor}
 
 The larger intuition here is about an answer to the question: when can
 one define a function $\ptrunc{A} \to B$, when $B$ is \emph{not} a

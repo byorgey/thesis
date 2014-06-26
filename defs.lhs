@@ -175,6 +175,8 @@
 \newcommand{\iso}{\cong}              % isomorphism in a category
 \newcommand{\lequiv}{\leftrightarrow} % logical equivalence
 
+\newcommand{\pbij}{\subseteq}         % partial bijection
+
 \newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 
 % axiom of choice
@@ -329,8 +331,9 @@
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
-\newcommand{\SSub}{\ST_{\subseteq}}
-\newcommand{\BSub}{\BT_{\subseteq}}
+\newcommand{\STSub}{\ST_{\subseteq}}
+\newcommand{\BTSub}{\BT_{\subseteq}}
+\newcommand{\PTSub}{\PT_{\leq}}
 
 \newcommand{\FinNSub}{\cat{Fin}\N_{\subseteq}}
 

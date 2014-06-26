@@ -583,7 +583,7 @@ K L A \defeq (\iota K \to A) \times F\ L. \]
 As a larger running example, we develop the theory of finite sets and
 \term{partial bijections}, bijection-like functions which are allowed
 to be partial in one direction.  Such partial bijections form a
-category, $\BSub$, which we put to work as the category of labels for
+category, $\BTSub$, which we put to work as the category of labels for
 generalized notion of species (\todo{forward reference}).  The
 development will be carried out in HoTT, though it works equally well
 in set theory.
@@ -599,7 +599,7 @@ in set theory.
 
 The basic idea is to introduce a type of evidence witnessing the fact
 that one set ($0$-type) is a ``subset'' of another, written $A
-\subseteq B$.\footnote{There should be no problem in generalizing
+\pbij B$.\footnote{There should be no problem in generalizing
   partial bijections to partial equivalences which work over any
   types, using an appropriate notion of partial adjoint equivalences.
   However, there is no need for such generalization in the present
@@ -612,7 +612,7 @@ bijections between arbitrary sets, and only later restrict to finite
 ones.
 
 \begin{defn} \label{defn:pbij}
-  A \term{partial bijection} $f : A \subseteq B$ between two sets $A$
+  A \term{partial bijection} $f : A \pbij B$ between two sets $A$
   and $B$ is given by:
 \begin{itemize}
 \item an embedding function $\embed f : A \to B$ (in a slight abuse of
@@ -628,7 +628,7 @@ together with two round-trip laws:
 \end{itemize}
 \end{defn}
 
-That is, $A \subseteq B$ witnesses that there is a $1$-$1$
+That is, $A \pbij B$ witnesses that there is a $1$-$1$
 correspondence between all the elements of $A$ and \emph{some}
 (possibly all) of the elements of $B$, as pictured in
 \pref{fig:partial-bijection}. This concept is also known as a
@@ -690,11 +690,11 @@ toTop n = withName n $ \s ->  -- $
 
 As an aid in discussing partial bijections we define $\pInv(f)$ which
 together with $f : A \to B$ constitutes a partial bijection $A
-\subseteq B$.
+\pbij B$.
 
 \begin{defn}
   A \term{partial inverse} $\pInv(f)$ to $f : A \to B$ is defined so
-  that \[ (A \subseteq B) = (f : A \to B) \times \pInv(f), \] that
+  that \[ (A \pbij B) = (f : A \to B) \times \pInv(f), \] that
   is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (\all {a b}
   (f\ a = b) \lequiv (\inr\ a = g\ b)). \]
 \end{defn}
@@ -703,8 +703,8 @@ We now turn to the category structure on partial bijections.
 
 \begin{prop}
   Partial bijections compose, that is, there is an associative
-  operation \[ - \comp - : (B \subseteq C) \to (A \subseteq B) \to (A
-  \subseteq C). \]
+  operation \[ - \comp - : (B \pbij C) \to (A \pbij B) \to (A
+  \pbij C). \]
 \end{prop}
 
 \begin{figure}
@@ -765,19 +765,19 @@ dia = hcat' (with & sep .~ 2)
 \end{proof}
 
 \begin{prop}
-  Partial bijections form an \hott{category}, $\SSub$, with sets as
+  Partial bijections form an \hott{category}, $\STSub$, with sets as
   objects.
 \end{prop}
 
 \begin{proof}
-  The identity morphism $\id : A \subseteq A$ is given by $\embed \id
+  The identity morphism $\id : A \pbij A$ is given by $\embed \id
   = \id$ and $\project \id = \inr$.  The identity laws follow from the
   fact that $\id$ is the identity for function composition, and $\inr$
   is the identity for Kleisli composition.
 
-  $\BSub$ is thus a precategory.  It remains only to show that
+  $\BTSub$ is thus a precategory.  It remains only to show that
   isomorphism is equivalent to equality.  An isomorphism $A \iso B$ is
-  given by $f : A \subseteq B$ and $g : B \subseteq A$ such that $f
+  given by $f : A \pbij B$ and $g : B \pbij A$ such that $f
   \comp g = \id = g \comp f$.  Note that we have $\embed f : A \to B$
   and $\embed g : B \to A$ with $\embed f \comp \embed g = \embed{(f
     \comp g)} = \embed \id = \id$, and likewise for $\embed g \comp
@@ -789,7 +789,7 @@ dia = hcat' (with & sep .~ 2)
 
 \begin{rem}
   Note that a bijection $f : A \bij B$ can be made into a partial
-  bijection $h : A \subseteq B$ trivially by setting $h = f$ and
+  bijection $h : A \pbij B$ trivially by setting $h = f$ and
   $\project h = \inr \comp f^{-1}$, and moreover that this is a
   homomorphism with respect to composition; that is, the category of
   bijections embeds into the category of partial bijections as a
@@ -808,7 +808,7 @@ dia = hcat' (with & sep .~ 2)
 
 Finally, we turn to the theory of partial bijections on \emph{finite}
 sets. In the case of finite sets, it turns out that partial bijections
-$A \subseteq B$ can be more simply characterized as injective
+$A \pbij B$ can be more simply characterized as injective
 functions $A \inj B$.  This might seem ``obvious'', and indeed, it is
 straightforward in a classical setting.  One direction, namely,
 converting a partial bijection into an injection, is straightforward
@@ -841,12 +841,12 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
 \end{rem}
 
 \begin{lem} \label{lem:pbij-is-inj}
-  Every partial bijection is an injection, that is, $(A \subseteq B)
+  Every partial bijection is an injection, that is, $(A \pbij B)
   \to (A \inj B)$.
 \end{lem}
 
 \begin{proof}
-  Let $f : A \subseteq B$.  Then $\embed f : A \to B$ is
+  Let $f : A \pbij B$.  Then $\embed f : A \to B$ is
   injective:
   \begin{sproof}
     \stmt{\embed f\ a_1 = \embed f\ a_2}
@@ -893,12 +893,12 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
 
 \begin{lem} \label{lem:inj-is-pbij}
   If $A$ is a finite set and $B$ a set with decidable equality,
-  then \[ (A \inj B) \to (A \subseteq B). \]
+  then \[ (A \inj B) \to (A \pbij B). \]
 \end{lem}
 
 \begin{proof}
   Let $f : A \to B$ be an injective function; we must construct $h : A
-  \subseteq B$.  First, we set $\embed h = f$.  It remains to
+  \pbij B$.  First, we set $\embed h = f$.  It remains to
   construct $\pInv(\embed h)$, which is a mere proposition by
   \pref{lem:pinv-mere-prop}.  Thus, by the recursion principle for
   propositional truncation, we are justified in using the constructive
@@ -925,9 +925,9 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
 \todo{Remark about finiteness and decidable equality.  Add it to
   equality chapter.}
 
-\begin{prop}
+\begin{prop} \label{prop:inj-equiv-pbij}
   For $A$ a finite set and $B$ a set with decidable equality,
-  \[ (A \inj B) \equiv (A \subseteq B). \]
+  \[ (A \inj B) \equiv (A \pbij B). \]
 \end{prop}
 
 \begin{proof}
@@ -938,6 +938,50 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
   \pref{lem:pinv-mere-prop} and the remark following
   \pref{defn:injection}.  Thus the functions defined by
   \pref{lem:pbij-is-inj} and \pref{lem:inj-is-pbij} are inverse.
+\end{proof}
+
+\begin{defn}
+  Denote by $\BTSub$ the \hott{category} of finite sets and partial
+  bijections (\ie injections).  That is, objects in $\BTSub$ are
+  values of type $\FinSetT \jeq (A : \Type) \times \isSet(A) \times
+  \isFinite(A)$, and morphisms $\hom[\BTSub] {(A,s_a,f_a)}
+  {(B,s_b,f_b)}$ are partial bijections $A \pbij B$.  Showing that
+  this is indeed an \hott{category} is left as an easy exercise.
+\end{defn}
+
+$\BTSub$ also has a corresponding skeleton category, just like $\BT$:
+
+\begin{defn}
+  Denote by $\PTSub$ the \hott{category} whose objects are natural
+  numbers and whose morphisms are given by $\hom[\PTSub] m n \hdefeq \Fin m
+  \inj \Fin n$. The proof that this is an \hott{category} is also left
+  as an exercise.
+\end{defn}
+
+\begin{rem}
+  $\PTSub$ has $m!\binom{n}{m}$ distinct morphisms $\hom m n$, since
+  there are $\binom n m$ ways to choose the $m$ distinct objects in
+  the image of the morphism, and $m!$ ways to permute the mapping.
+  Note this this means there are zero morphisms when $m > n$, and
+  exactly $n!$ morphisms $\hom n n$.
+\end{rem}
+
+\begin{prop}
+  $\BTSub \iso \PTSub$.
+\end{prop}
+
+\begin{proof}
+  The proof is similar to the proof that $\BT$ is equivalent to $\PT$
+  (\pref{cor:BT-iso-PT}).  We define a functor $\fin{-}_{\pbij} :
+  \PTSub \to \BTSub$ which sends $n$ to $(\Fin n, s,
+  \ptruncI{(n,\id)})$ (just like the functor $\fin - : \PT \to \BT$
+  defined in \pref{defn:functor-fin}), and which sends $\iota :
+  \hom[\PT] m n \jeq \Fin m \inj \Fin n$ to the corresponding partial
+  bijection (\pref{prop:inj-equiv-pbij}).  It is not hard to show that
+  this functor is full, faithful, and essentially surjective, which by
+  \pref{prop:splitEssSurj-equiv} and \pref{cor:essSurj-splitEssSurj}
+  implies that $\fin{-}_{\pbij} : \PTSub \to \BTSub$ is one half of an
+  equivalence. \later{actually flesh this out?}
 \end{proof}
 
 \subsection{The Gordon complementary bijection principle}
@@ -961,7 +1005,7 @@ In a combinatorial setting, one is primarily interested in
 \emph{counting} \todo{finish.  Computationally we want to model
   partiality.  Give some motivating examples.}
 
-We define \term{partial species} as functors $F : \BSub \to \ST$.
+We define \term{partial species} as functors $F : \BTSub \to \ST$.
 
 \todo{Explain functoriality.  Mapping from existing
   species. ``Rubbish'' and relationship with $\Rubbish$.}

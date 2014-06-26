@@ -665,7 +665,7 @@ with the object type \[ \FinTypeT \defeq (A : \Type) \times \isSet(A)
 \times \isFinite(A), \] where \[ \isFinite(A) \defeq \ptrunc{(n : \N)
   \times (A \equiv \Fin n)}, \] with morphisms given by paths.  Recall
 also that $\PT$ denotes the \hott{groupoid} whose objects are natural
-numbers and whose morphisms $\mor m n$ are equivalences $\Fin m \equiv
+numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv
 \Fin n$, and that $\ST$ denotes the \hott{category} of $0$-types
 (sets) and functions.
 
