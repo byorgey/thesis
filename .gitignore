@@ -2,6 +2,8 @@
 Shake
 *.hi
 *.o
+*.dyn_hi
+*.dyn_o
 *.log
 *.aux
 *.toc
