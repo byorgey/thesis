@@ -1005,7 +1005,9 @@ In a combinatorial setting, one is primarily interested in
 \emph{counting} \todo{finish.  Computationally we want to model
   partiality.  Give some motivating examples.}
 
-We define \term{partial species} as functors $F : \BTSub \to \ST$.
+We define \term{partial species} as functors $F : \BTSub \to
+\ST$. \todo{Note since $\BTSub \iso \PTSub$ we can equivalently use
+  $\PTSub \to \ST$.}
 
 \todo{Explain functoriality.  Mapping from existing
   species. ``Rubbish'' and relationship with $\Rubbish$.}
