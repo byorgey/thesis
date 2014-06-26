@@ -662,7 +662,7 @@ formulation of the round-trip laws in \pref{defn:pbij}.
 \end{proof}
 
 \begin{rem}
-  The formula in \pref{prop:rt-adj} is exceedingly reminiscent of an
+  The formula in \pref{prop:rt-adj} is strongly reminiscent of an
   adjunction.  However, it is not clear whether there is a suitable
   sense in which it can actually be seen as one.
 \end{rem}
@@ -697,6 +697,33 @@ together with $f : A \to B$ constitutes a partial bijection $A
   that \[ (A \pbij B) = (f : A \to B) \times \pInv(f), \] that
   is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (\all {a b}
   (f\ a = b) \lequiv (\inr\ a = g\ b)). \]
+\end{defn}
+
+We also define some notation to make working with partial bijections
+more convenient.
+
+\begin{defn}
+  First, for any types $A$ and $B$, there is a canonical partial
+  bijection $A \pbij A + B$, which we denote simply by $\inl$;
+  similarly, $\inr : B \pbij A + B$.
+
+  For the remainder, assume there is a partial bijection $p : K \pbij
+  L$.
+  \begin{itemize}
+  \item $\embed p\ K$ denotes the image of $K$ under $p$, that is, the
+    set of values in $L$ in the range of $\embed p$; we often simply
+    write $p\ K$ instead of $\embed p\ K$.
+  \item $\restr K p : K \bij p\ K$ denotes the bijection
+    between $K$ and the image of $K$ in $L$.
+  \item When some $q : K' \pbij K$ is understood from the context, we
+    also write $\restr {K'} p$ as an abbreviation for $\restr {K'} {(p
+      \comp q)}$, the bijection between $K'$ and the image of $K'$ in
+    $L$ under the composite $(p \comp q)$.
+  \item $\extra p = \{ l : L \mid \project l = \inl\ \unit \}$ denotes
+    the ``extra'' values in $L$ which are not in the image of $K$.
+  \item $\extrabij p$ denotes the canonical bijection $K + \extra p
+    \bij L$. \todo{better notation for this?}
+  \end{itemize}
 \end{defn}
 
 We now turn to the category structure on partial bijections.
@@ -904,10 +931,10 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
   \pref{lem:pinv-mere-prop}.  Thus, by the recursion principle for
   propositional truncation, we are justified in using the constructive
   evidence of $A$'s finiteness, that is, its cardinality $n : \N$ and
-  equivalence $\varphi : A \equiv \Fin n$.  We define $\project h : B \to
+  equivalence $\sigma : A \equiv \Fin n$.  We define $\project h : B \to
   \TyOne + A$ on an input $b : B$ as follows: by recursion on $n$,
-  find the smallest $k : \Fin n$ such that $\embed h\ (\varphi^{-1}\ k) =
-  b$.  If such a $k$ exists, yield $\inr\ (\varphi^{-1}\ k)$; otherwise,
+  find the smallest $k : \Fin n$ such that $\embed h\ (\sigma^{-1}\ k) =
+  b$.  If such a $k$ exists, yield $\inr\ (\sigma^{-1}\ k)$; otherwise,
   yield $\inl\ \unit$.
 
   Finally, we establish the round-trip law $\all {a b} (\embed h\ a = b)
@@ -915,9 +942,9 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
   \begin{itemize}
   \item[$(\rightarrow)$] Suppose $\embed h\ a = b$.  Then
     $\project h\ b$ will certainly find some $k : \Fin n$ with
-    $\embed h\ (\varphi^{-1}\ k) = b$, and thus $\project h\ b = \inr\
-    (\varphi^{-1}\ k)$; since $\embed h$ is injective it must actually be
-    the case that $\varphi^{-1}\ k = a$.
+    $\embed h\ (\sigma^{-1}\ k) = b$, and thus $\project h\ b = \inr\
+    (\sigma^{-1}\ k)$; since $\embed h$ is injective it must actually be
+    the case that $\sigma^{-1}\ k = a$.
   \item[$(\leftarrow)$] This follows directly from the definition
     of $\project h$.
   \end{itemize}
@@ -967,7 +994,7 @@ $\BTSub$ also has a corresponding skeleton category, just like $\BT$:
   exactly $n!$ morphisms $\hom n n$.
 \end{rem}
 
-\begin{prop}
+\begin{prop} \label{prop:btsub-iso-ptsub}
   $\BTSub \iso \PTSub$.
 \end{prop}
 
@@ -1271,14 +1298,175 @@ In a combinatorial setting, one is primarily interested in
 \emph{counting} \todo{finish.  Computationally we want to model
   partiality.  Give some motivating examples.}
 
-We define \term{partial species} as functors $F : \BTSub \to
-\ST$. \todo{Note since $\BTSub \iso \PTSub$ we can equivalently use
-  $\PTSub \to \ST$.}
+\begin{defn}
+  A \term{partial species} is a functor $F : \BTSub \to \ST$.  We
+  denote by $\PSpe = [\BTSub, \ST]$ the functor category of partial
+  species.
+\end{defn}
 
-\todo{Explain functoriality.  Mapping from existing
-  species. ``Rubbish'' and relationship with $\Rubbish$.}
+\begin{rem}
+  Since $\BTSub \iso \PTSub$ (\pref{prop:btsub-iso-ptsub}) partial
+  species are also equivalent to functors $\PTSub \to \ST$.
+\end{rem}
 
-\todo{Combinatorics of partial species, \eg generating functions?}
+Since the objects of \BTSub\ are the same as the objects of \BT, the
+object mapping of a partial species is similar to that of a normal
+species.  That is, one can still think of a partial species as mapping
+a finite set of labels to a set of structures ``built from'' those
+labels.
+
+\todo{use term ``transport'' instead of ``lift''?}
+A partial species $F$ also has an action on morphisms: it must lift
+any partial bijection $K \pbij L$ to a function $F\ K \to F\ L$.  Of
+course, bijections are partial bijections, so this includes the
+familiar case of ``relabelling''; bijections are isomorphisms in
+$\BTSub$, and functors necessarily preserve isomorphisms, so
+bijections on labels are still sent to bijections between structures.
+
+The case of strictly partial bijections, that is, $K \pbij L$ where
+$\size K < \size L$, is more interesting.  Each structure in the set
+$F\ K$, with labels in $K$, must map to a structure in $F\ L$, given
+an embedding of $K$ into $L$.  Intuitively, this can be thought of as
+introducing ``extra'' labels which must be incorporated into the
+structure in a suitably canonical way.  However, the partial bijection
+$p : K \pbij L$ affords no structure whatsoever on the ``extra''
+labels (that is, those $l \in L$ for which $\project p\ l = \inl
+\unit$).  So it is not acceptable, for example, to prepend the extra
+labels to the front of a list structure, since there is no canonical
+way to choose an ordering on the extra labels.  The only feasible
+approach is to simply attach the extra labels in a \emph{set}, as
+illustrated in \pref{fig:lift-strict-pbij}.
+
+\begin{figure}
+  \centering
+  \todo{make a diagram.  Tree maps to tree + set.}
+  \caption{Lifting a strictly partial bijection}
+  \label{fig:lift-strict-pbij}
+\end{figure}
+
+Moreover, note that one cannot adjoin a \emph{new} set of labels with
+every lift.  Performing multiple lifts would then result in multiple
+sets of extra labels (\eg a list of such sets), but this fails to be
+functorial, since \todo{explain.  Reference diagram.}
+
+\begin{figure}
+  \centering
+  \todo{make a diagram.  Non-commuting diagram of adjoining multiple
+    extra sets vs all at once.}
+  \caption{TODO write me}
+  \label{fig:XXX}
+\end{figure}
+
+So the only option is to have \emph{every} partial species structure
+accompanied by a set of ``extra'' labels (which may be
+empty). Transporting along a strictly partial bijection results in
+some labels being added to the set.
+
+Intuitively, every normal species $F$ gives rise to a partial species
+$\prt F$ which ``acts like'' the species $F \cdot \Bag$, and vice
+versa.  In fact, along these lines we can formally show an equivalence
+between the categories \Spe and \PSpe.
+
+\begin{defn}
+  The functor $\prt - : \Spe \to \PSpe$ is defined as follows.
+
+  First consider the action of $\prt -$ on objects, that is, species
+  $F : \BT \to \ST$.  We define $\prt F : \BTSub \to \ST$ as the
+  partial species which
+  \begin{itemize}
+  \item sends the finite set of labels $K$ to the set of structures
+    $(F \cdot \Bag)\ K$, and
+  \item lifts the partial bijection $p : K \pbij L$ to a function
+    $\prt p : \prt F\ K \to \prt F\ L$.  \todo{insert picture here?} This function takes as input
+    a structure of type $(F \cdot \Bag)\ K$, that is, a tuple \[ (K_1,
+    K_2, f, \unit, \sigma) \] where $f : F\ K_1$ is a $K_1$-labelled
+    $F$-structure, the unit value $\unit$ represents a $K_2$-labeled
+    set, and $\sigma : K \bij K_1 + K_2$ witnesses that $K_1$ and
+    $K_2$ form a partition of the label set $K$.  As output, $\prt p$
+    yields \[ (L_1, L_2 + \extra p, F\ (\restr{K_1}{p_1})\ f, \unit,
+    \psi), \] where
+    \begin{itemize}
+    \item $p_1$ is the ``restriction of $p$ to $K_1$'', that is, the
+      composite partial bijection
+      \[ p_1 : \xymatrix{K_1 \ar[r]^-{\pbij}_-{\inl} & K_1 + K_2
+        \ar[r]^-{\sim}_-{\sigma^{-1}} & K \ar[r]^{\pbij}_{p} & L}. \]
+      Similarly, $p_2 : K_2 \pbij L$.
+    \item $L_1 = p_1\ K_1$ is the image of $K_1$ under the restricted
+      partial bijection $p_1$.  Similarly, $L_2 = p_2\ K_2$. Note that
+      we ``throw in the extra labels'' by using the coproduct $L_2 +
+      \extra p$ as the second set of labels.
+    \item Recall that $\restr {K_1} {p_1} : K_1 \bij p_1\ K_1$; thus
+      $F\ (\restr {K_1} {p_1})\ f$ denotes the relabelling of the
+      $F$-structure $f$ from $K_1$ to $p\ K_1 = L_1$.
+    \item $\psi : L \bij L_1 + (L_2 + \extra p)$ is given by the composite
+    \[ \xymatrixcolsep{4pc} \xymatrix{L \ar[r]^-{\sim}_-{\extrabij p} & p\ K +
+      \extra p} \] \todo{finish.}
+    \end{itemize}
+  \end{itemize}
+  We must verify that this defines a valid functor $\BTSub \to
+  \ST$. \todo{finish}
+
+  Next, consider the action of $\prt -$ on morphisms, that is, natural
+  transformations $\varphi : \all L F\ L \to G\ L$ where $F$ and $G$
+  are species.  Define $(\prt \varphi)_L : \prt F\ L \to \prt G\ L$
+  by \[ (L_1, L_2, f, \unit, \sigma) \mapsto (L_1, L_2, \varphi_{L_1}\
+  f, \unit, \sigma). \] For this to be natural the following square
+  must commute for all $F, G : \BT \to \ST$, all $\varphi : \all L F\
+  L \to G\ L$, and all $p : K \pbij L$:
+  \[ \xymatrix
+       { \prt F\ K \ar[d]_{\prt F\ p} \ar[r]^{(\prt \varphi)_K}
+       & \prt G\ K \ar[d]^{\prt G\ p}
+      \\ \prt F\ L                    \ar[r]_{(\prt \varphi)_L}
+       & \prt G\ L
+       }
+  \]
+  Consider an arbitrary element $(K_1, K_2, f, \unit, \sigma)$ of the
+  top-left corner.  Note that the action of $\prt \varphi$ on a
+  five-tuple only affects the middle value, and likewise note that the
+  action of $\prt F\ p$ and $\prt G\ p$ are identical on all but the
+  middle value (that is, the middle value is the only one affected by
+  $F$ or $G$ specifically).  Thus, it suffices to consider only the
+  fate of $f$ as it travels both paths around the square.
+  Travelling around the left and bottom sides yields
+  \[ \varphi_{L_1}\ (F\ (\restr{K_1}{p_1})\ f), \] whereas the top and
+  right sides yield \[ G\ (\restr{K_1}{p_1})\ (\varphi_{K_1}\ f). \]
+  These are equal by naturality of $\varphi$.
+
+  Finally, it is easy to verify that $\prt -$ itself satisfies the
+  functor laws, since the mapping \[ (L_1, L_2, f, \unit, \sigma)
+  \mapsto (L_1, L_2, \varphi_{L_1}\ f, \unit, \sigma) \] clearly
+  preserves identity and composition of natural transformations.
+\end{defn}
+
+\begin{prop}
+  $\prt - : \Spe \to \PSpe$ is full.
+\end{prop}
+
+\begin{proof}
+  \todo{prove me}
+\end{proof}
+
+\begin{prop}
+  $\prt - : \Spe \to \PSpe$ is faithful.
+\end{prop}
+
+\begin{proof}
+  \todo{prove me}
+\end{proof}
+
+\begin{prop}
+  $\prt - : \Spe \to \PSpe$ is essentially surjective.
+\end{prop}
+
+\begin{proof}
+  \todo{prove me}
+\end{proof}
+
+\todo{Combinatorics of partial species, \eg generating functions.
+  Partial species are like having things ``up to'' the given size.
+  Generating function = partial sums.  Reversible operation.}
+
+\todo{Is the functor $\prt -$ monoidal?}
 
 \todo{Labelled structures with partial species; memory layout.}
 

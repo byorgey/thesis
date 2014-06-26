@@ -139,6 +139,8 @@
 
 \newcommand{\param}{\mathord{-}}
 
+\newcommand{\restr}[2]{#2||_{#1}}
+
 \newcommand{\comp}{\mathbin{\circ}}
 \newcommand{\kcomp}{\mathbin{\bullet}}
 \newcommand{\union}{\cup}
@@ -322,6 +324,7 @@
 \newcategory{Cat}     % (small) categories
 \newcategory{Spe}     % species
 \newcategory{CSpe}    % constructive species
+\newcategory{PSpe}    % partial species
 \newcategory{Hask}    % Haskell types and functions
 \newcategory{B}
 \newcategory{P}
@@ -331,11 +334,16 @@
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
-\newcommand{\STSub}{\ST_{\subseteq}}
-\newcommand{\BTSub}{\BT_{\subseteq}}
-\newcommand{\PTSub}{\PT_{\leq}}
 
-\newcommand{\FinNSub}{\cat{Fin}\N_{\subseteq}}
+\newcommand{\prt}[1]{\ensuremath{#1_{\pbij}}}
+\newcommand{\STSub}{\prt \ST}
+\newcommand{\BTSub}{\prt \BT}
+\newcommand{\PTSub}{\ensuremath{\PT_{\leq}}}
+
+\newcommand{\extra}[1]{#1_{\TyOne}}
+\newcommand{\extrabij}[1]{#1^{+}}
+
+\newcommand{\FinNSub}{\ensuremath{\cat{Fin}\N_{\subseteq}}}
 
 \newcommand{\fin}[1]{\ensuremath{[#1]}}
 

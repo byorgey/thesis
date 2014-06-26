@@ -671,8 +671,13 @@ numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv
 
 \begin{defn}
   A \term{constructive species} is an \hott{functor} $F : \BT \to
-  \ST$.  We use $\CSpe = [\BT,\ST]$ to refer to the \hott{category} of
-  constructive species.
+  \ST$.  We use $\Spe = [\BT,\ST]$ to refer to the \hott{category} of
+  constructive species.  Note this is the same name as the category
+  $[\B,\Set]$ of set-theoretic species; while technically ambiguous
+  this should not cause confusion since it should always be clear from
+  the context whether we are working in set theory or HoTT.  Likewise,
+  when working in the context of HoTT we will often simply say
+  ``species'' instead of ``constructive species''.
 \end{defn}
 
 Another one of the major goals of this chapter is to argue that this
@@ -686,6 +691,12 @@ Rather, one way we can justify $[\BT, \ST]$ as a constructive
 counterpart to $[\B, \Set]$ is to consider the operations and
 constructions that are typically carried out on $[\B, \Set]$, and show
 that $[\BT,\ST]$ supports them as well.
+
+\begin{rem}
+  When it is clear that we are working in a context based on HoTT, we
+  may simply use the term ``species'' rather than ``constructive
+  species'' to refer to \hott{functors} $\BT \to \ST$.
+\end{rem}
 
 \section{Lifted monoids: sum and Cartesian product}
 
