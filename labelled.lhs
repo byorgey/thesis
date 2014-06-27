@@ -1363,9 +1363,18 @@ empty). Transporting along a strictly partial bijection results in
 some labels being added to the set.
 
 Intuitively, every normal species $F$ gives rise to a partial species
-$\prt F$ which ``acts like'' the species $F \cdot \Bag$, and vice
-versa.  In fact, along these lines we can formally show an equivalence
-between the categories \Spe and \PSpe.
+$\prt F$ which ``acts like'' the species $F \cdot \Bag$.  In fact,
+along these lines we can formally define a fully faithful embedding of
+\Spe into \PSpe.
+
+\todo{Combinatorics of partial species, \eg generating functions.
+  Partial species are like having things ``up to'' the given size.
+  Explain why there is not an equivalence.  Problem is that partial
+  species do not necessarily preserve injectivity.  Talk about
+  intuition from generating functions and partial sums.  Can't undo
+  operation of taking ``partial sums'' in this case because it might
+  not preserve information---ie can't subtract $G\ (n-1)$ from $G\
+  n$.}
 
 \begin{defn}
   The functor $\prt - : \Spe \to \PSpe$ is defined as follows.
@@ -1453,18 +1462,6 @@ between the categories \Spe and \PSpe.
 \begin{proof}
   \todo{prove me}
 \end{proof}
-
-\begin{prop}
-  $\prt - : \Spe \to \PSpe$ is essentially surjective.
-\end{prop}
-
-\begin{proof}
-  \todo{prove me}
-\end{proof}
-
-\todo{Combinatorics of partial species, \eg generating functions.
-  Partial species are like having things ``up to'' the given size.
-  Generating function = partial sums.  Reversible operation.}
 
 \todo{Is the functor $\prt -$ monoidal?}
 
