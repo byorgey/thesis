@@ -1463,7 +1463,8 @@ along these lines we can formally define a fully faithful embedding of
   \todo{prove me}
 \end{proof}
 
-\todo{Is the functor $\prt -$ monoidal?}
+\todo{Is the functor $\prt -$ monoidal? Intuitively, yes for $+$, no
+  for $\cdot$.  Probably not for $\comp$.}
 
 \todo{Labelled structures with partial species; memory layout.}
 
