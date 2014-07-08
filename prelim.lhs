@@ -3,53 +3,140 @@
 %include polycode.fmt
 %include forall.fmt
 
-%format === = "\oldequiv"
-
 \chapter{Preliminaries}
 \label{chap:prelim}
 
-\todo{mention logical equivalence.}
-
-\todo{Explicitly discuss categorical monoids in HoTT. Note that strict
-  vs non-strict monoids is a non-issue.}
+\todo{Add forwards and backwards references.}
 
 The main content of this dissertation builds upon a great deal of
 mathematical formalism, particularly from set theory, category theory,
 and type theory.  To say that this chapter attempts to make the
-dissertation ``self-contained'' would be ludicrous, not to mention
+dissertation ``self-contained'' would be ludicrous---not to mention
 disheartening to those readers who find there are still gaps between
 this document's assumptions and their background knowledge.  Rather,
 the purpose of this chapter is to provide a brief overview of the
 necessary technical background, giving definitions, important
-intuitions, and references for further reading.  Readers who merely
-need to fill in a few gaps may find such brief treatments sufficient;
-it is hoped that readers with less background will find it a useful
-framework and source of intuition for furthering their own learning,
-making use of the provided references to read about things not covered
-here.
+intuitions, and references for further reading.  \todo{Make sure it is
+  so!} Readers who merely need to fill in a few gaps may find such
+brief treatments sufficient; it is hoped that readers with less
+background will find it a useful framework and source of intuition for
+furthering their own learning, making use of the provided references
+to read about things not covered here.
 
-\todo{Redo this based on splitting out another chapter.}
-The material in \pref{sec:basic}, \pref{sec:HoTT}, and
-\pref{sec:category-theory}, though by no means basic, is fairly
-standard, so readers with a good background in the subjects covered
-may safely skip them without too many surprises.  Even those readers
-who are not familiar with some of the material may find it more
-productive to begin reading \pref{chap:species} and refer back to this
-chapter as needed. On the other hand, the material in
-\Sect\Sect\ref{sec:AC}--\ref{sec:finiteness-hott} is somewhat less
-standard, and it is hoped that all readers, even experts, will gain
-something from them.
+\section{Metavariable conventions and notation}
+\label{sec:metavariables}
 
-\section{Basic notations}
-\label{sec:basic}
+A great many variables and named entities appear in this
+dissertation.  To aid the reader's comprehension, the following
+metavariable conventions are (mostly) adhered to, although this list
+is neither exhaustive nor prescriptive:
+\begin{itemize}
+\item Metavariables $f$, $g$, $h$ range over functions.
+\item Greek metavariables (especially $\alpha$, $\beta$, $\sigma$,
+  $\tau$, $\phi$, $\psi$) often range over bijections.
+\item Blackboard bold metavariables (\eg $\C$, $\D$, $\E$) range over
+  categories.
+\item Names of specific categories use boldface (\eg $\Set$, $\Cat$,
+  $\Spe$, $\B$, $\P$).
+\item Names of certain type-theoretic constructs or categories use a
+  calligraphic font (\eg $\Type$, $\BT$, $\PT$, $\ST$).
+\item Metavariables $A$, $B$, $C$, range over arbitrary sets or types.
+\item Metavariables $K$, $L$ range over \emph{finite} sets or types.
+\item Metavariables $F$, $G$, $H$ range over functors (and in particular
+  over species).
+\item Names of specific species use a sans-serif font (\eg $\X$, $\Bag$,
+  $\List$, $\Cyc$).
+\end{itemize}
+
+This dissertation also features a menagerie of notations to indicate
+``sameness''.  To the outsider this must seem quite bewildering: how
+complicated can ``sameness'' be? Why would one ever need anything
+other than plain old equality ($=$)?  On the other hand, to computer
+scientists and philosophers this should come as no surprise; equality
+turns out to be an incredibly subtle concept.  Each of these symbols
+and their corresponding concepts will later be discussed in more
+depth; however, as an aid to the reader, we give a brief enumeration
+of them here, which can referred back to in cases of confusion or
+forgetfulness.
+
+\begin{itemize}
+\item Equality $(=)$ is the only notation which is overloaded.  In the
+  context of set theory, two sets $A$ and $B$ are \term{equal},
+  denoted $A = B$, when they have the same elements.  In the context
+  of homotopy type theory (\pref{sec:HoTT}), $=$ denotes
+  \term{propositional} equality; $A = B$ denotes the type of
+  \term{paths} between the types $A$ and $B$.
+\item In the context of set theory, the symbol $\defeq$ is used to
+  introduce a \term{definitional} equality; that is, $x \defeq y$ is a
+  definition of $x$ rather than a proposition asserting the equality
+  of two things.
+\item $A \bij B$ denotes the set of \emph{bijections} between sets (or
+  types) $A$ and $B$.  That is, if $f : A \bij B$ then $f$ is a
+  function from $A$ to $B$ which possesses both a left and right
+  inverse (denoted $f^{-1}$).  Note that in set theory, sets which are
+  in bijection are typically not equal.
+\item In homotopy type theory, $\jeq$ denotes \term{judgmental} equality, not to be
+  confused with propositional equality ($=$).
+\item The symbol $\hdefeq$ also denotes a definitional equality, but
+  in homotopy type theory rather than set theory. The symbol
+  emphasizes the fact that a definition introduces a judgmental rather
+  than a propositional equality.
+\item Again in homotopy type theory, $A \equiv B$ denotes the
+  \term{equivalence} of two types $A$ and $B$. Intuitively,
+  equivalence can be thought of as a ``very well-behaved'' bijection,
+  \ie a bijection with some extra coherence conditions.
+\item $A \lequiv B$ denotes that $A$ and $B$ are \term{logically
+    equivalent}, that is, that each logically implies the other.  Via
+  the logical interpretation of types as propositions, this is also to
+  say that there exist functions $A \to B$ and $B \to A$.  Logical
+  equivalence is thus a weaker notion than bijection or equivalence,
+  since there is no requirement that the functions be inverse.
+\item An \term{isomorphism} is an invertible arrow in a category
+  (\pref{sec:category-theory}), and is denoted by $A \iso B$.  The
+  precise meaning of $\iso$ thus depends on the category under
+  consideration.  For example, in $\Set$, the category of sets,
+  isomorphisms are precisely bijections; in the category of pointed
+  sets, isomorphisms are those bijections which preserve the
+  distinguished element, and so on.  Generally speaking, isomorphisms
+  can be thought of as ``structure-preserving correspondences''.
+\end{itemize}
+
+These notations are summarized in \pref{tab:sameness}.
+
+\begin{table}
+  \centering
+  \begin{tabular}{cc}
+    $=$ & (propositional) equality \\
+    $\defeq$ & definitional equality (set theory) \\
+    $\bij$ & bijection \\
+    $\jeq$ & judgmental equality \\
+    $\hdefeq$ & definition equality (HoTT) \\
+    $\equiv$ & equivalence \\
+    $\lequiv$ & logical equivalence \\
+    $\iso$ & isomorphism
+  \end{tabular}
+  \caption{``Sameness'' relations}
+  \label{tab:sameness}
+\end{table}
+
+\section{Set theory}
+\label{set:set-theory}
+
+A grasp of basic set theory (the element-of ($\in$) and subset
+($\subseteq$) relations, intersections ($\intersect$), unions
+($\union$), and so on) is assumed.  However, no background is assumed
+in \emph{axiomatic} set theory, or in particular its role as a
+foundation for mathematics.  Issues relating to axiomatic set theory
+are spelled out in detail as necessary (for example, the axiom of
+choice, in \pref{sec:AC}).
 
 The set of \term{natural numbers} is denoted $\N = \{0, 1, 2,
 \dots\}$.  The \term{size} or \term{cardinality} of a finite set $X$,
 a natural number, is denoted $\size X$ (rather than the more
-traditional $||X||$, since that notation is used as the introduction
-form for propositional truncation; see \pref{sec:HoTT}). Given a
-natural number $n \in \N$, the canonical size-$n$ prefix of the
-natural numbers is denoted $\fin n = \{0, \dots, n-1\}$.
+traditional $||X||$, since that notation is used for another purpose;
+see \pref{sec:HoTT}). Given a natural number $n \in \N$, the canonical
+size-$n$ prefix of the natural numbers is denoted $\fin n = \{0,
+\dots, n-1\}$.
 
 Given a function $f : A \to B$, an element $b \in B$, and subsets $X
 \subseteq A$ and $Y \subseteq B$,
@@ -62,48 +149,34 @@ under $f$;
   \}$ likewise denotes the preimage of an entire set.
 \end{itemize}
 
-\todo{definitional equality}
-
-Metavariable conventions used throughout this dissertation include:
-\begin{itemize}
-\item Metavariables $f$, $g$, $h$ range over functions.
-\item Greek metavariables (especially $\alpha$, $\beta$, $\sigma$,
-  $\tau$, $\phi$, $\psi$) often range over bijections.
-\item Blackboard bold metavariables (\eg $\C$, $\D$, $\E$) range over
-  categories.
-\item Names of specific categories use boldface ($\Set$, $\Cat$,
-  $\Spe$, $\B$, $\P$).
-\item Names of certain type-theoretic constructs or categories use a
-  calligraphic font ($\Type$, $\BT$, $\PT$).
-\item Metavariables $K$, $L$ range over sets of labels (or, more generally, label
-  objects).
-\item Metavariables $F$, $G$, $H$ range over functors (and in particular
-  over species).
-\item Names of specific species use a sans-serif font ($\X$, $\Bag$,
-  $\List$, $\Cyc$).
-\end{itemize}
 
 \section{Homotopy type theory}
 \label{sec:HoTT}
 
-\term{Homotopy Type Theory} (HoTT) is a recent variant of Martin-L\"of
-type theory~\citep{martin1975intuitionistic, martin1984intuitionistic}
-arising out of Vladimir Voevodsky's Univalent Foundations
-program~\citep{voevodskyFoundations}.  There is not space to give a
-full description here; in any case, given the existence of the
-excellent HoTT Book~\citep{hottbook}, such a description would be
-superfluous.  Instead, it will suffice to give a brief description of
-the relevant parts of the theory, and explain the particular benefits
-of carrying out this work in the context of HoTT.
+\term{Homotopy Type Theory} (HoTT) is a relatively new variant of
+Martin-L\"of type theory~\citep{martin1975intuitionistic,
+  martin1984intuitionistic} arising out of Vladimir Voevodsky's
+Univalent Foundations program~\citep{voevodskyFoundations}.  There is
+certainly not space to give a full description here; in any case,
+given the existence of the excellent HoTT Book~\citep{hottbook}, such
+a description would be superfluous.  Instead, it will suffice to give
+a brief description of the relevant parts of the theory, and explain
+the particular benefits of carrying out this work in the context of
+HoTT.  Some particular results from the HoTT book are also reproduced
+as necessary, especially in \pref{sec:ct-hott}.  It is thus hoped that
+readers with no prior knowledge of HoTT will still be able to follow
+everything in this dissertation, at least at a high level, though a
+thorough understanding will probably require reference to the HoTT
+book.
 
 Homotopy type theory, I will argue, is the \emph{right} framework in
 which to carry out the work in this dissertation.  Intuitively, this
 is because the theory of species is based centrally around groupoids
 and isomorphism---and these are topics central to homotopy type theory
 as well.  In a sense, HoTT is what results when one begins with
-Martin-L\"of type theory (MLTT) and then takes issues of equality and
-isomorphism---and in particular the principle of equivalence---very
-seriously, generalizing equality to isomorphism in a coherent way.
+Martin-L\"of type theory (MLTT) and then takes the principle of
+equivalence (\pref{sec:equivalence-univalence}) very seriously,
+generalizing equality to isomorphism in a coherent way.
 
 We begin our brief tour of HoTT with its syntax.
 
@@ -117,22 +190,26 @@ The theory includes standard constructions such as:
   $\inr : B \to A + B$, as well as a $\cons{case}$ construct for doing
   case analysis;
 \item dependent pairs $(x:A) \times B(x)$, with constructor $\pair -
-  -$ and projection functions $\pi_1 : (x:A) \times B(x) \to A$ and
-  $\pi_2 : (p : (x:A) \times B(x)) \to B(\pi_1 p)$;
+  -$, and projection functions $\pi_1 : (x:A) \times B(x) \to A$ and
+  $\pi_2 : (p : (x:A) \times B(x)) \to B (\pi_1\ p)$;
 \item dependent functions $(x:A) \to B(x)$; and
 \item a hierarchy of type universes $\Type_0$, $\Type_1$,
   $\Type_2$\dots.
 \end{itemize}
 Following standard practice, universe level subscripts will usually be
 omitted, with $\Type$ being understood to represent whatever universe
-level is appropriate.
+level is appropriate in the context.
 
-HoTT also allows inductive definitions.  For example, $\N :
-\Type_0$ denotes the inductively-defined type of natural numbers, with
-constructors $\zero : \N$ and $\suc : \N \to \N$, and $\Fin : \N \to
-\Type_0$ denotes the usual indexed type of canonical finite sets, with
-constructors $\fzero : \Fin (\suc n)$ and $\fsuc : \Fin n \to \Fin
-(\suc n)$.
+HoTT also allows inductive definitions.  For example, $\N : \Type_0$
+denotes the inductively-defined type of natural numbers, with
+constructors $\zero : \N$ and $\suc : \N \to \N$; we will use Arabic
+notation like $3$ as a shorthand for $\suc\ (\suc\ (\suc \zero))$. We
+also have $\Fin : \N \to \Type_0$, which denotes the usual indexed
+type of finite sets, with constructors $\fzero : \Fin (\suc n)$ and
+$\fsuc : \Fin n \to \Fin (\suc n)$.  For example, one can check that
+$\Fin 3$ has the three inhabitants $\fzero$, $\fsuc\ \fzero$, and
+$\fsuc\ (\fsuc\ \fzero)$, and that in general $\Fin n$ is the
+type-theoretic counterpart to $\fin n = \{0, 1, \dots, n-1\}$.
 
 Although Agda notation~\citep{Agda} is mostly used in this dissertation
 for dependent pairs and functions, the traditional notations $\sum_{x
@@ -173,14 +250,14 @@ HoTT distinguishes between two different types of equality:
   equalities can be constructed and reasoned about \emph{within} HoTT.
   Inhabitants of $x = y$ are often called \term{paths} from $x$ to
   $y$; the intuition, taken from homotopy theory, is to think of paths
-  between points in a topological space.  The important point about
-  this intuition is that a path from a point $x$ to a point $y$ does
-  not witness the fact that $x$ and $y$ are literally the \emph{same}
-  point, but rather specifies a \emph{process} for getting from one to
-  the other.  As we will see, the analogue of this intuition in type
-  theory is the fact that a path of type $x = y$ can have
-  \emph{nontrivial computational content} specifying how to convert
-  between $x$ and $y$.
+  between points in a topological space.  The most important aspect of
+  this intuition to note is that a path from a point $x$ to a point
+  $y$ does not witness the fact that $x$ and $y$ are literally the
+  \emph{same} point, but rather specifies a \emph{process} for getting
+  from one to the other.  As we will see, the analogue of this
+  intuition in type theory is the fact that a path of type $x = y$ can
+  have \emph{nontrivial computational content} specifying how to
+  convert between $x$ and $y$.
 
   Note that it is possible (and often useful!) to have nontrivial
   higher-order paths, \ie paths between paths, paths between paths
@@ -190,7 +267,7 @@ HoTT distinguishes between two different types of equality:
 \subsection{Path induction}
 
 To make use of a path $p : x = y$, one may use the induction principle
-for paths, or \term{path induction}.  Path induction applies when is
+for paths, or \term{path induction}.  Path induction applies when
 trying to prove a statement of the form
 \begin{equation} \label{eq:path-ind-form}
 \all {x,y} {(p : x = y) \to
@@ -198,15 +275,15 @@ trying to prove a statement of the form
 \end{equation}
 There is also an equivalent induction principle, \term{based path
   induction}, which applies when proving a statement of the form \[
-\all x {(x = y) \to P x}, \] where $y$ is fixed.  Crucially, however,
+\all x {(x = y) \to P(x)}, \] where $y$ is fixed.  Crucially, however,
 neither can be used to prove statements of the form $(x = y) \to P$
 where both $x$ and $y$ are fixed.
 
 For the precise details of (based) path induction, see the HoTT
-book~\citep{hottbook}; the simple intuition suffices for this work: to
-prove \ref{eq:path-ind-form} it suffices to assume that $p$ is $\refl$
-and that $x$ and $y$ are literally the same, \ie it suffices to prove
-$P(\refl,x,x)$ for an arbitrary $x$.
+book~\citep{hottbook}. For this work, however, a simple intuition
+suffices: to prove \ref{eq:path-ind-form} it suffices to assume that
+$p$ is $\refl$ and that $x$ and $y$ are literally the same, \ie it
+suffices to prove $\all x P(\refl,x,x)$.
 
 It is important to note that this does \emph{not} imply all paths are
 equal to \refl!  It simply expresses that all paths must suitably
@@ -228,10 +305,11 @@ along $e$ and denoted $\transport{P}{e}$, or simply $e_*$ when $P$ is
 clear from context.  For example, if $e : A = B$ then $\transport{X
   \mapsto X \times (X \to C)}{e} : A \times (A \to C) \to B \times (B
 \to C)$.  Transport also follows easily from path induction: it
-suffices to note that $\idT : P(x) \to P(x)$ in the case when $e =
-\refl$.
+suffices to note that $\idT : P(x) \to P(x)$ in the case when $e$ is
+$\refl$.
 
 \subsection{Equivalence and univalence}
+\label{sec:equivalence-univalence}
 
 There is also a third sort of equality, namely, \term{equivalence}.
 An equivalence between $A$ and $B$, written $A \equiv B$ is
@@ -682,8 +760,8 @@ data Fork a = Leaf a | Fork (Fork a) (Fork a)
 These are obviously not \emph{equal}, but they are isomorphic, in the
 sense that there are natural transformations, \ie polymorphic
 functions, |rose2fork :: forall a. Rose a -> Fork a| and |fork2rose ::
-forall a. Fork a -> Rose a|, such that |rose2fork . fork2rose === id|
-and |fork2rose . rose2fork === id| \citep{yorgey-2010-species, hinze2010reason}.
+forall a. Fork a -> Rose a|, such that |rose2fork . fork2rose = id|
+and |fork2rose . rose2fork = id| \citep{yorgey-2010-species, hinze2010reason}.
 
 Here, then, is a better definition:
 \begin{defn} \label{defn:cat-equiv} Categories $\C$ and $\D$ are

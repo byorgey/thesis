@@ -1970,6 +1970,7 @@ embedding, that is, $j(L) = \Lab(-,L)$.
     \uplus \tau}{\bij} \Fin m \uplus \Fin n \stackrel{\varphi}{\bij}
   \Fin (m+n), \] as illustrated in \pref{fig:sumiso}.
 
+  \todo{Improve this diagram, with colors or something}
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
@@ -2031,6 +2032,7 @@ dia =
    # applyAll [connect' aOpts ('B' .> 'b' .> i) ('C' .> 'b' .> tau i) || i <- [0..3] ]
    # applyAll [connect' aOpts ('C' .> n) ('D' .> 'a' .> i) || i <- [0..6], let n = either2Name (inverse phi i) ]
    # frame 0.5
+   # lwO 0.7
 
 aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     \end{diagram}

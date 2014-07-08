@@ -662,9 +662,9 @@ formulation of the round-trip laws in \pref{defn:pbij}.
 \end{proof}
 
 \begin{rem}
-  The formula in \pref{prop:rt-adj} is strongly reminiscent of an
-  adjunction.  However, it is not clear whether there is a suitable
-  sense in which it can actually be seen as one.
+  Equation \eqref{eq:rt-adj} is strongly reminiscent of an adjunction.  However,
+  I do not know whether there is a suitable sense in which it can
+  actually be seen as one.
 \end{rem}
 
 
@@ -694,7 +694,7 @@ together with $f : A \to B$ constitutes a partial bijection $A
 
 \begin{defn}
   A \term{partial inverse} $\pInv(f)$ to $f : A \to B$ is defined so
-  that \[ (A \pbij B) = (f : A \to B) \times \pInv(f), \] that
+  that \[ (A \pbij B) \jeq (f : A \to B) \times \pInv(f), \] that
   is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (\all {a b}
   (f\ a = b) \lequiv (\inr\ a = g\ b)). \]
 \end{defn}
@@ -816,7 +816,7 @@ dia = hcat' (with & sep .~ 2)
 
 \begin{rem}
   Note that a bijection $f : A \bij B$ can be made into a partial
-  bijection $h : A \pbij B$ trivially by setting $h = f$ and
+  bijection $h : A \pbij B$ trivially by setting $\embed h = f$ and
   $\project h = \inr \comp f^{-1}$, and moreover that this is a
   homomorphism with respect to composition; that is, the category of
   bijections embeds into the category of partial bijections as a

@@ -165,17 +165,20 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 
-\newcommand{\bij}{\stackrel{\sim}{\longrightarrow}}
+\newcommand{\bij}{\stackrel{\protect\raisebox{-0.2em}{${}_\sim$}}{\longrightarrow}}
+%\newcommand{\bij}{\stackrel{\sim}{\longrightarrow}}
 \newcommand{\perm}[1]{#1!}
 \newcommand{\mkIso}{\rightleftharpoons}
 \newcommand{\inj}{\hookrightarrow}
 \let\oldequiv\equiv
 \newcommand{\jeq}{\oldequiv}          % judgmental equality
-\newcommand{\defeq}{\stackrel{\vartriangle}{=}}
+\newcommand{\defeq}{\mathrel{:=}}     % definitional equality in set theory
 \newcommand{\hdefeq}{\mathrel{:\jeq}} % definitional equality in HoTT
 \renewcommand{\equiv}{\simeq}         % homotopy equivalence
 \newcommand{\iso}{\cong}              % isomorphism in a category
 \newcommand{\lequiv}{\leftrightarrow} % logical equivalence
+\renewcommand{\implies}{\to}
+\renewcommand{\iff}{\lequiv}
 
 \newcommand{\pbij}{\subseteq}         % partial bijection
 
@@ -341,7 +344,7 @@
 \newcommand{\PTSub}{\ensuremath{\PT_{\leq}}}
 
 \newcommand{\extra}[1]{#1_{\TyOne}}
-\newcommand{\extrabij}[1]{#1^{+}}
+\newcommand{\extrabij}[1]{\tilde{#1}}  % #1^{\sim}
 
 \newcommand{\FinNSub}{\ensuremath{\cat{Fin}\N_{\subseteq}}}
 

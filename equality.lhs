@@ -466,6 +466,7 @@ There are also, however, several more creative options:
 \label{sec:cliques}
 
 \todo{Give some history, background, references etc.}
+\todo{Discuss strict vs non-strict monoidal categories.}
 
 As a preface to anafunctors, we begin with a brief outline of the
 theory of \term{cliques}, which are a formal way of representing the
@@ -829,6 +830,9 @@ HoTT instead of category theory, this becomes unnecessary.
 
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
+
+\todo{Explicitly discuss categorical monoids in HoTT. Note that strict
+  vs non-strict monoids is a non-issue.}
 
 As hinted earlier, category theory works much more nicely when founded
 in HoTT instead of set theory.  Intuitively, the main reason is that
