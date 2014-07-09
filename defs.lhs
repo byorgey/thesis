@@ -316,6 +316,8 @@
 \newcommand{\id}{\ensuremath{\mathit{id}}}
 \newcommand{\Id}{\ensuremath{\mathit{Id}}}
 
+\newcommand{\fc}[2]{#1 \to #2}   % functor category
+
 % some standard categories
 \newcommand{\newcategory}[1]{%
 \expandafter\providecommand\csname #1\endcsname{}\expandafter\renewcommand\csname #1\endcsname{\cat{#1}}}

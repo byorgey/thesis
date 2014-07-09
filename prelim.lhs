@@ -472,21 +472,23 @@ path $x =_{\ptrunc A} y$.  Thus, $\ptrunc A$ is a copy of $A$ but with
 all values considered equal.  This is called the \term{propositional
   truncation} of $A$ since it evidently turns $A$ into a proposition,
 which can intuitively be thought of as the proposition ``$A$ is
-inhabited''. If we have an inhabitant of $\ptrunc A$, we know some $a
-: A$ must have been used to construct it.  However, the induction
-principle for $\ptrunc A$ places some restructions on when we are
-allowed to look at the underlying $a : A$.  In particular, to
-construct a function $\ptrunc A \to P$, one must give a function $f :
-A \to P$, along with a proof that $f$ respects the equalities
-introduced by the higher constructor of $\ptrunc A$.  Hence \emph{all}
-the outputs of $f$ must be equal---that is, $P$ must be a proposition.
-Intuitively, this means that one is allowed to ``look at'' the value
-of type $A$ hidden inside a value of $\ptrunc A$, as long as one
-``promises not to reveal the secret''.  Producing an inhabitant of a
-proposition $P$ counts as such a promise, because it cannot ``leak''
-any information about the precise inhabitant $a : A$: up to
-propositional equality, there is at most one inhabitant of $P$, and
-hence no opportunity to convey information.
+inhabited''.
+
+If we have an inhabitant of $\ptrunc A$, we know some $a : A$ must
+have been used to construct it.  However, the induction principle for
+$\ptrunc A$ places some restructions on when we are allowed to look at
+the underlying $a : A$.  In particular, to construct a function
+$\ptrunc A \to P$, one must give a function $f : A \to P$, along with
+a proof that $f$ respects the equalities introduced by the higher
+constructor of $\ptrunc A$.  Hence \emph{all} the outputs of $f$ must
+be equal---that is, $P$ must be a proposition.  Intuitively, this
+means that one is allowed to ``look at'' the value of type $A$ hidden
+inside a value of $\ptrunc A$, as long as one ``promises not to reveal
+the secret''.  Producing an inhabitant of a proposition $P$ counts as
+such a promise, because it cannot ``leak'' any information about the
+precise inhabitant $a : A$. Up to propositional equality, there is at
+most one inhabitant of $P$, and hence no opportunity to convey
+information.
 
 %% Don't think I make any use of this later.
 %
@@ -549,10 +551,6 @@ well~\citep{martin1982constructive}.
 \section{Category theory}
 \label{sec:category-theory}
 
-\todo{Note notation for natural transformations---sometimes use $\nt F
-  G$, sometimes just $F \to G$.}
-\todo{Add section about \Hask}
-
 This dissertation makes extensive use of category theory, which is the
 natural language in which to explore species and related concepts.  A
 full understanding of the contents of this dissertation requires an
@@ -612,6 +610,10 @@ throughout this work.
 \item $\Grp$, the category of groups and group homomorphisms.
 \item $\Vect_K$, the category of vector spaces over the field $K$,
   together with linear maps.
+\item $\Hask$, the category of Haskell types and
+  functions.\footnote{Technically, this is a polite fiction, and
+    requires pretending that $\bot$ does not exist.  Fortunately,
+    laziness does not play an important role in this work.}
 \end{itemize}
 
 \paragraph{Bifunctors}
@@ -656,24 +658,11 @@ see \pref{sec:ends-coends}.
 
 \paragraph{Hom sets}
 
-\todo{Use a different notation for exponents and powers?  Also, decide
-re: notation for functor categories.}
 In a similar vein, the set of morphisms between objects $A$ and $B$ in
 a category $\C$ is usually denoted $\C(A,B)$ or
 $\mathrm{Hom}_\C(A,B)$, but I will also occasionally use the notation
-$A \to B$, or $A \to_\C B$ when the category $\C$ should be explicitly
-indicated.  The same notation will be used for exponentials
-(\pref{sec:monoids}) and powers (\pref{sec:enriched}).  While this
-certainly has the potential to introduce ambiguity and confusion, it
-has the decided benefit of playing to the intuition of Haskell
-programmers, and often makes the structure of calculations more
-apparent.  For example, the traditional notation \[ \int_{b} H
-b^{\C(a,G b)} \] can be instead written as the Haskell-like \[
-\eend{b} {(a \to G b) \to H b}, \] where the end
-(\pref{sec:ends-coends}) has been written using $\forall$, and both
-the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.
-It should be emphasized that this notation is perfectly rigorous, and
-not just an ``approximation'' in Haskell.
+$\Hom A B$, or $\Hom[\C] A B$ when the category $\C$ should be explicitly
+indicated.
 
 \paragraph{Slice categories}
 
@@ -702,12 +691,18 @@ number weight; morphisms in $\Set/\R$ are weight-preserving functions.
 Given two categories $\C$ and $\D$, the collection of functors from
 $\C$ to $\D$ forms a category (a \term{functor category}), with
 natural transformations as morphisms.  This category is denoted by
-both of the notations $[\C,\D]$ and $\D^\C$, as convenient.  The
+both of the notations $\fc \C \D$ and $\D^\C$, as
+convenient.\footnote{Traditionally the notation $[\C, \D]$ is also
+  used, but $\C \to \D$ is consistent with the general notational
+  choice to use arrow notation for exponentials, \ie internal homs in
+  closed categories; the functor category $\C \to \D$ is an
+  exponential object in the Cartesian closed category $\Cat$.}  The
 notation $\D^\C$ is often helpful since intuition for exponents
 carries over to functor categories; for example, $\C^{\D + \E} \equiv
-\C^\D \times \C^\E$, $(\C \times \D)^\E \equiv \C^\E \times \D^\E$, and
-so on. (In fact, this is not specific to functor categories; the same
-sorts of isomorphisms hold in any bicartesian closed category.)
+\C^\D \times \C^\E$, $(\C \times \D)^\E \equiv \C^\E \times \D^\E$,
+and so on. (In fact, this is not specific to functor categories; for
+example, the second isomorphism holds in any Cartesian closed
+category.)
 
 Given a set $X$, the functor category $\Set^X$ (considering $X$ as a
 discrete category) is equivalent to the slice category $\Set / X$. In
@@ -908,7 +903,7 @@ given here:
 
 For example, $\Set$ is symmetric monoidal under both Cartesian product
 and disjoint union. As an example of a non-symmetric monoidal
-category, consider the functor category $[\C,\C]$, with the monoid given
+category, consider the functor category $\C \to \C$, with the monoid given
 by composition of functors.
 
 \begin{defn}
@@ -944,7 +939,12 @@ language with first-class functions, the class of functions
   monoidal structure in all these different categories?  Are they
   related by monoidal functors?}
 
-\subsection{Ends, coends, and Yoneda}
+\subsection{Enriched categories}
+\label{sec:enriched}
+
+\todo{Write me.  Basic definitions; powers and copowers.}
+
+\subsection{Ends and coends}
 \label{sec:ends-coends}
 
 \todo{Define/give intuition for ends and coends.  (Co)ends as
@@ -960,7 +960,21 @@ et al.}
 
 \todo{natural transformations as ends.  Justifies $\forall$ notation.}
 
-\paragraph{The Yoneda lemma}
+\subsection{The Yoneda lemma}
+\label{sec:yoneda}
+
+Note that the same notation (namely, $- \to -$) is used for hom-sets,
+exponentials (\pref{sec:monoids}) and powers (\pref{sec:enriched}).
+While this certainly has the potential to introduce ambiguity and
+confusion, it has the decided benefit of playing to the intuition of
+Haskell programmers, and often makes the structure of calculations
+more apparent.  For example, the traditional notation \[ \int_{b} H
+b^{\C(a,G b)} \] can be instead written as the Haskell-like \[
+\eend{b} {(a \to G b) \to H b}, \] where the end
+(\pref{sec:ends-coends}) has been written using $\forall$, and both
+the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.
+It should be emphasized that this notation is perfectly rigorous, and
+not just an ``approximation'' in Haskell.
 
 \todo{Yoneda.}
 
@@ -1203,9 +1217,4 @@ true:
   The fact that $1$ is an identity for $\otimes^*$, associativity, and
   the coherence conditions all follow readily from the definitions.
 \end{proof}
-
-\subsection{Enriched categories}
-\label{sec:enriched}
-
-\todo{Write me.  Basic definitions; powers and copowers.}
 

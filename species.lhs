@@ -560,15 +560,15 @@ thought of as precisely those labelled by the canonical label set $[n]$.
 \subsection{The category of species}
 \label{sec:category-of-species}
 
-Recall that $[\C, \D]$ denotes the \term{functor category} whose
-objects are functors $\C \to \D$ and whose morphisms are natural
-transformations between functors.  We may thus consider the
-\term{category of species}, $\Spe = [\B, \Set]$, where the objects are
-species, and morphisms between species are label-preserving mappings
-which commute with relabelling---that is, mappings which are entirely
-``structural'' and do not depend on the labels in any way. For
-example, an in-order traversal constitutes such a mapping from the
-species of binary trees to the species of lists, as illustrated in
+Recall that $\fc \C \D$ denotes the \term{functor category} whose
+objects are functors and whose morphisms are natural transformations
+between functors.  We may thus consider the \term{category of
+  species}, $\Spe = \fc \B \Set$, where the objects are species, and
+morphisms between species are label-preserving mappings which commute
+with relabelling---that is, mappings which are entirely ``structural''
+and do not depend on the labels in any way. For example, an in-order
+traversal constitutes such a mapping from the species of binary trees
+to the species of lists, as illustrated in
 \pref{fig:species-morphism}: computing an in-order traversal and then
 relabelling yields the same list as first relabelling and then doing
 the traversal.
@@ -608,7 +608,7 @@ aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
   \end{figure}
 
   It turns out that functor categories have a lot of interesting
-  structure.  For example, as we will see, $[\B, \Set]$ has (at least)
+  structure.  For example, as we will see, $\fc \B \Set$ has (at least)
   five different monoidal structures!  The rest of this chapter is
   dedicated to exploring and generalizing this structure.
 
@@ -616,18 +616,18 @@ aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
 \label{sec:constructive-species}
 
 
-In many ways, $[\B, \Set]$ as the definition of species is too
+In many ways, $\fc \B \Set$ as the definition of species is too
 specific and restrictive.  For example, one of the big motivations for
 this work is to use species as a basis for computation, but ideally
 this means working with shapes and labels corresponding to
 \emph{types}, formalized in type theory, rather than sets.  Even
 within the realm of pure mathematics, there are many extensions to the
 basic theory of species (\eg multisort species, weighted species,
-$\L$-species, vector species, \dots) which require moving beyond $[\B,
-\Set]$ in some way.
+$\L$-species, vector species, \dots) which require moving beyond $\fc
+\B \Set$ in some way.
 
 The goal of the rest of this chapter is to examine a number of species
-operations in the context of general functor categories $[\Lab,\Str]$,
+operations in the context of general functor categories $\fc \Lab \Str$,
 in order to identify precisely what properties of $\Lab$ and $\Str$
 are necessary to define each operation. That is, starting ``from
 scratch'', we will build up a generic notion of species that supports
@@ -642,16 +642,16 @@ Along the way, by way of examples, we will also explore various
 generalizations of species and see how they fit in this framework:
 each arises from considering particular categories in place of $\B$
 and $\Set$.  To keep these various functor categories straight, the
-word ``species'' will be used for $[\B,\Set]$, and ``generalized
+word ``species'' will be used for $\fc \B \Set$, and ``generalized
 species'' (or, more specifically,
-``$[\Lab,\Str]$-species''\footnote{Not to be confused with the
+``$\fc \Lab \Str$-species''\footnote{Not to be confused with the
   generalized species of~\citet{Fiore08}, who define
   ``$(A,B)$-species'' as functors from $\B A$ (a generalization of
   $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
-  $B$.}) for some abstract $[\Lab, \Str]$.  Each of the following
+  $B$.}) for some abstract $\fc \Lab \Str$.  Each of the following
 section begins by defining a particular species operation in
-$[\B,\Set]$, then generalizes it to arbitrary functor categories
-$[\Lab,\Str]$, and exhibits a number of examples in particular functor
+$\fc \B \Set$, then generalizes it to arbitrary functor categories
+$\fc \Lab \Str$, and exhibits a number of examples in particular functor
 categories.
 
 \subsection{Species in type theory}
@@ -671,9 +671,9 @@ numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv
 
 \begin{defn}
   A \term{constructive species} is an \hott{functor} $F : \BT \to
-  \ST$.  We use $\Spe = [\BT,\ST]$ to refer to the \hott{category} of
+  \ST$.  We use $\Spe = \fc \BT \ST$ to refer to the \hott{category} of
   constructive species.  Note this is the same name as the category
-  $[\B,\Set]$ of set-theoretic species; while technically ambiguous
+  $\fc \B \Set$ of set-theoretic species; while technically ambiguous
   this should not cause confusion since it should always be clear from
   the context whether we are working in set theory or HoTT.  Likewise,
   when working in the context of HoTT we will often simply say
@@ -683,14 +683,14 @@ numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv
 Another one of the major goals of this chapter is to argue that this
 is an appropriate encoding of species within homotopy type theory.
 Note that this cannot be directly justified by showing that
-$[\B,\Set]$ and $[\BT,\ST]$ are categorically equivalent; this does
+$\fc \B \Set$ and $\fc \BT \ST$ are categorically equivalent; this does
 not even make sense since they live in entirely different foundational
 frameworks.
 
-Rather, one way we can justify $[\BT, \ST]$ as a constructive
-counterpart to $[\B, \Set]$ is to consider the operations and
-constructions that are typically carried out on $[\B, \Set]$, and show
-that $[\BT,\ST]$ supports them as well.
+Rather, one way we can justify $\fc \BT \ST$ as a constructive
+counterpart to $\fc \B \Set$ is to consider the operations and
+constructions that are typically carried out on $\fc \B \Set$, and show
+that $\fc \BT \ST$ supports them as well.
 
 \begin{rem}
   When it is clear that we are working in a context based on HoTT, we
@@ -854,7 +854,7 @@ species sum:
 \end{defn}
 
 \begin{prop}
-  $(+,\Zero)$ is a symmetric monoid on $[\B, \Set]$.
+  $(+,\Zero)$ is a symmetric monoid on $\fc \B \Set$.
 \end{prop}
 
 \begin{proof}
@@ -1068,7 +1068,7 @@ respect to $\times$.
 \label{sec:lifting-monoids}
 
 Both these constructions generalize readily. In fact, any monoidal
-structure on a category $\Str$ can be lifted to one on $[\Lab,\Str]$
+structure on a category $\Str$ can be lifted to one on $\fc \Lab \Str$
 where everything is done ``elementwise''.  The basic idea is exactly
 the same as the standard Haskell type class instance
 \begin{spec}
@@ -1080,7 +1080,7 @@ but quite a bit more general.
 
 \begin{prop} \label{prop:lift-monoid-simple} Any (strict) monoid
   $(\otimes, I)$ on $\Str$ lifts to a monoid, denoted $(\otimes^\Lab,
-  I^\Lab)$, on the functor category $[\Lab,\Str]$.  In particular, $(F
+  I^\Lab)$, on the functor category $\fc \Lab \Str$.  In particular, $(F
   \otimes^\Lab G)\ L = F\ L \otimes G\ L$, and $I^\Lab$ is $\Delta_I$,
   the functor which is constantly $I$.  Moreover, this lifting
   preserves products, coproducts, symmetry, and distributivity.
@@ -1091,11 +1091,11 @@ of this proposition, along with a detailed proof, will be given
 later. First, however, we consider some examples.
 
 \begin{ex}
-  Lifting coproducts in $\Set$ to $[\B,\Set]$ yields the $(+, \Zero)$
+  Lifting coproducts in $\Set$ to $\fc \B \Set$ yields the $(+, \Zero)$
   structure on species, and likewise lifting products yields $(\times,
   \Bag)$. According to \pref{prop:lift-monoid-simple}, since
   $(\uplus,\varnothing)$ is a coproduct structure on $\Set$, $(+,
-  \Zero)$ is likewise a coproduct structure on the category $[\B,\Set]$
+  \Zero)$ is likewise a coproduct structure on the category $\fc \B \Set$
   of species, and similarly $(\times, \One)$ is a categorical product.
 \end{ex}
 
@@ -1116,7 +1116,7 @@ later. First, however, we consider some examples.
   T_1) + (S_2, T_2) = (S_1 \uplus S_2, T_1 \uplus T_2)$.
 
   Recall that when $X$ is a discrete category, the functor category
-  $[X,\Set]$ is equivalent to the slice category $\Set / X$.  This
+  $\fc X \Set$ is equivalent to the slice category $\Set / X$.  This
   gives another way to think of a functor $\disc{\cat{2}} \to \Set$,
   namely, as a single set of elements $S$ together with a function $S
   \to \disc{\cat{2}}$ which ``tags'' each element with one of two tags
@@ -1139,7 +1139,7 @@ later. First, however, we consider some examples.
   However, the ``size'' intuition of course carries over well to
   species.)
 
-  Again, $[\N, \Set] \iso \Set/\N$, so functors $\N \to \Set$ can
+  Again, $\fc \N \Set \iso \Set/\N$, so functors $\N \to \Set$ can
   also be thought of as a single set $S$ along with a function $S \to
   \N$ which gives the size of each element.
 
@@ -1171,15 +1171,15 @@ later. First, however, we consider some examples.
   In $\ST$, the coproduct of two types $A$ and $B$ is given by their
   sum, $A + B$, with the void type $\TyZero$ serving as the identity.
   We may thus lift this coproduct structure to the functor category
-  $[\BT, \ST]$---or indeed to any $[\Lab, \ST]$, since no
+  $\fc \BT \ST$---or indeed to any $\fc \Lab \ST$, since no
   requirements are imposed on the domain category.
 \end{ex}
 
 \begin{ex}
   Similarly, categorical products in $\ST$ are given by product
   types $A \times B$, with the unit type $\TyOne$ as the identity.
-  This then lifts to products on $[\BT,\ST]$ (or, again, any
-  $[\Lab,\ST]$) which serve as an analogue of Cartesian product of
+  This then lifts to products on $\fc \BT \ST$ (or, again, any
+  $\fc \Lab \ST$) which serve as an analogue of Cartesian product of
   species.
 \end{ex}
 
@@ -1189,7 +1189,7 @@ later. First, however, we consider some examples.
 For completeness, we now turn to a detailed and fully general
 construction which shows how monoids (and many other structures of
 interest) can be lifted from a category $\Str$ to a functor category
-$[\Lab,\Str]$.  We must first develop some technical machinery
+$\fc \Lab \Str$.  We must first develop some technical machinery
 regarding functor categories.  In particular, we show how to lift
 objects, functors, and natural transformations based on some category $\Str$
 into related objects, functors, and natural transformations based on
@@ -1281,7 +1281,7 @@ functor category.
   Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a
   category $\Str$ lifts pointwise to a monoidal structure $(\otimes^\Lab,
   I^\Lab, \alpha^\Lab, \lambda^\Lab, \rho^\Lab)$ on the functor category
-  $[\Lab, \Str]$.
+  $\fc \Lab \Str$.
 \end{thm}
 
 \begin{proof}
@@ -1873,7 +1873,7 @@ product.
 
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G \in
-  [\Lab^\op, \Str]$ is given by the coend \[ (F \oast G)\ L = \coend{L_F, L_G}
+  \fc \Lab^\op \Str$ is given by the coend \[ (F \oast G)\ L = \coend{L_F, L_G}
   F\ L_F \otimes G\ L_G \otimes (\Hom[\Lab]{L}{L_F \oplus L_G}). \]
 \end{defn}
 
@@ -1889,7 +1889,7 @@ product.
 \end{rem}
 
 This operation is associative, and has as a unit $j(I)$ where $I$ is
-the unit for $\oplus$ and $j : \Lab \to [\Lab^{\text{op}}, \Str]$ is the Yoneda
+the unit for $\oplus$ and $j : \Lab \to \fc \Lab^{\text{op}} \Str$ is the Yoneda
 embedding, that is, $j(L) = \Lab(-,L)$.
 
 \begin{ex}
@@ -2079,8 +2079,8 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
 
 \begin{ex}
   \todo{Work out details here.  Do arithmetic product but in
-    $[\P,\Set]$.}  Let's examine this in detail in the case of
-  $[\P,\Set]$.  The monoidal structure on $\P$ is defined on objects
+    $\fc \P \Set$.}  Let's examine this in detail in the case of
+  $\fc \P \Set$.  The monoidal structure on $\P$ is defined on objects
   as $m \otimes n = mn$.  On morphisms, given $f : \fin m \bij \fin m$
   and $g : \fin n \bij \fin n$, we have $f \otimes g : \fin{mn} \bij
   \fin{mn}$ defined by \todo{finish}.
@@ -2099,7 +2099,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
 \begin{ex}
   We now verify that $\BT$ and $\ST$ have the right properties, so
   that partitional and arithmetic product are well-defined on
-  $[\BT,\ST]$-species. \todo{Have to redo this given new definitions
+  $(\fc \BT \ST)$-species. \todo{Have to redo this given new definitions
     of $\BT$ and $\ST$.}
   \begin{itemize}
   \item Like $\B$, there are monoidal structures on $\BT$
@@ -2127,7 +2127,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     induced by transport of paths in $\BT$. \todo{flesh out more}
   \end{itemize}
 
-  Given $F,G \in [\BT,\ST]$, and picking some particular sum-like
+  Given $F,G : \fc \BT \ST$, and picking some particular sum-like
   monoid $\oplus$ on $\BT$, we can instantiate the definition
   of Day convolution to get
   \[ (F \cdot G)\ L = \sum_{L_F, L_G} F\ L_F \times G\ L_G \times
@@ -2257,9 +2257,9 @@ Similarly, the species $\Perm$ of permutations is given by $\Perm = \Bag \comp
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
 
-We first show how to carry out the definition of composition in $[\B,
-\Set]$ more abstractly, and then discuss how it may be generalized to
-other functor categories $[\Lab, \Str]$.
+We first show how to carry out the definition of composition in $\fc \B 
+\Set$ more abstractly, and then discuss how it may be generalized to
+other functor categories $\fc \Lab \Str$.
 \citet{street2012monoidal} gives the following abstract
 definition of composition:
 \[ (F \comp G)\ L = \coend{K} F\ K \times G^{\size K}\ L, \]
@@ -2315,10 +2315,10 @@ subcategory of $\Set$ and disjoint union (respectively product)
 preserves finiteness.
 
 We now define a general notion of indexed species product. For a
-species $F \in [\B,\Set]$ and $K \in \B$ a finite set, $F^K \in
-[\B,\Set]$ represents the $\size K$-fold partitional product of $F$,
+species $F : \fc \B \Set$ and $K \in \B$ a finite set, $F^K :
+\fc \B \Set$ represents the $\size K$-fold partitional product of $F$,
 indexed by the elements of $K$: \todo{picture?} \[ F^K\ L = \coend{P
-  \in [K,\B]} \B(\Sigma P, L) \times \Pi (F \comp P). \] Note that $K$
+  : \fc K \B} \B(\Sigma P, L) \times \Pi (F \comp P). \] Note that $K$
 is regarded as a discrete category, so $P \in \B^K$ is a $K$-indexed
 collection of finite sets.  $\B(\Sigma P, L)$, a bijection between the
 coproduct of $P$ and $L$, witnesses the fact that $P$ represents a
@@ -2328,7 +2328,7 @@ fundamentally distinct partition. The composite $F \comp P =
 collection of $F$-structures, one on each finite set of labels in $P$;
 the $\Pi$ constructs their product.
 
-\todo{Note this is functorial in $K$, i.e. $F^- : \B \to [\B,\Set]$ is
+\todo{Note this is functorial in $K$, i.e. $F^- : \B \to (\fc \B \Set)$ is
 a functor.}
 
 Finally, the composite $F \comp G$ is defined by
@@ -2343,15 +2343,15 @@ product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
 \label{sec:closed}
 
 \paragraph{Cartesian closed} If $\Lab$ is locally small and $\Str$ is
-complete and Cartesian closed, then $[\Lab,\Str]$ is also complete and
+complete and Cartesian closed, then $\fc \Lab \Str$ is also complete and
 Cartesian closed. \todo{cite
   \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178\#104178},
   also check locally small thing?  Jacques asked it on MO?}  In
 particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
 (L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,
 $\B$, $\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and
-$\ST$ are complete and Cartesian closed, so $[\B,\Set]$, $[\P,\Set]$,
-$[\BT,\Set]$, and $[\PT,\Set]$ are all complete and Cartesian closed
+$\ST$ are complete and Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$,
+$\fc \BT \Set$, and $\fc \PT \Set$ are all complete and Cartesian closed
 as well.
 
 \todo{Note, here we don't need parametric polymorphism over $\forall
@@ -2359,8 +2359,8 @@ as well.
   preserve.  Should unpack this somewhere, and use a different
   notation below.}
 
-Let's unpack this result a bit in the specific case of $[\PT,
-\ST]$.  Ends in $\ST$ are given by (parametric) universal
+Let's unpack this result a bit in the specific case of $\fc \PT 
+\ST$.  Ends in $\ST$ are given by (parametric) universal
 quantification, and indexed products are $\Pi$-types; hence, we
 have
 \begin{align*}
@@ -2373,23 +2373,24 @@ only inhabited when $m = n$.
 
 Being Cartesian closed means there is an adjunction $- \times G \adj
 -^G$ between products and exponentials, which yields a natural
-isomorphism \[ [\PT,\ST](F \times G, H) \equiv [\PT,\ST](F,H^G) \]
-Expanding morphisms of the functor category $[\PT, \ST]$ as natural
-transformations and the definition of $H^G$ derived above, this
-yields \[ \left( \all n {(F \times G)_n \to H_n} \right) \equiv \left(
-  \all n {F_n \to (\Fin n \equiv \Fin n) \to G_n \to H_n} \right). \]
-Intuitively, this says that a size-polymorphic function that takes a
-Cartesian product shape $F \times G$ and yields another species $H$ is
-isomorphic to a size-polymorphic function that takes a triple of an
-$F$-shape, a $G$-shape, \emph{and a permutation on $\Fin n$}, and
-yields an $H$-shape.  The point is that an $(F \times G)$-shape
-consists not just of separate $F$- and $G$-shapes, but those shapes
-get to ``interact'': in particular we need a permutation to tell us
-how the labels on the separate $F$- and $G$-shapes ``line up''.  An
-$(F \times G)$-shape encodes this information implicitly, by the fact
-that the two shapes share the exact same set of labels. \todo{Need to
-  think about this a bit more carefully in the context of $\P$.}
-\todo{Note that we could require the equivalence to always be \id.}
+isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
+\ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
+\PT \ST$ as natural transformations and the definition of $H^G$
+derived above, this yields \[ \left( \all n {(F \times G)_n \to H_n}
+\right) \equiv \left( \all n {F_n \to (\Fin n \equiv \Fin n) \to G_n
+    \to H_n} \right). \] Intuitively, this says that a
+size-polymorphic function that takes a Cartesian product shape $F
+\times G$ and yields another species $H$ is isomorphic to a
+size-polymorphic function that takes a triple of an $F$-shape, a
+$G$-shape, \emph{and a permutation on $\Fin n$}, and yields an
+$H$-shape.  The point is that an $(F \times G)$-shape consists not
+just of separate $F$- and $G$-shapes, but those shapes get to
+``interact'': in particular we need a permutation to tell us how the
+labels on the separate $F$- and $G$-shapes ``line up''.  An $(F \times
+G)$-shape encodes this information implicitly, by the fact that the
+two shapes share the exact same set of labels. \todo{Need to think
+  about this a bit more carefully in the context of $\P$.}  \todo{Note
+  that we could require the equivalence to always be \id.}
 
 \todo{picture.  Two cases with identical shapes but ``interacting''
   differently.}
@@ -2397,9 +2398,9 @@ that the two shapes share the exact same set of labels. \todo{Need to
 Practically speaking, this result tells us how to express an
 eliminator for $(F \times G)$-shapes. \todo{Elaborate on this.}
 
-Note that $[\B, \Set]$ \emph{is} actually Cartesian closed, since it
-is equivalent to $[\P, \Set]$.  \todo{Check this for sure.}  The above
-derivations can be carried out in the context of $[\B, \Set]$ as well,
+Note that $\fc \B \Set$ \emph{is} actually Cartesian closed, since it
+is equivalent to $\fc \P \Set$.  \todo{Check this for sure.}  The above
+derivations can be carried out in the context of $\fc \B \Set$ as well,
 with similar results.  Intuitively, $\B$ ``appears to be too big on
 the surface'', but is saved by virtue of being equivalent to a small
 category.  In a sense, $\P$ is what is ``really going on''; $\B$ is
@@ -2408,11 +2409,12 @@ convenient to talk about \emph{sets} of labels rather than having to
 work with the canonical set $\{0, \dots, n-1\}$ all the time.  This is
 quite a special property of $\B$; for example, $\Set$ is certainly not
 equivalent to any small categories. The same argument shows that
-$[\BT, \ST]$ is Cartesian closed as well.
+$\fc \BT \ST$ is Cartesian closed as well.
 
 \section{Differentiation}
 \label{sec:differentiation}
 
+\todo{fix notation}
 The \term{derivative} $F'$ of a species $F$ is defined by \[ F'[U] =
 F[U \union \{\star\}], \] where $\star$ is some new distinguished
 label not already present in $U$.  The transport of relabellings along

@@ -210,7 +210,7 @@ lanAdjoint h = homL (uncurry (yoneda' h))
 We are now ready to consider Joyal's definition of \term{analytic
   functors}~\citep{Joyal86}.
 \begin{defn}[Joyal]
-  Given a species $F \in [\B,\Set]$, the \term{analytic functor}
+  Given a species $F : \fc \B \Set$, the \term{analytic functor}
   $\analytic F$ corresponding to $F$ is given by $\lan \iota F$, the
   left Kan extension of $F$ along the inclusion functor $\iota : \B
   \inj \Set$. A functor $\Set \to \Set$ is \term{analytic} when it
@@ -569,7 +569,7 @@ $\B$ and $\Set$ with $\BT$ and $\ST$.
 \subsection{Generalized labelled structures}
 \label{sec:generalized-labelled}
 
-To generalize labelled structures to $[\Lab,\Str]$-species where
+To generalize labelled structures to $(\fc \Lab \Str)$-species where
 $\Lab$ is not a groupoid, we must split the parameter $L$ into two,
 one each for the contravariant and covariant occurrences: \[ \GLStr F
 K L A \defeq (\iota K \to A) \times F\ L. \]
@@ -1300,7 +1300,7 @@ In a combinatorial setting, one is primarily interested in
 
 \begin{defn}
   A \term{partial species} is a functor $F : \BTSub \to \ST$.  We
-  denote by $\PSpe = [\BTSub, \ST]$ the functor category of partial
+  denote by $\PSpe = \fc \BTSub \ST$ the functor category of partial
   species.
 \end{defn}
 
