@@ -234,7 +234,7 @@ can be defined in a more nuanced way.  The best way to model what
 classical mathematicians mean when they say ``$S$ is non-empty'' is
 probably not with a negation, but instead with the \emph{propositional
   truncation} of the statement that $S$ contains an
-element~\cite[Chapter 3]{hottbook}.  This more faithfully mirrors the
+element~\citep[Chapter 3]{hottbook}.  This more faithfully mirrors the
 way mathematicians use it, for example, in reasoning such as ``$S$ is
 non-empty, so let $s \in S$ \dots''.  Non-emptiness does in fact imply
 an inhabitant, but such an inhabitant can only be used to prove
@@ -846,7 +846,7 @@ isomorphism in categories.
 
 This section lays out a few relevant definitions along with some
 intuition and commentary.  A fuller treatment may be found in Chapter
-9 of the HoTT book~\citep{hottbook}.  Generally, ``\hott{widget}'' is
+9 of the HoTT book~\citeyearpar{hottbook}.  Generally, ``\hott{widget}'' is
 used to refer to widgets as defined in HoTT, to distinguish from
 widgets as defined in set theory.
 
@@ -1678,7 +1678,7 @@ create a mere proposition $(b : B) \times Q(b)$---one can then define
 a function $\ptrunc{A} \to (b : B) \times Q(b)$ from a function $A \to
 (b : B) \times Q(b)$, and finally project out the $B$ to obtain a
 function $\ptrunc A \to B$.  This ``trick'' is detailed in the HoTT
-book~\citep[\Sect 3.9]{hottbook}; Exercise 3.19 is an excellent
+book~\citeyearpar[\Sect 3.9]{hottbook}; Exercise 3.19 is an excellent
 exercise that also affords some good intuition for this phenomenon.
 
 Computationally speaking, $\size : \BT \to \PT$ does precisely what we

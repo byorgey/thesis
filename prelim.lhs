@@ -181,6 +181,7 @@ generalizing equality to isomorphism in a coherent way.
 We begin our brief tour of HoTT with its syntax.
 
 \subsection{Terms and types}
+\label{sec:HoTT-syntax}
 
 The theory includes standard constructions such as:
 \begin{itemize}
@@ -225,6 +226,7 @@ and function types, respectively. \later{implicit quantification? Do
   \N)$.}
 
 \subsection{Equality}
+\label{sec:HoTT-equality}
 
 HoTT distinguishes between two different types of equality:
 \later{reference ``On the meanings of the logical constants'' or some
@@ -265,6 +267,7 @@ HoTT distinguishes between two different types of equality:
 \end{itemize}
 
 \subsection{Path induction}
+\label{sec:path-induction}
 
 To make use of a path $p : x = y$, one may use the induction principle
 for paths, or \term{path induction}.  Path induction applies when
@@ -311,15 +314,18 @@ $\refl$.
 \subsection{Equivalence and univalence}
 \label{sec:equivalence-univalence}
 
-There is also a third sort of equality, namely, \term{equivalence}.
-An equivalence between $A$ and $B$, written $A \equiv B$ is
-(essentially) a pair of functions $f : A \to B$ and $g : B \to A$,
-along with a proof that $f$ and $g$ are inverse.\footnote{The precise
-  details are more subtle \cite[chap.  4]{hottbook}, but unimportant
-  for the purposes of this work.  The key takeaway is that $A \equiv
-  B$ both implies and is implied by the existence of an inverse pair
-  of functions, although this does not make a good \emph{definition}
-  of equivalence because of problems with coherence of higher paths.}
+Another notion of ``sameness'' definable in HoTT is
+\term{equivalence}.  An equivalence between $A$ and $B$, written $A
+\equiv B$, is a ``coherent bijection'', that is, a pair of inverse
+functions $f : A \to B$ and $g : B \to A$, along with an extra
+condition ensuring coherence of higher path structure.  The precise
+details are unimportant for the purposes of this dissertation, and can
+be found in the HoTT book~\citeyearpar[Chapter 4]{hottbook}. The
+important point to note is that equivalence and bijection are
+logically equivalent---that is, each implies the other.  In
+particular, to prove an equivalence it suffices to exhibit a
+bijection.
+
 The identity equivalence is denoted by $\id$, and the composition of
 $h : B \equiv C$ and $k : A \equiv B$ by $h \comp k : A \equiv C$.  As
 a notational shortcut, equivalences of type $A \equiv B$ can be used
@@ -328,12 +334,12 @@ as functions $A \to B$ where it does not cause confusion.
 HoTT's main novel feature is the \emph{univalence axiom}, which states
 that equivalence is equivalent to propositional equality, that is, $(A
 \equiv B) \equiv (A = B)$. One direction, $(A = B) \to (A \equiv B)$,
-follows easily from the properties of equality; the interesting
-direction, which must be taken as an axiom, is $\ua : (A \equiv B) \to
-(A = B)$, which formally encodes the \emph{principle of
+follows easily by path induction. The interesting direction, which
+must be taken as an axiom, is $\ua : (A \equiv B) \to (A = B)$. This
+formally encodes the \emph{principle of
   equivalence}~\citep{principle-of-equivalence}, namely, that sensible
 properties of mathematical objects must be invariant under
-equivalence.  Putting univalence together with transport means that
+equivalence.  Univalence, in conjunction with transport, implies that
 equivalent values are completely interchangeable.
 
 Propositional equality thus takes on a meaning richer than the usual
@@ -347,21 +353,22 @@ applying $\ua$ to some equivalence.
 As of yet, univalence has no direct computational
 interpretation\footnote{Though as of this writing there seems to be
   some good progress on this front via the theory of \term{cubical
-    sets}~\citep{bezem2014model}.}, so using it to give a computational
-interpretation of species may seem suspect. Note, however, that $\ua$
-satisfies the $\beta$ law \mbox{$\transport{X \mapsto X}{\ua(f)} =
-  f$}. So univalence introduces no computational problems as long as
-applications of $\ua$ are only ultimately used via
-$\mathsf{transport}$.  In particular, sticking to this restricted
-usage of $\ua$ still allows a convenient shorthand: packaging up an
-equivalence into a path and then transporting along that path results
-in ``automatically'' inserting the equivalence and its inverse in all
-the necessary places throughout the term. For example, let $P(X)
-\hdefeq X \times (X \to C)$ as in the previous example, and suppose $e
-: A \equiv B$, so $\ua\ e : A = B$.  Then $\transport P {\ua(e)} :
-P(A) \to P(B)$, and in particular $\transport P {\ua(e)} \pair a g =
-\pair {e(a)}{g \comp e^{-1}}$, which can be derived mechanically by
-induction on the shape of $P$.
+    sets}~\citep{bezem2014model}.}, so using it to give a
+computational interpretation of species may seem suspect. Note,
+however, that $\ua$ satisfies the $\beta$ law \mbox{$\transport{X
+    \mapsto X}{\ua(f)} = f$}. So univalence introduces no
+computational problems as long as applications of $\ua$ are only
+ultimately used via $\mathsf{transport}$.  In particular, sticking to
+this restricted usage of $\ua$ still allows a convenient shorthand:
+packaging up an equivalence into a path and then transporting along
+that path results in ``automatically'' inserting the equivalence and
+its inverse in all the necessary places throughout the term. For
+example, let $P(X) \hdefeq X \times (X \to C)$ as in the example from
+the end of \pref{sec:path-induction}, and suppose $e : A \equiv B$, so
+$\ua\ e : A = B$.  Then $\transport P {\ua(e)} : P(A) \to P(B)$, and
+in particular $\transport P {\ua(e)} \pair a g = \pair {e(a)}{g \comp
+  e^{-1}}$, which can be derived mechanically by induction on the
+shape of $P$.
 
 \subsection{Propositions, sets, and $n$-types}
 \label{sec:n-types}
@@ -418,42 +425,79 @@ such bijections.
 Note that $\isSet(A)$ itself is always a mere proposition for any type
 $A$ (see Lemma 3.3.5 in the HoTT book).
 
+\subsection{Higher inductive types}
+\label{sec:HITs}
+
+Another novel feature of HoTT (albeit one that is not yet fully
+understood) is the presence of \term{higher inductive types} (HITs).
+Standard inductive data types are specified by a collection of
+\term{data constructors} which freely generate all values of the type.
+For example, the values of $\N$ are precisely those constructed by any
+(finite) combination of the constructors $\zero$ and $\suc$.  HITs add
+the possibility of constructors which build not \emph{values}, but
+\emph{paths} between values (or paths between paths, or\dots).  They
+also come with an induction principle requiring uses of the values to
+respect all the equalities built by the higher constructors.
+
+This gives a natural way to build \term{quotient types}.  For example,
+consider the HIT $T : \Type$ with data constructors $\cons{TO} : T$ and
+$\cons{SO} : T \to T$, as well as a higher path constructor $\cons{P2}
+: (t : T) \to t = \cons{TS}\ (\cons{TS}\ \cons{TO})$.  This
+corresponds to quotienting $\N$ by the reflexive transitive closure of
+the relation $n = n+2$.  In this case, we can see (and could even
+prove formally) that $T$ is equivalent to the type $\mathbf{2}$ with
+two inhabitants.  However, if we really have in mind the quotient
+$\N/(n = n+2)$ it may be more convenient to work with it
+directly---for example, defining functions $T \to A$ essentially by
+giving a function $f : \N \to A$ and proving separately that $f$
+is compatible the equality $n = n+2$, rather than directly defining a
+function $\mathbf{2} \to A$.  In any case, there are also many HITs
+which are not equivalent to some standard inductive type, so the
+presence of HITs really does represent a large jump in expressive
+power.  For a good example of a nontrivial ``real-world'' application
+of HITs, see \citet{Angiuli2014patch}.
+
 \subsection{Truncation}
+\label{sec:truncation}
 
 The last important concept from HoTT to touch upon is
-\term{propositional truncation}.  If $A$ is a type, then $\ptrunc{A}$
-is also a type, with an introduction form $\ptruncI - : A \to
+\term{propositional truncation}, which is also an example of a
+nontrivial higher inductive type.  If $A$ is a type, then $\ptrunc{A}$
+is also a type, with an data constructor $\ptruncI - : A \to
 \ptrunc{A}$ that allows injecting values of $A$ into $\ptrunc{A}$.
-The crucial difference is that in addition to being able to construct
-\emph{values} of $\ptrunc A$, there is also a way to construct
-\emph{paths} between them: in particular, for any two values $x, y :
-\ptrunc A$, there is a path $x =_{\ptrunc A} y$.  Thus, $\ptrunc A$ is
-a copy of $A$ but with all values considered equal.  This is called
-the \term{propositional truncation} of $A$ since it evidently turns
-$A$ into a proposition, which can intuitively be thought of as the
-proposition ``$A$ is inhabited''. If we have an inhabitant of $\ptrunc
-A$, we know there must exist some inhabitant of $A$, but without
-necessarily being able to tell what it is.
-
-One of the most interesting aspects of propositional truncation is its
-recursion principle: to construct a function $\ptrunc A \to P$, it
-suffices to give a function $A \to P$, but \emph{only if $P$ is a
-  proposition}.  In other words, one is allowed to ``look at'' the
-value of type $A$ hidden inside a value of $\ptrunc A$, as long as one
+However, in addition to being able to construct \emph{values} of
+$\ptrunc A$, there is also a way to construct \emph{paths} between
+them: in particular, for any two values $x, y : \ptrunc A$, there is a
+path $x =_{\ptrunc A} y$.  Thus, $\ptrunc A$ is a copy of $A$ but with
+all values considered equal.  This is called the \term{propositional
+  truncation} of $A$ since it evidently turns $A$ into a proposition,
+which can intuitively be thought of as the proposition ``$A$ is
+inhabited''. If we have an inhabitant of $\ptrunc A$, we know some $a
+: A$ must have been used to construct it.  However, the induction
+principle for $\ptrunc A$ places some restructions on when we are
+allowed to look at the underlying $a : A$.  In particular, to
+construct a function $\ptrunc A \to P$, one must give a function $f :
+A \to P$, along with a proof that $f$ respects the equalities
+introduced by the higher constructor of $\ptrunc A$.  Hence \emph{all}
+the outputs of $f$ must be equal---that is, $P$ must be a proposition.
+Intuitively, this means that one is allowed to ``look at'' the value
+of type $A$ hidden inside a value of $\ptrunc A$, as long as one
 ``promises not to reveal the secret''.  Producing an inhabitant of a
 proposition $P$ counts as such a promise, because it cannot ``leak''
-any information about the precise inhabitant $a : A$. This is because,
-up to propositional equality, there is at most one inhabitant of $P$,
-and hence no opportunity to convey information.
+any information about the precise inhabitant $a : A$: up to
+propositional equality, there is at most one inhabitant of $P$, and
+hence no opportunity to convey information.
 
-Propositional truncation is also known as $(-1)$-truncation, and is
-the bottom rung on a ladder of $n$-truncation operations.  The
-$n$-truncation $\ptrunc{A}_n$ adds all paths at level $n$, effectively
-``killing'' all higher-order path structure above that level and
-turning $A$ into an $n$-type.  For example, the $0$-truncation
-$\ptrunc{A}_0$ turns $A$ into a set, by adding paths not between
-elements $a, b : A$, but between all pairs of parallel paths $p,q : a
-= b$.
+%% Don't think I make any use of this later.
+%
+% Propositional truncation is also known as $(-1)$-truncation, and is
+% the bottom rung on a ladder of $n$-truncation operations.  The
+% $n$-truncation $\ptrunc{A}_n$ adds all paths at level $n$, effectively
+% ``killing'' all higher-order path structure above that level and
+% turning $A$ into an $n$-type.  For example, the $0$-truncation
+% $\ptrunc{A}_0$ turns $A$ into a set, by adding paths not between
+% elements $a, b : A$, but between all pairs of parallel paths $p,q : a
+% = b$.
 
 \subsection{Why HoTT?}
 \label{sec:why-hott}
@@ -471,18 +515,19 @@ in the dissertation.
   $L_2$.  This is a fundamental operation in HoTT, and is also central
   to the definition of species (\pref{sec:species-definition}).  In
   fact, when constructing species with HoTT as a foundation, transport
-  simply comes ``for free''---in contrast to using set theory as a
-  foundation, in which case transport must be tediously defined (and
-  proved correct) for each new species.
-\item The \term{univalence axiom} and \term{higher inductive types}
-  make for a rich notion of propositional equality, over which the
-  ``user'' has a relatively high degree of control.  For example,
-  using higher inductive types, it is easy to define various sorts of
-  \emph{quotient types} which would be tedious to define and work with
-  in MLTT.  For example, one particular manifestation of this general
-  idea is the fact that \term{coends} in HoTT are just $\Sigma$-types
-  (\pref{sec:ct-hott}).
-\item \term{Propositional truncation} (explained below) is an
+  simply comes ``for free'' \todo{make sure this is emphasized
+    later}---in contrast to using set theory as a foundation, in which
+  case transport must be tediously defined (and proved correct) for
+  each new species.
+\item The \term{univalence axiom} (\pref{sec:equivalence-univalence})
+  and \term{higher inductive types} (\pref{sec:HITs}) make for a rich
+  notion of propositional equality, over which the ``user'' has a
+  relatively high degree of control.  For example, using higher
+  inductive types, it is easy to define various quotient types which
+  would be tedious to define and work with in MLTT.  One particular
+  manifestation of this general idea is the fact that \term{coends} in
+  HoTT are just $\Sigma$-types (\pref{sec:ct-hott}).
+\item \term{Propositional truncation} (\pref{sec:truncation}) is an
   important tool for properly modelling concepts from classical
   mathematics in a constructive setting.  In particular we use it to
   model the concept of \emph{finiteness} (\pref{sec:finiteness-hott}).
@@ -491,7 +536,7 @@ in the dissertation.
   essential in a constructive or computational setting.
 \end{itemize}
 
-Although not its main goal, I hope that this work can serve as a
+Although not the main goal, I hope that this work can serve as a
 good example of the ``practical'' application of HoTT and its benefits
 for programming.  Much of the work on HoTT has so far been aimed at
 mathematicians rather than computer scientists---appropriately so,
@@ -555,7 +600,7 @@ throughout this work.
   category with two objects and only identity morphisms. A
   \term{discrete} category is a category with only identity morphisms;
   $\disc{\C}$ denotes the discrete category with the objects of $\C$.
-  Also, any set can be treated as a discrete category.
+  Also, note that any set can be treated as a discrete category.
 \item $\Set$, the category with sets as objects and (total) functions
   as morphisms.
 \item $\FinSet$, like $\Set$ but with only finite sets as objects.
@@ -586,11 +631,13 @@ monoidal categories; see~\pref{sec:monoids}.
 
 \paragraph{Natural transformations}
 
-The notation $\eta : \all {A} {F A \to G A}$ will often be used to
-denote a natural transformation $\eta : \nt F G$; this notation meshes
-well with the intuition of Haskell programmers, since naturality
-corresponds to \emph{parametricity}, a property enjoyed by polymorphic
-types in Haskell~\citep{reynolds1983types, wadler1989free}.  It is
+To denote a natural transformation between functors $F, G : \C \to
+\D$, we use the notation $\nt F G$, or sometimes just $\mor F G$ when
+it is clear that $F$ and $G$ are functors.  The notation $\eta : \all
+{A} {F A \to G A}$ will also be used, which meshes well with the
+intuition of Haskell programmers: naturality corresponds to
+\emph{parametricity}, a property enjoyed by polymorphic types in
+Haskell~\citep{reynolds1983types, wadler1989free}.  This notation is
 also more convenient when the functors $F$ and $G$ do not already have
 names but can be readily specified by expressions, especially when
 those expressions involve $A$ more than once or in awkward
@@ -600,10 +647,12 @@ positions\footnote{As Haskell programmers are well aware, writing
   A)}$.  This notation can be rigorously justified using \emph{ends};
 see \pref{sec:ends-coends}.
 
-\paragraph{Sums and products}
+% Not sure why I thought I needed this.
 
-\todo{Definitions?  Notation for universal morphisms; link to
-  Haskell.  Note $\beta$ laws and so on.}
+% \paragraph{Sums and products}
+
+% \todo{Definitions?  Notation for universal morphisms; link to
+%   Haskell.  Note $\beta$ laws and so on.}
 
 \paragraph{Hom sets}
 
@@ -824,7 +873,7 @@ equational laws by natural isomorphisms.
       A}$ and $\rho : \all{A}{A \otimes I \iso A}$.
   \end{itemize}
   $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
-  ``coherence axioms'', which ensure that parallel isomorphisms
+  coherence axioms, which ensure that parallel isomorphisms
   constructed from $\alpha$, $\lambda$, and $\rho$ are always equal;
   for details, see \citet[Chapter VII]{mac1998categories} \todo{fill in page or
     section number}.
