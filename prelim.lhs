@@ -693,16 +693,15 @@ $\C$ to $\D$ forms a category (a \term{functor category}), with
 natural transformations as morphisms.  This category is denoted by
 both of the notations $\fc \C \D$ and $\D^\C$, as
 convenient.\footnote{Traditionally the notation $[\C, \D]$ is also
-  used, but $\C \to \D$ is consistent with the general notational
-  choice to use arrow notation for exponentials, \ie internal homs in
-  closed categories; the functor category $\C \to \D$ is an
-  exponential object in the Cartesian closed category $\Cat$.}  The
-notation $\D^\C$ is often helpful since intuition for exponents
-carries over to functor categories; for example, $\C^{\D + \E} \equiv
-\C^\D \times \C^\E$, $(\C \times \D)^\E \equiv \C^\E \times \D^\E$,
-and so on. (In fact, this is not specific to functor categories; for
-example, the second isomorphism holds in any Cartesian closed
-category.)
+  used, but $\fc \C \D$ is consistent with the general notation for
+  \term{exponentials} explained in \pref{sec:monoids}; the functor
+  category $\fc \C \D$ is an exponential object in the Cartesian
+  closed category $\Cat$.}  The notation $\D^\C$ is often helpful
+since intuition for exponents carries over to functor categories; for
+example, $\C^{\D + \E} \equiv \C^\D \times \C^\E$, $(\C \times \D)^\E
+\equiv \C^\E \times \D^\E$, and so on. (In fact, this is not specific
+to functor categories; for example, the second isomorphism holds in
+any Cartesian closed category.)
 
 Given a set $X$, the functor category $\Set^X$ (considering $X$ as a
 discrete category) is equivalent to the slice category $\Set / X$. In
@@ -830,21 +829,14 @@ The topic of \term{adjunctions} is much too large to adequately cover
 here.  For the purposes of this dissertation, the most important form
 of the definition to keep in mind is that a functor $F : \C \to \D$ is
 \term{left adjoint} to $G : \D \to \C$ (and $G$ \term{right adjoint}
-to $F$), notated $F \adj G$, if and only if \[ \Hom[\D]{F A}{B} \iso
-\Hom[\C]{A}{G B}, \] that is, if there is some natural isomorphism
+to $F$), notated $F \adj G$, if and only if \[ (\Hom[\D]{F A}{B}) \iso
+(\Hom[\C]{A}{G B}), \] that is, if there is some natural isomorphism
 matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
 \to G B$ in $\C$.
 
 One example familiar to functional programmers is \emph{currying}, \[
-(A \times B \to C) \iso (A \to (B \to C)), \] which corresponds to the
-adjunction \[ (- \times B) \adj (B \to -). \]
-
-\paragraph{Monads}
-
-Monads are familiar to many, and do not play a very important role in
-this work, so only a few words need to be said.
-
-\todo{monad basics. Kleisli category.}
+(\Hom{A \times B} C) \iso (\Hom A {(\Hom B C)}), \] which corresponds to
+the adjunction \[ (- \times B) \adj (\Hom B -). \]
 
 \subsection{Monoidal categories}
 \label{sec:monoids}
@@ -909,12 +901,33 @@ by composition of functors.
 \begin{defn}
   A monoidal category $\C$ is \term{closed} if there some bifunctor $[-,-]
   : \C^\op \times \C \to \C$ such that there is a natural
-  isomorphism \[ \all{ABC}{(\Hom {A \otimes B} C) \iso (\Hom A
-    {[B,C]})}, \] that is, $- \otimes B$ is left adjoint to $[B,-]$.
+  isomorphism
+  \begin{equation} \label{eq:currying}
+   \all{ABC}{(\Hom {A \otimes B} C) \iso (\Hom A {[B,C]})},
+  \end{equation}
+  that is, $- \otimes B$ is left adjoint to $[B,-]$.  The object $[B,C]$ is
+  called an \term{exponential} object, and can also be notated by $C^B$
+  or by $\expn B C$.
 \end{defn}
 
-$(\Set, \times)$ is closed: $[B,C]$ is defined as the set of functions
-from $B$ to $C$, and the required isomorphism is currying.
+\begin{rem}
+  The notation $[B,C]$ for the exponential of $B$ and $C$ is common,
+  and used in the definition above for clarity.  However, in the
+  remainder of this dissertation, we will use the alternate notation
+  $\expn B C$ instead.  That is, the natural isomorphism
+  \eqref{eq:currying} will be written instead as \[ \all{ABC}{(\Hom {A
+      \otimes B} C) \iso (\Hom A {(\expn B C)})}. \] This certainly
+  does have the potential to introduce some ambiguity (although the
+  ambiguity is only apparent, since it can always be resolved by type
+  inference).  However, it emphasizes the fact that exponential
+  objects ``act like'' morphisms, and moreover it plays to the
+  intuition of Haskell programmers, since Haskell makes no notational
+  distinction between top-level functions and first-class functions
+  passed as arguments or returned as results.
+\end{rem}
+
+$(\Set, \times)$ is closed: $\expn B C$ is defined as the set of
+functions from $B$ to $C$, and the required isomorphism is currying.
 Categories, like $\Set$, which are closed with respect to the
 categorical product are called \term{Cartesian closed}.  Intuitively,
 Cartesian closed categories are those which can ``internalize''
@@ -947,28 +960,127 @@ language with first-class functions, the class of functions
 \subsection{Ends and coends}
 \label{sec:ends-coends}
 
-\todo{Define/give intuition for ends and coends.  (Co)ends as
-(co)equializers.  Talk about connection between natural
-transformations and polymorphic functions, specific ways it plays out
-in a dependent type theory---e.g. can we assume parametricity for
-functions that abstract over things classified by |*|? Cite Bernardy
-et al.}
+Intuitively, ends and coends can be thought of as abstract categorical
+formulations of the concepts of \emph{parametricity} and
+\emph{modularity}, respectively.  Both play an important role in this
+dissertation.
 
-\todo{Use notation $\forall$ and $\exists$ for ends and coends?}
+\later{Talk about connection between natural transformations and
+  polymorphic functions, specific ways it plays out in a dependent
+  type theory---e.g. can we assume parametricity for functions that
+  abstract over things classified by |*|? Cite Bernardy et al.}
+\todo{cite Kmett articles}
+
+\paragraph{Coends}
+
+Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
+$T$, denoted $\coend{C} T(C,C)$,\footnote{Traditionally, $\coend{C}
+  T(C,C)$ is notated as $\int^C T(C,C)$.  However, the link to
+  calculus is extremely obscure and not very helpful for building
+  intuition. Moreover, using the traditional notation, it is hard to
+  keep straight the notation for coends ($\int^C T(C,C)$) and ends
+  ($\int_C T(C,C)$).  On the other hand, as I will show, $\coend C
+  T(C,C)$ (and $\eend C T(C,C)$ for ends) are deeply appropriate
+  notations, easy to keep straight, and help computer scientists and
+  logicians build on existing intuition.} is an object of $\D$ with
+morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$ for every $X$, such
+that the
+diagram \[ \xymatrix@@dr{ T(C',C) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(C',C') \ar[d]^{\omega_{C'}} \\
+  T(C,C) \ar[r]_{\omega_C} & \coend C T(C,C) } \] commutes for all $C,
+C' : \C$ and $f : C \to C'$. (This square represents
+\term{dinaturality} of $\omega$.)
+
+Since there must be morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$
+for every $C$, one's first try might be to implement the coend as an
+indexed coproduct, $\sum_{C \in \C} T(C,C)$.  Then the $\omega_X$ are
+just injections.  This is a good start, but does not (in general)
+satisfy the commutative diagram shown above.
+
+In the specific case when the objects of $\D$ can be thought of as
+sets or types with ``elements'', we can ``force'' the commutative
+diagram to hold by taking a \emph{quotient} of the indexed coproduct.
+Elements of the indexed coproduct look like pairs $(C, t)$ where $C
+\in \C$ and $t \in T(C,C)$. The idea behind the quotient is that we
+want to consider two pairs $(C,t)$ and $(C', t')$ equivalent if they
+are related by the functoriality of $T$.  In particular, for each
+arrow $f : C \to C'$ in $\C$ and each $x \in T(C',C)$, we set $(C,
+T(f,1)\ x) \sim (C', T(1,f)\ x)$.  That is, we can always ``swap out
+$(C,t)$ for $(C',t')$'' as long as we have some way to map from $C$ to
+$C'$, and the associated values $t$ and $t'$ are related by the same
+mapping.  (More generally, even if the objects of $\D$ are not sets,
+the same thing can be accomplished using \term{coequalizers}.)
+
+Intuitively, the functor $T$ can be thought of as an ``interface'';
+$(C,t)$ is then a ``module'' with ``representation type'' $C$ and
+``implementation'' $t$.  The morphisms $\omega_X$ thus ``package up''
+a concrete representation type and implementation into a module, and
+the dinaturality condition ensures that one cannot directly
+``observe'' the concrete representation type, but can only distinguish
+values ``up to behavioral equivalence''.  Indeed, in Haskell, the
+coend of $T$ is given by the type \texttt{exists c.\ T c c}
+\citep{kmett2008kan}---or rather, by an isomorphic encoding such as
+\begin{spec}
+data Coend t where
+  Coend :: t c c -> Coend t
+\end{spec}
+since \texttt{exists} is not actually valid Haskell syntax. $T$ is
+required to be a functor from $\C^\op \times \C$ since the
+representation type may occur both co- and contravariantly in the
+interface.
+
+\begin{rem}
+  Note that $\coend {L_1, L_2} \dots$ is used as an abbrevation for a
+  coend over the product category $\Lab \times \Lab$. (Given
+    suitable assumptions it is also equivalent to an iterated coend;
+    see \citet[XXX]{mac1998categories} \todo{fill in reference}.)
+\end{rem}
 
 \paragraph{Ends}
 
-\todo{natural transformations as ends.  Justifies $\forall$ notation.}
+An \term{end} of a functor $T : \C^\op \times \C \to \D$, notated
+$\eend C T(C,C)$, is the categorical dual of a coend. That is, an end
+is an object of $\D$ together with morphisms $\alpha_X : \eend C
+T(C,C) \to T(X,X)$ such that \[ \xymatrix@@dr{ \eend C T(C,C)
+  \ar[r]^{\alpha_C} \ar[d]_{\alpha_{C'}} & T(C,C) \ar[d]^{T(1,f)} \\
+  T(C',C') \ar[r]_{T(f,1)} & T(C,C') } \] commutes for all $C, C' :
+\C$ and $f : C \to C'$.  The end $\eend C T(C,C)$ can thus be
+``instantiated'' at any type $X$ by the morphism $\alpha_X$, and the
+dinaturality of $\alpha$ ensures that these instantiations all
+``behave uniformly''.  It should come as no surprise that ends in
+Haskell are given by universal quantification, that is, |forall c. T c
+c| \citep{kmett2008kan}.
+
+The connection between ends and Haskell's $\forall$ notation can be
+extended even further. \later{improve previous sentence.  What am I
+  really trying to say here?}  Given two functors $F, G : \C \to \D$,
+consider the bifunctor \[ \Hom{F -}{G -} : \C^\op \times \C \to
+\Set, \] which sends objects $X, Y \in C$ to the set of morphisms
+$\Hom[\D] {F\ X}{G\ Y}$, and acts on morphisms $f : X' \to X$ and $g :
+Y \to Y'$ by \[ (\Hom{F\ f}{G\ g})\ h = G\ g \comp h \comp F\ f. \]
+Then an end $\eend C \Hom{F\ C}{G\ C}$ is a set with projections
+$\alpha_X : (\eend C \Hom{F\ C}{G\ C}) \to (\Hom{F\ X}{G\ X})$ such
+that \[ \xymatrix@@dr@@=4pc{ \eend C \Hom{F\ C}{G\ C}
+  \ar[r]^{\alpha_C} \ar[d]_{\alpha_{C'}} & \Hom{F\ C}{G\ C} \ar[d]^{G\
+    g \comp -} \\
+  \Hom{F\ C'}{G\ C'} \ar[r]_{- \comp F\ f} & \Hom{F\ C}{G\ C'} } \]
+commutes.  Reading off the edges of this diagram, we have $\alpha_{C'}
+\comp F\ f = G g \comp \alpha_C$---precisely the definition of
+naturality for $\alpha$.  Thus an end over $\Hom{F-}{G-}$ is precisely
+a natural transformation, that is, \[ (\eend C \Hom{F\ C}{G\ C}) \iso
+(\nt F G). \] This formally justifies using the notation $\eend C
+\Hom{F\ C}{G\ C}$ for natural transformations between $F$ and
+$G$. \todo{cite catsters videos?}
 
 \subsection{The Yoneda lemma}
 \label{sec:yoneda}
 
+\todo{figure out where to put this text.}
 Note that the same notation (namely, $- \to -$) is used for hom-sets,
 exponentials (\pref{sec:monoids}) and powers (\pref{sec:enriched}).
 While this certainly has the potential to introduce ambiguity and
-confusion, it has the decided benefit of playing to the intuition of
-Haskell programmers, and often makes the structure of calculations
-more apparent.  For example, the traditional notation \[ \int_{b} H
+confusion, it has the \todo{finish}
+
+For example, the traditional notation \[ \int_{b} H
 b^{\C(a,G b)} \] can be instead written as the Haskell-like \[
 \eend{b} {(a \to G b) \to H b}, \] where the end
 (\pref{sec:ends-coends}) has been written using $\forall$, and both
@@ -977,51 +1089,6 @@ It should be emphasized that this notation is perfectly rigorous, and
 not just an ``approximation'' in Haskell.
 
 \todo{Yoneda.}
-
-\paragraph{Coends}
-
-\todo{fix notation}
-
-Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
-$T$, denoted $\int^C T(C,C)$ or just $\int^\C T$, is an object of $\D$
-together with some (di)naturality conditions.  In the specific case
-when the objects of $\D$ can be thought of as sets or types with
-``elements'', the coend $\int^C T(C,C)$ is given by a quotient of an
-indexed coproduct $\left( \sum_{C \in \C} T(C,C) \right) / \sim$.
-Elements of the indexed coproduct look like pairs $(C, t)$ where $C
-\in \C$ and $t \in T(C,C)$. The idea behind the quotient is that we
-want to consider two pairs $(C,t)$ and $(C', t')$ equivalent if they
-are related by the functoriality of $T$.  In particular, for each
-arrow $f : C \to C'$ in $\C$ and each $x \in T(C',C)$, we set $(C,
-T(f,1)\ x) \sim (C', T(1,f)\ x)$.  That is, we can always ``swap out
-$(C,t)$ for $(C',t')$'' as long as we have some way to map from $C$ to
-$C'$ and the associated values $t$ and $t'$ are related by the same
-mapping.
-
-Intuitively, the functor $T$ can be thought of as an ``interface'';
-$(C,t)$ is then a ``module'' with ``representation type'' $C$ and
-``implementation'' $t$.  Indeed, in Haskell, the coend of $T$ is given
-by the type \texttt{exists c.\ T c c} \citep{kmett2008kan}---or
-rather, by an isomorphic encoding such as
-\begin{spec}
-data Coend t where
-  Coend :: t c c -> Coend t
-\end{spec}
-since \texttt{exists} is not actually valid Haskell syntax. $T$ is required to be a functor from $\C^\op
-\times \C$ since the representation type may occur both co- and
-contravariantly in the interface.
-
-The definition of a coend can be made precise in full generality
-(without requiring the objects of $\D$ to have ``elements'') using a
-\emph{coequalizer}.  \todo{Finish.  Give formal definition in terms of
-  coequalizer.}
-
-\begin{rem}
-  Note that $\int^{L_1, L_2} \dots$ is used as an abbrevation for a
-  coend over the product category $\Lab \times \Lab$. \todo{Given
-    suitable assumptions it is also equivalent to an iterated coend
-    (cite MacLane).}
-\end{rem}
 
 \subsection{Groupoids}
 \label{sec:groupoids}
@@ -1217,4 +1284,3 @@ true:
   The fact that $1$ is an identity for $\otimes^*$, associativity, and
   the coherence conditions all follow readily from the definitions.
 \end{proof}
-

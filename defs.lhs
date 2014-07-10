@@ -266,9 +266,8 @@
 \newmsf{Fun}
 \newmsf{Ana}
 
-\newcommand{\homsymb}{\Rightarrow}
 \providecommand{\hom}{}
-\renewcommand{\hom}[3][]{#2 \homsymb_{#1} #3}
+\renewcommand{\hom}{\Hom}
 
 \newcommand{\CT}{\mcal{C}}
 \newcommand{\DT}{\mcal{D}}
@@ -312,11 +311,13 @@
 \newcommand{\nt}[2]{\ensuremath{#1 \stackrel{\bullet}{\longrightarrow} #2}}
 \newcommand{\ntiso}[2]{\ensuremath{#1 \stackrel{\bullet}{\longleftrightarrow} #2}}
 
-\newcommand{\Hom}[3][]{#2 \to_{#1} #3}
+\newcommand{\homsymb}{\Rightarrow}
+\newcommand{\Hom}[3][]{#2 \homsymb_{#1} #3}
+\newcommand{\expn}{\Hom}
 \newcommand{\id}{\ensuremath{\mathit{id}}}
 \newcommand{\Id}{\ensuremath{\mathit{Id}}}
 
-\newcommand{\fc}[2]{#1 \to #2}   % functor category
+\newcommand{\fc}[2]{\Hom{#1}{#2}}   % functor category
 
 % some standard categories
 \newcommand{\newcategory}[1]{%
