@@ -816,7 +816,7 @@ Here, then, is a better definition:
 So the compositions of the functors $F$ and $G$ do not \emph{literally}
 have to be the identity functor, but only (naturally) \emph{isomorphic} to
 it.  This does turn out to be a well-behaved notion of sameness for
-categories. \todo{citation, or pointer to further reading.}
+categories. \later{citation, or pointer to further reading.}
 
 There is much more to say about equivalence of categories;
 \pref{sec:AC} picks up the thread with a much fuller discussion of the
@@ -952,10 +952,13 @@ language with first-class functions, the class of functions
   monoidal structure in all these different categories?  Are they
   related by monoidal functors?}
 
-\subsection{Enriched categories}
-\label{sec:enriched}
+% Don't put this here, but just where it is needed?  I don't want to
+% write a whole introduction to enriched categories here.
 
-\todo{Write me.  Basic definitions; powers and copowers.}
+% \subsection{Enriched categories}
+% \label{sec:enriched}
+
+% \todo{Write me.  Basic definitions; powers and copowers.}
 
 \subsection{Ends and coends}
 \label{sec:ends-coends}
@@ -969,7 +972,6 @@ dissertation.
   polymorphic functions, specific ways it plays out in a dependent
   type theory---e.g. can we assume parametricity for functions that
   abstract over things classified by |*|? Cite Bernardy et al.}
-\todo{cite Kmett articles}
 
 \paragraph{Coends}
 
@@ -1032,7 +1034,7 @@ interface.
   Note that $\coend {L_1, L_2} \dots$ is used as an abbrevation for a
   coend over the product category $\Lab \times \Lab$. (Given
     suitable assumptions it is also equivalent to an iterated coend;
-    see \citet[XXX]{mac1998categories} \todo{fill in reference}.)
+    see \citet[IX.8]{mac1998categories}.)
 \end{rem}
 
 \paragraph{Ends}
@@ -1069,26 +1071,24 @@ naturality for $\alpha$.  Thus an end over $\Hom{F-}{G-}$ is precisely
 a natural transformation, that is, \[ (\eend C \Hom{F\ C}{G\ C}) \iso
 (\nt F G). \] This formally justifies using the notation $\eend C
 \Hom{F\ C}{G\ C}$ for natural transformations between $F$ and
-$G$. \todo{cite catsters videos?}
+$G$. \later{cite catsters videos? or something else?}
 
 \subsection{The Yoneda lemma}
 \label{sec:yoneda}
 
-\todo{figure out where to put this text.}
-Note that the same notation (namely, $- \to -$) is used for hom-sets,
-exponentials (\pref{sec:monoids}) and powers (\pref{sec:enriched}).
-While this certainly has the potential to introduce ambiguity and
-confusion, it has the \todo{finish}
+Given a functor $F : \C \to \Set$, the Yoneda lemma states that for
+every $A \in \C$,
+\[ F\ A \iso (\all {B} \Hom {(\expn A B)} {F\ B}), \]
+that is, the set $F\ A$ is isomorphic to the set of natural
+transformations from $\Hom A -$ to $F$.  Haskell programmers may enjoy
+trying to implement a function of type |Functor f => f a -> (forall
+b. (a -> b) -> f b)| and its inverse---doing so successfully will give
+some intuition into the nature of the lemma and why it is true.
 
-For example, the traditional notation \[ \int_{b} H
-b^{\C(a,G b)} \] can be instead written as the Haskell-like \[
-\eend{b} {(a \to G b) \to H b}, \] where the end
-(\pref{sec:ends-coends}) has been written using $\forall$, and both
-the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.
-It should be emphasized that this notation is perfectly rigorous, and
-not just an ``approximation'' in Haskell.
+The Yoneda lemma is not used in much depth in this dissertation, but
+only as a step in a few symbolic proofs.
 
-\todo{Yoneda.}
+\later{Cite Edward blog posts, further reading.}
 
 \subsection{Groupoids}
 \label{sec:groupoids}
@@ -1096,10 +1096,8 @@ not just an ``approximation'' in Haskell.
 A \term{groupoid} is a category in which all morphisms are invertible,
 that is, for each morphism $f$ there is another morphism $f^{-1}$ for
 which $f \comp f^{-1} = id$ and $f^{-1} \comp f = id$.  Groupoids play
-a prominent role in \todo{finish; cite groupoids and stuff; HoTT;
-  etc.}
-
-Some examples of groupoids include:
+a prominent role in both HoTT and in the theory of species and related
+theories~\citep{Byrne2005, kock2012data}.
 
 \begin{ex}
   Any group can be thought of as a groupoid with a single element,

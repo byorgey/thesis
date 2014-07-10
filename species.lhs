@@ -1845,6 +1845,8 @@ construction applied to different monoids, both partitional and
 arithmetic product arise from \emph{Day convolution}, applied to
 different monoidal structures on $\B$.
 
+\todo{Need to introduce the idea of enriched categories here?}
+
 The essential idea, first described by Brian
 Day~\cite{day1970closed}, is to construct a monoidal structure on a
 functor category $[\Lab^\op, \Str]$ based primarily on a monoidal

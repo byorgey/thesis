@@ -68,3 +68,20 @@ they do not seem to be of much use computationally, so we will not
 consider them further in this paper.
 
 
+
+---------------------------------------------
+
+hom-set, exponential, and power notation.
+
+Note that the same notation (namely, $- \to -$) is used for hom-sets,
+exponentials (\pref{sec:monoids}) and powers (\pref{sec:enriched}).
+While this certainly has the potential to introduce ambiguity and
+confusion, it has the \todo{finish}
+
+For example, the traditional notation \[ \int_{b} H
+b^{\C(a,G b)} \] can be instead written as the Haskell-like \[
+\eend{b} {(a \to G b) \to H b}, \] where the end
+(\pref{sec:ends-coends}) has been written using $\forall$, and both
+the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.
+It should be emphasized that this notation is perfectly rigorous, and
+not just an ``approximation'' in Haskell.
