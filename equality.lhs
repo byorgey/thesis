@@ -202,7 +202,7 @@ The problem, it turns out, is that we've modelled the axiom of choice
 improperly, and it all boils down to how ``non-empty'' is defined.
 When a mathematician says ``$S$ is non-empty'', they typically don't
 actually mean ``\dots and here is an element of $S$ to prove it''.
-Instead, they literally mean ``it is *not the case* that $S$ is
+Instead, they literally mean ``it is \emph{not the case} that $S$ is
 empty'', that is, assuming $S$ is empty leads to a contradiction.
 (Actually, there is something yet more subtle going on, to be
 discussed below, but this is a good first approximation.)  In
@@ -790,7 +790,8 @@ Given compatible anafunctors $F : \Span \C {\lana F} S {\rana F} \D$
 and $G : \Span \D {\lana G} T {\rana G} \E$, consider the action of
 their composite on objects: each object of $\C$ may map to multiple
 objects of $\E$, via objects of $\D$.  Each such mapping corresponds
-to a zig-zag path \[ \xymatrix@@dr{ & t & E \\ s & D \\ C } \]  In
+to a zig-zag path \[ \xymatrix@@dr{ & t \ar[d] \ar[r] & E \\ s \ar[d]
+  \ar[r] & D \\ C } \]  In
 order to \emph{specify} such a path it suffices to give the pair
 $(s,t)$, which determines $C$, $D$, and $E$.  Note, however, that not
 every pair in $S \times T$ corresponds to a valid path, but only those

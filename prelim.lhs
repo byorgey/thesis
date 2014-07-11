@@ -862,8 +862,7 @@ equational laws by natural isomorphisms.
   $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
   coherence axioms, which ensure that parallel isomorphisms
   constructed from $\alpha$, $\lambda$, and $\rho$ are always equal;
-  for details, see \citet[Chapter VII]{mac1998categories} \todo{fill in page or
-    section number}.
+  for details, see \citet[VII.2]{mac1998categories}.
 
   We often write $(\C,\otimes,I)$ when we wish to emphasize the choice
   of a monoidal functor and identity object for a monoidal category $\C$.
