@@ -5,25 +5,62 @@
 \chapter{Equality and Finiteness}
 \label{chap:equality}
 
-\todo{cite my blog posts}
+Before delving into combinatorial species proper, we must first tackle
+some foundational issues---in particular, how equality and finiteness
+are handled in a constructive setting.  As we will see, these topics
+require much more care in a constructive setting than in a
+constructive one, but the extra care pays off in the form of deeper
+insight and even (in the case of finiteness) practical
+implementations.
 
-\todo{Write an introduction to this chapter.}
+We have already glimpsed some of the complexity surrounding equality
+in \pref{chap:prelim}. Indeed, equality is the central focus of HoTT,
+and we saw that HoTT allows us to talk about many different notions of
+sameness.
 
-\todo{Definitional equality. Leibniz equality. Judgmental
+This chapter highlights several other places where equality emerges as
+the key issue at stake. \pref{sec:AC} begins by discussing the status
+of the \term{axiom of choice} (AC), which is frequently used in
+practice but inadmissible in a constructive setting.  One of the main
+reasons that AC is used frequently in the context of category theory
+in particular has to do with the difference between equality and
+isomorphism. several approaches to doing without AC are outlined,
+culminating in showing (\pref{sec:ct-hott},
+\pref{sec:finiteness-hott}) that it is completely unnecessary when
+formulating category theory inside of HoTT.
+
+Interwoven with the story of equality and the axiom of choice is a
+story about \emph{finiteness} (\pref{sec:finiteness-sets},
+\pref{sec:finiteness-hott}).  In a classical setting, the notion of a
+\emph{finite} set is relatively uncomplicated.  In a constructive
+setting, however, it becomes much more subtle.  One must consider what
+counts as \emph{constructive evidence} of finiteness, and how such
+evidence may be used.  Finiteness turns out to play an important role
+in the theory of species, which are \term{labelled} by finite
+sets.
+
+\later{Definitional equality. Leibniz equality. Judgmental
   equality. Equivalence.  Principle of equivalence.}
+
+\later{cite my blog posts}
 
 \section{The axiom of choice (and how to avoid it)}
 \label{sec:AC}
 
 The (in)famous \emph{axiom of choice} (hereafter, AC) plays a central
 role in much of modern mathematics.  In a constructive setting,
-however, it is problematic.  Much effort has been expended trying to
-avoid it \citep{makkai1996avoiding, FOLDS, voevodskyFoundations}; in a
-sense, this can be seen as one of the goals of the univalent
-foundations program.  In \pref{sec:anafunctors-hott} we will see how
-HoTT indeed provides an excellent AC-free foundation for the
-mathematics we want to do.  First, however, we give an introduction to
-AC and related issues in set theory.
+however, it is problematic (\pref{sec:generalized-the},
+\pref{sec:AC-equivalence}).  Much effort has been expended attempting
+to avoid it \citep{makkai1995first, makkai1996avoiding,
+  makkai1998towards, voevodskyFoundations}; in a sense, this can be
+seen as one of the goals of the univalent foundations program.  In
+\pref{sec:ct-hott} and \pref{sec:finiteness-hott} we will see how HoTT
+indeed provides an excellent AC-free foundation for the mathematics we
+want to do.  First, however, we give an introduction to AC and related
+issues in set theory.
+
+\subsection{The axiom of choice and constructive mathematics}
+\label{sec:AC-constructive}
 
 The axiom of choice can be formulated in a number of equivalent ways.
 Perhaps the most well-known is
@@ -147,14 +184,11 @@ mkNm i j = i .> j
 
 Note that AC is \emph{independent} of the usual set theory foundations
 (the so-called \emph{Zermelo-Fraenkel axioms}, or ZF), in the sense
-that it is consistent to add either AC or its negation to ZF.  In
-particular this means that neither AC nor its negation can be proved
-from the axioms of ZF (since then adding the other would lead to
-inconsistency).  It is somewhat controversial since it has some
-strange consequences, \eg the Banach-Tarski
-paradox~\cite{banach-tarski}.  However, most mathematicians have come
-to accept it, and work (in principle) within ZF extended with AC,
-known as ZFC.
+that it is consistent to add either AC or its negation to ZF.  It is
+somewhat controversial since it has some (seemingly) strange
+consequences, \eg the Banach-Tarski paradox~\cite{wagon1993banach}.
+However, most mathematicians have come to accept it, and work (in
+principle) within ZF extended with AC, known as ZFC.
 
 Consider how to express AC in type theory.  First, we assume we have
 some type $I$ which indexes the collection of sets; that is, there
@@ -221,13 +255,12 @@ choosing a bunch of elements, but it was given a bunch of elements to
 start. All it had to do was shuffle them around a bit.  The ``real''
 AC, on the other hand, has a much harder job: it is told some sets are
 non-empty, but without any actual elements being mentioned, and it
-then has to manufacture a bunch of elements out of thin air.  This
-already doesn't seem to fit very well in a constructive/computational
-context; but even more to the point, it turns out that the axiom of
-choice implies the law of excluded middle \citep{diaconescu1975axiom,
-  goodman1978choice}, \citep[Theorem 10.1.14]{hottbook}!  Working as
-we are in a type theory based on intuitionistic logic, we must
-therefore reject the axiom of choice.
+then has to manufacture a bunch of elements out of thin air.  In the
+context of constructive logic, this is deeply impossible: it turns out
+that the axiom of choice implies the law of excluded middle
+\citep{diaconescu1975axiom, goodman1978choice}, \citep[Theorem
+10.1.14]{hottbook}!  Working as we are in a type theory based on
+intuitionistic logic, we must therefore reject the axiom of choice.
 
 It is worth noting that within HoTT, the notion of a ``non-empty'' set
 can be defined in a more nuanced way.  The best way to model what
@@ -240,11 +273,15 @@ non-empty, so let $s \in S$ \dots''.  Non-emptiness does in fact imply
 an inhabitant, but such an inhabitant can only be used to prove
 propositions.
 
+Na\"ively
+Traditional category theory (founded in set theory) makes
+frequent---though hidden---use of the axiom of choice.
+
 \subsection{Unique isomorphism and generalized ``the''}
 \label{sec:generalized-the}
 
-\todo{Make the link between ``the'' and ``definite description'' (aka iota,
-as well as Hilbert's choice operator, epsilon).}
+\todo{Make the link between ``the'' and ``definite description'' (aka $\iota$,
+as well as Hilbert's choice operator, $\epsilon$).}
 
 In category theory, one is typically interested in specifying objects
 only \emph{up to (unique) isomorphism}.  In fact, definitions which
@@ -257,72 +294,27 @@ when in fact there may be many objects with the given property, but
 all such objects are uniquely isomorphic; this cannot cause confusion
 if the principle of equivalence is in effect.
 
-\todo{Rewrite this a bit based on feedback from blog post
-  comments. Also Jacques says it is not that useful.}
-This phenomenon should be familiar to anyone who has seen simple
-universal constructions such as terminal objects or categorical
-products.  For example, an object $1 \in \C$ is called \term{terminal}
-if there is a unique morphism $\mor A 1$ from each object $A \in
-\C$. In general, there may be many objects satisfying this
-criterion; for example, in \Set, every singleton set is terminal.
-However, it is not hard to show that any two terminal objects must be
-uniquely isomorphic.  Thus it ``does not matter'' which terminal
-object we use---they all have the same properties, as long as we don't
-do anything ``evil''---and one therefore speaks of ``the'' terminal
-object of $\C$.  As another example, a \term{product} of two objects
-$A,B \in \C$ is a diagram $\xymatrix{A & C \ar[l]_{\pi_1}
-  \ar[r]^{\pi_2} & B}$ with the universal property that any other $C'$
-with morphisms to $A$ and $B$ uniquely factors through $C$.  Again,
-there may be multiple such products, but they are all uniquely
-isomorphic, and one speaks of ``the'' product $A \times B$.
-
-Note that in some cases, there may be a canonical choice among
-isomorphic objects.  For example, this is the case with products in
-$\Set$, where we may always pick the Cartesian product $\{(a,b) \mid a
-\in A, b \in B\}$ as a canonical product of $A$ and $B$.  In such
-cases use of ``the'', as in ``the product of $A$ and $B$'', is even
-more strongly justified, since we may take it to mean ``the
-\emph{canonical} product of $A$ and $B$''. However, in many cases (for
-example, with terminal objects in $\Set$), there is no canonical
-choice, and ``the terminal object'' simply means something like ``some
-terminal object, it doesn't matter which''.
-
 Beneath this seemingly innocuous use of ``the'' (often referred to as
-\term{generalized ``the''}), however, lurks the axiom of choice!  For
-example, if a category $\C$ has all products, we can define a functor
-$P : \C \times \C \to \C$\footnote{Note that we have made use here of
-  ``the'' product category $\C \times \C$---fortunately $\Cat$, like
-  $\Set$, has a suitably \emph{canonical} notion of products.} which
-picks out ``the'' product of any two objects $A$ and $B$---indeed, $P$
-may be taken as the \emph{definition} of the product of $A$ and
-$B$.  But how is $P$ to be defined?  Consider $\{ \mathrm{Prod}(A,B)
-\mid A,B \in \C \}$, where $\mathrm{Prod}(A,B)$ denotes the set of all
-possible products of $A$ and $B$, \ie all suitable diagrams
-$\xymatrix{A & C \ar[l]_{\pi_1} \ar[r]^{\pi_2} & B}$ in $\C$.  Since
-$\C$ has all products, this is a collection of nonempty sets;
-therefore we may invoke AC to obtain a choice function, which is
-precisely $P_0$, the action of $P$ on objects.  The action of $P$ on
-morphisms may then be defined straightforwardly.
-
-The axiom of choice really is necessary to construct $P$: as has
-already been noted, there is, in general, no way to make some
-canonical choice of object from each equivalence class.  On the other
-hand, this seems like a fairly ``benign'' use of AC.  If we have a
-collection of equivalence classes, where the elements in each class
-are all uniquely isomorphic, then using AC to pick one representative
-from each really ``does not matter'', in the sense that we cannot tell
-the difference between different choices (as long as we refrain from
-evil).  Unfortunately, even such ``benign'' use of AC still poses a
-problem for computation.
+\term{generalized ``the''}), however, lurks the axiom of choice!  In
+particular, one often wishes to define functors whose action on
+objects is defined only up to unique isomorphism, with no way to make
+a canonical choice of output object.  In order to define such a
+functor one must resort to the axiom of choice to arbitrarily choose
+particular outputs.  This seems like a fairly ``benign'' use of AC: if
+we have a collection of equivalence classes, where the elements in
+each class are all uniquely isomorphic, then using AC to pick one
+representative from each really ``does not matter'', in the sense that
+we cannot tell the difference between different choices (as long as we
+refrain from evil).  Unfortunately, even such ``benign'' use of AC
+still poses a problem for computation.
 
 \subsection{AC and equivalence of categories}
 \label{sec:AC-equivalence}
 
-Another place AC shows up in category theory, as hinted in
-\pref{sec:ct-fundamentals}, is in relation to equivalence of
-categories.  In fact, the underlying issue is the same, that is,
-functors defined only up to unique isomorphism; equivalence of
-categories is just a particularly important instantiation.
+As hinted in \pref{sec:ct-fundamentals}, a particular example of the
+need for AC relates to equivalence of categories.  The underlying
+issue is exactly that described in the previous section: namely, the
+need for functors defined only up to unique isomorphism.
 
 Recall, from \pref{sec:ct-fundamentals}, the definition of equivalence
 of categories:
@@ -365,7 +357,7 @@ convenient than explicitly constructing two functors and showing they
 are inverse.  However, it turns out that the converse is provable
 \emph{only} if one accepts the axiom of choice!\footnote{At this point
   I should note that ``protoequivalence'' is not standard terminology,
-  and now it should be clear why: there is no need for a separate term
+  and now it should be clear why: there is no need for a distinct term
   if one accepts the axiom of choice.}  To get an intuitive sense for
 why this is, suppose $F : \C \to \D$ is fully faithful and essentially
 surjective.  To construct an equivalence between $\C$ and $\D$
@@ -389,7 +381,7 @@ that the statement
 \end{equation}
 (let's call this the ``Axiom of Protoequivalence'', or AP) not only
 requires AC, but is \emph{equivalent} to it, in the sense that AC is
-derivable given AP as an exiom \citep{cat-equivalence-AC}!
+derivable given AP as an axiom \citep{cat-equivalence-AC}!
 
 On purely intuitive grounds, however, it still ``feels'' like AP
 ``ought to be'' true.  The particular choice of functor $G : \D \to
@@ -448,30 +440,42 @@ There are also, however, several more creative options:
   \emph{generalize the notion of equality}.  After all, what really
   seems to be at the heart of all these problems is differing notions
   of equality (\ie equality of sets, isomorphism, equivalence \dots).
-  In fact, this is precisely what is done in HoTT. \bay{As a
-    historical note
-    \url{http://byorgey.wordpress.com/2014/05/13/unique-isomorphism-and-generalized-the/\#comment-13123},
-    it seems that the original work on anafunctors is part of the same
-    intellectual thread that led to the development of HoTT.}  It
-  turns out that if one builds up suitable notions of category theory
-  on top of HoTT instead of set theory, then AP is true, without the
-  need for AC, and even with a \emph{weaker} version of essential
-  surjectivity that corresponds more closely to essential surjectivity
-  in classical logic, using propositional truncation to encode the
-  classical notion of existence. This is discussed in more detail
-  in \pref{sec:ct-hott}.
+  Of course, this is precisely what is done in HoTT.\footnote{As a
+    historical note, it seems that the original work on anafunctors is
+    part of the same intellectual thread that led to the development
+    of HoTT: see \url{http://byorgey.wordpress.com/2014/05/13/unique-isomorphism-and-generalized-the/\#comment-13123}.}  It turns out that if one builds up suitable notions of
+  category theory on top of HoTT instead of set theory, then AP is
+  true, without the need for AC, and even with a \emph{weaker} version
+  of essential surjectivity that corresponds more closely to essential
+  surjectivity in classical logic, using propositional truncation to
+  encode the classical notion of existence. This is discussed in more
+  detail in \pref{sec:ct-hott}.
 \end{enumerate}
 
 \subsection{Cliques}
 \label{sec:cliques}
 
-\todo{Give some history, background, references etc.}
-\todo{Discuss strict vs non-strict monoidal categories.}
-
 As a preface to anafunctors, we begin with a brief outline of the
 theory of \term{cliques}, which are a formal way of representing the
-informal notion of ``equivalence class of uniquely isomorphic
-objects''. \todo{say something else here?}
+informal notion of an ``equivalence class of uniquely isomorphic
+objects''. Cliques were introduced by \citet{joyal1991geometry} for
+the specialized purpose of relating strict and non-strict monoidal
+categories. \citet{makkai1996avoiding} later noted that cliques
+are a special case of anafunctors; the precise relationship will be
+explained in \pref{sec:anafunctors}.
+
+As we will see, the theory of cliques (and of anafunctors) is not
+completely successful in eradicating the need for the axiom of choice.
+By contrast, an approach that is successful is to instead build
+category theory directly within homotopy type theory
+(\pref{sec:ct-hott}), with no need for cliques or anafunctors.  This
+subsection and the next, therefore, are not strictly prerequisite to
+the remainder of this dissertation.  However, explaining these ideas
+clearly is an important contribution in and of itself, and helps build
+intuition for the success of homotopy type theory, explained in
+\pref{sec:finiteness-hott}. Moreover, it seems to have gone previously
+unnoticed that the theory of cliques and anafunctors does not, in
+fact, completely avoid the axiom of choice.
 
 \begin{defn}
   A \term{clique} $(I,A,u)$ in a category
@@ -498,21 +502,23 @@ objects''. \todo{say something else here?}
   u_{ii} = id$.
 \end{rem}
 
-A clique can thus be visualized as an actual clique in a directed
-graph, with a unique morphism between any two objects: \[
-\xymatrix{ A_1 \ar@@<.2em>[d] \ar@@<.4em>[r]
-  \ar@@<.2em>[dr]
+A clique can thus be visualized as a graph-theoretic clique in a
+directed graph, with a unique morphism between any two objects: \[
+\xymatrix{ A_1 \ar@@<.2em>[d] \ar@@<.4em>[r] \ar@@<.2em>[dr]
   & A_2 \ar[l] \ar@@<.2em>[d] \ar@@<.2em>[dl] \\
-  A_3 \ar@@<.2em>[u] \ar[r] \ar@@<.2em>[ur] &
-  A_4 \ar@@<.4em>[l] \ar@@<.2em>[u] \ar@@<.2em>[ul] }
+  A_3 \ar@@<.2em>[u] \ar[r] \ar@@<.2em>[ur] & A_4 \ar@@<.4em>[l]
+  \ar@@<.2em>[u] \ar@@<.2em>[ul] }
 \]
 
-Thus, a clique represents a collection of objects in $\C$ which are
-all isomorphic, with a single chosen isomorphism between any two.
+Equivalently, a clique may be visualized as a clique in an
+\emph{undirected} graph, with each edge representing an isomorphism.
+That is, a clique represents a collection of objects in $\C$ which are
+all isomorphic, with a single chosen isomorphism between each pair of
+objects.
 
 \begin{defn}
   A morphism between two cliques $(I,A,u)$ and $(J,B,v)$
-  is given by a collection of arrows \[ \{ \xymatrix{A_i \ar[r]^f_{ij}
+  is given by a collection of arrows \[ \{ \xymatrix{A_i \ar[r]^{f_{ij}}
     & B_j} \mid i \in I, j \in J \} \] such that \[ \xymatrix{ A_i
     \ar[r]^{f_{ij}} \ar[d]_{u_{ik}} & B_j \ar[d]^{v_{jl}} \\ A_{k}
     \ar[r]_{f_{kl}} & B_{l}} \] commutes for all $i,k \in I$ and
@@ -524,6 +530,7 @@ isomorphic objects to another---in particular, a way to map any
 representative of the first class to any representative of the
 second---in a way that preserves the unique isomorphisms.
 
+\todo{Reword/edit this paragraph.}
 In fact, the class of cliques and clique morphisms in a category $\C$
 itself forms a category $\clq \C$.  It is easy to imagine what the
 identity morphism of cliques must be---the one which maps each $A_i$
@@ -579,6 +586,8 @@ and so on\footnote{In fact, $\clq{-}$ turns out to be a (2-)monad, and the
   \citep{nlab-clique}.}. However, there is an alternative, equivalent
 formuation of ``clique functors'', namely, \term{anafunctors}, which
 do not require AC to define.
+
+\todo{Discuss strict vs non-strict monoidal categories.}
 
 \subsection{Anafunctors}
 \label{sec:anafunctors}
@@ -1703,3 +1712,4 @@ justified in working with them as functors from finite sets of labels,
 or from natural number sizes, as convenient---the equivalence $\BT
 \iso \PT$ is entirely constructive and allows species to be
 converted back and forth between the two views.
+

@@ -584,6 +584,9 @@ excellent references on the subject \citep{lawvere2009conceptual,
   awodey2006category, pierce1991basic, barr1990category,
   mac1998categories}.
 
+Note that the notations $f \then g = g \comp f$ are both used to
+denote composition of morphisms.
+
 \paragraph{Standard categories}
 
 We begin by listing some standard categories which will appear
