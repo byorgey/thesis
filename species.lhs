@@ -1874,8 +1874,8 @@ requirement that $\oplus$ be ``sum-like'' or $\otimes$
 product.
 
 \begin{defn}
-  Given the above conditions, the Day convolution product of $F, G \in
-  \fc \Lab^\op \Str$ is given by the coend \[ (F \oast G)\ L = \coend{L_F, L_G}
+  Given the above conditions, the Day convolution product of $F, G :
+  \fc {\Lab^\op} \Str$ is given by the coend \[ (F \oast G)\ L = \coend{L_F, L_G}
   F\ L_F \otimes G\ L_G \otimes (\Hom[\Lab]{L}{L_F \oplus L_G}). \]
 \end{defn}
 

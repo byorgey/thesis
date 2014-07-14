@@ -996,7 +996,7 @@ C' : \C$ and $f : C \to C'$. (This square represents
 
 Since there must be morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$
 for every $C$, one's first try might be to implement the coend as an
-indexed coproduct, $\sum_{C \in \C} T(C,C)$.  Then the $\omega_X$ are
+indexed coproduct, $\biguplus_{C \in \C} T(C,C)$.  Then the $\omega_X$ are
 just injections.  This is a good start, but does not (in general)
 satisfy the commutative diagram shown above.
 

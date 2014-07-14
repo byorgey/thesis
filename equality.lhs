@@ -464,25 +464,23 @@ categories. \citet{makkai1996avoiding} later noted that cliques
 are a special case of anafunctors; the precise relationship will be
 explained in \pref{sec:anafunctors}.
 
-As we will see, the theory of cliques (and of anafunctors) is not
-completely successful in eradicating the need for the axiom of choice.
-By contrast, an approach that is successful is to instead build
-category theory directly within homotopy type theory
-(\pref{sec:ct-hott}), with no need for cliques or anafunctors.  This
-subsection and the next, therefore, are not strictly prerequisite to
-the remainder of this dissertation.  However, explaining these ideas
-clearly is an important contribution in and of itself, and helps build
-intuition for the success of homotopy type theory, explained in
-\pref{sec:finiteness-hott}. Moreover, it seems to have gone previously
-unnoticed that the theory of cliques and anafunctors does not, in
-fact, completely avoid the axiom of choice.
+The theory of cliques (and of anafunctors) amounts to a way of doing
+(set-theoretic) category theory without using the axiom of choice.
+However, building category theory directly within homotopy type theory
+(\pref{sec:ct-hott}), instead of set theory, also obviates the need
+for the axiom of choice, but without the extra complication of
+anafunctors.  This subsection and the next, therefore, are not
+strictly prerequisite to the remainder of this dissertation.  However,
+explaining these ideas clearly is an important contribution in and of
+itself, and helps build intuition for the success of homotopy type
+theory, explained in \pref{sec:finiteness-hott}.
 
 \begin{defn}
   A \term{clique} $(I,A,u)$ in a category
   $\C$ is given by
   \begin{itemize}
-  \item a collection of objects $A = \{A_i \mid i \in I\}$, indexed by
-    some collection $I$, and
+  \item a \emph{non-empty} collection of objects $A = \{A_i \mid i \in
+    I\}$, indexed by some collection $I$, and
   \item a collection of morphisms $u = \{\xymatrix{A_i \ar[r]^{u_{ij}} &
       A_j} \mid i,j \in I\}$,
   \end{itemize}
@@ -517,30 +515,27 @@ all isomorphic, with a single chosen isomorphism between each pair of
 objects.
 
 \begin{defn}
-  A morphism between two cliques $(I,A,u)$ and $(J,B,v)$
-  is given by a collection of arrows \[ \{ \xymatrix{A_i \ar[r]^{f_{ij}}
+  A \term{morphism} between two cliques $(I,A,u)$ and $(J,B,v)$ is
+  given by a collection of arrows \[ \{ \xymatrix{A_i \ar[r]^{f_{ij}}
     & B_j} \mid i \in I, j \in J \} \] such that \[ \xymatrix{ A_i
     \ar[r]^{f_{ij}} \ar[d]_{u_{ik}} & B_j \ar[d]^{v_{jl}} \\ A_{k}
-    \ar[r]_{f_{kl}} & B_{l}} \] commutes for all $i,k \in I$ and
-  $j,l \in J$.
+    \ar[r]_{f_{kl}} & B_{l}} \] commutes for all $i,k \in I$ and $j,l
+  \in J$. In other words, a morphism of cliques maps an entire class
+  of isomorphic objects to another class---in particular, mapping each
+  representative of the first class to each representative of the
+  second---in a way that preserves the isomorphisms.
 \end{defn}
 
-Thus a morphism of cliques is a way to map an entire class of uniquely
-isomorphic objects to another---in particular, a way to map any
-representative of the first class to any representative of the
-second---in a way that preserves the unique isomorphisms.
-
-\todo{Reword/edit this paragraph.}
-In fact, the class of cliques and clique morphisms in a category $\C$
-itself forms a category $\clq \C$.  It is easy to imagine what the
-identity morphism of cliques must be---the one which maps each $A_i$
-to $A_j$ via $u_{ij}$.  However, a surprise awaits us when we define
-composition of clique morphisms.  Suppose we have three cliques with
-morphisms $\xymatrix{(I,A,u) \ar[r]^f & (J,B,v) \ar[r]^g & (K,C,q)}$.
-We need to define a collection of morphisms $\xymatrix{A_i
-  \ar[r]^{h_{ik}} & C_k}$.  For any given $A_i$ and $C_k$, we have
-morphisms from $A_i$ to each of the $B_j$, and from each of the $B_j$
-to $C_k$:
+As one would expect, the class of cliques and clique morphisms in a
+category $\C$ itself forms a category, which we call $\clq \C$.  It is
+easy to imagine what the identity morphism of cliques must be---the
+one which maps each $A_i$ to $A_j$ via $u_{ij}$.  However, composition
+of clique morphisms is more subtle.  Suppose we have three cliques
+with morphisms $\xymatrix{(I,A,u) \ar[r]^f & (J,B,v) \ar[r]^g &
+  (K,C,q)}$.  We must define a collection of morphisms
+$\xymatrix{A_i \ar[r]^{h_{ik}} & C_k}$.  For any given $A_i$ and
+$C_k$, we have morphisms from $A_i$ to each of the $B_j$, and from
+each of the $B_j$ to $C_k$, with a representative example shown below.
 \[ \xymatrixrowsep{1pc}
   \xymatrix{
     & B_1 \ar@@<.2em>[dd] \ar@@<.4em>[r] \ar[drr] \ar@@<.2em>[ddr]
@@ -550,17 +545,31 @@ to $C_k$:
     & B_4 \ar[l] \ar@@<.2em>[uu] \ar[ur]_{g_{4k}} \ar@@<.2em>[uul]
   }
 \]
-If we pick some particular $B_j$, we can define $h_{ik} = f_{ij} \then
-g_{jk}$; and it's not hard to show that the result will be the same no
-matter which $B_j$ we pick, since everything in sight commutes.  But
-which $B_j$ should we pick?  In fact, we have to use the axiom of
-choice!  Again, this use of AC is ``benign'', but it is a use
-nonetheless.
+If we pick a fixed $j \in J$, for each $i \in I$ and $k \in K$ we can define $h_{ik} = f_{ij} \then
+g_{jk}$.  Moreover, the resulting $h_{ik}$ are independent of the
+choice of $j$, since everything in sight commutes.  Specifically,
+\begin{sproof}
+\stmt{f_{ij} \then g_{jk}}
+\reason{=}{$v_{jl} \then v_{lj} = v_{jj} = \id$}
+\stmt{f_{ij} \then v_{jl} \then v_{lj} \then g_{jk}}
+\reason{=}{$f$, $g$ are clique morphisms}
+\stmt{u_{ii} \then f_{il} \then g_{lk} \then q_{kk}}
+\reason{=}{$u_{ii} = \id$; $q_{kk} = \id$}
+\stmt{f_{il} \then g_{lk}.}
+\end{sproof}
+Since $J$ is non-empty, it must contain some element $j$ which we may
+arbitrarily use to define the $h_{ik}$.  If defining the theory of
+cliques within HoTT instead of set theory, this can be done in an even
+more principled way: the fact that $J$ is non-empty should be modeled
+by its propositional truncation, $\ptrunc J$. This means that \emph{in
+  order} to be able to use the particular value of $J$ hidden inside
+the truncation, we \emph{must} show that the $h_{ik}$ thus defined are
+independent of the choice of $j$.
 
-In any case, the idea is now to replace functors $\C \to \D$ with
-functors $\C \to \clq \D$, which map objects of $\C$ to entire
-equivalence classes of objects in $\D$, instead of arbitrarily picking
-some object from each equivalence class.  For example, instead of a
+The idea now is to replace functors $\C \to \D$ with functors $\C \to
+\clq \D$, which map objects of $\C$ to entire equivalence classes of
+objects in $\D$, instead of arbitrarily picking some object from each
+equivalence class. \todo{redo example?}  For example, instead of a
 functor $\C \times \C \to \C$ giving ``the'' product of any two
 objects of $\C$, there is a functor $\C \times \C \to \clq \C$: given
 any two objects $A,B \in \C$, it constructs the clique whose objects
@@ -570,22 +579,19 @@ unique isomorphisms $u_{ij}$ between products: \[ \xymatrix{ & C_i
   \ar[ur] & } \]
 
 This gets rid of the need for AC in defining such functors.  However,
-we have only succeeded in postponing the problem a bit, since defining
-composition in $\clq \D$ requires AC.  It is also somewhat cumbersome
-to replace $\D$ by $\clq \D$ in this way.  To make it tenable, one
-would define a new notion of ``clique functor'' $F : \C
-\stackrel{\clq{}}{\to} \D$ given by a regular functor $\C \to \clq
-\D$, and show that these clique functors ``act like'' functors in
-suitable ways.  For example, it is easy to see that any regular
-functor $\C \to \D$ can be made into a trivial functor $\C \to \clq
-\D$, by sending each $C \in \C$ to the singleton clique containing
-only $F(C)$.  One can also show that clique functors can be composed,
-have a suitable notion of natural transformations between them,
-and so on\footnote{In fact, $\clq{-}$ turns out to be a (2-)monad, and the
-  category of clique functors is its Kleisli category
-  \citep{nlab-clique}.}. However, there is an alternative, equivalent
-formuation of ``clique functors'', namely, \term{anafunctors}, which
-do not require AC to define.
+it is somewhat cumbersome to replace $\D$ by $\clq \D$ in this way.
+To make it tenable, one could imagine defining a new notion of
+``clique functor'' $F : \C \stackrel{\clq{}}{\to} \D$ given by a
+regular functor $\C \to \clq \D$, and showing that these clique
+functors ``act like'' functors in suitable ways.  For example, it is
+easy to see that any regular functor $\C \to \D$ can be made into a
+trivial functor $\C \to \clq \D$, by sending each $C \in \C$ to the
+singleton clique containing only $F(C)$.  One can also show that
+clique functors can be composed, have a suitable notion of natural
+transformations between them, and so on\footnote{In fact, $\clq{-}$
+  turns out to be a (2-)monad, and the category of clique functors is
+  its Kleisli category \citep{nlab-clique}.}. In fact, it turns
+out that this is precisely the theory of \emph{anafunctors}.
 
 \todo{Discuss strict vs non-strict monoidal categories.}
 
@@ -758,6 +764,14 @@ aOpts = with & gaps .~ Local 0.2 & headLength .~ Local 0.4
   between $F_S(C)$ and $F_t(C)$.
 \end{rem}
 
+\begin{rem}
+  It is not hard to show that cliques in $\D$ are precisely
+  anafunctors from $\cat{1}$ to $\D$.  In fact, more is true: the
+  class of functors $\C \to \clq \D$ is naturally isomorphic to the
+  class of anafunctors $\C \to \D$ (for the proof, see
+  \citet[pp. 31--34]{makkai1996avoiding}).
+\end{rem}
+
 There is an alternative, equivalent definition of anafunctors, which
 is somewhat less intuitive but usually more convenient to work with.
 
@@ -826,7 +840,8 @@ anafunctors, and show that together these constitute a $2$-category
 $\mathbf{AnaCat}$ which is analogous to the usual $2$-category of
 (small) categories, functors, and natural transformations; in
 particular, there is a fully faithful embedding of $\mathbf{Cat}$ into
-$\mathbf{AnaCat}$, which moreover is an equivalence if AC holds.
+$\mathbf{AnaCat}$, which moreover is an equivalence if AC holds.  See
+\citet{makkai1996avoiding} for details.
 
 To work in category theory based on set theory and classical logic,
 while avoiding AC, one is therefore justified in ``mixing and
@@ -835,8 +850,14 @@ all as if they were regular functors (except when defining a
 particular anafunctor).  Such usage can be formalized by turning
 everything into an anafunctor, and translating functor operations and
 properties into corresponding operations and properties of
-anafunctors.  However, as we will see, by founding category theory on
-HoTT instead of category theory, this becomes unnecessary.
+anafunctors.  However, this is tediously complex (imagine if an
+introductory category theory textbook followed up the definition of
+categories with the definition of anafunctors!), and, as we will see,
+ultimately unnecessary. By founding category theory on
+HoTT instead of set theory, we can avoid the axiom of choice without
+incurring such complexity overhead.  In a sense, HoTT takes all the
+added complexity of anafunctors and moves it into the background
+theory, so that ``normal'' functors secrectly become anafunctors.
 
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
@@ -851,14 +872,14 @@ sets) is too impoverished---one really wants to work up to
 \emph{isomorphism} rather than literal equality, and the mismatch
 between isomorphism and strict equality introduces all sorts of
 difficulties and extra work.  In contrast, via the univalence axiom,
-HoTT has a very rich notion of equality that is able to encompass
-isomorphism in categories.
+HoTT has a very rich---yet coherent---notion of equality that is able
+to encompass isomorphism in categories.
 
 This section lays out a few relevant definitions along with some
 intuition and commentary.  A fuller treatment may be found in Chapter
-9 of the HoTT book~\citeyearpar{hottbook}.  Generally, ``\hott{widget}'' is
-used to refer to widgets as defined in HoTT, to distinguish from
-widgets as defined in set theory.
+9 of the HoTT book~\citeyearpar{hottbook}.  Generally, the term
+``\hott{widget}'' is used to refer to widgets as defined in HoTT, to
+distinguish from widgets as defined in set theory.
 
 We begin with the definition of a \term{precategory}.
 
@@ -926,9 +947,9 @@ isomorphism and equality.  This is remedied in the definition of an
 It is immediate, by path induction and the fact that $\idT_X$ is an
 isomorphism, that equality implies isomorphism: we call this $\idtoiso
 : (X = Y) \to (X \iso Y)$.  However, the other direction is not
-automatic.  Note it does not follow from univalence, due to the
-distinction between $X \iso Y$ and $X \equiv Y$. However, it has a very
-similar flavor to univalence, and matches the intuition that one
+automatic; in particular, it does not follow from univalence, due to
+the distinction between $X \iso Y$ and $X \equiv Y$. However, it has a
+very similar flavor to univalence, and matches the intuition that one
 should always work up to isomorphism in a category.  It is therefore
 added as a requirement of an \hott{category}.
 
@@ -955,11 +976,11 @@ isomorphism. The following example will play an important role later.
   isomorphisms are already paths, $\isotoid$ is just the identity.
 \end{proof}
 
-Another important example is ana analogue to the usual category \Set
+Another important example is an analogue to the usual category \Set
 of sets and functions.
 
-\begin{defn}[\citep{hottbook}, Examples 9.1.5 and 9.1.7]
-  Let $\ST$ denote the \hott{category} of sets, that is, the category
+\begin{defn}[HoTT book, Examples 9.1.5 and 9.1.7]
+  $\ST$ denotes the \hott{category} of sets, that is, the category
   whose objects are $0$-types, \ie sets, and whose morphisms are
   functions $A \to B$.
 \end{defn}
@@ -1021,7 +1042,7 @@ As is standard, we often write $F\ X$ and $F\ f$ instead of $F_0(X)$
 and $F_1(f)$.
 
 \begin{defn}
-  An \hott{natural transformation} $\gamma$ between functors $F,G :
+  An \hott{natural transformation} $\gamma$ between \hott{functors} $F,G :
   \CT \to \DT$ is a family of morphisms
   \begin{itemize}
   \item $\gamma_X : \hom[\DT] {F\ X} {G\ X}$
@@ -1033,11 +1054,39 @@ and $F_1(f)$.
   \end{itemize}
 \end{defn}
 
-\subsection{Coends}
+It may not be readily apparent from the definitions, but this turns
+out to be a much nicer environment in which to carry out category
+theory.  An extended example is given in \pref{sec:finiteness-hott}.
+For now we describe two smaller (but relevant) examples.
+
+\subsection{Monoidal categories in HoTT}
+\label{sec:monoidal-cats-hott}
+
+The first is the theory of \term{monoidal categories}.  Recall that a
+monoidal category $\C$ is one with a bifunctor $\otimes : \C^2 \to
+\C$, an identity object $1 \in \C$, and natural isomorphisms $\alpha$,
+$\lambda$, and $\rho$ expressing the associativity and identity laws
+(along with some extra coherence laws).  In set theory, there is also
+a notion of a \term{strict} monoidal category, where associativity and
+the identity laws hold up to \emph{equality} rather than just
+isomorphism.  In HoTT-based category theory, however, it turns out
+that functors between \hott{categories} (as opposed to precategories)
+are naturally isomorphic if and only if they are equal (HoTT book,
+Theorem 9.2.5)!  Thus, in HoTT, there is no difference between strict
+and non-strict monoidal categories.
+
+\subsection{Coends in HoTT}
 \label{sec:coends-hott}
 
-\bay{Where should this section go?}
-\todo{Write me.}
+The second example is the notion of a \term{coend}.  Recall that a coend over
+a functor $T : \C^\op \times \C \to \D$ is an object of $\D$, denoted
+$\coend C T(C,C)$, together with a family of morphisms $\omega_X :
+T(X,X) \to
+\coend C T(C,C)$ for each $X \in \C$, such that \[ \xymatrix@@dr{ T(C',C) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(C',C') \ar[d]^{\omega_{C'}} \\
+  T(C,C) \ar[r]_{\omega_C} & \coend C T(C,C) } \] commutes for all $C,
+C' : \C$ and $f : C \to C'$.
+
+\todo{finish me.}
 
 \section{Finiteness in set theory}
 \label{sec:finiteness-sets}
