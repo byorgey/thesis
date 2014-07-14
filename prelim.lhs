@@ -989,9 +989,9 @@ $T$, denoted $\coend{C} T(C,C)$,\footnote{Traditionally, $\coend{C}
   logicians build on existing intuition.} is an object of $\D$ with
 morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$ for every $X$, such
 that the
-diagram \[ \xymatrix@@dr{ T(C',C) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(C',C') \ar[d]^{\omega_{C'}} \\
-  T(C,C) \ar[r]_{\omega_C} & \coend C T(C,C) } \] commutes for all $C,
-C' : \C$ and $f : C \to C'$. (This square represents
+diagram \[ \xymatrix@@dr{ T(X',X) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(X',X') \ar[d]^{\omega_{X'}} \\
+  T(X,X) \ar[r]_{\omega_X} & \coend C T(C,C) } \] commutes for all $X,
+X' : \C$ and $f : X \to X'$. (This square represents
 \term{dinaturality} of $\omega$.)
 
 Since there must be morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$

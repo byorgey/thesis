@@ -871,15 +871,20 @@ in set theory the only notion of equality (extensional equality of
 sets) is too impoverished---one really wants to work up to
 \emph{isomorphism} rather than literal equality, and the mismatch
 between isomorphism and strict equality introduces all sorts of
-difficulties and extra work.  In contrast, via the univalence axiom,
-HoTT has a very rich---yet coherent---notion of equality that is able
-to encompass isomorphism in categories.
+difficulties and extra work.  For example, many concepts have subtly
+different ``strict'' and/or ``weak'' variants, having to do with the
+sort of equality used in the definition.  In contrast, via the
+univalence axiom, HoTT has a very rich---yet coherent---notion of
+equality that is able to encompass isomorphism in categories.
 
 This section lays out a few relevant definitions along with some
 intuition and commentary.  A fuller treatment may be found in Chapter
 9 of the HoTT book~\citeyearpar{hottbook}.  Generally, the term
 ``\hott{widget}'' is used to refer to widgets as defined in HoTT, to
-distinguish from widgets as defined in set theory.
+distinguish from widgets as defined in set theory.  Note that there is
+nothing fundamentally new in this section, but it is valuable to
+collect and synthesize the particularly relevant bits of information
+which are otherwise scattered throughout the HoTT book.
 
 We begin with the definition of a \term{precategory}.
 
@@ -921,12 +926,14 @@ We begin with the definition of a \term{precategory}.
 \end{rem}
 
 One might wonder why the term \term{precategory} is used for something
-that is evidently a straightforward port of the definition of a
-category from set theory into HoTT.  The problem is that this
-definition suffers from problems similar to the one in set theory:
-there is not necessarily a strong enough connection between
-isomorphism and equality.  This is remedied in the definition of an
-\hott{category}.
+that seems to be a direct port of the definition of a category from
+set theory into HoTT.  The reason is that the usual formal definition
+of categories as expressed in set theory is incomplete, seeing as
+categories come equipped with an extra \emph{social} convention
+regarding their use, namely ``don't be evil'', \ie don't violate the
+principle of equivalence.  In HoTT, we can formally encode this social
+convention as an axiom, which makes categories much nicer to work with
+in practice (after all, the social convention is not arbitrary).
 
 \begin{defn}
   An \term{isomorphism} in $\CT$ is a morphism $f : \hom X Y$
@@ -948,10 +955,10 @@ It is immediate, by path induction and the fact that $\idT_X$ is an
 isomorphism, that equality implies isomorphism: we call this $\idtoiso
 : (X = Y) \to (X \iso Y)$.  However, the other direction is not
 automatic; in particular, it does not follow from univalence, due to
-the distinction between $X \iso Y$ and $X \equiv Y$. However, it has a
-very similar flavor to univalence, and matches the intuition that one
-should always work up to isomorphism in a category.  It is therefore
-added as a requirement of an \hott{category}.
+the distinction between $X \iso Y$ and $X \equiv Y$. However,
+requiring the other direction as an axiom is what allows us to
+formalize the principle of equivalence: isomorphic objects in a
+category should be truly interchangeable.
 
 \begin{defn}
   An \term{\hott{category}} is a precategory $\CT$ together with the
@@ -970,14 +977,16 @@ isomorphism. The following example will play an important role later.
 \end{defn}
 
 \begin{proof}
-  Identity morphisms, composition, the identity laws, associativity,
-  and the fact that every morphism is an isomorphism all follow
-  directly from properties of propositional equality.  Since
-  isomorphisms are already paths, $\isotoid$ is just the identity.
+  The fact that $T$ is a $1$-type means that $\hom a b$ is a $0$-type
+  for $a, b : T$, as required.  Identity morphisms, composition, the
+  identity laws, associativity, and the fact that every morphism is an
+  isomorphism all follow directly from properties of propositional
+  equality.  Since isomorphisms are already paths, $\isotoid$ is just
+  the identity.
 \end{proof}
 
-Another important example is an analogue to the usual category \Set
-of sets and functions.
+Another important example of an \hott{category} is an analogue to the
+usual category \Set of sets and functions.
 
 \begin{defn}[HoTT book, Examples 9.1.5 and 9.1.7]
   $\ST$ denotes the \hott{category} of sets, that is, the category
@@ -1054,10 +1063,11 @@ and $F_1(f)$.
   \end{itemize}
 \end{defn}
 
-It may not be readily apparent from the definitions, but this turns
-out to be a much nicer environment in which to carry out category
-theory.  An extended example is given in \pref{sec:finiteness-hott}.
-For now we describe two smaller (but relevant) examples.
+It may not be readily apparent from the definitions, but as claimed
+earlier, this turns out to be a much nicer framework in which to carry
+out category theory.  An extended example is given in
+\pref{sec:finiteness-hott}.  For now we describe two smaller (but
+also relevant) examples.
 
 \subsection{Monoidal categories in HoTT}
 \label{sec:monoidal-cats-hott}
@@ -1082,11 +1092,48 @@ The second example is the notion of a \term{coend}.  Recall that a coend over
 a functor $T : \C^\op \times \C \to \D$ is an object of $\D$, denoted
 $\coend C T(C,C)$, together with a family of morphisms $\omega_X :
 T(X,X) \to
-\coend C T(C,C)$ for each $X \in \C$, such that \[ \xymatrix@@dr{ T(C',C) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(C',C') \ar[d]^{\omega_{C'}} \\
-  T(C,C) \ar[r]_{\omega_C} & \coend C T(C,C) } \] commutes for all $C,
-C' : \C$ and $f : C \to C'$.
+\coend C T(C,C)$ for each $X \in \C$, such that
+\begin{equation} \label{eq:coend-diagram}
+  \xymatrix@@dr{ T(X',X) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(X',X') \ar[d]^{\omega_{X'}} \\
+  T(X,X) \ar[r]_{\omega_X} & \coend C T(C,C) }
+\end{equation} commutes for all $X,
+X' : \C$ and $f : X \to X'$.  In set theory, recall that $\biguplus_C
+T(C,C)$, together with the obvious family of injections $\omega_C\ t =
+(C,t)$, comes close to being the right implementation of $\coend C
+T(C,C)$, but fails to satisfy \eqref{eq:coend-diagram}: in particular,
+the outputs of $\omega_X$ and $\omega_{X'}$ are never equal when $X
+\neq X'$, precisely because $\uplus_C$ denotes a \emph{disjoint}
+union.  Instead, we had to quotient this disjoint union by an
+equivalence relation induced by \eqref{eq:coend-diagram}.
 
-\todo{finish me.}
+\newcommand{\llangle}{\langle\!\langle}
+\newcommand{\rrangle}{\rangle\!\rangle}
+\newcommand{\hcoendI}[2]{\llangle #1 , #2 \rrangle}
+\newcommand{\hcoendP}[3]{#1 \stackrel{#2}{\sim} #3}
+
+In HoTT, given some categories $\CT$ and $\DT$ and a functor $T :
+\CT^\op \times \CT \to \DT$, we can directly encode this quotient as a
+higher inductive type $\exists T$.  We first introduce a data
+constructor \[ \hcoendI{-}{-} : X \to T(X,X) \to \exists T. \] So far
+this is equivalent to the $\Sigma$-type $\sum_C T(C,C)$, which
+corresponds to the disjoint union $\biguplus_C T(C,C)$.  However, we
+also introduce a path constructor with type \[ (X,X' : \CT) \to (f :
+\hom X {X'}) \to \hcoendI X {T(f,1)\ t} = \hcoendI{X'}{T(1,f)\ t} \]
+which ensures that the commutative diagram \eqref{eq:coend-diagram} is
+satisfied.
+
+It is already pleasant to be able to work directly with a data type
+representing a coend.  In the special case when $\CT$ is a groupoid,
+things become even more pleasant.  In a groupoid, any morphism $f :
+\hom X X'$ is automatically an isomorphism, $f : X \iso X'$, and hence
+there is a path $\isotoid\ f : X = X'$.  Moreover, one can show that
+\[ (\isotoid\ f)_*(T(f,1)\ t) = T(1,f)\ t \] ($(\isotoid\ f)_*$
+applies $f$ covariantly and $f^{-1}$ contravariantly), and therefore
+the above path constructor comes for free!  In other words, when $\CT$
+is a groupoid and $T : \CT^\op \times \CT \to \DT$, the coend $\exists
+T$ simply \emph{is} $\sum_C T(C,C)$, with no need for a special
+higher-order type.  The equalities which were missing in set theory
+are supplied automatically by HoTT's richer system of equality.
 
 \section{Finiteness in set theory}
 \label{sec:finiteness-sets}
