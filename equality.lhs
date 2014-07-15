@@ -1138,8 +1138,7 @@ are supplied automatically by HoTT's richer system of equality.
 \section{Finiteness in set theory}
 \label{sec:finiteness-sets}
 
-\todo{Should explain somewhere why elucidating the relation bewteen B
-  and P is so important.}
+\todo{Need to explain what this section has to do with ``finiteness''!}
 
 Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about \term{finiteness},
