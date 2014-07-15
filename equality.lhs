@@ -1367,10 +1367,11 @@ in type theory.  First, a few necessary lemmas:
     (\top + \Fin{n_1'} \equiv \top + \Fin{n_2'})$, it suffices to
     define $e'(e^{-1}\ \unit) = e\ \unit$, with the rest of $e' :
     \Fin{n_1'} \equiv \Fin{n_2'}$ defined as a restriction of
-    $e$. \todo{Formal proof that the resulting $e'$ is an
+    $e$. \later{Formal proof that the resulting $e'$ is an
       equivalence?}  This construction corresponds more generally to
-    the \term{Gordon complementary bijection principle}~\citep{gcbp},
-    to be discussed in more detail in \pref{sec:gcbp}.
+    the \term{Gordon complementary bijection
+      principle}~\citep{gordon1983sieve}, to be discussed in more
+    detail in \pref{sec:gcbp}.
   \end{itemize}
 \end{proof}
 
@@ -1436,11 +1437,10 @@ dia = hcat' (with & sep .~ 2)
 \end{figure}
 
 \begin{rem}
-  It is a bit strange that the above proof has so much computational
-  content, manipulating equivalences, \etc, when the end goal is to
-  prove an equality of the form $n_1 = n_2$, a mere
-  proposition. \todo{Not sure if there is a better proof; or, explain
-    why the given proof is necessary.}
+  It is somewhat strange that the above proof has so much
+  computational content---the required manipulations of equivalences
+  are quite nontrivial---when the end goal is to prove a mere
+  proposition.  I do not know whether there is a better proof.
 \end{rem}
 
 Constructing a type-theoretic counterpart to $\P$ is
@@ -1465,13 +1465,13 @@ paired with constructive evidence of property X'' (or perhaps ``a
 $0$-type paired with evidence of X'', depending how seriously we want
 to take the word \emph{set}); so what is constructive evidence of
 finiteness? This is not \latin{a priori} clear, and indeed, there are
-several possible answers \citep{finite}. However, the discussion
-above, where bijections $S \bij \fin{\size S}$ played a prominent
-role, suggests that we adopt the simplest option,
+several possible answers \citep{finite}. However, the discussion of
+\pref{sec:finiteness-sets}, where bijections $S \bij \fin{\size S}$
+played a prominent role, suggests that we adopt the simplest option,
 \term{cardinal-finiteness}.
 \begin{defn}
-  A set (type) $A$ is \term{cardinal-finite} iff there exists some $n
-  \in \N$ and a bijection $A \bij \fin n$; $n$ is called the size or
+  A set $A$ is \term{cardinal-finite} iff there exists some $n \in \N$
+  and a bijection $A \bij \fin n$; $n$ is called the size or
   cardinality of $A$.
 \end{defn}
 Our first try at encoding this in type theory is
@@ -1492,15 +1492,16 @@ the evidence of their finiteness, so that a path between two finite
 types requires them to be not just equivalent as types, but also
 ``finite in the same way''.
 
-The situation can be pictured as shown in \pref{fig:fin-equiv}. The elements
-of types $A_1$ and $A_2$ are shown on the sides; the evidence of their
-finiteness is represented by bijections between their elements and the
-elements of $\Fin n$, shown along the bottom.  The catch is that the diagram
-necessarily contains only triangles: corresponding elements of $A_1$ and $A_2$
-must correspond to the same element of $\Fin n$ on the bottom row.  Therefore,
-there are only two degrees of freedom. Once the evidence of finiteness is
-determined, there is only one valid correspondence between $A_1$ and
-$A_2$---but there ought to be $n!$ such correspondences.
+The situation can be pictured as shown in \pref{fig:fin-equiv}. The
+elements of types $A_1$ and $A_2$ are shown on the sides; the evidence
+of their finiteness is represented by bijections between their
+elements and the elements of $\Fin n$, shown along the bottom.  The
+catch is that the diagram necessarily contains only triangles:
+corresponding elements of $A_1$ and $A_2$ must correspond to the same
+element of $\Fin n$ on the bottom row.  Therefore, there are only two
+degrees of freedom. Once the evidence of finiteness is determined for
+$A_1$ and $A_2$, there is only one valid correspondence between
+them---but there ought to be $n!$ such correspondences.
 \begin{figure}
   \centering
   \begin{diagram}[width=150]
@@ -1605,11 +1606,11 @@ truncation does not really hide anything.
   \times \ptrunc{A \equiv \Fin n}$ are propositionally equal.  Since
   $e_1$ and $e_2$ are mere propositions, it suffices to show that $n_1
   = n_2$.  This equality is itself a mere proposition (since $\N$ is a
-  set, which follows from its induction principle), so we may apply
-  the recursion principle for propositional truncation to $e_1$ and
-  $e_2$, giving us equivalences $A \equiv \Fin n_1$ and $A \equiv \Fin
-  n_2$ to work with.  By symmetry and transitivity, $\Fin n_1 \equiv
-  \Fin n_2$, and thus $n_1 = n_2$ by \pref{lem:fin-iso-equal}.
+  set; see \pref{sec:n-types}), so we may apply the recursion
+  principle for propositional truncation to $e_1$ and $e_2$, giving us
+  equivalences $A \equiv \Fin n_1$ and $A \equiv \Fin n_2$ to work
+  with.  By symmetry and transitivity of equivalences, $\Fin n_1
+  \equiv \Fin n_2$, and thus $n_1 = n_2$ by \pref{lem:fin-iso-equal}.
 \end{proof}
 
 There is still one remaining problem, which is that $\FinTypeT$ is
@@ -1635,13 +1636,15 @@ $\FinSetT$ is consequently a $1$-type.
   groupoid of cardinal-finite sets and paths bewteen them.
 \end{defn}
 
-It is worth pointing out that with this definition of $\BT$, we have
-ended up with something akin to the category of specifications
-$\Spec_{\size{}}$ used to define the anafunctor $\size : \B \to \P$ in
-\pref{sec:finiteness-sets}, rather than something corresponding
-directly and na\"ively to $\B$ itself. The main difference is that
-$\BT$ uses a propositional truncation to ``hide'' the explicit choice
-of finiteness evidence.
+\begin{rem}
+  It is worth pointing out that with this definition of $\BT$, we have
+  ended up with something akin to the category of specifications
+  $\Spec_{\size{}}$ used to define the anafunctor $\size : \B \to \P$
+  in \pref{sec:finiteness-sets}, rather than something corresponding
+  directly and na\"ively to $\B$ itself. The main difference is that
+  $\BT$ uses a propositional truncation to ``hide'' the explicit
+  choice of finiteness evidence.
+\end{rem}
 
 We now turn to the equivalence of $\PT$ and $\BT$, with a goal of
 defining inverse functors $\fin - : \PT \to \BT$ and $\size : \BT \to
@@ -1675,8 +1678,8 @@ property of $\fin -$:
 \end{lem}
 \begin{proof}
   For any $m, n : \PT$, we must exhibit an equivalence between
-  $(\hom[\PT] m n) \jeq (\Fin m \equiv \Fin n)$ and $\hom[\BT] {\fin
-    m} {\fin n} \jeq (\fin m = \fin n) \equiv (\Fin m = \Fin
+  $(\hom[\PT] m n) \jeq (\Fin m \equiv \Fin n)$ and $(\hom[\BT] {\fin
+    m} {\fin n}) \jeq (\fin m = \fin n) \equiv (\Fin m = \Fin
   n)$---such an equivalence is given by univalence.
 \end{proof}
 
@@ -1696,7 +1699,8 @@ of choice holds.  In HoTT the situation turns out much better, thanks
 to the richer notion of equality and the extra axiom associated with a
 category.
 
-First, there are two relevant notions of essential surjectivity:
+First, there are two relevant notions of essential surjectivity (taken
+from the HoTT book):
 
 \begin{defn}
   A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
@@ -1733,6 +1737,8 @@ strong notion.  In particular:
 That is, a fully faithful, essentially surjective functor is an
 equivalence given AC; a fully faithful, \emph{split} essentially
 surjective functor is an equivalence \emph{without} AC.
+
+Now, what about $\fin - : \BT \to \PT$?  We have the following:
 
 \begin{prop}
   $\fin -$ is essentially surjective.
@@ -1811,11 +1817,4 @@ inverse is uniquely determined.  In essence, the construction of
 $\size$ proceeds by first constructing a functor paired with a proof
 that, together with $\fin -$, it forms an equivalence---altogether a
 mere proposition---and then projecting out the functor.
-
-\todo{Haven't actually defined species yet.}
-When working with species as founded in HoTT, therefore, we are fully
-justified in working with them as functors from finite sets of labels,
-or from natural number sizes, as convenient---the equivalence $\BT
-\iso \PT$ is entirely constructive and allows species to be
-converted back and forth between the two views.
 
