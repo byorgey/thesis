@@ -1138,14 +1138,14 @@ are supplied automatically by HoTT's richer system of equality.
 \section{Finiteness in set theory}
 \label{sec:finiteness-sets}
 
-\todo{Should explain somewhere why elucidating the relation between B
+\todo{Should explain somewhere why elucidating the relation bewteen B
   and P is so important.}
-\todo{Say something about how this is novel material?}
 
 Finally, we can assemble the foregoing material on anafunctors and
-category theory in HoTT into a coherent story about representing
-evidence of finiteness, first using set-theoretic foundations, and
-then in HoTT.
+category theory in HoTT into a coherent story about \term{finiteness},
+first using set-theoretic foundations, and then in HoTT.  The material
+in this section and the next (other than the lemmas and theorems cited
+from the HoTT book) is, to my knowledge, novel.
 
 Recall that $\B$ denotes the groupoid of finite sets and bijections,
 and $\P$ the groupoid of natural numbers and permutations.  In
@@ -1154,14 +1154,21 @@ $\B$---roughly, we may think of it as the result of replacing each
 equivalence class of isomorphic objects in $\B$ with a single object.
 In this case, we can identify each equivalence class of isomorphic
 finite sets with a \emph{size}, the only property of sets which is
-invariant under isomorphism.
+invariant under isomorphism.  The study of $\B$ and $\P$ is critical
+for the study of species; as we will shortly see in
+\pref{chap:species}, traditional species are defined as functors $\B
+\to \Set$.
 
 It is a simple result in classical category theory that every category
-is equivalent to its skeletons.  However, after the foregoing
-discussion of cliques and anafunctors, the idea of quotienting out by
-equivalences classes of isomorphic objects ought to make us
-squeamish---and, indeed, a proof that $\B$ and $\P$ are equivalent
-requires AC.
+is equivalent to its skeletons.  This equivalence allows one to pass
+back and forth between functors $\B \to \Set$ and functors $\P \to
+\Set$, and this is often implicitly exploited in the literature on
+species.  However, we are interested in the \emph{computational}
+content of this equivalence, and it is here that we run into trouble.
+After the foregoing discussion of cliques and anafunctors, the idea of
+quotienting out by equivalences classes of isomorphic objects ought to
+make us squeamish---and, indeed, a proof that $\B$ and $\P$ are
+equivalent requires AC.
 
 In more detail, it is easy to define a functor $\fin - : \P \to \B$
 which sends $n$ to $\fin n$ and preserves morphisms; defining an
@@ -1184,36 +1191,39 @@ is no obvious way to pick one.  For example, suppose $S =
 \end{diagram}
 \}$.  Given a bijection matching each animal with its favorite
 shape\footnote{The details are left as an exercise for the reader.},
-it must be sent to a permutation on $\{0,1,2\}$---but there is no
-canonical relationship between these natural numbers and either
-animals or shapes.
+it must be sent to a permutation on $\{0,1,2\}$---but to which
+permutation should it be sent?  Knowing that the size of
+$\{\text{cat}, \text{dog}, \text{moose}\}$ is $3$ does not tell us
+anything about how to match up animals with $\{0,1,2\}$.
 
 More abstractly, $\fin - : \P \to \B$ is fully faithful and
 essentially surjective (every finite set is in bijection with $\fin n$
-for some $n$); this yields an equivalence of categories (and hence an
-inverse functor $\size - : \B \to \P$) only in the presence of AC.
+for some $n$); this yields an equivalence of categories, and hence an
+inverse functor $\size - : \B \to \P$, only in the presence of AC.
 
 Concretely, we can use AC to choose an arbitrary bijection $\varphi_S
-: S \bij \fin{\size S}$ for each finite set $S$, matching up $S$ with
-a canonical set of size $\size S$. Given $\alpha : S \bij T$ we can
-then construct $\xymatrix{ \fin{\size S} \ar[r]^-{\varphi_S^{-1}} & S
-  \ar[r]^\alpha & T \ar[r]^-{\varphi_T} & \fin{\size T}}$.  As is
-familiar by now, this use of AC is ``benign'' in the sense that any
-two sets of choices yield equivalent functors; it thus yields a
-well-defined functor but has no computational interpretation.
+: S \bij \fin{\size S}$ for each finite set $S$, somehow matching up
+$S$ with the canonical set of size $\size S$. Given $\alpha : S \bij
+T$ we can then construct $\xymatrix{ \fin{\size S}
+  \ar[r]^-{\varphi_S^{-1}} & S \ar[r]^\alpha & T \ar[r]^-{\varphi_T} &
+  \fin{\size T}}$.  As is familiar by now, this use of AC is
+``benign'' in the sense that all choices yield equivalent functors;
+this construction using AC thus in some sense yields a well-defined
+functor but has no computational interpretation.
 
 We can avoid the use of AC by constructing an anafunctor $\size - : \B
 \to \P$ instead of a functor.  In particular, as the class of
 specifications $S_{\size{}}$, we choose the class of all bijections
-$\sum_{T \in \B} (T \bij \fin{\size T})$.  The function $\sigma :
-S_{\size{}} \to \Ob \B$ simply forgets the chosen bijection,
-$\sigma(T,\varphi) = T$, and $\tau : S_{size{}} \to \Ob \P$ sends
-finite sets to their size, $\tau(T,\varphi) = \size T$.  Note that
-both $\sigma$ and $\tau$ ignore $\varphi$, which is instead needed to
-define the action of $\size{}$ on morphisms.  In particular, given
-$\alpha : S \bij T$ in $\B$, we define $\sizesymb_{(S,\varphi_S),
-  (T,\varphi_T)}(\alpha) = \varphi_S^{-1} \then \alpha \then
-\varphi_T$, which can be visualized as
+$\sum_{T \in \B} (T \bij \fin{\size T})$.  The function $\lana
+{\size{}} : S_{\size{}} \to \Ob \B$ simply forgets the chosen
+bijection, $\lana{\size{}}\ (T,\varphi) = T$, and $\rana{\size{}} :
+S_{\size{}} \to \Ob \P$ sends finite sets to their size,
+$\rana{\size{}}\ (T,\varphi) = \size T$.  Note that both
+$\lana{\size{}}$ and $\rana{\size{}}$ ignore $\varphi$, which is
+instead needed to define the action of $\size{}$ on morphisms.  In
+particular, given $\alpha : S \bij T$ in $\B$, we define
+$\sizesymb_{(S,\varphi_S), (T,\varphi_T)}(\alpha) = \varphi_S^{-1}
+\then \alpha \then \varphi_T$, which can be visualized as
 \[
 \xymatrix{S \ar[d]_\alpha & \fin{\size S} \ar[l]_-{\varphi_S^{-1}}
   \ar@@{.>}[d]^{\size \alpha} \\
@@ -1264,26 +1274,26 @@ $\size \beta$; because $\varphi_T$ cancels with $\varphi_T^{-1}$ it is
 the same as the definition of $\size (\alpha \then \beta)$ (the
 right-hand diagram).
 
-Before returning to HoTT, it should be noted that there is an alternate
-way around the use of AC in this particular case, using the theory of
-\term{hereditarily finite} sets.
+As a side note, it is worth mentioning an alternate way around the use
+of AC in this particular case, using the theory of \term{hereditarily
+  finite} sets.
 \begin{defn}
   A \term{hereditarily finite} set is a finite set, all of whose
   elements are hereditarily finite.
 \end{defn}
 This definition gets off the ground since the empty set is vacuously
 hereditarily finite.  As is usual in set theory, this definition is
-interpreted recursively, so there cannot be any infinitely descending
-membership chains.  Hereditarily finite sets can thus be identified with
+interpreted inductively, so there cannot be any infinitely descending
+membership chains.  Hereditarily finite sets are thus identified with
 finitely-branching, finite-depth trees.
 
 Now consider the groupoid $\cat{H}$ obtained by replacing ``finite''
 with ``hereditarily finite'' in the definition of $\B$.  That is, the
 elements of $\cat{H}$ are hereditarily finite sets, and the morphisms
-are bijections.  Replacing $\B$ by $\cat{H}$ in the definition of
-species is really no great loss, since we are interested in modelling
-finite sets of ``labels'', and there is no particular reason to have
-individual labels modelled by infinite sets.
+are bijections.  This is no great loss, since given some finite set
+we are not interested in the intensional properties of its elements,
+but only in its extensional properties (how many elements it has,
+which elements are equal to other elements, and so on).
 
 Unlike the class of all sets, however, the class of all hereditarily
 finite sets (normally written $V_\omega$) has a well-ordering.  For
@@ -1297,13 +1307,14 @@ a canonical bijection $S \bij \fin{\size S}$ for every hereditarily
 finite set $S$.
 
 However, this construction is somewhat arbitrary, and has no natural
-counterpart in type theory, or indeed in a structural set theory.  The
-concept of hereditary finiteness only makes sense in a material set
-theory such as ZF.  To determine the canonical ordering on, say,
-$\{\text{dog}, \text{cat}, \text{moose}\}$, we need to know the
-precise identity of the set used to encode each animal---but knowing
-their precise encoding as sets violates the principle of equivalence,
-since there may be many possible encodings with the right properties.
+counterpart in type theory, or indeed in a structural set theory.
+Indeed, the concept of hereditary finiteness only makes sense in a
+material set theory such as ZF.  To determine the canonical ordering
+on, say, $\{\text{dog}, \text{cat}, \text{moose}\}$, we need to know
+the precise identity of the set used to encode each animal---but
+knowing their precise encoding as sets violates the principle of
+equivalence, since there may be many possible encodings with the right
+properties.
 
 \section{Finiteness in HoTT}
 \label{sec:finiteness-hott}

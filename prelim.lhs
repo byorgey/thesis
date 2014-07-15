@@ -527,15 +527,19 @@ in the dissertation.
   relatively high degree of control.  For example, using higher
   inductive types, it is easy to define various quotient types which
   would be tedious to define and work with in MLTT.  One particular
-  manifestation of this general idea is the fact that \term{coends} in
-  HoTT are just $\Sigma$-types (\pref{sec:ct-hott}).
+  manifestation of this general idea is \term{coends}
+  (\pref{sec:ends-coends}) which can be directly defined as a higher
+  inductive type (\pref{sec:coends-hott}).
+\item Homotopy type theory allows doing category theory without using
+  the axiom of choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
+  essential in a constructive or computational setting.  It also makes
+  many constructions simpler; for example, a coend over a functor with
+  a groupoid as its domain is just a plain $\Sigma$-type, with no need
+  for higher inductive types at all.
 \item \term{Propositional truncation} (\pref{sec:truncation}) is an
   important tool for properly modelling concepts from classical
   mathematics in a constructive setting.  In particular we use it to
   model the concept of \emph{finiteness} (\pref{sec:finiteness-hott}).
-\item Homotopy type theory allows doing category theory without using
-  the axiom of choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
-  essential in a constructive or computational setting.
 \end{itemize}
 
 Although not the main goal, I hope that this work can serve as a
