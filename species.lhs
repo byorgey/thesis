@@ -11,14 +11,14 @@
   figures}
 \todo{Put back in discussion of equivalence vs equipotence of species?}
 
-The theory of combinatorial species, introduced by \citet{joyal}, is a
-unified theory of \term{combinatorial structures} or \term{shapes}.
-It was originally intended as a unified framework for algebraically
-describing combinatorial structures of interest, and in particular one
-which gave new justification and a unifying context for an existing
-body of techniques involving \term{generating functions}. The
-connection to generating functions will be explored in more detail in
-\pref{chap:labelled}.
+The theory of combinatorial species, first introduced by
+\citet{joyal}, is a unified theory of \term{combinatorial structures}
+or \term{shapes}.  It was originally intended as a unified framework
+for algebraically describing combinatorial structures of interest, and
+in particular one which gave new justification and a unifying context
+for an existing body of techniques involving \term{generating
+  functions}; the connection to generating functions will be explored
+in more detail in \pref{chap:labelled}.
 
 In the process of generalizing the theory of generating functions, one
 of Joyal's great insights in formulating the theory of species was to
@@ -45,18 +45,18 @@ dia = hcat [tree # centerXY, strutX 4, octo [0..7]]
 Why \emph{labelled} shapes?  In the tree shown
 in~\pref{fig:example-labelled}, one can uniquely identify each
 location in the tree by a path from the root, without referencing
-labels at all.  However, the structure on the right illustrates one
-reason labels are needed. The circle indicates that the structure has
-\emph{rotational symmetry}, so there is be no way to uniquely refer
-to any location except by label.  More abstractly, to correctly
-enumerate unique unlabelled shapes, it is necessary to consider the
-action of label permutations on labelled shapes: which shapes are
-fixed by which permutations?
+labels at all.  However, the ``octopus'' illustrates one reason labels
+are needed. The particular way it is drawn is intended to indicate
+that the structure has fourfold rotational symmetry, which means there
+would be no way to uniquely refer to any location except by label.
+More abstractly, \term{unlabelled} shapes can be defined as
+equivalence classes of labelled shapes, which is nontrivial in the
+case of shapes with symmetry.
 
-Beyond its focus on labels, the power of the theory of species derives
-in large part from its ability to describe structures of interest
-\emph{algebraically}, making them amenable to further analysis with
-only a relatively small set of general tools.
+Besides its focus on labels, the power of the theory of species also
+derives from its ability to describe structures of interest
+\emph{algebraically}, making them amenable to analysis with only a
+small set of general tools.
 
 \begin{ex}
   Consider the species $\List$ of \term{lists}, or \term{linear
@@ -95,12 +95,13 @@ listStructures
     \label{fig:lists}
     %$
   \end{figure}
-The species of lists can be described by the recursive algebraic
-expression \[ \List = \One + \X \cdot \List. \] The meaning of this will be
-made precise later. For now, its intuitive meaning should be clear
-to anyone familiar with recursive algebraic data types in a language
-such as Haskell or OCaml: a labelled list ($\List$) is empty ($1$), or ($+$) a
-single label ($\X$) together with ($\cdot$) another labelled list ($\List$).
+  The species of lists can be described by the recursive algebraic
+  expression \[ \List = \One + \X \cdot \List. \] The meaning of this
+  will be made precise later. For now, its intuitive meaning should be
+  clear to anyone familiar with recursive algebraic data types in a
+  language such as Haskell or OCaml: a labelled list ($\List$) is
+  empty ($\One$), or ($+$) a single label ($\X$) together with
+  ($\cdot$) another labelled list ($\List$).
 \end{ex}
 
 \begin{ex}
@@ -231,7 +232,8 @@ mobiles
   \end{figure}
   Algebraically, \[ \msf{Mob} = \X + \X \cdot (\Bag_2 \comp
   \msf{Mob}), \] that is, a mobile is either a single label, or a
-  label together with an unordered pair of mobiles.
+  label together with an unordered pair ($\Bag_2$) of ($\comp$)
+  mobiles.
 \end{ex}
 
 \begin{ex}
@@ -326,27 +328,44 @@ permStructures
 
 In a computational context, it is important to keep in mind the
 distinction between \emph{labels} and \emph{data}, or more generally
-between \emph{labelled shapes} and \emph{labelled (data)
-  structures}.  Labels are merely names for locations where data can
-be stored; data structures contain data associated with each label,
-whereas labelled shapes have no data, only labels.  Put more
-intuitively, species shapes are ``form without content''.  As a
-concrete example, the numbers in \pref{fig:example-labelled} are not
-data being stored in the structures, but merely labels for the
-locations.  To talk about a data structure, one must also specify a
-mapping from locations to data; this will be made precise
-in~\pref{chap:labelled}.
+between \emph{labelled shapes} and \emph{(labelled) data structures}.
+Labels are merely names for locations where data can be stored, and
+(typically) have no particular computational significance beyond the
+ability to compare them for equality. Data structures contain data
+associated with each label, whereas labelled shapes have no data, only
+labels.  Put more intuitively, species shapes are ``form without
+content''.  As a concrete example, the numbers in
+\pref{fig:example-labelled} are not data being stored in the
+structures, but merely labels for the locations.  To talk about a data
+structure, one must additionally specify a mapping from labels to
+data; this will be made precise in~\pref{chap:labelled}.
 
 \section{Definition}
 \label{sec:species-definition}
 
 Informally, a species is a family of labelled shapes.  Crucially, the
 actual labels used ``shouldn't matter'': for example, we should get
-the ``same'' binary trees no matter what labels we want to use.  This
-intuition is made precise in the formal definition of combinatorial
-species.
+the ``same'' family binary trees no matter what labels we want to use.
+This intuition is made precise in the formal definition of
+combinatorial species.  We first give a concise, abstract version of
+the definition.
 
-\begin{defn}[Species \citep{joyal, bll}]
+\begin{defn}[Species \citep{joyal}]
+  \label{defn:species-cat}
+  A \term{species} is a functor $F : \B \to \Set$, where $\B$ is the
+  groupoid of finite sets whose morphisms are bijections, and $\Set$
+  is the category of sets and (total) functions.\footnote{Even more
+    abstractly, since $\B$ is self-dual, we may say that a species is
+    a \term{presheaf} on $\B$, that is, a functor $\B^\op \to \Set$.}
+\end{defn}
+
+However, it is worth spelling out this definition in more detail,
+which will also give an opportunity to explain some intuition and
+terminology. Even for those who are very comfortable with category
+theory, it may be hard to grok the intuition for the abstract
+definition right away.
+
+\begin{defn}
 \label{defn:species-set}
 
 A \term{species} $F$ is a pair of mappings which
@@ -425,74 +444,35 @@ or simply ``$F$-shapes on $L$'', or even (when $L$ is clear from
 context) just ``$F$-shapes''.\footnote{Margaret Readdy's translation
   of \citet{bll} uses the word ``structure'' instead of ``shape'', but
   that word is likely to remind computer scientists of ``data
-  structures'', but again, that is the wrong association: data
-  structures contain \emph{data}, whereas species shapes do not.}  $F\
-\sigma$ is called the ``transport of $\sigma$ along $F$'', or
-sometimes the ``relabelling of $F$-shapes by $\sigma$''.
+  structures'', which is, again, the wrong association: data
+  structures contain \emph{data}, whereas species shapes contain only
+  labels.}  $F\ \sigma$ is called the ``transport of $\sigma$ along
+$F$'', or sometimes the ``relabelling of $F$-shapes by $\sigma$''.
 
-The functoriality of relabelling means that the actual labels used
-don't matter; we get ``the same shapes'', up to relabelling, for any
-label sets of the same size.  We might say that species area
+The functoriality of a species $F$ means that the actual labels used
+don't matter; the resulting family of shapes is ``independent'' of the
+particular labels used.  We might say that species are
 \term{parametric} in the label sets of a given size. In particular,
 $F$'s action on all label sets of size $n$ is determined by its action
 on any particular such set: if $||L_1|| = ||L_2||$ and we know $F\
 L_1$, we can determine $F\ L_2$ by lifting an arbitrary bijection
-between $L_1$ and $L_2$.  So we often take the finite set of natural
-numbers $[n] = \{0, \dots, n-1\}$ as \emph{the} canonical label set of
-size $n$, and write $F\ n$ (instead of $F\ [n]$) for the set of
-$F$-shapes built from this set.
+between $L_1$ and $L_2$.  More formally, although Definitions
+\ref{defn:species-set}--\ref{defn:species-p} say only that a species
+$F$ sends a bijection $\sigma : L \bij L'$ to a \emph{function} $F\
+\sigma : F\ L \to F\ L'$, the functoriality of $F$ guarantees that $F\
+\sigma$ is a bijection as well. In particular, $(F\ \sigma)^{-1} = F\
+(\sigma^{-1})$, since $F\ \sigma \comp F\ (\sigma^{-1}) = F\ (\sigma
+\comp \sigma^{-1}) = F\ id = id$, and similarly $F\ (\sigma^{-1})
+\comp F\ \sigma = id$.  Thus, \emph{up to isomorphism}, a functor $F$
+must ``do the same thing'' for any two label sets of the same size.
 
-Some intuition is in order: why is $F$ required to be functorial?
-The answer is that it is functoriality which forces the family of
-shapes to be ``independent'' of the particular labels chosen.
-Intuitively, labels should be arbitrary; a species $F$ should not be
-able to ``do something different'' depending on the particular set of
-labels.  For example, we could define a mapping $B$ which
-\begin{itemize}
-\item sends the set of labels $\{a,b,c\}$ to the set of ``shapes''
-  $\{I,J,K\}$,
-\item sends any other set to $\{P,Q\}$, and
-\item sends every bijection to the identity function when possible, or
-  to the constantly $I$ or constantly $P$ functions as
-  appropriate. (For example, a bijection between $\{1,2\}$ and
-  $\{x,y\}$ is mapped to the identity function on $\{P,Q\}$, whereas a
-  bijection bewteen $\{a,b,c\}$ and $\{1,2,3\}$ is sent to the
-  constantly $P$ function from $\{I,J,K\}$.)
-\end{itemize}
-The fact that this definition singles out the special set of labels
-$\{a,b,c\}$ seems ``bogus'', and it is exactly functoriality that
-prevents this sort of definition.  Indeed, this definition is not
-functorial.  Though it does preserve identities, it does not preserve
-composition: consider, for example, a bijection $\sigma : \{a,b,c\}
-\bij \{1,2,3\}$ (it does not matter which).  Then $B (\sigma \comp
-\sigma^{-1}) = \id_{\{P,Q\}}$, but $B \sigma \comp B \sigma^{-1}$ is
-the constantly $P$ endofunction on $\{P,Q\}$.  This example is
-somewhat egregious; the reader may enjoy formulating more subtly wrong
-mappings and showing why they do not satisfy functoriality.
-
-Using the language of category theory, we can also give an equivalent, more
-concise definition of species:
-\begin{defn}
-  \label{defn:species-cat}
-  A \term{species} is a functor $F : \B \to \Set$, where $\B$ is the
-  groupoid of finite sets whose morphisms are bijections, and $\Set$
-  is the category of sets and (total) functions. (Even more abstractly,
-  since $\B$ is self-dual, we may say that a species is a
-  \term{presheaf} on $\B$, that is, a functor $\B^\op \to \Set$.)
-\end{defn}
-
-In a classical context, given AC, the groupoid $\P$ of natural numbers
-and finite permutations is equivalent to the groupoid $\B$, so it is
-also possible to define species as families of shapes indexed not by
-their labels but merely by their \emph{size}:
-
-\begin{defn}[Species (alternate)]
-  \label{defn:species-p}
-  A species is a functor $F : \P \to \Set$.
-\end{defn}
-
-In this case, the set of shapes corresponding to a given size $n$ can be
-thought of as precisely those labelled by the canonical label set $[n]$.
+We may therefore take the finite set of natural numbers $[n] = \{0,
+\dots, n-1\}$ as \emph{the} canonical label set of size $n$, and write
+$F\ n$ (instead of $F\ [n]$) for the set of $F$-shapes built from this
+set.  In fact, since $\B$ and $\P$ are equivalent, we may formally
+take the definition of a species to be a functor $\P \to \Set$ (or an
+anafunctor, if we wish to avoid AC; see \pref{sec:finiteness-sets}),
+which amounts to the same thing.
 
 \begin{rem}
   Typically, the sets of shapes $F\ L$ are required to be
@@ -511,18 +491,11 @@ thought of as precisely those labelled by the canonical label set $[n]$.
   only finitely many of a given size.
 \end{rem}
 
-\begin{rem}
-  Although Definitions \ref{defn:species-set}-- \ref{defn:species-p}
-  say only that a species $F$ sends a bijection $\sigma : L \bij L'$
-  to a \emph{function} $F\ \sigma : F\ L \to F\ L'$, the functoriality
-  of $F$ guarantees that $F\ \sigma$ is a bijection as well. In
-  particular, $(F\ \sigma)^{-1} = F\ (\sigma^{-1})$, since $F\ \sigma
-  \comp F\ (\sigma^{-1}) = F\ (\sigma \comp \sigma^{-1}) = F\ id =
-  id$, and similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.
-  Given the restriction that $F\ n$ be finite, one could---and some
-  authors do---define species as endofunctors $F : \B \to \B$ with no
-  loss of expressivity.
-\end{rem}
+\todo{edit.  Note historical defns, Joyal, BLL}
+Given the
+restriction that $F\ n$ be finite, one could---and some authors
+do---define species as endofunctors $F : \B \to \B$ with no loss of
+expressivity.
 
 \begin{rem}
   In my experience, computer scientists tend to have a bit of trouble
@@ -563,7 +536,7 @@ thought of as precisely those labelled by the canonical label set $[n]$.
 Recall that $\fc \C \D$ denotes the \term{functor category} whose
 objects are functors and whose morphisms are natural transformations
 between functors.  We may thus consider the \term{category of
-  species}, $\Spe = \fc \B \Set$, where the objects are species, and
+  species}, $\Spe = (\fc \B \Set)$, where the objects are species, and
 morphisms between species are label-preserving mappings which commute
 with relabelling---that is, mappings which are entirely ``structural''
 and do not depend on the labels in any way. For example, an in-order

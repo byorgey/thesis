@@ -1138,8 +1138,6 @@ are supplied automatically by HoTT's richer system of equality.
 \section{Finiteness in set theory}
 \label{sec:finiteness-sets}
 
-\todo{Need to explain what this section has to do with ``finiteness''!}
-
 Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about \term{finiteness},
 first using set-theoretic foundations, and then in HoTT.  The material
@@ -1153,10 +1151,13 @@ $\B$---roughly, we may think of it as the result of replacing each
 equivalence class of isomorphic objects in $\B$ with a single object.
 In this case, we can identify each equivalence class of isomorphic
 finite sets with a \emph{size}, the only property of sets which is
-invariant under isomorphism.  The study of $\B$ and $\P$ is critical
-for the study of species; as we will shortly see in
-\pref{chap:species}, traditional species are defined as functors $\B
-\to \Set$.
+invariant under isomorphism.  The relationship between $\B$ and $\P$
+is central to the concept of finiteness: passing from $\B$ to $\P$
+corresponds to taking the \emph{size} of finite sets, and passing from
+$\P$ to $\B$ corresponds to constructing canonical finite sets of a
+given size.  The study of $\B$ and $\P$ is also critical for the study
+of species; as we will shortly see in \pref{chap:species}, traditional
+species are defined as functors $\B \to \Set$.
 
 It is a simple result in classical category theory that every category
 is equivalent to its skeletons.  This equivalence allows one to pass
