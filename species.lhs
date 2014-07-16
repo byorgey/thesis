@@ -491,12 +491,6 @@ which amounts to the same thing.
   only finitely many of a given size.
 \end{rem}
 
-\todo{edit.  Note historical defns, Joyal, BLL}
-Given the
-restriction that $F\ n$ be finite, one could---and some authors
-do---define species as endofunctors $F : \B \to \B$ with no loss of
-expressivity.
-
 \begin{rem}
   In my experience, computer scientists tend to have a bit of trouble
   with these definitions, because their first instinct is to think of a
@@ -524,11 +518,42 @@ expressivity.
   between the functor category $\Set^\N$ and the slice category
   $\Set/\N$~(see the discussion under functor categories in
   \pref{sec:ct-fundamentals}), though the details are more subtle
-  since $\B$ is not discrete.  Both formulations have their strengths
-  and weaknesses; a fuller discussion can be found in
-  \pref{sec:related-work}. \todo{Make sure this reference gets filled
-    in.}
+  since $\B$ is not discrete.  \later{Both formulations have their strengths
+  and weaknesses; \dots}
 \end{rem}
+
+\begin{rem}
+  Historically, Joyal's first paper~\citeyearpar{joyal} defined
+  species as endofunctors $\B \to \B$.  Given a restriction to
+  finite families of shapes, and the observation that functors
+  preserve isomorphisms, this is essentially equivalent to $\B \to
+  \FinSet$, which is the definition used in Joyal's second
+  paper~\citeyearpar{joyal86} as well as, later, by \citet{bll}.  It
+  can be argued, however, that this second formulation is more
+  natural, especially when one wishes to make the connection to
+  functors $\FinSet \to \FinSet$ (or $\Set \to \Set$); see
+  \pref{chap:labelled}.
+\end{rem}
+
+\subsection{Cardinality restriction}
+\label{sec:cardinality-restr}
+
+For any species $F$ and natural number $n$, we may define \[ F_n\ L
+\defeq \begin{cases} F\ L & $\size L = n$ \\ \varnothing &
+  \text{otherwise} \end{cases}. \] That is, $F_n$ is the restriction
+of $F$ to label sets of size exactly $n$.  For example, $\Bag$ is the
+species of sets (of any size); $\Bag_4$ is the species of sets of size
+$4$.  This is well-defined since the action of a species is determined
+independently on sets of each size.  More abstractly, as noted
+previously, $\B$ (and $\P$) are disconnected categories, so functors
+out of them are equivalent to a disjoint union of individual functors
+out of each connected component; replacing the component functors at
+individual sizes will always result in another valid overall functor.
+
+More generally, we can ``kill'' any subset of sizes using arbitrary
+predicates.  For example, $F_{\leq n}$ is the species of $F$-shapes of
+size $n$ or less; similarly, $F_{\geq n}$ is the species of $F$-shapes
+of size $n$ or greater.
 
 \subsection{The category of species}
 \label{sec:category-of-species}
@@ -2460,8 +2485,6 @@ dia = theDia # centerXY # pad 1.1
     \caption{Species pointing}
     \label{fig:pointing}
   \end{figure}
-
-\todo{Put cardinality restriction back in.}
 
 \section{Examples}
 \label{sec:examples}
