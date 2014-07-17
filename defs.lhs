@@ -438,6 +438,8 @@
 \newcommand{\Lab}{\mathfrak{L}}
 \newcommand{\Str}{\mathfrak{S}}
 
+\newcommand{\equipot}{\mathrel{\stackrel{\#}{=}}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analytic functors
 

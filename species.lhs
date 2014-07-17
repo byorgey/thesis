@@ -6,10 +6,11 @@
 \label{chap:species}
 
 \todo{Go through and add some back references to preliminaries chapter?}
-\todo{List contributions of this chapter somewhere?}
 \todo{Need a story for building with both color or black/white
   figures}
-\todo{Put back in discussion of equivalence vs equipotence of species?}
+\todo{Split out a better introduction and overview of the whole
+  chapter (incorporate a list of contributions), and turn the
+  following material into a section.}
 
 The theory of combinatorial species, first introduced by
 \citet{joyal}, is a unified theory of \term{combinatorial structures}
@@ -343,12 +344,14 @@ data; this will be made precise in~\pref{chap:labelled}.
 \section{Definition}
 \label{sec:species-definition}
 
-Informally, a species is a family of labelled shapes.  Crucially, the
-actual labels used ``shouldn't matter'': for example, we should get
-the ``same'' family binary trees no matter what labels we want to use.
-This intuition is made precise in the formal definition of
-combinatorial species.  We first give a concise, abstract version of
-the definition.
+Informally, as we have seen, a species is a family of labelled shapes.
+Crucially, the actual labels used ``shouldn't matter'': for example,
+we should get the ``same'' family binary trees no matter what labels
+we want to use.  This intuition is made precise in the formal
+definition of combinatorial species.  \todo{One of Joyal's insights:
+  functoriality + naturality capture the salient combinatorial
+  insights.  Bring category theory to bear on combinatorics.}  We
+first give a concise, abstract version of the definition.
 
 \begin{defn}[Species \citep{joyal}]
   \label{defn:species-cat}
@@ -359,11 +362,11 @@ the definition.
     a \term{presheaf} on $\B$, that is, a functor $\B^\op \to \Set$.}
 \end{defn}
 
-However, it is worth spelling out this definition in more detail,
-which will also give an opportunity to explain some intuition and
-terminology. Even for those who are very comfortable with category
-theory, it may be hard to grok the intuition for the abstract
-definition right away.
+However, it is worth spelling out this definition
+in more detail, which will also give an opportunity to explain some
+intuition and terminology. Even for those who are very comfortable
+with category theory, it may be hard to grok the intuition for the
+abstract definition right away.
 
 \begin{defn}
 \label{defn:species-set}
@@ -524,14 +527,14 @@ which amounts to the same thing.
 
 \begin{rem}
   Historically, Joyal's first paper~\citeyearpar{joyal} defined
-  species as endofunctors $\B \to \B$.  Given a restriction to
-  finite families of shapes, and the observation that functors
-  preserve isomorphisms, this is essentially equivalent to $\B \to
-  \FinSet$, which is the definition used in Joyal's second
+  species as endofunctors $\B \to \B$.  Given a restriction to finite
+  families of shapes, and the observation that functors preserve
+  isomorphisms, this is essentially equivalent to $\B \to \FinSet$,
+  which is the definition used in Joyal's second
   paper~\citeyearpar{joyal86} as well as, later, by \citet{bll}.  It
-  can be argued, however, that this second formulation is more
-  natural, especially when one wishes to make the connection to
-  functors $\FinSet \to \FinSet$ (or $\Set \to \Set$); see
+  can be argued that this second formulation is more natural,
+  especially when one wishes to make the connection to functors
+  $\FinSet \to \FinSet$ (or $\Set \to \Set$); see
   \pref{chap:labelled}.
 \end{rem}
 
@@ -555,7 +558,7 @@ predicates.  For example, $F_{\leq n}$ is the species of $F$-shapes of
 size $n$ or less; similarly, $F_{\geq n}$ is the species of $F$-shapes
 of size $n$ or greater.
 
-\section{The category of species}
+\subsection{The category of species}
 \label{sec:category-of-species}
 
 Recall that $\fc \C \D$ denotes the \term{functor category} whose
@@ -571,7 +574,7 @@ to the species of lists, as illustrated in
 relabelling yields the same list as first relabelling and then doing
 the traversal.
 
-  \begin{figure}
+\begin{figure}
     \later{Add labels to the arrows?}
     \centering
   \begin{diagram}[width=300]
@@ -603,17 +606,115 @@ aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
   %$
     \caption{Inorder traversal is natural}
     \label{fig:species-morphism}
-  \end{figure}
+\end{figure}
 
-  It turns out that functor categories have a lot of interesting
-  structure.  For example, as we will see, $\fc \B \Set$ has (at least)
-  five different monoidal structures!  The rest of this chapter is
-  dedicated to exploring and generalizing this structure.
+It turns out that functor categories have a lot of interesting
+structure.  For example, as we will see, $\fc \B \Set$ has (at least)
+five different monoidal structures!  Most of the remainder of this
+chapter (\pref{sec:generalized-species} onward) is dedicated to
+exploring and generalizing this structure.
 
-\todo{Equivalence of categories.  Equivalence vs equipotence.}
+\todo{Should talk about unlabelled species somewhere here?  Would be
+  really useful for the following section\dots Relabelling yields an
+  equivalence relation.  Equivalence classes are called ``types'';
+  that's confusing here so we'll call them ``forms''.}
+
+\section{Isomorphism and equipotence}
+\label{sec:iso-equipotence}
+
+An isomorphism in the category of species is a pair of inverse natural
+transformations.  Species isomorphism preserves all the interesting
+\emph{combinatorial} properties of species; hence in the combinatorics
+literature everything is always done up to isomorphism. However, this
+is usually done in a way that glosses over the \emph{computational}
+properties of species.  Formulating species within HoTT gives us the
+best of both worlds: naturally isomorphic functors between
+\hott{categories} are equal, and hence isomorphic species are
+literally identified; however, equalities (\ie paths) in HoTT may
+still have computational content, and types force us to apply
+conversions in the right places.
+
+Somewhat surprisingly, there is another useful equivalence relation on
+species which is \emph{weaker} (\ie coarser) than
+isomorphism/equality, known as \term{equipotence}.
+
+\begin{defn}
+  An \term{equipotence} bewteen species $F$ and $G$, denoted $F
+  \equipot G$,\footnote{In the species literature, equipotence is
+    usually denoted $F \jeq G$, but that symbol is already taken for
+    judgmental equality.} is defined as an ``unnatural'' isomorphism
+  between $F$ and $G$---that is, two families of functions $\varphi_L
+  : F\ L \to G\ L$ and $\psi_L : G\ L \to F\ L$ such that $\varphi_L
+  \comp \psi_L = \psi_L \comp \varphi_L = \id$ for every finite set
+  $L$.  Note in particular there is \emph{no} requirement of
+  naturality for $\varphi$ or $\psi$.
+\end{defn}
+
+We can see that an equipotence preserves the \emph{number} of shapes
+of each size, since $\varphi$ and $\psi$ constitute a bijection,
+for each label set $L$, between the set of $F$-shapes $F\ L$ and the
+set of $G$-shapes $G\ L$.  However, an equipotence does not
+necessarily preserve \todo{what}?.
+
+Isomorphic species are of course equipotent, where the equipotence
+also happens to be natural.  It may be initially surprising, however,
+that the converse is false: there exist equipotent species which are
+not isomorphic. Put another way, having the same number of structures
+of each size is not enough to ensure isomorphism.
+
+One well-known example is the species $\List$ of lists and the species
+$\Perm$ of permutations.  It is well-known that there are the same
+number of linear orderings of $n$ labels as there are permutations of
+$n$ labels (namely, $n!$).  In fact, it is so well-known that
+mathematicians routinely conflate the two, referring to an ordered
+list as a ``permutation''.
+
+\todo{Picture of six lists and six permutations on three elements}
+
+However, $\List$ and $\Perm$ are not isomorphic.  The intuitive way to
+see this is to note that although there is essentially only one list
+``shape'' (ignoring labels) of any given size, for $n \geq 2$ there
+are multiple permutation shapes (in particular, there are as many
+permutation shapes as there are integer partitions of $n$).
+\todo{Figure nnn shows XYZ.}  \todo{Picture of single unlabelled list
+  shape of size 4? and unlabelled permutation shapes of same size}
+
+\todo{Redo the way this is explained if I end up previously writing
+  about unlabelled species.}  More formally, what we really mean when
+we say there is ``only one list shape'' is that any two labelled lists
+are related by some relabelling---that is, given $l_1, l_2 \in \List\
+K$ we can always find some $\sigma : K \bij K$ such that $L\ \sigma\
+l_1 = l_2$.  Put another way, if we consider the equivalence relation
+on labelled lists induced by relabelling, there is only one
+equivalence class.  On the other hand, there are multiple
+$\Perm$-forms, as shown, for example, in \todo{figure showing two
+  different $\Perm$-forms on $n = 2$.}  There is clearly no
+relabelling that relates the two forms shown in the figure.
+
+Now suppose there were some \emph{natural} isomorphism witnessed by
+$\varphi : \nt \List \Perm$ and $\psi : \nt \Perm \List$.  Let $s_1,
+s_2 : S\ K$ be two $K$-permutations with different forms.  $\psi_K\
+s_1$ and $\psi_K\ s_2$ are thus two $K$-lists, which we know must be
+related by some relabelling, say $\sigma$.  But now consider the
+naturality square for $\varphi$: \[ \xymatrix{ L\ K \ar[r]^{\varphi_K}
+  \ar[d]_{L\ \sigma} & S\ K \ar[d]^{S\ \sigma} \\ L\ K
+  \ar[r]_{\varphi_K} & S\ K } \] Starting with $\psi_K\ s_1$ in the
+upper-left and $L\ \sigma\ (\psi_K\ s_1) = \psi_K\ s_2$ in the lower
+left, the square is telling us that $s_1$ in the upper right and $s_2$
+in the lower right must be related by the relabelling $S\ \sigma$; but
+this is absurd, since we chose $s_1$ and $s_2$ to have different
+forms. \todo{Can probably simplify this argument.  Just explain what
+  the naturality square says in terms of relabelling equivalence,
+  forms, and so on, without choosing specific $s_1$, $s_2$, and so
+  on.}
+
+This argument shows that there cannot exist a natural isomorphism
+between $\List$ and $\Perm$.  However, the claim is that they are
+nonetheless equipotent.  \todo{Intuitively obvious but instructive to
+  do the proof.}
 
 \section{Generalized species}
-\label{sec:constructive-species}
+\label{sec:generalized-species}
 
 In many ways, $\fc \B \Set$ as the definition of species is too
 specific and restrictive.  For example, one of the big motivations for

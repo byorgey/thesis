@@ -99,6 +99,8 @@ forgetfulness.
   sets, isomorphisms are those bijections which preserve the
   distinguished element, and so on.  Generally speaking, isomorphisms
   can be thought of as ``structure-preserving correspondences''.
+\item Finally, $F \equipot G$ denotes the \term{equipotence} of two species,
+  discussed in \pref{sec:iso-equipotence}.
 \end{itemize}
 
 These notations are summarized in \pref{tab:sameness}.
@@ -113,7 +115,8 @@ These notations are summarized in \pref{tab:sameness}.
     $\hdefeq$ & definition equality (HoTT) \\
     $\equiv$ & equivalence \\
     $\lequiv$ & logical equivalence \\
-    $\iso$ & isomorphism
+    $\iso$ & isomorphism \\
+    $\equipot$ & species equipotence
   \end{tabular}
   \caption{``Sameness'' relations}
   \label{tab:sameness}
