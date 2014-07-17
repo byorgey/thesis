@@ -697,17 +697,35 @@ particular, for any $\sigma : K \bij K$ we have \[ \xymatrix{ \List\ K
   \ar[r]^{\varphi_K} \ar[d]_{\List\ \sigma} & \Perm\ K \ar[d]^{\Perm\ \sigma} \\
   \List\ K \ar[r]_{\varphi_K} & \Perm\ K } \] and similarly for
 $\psi_K$ in the opposite direction.  This says that any two
-$\List$-shapes related by the relabelling $\sigma$ correspond to
-$\Perm$-shapes which are also related by $\sigma$.  However, as we
-have seen, \emph{any} two elements of $\List\ K$ are related by some
-relabelling, and thus (since $\varphi$ and $\psi$ constitute a
-bijection) any two elements of $\Perm$ would have to be related by
-some relabelling as well, but this is false.
+$K$-labelled lists related by the relabelling $\sigma$ correspond to
+permutations which are also related by $\sigma$.  However, as we have
+seen, \emph{any} two lists are related by some relabelling, and thus
+(since $\varphi$ and $\psi$ constitute a bijection) any two
+permutations would have to be related by some relabelling as well, but
+this is false.
 
 This argument shows that there cannot exist a natural isomorphism
 between $\List$ and $\Perm$.  However, the claim is that they are
 nonetheless equipotent.  \todo{Intuitively obvious but instructive to
   do the proof.}
+
+\todo{Two proofs.  First is ``obvious'' one.  Puzzle for the
+  reader---why is it not natural?  Second proof, see
+  \citet{cartier1969problemes}, \citet{knuth1973sorting}, and
+  \citet[p. 22]{bll}.}
+
+Considering all of this from the viewpoint of HoTT yields additional
+insight.  A family of functions like $\varphi_K$ would typically
+correspond in HoTT to a function of type \[ \varphi : (K : \FinType)
+\to \List\ K \to \Perm\ K. \] However, to write such a function, as we
+have seen, we also need a linear ordering on the type $K$.  We could,
+of course, simply take a linear ordering as an extra argument, \[
+\varphi : (K : \FinType) \to \cons{LinOrd}\ K \to \List\ K \to \Perm\
+K, \] in which case it is clear 
+
+Alternatively, note that $K$ contains evidence of its finiteness in
+the form of an equivalence $K \equiv \Fin n$.  Forgetting for the
+moment that we are not allowed to use it, 
 
 \section{Generalized species}
 \label{sec:generalized-species}
