@@ -555,7 +555,7 @@ predicates.  For example, $F_{\leq n}$ is the species of $F$-shapes of
 size $n$ or less; similarly, $F_{\geq n}$ is the species of $F$-shapes
 of size $n$ or greater.
 
-\subsection{The category of species}
+\section{The category of species}
 \label{sec:category-of-species}
 
 Recall that $\fc \C \D$ denotes the \term{functor category} whose
@@ -610,9 +610,10 @@ aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
   five different monoidal structures!  The rest of this chapter is
   dedicated to exploring and generalizing this structure.
 
+\todo{Equivalence of categories.  Equivalence vs equipotence.}
+
 \section{Generalized species}
 \label{sec:constructive-species}
-
 
 In many ways, $\fc \B \Set$ as the definition of species is too
 specific and restrictive.  For example, one of the big motivations for
@@ -624,44 +625,17 @@ basic theory of species (\eg multisort species, weighted species,
 $\L$-species, vector species, \dots) which require moving beyond $\fc
 \B \Set$ in some way.
 
-The goal of the rest of this chapter is to examine a number of species
-operations in the context of general functor categories $\fc \Lab \Str$,
-in order to identify precisely what properties of $\Lab$ and $\Str$
-are necessary to define each operation. That is, starting ``from
-scratch'', we will build up a generic notion of species that supports
-the operations we are interested in. In the process, we get a much
-clearer picture of where the operations ``come from''.  In particular,
-$\B$ and \Set enjoy many special properties as categories (for
-example, \Set is cartesian closed, has all limits and colimits, and so
-on).  It is enlightening to see precisely which of these properties
-are required in which situations.
-
-Along the way, by way of examples, we will also explore various
-generalizations of species and see how they fit in this framework:
-each arises from considering particular categories in place of $\B$
-and $\Set$.  To keep these various functor categories straight, the
-word ``species'' will be used for $\fc \B \Set$, and ``generalized
-species'' (or, more specifically,
-``$\fc \Lab \Str$-species''\footnote{Not to be confused with the
-  generalized species of~\citet{Fiore08}, who define
-  ``$(A,B)$-species'' as functors from $\B A$ (a generalization of
-  $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
-  $B$.}) for some abstract $\fc \Lab \Str$.  Each of the following
-section begins by defining a particular species operation in
-$\fc \B \Set$, then generalizes it to arbitrary functor categories
-$\fc \Lab \Str$, and exhibits a number of examples in particular functor
-categories.
-
 \subsection{Species in type theory}
 \label{sec:species-in-type-theory}
 
 \todo{Mention encoding primitive species as HITs somewhere.}
+\todo{Edit this section given reorganization.}
 
 One generalization that will be of particular interest is a ``port''
 of species into HoTT. Recall that $\BT$ denotes the \hott{groupoid}
-with the object type \[ \FinTypeT \defeq (A : \Type) \times \isSet(A)
+with objects \[ \FinTypeT \defeq (A : \Type) \times \isSet(A)
 \times \isFinite(A), \] where \[ \isFinite(A) \defeq \ptrunc{(n : \N)
-  \times (A \equiv \Fin n)}, \] with morphisms given by paths.  Recall
+  \times (A \equiv \Fin n)}, \] and with morphisms given by paths.  Recall
 also that $\PT$ denotes the \hott{groupoid} whose objects are natural
 numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv
 \Fin n$, and that $\ST$ denotes the \hott{category} of $0$-types
@@ -669,13 +643,13 @@ numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv
 
 \begin{defn}
   A \term{constructive species} is an \hott{functor} $F : \BT \to
-  \ST$.  We use $\Spe = \fc \BT \ST$ to refer to the \hott{category} of
-  constructive species.  Note this is the same name as the category
+  \ST$.  We use $\Spe = \fc \BT \ST$ to refer to the \hott{category}
+  of constructive species.  Note this is the same name as the category
   $\fc \B \Set$ of set-theoretic species; while technically ambiguous
   this should not cause confusion since it should always be clear from
-  the context whether we are working in set theory or HoTT.  Likewise,
-  when working in the context of HoTT we will often simply say
-  ``species'' instead of ``constructive species''.
+  the context whether we are working in set theory or in HoTT.
+  Likewise, when working in the context of HoTT we will often simply
+  say ``species'' instead of ``constructive species''.
 \end{defn}
 
 Another one of the major goals of this chapter is to argue that this
@@ -690,11 +664,45 @@ counterpart to $\fc \B \Set$ is to consider the operations and
 constructions that are typically carried out on $\fc \B \Set$, and show
 that $\fc \BT \ST$ supports them as well.
 
-\begin{rem}
-  When it is clear that we are working in a context based on HoTT, we
-  may simply use the term ``species'' rather than ``constructive
-  species'' to refer to \hott{functors} $\BT \to \ST$.
-\end{rem}
+\subsection{Other generalizations of species}
+\label{sec:other-generalizations}
+
+\todo{Related work.  List generalizations with a bit more detail,
+  maybe even some brief definitions, and forward references.}
+
+\subsection{Roadmap}
+
+\todo{Need a better title for this section.}
+
+The goal of the rest of this chapter is to examine a number of species
+operations in the context of general functor categories $\fc \Lab \Str$,
+in order to identify precisely what properties of $\Lab$ and $\Str$
+are necessary to define each operation. That is, starting ``from
+scratch'', we will build up a generic notion of species that supports
+the operations we are interested in. In the process, we get a much
+clearer picture of where the operations ``come from''.  In particular,
+$\B$ and \Set enjoy many special properties as categories (for
+example, \Set is cartesian closed, has all limits and colimits, and so
+on).  It is enlightening to see precisely which of these properties
+are required in which situations.  \todo{Say something about
+  contribution.  ``This is the first systematic\dots''.  Also note re:
+  arithmetic product and weighted species.}
+
+Along the way, by way of examples, we will also explore various
+generalizations of species and see how they fit in this framework.
+Each arises from considering particular categories in place of $\B$
+and $\Set$.  To keep these functor categories straight, the
+word ``species'' will be used for $\fc \B \Set$, and ``generalized
+species'' (or, more specifically,
+``$\fc \Lab \Str$-species''\footnote{Not to be confused with the
+  generalized species of~\citet{Fiore08}, who define
+  ``$(A,B)$-species'' as functors from $\B A$ (a generalization of
+  $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
+  $B$.}) for some abstract $\fc \Lab \Str$.  Each of the following
+section begins by defining a particular species operation in
+$\fc \B \Set$, then generalizes it to arbitrary functor categories
+$\fc \Lab \Str$, and exhibits examples in other functor
+categories.
 
 \section{Lifted monoids: sum and Cartesian product}
 
