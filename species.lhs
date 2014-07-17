@@ -692,21 +692,17 @@ $\Perm$-forms, as shown, for example, in \todo{figure showing two
 relabelling that relates the two forms shown in the figure.
 
 Now suppose there were some \emph{natural} isomorphism witnessed by
-$\varphi : \nt \List \Perm$ and $\psi : \nt \Perm \List$.  Let $s_1,
-s_2 : S\ K$ be two $K$-permutations with different forms.  $\psi_K\
-s_1$ and $\psi_K\ s_2$ are thus two $K$-lists, which we know must be
-related by some relabelling, say $\sigma$.  But now consider the
-naturality square for $\varphi$: \[ \xymatrix{ L\ K \ar[r]^{\varphi_K}
-  \ar[d]_{L\ \sigma} & S\ K \ar[d]^{S\ \sigma} \\ L\ K
-  \ar[r]_{\varphi_K} & S\ K } \] Starting with $\psi_K\ s_1$ in the
-upper-left and $L\ \sigma\ (\psi_K\ s_1) = \psi_K\ s_2$ in the lower
-left, the square is telling us that $s_1$ in the upper right and $s_2$
-in the lower right must be related by the relabelling $S\ \sigma$; but
-this is absurd, since we chose $s_1$ and $s_2$ to have different
-forms. \todo{Can probably simplify this argument.  Just explain what
-  the naturality square says in terms of relabelling equivalence,
-  forms, and so on, without choosing specific $s_1$, $s_2$, and so
-  on.}
+$\varphi : \nt \List \Perm$ and $\psi : \nt \Perm \List$.  In
+particular, for any $\sigma : K \bij K$ we have \[ \xymatrix{ \List\ K
+  \ar[r]^{\varphi_K} \ar[d]_{\List\ \sigma} & \Perm\ K \ar[d]^{\Perm\ \sigma} \\
+  \List\ K \ar[r]_{\varphi_K} & \Perm\ K } \] and similarly for
+$\psi_K$ in the opposite direction.  This says that any two
+$\List$-shapes related by the relabelling $\sigma$ correspond to
+$\Perm$-shapes which are also related by $\sigma$.  However, as we
+have seen, \emph{any} two elements of $\List\ K$ are related by some
+relabelling, and thus (since $\varphi$ and $\psi$ constitute a
+bijection) any two elements of $\Perm$ would have to be related by
+some relabelling as well, but this is false.
 
 This argument shows that there cannot exist a natural isomorphism
 between $\List$ and $\Perm$.  However, the claim is that they are
