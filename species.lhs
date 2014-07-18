@@ -9,14 +9,12 @@
 \todo{Need a story for building with both color or black/white
   figures}
 
+\todo{rewrite this.}
 The theory of combinatorial species, first introduced by
-\citet{joyal}, is a unified theory of \term{combinatorial structures}
-or \term{shapes}.  It was originally intended as a unified framework
-for algebraically describing combinatorial structures of interest, and
-in particular one which gave new justification and a unifying context
-for an existing body of techniques involving \term{generating
-  functions}; the connection to generating functions will be explored
-in more detail in \pref{chap:labelled}.
+\citet{joyal}, is a unified, algebraic theory of \term{combinatorial
+  structures} or \term{shapes}.  The algebraic nature of species is of
+particular interest in the context of data structures, and will be
+explored in depth in this chapter.
 
 \todo{Add an overview of the whole chapter (incorporate a list of
   contributions).}
@@ -279,8 +277,8 @@ cycleStructures
 \end{ex}
 
 \begin{ex}
-  The species \Perm of \term{permutations} is illustrated in
-  \pref{fig:permutations}.
+  The species \Perm of \term{permutations}---\ie bijective
+  endofunctions---is illustrated in \pref{fig:permutations}.
   \begin{figure}
     \centering
     \begin{diagram}[width=400]
@@ -602,7 +600,7 @@ aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
 
 It turns out that functor categories have a lot of interesting
 structure.  For example, as we will see, $\fc \B \Set$ has (at least)
-five different monoidal structures!  Most of the remainder of this
+six different monoidal structures!  Much of the remainder of this
 chapter (\pref{sec:generalized-species} onward) is dedicated to
 exploring and generalizing this structure.
 
@@ -612,14 +610,17 @@ exploring and generalizing this structure.
 \todo{Mention encoding primitive species as HITs somewhere, probably
   interspersed throughout when those primitive species come up.}
 
-Recall that $\BT$ denotes the \hott{groupoid} with objects \[
-\FinTypeT \defeq (A : \Type) \times \isSet(A) \times \isFinite(A), \]
-where \[ \isFinite(A) \defeq \ptrunc{(n : \N) \times (A \equiv \Fin
-  n)}, \] and with morphisms given by paths.  Recall also that $\PT$
-denotes the \hott{groupoid} whose objects are natural numbers and
-whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv \Fin
-n$, and that $\ST$ denotes the \hott{category} of $0$-types (sets) and
-functions.
+We now turn to ``porting'' the category of species from set theory
+into HoTT.  Recall that $\BT$ denotes the \hott{groupoid} with
+objects \[ \FinSetT \defeq (A : \Type) \times \isSet(A) \times
+\isFinite(A), \] where \[ \isFinite(A) \defeq \ptrunc{(n : \N) \times
+  (A \equiv \Fin n)}, \] and with morphisms given by
+paths. \later{mention something about $\PT$ here?}
+% Recall
+% also that $\PT$ denotes the \hott{groupoid} whose objects are natural
+% numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m
+% \equiv \Fin n$, and that $\ST$ denotes the \hott{category} of
+% $0$-types (sets) and functions.
 
 \begin{defn}
   A \term{constructive species} is an \hott{functor} $F : \BT \to
@@ -632,56 +633,54 @@ functions.
   say ``species'' instead of ``constructive species''.
 \end{defn}
 
-It is not necessarily clear at this point that this is an appropriate
-encoding of species within homotopy type theory.  It cannot be
-directly justified by showing that $\fc \B \Set$ and $\fc \BT \ST$ are
-categorically equivalent; this does not even make sense since they
-live in entirely different foundational frameworks.  Rather, a
-justification must be extensional, in the sense of showing that the
-two definitions have similar properties and support similar
+It is not necessarily clear at this point whether this is an
+appropriate encoding of species within homotopy type theory.  It
+cannot be directly justified by showing that $\fc \B \Set$ and $\fc
+\BT \ST$ are categorically equivalent; this does not even make sense
+since they live in entirely different foundational frameworks.
+Rather, a justification must be extensional, in the sense of showing
+that the two definitions have similar properties and support similar
 operations.  In a sense, much of the rest of this chapter is precisely
 such an extensional justification.
 
 \section{Isomorphism and equipotence}
 \label{sec:iso-equipotence}
 
-\todo{introduction of some sort}
+Just as with HoTT itself, various issues of \emph{sameness} are also
+at the heart of the theory of species.  In this section we explore
+isomorphism of species and of species shapes, as well as a coarser
+notion of equivalence on species known as \term{equipotence}.
 
 \subsection{Species isomorphism}
 \label{sec:species-isomorphism}
 
-An isomorphism in the category of species is a pair of inverse natural
-transformations.  Species isomorphism preserves all the interesting
-\emph{combinatorial} properties of species; hence in the combinatorics
-literature everything is always done up to isomorphism. However, this
-is usually done in a way that glosses over the \emph{computational}
-properties of species.  Formulating species within HoTT gives us the
-best of both worlds: naturally isomorphic functors between
+An isomorphism of species is just an isomorphism in the category of
+species, that is, a pair of inverse natural transformations.  Species
+isomorphism preserves all the interesting \emph{combinatorial}
+properties of species; hence in the combinatorics literature
+everything is always done up to isomorphism. However, this is usually
+done in a way that glosses over the \emph{computational} properties of
+the isomorphisms.  Formulating species within HoTT gives us the best
+of both worlds: naturally isomorphic functors between
 \hott{categories} are equal, and hence isomorphic species are
 literally identified; however, equalities (\ie paths) in HoTT may
-still have computational content. \later{HoTT forces us to be disciplined
-about applying conversions in the right places, which may seem less
-convenient than the happy-go-lucky world of traditional mathematics,
-where isomorphisms are simply glossed over, but types\dots should I
-include a sentence like this at all?}
+still have computational content. \later{HoTT forces us to be
+  disciplined about applying conversions in the right places, which
+  may seem less convenient than the happy-go-lucky world of
+  traditional mathematics, where isomorphisms are simply glossed over,
+  but types\dots should I include a sentence like this at all?}
 
-\subsection{Unlabelled species}
+\subsection{Shape isomorphism and unlabelled species}
 \label{sec:unlabelled}
 
-\todo{Do unlabelled species also form a category?  Well, Joyal (p.3)
-  has groupoid of $F$-structures where morphisms are equivalence up to
-  relabelling.  Forms them correspond to connected components of this
-  groupoid.}
-
-\todo{Species \emph{shapes} also have a useful notion of isomorphism.
-  Comes up in various guises throughout.}
-
-Consider the set of permutations on the labels $\{0,1,2\}$, shown in
-\pref{fig:permutations-three}. Notice that some of these permutations
-``have the same form''.  For example, the only difference between the
-two permutations shown in \pref{fig:same-form-perms} is their
-differing labels.  On the other hand, the two permutations shown in
-\pref{fig:different-form-perms} are fundamentally different, in the
+In addition to isomorphism of entire species, there is also a natural
+notion of isomorphism for individual species \emph{shapes}.  For
+example, consider the set of permutations on the labels $\{0,1,2\}$,
+shown in \pref{fig:permutations-three}. Notice that some of these
+permutations ``have the same form''.  For example, the only difference
+between the two permutations shown in \pref{fig:same-form-perms} is
+their differing labels.  On the other hand, the two permutations shown
+in \pref{fig:different-form-perms} are fundamentally different, in the
 sense that there is no way to merely \emph{relabel} one to get the
 other.
 
@@ -759,6 +758,7 @@ We can formalize these ideas as follows.
   \relabel_\sigma f_2$.
 \end{defn}
 
+\todo{Define groupoid el(F) instead.}
 \begin{lem}
   For a given species $F$, $\relabel$ is an equivalence relation on
   the class of all $F$-shapes.
@@ -769,6 +769,8 @@ We can formalize these ideas as follows.
   identity bijection; transitivity follows from composition of
   bijections; symmetry follows from invertibility of bijections.
 \end{proof}
+
+
 
 \begin{defn}
   An $F$-\term{form} is an equivalence class under $\relabel$.
@@ -796,7 +798,7 @@ are all interconvertible by relabelling.  \todo{Rather large.  Can
 \subsection{Equipotence}
 \label{sec:equipotence}
 
-Somewhat surprisingly, there is another useful equivalence relation on
+It turns out that there is another useful equivalence relation on
 species which is \emph{weaker} (\ie coarser) than
 isomorphism/equality, known as \term{equipotence}.
 
@@ -864,24 +866,12 @@ dia = hcat' (with & sep .~ 3) [listStructures, permStructures]
 \end{figure}
 
 However, $\List$ and $\Perm$ are not isomorphic.  The intuitive way to
-see this is to note that although there is essentially only one list
-``shape'' (ignoring labels) of any given size, for $n \geq 2$ there
-are multiple permutation shapes (in particular, there are as many
-permutation shapes as there are integer partitions of $n$).
-\todo{Figure nnn shows XYZ.}  \todo{Picture of single unlabelled list
-  shape of size 4? and unlabelled permutation shapes of same size}
-
-\todo{Redo the way this is explained if I end up previously writing
-  about unlabelled species.}  More formally, what we really mean when
-we say there is ``only one list shape'' is that any two labelled lists
-are related by some relabelling---that is, given $l_1, l_2 \in \List\
-K$ we can always find some $\sigma : K \bij K$ such that $L\ \sigma\
-l_1 = l_2$.  Put another way, if we consider the equivalence relation
-on labelled lists induced by relabelling, there is only one
-equivalence class.  On the other hand, there are multiple
-$\Perm$-forms, as shown, for example, in \pref{fig:perm-forms}.  There
-are clearly no relabellings that relate any of the forms shown in the
-figure.
+see this is to note that although there is only a single list form of
+any given size, for $n \geq 2$ there are multiple permutation forms.
+Every permutation, \ie bijective endofunction, can be decomposed into
+a set of cycles, and a relabelling can only map between permutations
+with the same number of cycles of the same sizes.  There is thus one
+$\Perm$-form corresponding to each integer partitions of $n$.
 
 \begin{figure}
   \centering
@@ -913,9 +903,9 @@ dia = permForms
   \label{fig:perm-forms}
 \end{figure}
 
-Now suppose there were some \emph{natural} isomorphism witnessed by
-$\varphi : \nt \List \Perm$ and $\psi : \nt \Perm \List$.  In
-particular, for any $\sigma : K \bij K$ we would then have \[
+More formally, suppose there were some \emph{natural} isomorphism
+witnessed by $\varphi : \nt \List \Perm$ and $\psi : \nt \Perm \List$.
+In particular, for any $\sigma : K \bij K$ we would then have \[
 \xymatrix{ \List\ K
   \ar[r]^{\varphi_K} \ar[d]_{\List\ \sigma} & \Perm\ K \ar[d]^{\Perm\ \sigma} \\
   \List\ K \ar[r]_{\varphi_K} & \Perm\ K } \] and similarly for
@@ -929,22 +919,29 @@ this is false.
 
 This argument shows that there cannot exist a natural isomorphism
 between $\List$ and $\Perm$.  However, the claim is that they are
-nonetheless equipotent.  \todo{Intuitively obvious but instructive to
-  do the proof.}
+nonetheless equipotent.  Again, this fact is very well known, but it
+is still instructive to work out the details of a formal proof.
 
-\todo{Two proofs.  First is ``obvious'' one.  Puzzle for the
-  reader---why is it not natural?  Second proof, see
-  \citet{cartier1969problemes}, \citet{knuth1973sorting}, and
-  \citet[p. 22]{bll}.}
+The first and most ``obvious'' proof is to send the permutation
+$\sigma : \perm{(\Fin n)}$ to the list whose $i$th element is
+$\sigma(i)$, and vice versa.  Note, however, that this only gives us a
+specific bijection $\List\ (\Fin n) \bij \Perm\ (\Fin n)$, rather
+than a family of bijections $\List\ K \bij \Perm\ K$.
 
-\todo{drat, at this point I haven't introduced constructive species
-  yet! Need to reorganize a bit.}  Considering all of this from the
-viewpoint of HoTT yields additional insight.  A family of functions
-like $\varphi_K$ would typically correspond in HoTT to a function of
-type \[ \varphi : (K : \FinSetT) \to \List\ K \to \Perm\ K. \]
-However, note that any function of this type is automatically natural
-in $K$!  Constructively, it is somewhat strange to have a type-indexed
-family of functions which is not natural in the index.
+The second proof is much more elegant from a combinatorial point of
+view, and also makes clearer \todo{what is going on, e.g. how far the
+  previous proof can be generalized.}
+
+\todo{Second proof, see \citet{cartier1969problemes},
+  \citet{knuth1973sorting}, and \citet[p. 22]{bll}.}
+
+Considering all of this from the viewpoint of HoTT yields additional
+insight.  A family of functions like $\varphi_K$ would typically
+correspond in HoTT to a function of type \[ \varphi : (K : \FinSetT)
+\to \List\ K \to \Perm\ K. \] However, note that any function of this
+type is automatically natural in $K$!  Constructively, it is somewhat
+strange to have a type-indexed family of functions which is not
+natural in the index.
 
 It is certainly possible to implement a function with the above type
 (for example, one which sends each list to the cyclic permutation with

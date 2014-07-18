@@ -8,6 +8,14 @@
 \chapter{Labelled structures}
 \label{chap:labelled}
 
+The original motivation for the theory of species was not to give a
+unifying agebraic framework for studying combinatorial structures
+\latin{per se}.  Rather, the specific motivation was to provide new
+justification and a unifying context for an existing body of
+techniques involving \term{generating functions}.
+
+\todo{Continue introduction.}
+
 Now that we have a foundation for describing labelled shapes, the next
 step is to extend them into full-blown \emph{data structures} by
 adjoining mappings from labels to data.  For example,
