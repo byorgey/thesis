@@ -260,9 +260,6 @@ dia =
   # pad 1.1
   # lwO 0.7
 
-cycles [] = []
-cycles (x:xs) = map (x:) (permutations xs)
-
 cycleStructures
   = centerXY
   . hcat' (with & sep .~ 0.7)
@@ -286,7 +283,6 @@ cycleStructures
     \begin{diagram}[width=400]
 import           Data.List
 import           Data.List.Split
-import qualified Math.Combinatorics.Multiset    as MS
 import           SpeciesDiagrams
 
 dia =
@@ -298,17 +294,6 @@ dia =
   # centerXY
   # pad 1.1
   # lwO 0.7
-
-parts :: [a] -> [[[a]]]
-parts = map (map MS.toList . MS.toList) . MS.partitions . MS.fromDistinctList
-
-cycles [] = []
-cycles (x:xs) = map (x:) (permutations xs)
-
-perms :: [a] -> [[[a]]]
-perms = concatMap (mapM cycles) . parts
-
-drawPerm = hcat' (with & sep .~ 0.2) . map ((\l -> cyc' l 0.8) . map labT)
 
 permStructures
   = centerXY
@@ -614,10 +599,125 @@ five different monoidal structures!  Most of the remainder of this
 chapter (\pref{sec:generalized-species} onward) is dedicated to
 exploring and generalizing this structure.
 
-\todo{Should talk about unlabelled species somewhere here?  Would be
-  really useful for the following section\dots Relabelling yields an
-  equivalence relation.  Equivalence classes are called ``types'';
-  that's confusing here so we'll call them ``forms''.}
+\subsection{Unlabelled species}
+\label{sec:unlabelled}
+
+Consider the set of permutations on the labels $\{0,1,2\}$, shown in
+\pref{fig:permutations-three}. Notice that some of these permutations
+``have the same form''.  For example, the only difference between the
+two permutations shown in \pref{fig:same-form-perms} is their
+differing labels.  On the other hand, the two permutations shown in
+\pref{fig:different-form-perms} are fundamentally different, in the
+sense that there is no way to merely \emph{relabel} one to get the
+other.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import SpeciesDiagrams
+import Data.List.Split
+import Data.List (permutations)
+
+permStructures
+  = centerXY
+  . hcat' (with & sep .~ 1)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 2
+  . map drawPerm
+  . perms
+  $ [0..2]  -- $
+
+dia = permStructures
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{Permutations of size three}
+  \label{fig:permutations-three}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import SpeciesDiagrams
+
+permStructures
+  = centerXY
+  . hcat' (with & sep .~ 1)
+  . map drawPerm
+  $ [[[1],[0,2]], [[2],[0,1]]]  -- $
+
+dia = permStructures
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{Two permutations with the same form}
+  \label{fig:same-form-perms}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import SpeciesDiagrams
+
+permStructures
+  = centerXY
+  . hcat' (with & sep .~ 1)
+  . map drawPerm
+  $ [[[1],[0,2]], [[0,1,2]]]  -- $
+
+dia = permStructures
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{Two permutations with different forms}
+  \label{fig:different-form-perms}
+\end{figure}
+
+We can formalize these ideas as follows.
+
+\begin{defn}
+  Given a species $F$ and $F$-shapes $f_1 : F\ L_1$ and $f_2 : F\
+  L_2$, we say $f_1$ and $f_2$ are \term{equivalent up to
+    relabelling}, or \term{have the same form}, and write $f_1
+  \relabel f_2$, if there is some bijection $\sigma : L_1 \bij L_2$
+  such that $F\ \sigma\ f_1 = f_2$. If we wish to emphasize the
+  particular bijection relating $f_1$ and $f_2$ we may write $f_1
+  \relabel_\sigma f_2$.
+\end{defn}
+
+\begin{lem}
+  For a given species $F$, $\relabel$ is an equivalence relation on
+  the class of all $F$-shapes.
+\end{lem}
+
+\begin{proof}
+  Reflexivity follows since any shape is related to itself by the
+  identity bijection; transitivity follows from composition of
+  bijections; symmetry follows from invertibility of bijections.
+\end{proof}
+
+\begin{defn}
+  An $F$-\term{form} is an equivalence class under $\relabel$.
+\end{defn}
+
+That is, an $F$-form is a maximal class of labelled $F$-shapes which
+are all interconvertible by relabelling.  \todo{Rather large.  Can
+  instead consider just a single set of labels.}
+
+\begin{rem}
+  What are here called \term{forms} are more often called \term{types}
+  in the species literature; but using that term would lead to
+  unnecessary confusion in the present context.
+\end{rem}
+
+\begin{rem}
+  Forms are often depicted using indistinguishable dots in place of
+  labels, as in \pref{fig:perm-forms}.  However, such diagrams can break
+  down in more complex situations, so it is important to also keep in
+  mind the underlying definition in terms of equivalence classes.
+\end{rem}
+
+\todo{Should give some examples here.}
 
 \section{Isomorphism and equipotence}
 \label{sec:iso-equipotence}
@@ -634,8 +734,11 @@ properties of species.  Formulating species within HoTT gives us the
 best of both worlds: naturally isomorphic functors between
 \hott{categories} are equal, and hence isomorphic species are
 literally identified; however, equalities (\ie paths) in HoTT may
-still have computational content, and types force us to apply
-conversions in the right places.
+still have computational content. \later{HoTT forces us to be disciplined
+about applying conversions in the right places, which may seem less
+convenient than the happy-go-lucky world of traditional mathematics,
+where isomorphisms are simply glossed over, but types\dots should I
+include a sentence like this at all?}
 
 Somewhat surprisingly, there is another useful equivalence relation on
 species which is \emph{weaker} (\ie coarser) than
@@ -644,35 +747,65 @@ isomorphism/equality, known as \term{equipotence}.
 \begin{defn}
   An \term{equipotence} bewteen species $F$ and $G$, denoted $F
   \equipot G$,\footnote{In the species literature, equipotence is
-    usually denoted $F \jeq G$, but that symbol is already taken for
-    judgmental equality.} is defined as an ``unnatural'' isomorphism
-  between $F$ and $G$---that is, two families of functions $\varphi_L
-  : F\ L \to G\ L$ and $\psi_L : G\ L \to F\ L$ such that $\varphi_L
-  \comp \psi_L = \psi_L \comp \varphi_L = \id$ for every finite set
-  $L$.  Note in particular there is \emph{no} requirement of
-  naturality for $\varphi$ or $\psi$.
+    usually denoted $F \jeq G$, but we are already using that symbol
+    to denote judgmental equality.} is defined as an ``unnatural''
+  isomorphism between $F$ and $G$---that is, two families of functions
+  $\varphi_L : F\ L \to G\ L$ and $\psi_L : G\ L \to F\ L$ such that
+  $\varphi_L \comp \psi_L = \psi_L \comp \varphi_L = \id$ for every
+  finite set $L$.  Note in particular there is \emph{no} requirement
+  of naturality for $\varphi$ or $\psi$.
 \end{defn}
 
 We can see that an equipotence preserves the \emph{number} of shapes
-of each size, since $\varphi$ and $\psi$ constitute a bijection,
-for each label set $L$, between the set of $F$-shapes $F\ L$ and the
-set of $G$-shapes $G\ L$.  However, an equipotence does not
-necessarily preserve \todo{what?}.
-
-Isomorphic species are of course equipotent, where the equipotence
-also happens to be natural.  It may be initially surprising, however,
-that the converse is false: there exist equipotent species which are
-not isomorphic. Put another way, having the same number of structures
-of each size is not enough to ensure isomorphism.
+of each size, since $\varphi$ and $\psi$ constitute a bijection, for
+each label set $L$, between the set of $F$-shapes $F\ L$ and the set
+of $G$-shapes $G\ L$.  Isomorphic species are of course equipotent,
+where the equipotence also happens to be natural.  It may be initially
+surprising, however, that the converse is false: there exist
+equipotent species which are not isomorphic. Put another way, having
+the same number of structures of each size is not enough to ensure
+isomorphism.
 
 One good example is the species $\List$ of lists and the species
 $\Perm$ of permutations.  As is well-known, there are the same number
 of linear orderings of $n$ labels as there are permutations of $n$
 labels (namely, $n!$).  In fact, this is so well-known that
 mathematicians routinely conflate the two, referring to an ordered
-list as a ``permutation''.
+list as a ``permutation''. \pref{fig:lists-and-perms} shows the six
+lists and six permutations on three labels.
 
-\todo{Picture of six lists and six permutations on three elements}
+\begin{figure}
+  \centering
+  \begin{diagram}[width=400]
+import SpeciesDiagrams
+import Data.List.Split
+import Data.List (permutations)
+
+listStructures
+  = centerXY
+  . hcat' (with & sep .~ 0.7)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 2
+  . map (drawList' labT)
+  . permutations
+  $ [0..2]  -- $
+
+permStructures
+  = centerXY
+  . hcat' (with & sep .~ 1)
+  . map (vcat' (with & sep .~ 0.5))
+  . chunksOf 2
+  . map drawPerm
+  . perms
+  $ [0..2]  -- $
+
+dia = hcat' (with & sep .~ 3) [listStructures, permStructures]
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{Lists and permutations on three labels}
+  \label{fig:lists-and-perms}
+\end{figure}
 
 However, $\List$ and $\Perm$ are not isomorphic.  The intuitive way to
 see this is to note that although there is essentially only one list
@@ -690,13 +823,44 @@ K$ we can always find some $\sigma : K \bij K$ such that $L\ \sigma\
 l_1 = l_2$.  Put another way, if we consider the equivalence relation
 on labelled lists induced by relabelling, there is only one
 equivalence class.  On the other hand, there are multiple
-$\Perm$-forms, as shown, for example, in \todo{figure showing two
-  different $\Perm$-forms on $n = 2$.}  There is clearly no
-relabelling that relates the two forms shown in the figure.
+$\Perm$-forms, as shown, for example, in \pref{fig:perm-forms}.  There
+are clearly no relabellings that relate any of the forms shown in the
+figure.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import qualified Math.Combinatorics.Multiset    as MS
+import           SpeciesDiagrams
+
+permForms
+  = centerXY
+  . hcat' (with & sep .~ 2)
+  . map drawPermForm
+  . parts'
+  $ replicate 3 ()  -- $
+
+parts' :: Ord a => [a] -> [[[a]]]
+parts' = map (map MS.toList . MS.toList) . MS.partitions . MS.fromList
+
+drawPermForm
+  = hcat' (with & sep .~ 0.2)
+  . map ((\l -> cyc' l 0.8) . map (const dot))
+  where
+    dot = circle labR # fc black
+
+dia = permForms
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{Three distinct $\Perm$-forms of size three}
+  \label{fig:perm-forms}
+\end{figure}
 
 Now suppose there were some \emph{natural} isomorphism witnessed by
 $\varphi : \nt \List \Perm$ and $\psi : \nt \Perm \List$.  In
-particular, for any $\sigma : K \bij K$ we have \[ \xymatrix{ \List\ K
+particular, for any $\sigma : K \bij K$ we would then have \[
+\xymatrix{ \List\ K
   \ar[r]^{\varphi_K} \ar[d]_{\List\ \sigma} & \Perm\ K \ar[d]^{\Perm\ \sigma} \\
   \List\ K \ar[r]_{\varphi_K} & \Perm\ K } \] and similarly for
 $\psi_K$ in the opposite direction.  This says that any two
@@ -738,14 +902,14 @@ K, \] in which case it is clear \todo{it is not natural?}
 Alternatively, recall that $K$ contains evidence of its finiteness in
 the form of an equivalence $K \equiv \Fin n$.  This equivalence
 induces a linear ordering on $K$, corresponding to the natural linear
-ordering $0 < 1 < 2 < \dots$ on $\Fin n$.  In other words, each $K$
-already comes equipped with a linear ordering!  However, recall that
-the finiteness evidence is sealed inside a propositional truncation,
-so we cannot use it in implementing a function of type $(K : \FinSetT)
-\to \List\ L \to \Perm\ K$.  If we could, the resulting functions
-would indeed \emph{not} be natural, and it is instructive to see why.
-A path $K = K$ \todo{corresponds to a permutation on $K$, but
-  \emph{does not have to update the finiteness evidence in
+ordering $0 < 1 < 2 < \dots$ on $\Fin n$.  In other words, each finite
+set $K$ already comes equipped with a linear ordering!  However,
+recall that the finiteness evidence is sealed inside a propositional
+truncation, so we cannot use it in implementing a function of type $(K
+: \FinSetT) \to \List\ L \to \Perm\ K$.  If we could, the resulting
+function would indeed \emph{not} be natural, and it is instructive to
+see why.  A path $K = K$ \todo{corresponds to a permutation on $K$,
+  but \emph{does not have to update the finiteness evidence in
     conjunction} with permutation.  Note connection to BLL p. 22:
   standard transform is compatible with order-preserving bijections.
   That corresponds to taking $\cons{Set}_{Fin}$ which does not use
@@ -2383,9 +2547,6 @@ dia =
   # centerXY
   # pad 1.1
   # lwO 0.7
-
-parts :: [a] -> [[[a]]]
-parts = map (map MS.toList . MS.toList) . MS.partitions . MS.fromDistinctList
 
 drawPart = alignL . hcat' (with & sep .~ 0.2) . map (unord . map labT)
 

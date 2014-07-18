@@ -208,7 +208,7 @@ lanAdjoint h = homL (uncurry (yoneda' h))
   (like Joyal)?}
 
 We are now ready to consider Joyal's definition of \term{analytic
-  functors}~\citep{Joyal86}.
+  functors}~\citep{joyal86}.
 \begin{defn}[Joyal]
   Given a species $F : \fc \B \Set$, the \term{analytic functor}
   $\analytic F$ corresponding to $F$ is given by $\lan \iota F$, the
@@ -322,7 +322,7 @@ to be a categorification of such generating functions. \todo{Explain
 \subsection{Analytic functors and finiteness}
 \label{sec:analytic-finite}
 
-\citet{Joyal86} characterized analytic functors as those which
+\citet{joyal86} characterized analytic functors as those which
 preserve \term{filtered colimits}, \term{cofiltered limits}, and
 \term{weak pullbacks}.  It is instructive to use this characterization
 as a lens to consider some examples of functors which are \emph{not}

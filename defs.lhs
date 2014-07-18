@@ -439,6 +439,7 @@
 \newcommand{\Str}{\mathfrak{S}}
 
 \newcommand{\equipot}{\mathrel{\stackrel{\#}{=}}}
+\newcommand{\relabel}{\sim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analytic functors

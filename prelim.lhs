@@ -56,7 +56,7 @@ scientists and philosophers this should come as no surprise; equality
 turns out to be an incredibly subtle concept.  Each of these symbols
 and their corresponding concepts will later be discussed in more
 depth; however, as an aid to the reader, we give a brief enumeration
-of them here, which can referred back to in cases of confusion or
+of them here, which can referred back to in case of confusion or
 forgetfulness.
 
 \begin{itemize}
@@ -99,8 +99,10 @@ forgetfulness.
   sets, isomorphisms are those bijections which preserve the
   distinguished element, and so on.  Generally speaking, isomorphisms
   can be thought of as ``structure-preserving correspondences''.
-\item Finally, $F \equipot G$ denotes the \term{equipotence} of two species,
+\item $F \equipot G$ denotes the \term{equipotence} of two species,
   discussed in \pref{sec:iso-equipotence}.
+\item Finally, $f_1 \relabel f_2$ denotes equivalence up to
+  relabelling of species shapes, discussed in \pref{sec:unlabelled}.
 \end{itemize}
 
 These notations are summarized in \pref{tab:sameness}.
@@ -116,7 +118,8 @@ These notations are summarized in \pref{tab:sameness}.
     $\equiv$ & equivalence \\
     $\lequiv$ & logical equivalence \\
     $\iso$ & isomorphism \\
-    $\equipot$ & species equipotence
+    $\equipot$ & species equipotence \\
+    $\relabel$ & relabelling equivalence
   \end{tabular}
   \caption{``Sameness'' relations}
   \label{tab:sameness}
@@ -1188,7 +1191,7 @@ track :: Located (Trail R2)
 track = ((vrule 2 # reverseTrail <> arc (0 @@@@ turn) (1/2 @@@@ turn) # reverseTrail <> vrule 2) `at` origin)
       # scaleX 0.8
 
-drawPerm ht off = mconcat . zipWith drawStrand [0..]
+drawPermRibbon ht off = mconcat . zipWith drawStrand [0..]
   where
     xPos :: Integer -> Double
     xPos = (off*) . fromIntegral
@@ -1211,7 +1214,7 @@ dot = circle 0.5
 
 flower 0 = dot # dashingG [0.1,0.1] 0
 flower n = permutations [0 .. n-1]
-  # map (drawPerm 5 0.3)
+  # map (drawPermRibbon 5 0.3)
   # map centerX
   # map (deform' 0.001 (along 5 track))
   # map centerXY

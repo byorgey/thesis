@@ -8,9 +8,10 @@
 
 module SpeciesDiagrams where
 
-import           Control.Arrow                  (first, second, (&&&))
+import           Control.Arrow                  (first, second)
+import           Control.Lens                   (_head, _last)
 import           Data.Colour.Palette.BrewerSet
-import           Data.List                      (intersperse)
+import           Data.List                      (intersperse, permutations)
 import           Data.List.Split
 import qualified Data.Map                       as M
 import           Data.Maybe                     (fromJust, fromMaybe)
@@ -20,8 +21,7 @@ import           Diagrams.Core.Points
 import           Diagrams.Prelude
 import           Diagrams.TwoD.Layout.Tree
 import           Graphics.SVGFonts.ReadFont
-
-import           Control.Lens                   (_head, _last)
+import qualified Math.Combinatorics.Multiset    as MS
 
 colors :: [Colour Double]
 colors = brewerSet Set1 9
@@ -429,3 +429,17 @@ pb1 = fromRel
 
 pb2 :: PBij Int Int
 pb2 = fromRel [ (100, 3), (101, 2) ]
+
+------------------------------------------------------------------------
+
+parts :: [a] -> [[[a]]]
+parts = map (map MS.toList . MS.toList) . MS.partitions . MS.fromDistinctList
+
+cycles [] = []
+cycles (x:xs) = map (x:) (permutations xs)
+
+perms :: [a] -> [[[a]]]
+perms = concatMap (mapM cycles) . parts
+
+drawPerm = hcat' (with & sep .~ 0.2) . map ((\l -> cyc' l 0.8) . map labT)
+
