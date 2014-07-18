@@ -1493,6 +1493,9 @@ the evidence of their finiteness, so that a path between two finite
 types requires them to be not just equivalent as types, but also
 ``finite in the same way''.
 
+\todo{Note this actually gives us $\L$, the category of linear orders
+  and order-preserving bijections!}
+
 The situation can be pictured as shown in \pref{fig:fin-equiv}. The
 elements of types $A_1$ and $A_2$ are shown on the sides; the evidence
 of their finiteness is represented by bijections between their

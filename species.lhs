@@ -622,6 +622,9 @@ exploring and generalizing this structure.
 \section{Isomorphism and equipotence}
 \label{sec:iso-equipotence}
 
+\todo{Move this section to after generalized species section?  It
+  involves HoTT so I need to talk about HoTT-based species first.}
+
 An isomorphism in the category of species is a pair of inverse natural
 transformations.  Species isomorphism preserves all the interesting
 \emph{combinatorial} properties of species; hence in the combinatorics
@@ -654,7 +657,7 @@ We can see that an equipotence preserves the \emph{number} of shapes
 of each size, since $\varphi$ and $\psi$ constitute a bijection,
 for each label set $L$, between the set of $F$-shapes $F\ L$ and the
 set of $G$-shapes $G\ L$.  However, an equipotence does not
-necessarily preserve \todo{what}?.
+necessarily preserve \todo{what?}.
 
 Isomorphic species are of course equipotent, where the equipotence
 also happens to be natural.  It may be initially surprising, however,
@@ -662,10 +665,10 @@ that the converse is false: there exist equipotent species which are
 not isomorphic. Put another way, having the same number of structures
 of each size is not enough to ensure isomorphism.
 
-One well-known example is the species $\List$ of lists and the species
-$\Perm$ of permutations.  It is well-known that there are the same
-number of linear orderings of $n$ labels as there are permutations of
-$n$ labels (namely, $n!$).  In fact, it is so well-known that
+One good example is the species $\List$ of lists and the species
+$\Perm$ of permutations.  As is well-known, there are the same number
+of linear orderings of $n$ labels as there are permutations of $n$
+labels (namely, $n!$).  In fact, this is so well-known that
 mathematicians routinely conflate the two, referring to an ordered
 list as a ``permutation''.
 
@@ -714,18 +717,61 @@ nonetheless equipotent.  \todo{Intuitively obvious but instructive to
   \citet{cartier1969problemes}, \citet{knuth1973sorting}, and
   \citet[p. 22]{bll}.}
 
-Considering all of this from the viewpoint of HoTT yields additional
-insight.  A family of functions like $\varphi_K$ would typically
-correspond in HoTT to a function of type \[ \varphi : (K : \FinType)
-\to \List\ K \to \Perm\ K. \] However, to write such a function, as we
-have seen, we also need a linear ordering on the type $K$.  We could,
-of course, simply take a linear ordering as an extra argument, \[
-\varphi : (K : \FinType) \to \cons{LinOrd}\ K \to \List\ K \to \Perm\
-K, \] in which case it is clear 
+\todo{drat, at this point I haven't introduced constructive species
+  yet! Need to reorganize a bit.}  Considering all of this from the
+viewpoint of HoTT yields additional insight.  A family of functions
+like $\varphi_K$ would typically correspond in HoTT to a function of
+type \[ \varphi : (K : \FinSetT) \to \List\ K \to \Perm\ K. \]
+However, note that any function of this type is automatically natural
+in $K$!  Constructively, it is somewhat strange to have a type-indexed
+family of functions which is not natural in the index.
 
-Alternatively, note that $K$ contains evidence of its finiteness in
-the form of an equivalence $K \equiv \Fin n$.  Forgetting for the
-moment that we are not allowed to use it, 
+It is certainly possible to implement a function with the above type
+(for example, one which sends each list to the cyclic permutation with
+elements in the same order), but as we have seen, it is not possible
+to implement one which is invertible.  Writing an invertible such
+function also requires a linear ordering on the type $K$.  We could,
+of course, simply take a linear ordering as an extra argument, \[
+\varphi : (K : \FinSetT) \to \cons{LinOrd}\ K \to \List\ K \to \Perm\
+K, \] in which case it is clear \todo{it is not natural?}
+
+Alternatively, recall that $K$ contains evidence of its finiteness in
+the form of an equivalence $K \equiv \Fin n$.  This equivalence
+induces a linear ordering on $K$, corresponding to the natural linear
+ordering $0 < 1 < 2 < \dots$ on $\Fin n$.  In other words, each $K$
+already comes equipped with a linear ordering!  However, recall that
+the finiteness evidence is sealed inside a propositional truncation,
+so we cannot use it in implementing a function of type $(K : \FinSetT)
+\to \List\ L \to \Perm\ K$.  If we could, the resulting functions
+would indeed \emph{not} be natural, and it is instructive to see why.
+A path $K = K$ \todo{corresponds to a permutation on $K$, but
+  \emph{does not have to update the finiteness evidence in
+    conjunction} with permutation.  Note connection to BLL p. 22:
+  standard transform is compatible with order-preserving bijections.
+  That corresponds to taking $\cons{Set}_{Fin}$ which does not use
+  prop trunc.  Then we really can write standard transform, and it is
+  indeed natural!}
+
+In order to use the linear order associated to each finite set $K$, we
+must produce a mere proposition.  We cannot directly produce an
+equivalence---but we certainly can produce the propositional
+truncation of one.  In particular we can encode the standard transform
+as a function of type \[ \chi : (K : \FinSetT) \to \ptrunc{\List\ K
+  \equiv \Perm\ K}. \] This is precisely the right way to encode
+equipotence in HoTT.  For suppose we know that $\List\ K$ is finite of
+size $n$, that is, we have an inhabitant of the type $(n : \N) \times
+\ptrunc{\List\ K \equiv \Fin n}$.  Then we can conclude that $\Perm\
+K$ has the same size: since we want to produce the mere proposition
+$\ptrunc{\Perm\ K \equiv \Fin n}$, we are allowed to use the
+equivalence $\List\ K \equiv \Fin n$ as well as the equivalence
+$\List\ K \equiv \Perm\ K$ produced by $\chi_K$; composing them and
+injecting back into a truncation yields the desired result.  On the
+other hand, we cannot use the results of $\chi$ to actually compute a
+correspondence between elements of $\List\ K$ and $\Perm\ K$.
+
+\todo{Note that $\chi$ \emph{is} natural, but naturality in this case
+  means something a bit different: \dots what?}  \todo{cite Bernardy
+  parametricity stuff?}
 
 \section{Generalized species}
 \label{sec:generalized-species}
