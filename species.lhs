@@ -8,9 +8,6 @@
 \todo{Go through and add some back references to preliminaries chapter?}
 \todo{Need a story for building with both color or black/white
   figures}
-\todo{Split out a better introduction and overview of the whole
-  chapter (incorporate a list of contributions), and turn the
-  following material into a section.}
 
 The theory of combinatorial species, first introduced by
 \citet{joyal}, is a unified theory of \term{combinatorial structures}
@@ -20,6 +17,12 @@ in particular one which gave new justification and a unifying context
 for an existing body of techniques involving \term{generating
   functions}; the connection to generating functions will be explored
 in more detail in \pref{chap:labelled}.
+
+\todo{Add an overview of the whole chapter (incorporate a list of
+  contributions).}
+
+\section{Intuition and examples}
+\label{sec:species-intuition}
 
 In the process of generalizing the theory of generating functions, one
 of Joyal's great insights in formulating the theory of species was to
@@ -51,8 +54,8 @@ are needed. The particular way it is drawn is intended to indicate
 that the structure has fourfold rotational symmetry, which means there
 would be no way to uniquely refer to any location except by label.
 More abstractly, \term{unlabelled} shapes can be defined as
-equivalence classes of labelled shapes, which is nontrivial in the
-case of shapes with symmetry.
+equivalence classes of labelled shapes (\pref{sec:unlabelled}), which
+is nontrivial in the case of shapes with symmetry.
 
 Besides its focus on labels, the power of the theory of species also
 derives from its ability to describe structures of interest
@@ -326,17 +329,21 @@ structures, but merely labels for the locations.  To talk about a data
 structure, one must additionally specify a mapping from labels to
 data; this will be made precise in~\pref{chap:labelled}.
 
-\section{Definition}
+\section{Definitions}
 \label{sec:species-definition}
 
 Informally, as we have seen, a species is a family of labelled shapes.
 Crucially, the actual labels used ``shouldn't matter'': for example,
 we should get the ``same'' family binary trees no matter what labels
 we want to use.  This intuition is made precise in the formal
-definition of combinatorial species.  \todo{One of Joyal's insights:
-  functoriality + naturality capture the salient combinatorial
-  insights.  Bring category theory to bear on combinatorics.}  We
-first give a concise, abstract version of the definition.
+definition of combinatorial species as \emph{functors}.  In fact, one
+of the reasons Joyal's work was so groundbreaking was that it brought
+category theory to bear on combinatorics, showing that many
+specific combinatorial insights could be modeled abstractly using the
+language of categories.
+
+\subsection{Species as functors}
+\label{sec:species-functors}
 
 \begin{defn}[Species \citep{joyal}]
   \label{defn:species-cat}
@@ -347,11 +354,11 @@ first give a concise, abstract version of the definition.
     a \term{presheaf} on $\B$, that is, a functor $\B^\op \to \Set$.}
 \end{defn}
 
-However, it is worth spelling out this definition
-in more detail, which will also give an opportunity to explain some
-intuition and terminology. Even for those who are very comfortable
-with category theory, it may be hard to grok the intuition for the
-abstract definition right away.
+It is worth spelling out this definition in more detail, which will
+also give an opportunity to explain some intuition and
+terminology. Even for those who are very comfortable with category
+theory, it may be hard to grok the intuition for the abstract
+definition right away.
 
 \begin{defn}
 \label{defn:species-set}
@@ -599,8 +606,75 @@ five different monoidal structures!  Most of the remainder of this
 chapter (\pref{sec:generalized-species} onward) is dedicated to
 exploring and generalizing this structure.
 
+\subsection{Species in HoTT}
+\label{sec:species-hott}
+
+\todo{Mention encoding primitive species as HITs somewhere, probably
+  interspersed throughout when those primitive species come up.}
+
+Recall that $\BT$ denotes the \hott{groupoid} with objects \[
+\FinTypeT \defeq (A : \Type) \times \isSet(A) \times \isFinite(A), \]
+where \[ \isFinite(A) \defeq \ptrunc{(n : \N) \times (A \equiv \Fin
+  n)}, \] and with morphisms given by paths.  Recall also that $\PT$
+denotes the \hott{groupoid} whose objects are natural numbers and
+whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv \Fin
+n$, and that $\ST$ denotes the \hott{category} of $0$-types (sets) and
+functions.
+
+\begin{defn}
+  A \term{constructive species} is an \hott{functor} $F : \BT \to
+  \ST$.  We use $\Spe = \fc \BT \ST$ to refer to the \hott{category}
+  of constructive species.  Note this is the same name as the category
+  $\fc \B \Set$ of set-theoretic species; while technically ambiguous
+  this should not cause confusion since it should always be clear from
+  the context whether we are working in set theory or in HoTT.
+  Likewise, when working in the context of HoTT we will often simply
+  say ``species'' instead of ``constructive species''.
+\end{defn}
+
+It is not necessarily clear at this point that this is an appropriate
+encoding of species within homotopy type theory.  It cannot be
+directly justified by showing that $\fc \B \Set$ and $\fc \BT \ST$ are
+categorically equivalent; this does not even make sense since they
+live in entirely different foundational frameworks.  Rather, a
+justification must be extensional, in the sense of showing that the
+two definitions have similar properties and support similar
+operations.  In a sense, much of the rest of this chapter is precisely
+such an extensional justification.
+
+\section{Isomorphism and equipotence}
+\label{sec:iso-equipotence}
+
+\todo{introduction of some sort}
+
+\subsection{Species isomorphism}
+\label{sec:species-isomorphism}
+
+An isomorphism in the category of species is a pair of inverse natural
+transformations.  Species isomorphism preserves all the interesting
+\emph{combinatorial} properties of species; hence in the combinatorics
+literature everything is always done up to isomorphism. However, this
+is usually done in a way that glosses over the \emph{computational}
+properties of species.  Formulating species within HoTT gives us the
+best of both worlds: naturally isomorphic functors between
+\hott{categories} are equal, and hence isomorphic species are
+literally identified; however, equalities (\ie paths) in HoTT may
+still have computational content. \later{HoTT forces us to be disciplined
+about applying conversions in the right places, which may seem less
+convenient than the happy-go-lucky world of traditional mathematics,
+where isomorphisms are simply glossed over, but types\dots should I
+include a sentence like this at all?}
+
 \subsection{Unlabelled species}
 \label{sec:unlabelled}
+
+\todo{Do unlabelled species also form a category?  Well, Joyal (p.3)
+  has groupoid of $F$-structures where morphisms are equivalence up to
+  relabelling.  Forms them correspond to connected components of this
+  groupoid.}
+
+\todo{Species \emph{shapes} also have a useful notion of isomorphism.
+  Comes up in various guises throughout.}
 
 Consider the set of permutations on the labels $\{0,1,2\}$, shown in
 \pref{fig:permutations-three}. Notice that some of these permutations
@@ -719,26 +793,8 @@ are all interconvertible by relabelling.  \todo{Rather large.  Can
 
 \todo{Should give some examples here.}
 
-\section{Isomorphism and equipotence}
-\label{sec:iso-equipotence}
-
-\todo{Move this section to after generalized species section?  It
-  involves HoTT so I need to talk about HoTT-based species first.}
-
-An isomorphism in the category of species is a pair of inverse natural
-transformations.  Species isomorphism preserves all the interesting
-\emph{combinatorial} properties of species; hence in the combinatorics
-literature everything is always done up to isomorphism. However, this
-is usually done in a way that glosses over the \emph{computational}
-properties of species.  Formulating species within HoTT gives us the
-best of both worlds: naturally isomorphic functors between
-\hott{categories} are equal, and hence isomorphic species are
-literally identified; however, equalities (\ie paths) in HoTT may
-still have computational content. \later{HoTT forces us to be disciplined
-about applying conversions in the right places, which may seem less
-convenient than the happy-go-lucky world of traditional mathematics,
-where isomorphisms are simply glossed over, but types\dots should I
-include a sentence like this at all?}
+\subsection{Equipotence}
+\label{sec:equipotence}
 
 Somewhat surprisingly, there is another useful equivalence relation on
 species which is \emph{weaker} (\ie coarser) than
@@ -950,32 +1006,9 @@ basic theory of species (\eg multisort species, weighted species,
 $\L$-species, vector species, \dots) which require moving beyond $\fc
 \B \Set$ in some way.
 
-\subsection{Species in type theory}
-\label{sec:species-in-type-theory}
-
-\todo{Mention encoding primitive species as HITs somewhere.}
-\todo{Edit this section given reorganization.}
-
+\todo{Mention previous species in HoTT definition.}
 One generalization that will be of particular interest is a ``port''
-of species into HoTT. Recall that $\BT$ denotes the \hott{groupoid}
-with objects \[ \FinTypeT \defeq (A : \Type) \times \isSet(A)
-\times \isFinite(A), \] where \[ \isFinite(A) \defeq \ptrunc{(n : \N)
-  \times (A \equiv \Fin n)}, \] and with morphisms given by paths.  Recall
-also that $\PT$ denotes the \hott{groupoid} whose objects are natural
-numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m \equiv
-\Fin n$, and that $\ST$ denotes the \hott{category} of $0$-types
-(sets) and functions.
-
-\begin{defn}
-  A \term{constructive species} is an \hott{functor} $F : \BT \to
-  \ST$.  We use $\Spe = \fc \BT \ST$ to refer to the \hott{category}
-  of constructive species.  Note this is the same name as the category
-  $\fc \B \Set$ of set-theoretic species; while technically ambiguous
-  this should not cause confusion since it should always be clear from
-  the context whether we are working in set theory or in HoTT.
-  Likewise, when working in the context of HoTT we will often simply
-  say ``species'' instead of ``constructive species''.
-\end{defn}
+of species into HoTT.
 
 Another one of the major goals of this chapter is to argue that this
 is an appropriate encoding of species within homotopy type theory.
