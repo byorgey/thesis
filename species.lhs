@@ -1052,30 +1052,48 @@ recall that the finiteness evidence is sealed inside a propositional
 truncation, so we cannot use it in implementing a function of type $(K
 : \FinSetT) \to \List\ L \to \Perm\ K$.  If we could, the resulting
 function would indeed \emph{not} be natural, and it is instructive to
-see why.  A path $K = K$ \todo{corresponds to a permutation on $K$,
-  but \emph{does not have to update the finiteness evidence in
-    conjunction} with permutation.  Note connection to BLL p. 22:
-  standard transform is compatible with order-preserving bijections.
-  That corresponds to taking $\cons{Set}_{Fin}$ which does not use
-  prop trunc.  Then we really can write standard transform, and it is
-  indeed natural!}
+see why.  A path $K = K$ corresponds to a permutation on $K$, but
+\emph{does not have to update the finiteness evidence in conjunction}
+with the permutation.  Thinking of the finiteness evidence as giving a
+linear order on $K$, another way to say this is that permutations $K =
+K$ need not be order-preserving.  Naturality is not satisfied,
+therefore, since applying the standard transform directly may give
+results completely incompatible with those obtained by applying a
+non-order-preserving permutation followed by the standard transform.
 
-In order to use the linear order associated to each finite set $K$, we
-must produce a mere proposition.  We cannot directly produce an
-equivalence---but we certainly can produce the propositional
-truncation of one.  In particular we can encode the standard transform
-as a function of type \[ \chi : (K : \FinSetT) \to \ptrunc{\List\ K
-  \equiv \Perm\ K}. \] This is precisely the right way to encode
-equipotence in HoTT.  For suppose we know that $\List\ K$ is finite of
-size $n$, that is, we have an inhabitant of the type $(n : \N) \times
-\ptrunc{\List\ K \equiv \Fin n}$.  Then we can conclude that $\Perm\
-K$ has the same size: since we want to produce the mere proposition
-$\ptrunc{\Perm\ K \equiv \Fin n}$, we are allowed to use the
-equivalence $\List\ K \equiv \Fin n$ as well as the equivalence
-$\List\ K \equiv \Perm\ K$ produced by $\chi_K$; composing them and
-injecting back into a truncation yields the desired result.  On the
-other hand, we cannot use the results of $\chi$ to actually compute a
-correspondence between elements of $\List\ K$ and $\Perm\ K$.
+\citet{bll}[p. 22] note that the standard transform \emph{is} in fact
+compatible with \emph{order-preserving} bijections.  If we take
+species as functors $\L \to \Set$, where $\L$ is the groupoid of
+finite sets equipped with linear orders, along with order-preserving
+bijections, then the standard transform is indeed a natural
+isomorphism between $\List$ and $\Perm$.  Such species are called
+$\L$-species, and are discussed further in \pref{sec:L-species}.
+For the moment we note only that in HoTT, $\L$ corresponds exactly to
+$\cons{Set}_{Fin}$, \ie the variant of $\FinSetT$ \emph{without} a
+propositional truncation hiding the finiteness evidence.  The objects
+of $\cons{Set}_{Fin}$ are finite sets ($0$-types) along with a natural
+number $n$ and an equivalence to $\Fin n$, which, as we have seen, is
+equivalent to a linear ordering.  The morphisms are just paths, which,
+as the proof of \pref{prop:U-fin-set} demonstrates, should be thought
+of as order-preserving bijections.
+
+Back in $\FinSetT$, however, in order to use the linear order
+associated to each finite set $K$, we must produce a mere proposition.
+We cannot directly produce an equivalence---but we certainly can
+produce the propositional truncation of one.  In particular we can
+encode the standard transform as a function of type \[ \chi : (K :
+\FinSetT) \to \ptrunc{\List\ K \equiv \Perm\ K}. \] This is precisely
+the right way to encode equipotence in HoTT.  For suppose we know that
+$\List\ K$ is finite of size $n$, that is, we have an inhabitant of
+the type $(n : \N) \times \ptrunc{\List\ K \equiv \Fin n}$.  Then we
+can conclude that $\Perm\ K$ has the same size: since we want to
+produce the mere proposition $\ptrunc{\Perm\ K \equiv \Fin n}$, we are
+allowed to use the equivalence $\List\ K \equiv \Fin n$ as well as the
+equivalence $\List\ K \equiv \Perm\ K$ produced by $\chi_K$; composing
+them and injecting back into a truncation yields the desired result.
+On the other hand, we cannot use the results of $\chi$ to actually
+compute a correspondence between elements of $\List\ K$ and $\Perm\
+K$.
 
 \later{Note that $\chi$ \emph{is} natural, but naturality in this case
   means something a bit different: \dots what?}  \later{cite Bernardy

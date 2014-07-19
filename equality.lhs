@@ -1547,7 +1547,7 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
   \label{fig:fin-equiv}
 \end{figure}
 
-\begin{prop}
+\begin{prop} \label{prop:U-fin-set}
   $\FinType$ is a set, that is, for any $X, Y : \FinType$,
   if $p_1, p_2 : X = Y$ then $p_1 = p_2$.
 \end{prop}
