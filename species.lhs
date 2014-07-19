@@ -1095,8 +1095,8 @@ On the other hand, we cannot use the results of $\chi$ to actually
 compute a correspondence between elements of $\List\ K$ and $\Perm\
 K$.
 
-\later{Note that $\chi$ \emph{is} natural, but naturality in this case
-  means something a bit different: \dots what?}  \later{cite Bernardy
+\todo{Note that $\chi$ \emph{is} natural, but naturality in this case
+  means something a bit different: \dots what?}  \todo{cite Bernardy
   parametricity stuff?}
 
 \section{Generalized species}

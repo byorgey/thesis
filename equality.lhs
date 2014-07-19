@@ -1493,9 +1493,6 @@ the evidence of their finiteness, so that a path between two finite
 types requires them to be not just equivalent as types, but also
 ``finite in the same way''.
 
-\todo{Note this actually gives us $\L$, the category of linear orders
-  and order-preserving bijections!}
-
 The situation can be pictured as shown in \pref{fig:fin-equiv}. The
 elements of types $A_1$ and $A_2$ are shown on the sides; the evidence
 of their finiteness is represented by bijections between their
@@ -1559,6 +1556,14 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
   (\ua^{-1}(p))^{-1}$, but this essentially means that $p$ is uniquely
   determined by $e_1$ and $e_2$.
 \end{proof}
+
+In fact, this gives us a counterpart not to $\B$, but to $\L$, the
+category whose objects are finite sets \emph{equipped with linear
+  orders}, and whose morphisms are \emph{order-preserving}
+bijections. \todo{Explain how equivalence with $\Fin n$ is the same as
+  a linear order, and how paths here correspond to order-preserving
+  bijections.}  \todo{This will come in handy later.  Forward
+  references.}
 
 The underlying problem is that $\FinType$ does not actually do a very
 good job at encoding what classical mathematicians usually mean by

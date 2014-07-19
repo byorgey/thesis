@@ -1237,7 +1237,7 @@ flowerRadius 4 = 10
 ellipsis = hcat' (with & sep .~ 0.6) (replicate 3 (circle 0.1 # fc black))
 
 factorial :: Integer -> Double
-factorial n = fromIntegral $ product [1 .. n]
+factorial n = fromIntegral $ product [1 .. n]  -- $
 
 dia = hcat' (with & sep .~ 2) (map flower [0..3] ++ [ellipsis]) # frame 0.5 # lwO 0.7
   \end{diagram}
@@ -1294,3 +1294,5 @@ true:
   The fact that $1$ is an identity for $\otimes^*$, associativity, and
   the coherence conditions all follow readily from the definitions.
 \end{proof}
+
+\todo{mention $\L$ somewhere?}
