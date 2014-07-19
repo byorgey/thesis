@@ -770,7 +770,7 @@ We can formalize these ideas as follows.
   bijections; symmetry follows from invertibility of bijections.
 \end{proof}
 
-
+\todo{some English here}
 
 \begin{defn}
   An $F$-\term{form} is an equivalence class under $\relabel$.
@@ -968,6 +968,14 @@ see why.  A path $K = K$ \todo{corresponds to a permutation on $K$,
   That corresponds to taking $\cons{Set}_{Fin}$ which does not use
   prop trunc.  Then we really can write standard transform, and it is
   indeed natural!}
+
+\todo{conjecture: any equipotence can always be implemented as family
+  of bijections using linear ordering on labels.  Proof: (?) Use
+  linear order on labels to put linear ordering on set of all shapes.
+  Molecular decomposition, order summands by smallest label.  Each
+  summand is a molecular species given by X^n/H for some group H <=
+  S_n.  Can we order THOSE using linear ordering on labels?  I suspect
+  yes but there's a bit of interesting math to work out.}
 
 In order to use the linear order associated to each finite set $K$, we
 must produce a mere proposition.  We cannot directly produce an
