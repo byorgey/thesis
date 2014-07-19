@@ -758,42 +758,108 @@ We can formalize these ideas as follows.
   \relabel_\sigma f_2$.
 \end{defn}
 
-\todo{Define groupoid el(F) instead.}
-\begin{lem}
-  For a given species $F$, $\relabel$ is an equivalence relation on
-  the class of all $F$-shapes.
-\end{lem}
-
-\begin{proof}
-  Reflexivity follows since any shape is related to itself by the
-  identity bijection; transitivity follows from composition of
-  bijections; symmetry follows from invertibility of bijections.
-\end{proof}
-
-\todo{some English here}
+Thus, the two labelled shapes shown in \pref{fig:same-form-perms} are
+related by $\relabel$, whereas those shown in
+\pref{fig:different-form-perms} are not.
 
 \begin{defn}
-  An $F$-\term{form} is an equivalence class under $\relabel$.
+  Given a species $F$, denote by $\sh(F)$ the groupoid whose objects
+  are $F$-shapes---that is, finite sets $L$ together with an element
+  of $F\ L$---and whose morphisms are given by the $\relabel$
+  relation.
 \end{defn}
 
-That is, an $F$-form is a maximal class of labelled $F$-shapes which
-are all interconvertible by relabelling.  \todo{Rather large.  Can
-  instead consider just a single set of labels.}
+\begin{proof}
+  We need to show this is a well-defined groupoid, \ie that $\relabel$
+  is an equivalence relation.  The $\relabel$ relation is reflexive,
+  yielding identity morphisms, since any shape is related to itself by
+  the identity bijection.  If $f \relabel g \relabel h$ then $f
+  \relabel h$ by composing the underlying bijections.  Finally, $f
+  \relabel g$ implies $g \relabel f$ since the underlying bijections
+  are invertible.
+\end{proof}
+
+Finally, we can define what we mean by a \term{form}, or
+\term{unlabelled species}.
+
+\begin{defn}
+  An $F$-\term{form} is an equivalence class under $\relabel$, that
+  is, a connected component of the groupoid $\sh(F)$.
+\end{defn}
+
+In other words, an $F$-form is a maximal class of labelled $F$-shapes
+which are all interconvertible by relabelling.  Note that as defined,
+such classes are rather large, as they include labellings by \emph{all
+  possible} sets of labels!  We lose nothing by considering only a
+single label set of each size, such as $\Fin n$.  For example,
+\pref{fig:perm-forms-four} shows all the $\Perm$-forms of size four,
+using two different representations: on the right are the literal
+equivalence classes of permutations on $\Fin 4$ which are equivalent
+up to relabelling.  On the left are schematic representations of each
+form, drawn by replacing labels with indistinguishable dots.  Note
+that the schematic representations, while convenient, can break down
+in more complex situations, so it is important to also keep in mind
+the underlying definition in terms of equivalence classes.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=400]
+import           Data.Function                  (on)
+import           Data.List                      (partition, sortBy)
+import           Data.Ord                       (comparing)
+import qualified Math.Combinatorics.Multiset    as MS
+import           SpeciesDiagrams
+
+permForms
+  = centerXY
+  . vcat' (with & sep .~ 1)
+  . map drawPermRow
+  . (map . map) lenSort
+  . groupBy' sameForm
+  . perms
+  $ [0 .. 3 :: Int]  -- $
+
+parts' :: Ord a => [a] -> [[[a]]]
+parts' = map (map MS.toList . MS.toList) . MS.partitions . MS.fromList
+
+sameForm :: [[a]] -> [[a]] -> Bool
+sameForm xs ys = eqLen xs ys && (and $ zipWith eqLen (lenSort xs) (lenSort ys))
+  where
+    eqLen = (==) `on` length
+
+lenSort = sortBy (comparing length)
+
+groupBy' :: (a -> a -> Bool) -> [a] -> [[a]]
+groupBy' _    []     = []
+groupBy' comp (x:rest) = (x:xs) : groupBy' comp ys
+  where (xs,ys) = partition (x `comp`) rest
+
+drawPermForm
+  = hcat' (with & sep .~ 0.2)
+  . map ((\l -> cyc' l 0.8) . map (const dot))
+  where
+    dot = circle labR # fc black
+
+drawPermRow ps = hcat' (with & sep .~ 2)
+    [ (map . map . const) () (head ps) # drawPermForm # alignR
+    , lPerms
+    ]
+  where
+    lPerms = hcat' (with & sep .~ 1) . map drawPerm $ ps
+
+dia = permForms
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{$\Perm$-forms of size $4$}
+  \label{fig:perm-forms-four}
+\end{figure}
 
 \begin{rem}
   What are here called \term{forms} are more often called \term{types}
   in the species literature; but using that term would lead to
   unnecessary confusion in the present context.
 \end{rem}
-
-\begin{rem}
-  Forms are often depicted using indistinguishable dots in place of
-  labels, as in \pref{fig:perm-forms}.  However, such diagrams can break
-  down in more complex situations, so it is important to also keep in
-  mind the underlying definition in terms of equivalence classes.
-\end{rem}
-
-\todo{Should give some examples here.}
 
 \subsection{Equipotence}
 \label{sec:equipotence}
@@ -871,37 +937,9 @@ any given size, for $n \geq 2$ there are multiple permutation forms.
 Every permutation, \ie bijective endofunction, can be decomposed into
 a set of cycles, and a relabelling can only map between permutations
 with the same number of cycles of the same sizes.  There is thus one
-$\Perm$-form corresponding to each integer partitions of $n$.
-
-\begin{figure}
-  \centering
-  \begin{diagram}[width=300]
-import qualified Math.Combinatorics.Multiset    as MS
-import           SpeciesDiagrams
-
-permForms
-  = centerXY
-  . hcat' (with & sep .~ 2)
-  . map drawPermForm
-  . parts'
-  $ replicate 3 ()  -- $
-
-parts' :: Ord a => [a] -> [[[a]]]
-parts' = map (map MS.toList . MS.toList) . MS.partitions . MS.fromList
-
-drawPermForm
-  = hcat' (with & sep .~ 0.2)
-  . map ((\l -> cyc' l 0.8) . map (const dot))
-  where
-    dot = circle labR # fc black
-
-dia = permForms
-  # lwO 0.7
-  # frame 0.5
-  \end{diagram}
-  \caption{Three distinct $\Perm$-forms of size three}
-  \label{fig:perm-forms}
-\end{figure}
+$\Perm$-form corresponding to each integer partition of $n$
+(\pref{fig:perm-forms-four} shows the five permutation forms of size
+$4$, corresponding to $4 = 3 + 1 = 2 + 2 = 2 + 1 + 1 = 1+1+1+1$).
 
 More formally, suppose there were some \emph{natural} isomorphism
 witnessed by $\varphi : \nt \List \Perm$ and $\psi : \nt \Perm \List$.
@@ -922,26 +960,79 @@ between $\List$ and $\Perm$.  However, the claim is that they are
 nonetheless equipotent.  Again, this fact is very well known, but it
 is still instructive to work out the details of a formal proof.
 
-The first and most ``obvious'' proof is to send the permutation
+The first and most obvious ``proof'' is to send the permutation
 $\sigma : \perm{(\Fin n)}$ to the list whose $i$th element is
-$\sigma(i)$, and vice versa.  Note, however, that this only gives us a
-specific bijection $\List\ (\Fin n) \bij \Perm\ (\Fin n)$, rather
-than a family of bijections $\List\ K \bij \Perm\ K$.
+$\sigma(i)$, and vice versa.  Note, however, that this is not really a
+proof, since it only gives us a specific bijection $\List\ (\Fin n)
+\bij \Perm\ (\Fin n)$, rather than a family of bijections $\List\ K
+\bij \Perm\ K$.  We will return to this point shortly.
 
-The second proof is much more elegant from a combinatorial point of
-view, and also makes clearer \todo{what is going on, e.g. how far the
-  previous proof can be generalized.}
+The second proof, known as the \term{fundamental transform}, is more
+elegant from a combinatorial point of view.  For more details, see
+\citet{cartier1969problemes}, \citet{knuth1973sorting}, or
+\citet[p. 22]{bll}.  We first describe the mapping from permutations
+on $\Fin n$ to lists on $\Fin n$: given a permutation, order its
+cycles in decreasing order of their smallest element, and then
+transcribe each cycle as a list beginning with the smallest element.
+\pref{fig:fundamental-transform} shows an example where the
+permutation $(35)(26)(014)$ (whose cycles have minimum elements $3$,
+$2$, and $0$ respectively) is sent to the list $3526014$.  To invert
+the transformation, partition a list into segments with each record
+minimum beginning a new segment, and turn each such segment into a
+cycle.  For example, in the list $3526014$, the elements $3$, $2$, and
+$0$ are the ones which are smaller than all the elements to their
+left, so each one marks off the beginning of a new cycle.
 
-\todo{Second proof, see \citet{cartier1969problemes},
-  \citet{knuth1973sorting}, and \citet[p. 22]{bll}.}
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import           SpeciesDiagrams
 
-Considering all of this from the viewpoint of HoTT yields additional
-insight.  A family of functions like $\varphi_K$ would typically
-correspond in HoTT to a function of type \[ \varphi : (K : \FinSetT)
-\to \List\ K \to \Perm\ K. \] However, note that any function of this
-type is automatically natural in $K$!  Constructively, it is somewhat
-strange to have a type-indexed family of functions which is not
-natural in the index.
+permToList = hcat' (with & sep .~ 1)
+  [ drawPerm [[3,5],[2,6],[0,1,4]]
+  , arrow 1
+  , drawList' labT [3,5,2,6,0,1,4]
+  ]
+
+dia = permToList
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{The fundamental transform}
+  \label{fig:fundamental-transform}
+\end{figure}
+
+The way the fundamental transform is presented also makes it clear how
+to generalize from $\Fin n$ to other finite sets of labels $L$: all we
+require is a linear order on $L$, in order to find the minimum label
+in a given cycle and sort the cycles by minimum element, and to
+determine the successive record minima in a list.  Looking back at the
+first, ``obvious'' proof, which sends $\sigma$ to the list whose $i$th
+element is $\sigma(i)$, we can see that it also can be generalized to
+work for any finite set $L$ equipped with a linear order.  In
+particular, being equipped with a linear order is equivalent to being
+equipped with a bijection to $\Fin n$.
+
+Intuitively, then, the reason that these two families of bijections
+are not natural is that they do not work \emph{uniformly} for all sets
+of labels, but require some extra structure.  Any finite label set can
+be given a linear order, but the precise choice of linear order
+determines how the bijections work.
+
+\todo{conjecture: any equipotence can always be implemented as family
+  of bijections using linear ordering on labels.  Proof: (?) Use
+  linear order on labels to put linear ordering on set of all shapes.
+  Molecular decomposition, order summands by smallest label.  Each
+  summand is a molecular species given by $X^n/H$ for some group $H
+  \subseteq S_n$.  Can we order THOSE using linear ordering on labels?
+  I suspect yes but there may be some interesting math to work out.
+  Maybe we ought to do this in HoTT\dots}
+
+Considering this from the viewpoint of HoTT yields additional insight.
+A family of functions like $\varphi_K$ would typically correspond in
+HoTT to a function of type \[ \varphi : (K : \FinSetT) \to \List\ K
+\to \Perm\ K. \] However, note that any function of this type is
+automatically natural in $K$.
 
 It is certainly possible to implement a function with the above type
 (for example, one which sends each list to the cyclic permutation with
@@ -950,7 +1041,7 @@ to implement one which is invertible.  Writing an invertible such
 function also requires a linear ordering on the type $K$.  We could,
 of course, simply take a linear ordering as an extra argument, \[
 \varphi : (K : \FinSetT) \to \cons{LinOrd}\ K \to \List\ K \to \Perm\
-K, \] in which case it is clear \todo{it is not natural?}
+K. \]
 
 Alternatively, recall that $K$ contains evidence of its finiteness in
 the form of an equivalence $K \equiv \Fin n$.  This equivalence
@@ -969,14 +1060,6 @@ see why.  A path $K = K$ \todo{corresponds to a permutation on $K$,
   prop trunc.  Then we really can write standard transform, and it is
   indeed natural!}
 
-\todo{conjecture: any equipotence can always be implemented as family
-  of bijections using linear ordering on labels.  Proof: (?) Use
-  linear order on labels to put linear ordering on set of all shapes.
-  Molecular decomposition, order summands by smallest label.  Each
-  summand is a molecular species given by X^n/H for some group H <=
-  S_n.  Can we order THOSE using linear ordering on labels?  I suspect
-  yes but there's a bit of interesting math to work out.}
-
 In order to use the linear order associated to each finite set $K$, we
 must produce a mere proposition.  We cannot directly produce an
 equivalence---but we certainly can produce the propositional
@@ -994,8 +1077,8 @@ injecting back into a truncation yields the desired result.  On the
 other hand, we cannot use the results of $\chi$ to actually compute a
 correspondence between elements of $\List\ K$ and $\Perm\ K$.
 
-\todo{Note that $\chi$ \emph{is} natural, but naturality in this case
-  means something a bit different: \dots what?}  \todo{cite Bernardy
+\later{Note that $\chi$ \emph{is} natural, but naturality in this case
+  means something a bit different: \dots what?}  \later{cite Bernardy
   parametricity stuff?}
 
 \section{Generalized species}

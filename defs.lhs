@@ -440,6 +440,7 @@
 
 \newcommand{\equipot}{\mathrel{\stackrel{\#}{=}}}
 \newcommand{\relabel}{\sim}
+\DeclareMathOperator{\sh}{sh}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analytic functors
