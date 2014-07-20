@@ -1069,9 +1069,9 @@ bijections, then the standard transform is indeed a natural
 isomorphism between $\List$ and $\Perm$.  Such species are called
 $\L$-species, and are discussed further in \pref{sec:L-species}.
 For the moment we note only that in HoTT, $\L$ corresponds exactly to
-$\cons{Set}_{Fin}$, \ie the variant of $\FinSetT$ \emph{without} a
+$\SetL$, \ie the variant of $\FinSetT$ \emph{without} a
 propositional truncation hiding the finiteness evidence.  The objects
-of $\cons{Set}_{Fin}$ are finite sets ($0$-types) along with a natural
+of $\SetL$ are finite sets ($0$-types) along with a natural
 number $n$ and an equivalence to $\Fin n$, which, as we have seen, is
 equivalent to a linear ordering.  The morphisms are just paths, which,
 as the proof of \pref{prop:U-fin-set} demonstrates, should be thought
@@ -1098,6 +1098,59 @@ K$.
 \todo{Note that $\chi$ \emph{is} natural, but naturality in this case
   means something a bit different: \dots what?}  \todo{cite Bernardy
   parametricity stuff?}
+
+One might expect that there are other ways to obtain an equipotence.
+That is, the proof of equipotence between $\List$ and $\Perm$ is not
+a natural isomorphism because it additionally requires a linear order
+structure on the labels.  Might there be other equipotences which
+require other sorts of structure on the labels?
+
+I conjecture that a linear order is as strong as one could ever want;
+that is, for any species which are provably equipotent, there exists a
+proof making use of a linear order on the set of labels.
+
+\begin{conj}
+  The type of natural isomorphisms with access to a linear order is
+  logically equivalent to the type of equipotences. That is, for all
+  species $F$ and $G$, \[ ((L : \SetL) \to (F\ L \equiv G\ L)) \lequiv
+  ((L : \FinSetT) \to \ptrunc{F\ L \equiv G\ L}). \]
+\end{conj}
+
+\begin{proof}[Proof (sketch)]
+  I describe here a plan of attack, \ie an outline of a possible proof.
+  \begin{itemize}
+  \item[$(\to)$] This direction is certainly true and quite easy to
+    show.  We are given a function $f : (L : \SetL) \to (F\ L \equiv
+    G\ L)$ and some $L : \FinSetT$, and must produce
+    $\ptrunc{F\ L \equiv G\ L}$.  Since we are producing a mere
+    proposition we may unwrap the finiteness evidence in $L$ to turn
+    it into a $\SetL$, pass it to $f$, and then wrap the result in a
+    propositional truncation.  Intuitively, this direction is true
+    since every natural isomorphism is also an equipotence.
+  \item[$(\leftarrow)$] This is the more interesting direction.  We
+    are given a function $f : (L : \FinSetT) \to \ptrunc{F\ L \equiv
+      G\ L}$ and some $L : \SetL$, \ie a finite set equipped with a
+    linear order.  We must produce an equivalence $F\ L \equiv G\ L$.
+    We can easily turn $L$ into a $\FinSetT$ by applying a
+    propositional truncation; passing this to $f$ results in
+    some $s : \ptrunc{F\ L \equiv G\ L}$.
+
+    The trick is now to uniquely characterize the particular
+    equivalence $F\ L \equiv G\ L$ we wish to produce.  This seems
+    impossible without some sort of knowledge about $F$ and $G$.
+    Fortunately, it is possible to deeply characterize species based
+    on their extensional behavior.  \todo{Describe molecular species
+      theorem, etc.}
+
+    Even if we succeed in doing that, note that the
+    equivalence we thus characterize may not be the same as $s$!
+    We must construct the final equivalence ``from scratch'',
+    somehow using the fact that we know \emph{some} equivalence exists
+    to construct the one we have characterized.  Perhaps construct
+    a permutation on $G\ L$ which, when composed with the equivalence
+    given by $f$, produces the desired equivalence.
+  \end{itemize}
+\end{proof}
 
 \section{Generalized species}
 \label{sec:generalized-species}

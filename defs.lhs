@@ -194,6 +194,7 @@
 \newtheorem{prop}[thm]{Proposition}
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
 
 \theoremstyle{definition}
 
@@ -289,6 +290,7 @@
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
 \newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
 \newcommand{\FinTypeT}{\ensuremath{\Type_{\ptrunc{\text{Fin}}}}}
+\newcommand{\SetL}{\ensuremath{\SetT_{\text{Fin}}}}
 \newcommand{\FinSetT}{\ensuremath{\SetT_{\ptrunc{\text{Fin}}}}}
 \newcommand{\sizesymb}{\#}
 \newcommand{\size}[1]{\ensuremath{\sizesymb#1}}
@@ -487,6 +489,7 @@
 \newrefformat{prop}{Proposition~\ref{#1}}
 \newrefformat{defn}{Definition~\ref{#1}}
 \newrefformat{cor}{Corollary~\ref{#1}}
+\newrefformat{conj}{Conjecture~\ref{#1}}
 
 % memoir defines pref and Pref as 'pageref'
 \providecommand{\pref}{}
