@@ -1136,11 +1136,18 @@ proof making use of a linear order on the set of labels.
     some $s : \ptrunc{F\ L \equiv G\ L}$.
 
     The trick is now to uniquely characterize the particular
-    equivalence $F\ L \equiv G\ L$ we wish to produce.  This seems
-    impossible without some sort of knowledge about $F$ and $G$.
-    Fortunately, it is possible to deeply characterize species based
-    on their extensional behavior.  \todo{Describe molecular species
-      theorem, etc.}
+    equivalence $F\ L \equiv G\ L$ we wish to produce, which we can do
+    by producing linear orderings on the $(F\ L)$-shapes and $(G\
+    L)$-shapes, and matching them up. We have the linear ordering on
+    $L$ to help, but the task still seems impossible without some sort
+    of knowledge about $F$ and $G$.  Fortunately, it is possible to
+    deeply characterize species based on their extensional behavior.
+    In particular, every species can be uniquely decomposed as a sum
+    of \term{molecular} species, where each molecular species is of
+    the form $\X^n/H$ for some $n \in N$ and some subgroup $H
+    \subseteq \S_n$ \citep[\Sect 2.6]{bll}.  \todo{Talk about porting
+      theorem to HoTT, explain what $\X^n/H$ notation means, prove we
+      can come up with an ordering for it.}
 
     Even if we succeed in doing that, note that the
     equivalence we thus characterize may not be the same as $s$!
