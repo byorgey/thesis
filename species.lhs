@@ -1143,18 +1143,45 @@ proof making use of a linear order on the set of labels.
     of knowledge about $F$ and $G$.  Fortunately, it is possible to
     deeply characterize species based on their extensional behavior.
     In particular, every species can be uniquely decomposed as a sum
-    of \term{molecular} species, where each molecular species is of
-    the form $\X^n/H$ for some $n \in N$ and some subgroup $H
-    \subseteq \S_n$ \citep[\Sect 2.6]{bll}.  \todo{Talk about porting
-      theorem to HoTT, explain what $\X^n/H$ notation means, prove we
-      can come up with an ordering for it.}
+    of \term{molecular} species~\citep[\Sect 2.6]{bll}, where each
+    molecular species is of the form $\X^n/H$ for some natural number
+    $n$ and some subgroup $H \subseteq \S_n$ of the symmetric group on
+    $n$ elements.  That is, molecular species are lists of particular
+    length quotiented by some symmetries.  For example, $\List_5$ is
+    given by $\X^5/1$, where $1$ denotes the trivial group; $\Bag_5$
+    is $\X^5/\S_5$, quotienting by all possible symmetries; $\C_5$ is
+    $\X^5/\Z_5$, quotienting by the cyclic group of size $5$.  The
+    study and classification of molecular and atomic species takes up
+    an entire section of \citet{bll}, and porting all of the
+    definitions and theorems there to HoTT would be a formidable
+    (though worthwhile) undertaking, and is outside the scope of this
+    dissertation.
 
-    Even if we succeed in doing that, note that the
-    equivalence we thus characterize may not be the same as $s$!
-    We must construct the final equivalence ``from scratch'',
+    In any case, an equivalence $F\ L \equiv M_1\ L + M_2\ L + M_3\ L
+    + \dots$ should yield a canonical ordering on the classes of
+    $F$-shapes resulting from each $M_i$: all the $M_1$ shapes come
+    first, followed by the $M_2$ shapes, and so on.  It remains to
+    show that we can put a linear ordering on the $F$ shapes generated
+    by each $M_i$.
+
+    Recall that each $M_i$ is of the form $\X^n/H$.  We can thus use
+    the linear order on $L$ to put an ordering on $M_i\ L$ as
+    follows.  First, in the case that $H = 1$, \ie the trivial group,
+    we can order all the $n!$ labelled $\X^n$ shapes using a
+    lexicographic order (or some other appropriate order derived from
+    the order on $L$).  If $H$ is nontrivial, then the orbits of
+    $\X^n$ under the action of $H$ are themselves the $M_i$-shapes,
+    and we can extend the ordering on the $\X^n$ shapes to orbits
+    thereof, ordering the orbits according to the smallest
+    $\X^n$-shape contained in each.
+
+    Even if we succeed in uniquely characterizing some equivalence,
+    note that the equivalence we thus characterize may not be the same
+    as $s$!  We must construct the final equivalence ``from scratch'',
     somehow using the fact that we know \emph{some} equivalence exists
-    to construct the one we have characterized.  Perhaps construct
-    a permutation on $G\ L$ which, when composed with the equivalence
+    to construct the one we have characterized.  It is not entirely
+    clear how to do this.  One idea might be to construct a
+    permutation on $G\ L$ which, when composed with the equivalence
     given by $f$, produces the desired equivalence.
   \end{itemize}
 \end{proof}
