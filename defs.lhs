@@ -151,7 +151,7 @@
 \newcommand{\singleton}{\{\star\}}
 
 \newcommand{\partition}{\vdash}
-\newcommand{\rectangle}{\multimap}
+\newcommand{\rectangle}{\Vdash}
 
 % problem: doesn't seem to adapt to different font sizes, even though
 % we use em units??
