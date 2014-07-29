@@ -1127,12 +1127,27 @@ theories~\citep{Byrne2005, kock2012data}.
   morphisms when $m \neq n$.)
 \end{ex}
 
+The next two examples will play important roles in the remainder of
+the dissertation, so they merit the status of formal definitions.
+
 \begin{defn}
   $\B$ is the groupoid whose objects are finite sets and whose
   morphisms are bijections between finite sets.
 \end{defn}
 
-In fact, $\B$ is an instance of a more general phenomenon:
+\begin{defn}
+  $\L$ is the groupoid whose objects are finite sets equipped with a
+  linear order, and whose morphisms are order-preserving bijections.
+\end{defn}
+
+Note that there is exactly one order-preserving bijection between
+two linear orders of the same size, so $\L$ is rather impoverished as
+compared with $\B$.  Nonetheless, there is a close relationship
+between them, which will be explored more in Chapters
+\ref{chap:equality} and \ref{chap:species}.
+
+It is worth pointing out that $\B$ is an instance of a more general
+phenomenon:
 
 \begin{defn}
   Any category $\C$ gives rise to a groupoid $\core \C$, called the
@@ -1294,5 +1309,3 @@ true:
   The fact that $1$ is an identity for $\otimes^*$, associativity, and
   the coherence conditions all follow readily from the definitions.
 \end{proof}
-
-\todo{mention $\L$ somewhere?}

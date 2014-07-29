@@ -263,6 +263,7 @@
 \newmsf{refl}
 \newmsf{isSet}
 \newmsf{isFinite}
+\newmsf{linOrd}
 
 \newmsf{Fun}
 \newmsf{Ana}
@@ -288,10 +289,10 @@
 \newmsf{isInjective}
 
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
-\newcommand{\FinType}{\ensuremath{\Type_{\text{Fin}}}}
-\newcommand{\FinTypeT}{\ensuremath{\Type_{\ptrunc{\text{Fin}}}}}
-\newcommand{\SetL}{\ensuremath{\SetT_{\text{Fin}}}}
-\newcommand{\FinSetT}{\ensuremath{\SetT_{\ptrunc{\text{Fin}}}}}
+\newcommand{\FinType}{\ensuremath{\Type_{\mathrm{Fin}}}}
+\newcommand{\FinTypeT}{\ensuremath{\Type_{\ptrunc{\mathrm{Fin}}}}}
+\newcommand{\SetL}{\ensuremath{\SetT_{\mathrm{Fin}}}}
+\newcommand{\FinSetT}{\ensuremath{\SetT_{\ptrunc{\mathrm{Fin}}}}}
 \newcommand{\sizesymb}{\#}
 \newcommand{\size}[1]{\ensuremath{\sizesymb#1}}
 
@@ -334,14 +335,13 @@
 \newcategory{CSpe}    % constructive species
 \newcategory{PSpe}    % partial species
 \newcategory{Hask}    % Haskell types and functions
-\newcategory{B}
-\newcategory{P}
-
-\providecommand{\L}{}
-\renewcommand{\L}{\bbb{L}}     % category of linear orderings
+\newcategory{B}       % finite sets and bijections
+\newcategory{P}       % naturals and permutations
+\newcategory{L}       % finite linear orders and order-preserving bijections
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
+\newcommand{\LT}{\mcal{L}}
 
 \newcommand{\prt}[1]{\ensuremath{#1_{\pbij}}}
 \newcommand{\STSub}{\prt \ST}

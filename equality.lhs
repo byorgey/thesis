@@ -569,31 +569,21 @@ independent of the choice of $j$.
 The idea now is to replace functors $\C \to \D$ with functors $\C \to
 \clq \D$, which map objects of $\C$ to entire equivalence classes of
 objects in $\D$, instead of arbitrarily picking some object from each
-equivalence class. \todo{redo example?}  For example, instead of a
-functor $\C \times \C \to \C$ giving ``the'' product of any two
-objects of $\C$, there is a functor $\C \times \C \to \clq \C$: given
-any two objects $A,B \in \C$, it constructs the clique whose objects
-are all possible products of $A$ and $B$, and whose morphisms are the
-unique isomorphisms $u_{ij}$ between products: \[ \xymatrix{ & C_i
-  \ar[dl] \ar[dd]^{u_{ij}} \ar[dr] & \\ A & & B \\ & C_j \ar[ul]
-  \ar[ur] & } \]
-
-This gets rid of the need for AC in defining such functors.  However,
-it is somewhat cumbersome to replace $\D$ by $\clq \D$ in this way.
-To make it tenable, one could imagine defining a new notion of
-``clique functor'' $F : \C \stackrel{\clq{}}{\to} \D$ given by a
-regular functor $\C \to \clq \D$, and showing that these clique
-functors ``act like'' functors in suitable ways.  For example, it is
-easy to see that any regular functor $\C \to \D$ can be made into a
-trivial functor $\C \to \clq \D$, by sending each $C \in \C$ to the
-singleton clique containing only $F(C)$.  One can also show that
-clique functors can be composed, have a suitable notion of natural
-transformations between them, and so on\footnote{In fact, $\clq{-}$
-  turns out to be a (2-)monad, and the category of clique functors is
-  its Kleisli category \citep{nlab-clique}.}. In fact, it turns
-out that this is precisely the theory of \emph{anafunctors}.
-
-\todo{Discuss strict vs non-strict monoidal categories.}
+equivalence class. \later{example?}  This gets rid of the need for AC
+in defining such functors.  However, it is somewhat cumbersome to
+replace $\D$ by $\clq \D$ in this way.  To make it tenable, one could
+imagine defining a new notion of ``clique functor'' $F : \C
+\stackrel{\clq{}}{\to} \D$ given by a regular functor $\C \to \clq
+\D$, and showing that these clique functors ``act like'' functors in
+suitable ways.  For example, it is easy to see that any regular
+functor $\C \to \D$ can be made into a trivial functor $\C \to \clq
+\D$, by sending each $C \in \C$ to the singleton clique containing
+only $F(C)$.  One can also show that clique functors can be composed,
+have a suitable notion of natural transformations between them, and so
+on\footnote{In fact, $\clq{-}$ turns out to be a (2-)monad, and the
+  category of clique functors is its Kleisli category
+  \citep{nlab-clique}.}. In fact, it turns out that this is precisely
+the theory of \emph{anafunctors}.
 
 \subsection{Anafunctors}
 \label{sec:anafunctors}
@@ -862,9 +852,6 @@ theory, so that ``normal'' functors secrectly become anafunctors.
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
 
-\todo{Explicitly discuss categorical monoids in HoTT. Note that strict
-  vs non-strict monoids is a non-issue.}
-
 As hinted earlier, category theory works much more nicely when founded
 in HoTT instead of set theory.  Intuitively, the main reason is that
 in set theory the only notion of equality (extensional equality of
@@ -1072,18 +1059,19 @@ also relevant) examples.
 \subsection{Monoidal categories in HoTT}
 \label{sec:monoidal-cats-hott}
 
-The first is the theory of \term{monoidal categories}.  Recall that a
-monoidal category $\C$ is one with a bifunctor $\otimes : \C^2 \to
-\C$, an identity object $1 \in \C$, and natural isomorphisms $\alpha$,
-$\lambda$, and $\rho$ expressing the associativity and identity laws
-(along with some extra coherence laws).  In set theory, there is also
-a notion of a \term{strict} monoidal category, where associativity and
-the identity laws hold up to \emph{equality} rather than just
-isomorphism.  In HoTT-based category theory, however, it turns out
-that functors between \hott{categories} (as opposed to precategories)
-are naturally isomorphic if and only if they are equal (HoTT book,
-Theorem 9.2.5)!  Thus, in HoTT, there is no difference between strict
-and non-strict monoidal categories.
+The first example is the theory of \term{monoidal categories}.  Recall
+that a monoidal category $\C$ is one with a bifunctor $\otimes : \C^2
+\to \C$, an identity object $1 \in \C$, and natural isomorphisms
+$\alpha$, $\lambda$, and $\rho$ expressing the associativity and
+identity laws (along with some extra coherence laws).  In set theory,
+there is also a notion of a \term{strict} monoidal category, where
+associativity and the identity laws hold up to \emph{equality} rather
+than just isomorphism.  In HoTT-based category theory, however,
+functors between \hott{categories}---as opposed to precategories---are
+naturally isomorphic if and only if they are equal (HoTT book, Theorem
+9.2.5).  Thus, in HoTT, there is no difference between strict and
+non-strict monoidal categories (though there is still a difference for
+precategories).
 
 \subsection{Coends in HoTT}
 \label{sec:coends-hott}
@@ -1103,7 +1091,7 @@ T(C,C)$, together with the obvious family of injections $\omega_C\ t =
 T(C,C)$, but fails to satisfy \eqref{eq:coend-diagram}: in particular,
 the outputs of $\omega_X$ and $\omega_{X'}$ are never equal when $X
 \neq X'$, precisely because $\uplus_C$ denotes a \emph{disjoint}
-union.  Instead, we had to quotient this disjoint union by an
+union.  Instead, we must quotient this disjoint union by the
 equivalence relation induced by \eqref{eq:coend-diagram}.
 
 \newcommand{\llangle}{\langle\!\langle}
@@ -1122,17 +1110,18 @@ also introduce a path constructor with type \[ (X,X' : \CT) \to (f :
 which ensures that the commutative diagram \eqref{eq:coend-diagram} is
 satisfied.
 
-It is already pleasant to be able to work directly with a data type
-representing a coend.  In the special case when $\CT$ is a groupoid,
-things become even more pleasant.  In a groupoid, any morphism $f :
+It is already convenient to be able to work directly with a data type
+representing a coend.  The special case where $\CT$ is a groupoid is
+even more convenient.  In a groupoid, any morphism $f :
 \hom X X'$ is automatically an isomorphism, $f : X \iso X'$, and hence
 there is a path $\isotoid\ f : X = X'$.  Moreover, one can show that
 \[ (\isotoid\ f)_*(T(f,1)\ t) = T(1,f)\ t \] ($(\isotoid\ f)_*$
 applies $f$ covariantly and $f^{-1}$ contravariantly), and therefore
 the above path constructor comes for free!  In other words, when $\CT$
-is a groupoid and $T : \CT^\op \times \CT \to \DT$, the coend $\exists
-T$ simply \emph{is} $\sum_C T(C,C)$, with no need for a special
-higher-order type.  The equalities which were missing in set theory
+is a groupoid and $T : \CT^\op \times \CT \to \DT$, the coend type
+$\exists T$ defined above is equivalent to the simple $\Sigma$-type
+$\sum_C T(C,C)$---that is, the extra higher path constructor is
+entirely redundant. The equalities which were missing in set theory
 are supplied automatically by HoTT's richer system of equality.
 
 \section{Finiteness in set theory}
@@ -1161,13 +1150,13 @@ species are defined as functors $\B \to \Set$.
 
 It is a simple result in classical category theory that every category
 is equivalent to its skeletons.  This equivalence allows one to pass
-back and forth between functors $\B \to \Set$ and functors $\P \to
-\Set$, and this is often implicitly exploited in the literature on
+freely back and forth between functors $\B \to \Set$ and functors $\P
+\to \Set$, and this is often implicitly exploited in the literature on
 species.  However, we are interested in the \emph{computational}
 content of this equivalence, and it is here that we run into trouble.
 After the foregoing discussion of cliques and anafunctors, the idea of
 quotienting out by equivalences classes of isomorphic objects ought to
-make us squeamish---and, indeed, a proof that $\B$ and $\P$ are
+make us squeamish---and, indeed, the proof that $\B$ and $\P$ are
 equivalent requires AC.
 
 In more detail, it is easy to define a functor $\fin - : \P \to \B$
@@ -1211,19 +1200,20 @@ T$ we can then construct $\xymatrix{ \fin{\size S}
 this construction using AC thus in some sense yields a well-defined
 functor but has no computational interpretation.
 
-We can avoid the use of AC by constructing an anafunctor $\size - : \B
-\to \P$ instead of a functor.  In particular, as the class of
-specifications $S_{\size{}}$, we choose the class of all bijections
-$\sum_{T \in \B} (T \bij \fin{\size T})$.  The function $\lana
-{\size{}} : S_{\size{}} \to \Ob \B$ simply forgets the chosen
-bijection, $\lana{\size{}}\ (T,\varphi) = T$, and $\rana{\size{}} :
-S_{\size{}} \to \Ob \P$ sends finite sets to their size,
-$\rana{\size{}}\ (T,\varphi) = \size T$.  Note that both
-$\lana{\size{}}$ and $\rana{\size{}}$ ignore $\varphi$, which is
-instead needed to define the action of $\size{}$ on morphisms.  In
-particular, given $\alpha : S \bij T$ in $\B$, we define
-$\sizesymb_{(S,\varphi_S), (T,\varphi_T)}(\alpha) = \varphi_S^{-1}
-\then \alpha \then \varphi_T$, which can be visualized as
+We can avoid the use of AC by constructing an \emph{anafunctor} $\size
+- : \B \to \P$ instead of a functor.  In particular, as the class of
+specifications $S_{\size{}}$, we choose the class of sets paired with
+bijections to canonical finite sets of the appropriate size, $\sum_{T
+  \in \B} (T \bij \fin{\size T})$.  The function $\lana {\size{}} :
+S_{\size{}} \to \Ob \B$ simply forgets the chosen bijection,
+$\lana{\size{}}\ (T,\varphi) = T$, and $\rana{\size{}} : S_{\size{}}
+\to \Ob \P$ sends finite sets to their size, $\rana{\size{}}\
+(T,\varphi) = \size T$.  Note that both $\lana{\size{}}$ and
+$\rana{\size{}}$ ignore $\varphi$, which is instead needed to define
+the action of $\size{}$ on morphisms.  In particular, given $\alpha :
+S \bij T$ in $\B$, we define $\sizesymb_{(S,\varphi_S),
+  (T,\varphi_T)}(\alpha) = \varphi_S^{-1} \then \alpha \then
+\varphi_T$, which can be visualized as
 \[
 \xymatrix{S \ar[d]_\alpha & \fin{\size S} \ar[l]_-{\varphi_S^{-1}}
   \ar@@{.>}[d]^{\size \alpha} \\
@@ -1290,34 +1280,36 @@ finitely-branching, finite-depth trees.
 Now consider the groupoid $\cat{H}$ obtained by replacing ``finite''
 with ``hereditarily finite'' in the definition of $\B$.  That is, the
 elements of $\cat{H}$ are hereditarily finite sets, and the morphisms
-are bijections.  This is no great loss, since given some finite set
-we are not interested in the intensional properties of its elements,
-but only in its extensional properties (how many elements it has,
-which elements are equal to other elements, and so on).
+are bijections.  This is no great loss, since given some finite set we
+are not particularly interested in the intensional properties of its
+elements, but only in its extensional properties (how many elements it
+has, which elements are equal to other elements, and so on).
 
 Unlike the class of all sets, however, the class of all hereditarily
 finite sets (normally written $V_\omega$) has a well-ordering.  For
-example, to order two hereditarily finite sets, we can first
-inductively sort their elements, and then do a lexicographic
-comparison.  This means that every hereditarily finite set has an
-induced ordering on its elements, since they are themselves
+example, we can compare two hereditarily finite sets by first
+inductively sorting their elements, and then performing a
+lexicographic comparison between the two ordered sequences of
+elements.  This means that every hereditarily finite set has an
+induced ordering on its elements, since the elements are themselves
 hereditarily finite. In other words, picking a well-ordering of
 $V_\omega$ is like making a ``global'' choice of orderings, assigning
 a canonical bijection $S \bij \fin{\size S}$ for every hereditarily
 finite set $S$.
 
 However, this construction is somewhat arbitrary, and has no natural
-counterpart in type theory, or indeed in a structural set theory.
-Indeed, the concept of hereditary finiteness only makes sense in a
-material set theory such as ZF.  To determine the canonical ordering
-on, say, $\{\text{dog}, \text{cat}, \text{moose}\}$, we need to know
-the precise identity of the set used to encode each animal---but
-knowing their precise encoding as sets violates the principle of
-equivalence, since there may be many possible encodings with the right
-properties.
+counterpart in type theory, or indeed in a structural set theory.  The
+concept of hereditary finiteness only makes sense in a material set
+theory such as ZF.  To determine the canonical ordering on, say,
+$\{\text{dog}, \text{cat}, \text{moose}\}$, we need to know the
+precise identity of the set used to encode each animal---but knowing
+their precise encoding as sets violates the principle of equivalence,
+since there may be many possible encodings with the right properties.
 
 \section{Finiteness in HoTT}
 \label{sec:finiteness-hott}
+
+\todo{add some subsections, this is getting a bit long}
 
 We now turn to developing counterparts to the groupoids $\P$ and $\B$
 in type theory.  First, a few necessary lemmas:
@@ -1557,19 +1549,11 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
   determined by $e_1$ and $e_2$.
 \end{proof}
 
-In fact, this gives us a counterpart not to $\B$, but to $\L$, the
-category whose objects are finite sets \emph{equipped with linear
-  orders}, and whose morphisms are \emph{order-preserving}
-bijections. \todo{Explain how equivalence with $\Fin n$ is the same as
-  a linear order, and how paths here correspond to order-preserving
-  bijections.}  \todo{This will come in handy later.  Forward
-  references.}
-
 The underlying problem is that $\FinType$ does not actually do a very
 good job at encoding what classical mathematicians usually mean by
 ``finite set''.  Saying that a set $A$ is finite with size $n$ does
 not typically imply there is some specific, chosen bijection $A \bij
-\fin n$, but merely that $A$ \emph{can be put} in bijection with $\fin
+\fin n$, but merely that $A$ \emph{can be} put in bijection with $\fin
 n$, with no mention of a specific bijection.  This is justified by the
 fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
 good as any other.
@@ -1582,7 +1566,7 @@ between $A$ and $\Fin n$, but without exposing a precise choice.  The
 finiteness evidence is now irrelevant to paths in $\FinTypeT$, since
 there is always a path between any two elements of a truncated type.
 We also note the following:
-\begin{prop}
+\begin{prop} \label{prop:size-not-trunc}
   For any type $A$, \[ \ptrunc{(n : \N) \times (A \equiv \Fin n)} \equiv
   (n : \N) \times \ptrunc{A \equiv \Fin n}. \]
 \end{prop}
@@ -1654,6 +1638,73 @@ $\FinSetT$ is consequently a $1$-type.
   $\BT$ uses a propositional truncation to ``hide'' the explicit
   choice of finiteness evidence.
 \end{rem}
+
+With the definition of $\BT$ and associated machinery under our belts,
+we now return to one of our first attempts, \[ \FinType \hdefeq (A :
+\Type) \times (n : \N) \times (A \equiv \Fin n). \] Recall that
+$\FinType$ turned out to be unsuitable as a basis for $\B$ because it
+has at most one path between any two elements.  However, $\FinType$
+turns out to be quite interesting in its own right; instead of a
+counterpart to $\B$, it yields a counterpart to $\L$, the category
+whose objects are finite sets \emph{equipped with linear orders}, and
+whose morphisms are \emph{order-preserving} bijections.
+
+For consistency, we first introduce a variant restricted to sets:
+\begin{defn}
+  The type of \emph{manifestly finite} sets is given by \[ \SetL
+  \hdefeq (A : \Type) \times \isSet(A) \times (n : \N) \times (A
+  \equiv \Fin n). \]
+\end{defn}
+Note that the definition of $\SetL$ is identical to that of
+$\FinSetT$, except for the absence of propositional truncation around
+the evidence of finiteness.
+
+The claim is that manifestly finite sets are the same as linearly
+ordered finite sets.  In one direction, the evident linear order on
+$\Fin n$ induces a corresponding linear order on $A$ via transport
+through an equivalence $A \equiv \Fin n$. Conversely, given a linear
+order on a \emph{finite} set $A$, we may construct an equivalence
+with $\Fin n$ by matching the smallest element to $0$, the second
+smallest to $1$, and so on.  More formally:
+
+\begin{prop}
+  We have the equivalence
+  \[ \SetL \equiv (A : \FinSetT) \times \linOrd(A), \] where $\linOrd(A)$ is
+  suitably defined as an antisymmetric, transitive, total binary
+  relation on $A$.
+\end{prop}
+\begin{proof}
+  As described above, the left-to-right direction is easy: there is a
+  canonical inhabitant of $\linOrd(\Fin n)$, which we can turn into an
+  inhabitant of $\linOrd(A)$ via transport.
+
+  \todo{This is using the ``uniquely characterize'' stuff re: prop
+    trunc but it seems that isn't discussed until after cor:BT-iso-PT.
+    Need to move the discussion, or something.}  The right-to-left
+  direction, while not hard to understand intuitively, is more subtle
+  from a constructive point of view.  The key observation is that the
+  smallest element of $A$ (according to the given linear order) is
+  uniquely determined, and hence we are justified in ``peeking'' at
+  the specific isomorphism contained in the propositional truncation
+  in order to construct it.  By induction on the size $n$, we can thus
+  enumerate the elements of $A$ in order to find the smallest.
+  We then proceed to recursively construct the isomorphism
+  corresponding to the linear order with the smallest element removed,
+  and then to add back the smallest element, incrementing the indices of
+  the remaining elements.
+\end{proof}
+
+Paths bewteen elements of $\SetL$ are thus necessarily
+order-preserving, since they correspond to paths between elements of
+$(A : \FinSetT) \times \linOrd(A)$. This constitutes an alternate
+proof of the fact that there is at most one path between any two
+elements of $\SetL$.  We can now define a counterpart to $\L$:
+
+\begin{defn}
+  $\LT$ denotes \[ \LT \hdefeq \tygrpd{\SetL}, \] the groupoid of
+  manifestly finite---\ie linearly ordered---sets, and
+  (order-preserving) paths between them.
+\end{defn}
 
 We now turn to the equivalence of $\PT$ and $\BT$, with a goal of
 defining inverse functors $\fin - : \PT \to \BT$ and $\size : \BT \to
