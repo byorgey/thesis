@@ -2150,7 +2150,7 @@ $\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
   $\Perm$ denotes the species of permutations.  Consider the species
   $\Der$ of \term{derangements}, that is, permutations which have no
   fixed points.  It is not possible, in general, to directly express
-  species using a ``filter'' operation, as in, ``all $F$-structures
+  species using a ``filter'' operation, as in, ``all $F$-shapes
   satisfying predicate $P$''.  However, it is possible to get a handle
   on $\Der$ in a more constructive manner by noting that every
   permutation can be canonically decomposed as a set of fixed points
@@ -2333,17 +2333,57 @@ We can now formally define arithmetic product as follows:
 \begin{ex}
   $\Sp{Mat} = \List \aprod \List$ is the species of (two-dimensional)
   \term{matrices}. $\Sp{Mat}$-shapes consist simply of labels arranged
-  in a rectangular grid.\todo{Say more. Picture?}
+  in a rectangular grid (\pref{fig:mat-shape}).
 \end{ex}
+\begin{figure}
+  \centering
+  \begin{diagram}[width=150]
+import           SpeciesDiagrams
+
+mkGrid = vcat . map hcat . (map . map) mkElt
+  where
+    mkElt i = square 1 <> labT i
+
+dia = mkGrid [[0,2,5],[3,1,4]]
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{A $\Sp{Mat}$-shape of size $6$}
+  \label{fig:mat-shape}
+\end{figure}
 
 \begin{ex}
   $\Sp{Rect} = \Bag \aprod \Bag$ is the species of
   \term{rectangles}. One way to think of rectangles is as equivalence
-  classes of matrices up to reordering the rows and columns.  Each
-  label has no fixed ``position''; the only thing one can ``ask''
-  about a particular label is the sets of other labels which are in
-  the same row or column.
+  classes of matrices up to reordering of the rows and columns.  Each
+  label has no fixed ``position''; the only invariants on any given
+  label are the sets of other labels which are in the same row or
+  column.  \pref{fig:rect-shape} shows an illustration; each rounded
+  outline represents a \emph{set} of labels.
 \end{ex}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import           Data.List                      (transpose)
+import           Diagrams.TwoD.Offset
+import           SpeciesDiagrams
+
+mkRect :: [[Int]] -> Diagram B R2
+mkRect g = (vcat . map hcat . (map . map) mkElt $ g) # applyAll (map neighborSet g) # applyAll (map neighborSet (transpose g))
+  where
+    mkElt i = square 1.5 # lw none <> labT i # named i
+    neighborSet xs = withNames [head xs, last xs] $ \[s,e] ->
+      let v = (location e .-. location s) # normalized # scale 0.6
+      in  beneath (stroke $ expandPath' (with & expandCap .~ LineCapRound) 0.4 ((location s .-^ v) ~~ (location e .+^ v))) -- $
+
+dia = mkRect [[0,2,5],[3,1,4]]
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{A $\Sp{Rect}$-shape of size $6$}
+  \label{fig:rect-shape}
+\end{figure}
 
 \begin{ex}
   Just as topological cylinders and tori may be obtained by gluing the
@@ -2405,11 +2445,33 @@ Species corresponding to a wide variety of standard data structures
 can be defined using $\X$.
 
 \begin{ex}
-  The species of \term{ordered pairs} is given by $\X \cdot \X$.  Since there
-  is only an $\X$-structure on a single label, and product partitions
-  labels, there are only $(\X \cdot \X)$-structures on label sets of
-  cardinality $2$, and there are two such structures, one for each
-  ordering of the two labels. \todo{picture?}
+  The species of \term{ordered pairs} is given by $\X \cdot \X$.
+  Since there is only an $\X$-shape on a single label, and product
+  partitions the labels, there are only $(\X \cdot \X)$-shapes on
+  label sets of cardinality $2$, and there are two such shapes, one
+  for each ordering of the two labels (\pref{fig:XdX-shapes}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=200]
+import           Data.List                      (permutations)
+import           SpeciesDiagrams
+
+pair x y = hcat
+  [ roundedRect' 1 1 (with & radiusTL .~ 0.2 & radiusBL .~ 0.2) <> x
+  , roundedRect' 1 1 (with & radiusTR .~ 0.2 & radiusBR .~ 0.2) <> y
+  ]
+
+pairs = hcat' (with & sep .~ 1) $ map mkPair (permutations [0,1])  -- $
+  where
+    mkPair [x,y] = pair (labT x) (labT y)
+
+dia = pairs
+  # lwO 0.7
+  # frame 0.5
+    \end{diagram}
+    \caption{$(\X \cdot \X)$-shapes}
+    \label{fig:XdX-shapes}
+  \end{figure}
 
   More generally, $\X^n = \underbrace{\X \cdot \dots \cdot \X}_n$ is the
   species of \term{ordered $n$-tuples}; there are exactly $n!$ many
