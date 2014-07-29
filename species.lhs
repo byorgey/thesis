@@ -9,15 +9,26 @@
 \todo{Need a story for building with both color or black/white
   figures}
 
-\todo{rewrite this.}
-The theory of combinatorial species, first introduced by
+The theory of \term{combinatorial species}, introduced by
 \citet{joyal}, is a unified, algebraic theory of \term{combinatorial
   structures} or \term{shapes}.  The algebraic nature of species is of
 particular interest in the context of data structures, and will be
-explored in depth in this chapter.
+explored in depth in this chapter.  The theory can also be seen as a
+\term{categorification} of the theory of \term{generating functions};
+this will be explored more in \pref{chap:labelled}.
 
-\todo{Add an overview of the whole chapter (incorporate a list of
-  contributions).}
+The present chapter begins by presenting an intuitive sense for
+species, along with a collection of examples, in
+\pref{sec:species-intuition}.  \pref{sec:species-definition} presents
+the formal definition of species and related definitions, along with
+more commentary and intuition.  The same section also discusses an
+encoding of species within homotopy type theory
+(\pref{sec:species-hott}).  As a close follow-up to the formal
+definition, \pref{sec:iso-equipotence} presents two equivalence
+relations on species, \term{isomorphism} and \term{equipotence}, and
+in particular sheds some new light on equipotence via the encoding of
+species in HoTT.  \todo{finish this introduction, once I have a better
+  idea of how the rest of the chapter will actually shake out.}
 
 \section{Intuition and examples}
 \label{sec:species-intuition}
