@@ -49,7 +49,7 @@ can be drawn from any set.
 import SpeciesDiagrams
 dia = hcat [tree # centerXY, strutX 4, octo [0..7]]
     # centerXY
-    # pad 1.1
+    # frame 0.5
     # lwO 0.7
 \end{diagram}
 \caption{Representative labelled shapes} \label{fig:example-labelled}
@@ -1284,23 +1284,25 @@ corresponding to \emph{types}, formalized in type theory, rather than
 sets.  Even within the realm of pure mathematics, there are many
 extensions to the basic theory of species (\eg multisort species,
 weighted species, $\L$-species, vector species, \dots) which require
-generalizing from $\fc \B \Set$ to other functor categories.
+generalizing from $\fc \B \Set$ to other functor categories. The rest
+of this chapter examines such generalized species in detail.
 
-The main goal of the rest of this chapter is to examine a number of
-species operations in the context of general functor categories $\fc
-\Lab \Str$, in order to identify precisely what properties of $\Lab$
-and $\Str$ are necessary to define each operation. That is, starting
-``from scratch'', we will build up a generic notion of species that
-supports the operations we are interested in. In the process, we get a
-much clearer picture of where the operations ``come from''.  In
-particular, $\B$ and \Set enjoy many special properties as categories
-(for example, \Set is cartesian closed, has all limits and colimits,
-and so on), and it is enlightening to see precisely which of these
-properties are required in which situations.  Although more general
-versions of specific operations have been defined previously
-\citep{Fiore08} \todo{cite some other things?}, I am not aware of any
-previous systematic generalization similar to this work.  In
-particular, the general categorical treatments of arithmetic product
+First, sections \pref{sec:lifted}--\pref{sec:differentiation} examine
+particular species operations in the context of general functor
+categories $\fc \Lab \Str$, in order to identify precisely what
+properties of $\Lab$ and $\Str$ are necessary to define each
+operation. That is, starting ``from scratch'', we will build up a
+generic notion of species that supports the operations we are
+interested in. In the process, we get a much clearer picture of where
+the operations ``come from''.  In particular, $\B$ and \Set enjoy many
+special properties as categories (for example, \Set is cartesian
+closed, has all limits and colimits, and so on), and it is
+enlightening to see precisely which of these properties are required
+in which situations.  Although more general versions of specific
+operations have been defined previously \citep{Fiore08} \todo{cite
+  some other things?}, I am not aware of any previous systematic
+generalization similar to this work.  In particular, the general
+categorical treatments of arithmetic product
 (\pref{sec:arithmetic-product}) and weighted species
 (\pref{sec:weighted}) appear to be new.
 
@@ -1315,11 +1317,8 @@ operation in $\fc \B \Set$, then generalizes it to arbitrary functor
 categories $\fc \Lab \Str$, and exhibits examples in other functor
 categories.
 
-\subsection{Other generalizations of species}
-\label{sec:other-generalizations}
-
-\todo{Related work.  List generalizations with a bit more detail,
-  maybe even some brief definitions, and forward references?}
+The remaining sections, \todo{fill in}, examine other specific
+generalizations of species, such as \todo{fill in}?
 
 \todo{Not to be confused with the
   generalized species of~\citet{Fiore08}, who define
@@ -1327,13 +1326,8 @@ categories.
   $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
   $B$.}
 
-\subsection{Roadmap}
-
-\todo{Need a better title for this section.} \todo{Summarize the rest
-  of the chapter?  lifted monoids. Day
-  convolution. Composition. Differentiation.}
-
 \section{Lifted monoids: sum and Cartesian product}
+\label{sec:lifted}
 
 Two of the simplest operations on species are \emph{sum} and
 \emph{Cartesian product}.  These operations are structurally
@@ -3033,17 +3027,49 @@ Similarly, the species $\Perm$ of permutations is given by $\Perm = \Bag \comp
 \begin{ex}
   The species $\Sp{R}$ of nonempty $n$-ary (``rose'') trees, with data
   stored at internal nodes, may be defined by the recursive species
-  equation \[ \Sp{R} = \X \sprod (\List \comp \Sp{R}). \] \todo{picture +
-    more commentary.  Just a single example tree?}
+  equation \[ \Sp{R} = \X \sprod (\List \comp \Sp{R}). \] An example
+  of an $\Sp R$-shape is shown in \pref{fig:rose-tree}.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=200]
+import SpeciesDiagrams
+
+dia = tree # centerXY # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{An example $\Sp R$-shape}
+    \label{fig:rose-tree}
+  \end{figure}
+  Note the use of $\List$ means the children of each node are linearly
+  ordered.  Using $\Bag$ in place of $\List$ yields a more
+  graph-theoretic notion of a rooted tree, with no structure imposed
+  on the neighbors of a particular node.  Using $\Cyc$, in turn,
+  yields shapes which correspond to particular planar embeddings of
+  rooted trees, with the children of each node ordered cyclically
+  around it but no distinguished first or last child.
 \end{ex}
 
 \begin{ex}
   The species $\Sp{P}$ of \emph{perfect trees}, with data stored in
   the leaves, may be defined by \[ \Sp{P} = \X + (\Sp{P} \comp
-  \X^2). \] \todo{picture + more commentary}
-\end{ex}
+  \X^2). \] That is, a perfect tree is either a single node, or a
+  perfect tree containing \emph{pairs}.  Functional programmers will
+  recognize this as a \term{non-regular} or \term{nested} recursive
+  type; it corresponds to the Haskell type
+  \begin{spec}
+    data P a = Leaf a | Branch (P (a,a))
+  \end{spec}
+  \pref{fig:perfect-shapes} illustrates some example $\Sp P$-shapes.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import SpeciesDiagrams
 
-\todo{Need a story for unlabelled species??}
+dia = square 1
+    \end{diagram}
+    \caption{Example $\Sp P$-shapes}
+    \label{fig:perfect-shapes}
+  \end{figure}
+\end{ex}
 
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
@@ -3130,78 +3156,6 @@ product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
 \todo{Prove it is associative?}
 \todo{Distributes over sum and product?}
 
-\section{Closed monoidal structures and elimination}
-\label{sec:closed}
-
-\paragraph{Cartesian closed} If $\Lab$ is locally small and $\Str$ is
-complete and Cartesian closed, then $\fc \Lab \Str$ is also complete and
-Cartesian closed. \todo{cite
-  \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178\#104178},
-  also check locally small thing?  Jacques asked it on MO?}  In
-particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
-(L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,
-$\B$, $\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and
-$\ST$ are complete and Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$,
-$\fc \BT \Set$, and $\fc \PT \Set$ are all complete and Cartesian closed
-as well.
-
-\todo{Note, here we don't need parametric polymorphism over $\forall
-  (n : \N)$ since there are no arrows between different $n$ to
-  preserve.  Should unpack this somewhere, and use a different
-  notation below.}
-
-Let's unpack this result a bit in the specific case of $\fc \PT 
-\ST$.  Ends in $\ST$ are given by (parametric) universal
-quantification, and indexed products are $\Pi$-types; hence, we
-have
-\begin{align*}
-(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
-       &= \all {(m : \N)} {(\Fin m \equiv \Fin n) \to G_n \to H_n} \\
-       &\equiv (\Fin n \equiv \Fin n) \to G_n \to H_n
-\end{align*}
-where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
-only inhabited when $m = n$.
-
-Being Cartesian closed means there is an adjunction $- \times G \adj
--^G$ between products and exponentials, which yields a natural
-isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
-\ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
-\PT \ST$ as natural transformations and the definition of $H^G$
-derived above, this yields \[ \left( \all n {(F \times G)_n \to H_n}
-\right) \equiv \left( \all n {F_n \to (\Fin n \equiv \Fin n) \to G_n
-    \to H_n} \right). \] Intuitively, this says that a
-size-polymorphic function that takes a Cartesian product shape $F
-\times G$ and yields another species $H$ is isomorphic to a
-size-polymorphic function that takes a triple of an $F$-shape, a
-$G$-shape, \emph{and a permutation on $\Fin n$}, and yields an
-$H$-shape.  The point is that an $(F \times G)$-shape consists not
-just of separate $F$- and $G$-shapes, but those shapes get to
-``interact'': in particular we need a permutation to tell us how the
-labels on the separate $F$- and $G$-shapes ``line up''.  An $(F \times
-G)$-shape encodes this information implicitly, by the fact that the
-two shapes share the exact same set of labels. \todo{Need to think
-  about this a bit more carefully in the context of $\P$.}  \todo{Note
-  that we could require the equivalence to always be \id.}
-
-\todo{picture.  Two cases with identical shapes but ``interacting''
-  differently.}
-
-Practically speaking, this result tells us how to express an
-eliminator for $(F \times G)$-shapes. \todo{Elaborate on this.}
-
-Note that $\fc \B \Set$ \emph{is} actually Cartesian closed, since it
-is equivalent to $\fc \P \Set$.  \todo{Check this for sure.}  The above
-derivations can be carried out in the context of $\fc \B \Set$ as well,
-with similar results.  Intuitively, $\B$ ``appears to be too big on
-the surface'', but is saved by virtue of being equivalent to a small
-category.  In a sense, $\P$ is what is ``really going on''; $\B$ is
-like $\P$ with lots of ``extra junk'' thrown in because it's
-convenient to talk about \emph{sets} of labels rather than having to
-work with the canonical set $\{0, \dots, n-1\}$ all the time.  This is
-quite a special property of $\B$; for example, $\Set$ is certainly not
-equivalent to any small categories. The same argument shows that
-$\fc \BT \ST$ is Cartesian closed as well.
-
 \section{Differentiation}
 \label{sec:differentiation}
 
@@ -3276,6 +3230,78 @@ dia = theDia # centerXY # pad 1.1
     \caption{Species pointing}
     \label{fig:pointing}
   \end{figure}
+
+\section{Closed monoidal structures and elimination}
+\label{sec:closed}
+
+\paragraph{Cartesian closed} If $\Lab$ is locally small and $\Str$ is
+complete and Cartesian closed, then $\fc \Lab \Str$ is also complete and
+Cartesian closed. \todo{cite
+  \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178\#104178},
+  also check locally small thing?  Jacques asked it on MO?}  In
+particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
+(L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,
+$\B$, $\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and
+$\ST$ are complete and Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$,
+$\fc \BT \Set$, and $\fc \PT \Set$ are all complete and Cartesian closed
+as well.
+
+\todo{Note, here we don't need parametric polymorphism over $\forall
+  (n : \N)$ since there are no arrows between different $n$ to
+  preserve.  Should unpack this somewhere, and use a different
+  notation below.}
+
+Let's unpack this result a bit in the specific case of $\fc \PT 
+\ST$.  Ends in $\ST$ are given by (parametric) universal
+quantification, and indexed products are $\Pi$-types; hence, we
+have
+\begin{align*}
+(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
+       &= \all {(m : \N)} {(\Fin m \equiv \Fin n) \to G_n \to H_n} \\
+       &\equiv (\Fin n \equiv \Fin n) \to G_n \to H_n
+\end{align*}
+where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
+only inhabited when $m = n$.
+
+Being Cartesian closed means there is an adjunction $- \times G \adj
+-^G$ between products and exponentials, which yields a natural
+isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
+\ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
+\PT \ST$ as natural transformations and the definition of $H^G$
+derived above, this yields \[ \left( \all n {(F \times G)_n \to H_n}
+\right) \equiv \left( \all n {F_n \to (\Fin n \equiv \Fin n) \to G_n
+    \to H_n} \right). \] Intuitively, this says that a
+size-polymorphic function that takes a Cartesian product shape $F
+\times G$ and yields another species $H$ is isomorphic to a
+size-polymorphic function that takes a triple of an $F$-shape, a
+$G$-shape, \emph{and a permutation on $\Fin n$}, and yields an
+$H$-shape.  The point is that an $(F \times G)$-shape consists not
+just of separate $F$- and $G$-shapes, but those shapes get to
+``interact'': in particular we need a permutation to tell us how the
+labels on the separate $F$- and $G$-shapes ``line up''.  An $(F \times
+G)$-shape encodes this information implicitly, by the fact that the
+two shapes share the exact same set of labels. \todo{Need to think
+  about this a bit more carefully in the context of $\P$.}  \todo{Note
+  that we could require the equivalence to always be \id.}
+
+\todo{picture.  Two cases with identical shapes but ``interacting''
+  differently.}
+
+Practically speaking, this result tells us how to express an
+eliminator for $(F \times G)$-shapes. \todo{Elaborate on this.}
+
+Note that $\fc \B \Set$ \emph{is} actually Cartesian closed, since it
+is equivalent to $\fc \P \Set$.  \todo{Check this for sure.}  The above
+derivations can be carried out in the context of $\fc \B \Set$ as well,
+with similar results.  Intuitively, $\B$ ``appears to be too big on
+the surface'', but is saved by virtue of being equivalent to a small
+category.  In a sense, $\P$ is what is ``really going on''; $\B$ is
+like $\P$ with lots of ``extra junk'' thrown in because it's
+convenient to talk about \emph{sets} of labels rather than having to
+work with the canonical set $\{0, \dots, n-1\}$ all the time.  This is
+quite a special property of $\B$; for example, $\Set$ is certainly not
+equivalent to any small categories. The same argument shows that
+$\fc \BT \ST$ is Cartesian closed as well.
 
 \section{Examples}
 \label{sec:examples}

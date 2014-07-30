@@ -8,6 +8,9 @@
 \chapter{Labelled structures}
 \label{chap:labelled}
 
+\todo{Put stuff about unlabelled structures somewhere in here? Need to
+  figure out what I even want to say about them.}
+
 The original motivation for the theory of species was not to give a
 unifying agebraic framework for studying combinatorial structures
 \latin{per se}.  Rather, the specific motivation was to provide new
