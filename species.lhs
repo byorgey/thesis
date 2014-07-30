@@ -375,9 +375,9 @@ permStructures
   permutations of rooted trees, \[ \Sp{End} = \Perm \comp T = \Bag
   \comp \Cyc \comp T, \] where $T = \X \cdot (\Bag \comp T)$.
   \citet{joyal} makes use of this characterization in giving an
-  elegant combinatorial proof of Cayley's formula, that the number of
-  (unrooted, unordered) labelled trees of size $n$ is given by
-  $n^{n-2}$.
+  elegant combinatorial proof of Cayley's formula, namely, that there
+  are $n^{n-2}$ (unrooted, unordered, arbitrary arity) labelled trees
+  of size $n$.
 
   One can likewise give characterizations of the species of
   endofunctions with various special properties, such as injections,
@@ -1229,15 +1229,18 @@ injection.
     species~\citep[\Sect 2.6]{bll}, where each molecular species is of
     the form $\X^n/H$ for some natural number $n$ and some subgroup $H
     \subseteq \S_n$ of the symmetric group on $n$ elements.  That is,
-    molecular species are lists of particular length quotiented by
-    some symmetries.  For example, $\List_5$ is given by $\X^5/1$,
-    where $1$ denotes the trivial group; $\Bag_5$ is $\X^5/\S_5$,
-    quotienting by all possible symmetries; $\C_5$ is $\X^5/\Z_5$,
-    quotienting by the cyclic group of size $5$.  The study and
-    classification of molecular and atomic species takes up an entire
-    section of \citet{bll}, and porting all of the definitions and
-    theorems there to HoTT would be a formidable (though worthwhile)
-    undertaking, and is outside the scope of this dissertation.
+    molecular species are lists of a particular length quotiented by
+    some symmetries: we let $H$ act on $\X^n$-shapes by permuting
+    their elements, and consider equivalence classes of $\X^n$-shapes
+    corresponding to orbits under $H$.  For example, $\List_5$ is
+    given by $\X^5/1$, where $1$ denotes the trivial group; $\Bag_5$
+    is $\X^5/\S_5$, quotienting by all possible symmetries; $\C_5$ is
+    $\X^5/\Z_5$, quotienting by the cyclic group of size $5$.  The
+    study and classification of molecular and atomic species takes up
+    an entire section of \citet{bll}, and porting all of the
+    definitions and theorems there to HoTT would be a formidable
+    undertaking, though I expect it would yield considerable insight.
+    Such an undertaking is left to future work.
 
     In any case, an equivalence $F\ L \equiv M_1\ L + M_2\ L + M_3\ L
     + \dots$ should yield a canonical ordering on the classes of
@@ -1247,25 +1250,26 @@ injection.
     by each $M_i$.
 
     Recall that each $M_i$ is of the form $\X^n/H$.  We can thus use
-    the linear order on $L$ to put an ordering on $M_i\ L$ as
-    follows.  First, in the case that $H = 1$, \ie the trivial group,
-    we can order all the $n!$ labelled $\X^n$ shapes using a
-    lexicographic order (or some other appropriate order derived from
-    the order on $L$).  If $H$ is nontrivial, then the orbits of
-    $\X^n$ under the action of $H$ are themselves the $M_i$-shapes,
-    and we can extend the ordering on the $\X^n$ shapes to orbits
-    thereof, ordering the orbits according to the smallest
-    $\X^n$-shape contained in each.
+    the linear order on $L$ to put an ordering on $M_i\ L$ as follows.
+    First, in the case that $H = 1$, \ie the trivial group, we can
+    order all the $n!$ labelled $\X^n$ shapes using a lexicographic
+    order (or some other appropriate order derived from the order on
+    $L$).  If $H$ is nontrivial, then the orbits of $\X^n$ under the
+    action of $H$ are themselves the $M_i$-shapes, and we can extend
+    the ordering on the $\X^n$ shapes to orbits thereof, for example,
+    by ordering the orbits according to the smallest $\X^n$-shape
+    contained in each.
 
     Even if we succeed in uniquely characterizing some equivalence,
     note that the equivalence we thus characterize may not be the same
-    as $s$!  We must construct the final equivalence ``from scratch'',
-    somehow using the fact that we know \emph{some} equivalence exists
-    to construct the one we have characterized.  It is not entirely
-    clear how to do this.  One idea might be to construct a
-    permutation on $G\ L$ which, when composed with the equivalence
-    given by $f$, produces the desired equivalence.  However, this is
-    the sketchiest part of the proof.
+    as the $s$ obtained as the output of the function $f$.  We must
+    construct the final equivalence ``from scratch'', somehow using
+    the fact that we know \emph{some} equivalence exists to construct
+    the one we have characterized.  It is not entirely clear how to do
+    this.  One idea might be to construct a permutation on $G\ L$
+    which, when composed with the equivalence given by $f$, produces
+    the desired equivalence.  However, this is admittedly the
+    sketchiest part of the proof.
   \end{itemize}
 \end{proof}
 
