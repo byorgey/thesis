@@ -320,8 +320,68 @@ permStructures
     \label{fig:permutations}
     %$
   \end{figure}
-  Algebraically, it can be described by \[ \Perm = \Bag_+ \comp
-  \Cyc. \]
+  Algebraically, it can be described by \[ \Perm = \Bag \comp
+  \Cyc, \] that is, a permutation is a set of cycles.
+\end{ex}
+
+\begin{ex}
+  The species $\Sp{End}$ of \term{endofunctions} consists of directed
+  graphs corresponding to valid endofunctions on the labels---that is,
+  where every label has exactly one outgoing edge.
+
+  \todo{Example picture---use graphviz?}
+
+% IN PROGRESS
+%
+% import           Data.Maybe
+% import           Data.Tree
+% import           Diagrams.TwoD.Layout.Tree
+% import           Diagrams.TwoD.Polygons
+% import           SpeciesDiagrams
+
+% type Endofun = [[Tree Int]]
+
+% mkEndo :: Int -> (Int -> Int) -> Endofun
+% mkEndo n f = [map mkTree c | Cycle c <- g]
+%   where
+%     g = mkGraph f [0 .. n-1]
+%     hairs = [h | Hair h <- g]
+%     mkTree :: Int -> Tree Int
+%     mkTree i = Node i (map mkTree (childrenOf i))
+%     childrenOf i = catMaybes (map (childOf i) hairs)
+%     childOf i [] = Nothing
+%     childOf i (x:xs) = childOf' i x xs
+%     childOf' i x [] = Nothing
+%     childOf' i x (y:ys) | y == i = Just x
+%                         | otherwise = childOf' i y ys
+
+% drawEndo :: Endofun -> Diagram B R2
+% drawEndo = hcat' (with & sep .~ 1) . map drawComponent
+
+% drawComponent :: [Tree Int] -> Diagram B R2
+% drawComponent = flip cyc' 1 . map drawT
+%   where
+%     drawT = renderTree mloc (~~) . symmLayout' (with & slHSep .~ 4 & slVSep .~ 4)
+
+% endo = drawEndo (mkEndo 10 (\n -> if n == 0
+%                                      then 1
+%                                      else (n `div` 3)))
+
+% dia = endo
+%   # lwO 0.7
+%   # frame 0.5
+
+  Some reflection shows that endofunctions can be characterized as
+  permutations of rooted trees, \[ \Sp{End} = \Perm \comp T = \Bag
+  \comp \Cyc \comp T, \] where $T = \X \cdot (\Bag \comp T)$.
+  \citet{joyal} makes use of this characterization in giving an
+  elegant combinatorial proof of Cayley's formula, that the number of
+  (unrooted, unordered) labelled trees of size $n$ is given by
+  $n^{n-2}$.
+
+  One can likewise give characterizations of the species of
+  endofunctions with various special properties, such as injections,
+  surjections, and involutions.
 \end{ex}
 
 In a computational context, it is important to keep in mind the
@@ -366,7 +426,7 @@ language of categories.
 It is worth spelling out this definition in more detail, which will
 also give an opportunity to explain some intuition and
 terminology. Even for those who are very comfortable with category
-theory, it may be hard to grok the intuition for the abstract
+theory, it may be hard to grasp the intuition for the abstract
 definition right away.
 
 \begin{defn}
@@ -450,8 +510,12 @@ context) just ``$F$-shapes''.\footnote{Margaret Readdy's translation
   that word is likely to remind computer scientists of ``data
   structures'', which is, again, the wrong association: data
   structures contain \emph{data}, whereas species shapes contain only
-  labels.}  $F\ \sigma$ is called the ``transport of $\sigma$ along
-$F$'', or sometimes the ``relabelling of $F$-shapes by $\sigma$''.
+  labels.  I try to consistently use the word ``shape'' to refer to
+  the elements of a species, and reserve ``structure'' for the
+  labelled data structures to be introduced in \pref{chap:labelled},
+  though a few slip-ups are likely inevitable.}  $F\ \sigma$ is called
+the ``transport of $\sigma$ along $F$'', or sometimes the
+``relabelling of $F$-shapes by $\sigma$''.
 
 The functoriality of a species $F$ means that the actual labels used
 don't matter; the resulting family of shapes is ``independent'' of the
@@ -461,14 +525,15 @@ $F$'s action on all label sets of size $n$ is determined by its action
 on any particular such set: if $||L_1|| = ||L_2||$ and we know $F\
 L_1$, we can determine $F\ L_2$ by lifting an arbitrary bijection
 between $L_1$ and $L_2$.  More formally, although Definitions
-\ref{defn:species-set}--\ref{defn:species-p} say only that a species
-$F$ sends a bijection $\sigma : L \bij L'$ to a \emph{function} $F\
-\sigma : F\ L \to F\ L'$, the functoriality of $F$ guarantees that $F\
-\sigma$ is a bijection as well. In particular, $(F\ \sigma)^{-1} = F\
-(\sigma^{-1})$, since $F\ \sigma \comp F\ (\sigma^{-1}) = F\ (\sigma
-\comp \sigma^{-1}) = F\ id = id$, and similarly $F\ (\sigma^{-1})
-\comp F\ \sigma = id$.  Thus, \emph{up to isomorphism}, a functor $F$
-must ``do the same thing'' for any two label sets of the same size.
+\ref{defn:species-cat} and \ref{defn:species-set} say only that a
+species $F$ sends a bijection $\sigma : L \bij L'$ to a
+\emph{function} $F\ \sigma : F\ L \to F\ L'$, the functoriality of $F$
+guarantees that $F\ \sigma$ is a bijection as well. In particular,
+$(F\ \sigma)^{-1} = F\ (\sigma^{-1})$, since $F\ \sigma \comp F\
+(\sigma^{-1}) = F\ (\sigma \comp \sigma^{-1}) = F\ id = id$, and
+similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.  Thus, \emph{up to
+  isomorphism}, a functor $F$ must ``do the same thing'' for any two
+label sets of the same size.
 
 We may therefore take the finite set of natural numbers $[n] = \{0,
 \dots, n-1\}$ as \emph{the} canonical label set of size $n$, and write
@@ -482,17 +547,17 @@ which amounts to the same thing.
   Typically, the sets of shapes $F\ L$ are required to be
   \emph{finite}, that is, species are defined as functors into the
   category of \emph{finite} sets.  Of course, this is important if the
-  goal is to \emph{count} them!  However, nothing in the present work
+  goal is to \emph{count} things!  However, nothing in the present work
   hinges on this restriction, so it is simpler to drop it.
 
   It should be noted, however, that requiring finiteness in this way
-  is actually no great restriction: requiring each \emph{particular}
-  set of shapes $F\ L$ to be finite is not at all the same thing as
-  requiring the \emph{entire family} of shapes, $\uplus_{n \in \N} F\
-  n$, to be finite.  Typically, even in the cases that programmers
-  care about, each individual $F\ n$ is finite but the entire family
-  is not---that is, a type may have infinitely many inhabitants but
-  only finitely many of a given size.
+  is no great restriction: requiring each \emph{particular} set of
+  shapes $F\ L$ to be finite is not at all the same thing as requiring
+  the \emph{entire family} of shapes, $\uplus_{n \in \N} F\ n$, to be
+  finite.  Typically, even in the cases that programmers care about,
+  each individual $F\ n$ is finite but the entire family is not---that
+  is, a type may have infinitely many inhabitants but only finitely
+  many of a given size.
 \end{rem}
 
 \begin{rem}
@@ -513,17 +578,17 @@ which amounts to the same thing.
   labelled shapes \emph{indexed by} their labels.
 
   Given this shift in emphasis, one might think it more natural to
-  define a set of labelled shapes along with a function from shapes to
-  the set of labels contained in them (indeed, down this path lies the
-  notion of \term{containers} \citep{abbott_categories_2003,
-    abbott_quotient, alti:cont-tcs, alti:lics09}).  Species can be
-  seen as roughly dual to these shapes-to-labels mappings, giving the
-  \term{fiber} of each label set.  This is parallel to the equivalence
-  between the functor category $\Set^\N$ and the slice category
-  $\Set/\N$~(see the discussion under functor categories in
-  \pref{sec:ct-fundamentals}), though the details are more subtle
-  since $\B$ is not discrete.  \later{Both formulations have their strengths
-  and weaknesses; \dots}
+  define a set of labelled shapes along with a function mapping shapes
+  to the set of labels contained in them (indeed, down this path lies
+  the notion of \term{containers} \citep{abbott_categories_2003,
+    abbott_quotient, alti:cont-tcs, alti:lics09}) \todo{cite stuff
+    types?}.  Species can be seen as roughly dual to these
+  shapes-to-labels mappings, giving the \term{fiber} of each label
+  set.  This is parallel to the equivalence between the functor
+  category $\Set^\N$ and the slice category $\Set/\N$~(see the
+  discussion under functor categories in \pref{sec:ct-fundamentals}),
+  though the details are more subtle since $\B$ is not discrete.
+  \later{Both formulations have their strengths and weaknesses; \dots}
 \end{rem}
 
 \begin{rem}
@@ -533,9 +598,9 @@ which amounts to the same thing.
   isomorphisms, this is essentially equivalent to $\B \to \FinSet$,
   which is the definition used in Joyal's second
   paper~\citeyearpar{joyal86} as well as, later, by \citet{bll}.  It
-  can be argued that this second formulation is more natural,
-  especially when one wishes to make the connection to functors
-  $\FinSet \to \FinSet$ (or $\Set \to \Set$); see
+  can be argued, however, that this second formulation is more
+  natural, especially when one wishes to make the connection to
+  functors $\FinSet \to \FinSet$ (or $\Set \to \Set$); see
   \pref{chap:labelled}.
 \end{rem}
 
@@ -557,7 +622,9 @@ individual sizes will always result in another valid overall functor.
 More generally, we can ``kill'' any subset of sizes using arbitrary
 predicates.  For example, $F_{\leq n}$ is the species of $F$-shapes of
 size $n$ or less; similarly, $F_{\geq n}$ is the species of $F$-shapes
-of size $n$ or greater.
+of size $n$ or greater.  We also write $F_+$ as a shorthand, and say
+``nonempty $F$'', for $F_{\geq 1}$, the species $F$ restricted to
+nonempty sets of labels.
 
 \subsection{The category of species}
 \label{sec:category-of-species}
@@ -565,12 +632,12 @@ of size $n$ or greater.
 Recall that $\fc \C \D$ denotes the \term{functor category} whose
 objects are functors and whose morphisms are natural transformations
 between functors.  We may thus consider the \term{category of
-  species}, $\Spe = (\fc \B \Set)$, where the objects are species, and
-morphisms between species are label-preserving mappings which commute
-with relabelling---that is, mappings which are entirely ``structural''
-and do not depend on the labels in any way. For example, an in-order
-traversal constitutes such a mapping from the species of binary trees
-to the species of lists, as illustrated in
+  species}, $\Spe \defeq (\fc \B \Set)$, where the objects are
+species, and morphisms between species are label-preserving mappings
+which commute with relabelling---that is, mappings which are entirely
+``structural'' and do not depend on the labels in any way. For
+example, an in-order traversal constitutes such a mapping from the
+species of binary trees to the species of lists, as illustrated in
 \pref{fig:species-morphism}: computing an in-order traversal and then
 relabelling yields the same list as first relabelling and then doing
 the traversal.
@@ -790,8 +857,8 @@ related by $\relabel$, whereas those shown in
   are invertible.
 \end{proof}
 
-Finally, we can define what we mean by a \term{form}, or
-\term{unlabelled species}.
+Given these preliminary definitions, we can now define what we mean by
+a \term{form}, or \term{unlabelled shape}.
 
 \begin{defn}
   An $F$-\term{form} is an equivalence class under $\relabel$, that
@@ -801,7 +868,7 @@ Finally, we can define what we mean by a \term{form}, or
 In other words, an $F$-form is a maximal class of labelled $F$-shapes
 which are all interconvertible by relabelling.  Note that as defined,
 such classes are rather large, as they include labellings by \emph{all
-  possible} sets of labels!  We lose nothing by considering only a
+  possible} sets of labels!  Typically, we consider only a
 single label set of each size, such as $\Fin n$.  For example,
 \pref{fig:perm-forms-four} shows all the $\Perm$-forms of size four,
 using two different representations: on the right are the literal
@@ -987,23 +1054,33 @@ cycles in decreasing order of their smallest element, and then
 transcribe each cycle as a list beginning with the smallest element.
 \pref{fig:fundamental-transform} shows an example where the
 permutation $(35)(26)(014)$ (whose cycles have minimum elements $3$,
-$2$, and $0$ respectively) is sent to the list $3526014$.  To invert
-the transformation, partition a list into segments with each record
-minimum beginning a new segment, and turn each such segment into a
-cycle.  For example, in the list $3526014$, the elements $3$, $2$, and
-$0$ are the ones which are smaller than all the elements to their
-left, so each one marks off the beginning of a new cycle.
+$2$, and $0$ respectively) is sent to the list $3526014$, which for
+emphasis is drawn with the height of each node corresponding to the
+size of its label.  To invert the transformation, partition a list
+into segments with each record minimum beginning a new segment, and
+turn each such segment into a cycle.  For example, in the list
+$3526014$, the elements $3$, $2$, and $0$ are the ones which are
+smaller than all the elements to their left, so each one marks off the
+beginning of a new cycle.
 
 \begin{figure}
   \centering
   \begin{diagram}[width=300]
+import           Control.Arrow
 import           SpeciesDiagrams
 
 permToList = hcat' (with & sep .~ 1)
   [ drawPerm [[3,5],[2,6],[0,1,4]]
   , arrow 1
-  , drawList' labT [3,5,2,6,0,1,4]
+  , mountainRange labT [3,5,2,6,0,1,4]
   ]
+
+mountainRange nd ns = lst # applyAll [conn i || i <- [0 :: Int .. length ns - 2]] # centerY
+  where
+    elts = map (id &&& nd) ns # zipWith (second . named) [0 :: Int ..] # map (\(i,n) -> n # translateY (fromIntegral i / 2))
+    w    = (maximum . map width) elts
+    lst  = hcat' (with & sep .~ w/2) elts
+    conn i = withNames [i,i+1] (\[a,b] -> beneath (location a ~~ location b))
 
 dia = permToList
   # lwO 0.7
@@ -1063,21 +1140,21 @@ therefore, since applying the standard transform directly may give
 results completely incompatible with those obtained by applying a
 non-order-preserving permutation followed by the standard transform.
 
-\citet{bll}[p. 22] note that the standard transform \emph{is} in fact
+\citet[p. 22]{bll} note that the standard transform \emph{is} in fact
 compatible with \emph{order-preserving} bijections.  If we take
 species as functors $\L \to \Set$, where $\L$ is the groupoid of
 finite sets equipped with linear orders, along with order-preserving
 bijections, then the standard transform is indeed a natural
 isomorphism between $\List$ and $\Perm$.  Such species are called
-$\L$-species, and are discussed further in \pref{sec:L-species}.
-For the moment we note only that in HoTT, $\L$ corresponds exactly to
-$\SetL$, \ie the variant of $\FinSetT$ \emph{without} a
-propositional truncation hiding the finiteness evidence.  The objects
-of $\SetL$ are finite sets ($0$-types) along with a natural
-number $n$ and an equivalence to $\Fin n$, which, as we have seen, is
-equivalent to a linear ordering.  The morphisms are just paths, which,
-as the proof of \pref{prop:U-fin-set} demonstrates, should be thought
-of as order-preserving bijections.
+$\L$-species, and are discussed further in \pref{sec:L-species}.  For
+the moment we note only that in HoTT, $\L$ corresponds exactly to
+$\SetL$, \ie the variant of $\FinSetT$ \emph{without} a propositional
+truncation hiding the finiteness evidence.  The objects of $\SetL$ are
+finite sets ($0$-types) along with a natural number $n$ and an
+equivalence to $\Fin n$, which, as we have seen, is equivalent to a
+linear ordering.  The morphisms are just paths, which, as the proof of
+\pref{prop:U-fin-set} demonstrates, should be thought of as
+order-preserving bijections.
 
 Back in $\FinSetT$, however, in order to use the linear order
 associated to each finite set $K$, we must produce a mere proposition.
@@ -1097,13 +1174,9 @@ On the other hand, we cannot use the results of $\chi$ to actually
 compute a correspondence between elements of $\List\ K$ and $\Perm\
 K$.
 
-\todo{Note that $\chi$ \emph{is} natural, but naturality in this case
-  means something a bit different: \dots what?}  \todo{cite Bernardy
-  parametricity stuff?}
-
 One might expect that there are other ways to obtain an equipotence.
-That is, the proof of equipotence between $\List$ and $\Perm$ is not
-a natural isomorphism because it additionally requires a linear order
+That is, the correspondence between $\List$ and $\Perm$ is not a
+natural isomorphism because it additionally requires a linear order
 structure on the labels.  Might there be other equipotences which
 require other sorts of structure on the labels?
 
@@ -1118,8 +1191,15 @@ proof making use of a linear order on the set of labels.
   ((L : \FinSetT) \to \ptrunc{F\ L \equiv G\ L}). \]
 \end{conj}
 
+Note that on the left-hand side, $F\ L$ and $G\ L$ are not well-typed
+as written, but are used as shorthands for the application of $F$ and
+$G$ to $\iota L$, where $\iota : \SetL \to \FinSetT$ is the evident
+injection.
+
 \begin{proof}[Proof (sketch)]
-  I describe here a plan of attack, \ie an outline of a possible proof.
+  I describe here a plan of attack, \ie an outline of a possible
+  proof, although as explained below, I expect that completing the
+  proof will require a considerable amount of effort.
   \begin{itemize}
   \item[$(\to)$] This direction is certainly true and quite easy to
     show.  We are given a function $f : (L : \SetL) \to (F\ L \equiv
@@ -1140,24 +1220,24 @@ proof making use of a linear order on the set of labels.
     The trick is now to uniquely characterize the particular
     equivalence $F\ L \equiv G\ L$ we wish to produce, which we can do
     by producing linear orderings on the $(F\ L)$-shapes and $(G\
-    L)$-shapes, and matching them up. We have the linear ordering on
-    $L$ to help, but the task still seems impossible without some sort
-    of knowledge about $F$ and $G$.  Fortunately, it is possible to
-    deeply characterize species based on their extensional behavior.
-    In particular, every species can be uniquely decomposed as a sum
-    of \term{molecular} species~\citep[\Sect 2.6]{bll}, where each
-    molecular species is of the form $\X^n/H$ for some natural number
-    $n$ and some subgroup $H \subseteq \S_n$ of the symmetric group on
-    $n$ elements.  That is, molecular species are lists of particular
-    length quotiented by some symmetries.  For example, $\List_5$ is
-    given by $\X^5/1$, where $1$ denotes the trivial group; $\Bag_5$
-    is $\X^5/\S_5$, quotienting by all possible symmetries; $\C_5$ is
-    $\X^5/\Z_5$, quotienting by the cyclic group of size $5$.  The
-    study and classification of molecular and atomic species takes up
-    an entire section of \citet{bll}, and porting all of the
-    definitions and theorems there to HoTT would be a formidable
-    (though worthwhile) undertaking, and is outside the scope of this
-    dissertation.
+    L)$-shapes, and matching them in order. We have the linear
+    ordering on $L$ to help, but the task still seems impossible
+    without some sort of knowledge about $F$ and $G$.  Fortunately, it
+    is possible to deeply characterize species based on their
+    extensional behavior.  In particular, every species can be
+    uniquely decomposed as a sum of \term{molecular}
+    species~\citep[\Sect 2.6]{bll}, where each molecular species is of
+    the form $\X^n/H$ for some natural number $n$ and some subgroup $H
+    \subseteq \S_n$ of the symmetric group on $n$ elements.  That is,
+    molecular species are lists of particular length quotiented by
+    some symmetries.  For example, $\List_5$ is given by $\X^5/1$,
+    where $1$ denotes the trivial group; $\Bag_5$ is $\X^5/\S_5$,
+    quotienting by all possible symmetries; $\C_5$ is $\X^5/\Z_5$,
+    quotienting by the cyclic group of size $5$.  The study and
+    classification of molecular and atomic species takes up an entire
+    section of \citet{bll}, and porting all of the definitions and
+    theorems there to HoTT would be a formidable (though worthwhile)
+    undertaking, and is outside the scope of this dissertation.
 
     In any case, an equivalence $F\ L \equiv M_1\ L + M_2\ L + M_3\ L
     + \dots$ should yield a canonical ordering on the classes of
