@@ -1277,15 +1277,15 @@ injection.
 \label{sec:generalized-species}
 
 In many ways, $\fc \B \Set$ as the definition of species is too
-specific and restrictive.  As mentioned previously, one of the big
-motivations for this work is to use species as a basis for
-computation, and ideally this means working with shapes and labels
-corresponding to \emph{types}, formalized in type theory, rather than
-sets.  Even within the realm of pure mathematics, there are many
-extensions to the basic theory of species (\eg multisort species,
-weighted species, $\L$-species, vector species, \dots) which require
-generalizing from $\fc \B \Set$ to other functor categories. The rest
-of this chapter examines such generalized species in detail.
+specific and restrictive. One of the main motivations for this work is
+to be able to use species as a basis for computation, and ideally this
+means working with shapes and labels corresponding to \emph{types},
+formalized in type theory, rather than sets.  Even within the realm of
+pure mathematics, there are many extensions to the basic theory of
+species (\eg multisort species, weighted species, $\L$-species, vector
+species, \dots) which require generalizing from $\fc \B \Set$ to other
+functor categories. The rest of this chapter examines such generalized
+species in detail.
 
 First, sections \pref{sec:lifted}--\pref{sec:differentiation} examine
 particular species operations in the context of general functor
@@ -1311,20 +1311,17 @@ general framework. Each instantiation arises from considering
 particular categories in place of $\B$ and $\Set$.  To keep these
 functor categories straight, the word ``species'' will be used for
 $\fc \B \Set$, and ``generalized species'' (or, more specifically,
-``$\fc \Lab \Str$-species'') for some abstract $\fc \Lab \Str$.  Each
-of the following section begins by defining a particular species
-operation in $\fc \B \Set$, then generalizes it to arbitrary functor
-categories $\fc \Lab \Str$, and exhibits examples in other functor
-categories.
-
-The remaining sections, \todo{fill in}, examine other specific
-generalizations of species, such as \todo{fill in}?
-
-\todo{Not to be confused with the
+``$\fc \Lab \Str$-species'')\footnote{Not to be confused with the
   generalized species of~\citet{Fiore08}, who define
   ``$(A,B)$-species'' as functors from $\B A$ (a generalization of
   $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
-  $B$.}
+  $B$.} for some abstract $\fc \Lab \Str$.  Each section begins by
+defining a particular species operation in $\fc \B \Set$, then
+generalizes it to arbitrary functor categories $\fc \Lab \Str$, and
+exhibits examples in other functor categories.
+
+The remaining sections, \todo{fill in}, examine other specific
+generalizations of species, such as \todo{fill in}?
 
 \section{Lifted monoids: sum and Cartesian product}
 \label{sec:lifted}
@@ -1451,7 +1448,7 @@ lists
 \begin{ex}
   As another example, consider $\Bin + \Bin$.  It is important to bear
   in mind that $+$ yields a \emph{disjoint} or ``tagged'' union; so
-  $\Bin + \Bin$ yields two copies of every binary tree
+  $\Bin + \Bin$ consists of \emph{two} copies of every binary tree
   (\pref{fig:bin-plus-bin}), and in particular it is distinct from
   $\Bin$.
 \end{ex}
@@ -1659,9 +1656,11 @@ is symmetric, but only up to isomorphism, since at root it still
 consists of an \emph{ordered} pair of shapes.
 
 There is also a species, usually called $\Bag$, which is an identity
-element for Cartesian product.  Considering that we should have $(\Bag
-\times G)\ L = \Bag\ L \times G\ L \equiv G\ L$, the proper definition of
-$\Bag$ becomes clear:
+element for Cartesian product.\footnote{The notation $\Bag$ comes for
+  the French \foreign{ensemble} (set), and is also a clever pun on the
+  fact that the exponential generating function for $\Bag$ is $e^x$.}
+Considering that we should have $(\Bag \times G)\ L = \Bag\ L \times
+G\ L \equiv G\ L$, the proper definition of $\Bag$ becomes clear:
 
 \begin{defn}
   The species of \emph{sets}, $\Bag$, is defined as the constant functor
@@ -1732,8 +1731,8 @@ later. First, however, we consider some examples.
   Lifting coproducts in $\Set$ to $\fc \B \Set$ yields the $(+, \Zero)$
   structure on species, and likewise lifting products yields $(\times,
   \Bag)$. According to \pref{prop:lift-monoid-simple}, since
-  $(\uplus,\varnothing)$ is a coproduct structure on $\Set$, $(+,
-  \Zero)$ is likewise a coproduct structure on the category $\fc \B \Set$
+  $(\uplus,\varnothing)$ is a categorical coproduct on $\Set$, $(+,
+  \Zero)$ is likewise a categorical coproduct on the category $\fc \B \Set$
   of species, and similarly $(\times, \Bag)$ is a categorical product.
 \end{ex}
 
@@ -1825,12 +1824,10 @@ later. First, however, we consider some examples.
 
 We now turn to a detailed and fully general construction which shows
 how monoids (and many other structures of interest) can be lifted from
-a category $\Str$ to a functor category $\fc \Lab \Str$.  This
-construction seems to be ``folklore'', but I have been unable to find
-any detailed published account, so it seemed good to include it here
-for completeness.  This therefore may not represent a truly novel
-contribution, but I have worked it out independently based on a few
-vague hints on StackOverflow and elsewhere. \todo{cite??}
+a category $\Str$ to a functor category $\fc \Lab \Str$.  The
+high-level ideas of this construction seem to be ``folklore'', but I
+have been unable to find any detailed published account, so it seemed
+good to include it here for completeness.
 
 We must first develop some technical machinery regarding functor
 categories.  In particular, we show how to lift objects, functors, and
@@ -1839,7 +1836,6 @@ objects, functors, and natural transformations based on the functor
 category $\Str^\Lab$.
 
 \begin{lem} \label{lem:lift-object}
-  \bay{Not sure if this is actually needed at all.}
   An object $D \in \D$ lifts to an object (\ie a functor) $D^\C \in
   \D^\C$, defined as the constant functor $\Delta_D$.
 \end{lem}
@@ -1914,10 +1910,14 @@ Natural transformations lift in the same way:
 \end{proof}
 
 Finally, we need to know that \emph{laws}---expressed as commutative
-diagrams---also lift appropriately from $\D$ to $\D^\C$.  The first
-step is to understand how to appropriately encode laws as categorical
-objects.  Consider a typical commutative diagram, such as the
-following diagram expressing the coherence of the associator for a
+diagrams---also lift appropriately from $\D$ to $\D^\C$.  For example,
+if we lift the functor and natural transformations defining a monoid
+in $\D$, we need to know that the resulting lifted functor and lifted
+natural transformations still define a valid monoid in $\D^\C$.
+
+The first step is to understand how to appropriately encode laws as
+categorical objects.  Consider a typical commutative diagram, such as
+the following diagram expressing the coherence of the associator for a
 monoidal category.  The parameters to all the instances of $\alpha$
 have been written out explicitly, to make the subsequent discussion
 clearer, although in common practice these would be left implicit.
@@ -1935,17 +1935,17 @@ forming a pentagon, along with the required composites) into the
 category in which the diagram is supposed to live. Such a functor will
 pick out certain objects and morphisms of the right ``shape'' in the
 target category, and the functor laws will ensure that the target
-diagram commutes in the same ways as the index category. (This much is
-well-known to anyone who has studied abstract limits and colimits.)
-The second point is that this diagram, like most such diagrams, is
-really supposed to hold for \emph{all} objects $A$, $B$, $C$, $D$.  So
-instead of thinking of this diagram as living in a category $\C$,
-where the vertices of the diagram are objects of $\C$ and the edges
-are morphisms, we can think of it as living in $\fc {\C^4} \C$, where
-the vertices are \emph{functors} $\C^4 \to \C$ (for example, the top
-vertex is the functor which takes the quadruple of objects $(A,B,C,D)$
-and sends them to the object $((A \oplus B) \oplus C) \oplus D$), and
-the edges are natural transformations.
+diagram commutes in the same ways as the index category. (This much
+should be familiar to anyone who has studied abstract limits and
+colimits.)  The second point is that this diagram, like many such
+diagrams, is really supposed to hold for \emph{all} objects $A$, $B$,
+$C$, $D$.  So instead of thinking of this diagram as living in a
+category $\C$, where the vertices of the diagram are objects of $\C$
+and the edges are morphisms, we can think of it as living in $\fc
+{\C^4} \C$, where the vertices are \emph{functors} $\C^4 \to \C$ (for
+example, the top vertex is the functor which takes the quadruple of
+objects $(A,B,C,D)$ and sends them to the object $((A \oplus B) \oplus
+C) \oplus D$), and the edges are natural transformations.
 
 All told, then, we can think of a typical diagram $D$ in $\C$ as a
 functor $D : J \to (\fc {\C^A} \C)$, where $A$ is some (discrete)
@@ -1959,12 +1959,17 @@ category recording the arity of the diagram.
 \begin{proof}
   This amounts to implementing a higher-order function with the
   type \[ (J \to (A \to \C) \to \C) \to J \to (A \to \D \to \C) \to \D
-  \to \C \] which is not hard.  In particular, we define \todo{XXX}
+  \to \C \] which can be easily done as follows: \[ \Phi\ D\ j\ g\ d =
+  D\ j\ (\fun a {g\ a\ d}). \] Of course there are some technical
+  conditions to check, but they all fall out easily.
 \end{proof}
 
-\todo{Argue that the lifted diagram defined in this proof is ``about''
-  (\ie has as its vertices and edges) the lifted versions of the
-  vertices and edges of the original diagram.}
+One important thing to note is that the above proof is constructive,
+and we can thus make statements about the particular diagram produced.
+In particular, it is the case that \todo{Argue that the lifted diagram
+  defined in this proof is ``about'' (\ie has as its vertices and
+  edges) the lifted versions of the vertices and edges of the original
+  diagram.}
 
 We have seen that we can lift a diagram in $\C$ to a diagram in
 $\C^\D$, and even that the lifted diagram is related to the original
@@ -2112,6 +2117,9 @@ symmetric form of composition.  These two products arise in an
 analogous way, via a categorical construction known as \emph{Day
   convolution}.
 
+In this section, we explore each operation in turn, and then give a
+general account of their common abstraction.
+
 \subsection{Partitional/Cauchy product}
 \label{sec:partitional-product}
 
@@ -2188,7 +2196,8 @@ dia
 
 % dia = theDia # centerXY # pad 1.1
 %     \end{diagram}
-    \caption{Partitional species product}
+    \caption{Two views on the partitional species product $\Bin
+      \cdot \List$}
     \label{fig:product}
   \end{figure}
 
@@ -2196,10 +2205,14 @@ dia
   The \term{partitional} or \term{Cauchy product} of two species $F$
   and $G$ is the functor defined on objects by \[ (F \sprod G)\ L =
   \biguplus_{L_F,L_G \partition L} F\ L_F \times G\ L_G \] where
-  $\biguplus$ denotes an indexed coproduct of sets, and $L_F,L_G
+  $\biguplus$ denotes an indexed coproduct (\ie disjoint union) of
+  sets, and $L_F,L_G
   \partition L$ denotes that $L_F$ and $L_G$ constitute a partition of
   $L$, (\ie $L_F \union L_G = L$ and $L_F \intersect L_G =
-  \varnothing$).
+  \varnothing$).  (Note that $L_F$ and $L_G$ may be empty.)  In words,
+  an $(F \cdot G)$-shape with labels taken from $L$ consists of some
+  partition of $L$ into two disjoint subsets, with an $F$-shape on one
+  subset and a $G$-shape on the other.
 
   On morphisms, $(F \cdot G)\ \sigma$ is the function \[
   (L_F,L_G, x, y) \mapsto (\sigma\ L_F, \sigma\ L_G, F\ (\sigma
@@ -2226,9 +2239,11 @@ $\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
 \end{defn}
 
 \begin{rem}
-  The unit species denotes a sort of ``trivial'' or ``leaf'' structure
-  containing no labels.  Intuitively, it corresponds to a Haskell type
-  like
+  Recall that one should not think of $\One$ as doing case analysis.
+  Rather, a more intuitive way to think of it is ``there is a single
+  $\One$-shape, and it has no labels''; that is, the unit species thus
+  denotes a sort of ``trivial'' or ``leaf'' structure containing no
+  labels.  Intuitively, it corresponds to a Haskell type like
   \begin{spec}
     data Unit a = Unit
   \end{spec}
@@ -2274,19 +2289,19 @@ dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
     \label{fig:perm-der}
   \end{figure}
   That is, algebraically, \[ \Perm = \Bag \cdot \Der. \] This does not
-  directly give us an expression for $\Der$; there is no notion of
-  multiplicative inverse for species\footnote{Multiplicative inverses
-    can in fact be defined for suitable \emph{virtual}
+  directly give us an expression for $\Der$, since there is no notion
+  of multiplicative inverse for species\footnote{Multiplicative
+    inverses can in fact be defined for suitable \emph{virtual}
     species~\citep[Chapter 3]{bll}.  However, virtual species are
     beyond the scope of this dissertation.}.  However, this is still a
   useful characterization of derangements.  For example, as explained
   further in \pref{chap:labelled}, every species has associated to it
   an \term{exponential generating function} (egf), and the mapping
   from species to generating functions is a homomorphism with respect
-  to product.  Replacing $\Perm$ and $\Bag$ with their egfs thus
-  yields \[ \frac{1}{1-x} = e^x \cdot \Der(x), \] allowing us to solve
-  for the egf $\Der(x) = e^{-x}/(1-x)$, even though we cannot make
-  direct combinatorial sense out of $\Der = \Perm / \Bag$.
+  to (partitional) product.  Replacing $\Perm$ and $\Bag$ with their
+  egfs thus yields \[ \frac{1}{1-x} = e^x \cdot \Der(x), \] allowing
+  us to solve for the egf $\Der(x) = e^{-x}/(1-x)$, even though we
+  cannot make direct combinatorial sense out of $\Der = \Perm / \Bag$.
 \end{ex}
 
 \later{Another example?}
@@ -2365,20 +2380,21 @@ dia = frame 0.2 . lwO 0.7 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
   , grid
   ]
   \end{diagram}
-  \caption{Three views on arithmetic product of species}
+  \caption{Three views on the arithmetic product $\Bin \aprod \List$}
   \label{fig:arithmetic-product}
 \end{figure}
 
-\todo{fill in citation}
 A more formal definition requires the notion of a \term{rectangle} on
-a set~\citep{Maia2008arithmetic, XXX}, which plays a role similar to
-that of set partition in the definition of partitional product. (So
-perhaps arithmetic product ought to be called \emph{rectangular
-  product}.)  In particular, whereas a binary partition of a set $L$
-gives a canonical decomposition of $L$ into a sum, a rectangle on $L$
-gives a canonical decomposition into a product.  The basic idea is to
-partition $L$ in two different ways, and require the partitions to act
-like the ``rows'' and ``columns'' of a rectangular matrix.
+a set~\citep{Maia2008arithmetic, baddeley2004transitive}, which plays
+a role similar to that of set partition in the definition of
+partitional product. (So perhaps arithmetic product ought to be called
+\emph{rectangular product}.)  In particular, whereas a binary
+partition of a set $L$ is a decomposition of $L$ into a sum, a
+rectangle on $L$ can be thought of as a decomposition into a product.
+The basic idea is to partition $L$ in two different ways, and require
+the partitions to act like the ``rows'' and ``columns'' of a
+rectangular matrix, which have the defining characteristic that every
+pair of a row and a column have a single point of intersection.
 
 \begin{defn}[\citet{Maia2008arithmetic}]
   \label{defn:rectangle}
@@ -2406,17 +2422,17 @@ We can now formally define arithmetic product as follows:
   $(F \aprod G)$ lifts bijections $\sigma : L \bij L'$ to functions
   $(F \aprod G)\ L \to (F \aprod G)\ L'$ as follows: \[ (F \aprod G)\
   \sigma\ (L_F, L_G, f, g) = (\powerset(\sigma)\ L_F,
-  \powerset(\sigma)\ L_G, F\ \powerset(\sigma)\ L_F, G\
-  \powerset(\sigma)\ L_G), \] where $\powerset(\sigma) : \powerset(L)
+  \powerset(\sigma)\ L_G, F\ \powerset(\sigma)\ f, G\
+  \powerset(\sigma)\ g), \] where $\powerset(\sigma) : \powerset(L)
   \bij \powerset(L')$ denotes the functorial lifting of $\sigma$ to a
   bijection between subsets of $L$ and $L'$.
 \end{defn}
 
 \begin{rem}
   The similarity of this definition to the definition of partitional
-  product should be apparent: the only difference is that rectangles
-  ($L_F,L_G \rectangle L$) have been substituted for partitions
-  ($L_F,L_G \partition L$).
+  product should be apparent: the only real difference is that
+  rectangles ($L_F,L_G \rectangle L$) have been substituted for
+  partitions ($L_F,L_G \partition L$).
 \end{rem}
 
 \begin{ex}
@@ -2448,7 +2464,9 @@ dia = mkGrid [[0,2,5],[3,1,4]]
   label has no fixed ``position''; the only invariants on any given
   label are the sets of other labels which are in the same row or
   column.  \pref{fig:rect-shape} shows an illustration; each rounded
-  outline represents a \emph{set} of labels.
+  outline represents a \emph{set} of labels.  Note that one can also
+  take the species of rectangles as primitive and define arithmetic
+  product in terms of it.
 \end{ex}
 
 \begin{figure}
@@ -2496,7 +2514,7 @@ dia = mkRect [[0,2,5],[3,1,4]]
 An identity element for arithmetic product should be some species $\X$
 such that \[ (\X \aprod G)\ L = \left(\biguplus_{L_\X, L_G \rectangle L} \X\
 L_\X \times G\ L_G\right) \iso G\ L. \] Thus we want $\X\ L_\X = \singleton$
-when $L_\X, L \rectangle L$ and $\X\ L_\X = \varnothing$ otherwise.
+when $L_G = L$, and $\X\ L_\X = \varnothing$ otherwise.
 Consider $L_\X, L \rectangle L$.  Of course, $L$ does not have the
 right type to be one side of a rectangle on itself, but it is
 isomorphic to the set of all singleton subsets of itself, which does.
@@ -2594,10 +2612,10 @@ dia = pairs
   cardinality $n$, one for each label.
 
   The two different names result from the fact that we may ``care
-  about'' the labels in a $\Bag$-structure or not---that is, when
+  about'' the labels in an $\Bag$-structure or not---that is, when
   considering data structures built on top of species, $\Bag$ may
   correspond either to a bag data structure, or instead to a ``sink''
-  where we throw labels to which we do not wish to associated any
+  where we throw labels to which we do not wish to associate any
   data. This makes no difference from a purely combinatorial point of
   view---for example, there are the same number of $(\X \cdot
   \Bag)$-structures on $n$ labels whether we ``care about'' the labels
