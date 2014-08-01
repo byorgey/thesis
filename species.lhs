@@ -2649,28 +2649,53 @@ construction applied to different monoids, both partitional and
 arithmetic product arise from \emph{Day convolution}, applied to
 different monoidal structures on $\B$.
 
-\todo{Need to introduce the idea of enriched categories here?}
+It is worth first briefly mentioning the definition of an
+\term{enriched category}, which is needed here and also in
+\pref{sec:composition}.  Enriched categories are a generalization of
+categories where the \emph{set} of morphisms between two objects is
+replaced by an \emph{object} of some other category.
+\begin{defn}
+  Given some monoidal category $(\D, \otimes, I)$, a \term{category
+    enriched over $\D$} consists of
+  \begin{itemize}
+  \item a collection of objects $O$;
+  \item for every pair of objects $A,B \in O$, an object $\hom A B \in \D$;
+  \item for each object $A \in O$, a morphism $I \to \hom A A$ in
+    $\D$, which ``picks out'' the identity morphism for each object;
+  \item for every three objects $A,B,C \in O$, a morphism
+    $\comp_{A,B,C} : (\hom B C) \otimes (\hom A B) \to (\hom A C)$
+    representing composition.
+  \end{itemize}
+  Of course, identity and composition have to satisfy the usual laws,
+  expressed via commutative diagrams.
+\end{defn}
+Note that any category can be seen as an enriched category over
+$\Set$.  We also often say that a category $\C$ \term{is enriched
+  over} $\D$ if there exists some functor $\hom - - : \C^\op \times \C
+\to \D$ satisfying the above criteria.
 
-The essential idea, first described by Brian
-Day~\cite{day1970closed}, is to construct a monoidal structure on a
-functor category $[\Lab^\op, \Str]$ based primarily on a monoidal
-structure on the \emph{domain} category $\Lab$.  In particular, Day
-convolution requires
+We can now give the definition of Day convolution.  The essential
+idea, first described by Brian Day~\cite{day1970closed}, is to
+construct a monoidal structure on a functor category $[\Lab^\op,
+\Str]$ based primarily on a monoidal structure on the \emph{domain}
+category $\Lab$.  In particular, Day convolution requires
 \begin{itemize}
 \item a monoidal structure $\oplus$ on the domain $\Lab$;
-\item that $\Lab$ be \emph{enriched over} $\Str$, \ie\ for any two
-  objects $L_F,L_G \in \Lab$ there is a hom-object $\Lab(L_F,L_G) \in
-  \Str$ rather than a set, with approrpiate coherent notions of
-  composition and identity morphisms;
+\item that $\Lab$ be enriched over $\Str$, so morphisms of $\Lab$ can
+  be seen as objects in $\Str$;
 \item a symmetric monoidal structure $\otimes$ on the codomain $\Str$;
 \item that $\Str$ be cocomplete, and in particular
   have coends over $\Lab$.
 \end{itemize}
 
-\todo{Note that any small category can be seen as $V$-enriched, for
+\later{Note that any small category can be seen as $V$-enriched, for
   symmetric monoidal (closed?) $V$, by composing $hom$ with functor
   $\Set \to V$ that sends $U$ to $U$-indexed product of $I$.  Does
-  this assume AC or anything?}
+  this assume AC or anything?  Actually I am no longer sure I even
+  understand this statement.  Need to look it up in ``geometry of
+  tensor calculus'' or ``introduction to enriched categories'',
+  perhaps.  But if I can understand it again it would probably be a
+  good thing to include.}
 
 Note that any monoidal structures will do; in particular there is no
 requirement that $\oplus$ be ``sum-like'' or $\otimes$
@@ -2688,15 +2713,9 @@ product.
   common case that $\Lab$ is a groupoid.
 \end{rem}
 
-\begin{rem}
-  Note that there are only covariant occurrences of $L_F$ and $L_G$ in
-  the above definition, which simplifies the definition of the
-  coend. \todo{flesh out}
-\end{rem}
-
 This operation is associative, and has as a unit $j(I)$ where $I$ is
-the unit for $\oplus$ and $j : \Lab \to \fc \Lab^{\text{op}} \Str$ is the Yoneda
-embedding, that is, $j(L) = \Lab(-,L)$.
+the unit for $\oplus$ and $j : \Lab \to \fc {\Lab^{\text{op}}} \Str$ is the Yoneda
+embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof, see ???}
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
