@@ -2714,8 +2714,9 @@ product.
 \end{rem}
 
 This operation is associative, and has as a unit $j(I)$ where $I$ is
-the unit for $\oplus$ and $j : \Lab \to \fc {\Lab^{\text{op}}} \Str$ is the Yoneda
-embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof, see ???}
+the unit for $\oplus$ and $j : \Lab \to \fc {\Lab^{\text{op}}} \Str$
+is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof,
+  see ???}
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
@@ -2726,38 +2727,46 @@ embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof, see ???}
 
   Specializing the definition to this case, we obtain
   \begin{align*}
-    (F \cdot G)(L) &= \coend{L_F, L_G} F\ L_F \times G\ L_G \times
+    (F \cdot G)\ L &= \coend{L_F, L_G} F\ L_F \times G\ L_G \times
     (L \bij L_F \uplus L_G).
   \end{align*}
-  Let $R \defeq \biguplus_{L_F, L_G} F\ L_F \times G\ L_G \times (L
-  \bij L_F \uplus L_G)$; elements of $R$ look like quintuples $(L_F, L_G,
-  f, g, i)$, where $f \in F\ L_F$, $g \in G\ L_G$, and $i : L \bij L_F
-  \uplus L_G$.  Then, as we have seen, the coend can be expressed as a
-  quotient $\quotient{R}{\sim}$, where every pair of bijections
+  We can simplify this further by characterizing the coend more
+  explicitly.  Let $R \defeq \biguplus_{L_F, L_G} F\ L_F \times G\ L_G
+  \times (L \bij L_F \uplus L_G)$; elements of $R$ look like
+  quintuples $(L_F, L_G, f, g, i)$, where $f \in F\ L_F$, $g \in G\
+  L_G$, and $i : L \bij L_F \uplus L_G$ witnesses a partition of $L$
+  into two subsets.  Then, as we have seen, the coend can be expressed
+  as a quotient $\quotient{R}{\sim}$, where every pair of bijections
   $(\sigma_F : L_F \bij L_F', \sigma_G : L_G \bij L_G')$ induces an
   equivalence of the form \[ (L_F, L_G, f, g, i) \sim (L_F',\; L_G',\;
   F\ \sigma_F\ f,\; G\ \sigma_G\ g,\; i \then (\sigma_F \uplus
   \sigma_G)). \] That is, $f \in F\ L_F$ is sent to $F\ \sigma_F\ f$
   (the relabelling of $f$ by $\sigma_F$); $g \in G\ L_G$ is sent to
-  $G\ \sigma_G\ g$; and $i : L \bij L_F \uplus L_G$ is sent to $i ;
-  (\sigma_F \uplus \sigma_G) : L \bij L_F' \uplus L_G'$.
+  $G\ \sigma_G\ g$; and $i : L \bij L_F \uplus L_G$ is sent to \[
+  \xymatrixcolsep{4pc} \xymatrix{L \ar[r]^-{\bij}_-i & L_F \uplus L_G
+    \ar[r]^-{\bij}_-{\sigma_F \uplus \sigma_G} & L_F' \uplus L_G'}. \]
 
-  When are two elements of $R$ inequivalent, that is, when can we be
+  When are two elements of $R$ \emph{inequivalent}, that is, when can we be
   certain two elements of $R$ are not related by a pair of
   relabellings?  Two elements $(L_{F1}, L_{G2}, f_1, g_1, i_1)$ and
   $(L_{F2},L_{G2},f_2,g_2,i_2)$ of $R$ are unrelated if and only if
   \begin{itemize}
-  \item $f_1$ and $f_2$ are unrelated by any relabelling, or
-  \item $g_1$ and $g_2$ are unrelated by any relabelling, or
+  \item $f_1$ and $f_2$ have different forms, that is, they are
+    unrelated by any relabelling, or
+  \item $g_1$ and $g_2$ have different forms, or
   \item $L_{F1}$ and $L_{G1}$ ``sit inside'' $L$ differently than $L_{F2}$ and
     $L_{G2}$ in $L_2$, that is, $i_1^{-1}(L_{F1}) \neq i_2^{-1}(L_{F2})$.
   \end{itemize}
-  The first two bullets are immediate; the third follows since a pair
-  of relabellings can permute the elements of $L_F$ and $L_G$
+  (Note they are also unrelated if there is no bijection $L_{F1} \bij
+  L_{F2}$ or no bijection $L_{G1} \bij L_{G2}$, but in those cases one
+  of the first two bullets above would hold as well.)  The first two
+  bullets are immediate; the third follows since a pair of
+  relabellings can permute the elements of $L_F$ and $L_G$
   arbitrarily, or replace $L_F$ and $L_G$ with any other sets of the
   same size, but relabelling alone can never change which elements of
   $L$ correspond to $L_F$ and which to $L_G$, since that is preserved
-  by composition with a coproduct bijection $\sigma_F \uplus \sigma_G$.
+  by composition with a coproduct bijection $\sigma_F \uplus
+  \sigma_G$.
 
   Therefore, all the equivalence classes of $\quotient{R}{\sim}$ can
   be represented canonically by a partition of $L$ into two disjoint
@@ -2788,20 +2797,20 @@ embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof, see ???}
   ways to do this---in fact, one for every choice of \[ \varphi : \Fin
   m \uplus \Fin n \bij \Fin (m + n), \] which specifies how to embed
   $\{0, \dots, m-1\}$ and $\{0, \dots, n-1\}$ into $\{0, \dots,
-  m+n-1\}$.
-
-  Given such a $\varphi$, we may construct \[ \Fin (m+n)
+  m+n-1\}$.  Given such a $\varphi$, we may construct \[ \Fin (m+n)
   \stackrel{\varphi^{-1}}{\bij} \Fin m \uplus \Fin n \stackrel{\sigma
     \uplus \tau}{\bij} \Fin m \uplus \Fin n \stackrel{\varphi}{\bij}
   \Fin (m+n), \] as illustrated in \pref{fig:sumiso}.
 
-  \todo{Improve this diagram, with colors or something}
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
 {-# LANGUAGE DeriveDataTypeable         #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
+import           Diagrams.Backend.Cairo.CmdLine
+
+import           Control.Lens                   (partsOf, traverse, (%~))
 import           Data.Bits
 import           Data.List                      (find)
 import           Data.Maybe                     (fromJust)
@@ -2809,10 +2818,12 @@ import           Data.Typeable
 import           Data.Universe.Instances.Base
 import           Diagrams.Prelude               hiding (tau)
 
-column
+column cs
   = vcat' (with & sep .~ 1)
   . zipWith (||>) ['a' ..]
-  . map (\n -> vcat (zipWith named [0 :: Index ..] (replicate n (square 1))))
+  . map vcat
+  . (partsOf (traverse.traverse) %~ zipWith fc cs)
+  . map (\n -> zipWith named [0 :: Index ..] (replicate n (square 1)))
 
 newtype Index = Index Int
   deriving (Eq, Ord, Show, Read, Real, Num, Integral, Bits, Enum, Typeable)
@@ -2831,11 +2842,18 @@ phi (Right 0) = 0
 phi (Right 1) = 2
 phi (Right 2) = 5
 
+q :: Index -> Either Index Index
+q n || n <= 3    = Left n
+    || otherwise = Right (n-4)
+
 sigma :: Index -> Index
 sigma = (`xor` 1)
 
 tau :: Index -> Index
 tau = (`mod` 3) . succ
+
+permL :: (Index -> Index) -> [a] -> [a]
+permL s l = [ l !! (fromEnum (inverse s i)) || i <- [0 .. toEnum (length l) - 1] ]
 
 either2Name :: Either Index Index -> Name
 either2Name (Left i) = 'a' .> i
@@ -2844,12 +2862,15 @@ either2Name (Right i) = 'b' .> i
 inverse :: (Universe a, Eq b) => (a -> b) -> (b -> a)
 inverse f b = fromJust (find ((==b) . f) universe)
 
+blues = iterateN 4 (blend 0.3 white) blue # reverse
+reds = iterateN 3 (blend 0.3 white) red # reverse
+
 dia =
   (hcat' (with & sep .~ 2) . map centerY $ -- $
-     [ 'A' ||> column [7]
-     , 'B' ||> column [4,3]
-     , 'C' ||> column [4,3]
-     , 'D' ||> column [7]
+     [ 'A' ||> column (permL (phi . q) (blues ++ reds)) [7]
+     , 'B' ||> column (blues ++ reds) [4,3]
+     , 'C' ||> column (permL sigma blues ++ permL tau reds)  [4,3]
+     , 'D' ||> column (permL (phi . q) (permL sigma blues ++ permL tau reds))  [7]
      ]
    )
    # applyAll [connect' aOpts ('A' .> 'a' .> i) ('B' .> n) || i <- [0..6], let n = either2Name (inverse phi i) ]
@@ -2872,7 +2893,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     1) \bmod m}$) as the first argument to $q$, and $\id$ as the
   second---the resulting permutation will modify those indices
   which are matched with $\Fin m$, and fix those matched with $\Fin
-  n$. \todo{picture?}
+  n$.
 
   The choice of $\varphi$ does not matter up to isomorphism---hence
   this is where the axiom of choice can be invoked, in order to define
@@ -2881,15 +2902,15 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
   indexed by a bijection $\varphi : \Fin m \uplus \Fin n \bij \Fin
   (m+n)$ and denoted $+_\varphi$.
 
-  We may now instantiate the definition of Day convolution,
-  obtaining \[ (F \sprod G)_n = \coend{n_F, n_G} F_{n_F} \times G_{n_G}
-  \times (\Fin n \bij \Fin (n_F + n_G)). \] Again, letting $R \defeq
-  \biguplus_{n_F, n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin
-  (n_F + n_G))$, the coend is equivalent to $\quotient{R}{\sim}$,
-  where \[ (n_F, n_G, f, g, i) \sim (n_F, n_G,\;F\ \sigma_F\ f,\;G\
-  \sigma_G\ g,\;i \then (\sigma_F +_\varphi \sigma_G)) \] for any
-  $\sigma_F : \perm{(\Fin n_F)}$ and $\sigma_G : \perm{(\Fin
-    n_G)}$. \todo{Finish}
+  We may now instantiate the definition of Day convolution at some
+  particular $+_\varphi$, obtaining \[ (F \sprod G)_n = \coend{n_F,
+    n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin (n_F +
+  n_G)). \] Again, letting $R \defeq \biguplus_{n_F, n_G} F_{n_F}
+  \times G_{n_G} \times (\Fin n \bij \Fin (n_F + n_G))$, the coend is
+  equivalent to $\quotient{R}{\sim}$, where \[ (n_F, n_G, f, g, i)
+  \sim (n_F, n_G,\;F\ \sigma_F\ f,\;G\ \sigma_G\ g,\;i \then (\sigma_F
+  +_\varphi \sigma_G)) \] for any $\sigma_F : \perm{(\Fin n_F)}$ and
+  $\sigma_G : \perm{(\Fin n_G)}$. \todo{Finish}
 \end{ex}
 
 \begin{ex}
