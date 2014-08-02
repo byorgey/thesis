@@ -1326,7 +1326,7 @@ in type theory.  First, a few necessary lemmas:
   \citep[Lemma 3.3.4, Examples 3.1.5 and 3.1.6]{hottbook}.
 \end{proof}
 
-\begin{cor}
+\begin{cor} \label{cor:path-pres-set}
   If $A$ and $B$ are sets, then so is $A = B$.
 \end{cor}
 \begin{proof}

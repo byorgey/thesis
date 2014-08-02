@@ -2683,7 +2683,9 @@ category $\Lab$.  In particular, Day convolution requires
 \item a monoidal structure $\oplus$ on the domain $\Lab$;
 \item that $\Lab$ be enriched over $\Str$, so morphisms of $\Lab$ can
   be seen as objects in $\Str$;
-\item a symmetric monoidal structure $\otimes$ on the codomain $\Str$;
+\item a symmetric monoidal structure $\otimes$ on the codomain $\Str$
+  (satisfying an additional technical requirement, to be explained
+  below); and
 \item that $\Str$ be cocomplete, and in particular
   have coends over $\Lab$.
 \end{itemize}
@@ -2697,10 +2699,18 @@ category $\Lab$.  In particular, Day convolution requires
   perhaps.  But if I can understand it again it would probably be a
   good thing to include.}
 
-Note that any monoidal structures will do; in particular there is no
-requirement that $\oplus$ be ``sum-like'' or $\otimes$
-``product-like'', though that is indeed the case for partitional
-product.
+In addition, $\otimes$ must preserve colimits in each of its
+arguments.  That is, $- \otimes B$ and $A \otimes -$ must both
+preserve colimits for any $A$ and $B$.  It is sufficient (though not
+necessary) that $\otimes$ is a left adjoint.  For example, the product
+bifunctor in $\Set$ is left adjoint (via currying), and thus preserves
+colimits---the distributive law $(X \times (Y + Z) \iso X \times Y + X
+\times Z$ is a well-known example.  On the other hand, the coproduct
+bifunctor in $\Set$ does not preserve colimits; it is not the case,
+for example, that $X + (Y + Z) \iso (X + Y) + (X + Z)$.  The important
+point to note is that Day convolution can be instantiated using
+\emph{any} monoidal structure on the source category, but requires a
+very particular sort of monoidal structure on the target category.
 
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G :
@@ -2887,30 +2897,27 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     \label{fig:sumiso}
   \end{figure}
 
-  Conversely, given some functorial $q : \perm{(\Fin
-    m)} \to \perm{(\Fin n)} \to \perm{(\Fin (m+n))}$, we can recover
-  $\varphi$ by passing some transitive bijection (say, $\lam{i}{(i +
-    1) \bmod m}$) as the first argument to $q$, and $\id$ as the
-  second---the resulting permutation will modify those indices
-  which are matched with $\Fin m$, and fix those matched with $\Fin
-  n$.
+  \later{Conversely\dots}
 
   The choice of $\varphi$ does not matter up to isomorphism---hence
   this is where the axiom of choice can be invoked, in order to define
   a single, canonical monoid structure on $\P$.  However, it is
   preferable to simply retain a plethora of monoidal structures, each
-  indexed by a bijection $\varphi : \Fin m \uplus \Fin n \bij \Fin
-  (m+n)$ and denoted $+_\varphi$.
+  indexed by a family of bijections $\varphi_{m,n} : \Fin m \uplus
+  \Fin n \bij \Fin (m+n)$.
 
-  We may now instantiate the definition of Day convolution at some
-  particular $+_\varphi$, obtaining \[ (F \sprod G)_n = \coend{n_F,
-    n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin (n_F +
-  n_G)). \] Again, letting $R \defeq \biguplus_{n_F, n_G} F_{n_F}
-  \times G_{n_G} \times (\Fin n \bij \Fin (n_F + n_G))$, the coend is
-  equivalent to $\quotient{R}{\sim}$, where \[ (n_F, n_G, f, g, i)
-  \sim (n_F, n_G,\;F\ \sigma_F\ f,\;G\ \sigma_G\ g,\;i \then (\sigma_F
-  +_\varphi \sigma_G)) \] for any $\sigma_F : \perm{(\Fin n_F)}$ and
-  $\sigma_G : \perm{(\Fin n_G)}$. \todo{Finish}
+  We may now instantiate the definition of Day convolution (for some
+  particular choice of $\varphi_{m,n}$, obtaining \[ (F \sprod G)_n =
+  \coend{n_F, n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin
+  (n_F + n_G)). \] \todo{Finish.  Can't really simplify this much/any
+    further.}
+
+  % Again, letting $R \defeq \biguplus_{n_F, n_G}
+  % F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin (n_F + n_G))$, the
+  % coend is equivalent to $\quotient{R}{\sim}$, where \[ (n_F, n_G, f,
+  % g, i) \sim (n_F, n_G,\;F\ \sigma_F\ f,\;G\ \sigma_G\ g,\;i \then
+  % (\sigma_F +_\varphi \sigma_G)) \] for any $\sigma_F : \perm{(\Fin
+  %   n_F)}$ and $\sigma_G : \perm{(\Fin n_G)}$.
 \end{ex}
 
 \begin{ex}
@@ -2920,70 +2927,78 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
   keep everything else the same, in particular continuing to use
   products on $\Set$---we obtain the arithmetic product.
 
-  \todo{Flesh out.  Derive $\X$ categorically.}
+  That is, \[ (F \aprod G)\ L = \coend {L_F, L_G} F\ L_F \times G\ L_G
+  \times (L \bij L_F \times L_G). \] By a similar argument to the one
+  used above, this is equivalent to \[ \biguplus_{L_F,L_G \rectangle
+    L} F\ L_F \times G L_G. \] In this case we also have $j(I) =
+  j(\singleton) = \B(-,\singleton)$, the species which constructs all
+  bijections between the label set and $\singleton$. There is only one
+  such bijection whenever the label set is of size $1$ and none
+  otherwise, so this is equivalent to the species $\X$, as expected.
 \end{ex}
 
-\begin{ex}
-  \todo{Work out details here.  Do arithmetic product but in
-    $\fc \P \Set$.}  Let's examine this in detail in the case of
-  $\fc \P \Set$.  The monoidal structure on $\P$ is defined on objects
-  as $m \otimes n = mn$.  On morphisms, given $f : \fin m \bij \fin m$
-  and $g : \fin n \bij \fin n$, we have $f \otimes g : \fin{mn} \bij
-  \fin{mn}$ defined by \todo{finish}.
+% \begin{ex}
+%   \todo{Work out details here.  Do arithmetic product but in
+%     $\fc \P \Set$.}  Let's examine this in detail in the case of
+%   $\fc \P \Set$.  The monoidal structure on $\P$ is defined on objects
+%   as $m \otimes n = mn$.  On morphisms, given $f : \fin m \bij \fin m$
+%   and $g : \fin n \bij \fin n$, we have $f \otimes g : \fin{mn} \bij
+%   \fin{mn}$ defined by \todo{finish}.
 
-  Instantiating the definition of Day convolution yields
-  \begin{align*}
-    (F \boxtimes G)\ n &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times
-    \P(n, n_Fn_G) \\
-    &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times (\fin n \bij \fin
-    {n_F n_G}) \\
-    &= ? \\
-    &= \biguplus_{d \mid n} F\ d \times G\ (n/d)
-  \end{align*}
-\end{ex}
+%   Instantiating the definition of Day convolution yields
+%   \begin{align*}
+%     (F \boxtimes G)\ n &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times
+%     \P(n, n_Fn_G) \\
+%     &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times (\fin n \bij \fin
+%     {n_F n_G}) \\
+%     &= ? \\
+%     &= \biguplus_{d \mid n} F\ d \times G\ (n/d)
+%   \end{align*}
+% \end{ex}
 
 \begin{ex}
   We now verify that $\BT$ and $\ST$ have the right properties, so
   that partitional and arithmetic product are well-defined on
-  $(\fc \BT \ST)$-species. \todo{Have to redo this given new definitions
-    of $\BT$ and $\ST$.}
+  $(\fc \BT \ST)$-species.
   \begin{itemize}
-  \item Like $\B$, there are monoidal structures on $\BT$
-    corresponding to the coproduct and product of types. As with $\P$,
-    however, there are many monoidal structures corresponding to
-    each. In contrast to $\P$, however, the choice concerns what to do
-    with \emph{objects}.  A monoidal operation on $\BT$ does not
-    simply combine two types into their coproduct or product, but also
-    combines their finiteness evidence into corresponding evidence for
-    the combined type, via some function $\oplus_{\Fin{}} : \isFinite
-    A \to \isFinite B \to \isFinite (A \oplus B)$.  Any such function,
-    in combination with a monoid $\oplus$ on $\ST$, gives rise to a
-    valid monoid on $\FinType$, since \todo{finish}
-  \item $\BT$ can indeed be seen as enriched over $\ST$, since by
-    univalence, paths $A = B$ are equivalent to equivalences $A \equiv
-    B$, and by \pref{lem:equiv-pres-set}, $A \equiv B$ is a set when
-    $A$ and $B$ are.
+  \item As with $\B$, there are monoidal structures on $\BT$
+    corresponding to the coproduct and product of types. Note that
+    when combining two finite types, their finiteness evidence must be
+    somehow combined to create evidence for the finiteness of their
+    product/coproduct.  For example, given equivalences $A \equiv \Fin
+    m$ and $B \equiv \Fin n$, one must create an equivalence $A + B
+    \equiv \Fin {(m + n)}$ (in the case of coproduct) or $A \times B
+    \equiv \Fin {(mn)}$ (in the case of product). In the first case,
+    this can be accomplished by combining the given equivalences with
+    an equivalence $\Fin m + \Fin n \equiv \Fin {(m + n)}$, which can
+    be implemented, say, by matching the elements of $\Fin m$ with the
+    first $m$ elements of $\Fin {(m + n)}$, and the elements of $\Fin
+    n$ with the remaining $n$ elements.  Likewise, $A \times B \equiv
+    \Fin {(mn)}$ can be implemented via an equivalence $\Fin m \times
+    \Fin n \equiv \Fin {(mn)}$, \eg the one which sends $(i,j)$ to $in
+    + j$.  Fundamentally, there are many ways to implement such
+    equivalences, but since everything is wrapped in a propositional
+    truncation it does not ultimately matter, as long as there is
+    \emph{some} way to implement them.
+  \item $\BT$ can indeed be seen as enriched over $\ST$, since
+    morphisms in $\BT$ are paths, which are equivalent to paths
+    between the underlying sets, and because by \pref{cor:path-pres-set},
+    $A = B$ is a set when $A$ and $B$ are.
   \item We have already seen that there is a symmetric monoidal
     structure on $\ST$ given by the product of types.
-  \item The last condition is the most interesting: we need to say
-    what a coend over $\BT$ is in $\ST$. In fact, in this case a
-    coend is just a $\Sigma$-type!  This is because the morphisms in
-    $\BT$ are paths, and hence the required identifications between
-    inhabitants of the $\Sigma$-type are already present---they are
-    induced by transport of paths in $\BT$. \todo{flesh out more}
+  \item Finally, $\ST$ does have coends over $\BT$.  In fact, since
+    $\BT$ is a groupoid, recall from \pref{sec:coends-hott}
+    that coends are just $\Sigma$-types.
   \end{itemize}
 
-  Given $F,G : \fc \BT \ST$, and picking some particular sum-like
-  monoid $\oplus$ on $\BT$, we can instantiate the definition
-  of Day convolution to get
+  Given $F,G : \fc \BT \ST$, and picking the monoid corresponding to
+  coproduct on $\BT$, we can instantiate the definition of Day
+  convolution to get
   \[ (F \cdot G)\ L = \sum_{L_F, L_G} F\ L_F \times G\ L_G \times
-  (\mor L {L_F \oplus L_G}). \] \todo{Flesh out. Need some notation
-    for the underlying sets of $L$, $L_F$, and $L_G$.  Particular
-    monoid chosen doesn't actually matter here.}
-\end{ex}
-
-\begin{ex}
-  Try it with $(\otimes, \oplus)$ and $(\oplus, \oplus)$.
+  (L = L_F + L_G). \] That is, a value of type $(F \cdot G)\ L$
+  consists of a choice of finite types $L_F$ and $L_G$, an $F$-shape
+  and a $G$-shape, labelled by $L_F$ and $L_G$ respectively, and a
+  path between $L$ and $L_F + L_G$.
 \end{ex}
 
 \section{Composition}
@@ -3004,39 +3019,45 @@ Formally,
   \pi} G\ p. \] \pref{fig:composition} shows an abstract
 representation of the definition.
 
-%   \begin{figure}
-%     \centering
-%     \begin{diagram}[width=250]
-% import SpeciesDiagrams
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import SpeciesDiagrams
 
-% theDia = struct 6 "F∘G"
-%          ||||||
-%          strutX 1
-%          ||||||
-%          txt "="
-%          ||||||
-%          strutX 1
-%          ||||||
-%          drawSpT
-%          ( nd (txt "F")
-%            [ struct' 2 "G"
-%            , struct' 3 "G"
-%            , struct' 1 "G"
-%            ]
-%          )
+theDia = struct 6 "F∘G"
+         ||||||
+         strutX 1
+         ||||||
+         txt "="
+         ||||||
+         strutX 1
+         ||||||
+         drawSpT
+         ( nd (txt "F")
+           [ struct' 2 "G"
+           , struct' 3 "G"
+           , struct' 1 "G"
+           ]
+         )
 
-% dia = theDia # centerXY # pad 1.1
-%     \end{diagram}
-%     \caption{Species composition}
-%     \label{fig:composition}
-%   \end{figure}
+dia = theDia # centerXY # pad 1.1
+    \end{diagram}
+    \caption{Species composition}
+    \label{fig:composition}
+  \end{figure}
 
 One can see that in addition to being the identity for $\aprod$, $\X$
 is the (two-sided) identity for $\comp$ as well, since an $F$-shape
 containing singletons and a singleton $F$-shape are both isomorphic to
 an $F$-shape.
 
-\todo{talk about requirement that $G(0) = 0$.}
+\begin{rem}
+  If the family of shapes on any particular set of labels is required
+  to be finite (\eg if species are defined as functors $\B \to
+  \FinSet$), then one must add the restriction that $G\ \varnothing =
+  \varnothing$. Otherwise, $(F \comp G)\ L$ may contain infinitely
+  many shapes with arbitrary numbers of empty $G$-shapes.
+\end{rem}
 
 \begin{ex}
   As an example, we may define the species $\Par$ of \term{set
@@ -3086,7 +3107,7 @@ Similarly, the species $\Perm$ of permutations is given by $\Perm = \Bag \comp
   The species $\Sp{R}$ of nonempty $n$-ary (``rose'') trees, with data
   stored at internal nodes, may be defined by the recursive species
   equation \[ \Sp{R} = \X \sprod (\List \comp \Sp{R}). \] An example
-  of an $\Sp R$-shape is shown in \pref{fig:rose-tree}.
+  $\Sp R$-shape is shown in \pref{fig:rose-tree}.
   \begin{figure}
     \centering
     \begin{diagram}[width=200]
@@ -3100,10 +3121,14 @@ dia = tree # centerXY # frame 0.5 # lwO 0.7
   Note the use of $\List$ means the children of each node are linearly
   ordered.  Using $\Bag$ in place of $\List$ yields a more
   graph-theoretic notion of a rooted tree, with no structure imposed
-  on the neighbors of a particular node.  Using $\Cyc$, in turn,
-  yields shapes which correspond to particular planar embeddings of
-  rooted trees, with the children of each node ordered cyclically
-  around it but no distinguished first or last child.
+  on the neighbors of a particular node.
+
+  $\Sp{Plan} = \X \cdot (\Cyc \comp \Sp R)$ is the species of
+  \emph{planar embeddings} of rooted trees, where the top-level
+  subtrees of the root are ordered cyclically.  For all nodes other
+  than the root, on the other hand, there is still a linear order on
+  its children, fixed by the distinguished edge from the node towards the
+  root.
 \end{ex}
 
 \begin{ex}
@@ -3120,9 +3145,23 @@ dia = tree # centerXY # frame 0.5 # lwO 0.7
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
-import SpeciesDiagrams
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
 
-dia = square 1
+pShape :: Int -> BTree (Maybe Int)
+pShape = pShape' 0
+  where
+    pShape' i 0 = leaf (Just i)
+    pShape' i n = BNode Nothing (pShape' i (n-1)) (pShape' (i + 2^ (n-1)) (n-1))
+
+drawPShape :: BTree (Maybe Int) -> Diagram B R2
+drawPShape = maybe mempty (renderTree (maybe mempty mloc) (~~)) . symmLayoutBin' tOpts
+
+tOpts = with & slHSep .~ 2 & slVSep .~ 1.5
+
+dia = hcat' (with & sep .~ 2) (map (alignB . drawPShape . pShape) [0..3])
+   # frame 0.5
+   # lwO 0.7
     \end{diagram}
     \caption{Example $\Sp P$-shapes}
     \label{fig:perfect-shapes}
