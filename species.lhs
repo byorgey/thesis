@@ -3171,7 +3171,8 @@ dia = hcat' (with & sep .~ 2) (map (alignB . drawPShape . pShape) [0..3])
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
 
-We first show how to carry out the definition of composition in $\fc \B 
+\todo{FIX ME}
+We first show how to carry out the definition of composition in $\fc \B
 \Set$ more abstractly, and then discuss how it may be generalized to
 other functor categories $\fc \Lab \Str$.
 \citet{street2012monoidal} gives the following abstract
@@ -3256,21 +3257,146 @@ product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
 \section{Differentiation}
 \label{sec:differentiation}
 
-\todo{fix notation}
-The \term{derivative} $F'$ of a species $F$ is defined by \[ F'[U] =
-F[U \union \{\star\}], \] where $\star$ is some new distinguished
-label not already present in $U$.  The transport of relabellings along
-the derivative is defined as expected, leaving the distinguished
-label alone and transporting the others.
-
 The derivative of container types is a notion already familiar to many
 functional programmers through the work of \citet{Huet_zipper},
 \citet{mcbride:derivative, mcbride_clowns_2008} and
 \citet{abbott_deriv}: the derivative of a type is its type of
-``one-hole contexts''.  This can be seen in the definition above;
-$\star$ represents the distinguished ``hole'' in the $F$-structure.
+``one-hole contexts''.  For example, \pref{fig:derivative-example}
+shows a $\Bin'$-shape, where $\Bin$ is the species of rooted binary
+trees.  There is a ``hole'' in a place where a label would normally
+be.
 
-\newcommand{\pt}[1]{#1^{\bullet}}
+\subsection{Differentiation in $\fc \B \Set$}
+
+Formally, we create a ``hole'' by adjoining a new distinguished
+label to the existing set of labels:
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=250]
+import           Data.Tree
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+sampleT7' :: Tree (Maybe Int)
+sampleT7' = fmap (\n -> if n == 4
+                           then Nothing
+                           else Just ((n + 3) `mod` 8)) sampleT7
+
+derTree =
+  renderTree
+    (maybe holeNode mloc)
+    (~~)
+    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
+
+dia = derTree
+   # frame 0.5
+   # lwO 0.7
+  \end{diagram}
+  \caption{An example $\Bin'$-shape}
+  \label{fig:derivative-example}
+\end{figure}
+
+\begin{defn}
+  The \term{derivative} $F'$ of a species $F$ is defined by \[ F'\ L =
+  F\ (L \uplus \singleton). \] The transport of relabellings along the
+  derivative is defined as expected, leaving the distinguished label
+  alone and transporting the others.
+\end{defn}
+In other words, an $F'$-shape on the set of labels $L$ is an $F$-shape
+on $L$ plus one additional distinguished label.  It is therefore
+slightly misleading to draw the distinguished extra label as an
+indistinct ``hole'', as in \pref{fig:derivative-example}, since, for
+example, taking the derivative twice results in two \emph{different,
+  distinguishable} holes.  But it is still a good intuition for most
+purposes.
+
+\begin{ex}
+  Denote by $\mathfrak{a}$ the species of \emph{unrooted} trees, \ie
+  trees in the pure graph-theoretic sense.  Also let $\mcal{A} = \X
+  \cdot (\Bag \comp \mcal{A})$ denote the species of rooted trees.  It
+  is difficult to get a direct algebraic handle on $\mathfrak{a}$;
+  however, we have the relation \[ \mathfrak{a}' = \Bag \comp
+  \mcal{A}, \] since an unrooted tree with a hole in it is equivalent
+  to the set of all the subtrees connected to the hole (note that they
+  become \emph{rooted} trees; their root is distinguished by virtue of
+  being the node adjacent to the hole).
+
+  \todo{picture}
+\end{ex}
+
+\begin{ex}
+  $\Cyc' = \List$, as illustrated in \pref{fig:cycle-deriv}.
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           SpeciesDiagrams
+
+ls = [2,0,1,3]
+
+derCyc = cyc' (smallHoleNode : map labT ls) 1.1
+
+derCycEquiv = hcat' (with & sep .~ 1)
+  [ derCyc
+  , text "≅" # scale 0.6
+  , drawList' labT ls
+  ]
+
+dia = derCycEquiv
+   # frame 0.5
+   # lwO 0.7
+    \end{diagram}
+    \caption{$\Cyc' = \List$}
+    \label{fig:cycle-deriv}
+  \end{figure}
+\end{ex}
+
+\begin{ex}
+  $\List' = \List^2$, as illustrated in \pref{fig:list-deriv}.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           SpeciesDiagrams
+
+ls = [2,0,5,1,4,3] # map (\n -> if n == 5
+                                   then Nothing
+                                   else Just n)
+pair x y = hcat
+  [ roundedRect' 2 1 (with & radiusTL .~ 0.2 & radiusBL .~ 0.2) <> x
+  , roundedRect' 3 1 (with & radiusTR .~ 0.2 & radiusBR .~ 0.2) <> y
+  ]
+
+listCycEquiv = hcat' (with & sep .~ 1)
+  [ drawList' (maybe smallHoleNode labT) ls
+  , text "≅" # scale 0.6
+  , pair (drawList' labT [2,0]) (drawList' labT [1,4,3])
+  ]
+
+dia = listCycEquiv
+   # frame 0.5
+   # lwO 0.7
+    \end{diagram}
+    \caption{$\List' = \List^2$}
+    \label{fig:list-deriv}
+  \end{figure}
+\end{ex}
+
+The operation of species differentiation obeys laws which are familiar
+from calculus:
+\begin{gather*}
+  \One' = \Zero \\
+  \X' = \One \\
+  \Bag' = \Bag \\
+  (F + G)' = F' + G' \\
+  (F \cdot G)' = F' \cdot G + F \cdot G' \\
+  (F \comp G)' = (F' \comp G) \cdot G'
+\end{gather*}
+The reader may enjoy working out \emph{combinatorial} interpretations
+of these laws.
+
+\subsection{Pointing}
+\label{sec:pointing}
 
 The related operation of \term{pointing} can be defined in terms of
 the derivative as \[ \pt F = \X \sprod F'. \] As illustrated in
@@ -3279,54 +3405,57 @@ $F$-structure with one particular distinguished element.
 
   \begin{figure}
     \centering
-    \todo{FIX ME}
-    \begin{diagram}[width=250]
-import SpeciesDiagrams
+    \begin{diagram}[width=300]
+import           Data.Tree
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
 
-theDia = drawSpT (struct'' 5 ((text "F" <> rect 1 1 # lw none) |||||| circle 0.2 # fc black # translateY 0.2)) # centerXY
-         ||||||
-         strutX 1
-         ||||||
-         txt "="
-         ||||||
-         strutX 1
-         ||||||
-         ( struct 1 "X" # alignR
-           ===
-           strutY 0.1
-           ===
-           drawSpT
-           ( nd (txt "F")
-             [ lf Leaf
-             , lf Leaf
-             , lf Leaf
-             , lf Hole
-             , lf Leaf
-             ]
-           ) # alignR
-         ) # centerXY
-         ||||||
-         strutX 1
-         ||||||
-         txt "="
-         ||||||
-         strutX 1
-         ||||||
-         drawSpT
-         ( nd (txt "F")
-           [ lf Leaf
-           , lf Leaf
-           , lf Leaf
-           , lf Point
-           , lf Leaf
-           ]
-         )
+sampleT7' :: Tree (Either Int Int)
+sampleT7' = fmap (\n -> if n == 4
+                           then Left n
+                           else Right n) sampleT7
 
-dia = theDia # centerXY # pad 1.1
+derTree =
+  renderTree
+    (either (const holeNode) mloc)
+    (~~)
+    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
+
+pair x y = hcat
+  [ roundedRect' (width x + 1) ht (with & radiusTL .~ 1 & radiusBL .~ 1) <> x # centerXY
+  , roundedRect' (width y + 1) ht (with & radiusTR .~ 1 & radiusBR .~ 1) <> y # centerXY
+  ]
+  where
+    ht = max (height x) (height y) + 1
+
+xTreePair = pair (mloc 4) derTree
+
+pointedTree =
+  renderTree
+    (either ((<> (circle 1 # fc white)) . mloc) mloc)
+    (~~)
+    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
+  # centerXY
+
+dia = hcat' (with & sep .~ 2)
+   [ xTreePair
+   , text "≅" # scale 2
+   , pointedTree
+   ]
+   # frame 0.5
+   # lwO 0.7
     \end{diagram}
     \caption{Species pointing}
     \label{fig:pointing}
   \end{figure}
+
+\todo{Say something about constructive difference between pointing and
+  derivative?}
+
+\subsection{Generalized differentiation}
+\label{sec:generalized-differentiation}
+
+\todo{Write me}
 
 \section{Closed monoidal structures and elimination}
 \label{sec:closed}

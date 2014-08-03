@@ -444,6 +444,8 @@
 \newcommand{\relabel}{\sim}
 \DeclareMathOperator{\sh}{sh}
 
+\newcommand{\pt}[1]{#1^{\bullet}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analytic functors
 
