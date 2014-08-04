@@ -2804,44 +2804,22 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof,
   are sent to their sum $m + n$.  For the action on morphisms, we are
   given $\sigma : \perm{(\Fin m)}$ and $\tau : \perm{(\Fin n)}$ and
   have to produce some $\perm{(\Fin (m+n))}$.  However, there are many
-  ways to do this---in fact, one for every choice of \[ \varphi : \Fin
-  m \uplus \Fin n \bij \Fin (m + n), \] which specifies how to embed
-  $\{0, \dots, m-1\}$ and $\{0, \dots, n-1\}$ into $\{0, \dots,
-  m+n-1\}$.  Given such a $\varphi$, we may construct \[ \Fin (m+n)
-  \stackrel{\varphi^{-1}}{\bij} \Fin m \uplus \Fin n \stackrel{\sigma
-    \uplus \tau}{\bij} \Fin m \uplus \Fin n \stackrel{\varphi}{\bij}
-  \Fin (m+n), \] as illustrated in \pref{fig:sumiso}.
-
+  valid ways to do this.  One class of examples arises from
+  considering bijections \[ \varphi : \Fin m \uplus \Fin n \bij \Fin (m
+  + n), \] which specify how to embed $\{0, \dots, m-1\}$ and $\{0,
+  \dots, n-1\}$ into $\{0, \dots, m+n-1\}$.  Given such a $\varphi$,
+  we may construct \[ \Fin (m+n) \stackrel{\varphi^{-1}}{\bij} \Fin m
+  \uplus \Fin n \stackrel{\sigma \uplus \tau}{\bij} \Fin m \uplus \Fin
+  n \stackrel{\varphi}{\bij} \Fin (m+n), \] as illustrated in
+  \pref{fig:sumiso}.
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
-{-# LANGUAGE DeriveDataTypeable         #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-
-import           Diagrams.Backend.Cairo.CmdLine
-
 import           Control.Lens                   (partsOf, traverse, (%~))
-import           Data.Bits
-import           Data.List                      (find)
-import           Data.Maybe                     (fromJust)
-import           Data.Typeable
-import           Data.Universe.Instances.Base
 import           Diagrams.Prelude               hiding (tau)
 
-column cs
-  = vcat' (with & sep .~ 1)
-  . zipWith (||>) ['a' ..]
-  . map vcat
-  . (partsOf (traverse.traverse) %~ zipWith fc cs)
-  . map (\n -> zipWith named [0 :: Index ..] (replicate n (square 1)))
-
-newtype Index = Index Int
-  deriving (Eq, Ord, Show, Read, Real, Num, Integral, Bits, Enum, Typeable)
-
-instance IsName Index
-
-instance Universe Index where
-  universe = map Index [0..]
+import           Data.Bits (xor)
+import           SumPermDiagrams
 
 phi :: Either Index Index -> Index
 phi (Left 0) = 1
@@ -2861,16 +2839,6 @@ sigma = (`xor` 1)
 
 tau :: Index -> Index
 tau = (`mod` 3) . succ
-
-permL :: (Index -> Index) -> [a] -> [a]
-permL s l = [ l !! (fromEnum (inverse s i)) || i <- [0 .. toEnum (length l) - 1] ]
-
-either2Name :: Either Index Index -> Name
-either2Name (Left i) = 'a' .> i
-either2Name (Right i) = 'b' .> i
-
-inverse :: (Universe a, Eq b) => (a -> b) -> (b -> a)
-inverse f b = fromJust (find ((==b) . f) universe)
 
 blues = iterateN 4 (blend 0.3 white) blue # reverse
 reds = iterateN 3 (blend 0.3 white) red # reverse
@@ -2897,7 +2865,22 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     \label{fig:sumiso}
   \end{figure}
 
-  \later{Conversely\dots}
+  \begin{rem}
+    Although it is not important to what follows, we note that the
+    mapping described above, from bijections $\varphi : \Fin m \uplus
+    \Fin n \bij \Fin (m + n)$ to functorial maps $\perm{(\Fin m)} \to
+    \perm{(\Fin n)} \to \perm{(\Fin{(m+n)})}$, is neither injective
+    nor surjective.  It is not injective since, for example, with $m =
+    n = 1$, there are two distinct inhabitants of $\Fin 2 \bij \Fin 1
+    + \Fin 1$, but both give rise to the same function $\perm{(\Fin
+      1)} \to \perm{(\Fin 1)} \to \perm{(\Fin 2)}$, namely, the one
+    which constantly returns the identity permutation (which, indeed,
+    is the only such function which is functorial).
+
+    \begin{diagram}[width=300]
+      dia = circle 1 # scaleX 3
+    \end{diagram}
+  \end{rem}
 
   The choice of $\varphi$ does not matter up to isomorphism---hence
   this is where the axiom of choice can be invoked, in order to define
@@ -3273,7 +3256,7 @@ label to the existing set of labels:
 
 \begin{figure}
   \centering
-  \begin{diagram}[width=250]
+  \begin{diagram}[width=200]
 import           Data.Tree
 import           Diagrams.TwoD.Layout.Tree
 import           SpeciesDiagrams
