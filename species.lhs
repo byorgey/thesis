@@ -2781,8 +2781,11 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof,
   Therefore, all the equivalence classes of $\quotient{R}{\sim}$ can
   be represented canonically by a partition of $L$ into two disjoint
   subsets, along with a choice of $F$ and $G$ structures, giving rise
-  to the earlier definition: \[ (F \sprod G)\ L =
-  \biguplus_{L_F,L_G \partition L} F\ L_F \times G\ L_G. \]
+  to the earlier definition:
+  \begin{equation} \label{eq:product-partition}
+    (F \sprod G)\ L = \biguplus_{L_F,L_G \partition L} F\ L_F \times
+    G\ L_G.
+  \end{equation}
 
   Also, in this case, the identity element is $j(I) = j(\varnothing) =
   \B(-,\varnothing)$, that is, the species which takes as input a
@@ -2923,7 +2926,8 @@ dia = hcat' (with & sep .~ 2) [idDia, swapDia]
 
 aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
       \end{diagram}
-      \caption{Two different \todo{write a caption}}
+      \caption{Distinct choices of $\varphi$ that result in identical
+        permutations $f$}
       \label{fig:conjugations}
     \end{figure}
 
@@ -2984,17 +2988,30 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
   \end{rem}
 
   We may now instantiate the definition of Day convolution (for some
-  particular \todo{fixme}), obtaining \[ (F \sprod G)_n = \coend{n_F,
-    n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin (n_F +
-  n_G)). \] \todo{Finish.  Can't really simplify this much/any
-    further.}
+  particular choice of monoid in $\B$), obtaining \[ (F \sprod G)\ n =
+  \coend{n_F, n_G} F\ n_F \times G\ n_G \times (\Fin n \bij \Fin (n_F
+  + n_G)). \]
 
-  % Again, letting $R \defeq \biguplus_{n_F, n_G}
-  % F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin (n_F + n_G))$, the
-  % coend is equivalent to $\quotient{R}{\sim}$, where \[ (n_F, n_G, f,
-  % g, i) \sim (n_F, n_G,\;F\ \sigma_F\ f,\;G\ \sigma_G\ g,\;i \then
-  % (\sigma_F +_\varphi \sigma_G)) \] for any $\sigma_F : \perm{(\Fin
-  %   n_F)}$ and $\sigma_G : \perm{(\Fin n_G)}$.
+  Again, letting $R \defeq \biguplus_{n_F, n_G} F_{n_F} \times G_{n_G}
+  \times (\Fin n \bij \Fin {(n_F + n_G)})$, the coend is equivalent to
+  $\quotient{R}{\sim}$, where \[ (n_F, n_G, f, g, i) \sim (n_F,
+  n_G,\;F\ \sigma_F\ f,\;G\ \sigma_G\ g,\;i \then (\sigma_F +_\varphi
+  \sigma_G)) \] for any $\sigma_F : \perm{(\Fin n_F)}$ and $\sigma_G :
+  \perm{(\Fin n_G)}$.  Note that the meaning of $\sigma_F + \sigma_G$
+  depends on the particular monoid we have chosen, which fixes an
+  interpretation of $\Fin{(m+n)}$ as representing a disjoint union.
+
+  Unlike in the case of $\fc \B \Set$, we cannot really simplify this
+  any further.  In particular, it is \emph{not} equivalent to \[
+  \biguplus_{n_F + n_G = n} F\ n_F \times G\ n_G, \] since that does
+  not take into account the different ways the ``overall'' set of
+  labels could be distributed between $F$ and $G$---that is, it
+  throws away the information contained in the bijection $\Fin n \bij
+  \Fin {(n_F + n_G)}$.  The reason we could ``get rid of'' the
+  bijection in \eqref{eq:product-partition} is that the bijection is
+  secretly encoded in the partition $L_F, L_G \partition L$.  In
+  contrast, $n_F + n_G = n$ says nothing about the relationship of the
+  actual labels, but only about the sizes of the label sets.
 \end{ex}
 
 \begin{ex}
