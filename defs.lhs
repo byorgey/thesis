@@ -446,6 +446,9 @@
 
 \newcommand{\pt}[1]{#1^{\bullet}}
 
+\DeclareMathOperator{\fix}{fix}
+\DeclareMathOperator{\Fix}{Fix}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Analytic functors
 

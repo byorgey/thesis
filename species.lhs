@@ -2805,13 +2805,17 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof,
   given $\sigma : \perm{(\Fin m)}$ and $\tau : \perm{(\Fin n)}$ and
   have to produce some $\perm{(\Fin (m+n))}$.  However, there are many
   valid ways to do this.  One class of examples arises from
-  considering bijections \[ \varphi : \Fin m \uplus \Fin n \bij \Fin (m
-  + n), \] which specify how to embed $\{0, \dots, m-1\}$ and $\{0,
+  considering bijections \[ \varphi : \Fin m \uplus \Fin n \bij \Fin
+  (m + n), \] which specify how to embed $\{0, \dots, m-1\}$ and $\{0,
   \dots, n-1\}$ into $\{0, \dots, m+n-1\}$.  Given such a $\varphi$,
-  we may construct \[ \Fin (m+n) \stackrel{\varphi^{-1}}{\bij} \Fin m
-  \uplus \Fin n \stackrel{\sigma \uplus \tau}{\bij} \Fin m \uplus \Fin
-  n \stackrel{\varphi}{\bij} \Fin (m+n), \] as illustrated in
-  \pref{fig:sumiso}.
+  we may construct \[ \Omega(\varphi)(\sigma, \tau) \defeq \Fin (m+n)
+  \stackrel{\varphi^{-1}}{\bij} \Fin m \uplus \Fin n \stackrel{\sigma
+    \uplus \tau}{\bij} \Fin m \uplus \Fin n \stackrel{\varphi}{\bij}
+  \Fin (m+n), \] as illustrated in \pref{fig:sumiso}. (Note that
+  conjugating by $\varphi$ is essential for the functoriality of the
+  result; picking some other bijection in place of, say,
+  $\varphi^{-1}$, would result in a permutation that sent $\sigma =
+  \tau = \id$ to something other than the identity.)
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
@@ -2866,33 +2870,123 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
   \end{figure}
 
   \begin{rem}
-    Although it is not important to what follows, we note that the
-    mapping described above, from bijections $\varphi : \Fin m \uplus
-    \Fin n \bij \Fin (m + n)$ to functorial maps $\perm{(\Fin m)} \to
-    \perm{(\Fin n)} \to \perm{(\Fin{(m+n)})}$, is neither injective
-    nor surjective.  It is not injective since, for example, with $m =
-    n = 1$, there are two distinct inhabitants of $\Fin 2 \bij \Fin 1
-    + \Fin 1$, but both give rise to the same function $\perm{(\Fin
-      1)} \to \perm{(\Fin 1)} \to \perm{(\Fin 2)}$, namely, the one
-    which constantly returns the identity permutation (which, indeed,
-    is the only such function which is functorial).
+    Although it is not essential to what follows, we note that the
+    $\Omega$ defined above, which sends bijections $\varphi : \Fin m
+    \uplus \Fin n \bij \Fin (m + n)$ to functorial maps $\perm{(\Fin
+      m)} \to \perm{(\Fin n)} \to \perm{(\Fin{(m+n)})}$, is neither
+    injective nor surjective.  It is not injective since, for example,
+    with $m = n = 1$, there are two distinct inhabitants of $\Fin 2
+    \bij \Fin 1 + \Fin 1$, but both give rise to the same function
+    $\perm{(\Fin 1)} \to \perm{(\Fin 1)} \to \perm{(\Fin 2)}$
+    (\pref{fig:conjugations}), namely, the one which constantly
+    returns the identity permutation (which, indeed, is the only such
+    function which is functorial).
 
-    \begin{diagram}[width=300]
-      dia = circle 1 # scaleX 3
-    \end{diagram}
+    \begin{figure}
+      \centering
+      \begin{diagram}[width=300]
+import           SpeciesDiagrams
+import           SumPermDiagrams
+
+idDia = (hcat' (with & sep .~ 1.5) . map centerY $ -- $
+      [ 'A' ||> column (repeat white) [2]
+      , 'B' ||> column (repeat white) [1,1]
+      , 'C' ||> column (repeat white) [1,1]
+      , 'D' ||> column (repeat white) [2]
+      ]
+  )
+  # connect' aOpts ('A' .> 'a' .> (0 :: Index)) ('B' .> 'a' .> (0 :: Index))
+  # connect' aOpts ('A' .> 'a' .> (1 :: Index)) ('B' .> 'b' .> (0 :: Index))
+  # connect' aOpts ('B' .> 'a' .> (0 :: Index)) ('C' .> 'a' .> (0 :: Index))
+  # connect' aOpts ('B' .> 'b' .> (0 :: Index)) ('C' .> 'b' .> (0 :: Index))
+  # connect' aOpts ('C' .> 'a' .> (0 :: Index)) ('D' .> 'a' .> (0 :: Index))
+  # connect' aOpts ('C' .> 'b' .> (0 :: Index)) ('D' .> 'a' .> (1 :: Index))
+
+swapDia =
+  (hcat' (with & sep .~ 1.5) . map centerY $ -- $
+    [ 'A' ||> column (repeat white) [2]
+    , 'B' ||> column (repeat white) [1,1]
+    , 'C' ||> column (repeat white) [1,1]
+    , 'D' ||> column (repeat white) [2]
+    ]
+  )
+  # connect' aOpts ('A' .> 'a' .> (0 :: Index)) ('B' .> 'b' .> (0 :: Index))
+  # connect' aOpts ('A' .> 'a' .> (1 :: Index)) ('B' .> 'a' .> (0 :: Index))
+  # connect' aOpts ('B' .> 'a' .> (0 :: Index)) ('C' .> 'a' .> (0 :: Index))
+  # connect' aOpts ('B' .> 'b' .> (0 :: Index)) ('C' .> 'b' .> (0 :: Index))
+  # connect' aOpts ('C' .> 'b' .> (0 :: Index)) ('D' .> 'a' .> (0 :: Index))
+  # connect' aOpts ('C' .> 'a' .> (0 :: Index)) ('D' .> 'a' .> (1 :: Index))
+
+dia = hcat' (with & sep .~ 2) [idDia, swapDia]
+  # frame 0.5
+  # lwO 0.7
+
+aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
+      \end{diagram}
+      \caption{Two different \todo{write a caption}}
+      \label{fig:conjugations}
+    \end{figure}
+
+    Neither is $\Omega$ surjective.  Consider the case where $m = n =
+    2$, and the function $f : \perm{(\Fin 2)} \to \perm{(\Fin
+      2)} \to \perm{(\Fin 4)}$ given by the table
+    \begin{center}
+    \begin{tabular}{c||cc}
+             & $\id$  & $(12)$ \\
+             \hline
+      $\id$  & $\id$  & $(12)(34)$ \\
+      $(12)$ & $(12)$ & $(34)$
+    \end{tabular}
+    \end{center}
+    It is not hard to verify that $f$ is functorial; for example,
+    $f\ \id\ (12) \then f\ (12)\ \id = (12)(34) \then (12) = (34) = f\
+    (12)\ (12)$.  However, we will show that $f$ cannot be of the form
+    $f\ \sigma\ \tau = \varphi \comp (\sigma \uplus \tau) \comp
+    \varphi^{-1}$ for any $\varphi$.
+
+    For a permutation $\psi$, denote by $\Fix(\psi) = \{ x \mid
+    \psi(x) = x \}$ the set of fixed points of $\psi$, and by
+    $\fix(\psi) = \size \Fix(\psi)$ the number of fixed points.  Note
+    that $\fix(\sigma \uplus \tau) = \fix(\sigma) + \fix(\tau)$, since
+    if some value $\inl\ s$ is fixed by $\sigma \uplus \tau$, then $s$
+    must be fixed by $\sigma$, and conversely (and similarly for
+    $\inr$ and $\tau$).  We also note the following lemma:
+    \begin{lem}
+      $\fix$ is invariant under conjugation; that is, for any
+      permutations $\psi$ and $\varphi$ we have $\fix(\psi) =
+      \fix(\varphi \comp \psi \comp \varphi^{-1})$.
+    \end{lem}
+    \begin{proof}
+      We calculate as follows:
+      \begin{sproof}
+        \stmt{\psi(x) = x}
+        \reason{\iff}{apply $\psi^{-1}$ to both sides}
+        \stmt{x = \psi^{-1}(x)}
+        \reason{\iff}{apply $\varphi \comp \psi \comp \varphi^{-1}
+          \comp \varphi$ to both sides}
+        \stmt{\varphi(\psi(\varphi^{-1}(\varphi(s)))) =
+          \varphi(\psi(\varphi^{-1}(\varphi(\psi^{-1}(s)))))}
+        \reason{\iff}{simplify}
+        \stmt{(\varphi \comp \psi \comp
+          \varphi^{-1})(\varphi(s)) = \varphi(s).}
+      \end{sproof}
+      Thus $\varphi$ is a bijection between the fixed points of $\psi$
+      and those of $\varphi \comp \psi \comp \varphi^{-1}$.
+    \end{proof}
+
+    If $f\ \sigma\ \tau$ is of the form $\varphi \comp (\sigma \uplus
+    \tau) \comp \varphi^{-1}$, we therefore have \[ \fix(f\ \sigma\
+    \tau) = \fix(\varphi \comp (\sigma \uplus \tau) \comp
+    \varphi^{-1}) = \fix(\sigma \uplus \tau) = \fix(\sigma) +
+    \fix(\tau). \] However, the $f$ exhibited in the table above does
+    not satisfy this equality: in particular, \[ \fix(f\ \id\ (12)) =
+    \fix((12)(34)) = 0 \neq 2 = \fix(\id) + \fix((12)). \]
   \end{rem}
 
-  The choice of $\varphi$ does not matter up to isomorphism---hence
-  this is where the axiom of choice can be invoked, in order to define
-  a single, canonical monoid structure on $\P$.  However, it is
-  preferable to simply retain a plethora of monoidal structures, each
-  indexed by a family of bijections $\varphi_{m,n} : \Fin m \uplus
-  \Fin n \bij \Fin (m+n)$.
-
   We may now instantiate the definition of Day convolution (for some
-  particular choice of $\varphi_{m,n}$, obtaining \[ (F \sprod G)_n =
-  \coend{n_F, n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin
-  (n_F + n_G)). \] \todo{Finish.  Can't really simplify this much/any
+  particular \todo{fixme}), obtaining \[ (F \sprod G)_n = \coend{n_F,
+    n_G} F_{n_F} \times G_{n_G} \times (\Fin n \bij \Fin (n_F +
+  n_G)). \] \todo{Finish.  Can't really simplify this much/any
     further.}
 
   % Again, letting $R \defeq \biguplus_{n_F, n_G}
