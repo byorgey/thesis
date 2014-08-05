@@ -3111,7 +3111,8 @@ create an $F$-shape over the resulting set of $G$-shapes.
 Formally,
 \[ (F \comp G)\ L = \sum_{\pi \partition L} F\ \pi \times \prod_{p \in
   \pi} G\ p. \] \pref{fig:composition} shows an abstract
-representation of the definition.
+representation of the definition, and \pref{fig:composition-example}
+shows a concrete example of a $(\Bin \comp \List_+)$-shape.
 
   \begin{figure}
     \centering
@@ -3136,9 +3137,43 @@ theDia = struct 6 "F∘G"
 
 dia = theDia # centerXY # pad 1.1
     \end{diagram}
-    \caption{Species composition}
+    \caption{Generic species composition}
     \label{fig:composition}
   \end{figure}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import           Control.Lens                   (traverse, unsafePartsOf)
+import           Data.List                      (permutations)
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+tOfLs = sampleBTree5
+  # fmap ([2,3,1,3,1] !!)
+  # fmap (\n -> replicate n ())
+  # (unsafePartsOf (traverse.traverse) .~ [2,6,0,3,5,7,1,9,8,4])
+
+treeOfLists =
+  tree3 (\ls -> enrect (list2 ls (scale 0.5 . mloc) # centerX # scale 0.5 # fc black) # fc white)
+
+enrect d = d <> roundedRect (width d + 0.2) (height d + 0.2) 0.2
+
+tree3 nd
+  = maybe mempty (renderTree nd (~~))
+  . uniqueXLayout 1 1
+  $ tOfLs  -- $
+
+list2 ns nd = hcat' (with & sep .~ 1 & catMethod .~ Distrib)
+  (map nd ns)
+  <>
+  hrule (fromIntegral (length ns - 1)) # alignL
+
+dia = treeOfLists # frame 0.5 # lwO 0.7
+  \end{diagram}
+  \caption{An example $(\Bin \comp \List_+)$-shape}
+  \label{fig:composition-example}
+\end{figure}
 
 One can see that in addition to being the identity for $\aprod$, $\X$
 is the (two-sided) identity for $\comp$ as well, since an $F$-shape
@@ -3265,30 +3300,33 @@ dia = hcat' (with & sep .~ 2) (map (alignB . drawPShape . pShape) [0..3])
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
 
-\todo{FIX ME}
 We first show how to carry out the definition of composition in $\fc \B
 \Set$ more abstractly, and then discuss how it may be generalized to
 other functor categories $\fc \Lab \Str$.
 \citet{street2012monoidal} gives the following abstract
 definition of composition:
-\[ (F \comp G)\ L = \coend{K} F\ K \times G^{\size K}\ L, \]
-where $G^{n} = \underbrace{G \bullet \dots \bullet G}_n$ is
-the $n$-fold partitional product of $G$.  Intuitively, this
-corresponds to a top-level $F$-shape on labels drawn from the
-``internal'' label set $K$, paired with $\size K$-many $G$-shapes,
-with the labels from $L$ partitioned among all the $G$-shapes.  The
-coend ensures that the precise choice of $K$ ``does not matter'' up to
-isomorphism.
+\[ (F \comp G)\ L = \coend{K} F\ K \times G^{\size K}\ L, \] where
+$G^{n} = \underbrace{G \cdot \dots \cdot G}_n$ is the $n$-fold
+partitional product of $G$.  Intuitively, this corresponds to a
+top-level $F$-shape on labels drawn from the ``internal'' label set
+$K$, paired with $\size K$-many $G$-shapes, with the labels from $L$
+partitioned among all the $G$-shapes.  The coend abstracts over $K$,
+ensuring that the precise choice of ``internal'' labels does not
+matter up to isomorphism.
 
-However, this definition is puzzling from a constructive point of
-view, since it is would seem that $G^{\size K}$ retains no information
-about which element of $K$ corresponds to which $G$-shape in the
-product.  The problem boils down, again, to the use of the axiom of
-choice.  For each finite set $K$ we may choose some ordering
+However, this definition is somewhat puzzling from a constructive
+point of view, since it would seem that $G^{\size K}$ retains no
+information about which element of $K$ corresponds to which $G$-shape
+in the product.  The problem boils down, again, to the use of the
+axiom of choice.  For each finite set $K$ we may choose some ordering
 $K \bij \fin{\size K}$; this ordering then dictates how to match up
 the elements of $K$ with the $G$-shapes in the product $G^{\size K}$.
 
-Our goal will be to instead define $G^K$, a ``$K$-indexed partitional
+There are several ways forward. In the particular case of $\fc \B
+\Set$, we can use a more explicit construction (again due to
+Street\footnote{Personal communication.}) as follows.
+
+The general problem is to define $G^K$, a ``$K$-indexed partitional
 product'' of $G$-shapes, where each $G$-shape corresponds, by
 construction, to an element of $K$.
 
@@ -3347,6 +3385,54 @@ product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
 
 \todo{Prove it is associative?}
 \todo{Distributes over sum and product?}
+
+\section{Functor composition}
+\label{sec:functor-composition}
+
+There is a more direct variant of composition, known as \term{functor
+  composition} \citep{bll, decoste1992functorial}.  When species are
+defined as endofunctors $\B \to \B$, the functor composition $F \fcomp
+G$ is literally defined as the composition of $F$ and $G$ as functors,
+that is, \[ (F \fcomp G)\ L = F\ (G\ L). \]  However, if species are
+viewed as functors $\B \to \Set$ then this operation is not well-typed
+as stated, and indeed feels somewhat unnatural.
+
+Intuitively, an $(F \fcomp G)$-shape on the set of labels $L$ can be
+thought of as consisting of \emph{all possible} $G$-shapes on the
+labels $L$, with an $F$-shape on this collection of $G$-shapes as
+labels.  Functor composition thus has a similar relationship to
+partitional composition as Cartesian product has to partitional
+product.  With partitional product, the labels are partitioned into
+two disjoint sets, whereas with Cartesian products the labels are
+shared.  With partitional composition, the labels are partitioned into
+(any number of) subsets with a $G$-shape on each; with functor
+composition, the labels are shared among \emph{all possible}
+$G$-shapes.
+
+\begin{rem}
+  There is no standard operation which creates an $F$-shape of
+  \emph{some} $G$-shapes, with the labels $L$ shared among all the
+  $G$-shapes.  To accomplish this one can simply use $(F \cdot
+  \Rubbish) \fcomp G$.
+\end{rem}
+
+\begin{ex}
+  The species of simple, directed graphs can be described by \[ (\Bag
+  \cdot \Rubbish) \fcomp (\X^2 \cdot \Rubbish). \] Each $(\X^2 \cdot
+  \Rubbish)$-shape applied to the same set of labels $L$ picks out an
+  ordered pair of distinct labels, which can be thought of as a
+  directed edge.  Taking the functor composition with $(\Bag \cdot
+  \Rubbish)$ thus picks out a subset of the total collection of
+  possible directed edges.
+
+  A number of variants are also possible.  For example, to allow
+  self-loops, one can replace $\X^2$ by $(\X + \X^2)$; to use
+  undirected instead of directed edges, one can replace $\X^2$ by
+  $\Bag_2$; and so on.
+\end{ex}
+
+A more thorough investigation and generalization of functor
+composition is left to future work.
 
 \section{Differentiation}
 \label{sec:differentiation}
