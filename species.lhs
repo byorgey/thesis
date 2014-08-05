@@ -3305,7 +3305,10 @@ We first show how to carry out the definition of composition in $\fc \B
 other functor categories $\fc \Lab \Str$.
 \citet{street2012monoidal} gives the following abstract
 definition of composition:
-\[ (F \comp G)\ L = \coend{K} F\ K \times G^{\size K}\ L, \] where
+\begin{equation} \label{eq:comp-street}
+(F \comp G)\ L = \coend{K} F\ K \times G^{\size K}\ L,
+\end{equation}
+ where
 $G^{n} = \underbrace{G \cdot \dots \cdot G}_n$ is the $n$-fold
 partitional product of $G$.  Intuitively, this corresponds to a
 top-level $F$-shape on labels drawn from the ``internal'' label set
@@ -3324,44 +3327,49 @@ the elements of $K$ with the $G$-shapes in the product $G^{\size K}$.
 
 There are several ways forward. In the particular case of $\fc \B
 \Set$, we can use a more explicit construction (again due to
-Street\footnote{Personal communication.}) as follows.
+Street\footnote{Personal communication, 6 March 2014.}) as follows.
+For a finite set $K$ and category $\C$, recall that we may represent a
+$K$-indexed tuple of objects of $\C$ by a functor $K \to \C$ (where
+$K$ is considered as a discrete category).  It's important to note
+that this ``$K$-tuple'' has no inherent ordering (unless $K$ itself
+has one)---it simply assigns an object of $\C$ to each element of $K$.
+Denote by $\Delta_K : \C \to \C^K$ the diagonal functor which sends
+objects $C \in \C$ to the $K$-tuple containing only copies of $C$.
 
-The general problem is to define $G^K$, a ``$K$-indexed partitional
-product'' of $G$-shapes, where each $G$-shape corresponds, by
-construction, to an element of $K$.
-
-As a warm-up, consider first the situation in $\Set$.  We can
-represent a $K$-indexed collection of sets by a functor $K \to \Set$
-(where $L$ is regarded as a discrete category). \todo{working here}
-
-be regarded as an
-$L$-indexed tuple of sets; \eg in the case $L = \disc{\cat{2}}$, the
-discrete category on two objects, a functor $\disc{\cat{2}} \to \Set$
-is just an ordered pair of sets. $\Delta_L (X)$ is the $L$-indexed
-tuple containing identical copies of $X$.
-
-\todo{Need to say what limits and colimits are.}
-The fact that $\Set$ has all limits and colimits is equivalent to
-saying that for any category $J$, the diagonal functor $\Delta_J :
-\Set \to \Set^J$ always has (respectively) a right and left
-adjoint~\cite{wikipedia on limits}. \todo{Look up Taylor, Ex 7.3.7
-  p.387, 9.1.7 p.474.}  In the particular case of a discrete category
-$L$, we call these adjoints $\Pi^L$ and $\Sigma^L$: \[ \Sigma^L \adj
-\Delta_L \adj \Pi^L. \] In particular, $\Sigma^L : \Set^L \to \Set$
-constructs $L$-indexed coproducts, and $\Pi^L$ indexed products. (In
-the special case $L = \cat{2}$, $\Sigma^2$ and $\Pi^2$ resolve to the
+Consider $\C = \FinSet$.  Given any discrete category $K$, the
+diagonal functor $\Delta_K : \FinSet \to \FinSet^K$ has both a left
+and right adjoint, which we call $\Sigma_K$ and $\Pi_K$: \[ \Sigma_K
+\adj \Delta_K \adj \Pi_K. \] In particular, $\Sigma_K : \Set^K \to
+\Set$ constructs $K$-indexed coproducts, and $\Pi_K$ constructs
+indexed products. (In the special case $K = \disc{\cat{2}}$,
+$\Sigma_{\disc{\cat{2}}}$ and $\Pi_{\disc{\cat{2}}}$ resolve to the
 familiar notions of binary disjoint union and Cartesian product of
-sets, respectively.)  We often omit the superscripts, writing simply
-$\Sigma$ and $\Pi$ when $L$ is clear from the context.
+finite sets, respectively.)  One can see this by considering the
+expansion of the adjoint relations as natural isomorphisms between
+hom-sets.  For example, in the case of $\Pi_K$, we have \[ (\Delta_K\
+A \to T) \iso (A \to \Pi_K\ T) \] where $A \in \FinSet$ and $T \in
+\FinSet^K$.  Essentially this expands to something like \[ (A \to T_1)
+\times \dots \times (A \to T_n) \iso (A \to \Pi_K\ T), \] and it is easy
+to see that in order for the isomorphism to hold, we should have
+$\Pi_K\ T = T_1 \times \dots \times T_N$. (In general, of course, $K$
+need not have some associated indexing $1 \dots n$, but the same
+argument can be generalized.)  We often omit the subscripts, writing
+simply $\Sigma$ and $\Pi$ when $K$ is clear from the context.
 
-As noted previously, $\B$ does not have products or coproducts, so we
-cannot directly define $\Sigma$ or $\Pi$ as adjoints in $\B$.
-However, we may take the restriction of $\Sigma : \Set^L \to \Set$ to
-$\Sigma : \B^L \to \B$ (and likewise for $\Pi$), since $\B$ is a
-subcategory of $\Set$ and disjoint union (respectively product)
-preserves finiteness.
+Now consider $\C = \B$.  $\Delta_K$ does not have adjoints in $\B$; in
+fact, categorical products and coproducts can be exactly characterized
+as adjoints to $\Delta_{\disc{\cat{2}}}$, and we have already seen
+that $\B$ does not have categorical products or coproducts.  However,
+we can simply take $\Pi_K, \Sigma_K : \FinSet^K \to \FinSet$ and
+restrict them to functors $\B \to \B^K$.  This is well-defined since
+$\FinSet$ and $\B$ have the same objects, and $\Pi_K$ and $\Sigma_K$
+produce only isomorphism when applied to isomorphisms.  For example,
+if $\alpha : A \bij A'$, $\beta : B \bij B'$, and $\gamma : C \bij
+C'$, then $\Pi_{\disc{\cat{3}}} (\alpha, \beta, \gamma)$ is the
+isomorphism $\alpha \times \beta \times \gamma : A \times B \times C
+\bij A' \times B' \times C'$.
 
-We now define a general notion of indexed species product. For a
+We can now define a general notion of indexed species product. For a
 species $F : \fc \B \Set$ and $K \in \B$ a finite set, $F^K :
 \fc \B \Set$ represents the $\size K$-fold partitional product of $F$,
 indexed by the elements of $K$: \todo{picture?} \[ F^K\ L = \coend{P
@@ -3375,13 +3383,17 @@ fundamentally distinct partition. The composite $F \comp P =
 collection of $F$-structures, one on each finite set of labels in $P$;
 the $\Pi$ constructs their product.
 
-\todo{Note this is functorial in $K$, i.e. $F^- : \B \to (\fc \B \Set)$ is
-a functor.}
+It is important to note that this is functorial in $K$: the action on
+a morphism $\sigma : K \bij K'$ is to appropriately compose $\sigma$
+with $P$.
 
-Finally, the composite $F \comp G$ is defined by
-\[ (F \comp G)\ L = \coend{K} F\ K \times G^K\ L, \] \ie an $(F \comp
-G)$-shape on $L$ is an $F$-shape on some label set $K$ paired with a $K$-indexed
-product of $G$-shapes on $L$; the coend \todo{finish}. \todo{picture}
+The composite $F \comp G$ can now be defined by
+\[ (F \comp G)\ L = \coend{K} F\ K \times G^K\ L. \]  This is
+identical to the definition given in \eqref{eq:comp-street}, except
+that $G^{\size K}$ has been replaced by $G^K$, which explicitly
+records a mapping from elements of $K$ to $G$-shapes.
+
+This explicit construction relies on 
 
 \todo{Prove it is associative?}
 \todo{Distributes over sum and product?}
