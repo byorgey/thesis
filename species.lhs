@@ -398,13 +398,15 @@ dia = graphToDia (unsafePerformIO (graphToGraph' nonClusteredParams gr))
 
   Some reflection shows that endofunctions can be characterized as
   permutations of rooted trees, \[ \Sp{End} = \Perm \comp T = \Bag
-  \comp \Cyc \comp T, \] where $T = \X \cdot (\Bag \comp
-  T)$. \todo{explain this in terms of the example picture. ``Some
-    reflection'' is a cop-out.  Show each tree in a different color,
-    perhaps?}  \citet{joyal} makes use of this characterization in
-  giving an elegant combinatorial proof of Cayley's formula, namely,
-  that there are $n^{n-2}$ (unrooted, unordered, arbitrary arity)
-  labelled trees of size $n$.
+  \comp \Cyc \comp T, \] where $T = \X \cdot (\Bag \comp T)$. Each
+  element which is part of a cycle serves as the root of a tree;
+  iterating an endofunction starting from any element must eventually
+  reach a cycle, showing that every element belongs to some
+  tree. \todo{explain this in terms of the example picture.  Show each
+    tree in a different color, perhaps?}  \citet{joyal} makes use of
+  this characterization in giving an elegant combinatorial proof of
+  Cayley's formula, namely, that there are $n^{n-2}$ (unrooted,
+  unordered, arbitrary arity) labelled trees of size $n$.
 
   One can likewise give characterizations of the species of
   endofunctions with various special properties, such as injections,
