@@ -3324,17 +3324,23 @@ in the product.  The problem boils down, again, to the use of the
 axiom of choice.  For each finite set $K$ we may choose some ordering
 $K \bij \fin{\size K}$; this ordering then dictates how to match up
 the elements of $K$ with the $G$-shapes in the product $G^{\size K}$.
+More formally, given a species $G$ we can define the anafunctor $G^- :
+\B \to \Spe$ which sends each finite set $K$ to the clique of $(\size
+K)$-ary products of $G$, with the morphisms in the clique
+corresponding to permutations (since $\Spe$ is symmetric monoidal with
+respect to partitional product).  This then becomes a regular functor
+in the presence of the axiom of choice.
 
-There are several ways forward. In the particular case of $\fc \B
-\Set$, we can use a more explicit construction (again due to
-Street\footnote{Personal communication, 6 March 2014.}) as follows.
-For a finite set $K$ and category $\C$, recall that we may represent a
-$K$-indexed tuple of objects of $\C$ by a functor $K \to \C$ (where
-$K$ is considered as a discrete category).  It's important to note
-that this ``$K$-tuple'' has no inherent ordering (unless $K$ itself
-has one)---it simply assigns an object of $\C$ to each element of $K$.
+In the particular case of $\fc \B \Set$, we can also avoid the axiom
+of choice by using a more explicit construction (again due to
+Street\footnote{Personal communication, 6 March 2014.}).  For a finite
+set $K$ and category $\C$, recall that we may represent a $K$-indexed
+tuple of objects of $\C$ by a functor $K \to \C$ (where $K$ is
+considered as a discrete category).  It's important to note that this
+``$K$-tuple'' has no inherent ordering (unless $K$ itself has
+one)---it simply assigns an object of $\C$ to each element of $K$.
 Denote by $\Delta_K : \C \to \C^K$ the diagonal functor which sends
-objects $C \in \C$ to the $K$-tuple containing only copies of $C$.
+an object $C \in \C$ to the $K$-tuple containing only copies of $C$.
 
 Consider $\C = \FinSet$.  Given any discrete category $K$, the
 diagonal functor $\Delta_K : \FinSet \to \FinSet^K$ has both a left
@@ -3343,7 +3349,7 @@ and right adjoint, which we call $\Sigma_K$ and $\Pi_K$: \[ \Sigma_K
 \Set$ constructs $K$-indexed coproducts, and $\Pi_K$ constructs
 indexed products. (In the special case $K = \disc{\cat{2}}$,
 $\Sigma_{\disc{\cat{2}}}$ and $\Pi_{\disc{\cat{2}}}$ resolve to the
-familiar notions of binary disjoint union and Cartesian product of
+familiar notions of disjoint union and Cartesian product of
 finite sets, respectively.)  One can see this by considering the
 expansion of the adjoint relations as natural isomorphisms between
 hom-sets.  For example, in the case of $\Pi_K$, we have \[ (\Delta_K\
@@ -3361,39 +3367,103 @@ fact, categorical products and coproducts can be exactly characterized
 as adjoints to $\Delta_{\disc{\cat{2}}}$, and we have already seen
 that $\B$ does not have categorical products or coproducts.  However,
 we can simply take $\Pi_K, \Sigma_K : \FinSet^K \to \FinSet$ and
-restrict them to functors $\B \to \B^K$.  This is well-defined since
+restrict them to functors $\B^K \to \B$.  This is well-defined since
 $\FinSet$ and $\B$ have the same objects, and $\Pi_K$ and $\Sigma_K$
-produce only isomorphism when applied to isomorphisms.  For example,
+produce only isomorphisms when applied to isomorphisms.  For example,
 if $\alpha : A \bij A'$, $\beta : B \bij B'$, and $\gamma : C \bij
 C'$, then $\Pi_{\disc{\cat{3}}} (\alpha, \beta, \gamma)$ is the
 isomorphism $\alpha \times \beta \times \gamma : A \times B \times C
 \bij A' \times B' \times C'$.
 
 We can now define a general notion of indexed species product. For a
-species $F : \fc \B \Set$ and $K \in \B$ a finite set, $F^K :
-\fc \B \Set$ represents the $\size K$-fold partitional product of $F$,
-indexed by the elements of $K$: \todo{picture?} \[ F^K\ L = \coend{P
-  : \fc K \B} \B(\Sigma P, L) \times \Pi (F \comp P). \] Note that $K$
-is regarded as a discrete category, so $P \in \B^K$ is a $K$-indexed
-collection of finite sets.  $\B(\Sigma P, L)$, a bijection between the
-coproduct of $P$ and $L$, witnesses the fact that $P$ represents a
-partition of $L$; the coend means there is only one shape per
-fundamentally distinct partition. The composite $F \comp P =
-\xymatrix{K \ar[r]^P & \B \ar[r]^F & \Set}$ is a $K$-indexed
-collection of $F$-structures, one on each finite set of labels in $P$;
-the $\Pi$ constructs their product.
+species $F : \fc \B \Set$ and $K \in \B$ a finite set, $F^K : \fc \B
+\Set$ represents the $\size K$-fold partitional product of $F$,
+indexed by the elements of $K$ (see
+\pref{fig:indexed-species-product}): \[ F^K\ L = \coend{(P : \B^K)}
+\B(\Sigma P, L) \times \Pi (F \comp P). \] Note that $K$ is regarded
+as a discrete category, so $P \in \B^K$ is a $K$-indexed collection of
+finite sets.  $\B(\Sigma P, L)$, a bijection between the coproduct of
+$P$ and $L$, witnesses the fact that $P$ represents a partition of
+$L$; the coend means there is only one shape per fundamentally
+distinct partition. The composite $F \comp P = \xymatrix{K \ar[r]^P &
+  \B \ar[r]^F & \Set}$ is a $K$-indexed collection of $F$-structures,
+one on each finite set of labels in $P$; the $\Pi$ constructs their
+product.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import           SpeciesDiagrams
+
+mkFShape :: [Int] -> Diagram B R2
+mkFShape labs = (es <> fShape) # connectUp
+  where
+    es = enRect (hcat' (with & sep .~ 0.5) (map mloc' labs)) # centerXY
+    connectUp = applyAll
+      [ withName l (\s -> beneath (location s ~~ topPt)) || l <- labs ]
+    topPt = 0 ^& 2.5
+    fShape =
+      arc (9/16 @@@@ turn) (15/16 @@@@ turn) # scale 0.5 # moveTo topPt
+      <>
+      text "F" # scale 0.5 # moveTo topPt # translateX (-0.8)
+
+mloc' :: Int -> Diagram B R2
+mloc' n = mloc n # named n
+
+fShapes =
+  text "P" # scale 0.8
+  |||||| strutX 1 ||||||
+  hcat' (with & sep .~ 1)
+  [ mkFShape [1,3,0]
+  , mkFShape [5,2]
+  , mkFShape [4,6]
+  ]
+  # centerX
+  # underbrace (text "L" # scale 0.8 <> phantom (square 0.5 :: D R2))
+
+underbrace lab d =
+  vcat' (with & sep .~ 0.5)
+  [ d
+  , brace
+  , lab
+  ]
+  where
+    w = width d
+    brace = centerX . strokeT . mconcat $  -- $
+      [ corner
+      , hrule ruleLen
+      , corner # rotateBy (1/2) # reverseTrail
+      , corner # rotateBy (-1/4) # reverseTrail
+      , hrule ruleLen
+      , corner # rotateBy (1/4)
+      ]
+    braceRad = 0.3
+    ruleLen = (w - 4*braceRad) / 2
+    corner = (arc (1/2 @@@@ turn) (3/4 @@@@ turn) # scale braceRad)
+
+dia = fShapes
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{Indexed species product}
+  \label{fig:indexed-species-product}
+\end{figure}
 
 It is important to note that this is functorial in $K$: the action on
 a morphism $\sigma : K \bij K'$ is to appropriately compose $\sigma$
 with $P$.
 
-The composite $F \comp G$ can now be defined by
+The composition $F \comp G$ can now be defined by
 \[ (F \comp G)\ L = \coend{K} F\ K \times G^K\ L. \]  This is
 identical to the definition given in \eqref{eq:comp-street}, except
 that $G^{\size K}$ has been replaced by $G^K$, which explicitly
 records a mapping from elements of $K$ to $G$-shapes.
 
-This explicit construction relies on 
+This explicit construction relies on \todo{what? Seems too
+  complicated, relies on lots of specific stuff about B and Set.  And
+  we don't need it in HoTT.}
+
+\todo{Discuss in HoTT. Discuss requirements in general.}
 
 \todo{Prove it is associative?}
 \todo{Distributes over sum and product?}
@@ -3404,28 +3474,29 @@ This explicit construction relies on
 There is a more direct variant of composition, known as \term{functor
   composition} \citep{bll, decoste1992functorial}.  When species are
 defined as endofunctors $\B \to \B$, the functor composition $F \fcomp
-G$ is literally defined as the composition of $F$ and $G$ as functors,
-that is, \[ (F \fcomp G)\ L = F\ (G\ L). \]  However, if species are
-viewed as functors $\B \to \Set$ then this operation is not well-typed
-as stated, and indeed feels somewhat unnatural.
+G$ can literally be defined as the composition of $F$ and $G$ as
+functors, that is, \[ (F \fcomp G)\ L = F\ (G\ L). \] However, if
+species are viewed as functors $\B \to \Set$ then this operation is
+not well-typed as stated, and indeed feels somewhat unnatural.
 
 Intuitively, an $(F \fcomp G)$-shape on the set of labels $L$ can be
 thought of as consisting of \emph{all possible} $G$-shapes on the
 labels $L$, with an $F$-shape on this collection of $G$-shapes as
-labels.  Functor composition thus has a similar relationship to
-partitional composition as Cartesian product has to partitional
-product.  With partitional product, the labels are partitioned into
-two disjoint sets, whereas with Cartesian products the labels are
-shared.  With partitional composition, the labels are partitioned into
-(any number of) subsets with a $G$-shape on each; with functor
-composition, the labels are shared among \emph{all possible}
-$G$-shapes.
+labels. (It is this conflation of shapes and labels which gives
+functor composition an unnatural feeling from a typed point of view.)
+Functor composition thus has a similar relationship to partitional
+composition as Cartesian product has to partitional product.  With
+partitional product, the labels are partitioned into two disjoint
+sets, whereas with Cartesian products the labels are shared.  With
+partitional composition, the labels are partitioned into (any number
+of) subsets with a $G$-shape on each; with functor composition, the
+labels are shared among \emph{all possible} $G$-shapes.
 
 \begin{rem}
-  There is no standard operation which creates an $F$-shape of
-  \emph{some} $G$-shapes, with the labels $L$ shared among all the
-  $G$-shapes.  To accomplish this one can simply use $(F \cdot
-  \Rubbish) \fcomp G$.
+  There is no standard operation which directly creates an $F$-shape
+  on only \emph{some} $G$-shapes, with the labels $L$ shared among
+  them.  To accomplish this one can simply use $(F \cdot \Rubbish)
+  \fcomp G$.
 \end{rem}
 
 \begin{ex}
@@ -3653,30 +3724,23 @@ dia = hcat' (with & sep .~ 2)
 \label{sec:closed}
 
 \paragraph{Cartesian closed} If $\Lab$ is locally small and $\Str$ is
-complete and Cartesian closed, then $\fc \Lab \Str$ is also complete and
-Cartesian closed. \todo{cite
-  \url{mathoverflow.net/questions/104152/exponentials-in-functor-categories/104178\#104178},
-  also check locally small thing?  Jacques asked it on MO?}  In
-particular the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F
-(L) = \eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example,
-$\B$, $\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and
-$\ST$ are complete and Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$,
-$\fc \BT \Set$, and $\fc \PT \Set$ are all complete and Cartesian closed
-as well.
+complete and Cartesian closed, then $\fc \Lab \Str$ is also complete
+and Cartesian closed \citep{cart-closed-functor-cat}.  In particular,
+the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F\ L =
+\eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example, $\B$,
+$\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and $\ST$ are
+complete and Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$, $\fc
+\BT \ST$, and $\fc \PT \ST$ are all complete and Cartesian closed as
+well.
 
-\todo{Note, here we don't need parametric polymorphism over $\forall
-  (n : \N)$ since there are no arrows between different $n$ to
-  preserve.  Should unpack this somewhere, and use a different
-  notation below.}
-
-Let's unpack this result a bit in the specific case of $\fc \PT 
-\ST$.  Ends in $\ST$ are given by (parametric) universal
-quantification, and indexed products are $\Pi$-types; hence, we
-have
+Let's unpack this result a bit in the specific case of $\fc \PT \ST$.
+By a dual argument to the one given in \pref{sec:coends-hott}, ends in
+$\ST$ over the groupoid $\PT$ are given by $\Pi$-types, \ie universal
+quantification; hence, we have
 \begin{align*}
-(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H_n)^{G_n} \\
-       &= \all {(m : \N)} {(\Fin m \equiv \Fin n) \to G_n \to H_n} \\
-       &\equiv (\Fin n \equiv \Fin n) \to G_n \to H_n
+(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H\ n)^{G\ n} \\
+       &= (m : \N) \to (\Fin m \equiv \Fin n) \to G\ n \to H\ n \\
+       &\equiv (\Fin n \equiv \Fin n) \to G\ n \to H\ n
 \end{align*}
 where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
 only inhabited when $m = n$.
@@ -3686,13 +3750,13 @@ Being Cartesian closed means there is an adjunction $- \times G \adj
 isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
 \ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
 \PT \ST$ as natural transformations and the definition of $H^G$
-derived above, this yields \[ \left( \all n {(F \times G)_n \to H_n}
-\right) \equiv \left( \all n {F_n \to (\Fin n \equiv \Fin n) \to G_n
-    \to H_n} \right). \] Intuitively, this says that a
-size-polymorphic function that takes a Cartesian product shape $F
-\times G$ and yields another species $H$ is isomorphic to a
-size-polymorphic function that takes a triple of an $F$-shape, a
-$G$-shape, \emph{and a permutation on $\Fin n$}, and yields an
+derived above, this yields \[ \left( (n : \N) \to (F \times G)\ n \to
+  H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n \equiv \Fin
+  n) \to G\ n \to H\ n \right). \] Intuitively, this says that a
+size-polymorphic function taking a Cartesian product shape $F \times
+G$ and yielding an $H$-shape of the same size is isomorphic to a
+size-polymorphic function taking a triple of an $F$-shape, a
+$G$-shape, \emph{and a permutation on $\Fin n$}, and yielding an
 $H$-shape.  The point is that an $(F \times G)$-shape consists not
 just of separate $F$- and $G$-shapes, but those shapes get to
 ``interact'': in particular we need a permutation to tell us how the
