@@ -327,11 +327,36 @@ permStructures
 \begin{ex}
   The species $\Sp{End}$ of \term{endofunctions} consists of directed
   graphs corresponding to valid endofunctions on the labels---that is,
-  where every label has exactly one outgoing edge.
+  where every label has exactly one outgoing edge
+  (\pref{fig:example-End}).
 
-  \todo{Example picture---use graphviz?}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           Data.Graph.Inductive.Graph        (mkGraph)
+import           Data.Graph.Inductive.PatriciaTree
+import           Data.GraphViz
+import           Data.Maybe                        (fromJust)
+import           System.IO.Unsafe
 
-% IN PROGRESS
+import           GraphViz
+
+numNodes = 14
+
+endo :: Int -> Int
+endo n = fromJust (lookup n [(0,3),(1,3),(2,3),(3,7),(4,6),(5,6),(6,7),(7,8),(9,7),(8,10),(10,9),(11,10),(12,13),(13,13)])
+
+gr :: Gr () ()
+gr = mkGraph [(n,()) || n <- [0..numNodes-1]] [(n,endo n,()) || n <- [0..numNodes-1]]
+
+dia = graphToDia (unsafePerformIO (graphToGraph' nonClusteredParams gr))
+    # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{An example $\Sp{End}$-shape}
+    \label{fig:exampe-End}
+  \end{figure}
+
+% IN PROGRESS -- ABANDONED
 %
 % import           Data.Maybe
 % import           Data.Tree
@@ -373,11 +398,13 @@ permStructures
 
   Some reflection shows that endofunctions can be characterized as
   permutations of rooted trees, \[ \Sp{End} = \Perm \comp T = \Bag
-  \comp \Cyc \comp T, \] where $T = \X \cdot (\Bag \comp T)$.
-  \citet{joyal} makes use of this characterization in giving an
-  elegant combinatorial proof of Cayley's formula, namely, that there
-  are $n^{n-2}$ (unrooted, unordered, arbitrary arity) labelled trees
-  of size $n$.
+  \comp \Cyc \comp T, \] where $T = \X \cdot (\Bag \comp
+  T)$. \todo{explain this in terms of the example picture. ``Some
+    reflection'' is a cop-out.  Show each tree in a different color,
+    perhaps?}  \citet{joyal} makes use of this characterization in
+  giving an elegant combinatorial proof of Cayley's formula, namely,
+  that there are $n^{n-2}$ (unrooted, unordered, arbitrary arity)
+  labelled trees of size $n$.
 
   One can likewise give characterizations of the species of
   endofunctions with various special properties, such as injections,
@@ -3749,41 +3776,31 @@ Being Cartesian closed means there is an adjunction $- \times G \adj
 -^G$ between products and exponentials, which yields a natural
 isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
 \ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
-\PT \ST$ as natural transformations and the definition of $H^G$
-derived above, this yields \[ \left( (n : \N) \to (F \times G)\ n \to
-  H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n \equiv \Fin
-  n) \to G\ n \to H\ n \right). \] Intuitively, this says that a
-size-polymorphic function taking a Cartesian product shape $F \times
-G$ and yielding an $H$-shape of the same size is isomorphic to a
-size-polymorphic function taking a triple of an $F$-shape, a
+\PT \ST$ as natural transformations, and expanding the definition of
+$H^G$ derived above, this yields \[ \left( (n : \N) \to (F \times G)\
+  n \to H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n
+  \equiv \Fin n) \to G\ n \to H\ n \right). \] Intuitively, this says
+that a size-polymorphic function taking a Cartesian product shape $F
+\times G$ and yielding an $H$-shape of the same size is isomorphic to
+a size-polymorphic function taking a triple of an $F$-shape, a
 $G$-shape, \emph{and a permutation on $\Fin n$}, and yielding an
 $H$-shape.  The point is that an $(F \times G)$-shape consists not
 just of separate $F$- and $G$-shapes, but those shapes get to
 ``interact'': in particular we need a permutation to tell us how the
 labels on the separate $F$- and $G$-shapes ``line up''.  An $(F \times
 G)$-shape encodes this information implicitly, by the fact that the
-two shapes share the exact same set of labels. \todo{Need to think
-  about this a bit more carefully in the context of $\P$.}  \todo{Note
-  that we could require the equivalence to always be \id.}
-
-\todo{picture.  Two cases with identical shapes but ``interacting''
-  differently.}
+two shapes share the exact same set of labels.
 
 Practically speaking, this result tells us how to express an
-eliminator for $(F \times G)$-shapes. \todo{Elaborate on this.}
+eliminator for $(F \times G)$-shapes. (Note that $H$ can be something
+trivial like ``the species which contains just a single \cons{Bool} value
+for any set of labels''.)  That is, to be able to eliminate $(F \times
+G)$-shapes, it suffices to be able to eliminate $F$- and $G$-shapes
+individually, with an extra permutation supplied as an argument.
 
-Note that $\fc \B \Set$ \emph{is} actually Cartesian closed, since it
-is equivalent to $\fc \P \Set$.  \todo{Check this for sure.}  The above
-derivations can be carried out in the context of $\fc \B \Set$ as well,
-with similar results.  Intuitively, $\B$ ``appears to be too big on
-the surface'', but is saved by virtue of being equivalent to a small
-category.  In a sense, $\P$ is what is ``really going on''; $\B$ is
-like $\P$ with lots of ``extra junk'' thrown in because it's
-convenient to talk about \emph{sets} of labels rather than having to
-work with the canonical set $\{0, \dots, n-1\}$ all the time.  This is
-quite a special property of $\B$; for example, $\Set$ is certainly not
-equivalent to any small categories. The same argument shows that
-$\fc \BT \ST$ is Cartesian closed as well.
+\todo{Closed with respect to partitional product}
+
+\todo{Closed with respect to composition?}
 
 \section{Examples}
 \label{sec:examples}
