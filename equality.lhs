@@ -1624,6 +1624,45 @@ between $\FinSetT$ values are characterized by paths between their
 underlying types. Since those types must be sets, \ie $0$-types,
 $\FinSetT$ is consequently a $1$-type.
 
+We note in passing that although it is not possible to explicitly
+extract the equivalence with $\Fin n$ from a finite set, it can still
+be implicitly used to decide the equality of any two elements of a
+finite set.
+\begin{prop}
+  If $(A,s,f) : \FinSetT$, then $A$ has decidable equality.
+\end{prop}
+\begin{proof}
+Let $x,y : A$; we must show $(x=y) + \lnot (x=y)$.  We first show that
+$(x=y) + \lnot (x=y)$ is a mere proposition, and then show how to use
+the equivalence $A \equiv \Fin n$ contained in $f$ to construct the
+desired value.
+
+Since $A$ is a set, $x=y$ is a mere proposition; $\lnot (x=y)$ is also
+a mere proposition since $\lnot Q$ is always a mere proposition for
+any $Q$.  Now let $p,q : (x=y) + \lnot (x=y)$, and consider a case
+analysis on $p$ and $q$.  If one is $\inl$ and the other $\inr$, then
+we can derive $\bot$, and hence $p=q$ since anything follows.  If both
+are $\inl$ or both $\inr$, then $p = q$ again, since $x=y$ and $\lnot
+(x=y)$ are both mere propositions.  We therefore conclude that $(x=y)
++ \lnot(x=y)$ is itself a mere proposition.
+
+Since we are constructing a mere proposition, we may make use of the
+equivalence $A \equiv \Fin n$ contained in $f$.  In particular, $\Fin
+n$ has decidable equality, which we may transport along the
+equivalence (using univalence) to obtain decidable equality for $A$.
+That is, computationally speaking, given $x,y : A$, one may send them
+across the equivalence to find their corresponding $\Fin n$ values,
+and then decide the equality of those $\Fin n$ values.
+\end{proof}
+
+\todo{Don't need $\isSet$ part of $\FinSetT$!  i.e. we don't need a
+  separate $\FinSetT$ definition at all, just $\FinTypeT$!  An
+  equivalence with $\Fin n$ (a set) already implies that $A$ must be a
+  set!!!  Arghhh!}
+
+Using $\FinSetT$, we can now finally define a HoTT counterpart to
+$\B$.
+
 \begin{defn}
   $\BT$ is defined by \[ \BT \hdefeq \tygrpd{\FinSetT}, \] the
   groupoid of cardinal-finite sets and paths bewteen them.
