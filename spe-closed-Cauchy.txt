@@ -1,0 +1,39 @@
+A functor category equipped with Day convolution is automatically
+closed!  This is of course covered in Day's paper which I haven't yet
+read.  But it's also given in Kelly ("On the Operads of JP May"):
+
+  [S,T] L = \int_K [S K, T (K + L)]
+
+The [-,-] on the left is the internal hom in the category of species;
+the [-,-] on the right is the internal hom in Set. (I'll concretely
+use species = B -> Set for now; of course all this can be suitably
+generalized.  I'm also going to just use = when I mean natural
+isomorphism.)  Since \int_x [F x, G x] = Nat(F,G) we can rewrite this
+as
+
+  [S,T] L = Nat(S, T(- + L))
+
+(note that T(- + L) = T^(|L|), that is, the |L|-fold iterated
+derivative of T).  Now, if this is really the internal hom in the
+category of species then we should have
+
+  Hom(R*S, T) = Hom(R, [S,T])
+
+Homs in a functor category are natural transformations; expanding them
+as ends (which I will now write using ∀, to give better computational
+intuition) gives
+
+  Hom(R*S, T) = ∀ L. (R*S) L -> T L
+  Hom(R, [S,T]) = ∀ L. R L -> [S,T] L = ∀ N. R N -> (∀ M. S M -> T (M + N))
+
+and it actually makes sense that these are isomorphic: if we can
+naturally turn an R*S-structure into a T-structure, then we can turn
+an R-structure into a function which expects an S-structure and then
+constructs a T-structure out of the sum of their labels.
+
+I am not yet sure how useful this is.  In particular, of course, it
+*doesn't* let us model function *datatypes*; species can still only
+model covariant datatypes.  Still, it was an interesting surprise and
+enlightening to try wrapping my head around it.
+
+-Brent

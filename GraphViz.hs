@@ -18,8 +18,8 @@ import           Data.GraphViz.Attributes.Complete (Attribute (Pos), Point (..),
 import           Data.GraphViz.Commands.IO         (hGetDot)
 import           Data.GraphViz.Types.Generalised   (FromGeneralisedDot (..))
 
-graphToDia :: Gr (AttributeNode nl) (AttributeNode el) -> Diagram B R2
-graphToDia gr = drawNodes # drawEdges
+graphToDia :: (Int -> Diagram B R2) -> Gr (AttributeNode nl) (AttributeNode el) -> Diagram B R2
+graphToDia dn gr = drawNodes # drawEdges
   where
     nodes = labNodes gr
     edges = labEdges gr
@@ -28,7 +28,7 @@ graphToDia gr = drawNodes # drawEdges
     drawNode (n,(attrs,_)) =
       case [p | Pos (PointPos p) <- attrs] of
         [] -> mempty
-        [pt] -> circle 0.8 # fc mlocColor # named n # moveTo (pointToP2 pt)
+        [pt] -> dn n # named n # moveTo (pointToP2 pt)
         -- it's actually using ellipses by default.  Need to set input shape.
         -- I will just draw edges myself, using diagrams.
     drawEdge (n1,n2,_)

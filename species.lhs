@@ -333,27 +333,49 @@ permStructures
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
+import           SpeciesDiagrams                   (colors, mlocColor)
+
 import           Data.Graph.Inductive.Graph        (mkGraph)
 import           Data.Graph.Inductive.PatriciaTree
 import           Data.GraphViz
+import           Data.List                         (findIndex)
 import           Data.Maybe                        (fromJust)
 import           System.IO.Unsafe
 
 import           GraphViz
 
-numNodes = 14
+numNodes = 17
 
 endo :: Int -> Int
-endo n = fromJust (lookup n [(0,3),(1,3),(2,3),(3,7),(4,6),(5,6),(6,7),(7,8),(9,7),(8,10),(10,9),(11,10),(12,13),(13,13)])
+endo n = fromJust (lookup n [(0,3),(1,3),(2,3),(3,7),(4,6),(5,6),(6,7),(7,8),(9,7),(8,10),(10,9),(11,10),(12,13),(13,13),(14,10),(15,9),(16,10)])
+
+data EndoStatus = InTree [Int] || InLoop [Int]
+  deriving Show
+
+endoStatus :: Int -> (Int -> Int) -> EndoStatus
+endoStatus x f = endoStatus' [x] (f x)
+  where
+    endoStatus' (i:seen) y
+      || y == i = InLoop (i:seen)
+      || y `elem` seen = InTree (i : takeWhile (/= y) seen ++ [y])
+      || otherwise = endoStatus' (i : seen ++ [y]) (f y)
 
 gr :: Gr () ()
 gr = mkGraph [(n,()) || n <- [0..numNodes-1]] [(n,endo n,()) || n <- [0..numNodes-1]]
 
-dia = graphToDia (unsafePerformIO (graphToGraph' nonClusteredParams gr))
+colorFor n = colors !! (fromJust $ findIndex (==n) [8,7,9,10,13])  -- $
+
+dn n = circle 0.8 # fc c
+  where
+    c = case endoStatus n endo of
+          InLoop _ -> colorFor n
+          InTree pth -> colorFor (last pth)
+
+dia = graphToDia dn (unsafePerformIO (graphToGraph' nonClusteredParams gr))
     # frame 0.5 # lwO 0.7
     \end{diagram}
     \caption{An example $\Sp{End}$-shape}
-    \label{fig:exampe-End}
+    \label{fig:example-End}
   \end{figure}
 
 % IN PROGRESS -- ABANDONED
@@ -401,16 +423,19 @@ dia = graphToDia (unsafePerformIO (graphToGraph' nonClusteredParams gr))
   \comp \Cyc \comp T, \] where $T = \X \cdot (\Bag \comp T)$. Each
   element which is part of a cycle serves as the root of a tree;
   iterating an endofunction starting from any element must eventually
-  reach a cycle, showing that every element belongs to some
-  tree. \todo{explain this in terms of the example picture.  Show each
-    tree in a different color, perhaps?}  \citet{joyal} makes use of
-  this characterization in giving an elegant combinatorial proof of
-  Cayley's formula, namely, that there are $n^{n-2}$ (unrooted,
-  unordered, arbitrary arity) labelled trees of size $n$.
+  reach a cycle, so every element belongs to some
+  tree. \pref{fig:example-End} illustrates this by highlighting each
+  tree in a different color.  The large component contains a central
+  cycle of four elements, each a different color, with a tree hanging
+  off of each; the small component consists of just a single tree with
+  a self-loop at its root.
 
-  One can likewise give characterizations of the species of
-  endofunctions with various special properties, such as injections,
-  surjections, and involutions.
+  \citet{joyal} makes use of this characterization in giving an
+  elegant combinatorial proof of Cayley's formula, namely, that there
+  are $n^{n-2}$ (unrooted, unordered, arbitrary arity) labelled trees
+  of size $n$.  One can likewise give characterizations of the species
+  of endofunctions with various special properties, such as
+  injections, surjections, and involutions.
 \end{ex}
 
 In a computational context, it is important to keep in mind the
@@ -3558,6 +3583,9 @@ shows a $\Bin'$-shape, where $\Bin$ is the species of rooted binary
 trees.  There is a ``hole'' in a place where a label would normally
 be.
 
+This section explores \todo{finish: basic differentiation, higher
+  derivatives, pointing}
+
 \subsection{Differentiation in $\fc \B \Set$}
 
 Formally, we create a ``hole'' by adjoining a new distinguished
@@ -3690,6 +3718,9 @@ of these laws.
 \subsection{Pointing}
 \label{sec:pointing}
 
+\todo{don't \emph{define} pointing this way!  Define it in terms of
+  species of elements and Hadamard product?}
+
 The related operation of \term{pointing} can be defined in terms of
 the derivative as \[ \pt F = \X \sprod F'. \] As illustrated in
 \pref{fig:pointing}, an $\pt F$-structure can be thought of as an
@@ -3744,7 +3775,88 @@ dia = hcat' (with & sep .~ 2)
 \todo{Say something about constructive difference between pointing and
   derivative?}
 
-\subsection{Generalized differentiation}
+\subsection{Up and down operators}
+\label{sec:up-down-operators}
+
+\citet[\Sect 8.12]{aguiar2010monoidal} define an \term{up operator} on
+a species $F$ as a species morphism $u : F \to F'$.  Since a species
+morphism is a natural, label-preserving map, an up operator must
+essentially ``add'' an extra ``hole'' somewhere in a shape. (Of course
+it can also rearrange existing labels, as long as it does so in a
+natural way that does not depend on the identity of the labels at
+all.)
+
+\begin{ex}
+  The species $\Bag$ of sets has a trivial up operator which sends the
+  unique set shape on $L$ to the unique set shape on $L \uplus
+  \singleton$. \todo{picture?}
+\end{ex}
+
+\begin{ex}
+  The species $\List$ of linear orders has an up operator which adds a
+  hole in the leftmost position \todo{picture?}.  There is a similar
+  operator which adds a hole at the end of a list.  In fact, there are
+  many other examples (particularly since species maps are allowed to
+  do something completely different at every size), but these are two
+  of the most apparent.
+\end{ex}
+
+\begin{ex}
+  We can similarly make an up operator for the species $\Bin$ of
+  binary trees, which adds a hole as the leftmost (or rightmost) leaf.
+  \todo{picture?}
+\end{ex}
+
+\begin{ex}
+  The species $\Cyc$ of cycles, on the other hand, has \emph{no} up
+  operator.  There is no way to define a \emph{natural} map $\varphi :
+  \Cyc \to \List$ (recall that $\Cyc' = \List$).  If there were such a
+  natural map, we would have for example \[ \xymatrix{ \Cyc\ \cat{2}
+    \ar[r]^{\varphi_\cat{2}} \ar[d]_{\Cyc\ \sigma} & \List\ \cat{2}
+    \ar[d]^{\List\ \sigma} \\ \Cyc\ \cat{2} \ar[r]_{\varphi_{\cat{2}}}
+    & \List\ \cat{2}} \] where $\cat{2} = \{0,1\}$ is a two-element
+  set, and $\sigma : \cat{2} \bij \cat{2}$ is the permutation that
+  swaps $0$ and $1$.  The problem is that $C \sigma$ is the identity
+  on $\Cyc\ \cat{2}$, but $\List\ \sigma$ is not the identity on
+  $\List\ \cat{2}$, so this square cannot possibly commute.
+
+  Generalizing from this example, we intuitively expect that there is
+  no up operator whenever taking the derivative ``breaks some
+  symmetry'', as in the case of $\Cyc$.  Formalizing this intuitive
+  observation is left to future work.
+\end{ex}
+
+Similarly, a \term{down operator} is a species morphism $d : F' \to
+F$.
+
+\begin{ex}
+  Again, $\Bag$ has a trivial down operator, which is the inverse of
+  its up operator.
+\end{ex}
+
+\begin{ex}
+  Although we saw previously that the species $\Cyc$ of cycles has no
+  up operator, it has an immediately apparent down operator, namely,
+  the natural map $\List \to \Cyc$ which ``closes up'' a list into a
+  cycle.
+  \todo{picture?}
+\end{ex}
+
+\begin{ex}
+  The species $\List$ of linear orders also has an apparent down
+  operator, which simply removes the hole. \todo{picture?}
+\end{ex}
+
+\begin{ex}
+  It takes a bit more imagination, but it is not too hard to come up
+  with examples of down operators for the species $\Bin$ of binary
+  trees.  For example, the two subtrees beneath the hole can be
+  ``stacked'' and added under the leftmost leaf of the remaining
+  tree. \todo{picture.  Note that BST deletion can be seen as a down
+    operator on L-species.}
+\end{ex}
+
+\section{Generalized differentiation}
 \label{sec:generalized-differentiation}
 
 \todo{Write me}
