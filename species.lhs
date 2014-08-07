@@ -3789,34 +3789,107 @@ all.)
 \begin{ex}
   The species $\Bag$ of sets has a trivial up operator which sends the
   unique set shape on $L$ to the unique set shape on $L \uplus
-  \singleton$. \todo{picture?}
+  \singleton$ (\pref{fig:up-down-set}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=200]
+import           SpeciesDiagrams
+
+set = tag 0 (decoratePath (pentagon 1) (map labT [0..3] ++ [mempty]))
+
+set' = tag 0 (decoratePath (pentagon 1) (map labT [0..3] ++ [smallHoleNode]))
+
+dia =
+  hcat' (with & sep .~ 0.5)
+    [ set
+    , vcat' (with & sep .~ 0.3) . map centerX $ [arrow 1.5, arrow 1.5 # reflectX]  -- $
+    , set'
+    ]
+  # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{The trivial up and down operators on $\Bag$}
+    \label{fig:up-down-set}
+  \end{figure}
 \end{ex}
 
 \begin{ex}
   The species $\List$ of linear orders has an up operator which adds a
-  hole in the leftmost position \todo{picture?}.  There is a similar
-  operator which adds a hole at the end of a list.  In fact, there are
-  many other examples (particularly since species maps are allowed to
-  do something completely different at every size), but these are two
-  of the most apparent.
+  hole in the leftmost position (\pref{fig:up-list}).  There is a
+  similar operator which adds a hole at the end of a list.  In fact,
+  there are many other examples (particularly since species maps are
+  allowed to do something completely different at every size), but
+  these are two of the most apparent.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           SpeciesDiagrams
+
+list = drawList' labT [3,0,1,2]
+list' = drawList' id (smallHoleNode : map labT [3,0,1,2])
+
+dia =
+  hcat' (with & sep .~ 0.5)
+    [ list
+    , arrow 1
+    , list'
+    ]
+  # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{An up operator on $\List$}
+    \label{fig:up-list}
+  \end{figure}
 \end{ex}
 
 \begin{ex}
   We can similarly make an up operator for the species $\Bin$ of
-  binary trees, which adds a hole as the leftmost (or rightmost) leaf.
-  \todo{picture?}
+  binary trees, which adds a hole as the leftmost (or rightmost) leaf
+  (\pref{fig:up-btree}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+t1 = BNode 2 (leaf 1) (leaf 0)
+t2 = BNode 3 (BNode 1 Empty (leaf 4)) (BNode 0 Empty (leaf 2))
+
+up = addLeftmost Nothing . fmap Just
+
+addLeftmost a Empty = leaf a
+addLeftmost a (BNode b l r) = BNode b (addLeftmost a l) r
+
+tree1 = fmap labT t1
+tree1' = fmap (maybe smallHoleNode labT) (up t1)
+tree2 = fmap labT t2
+tree2' = fmap (maybe smallHoleNode labT) (up t2)
+
+dia =
+  hcat' (with & sep .~ 0.5)
+    [ drawBinTree tree1
+    , arrow 1 # translateY (-1)
+    , drawBinTree tree1'
+    , strutX 1
+    , drawBinTree tree2
+    , arrow 1 # translateY (-1)
+    , drawBinTree tree2'
+    ]
+  # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{An up operator on $\Bin$}
+    \label{fig:up-btree}
+  \end{figure}
 \end{ex}
 
 \begin{ex}
-  The species $\Cyc$ of cycles, on the other hand, has \emph{no} up
-  operator.  There is no way to define a \emph{natural} map $\varphi :
-  \Cyc \to \List$ (recall that $\Cyc' = \List$).  If there were such a
-  natural map, we would have for example \[ \xymatrix{ \Cyc\ \cat{2}
+  The species $\Cyc$ of cycles, on the other hand, has no up operator.
+  There is no way to define a \emph{natural} map $\varphi : \Cyc \to
+  \List$ (recall that $\Cyc' = \List$).  If there were such a
+  $\varphi$, we would have, for example \[ \xymatrix{ \Cyc\ \cat{2}
     \ar[r]^{\varphi_\cat{2}} \ar[d]_{\Cyc\ \sigma} & \List\ \cat{2}
     \ar[d]^{\List\ \sigma} \\ \Cyc\ \cat{2} \ar[r]_{\varphi_{\cat{2}}}
     & \List\ \cat{2}} \] where $\cat{2} = \{0,1\}$ is a two-element
   set, and $\sigma : \cat{2} \bij \cat{2}$ is the permutation that
-  swaps $0$ and $1$.  The problem is that $C \sigma$ is the identity
+  swaps $0$ and $1$.  The problem is that $C\ \sigma$ is the identity
   on $\Cyc\ \cat{2}$, but $\List\ \sigma$ is not the identity on
   $\List\ \cat{2}$, so this square cannot possibly commute.
 
@@ -3826,8 +3899,8 @@ all.)
   observation is left to future work.
 \end{ex}
 
-Similarly, a \term{down operator} is a species morphism $d : F' \to
-F$.
+A \term{down operator} on a species $F$ is defined dually, as a
+species morphism $d : F' \to F$.
 
 \begin{ex}
   Again, $\Bag$ has a trivial down operator, which is the inverse of
@@ -3844,7 +3917,7 @@ F$.
 
 \begin{ex}
   The species $\List$ of linear orders also has an apparent down
-  operator, which simply removes the hole. \todo{picture?}
+  operator, which simply removes the hole.
 \end{ex}
 
 \begin{ex}
@@ -3855,6 +3928,8 @@ F$.
   tree. \todo{picture.  Note that BST deletion can be seen as a down
     operator on L-species.}
 \end{ex}
+
+\todo{Any relation to down operator of Conor?}
 
 \section{Generalized differentiation}
 \label{sec:generalized-differentiation}
