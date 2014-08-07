@@ -3930,6 +3930,7 @@ species morphism $d : F' \to F$.
 \end{ex}
 
 \todo{Any relation to down operator of Conor?}
+\todo{Discussion of why this is interesting?}
 
 \section{Generalized differentiation}
 \label{sec:generalized-differentiation}
