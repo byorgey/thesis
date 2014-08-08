@@ -3945,17 +3945,19 @@ species morphism $d : F' \to F$.
   It takes a bit more imagination, but it is not too hard to come up
   with examples of down operators for the species $\Bin$ of binary
   trees.  For example, the two subtrees beneath the hole can be
-  ``stacked'' and added under the leftmost leaf of the remaining
-  tree (\pref{fig:down-btree-stack}), or nodes could be iteratively
-  ``promoted'' to fill the hole, say, preferring the left-hand node
-  when one is available (\pref{fig:down-btree-promote})
+  ``stacked'', with the first subtree added as the leftmost leaf of
+  the remaining tree, and the other subtree added as \emph{its}
+  leftmost leaf (\pref{fig:down-btree-stack}), or nodes could be
+  iteratively ``promoted'' to fill the hole, say, preferring the
+  left-hand node when one is available
+  (\pref{fig:down-btree-promote}).
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
 import           Diagrams.TwoD.Layout.Tree
 import           SpeciesDiagrams
 
-t1 = BNode (Just 3) (leaf (Just 0)) (BNode Nothing (BNode (Just 1) (leaf (Just 6)) (leaf (Just 2))) (BNode (Just 5) Empty (leaf (Just 4))))
+t1 = BNode (Just 3) (leaf (Just 0)) (BNode Nothing (BNode (Just 1) Empty (BNode (Just 2) (leaf (Just 6)) (leaf (Just 7)))) (BNode (Just 5) Empty (leaf (Just 4))))
 
 downOp :: BTree (Maybe a) -> BTree (Maybe a)
 downOp t = addLeftmost r (addLeftmost l t')
@@ -3986,10 +3988,42 @@ dia =
     \label{fig:down-btree-stack}
   \end{figure}
 
-\todo{picture here to illustrate down operator via promotion}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
 
-\todo{Note that BST deletion can be seen as a down
-    operator on L-species.}
+t1 = BNode (Just 3) (leaf (Just 0)) (BNode Nothing (BNode (Just 1) Empty (BNode (Just 2) (leaf (Just 6)) (leaf (Just 7)))) (BNode (Just 5) Empty (leaf (Just 4))))
+
+promote :: BTree (Maybe a) -> BTree (Maybe a)
+promote Empty = Empty
+promote (BNode (Just a) l r) = BNode (Just a) (promote l) (promote r)
+promote (BNode Nothing Empty Empty) = Empty
+promote (BNode Nothing Empty (BNode a l r)) = BNode a Empty (promote (BNode Nothing l r))
+promote (BNode Nothing (BNode a l r) r') = BNode a (promote (BNode Nothing l r)) r'
+
+renderBT = fmap (maybe smallHoleNode labT)
+
+dia =
+  hcat' (with & sep .~ 0.5)
+    [ drawBinTree (renderBT t1)
+    , arrow 1 # translateY (-2)
+    , drawBinTree (renderBT $ promote t1)  -- $
+    ]
+  # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{An example down operator on $\Bin$, via promotion}
+    \label{fig:down-btree-promote}
+  \end{figure}
+
+  This last operator is somewhat reminiscent of deletion from a binary
+  search tree or a heap.  Those algorithms rely on a linear order on
+  the labels, and hence do not qualify as natural species morphisms.
+  However, they do indeed qualify as down operators on the
+  $\L$-species of binary search trees and heaps,
+  respectively. \todo{Forward or backward reference to somewhere else
+    we talk about $\L$-species.}
 \end{ex}
 
 \todo{Any relation to down operator of Conor?}
