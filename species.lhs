@@ -3920,9 +3920,32 @@ species morphism $d : F' \to F$.
 \begin{ex}
   Although we saw previously that the species $\Cyc$ of cycles has no
   up operator, it has an immediately apparent down operator, namely,
-  the natural map $\List \to \Cyc$ which ``closes up'' a list into a
-  cycle.
-  \todo{picture?}
+  the natural map $\Cyc' \to \Cyc$ which removes the hole from a
+  cycle, that is, glues together the two ends of a list.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import           SpeciesDiagrams
+
+ls = [2,0,1,3]
+
+derCyc = cyc' (smallHoleNode : map labT ls) 1.1
+
+theCyc = cyc' (map labT ls) 0.9
+
+downCyc = hcat' (with & sep .~ 1)
+  [ derCyc
+  , arrow 1
+  , theCyc
+  ]
+
+dia = downCyc
+   # frame 0.5
+   # lwO 0.7
+    \end{diagram}
+    \caption{An example down operator on $\Cyc$}
+    \label{fig:down-cyc}
+  \end{figure}
 \end{ex}
 
 \begin{ex}
