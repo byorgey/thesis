@@ -18,8 +18,8 @@ import           Data.GraphViz.Attributes.Complete (Attribute (Pos), Point (..),
 import           Data.GraphViz.Commands.IO         (hGetDot)
 import           Data.GraphViz.Types.Generalised   (FromGeneralisedDot (..))
 
-graphToDia :: (Int -> Diagram B R2) -> Gr (AttributeNode nl) (AttributeNode el) -> Diagram B R2
-graphToDia dn gr = drawNodes # drawEdges
+graphToDia :: (Int -> Diagram B R2) -> (Int -> Int -> Diagram B R2 -> Diagram B R2) -> Gr (AttributeNode nl) (AttributeNode el) -> Diagram B R2
+graphToDia dn de gr = drawNodes # drawEdges
   where
     nodes = labNodes gr
     edges = labEdges gr
@@ -31,9 +31,7 @@ graphToDia dn gr = drawNodes # drawEdges
         [pt] -> dn n # named n # moveTo (pointToP2 pt)
         -- it's actually using ellipses by default.  Need to set input shape.
         -- I will just draw edges myself, using diagrams.
-    drawEdge (n1,n2,_)
-      | n1 == n2  = connectPerim' (with & arrowShaft .~ arc (3/8 @@ turn) (1/8 @@ turn)) n1 n2 (5/8 @@ turn) (7/8 @@ turn)
-      | otherwise = connectOutside n1 n2
+    drawEdge (n1,n2,_) = de n1 n2
     --   case [ss | Pos (SplinePos ss) <- attrs] of
     --     [] -> mempty
     --     [splines] -> mconcat . map drawSpline $ splines
@@ -49,19 +47,20 @@ pointToP2 (Point {xCoord = x, yCoord = y}) = (x ^& y) # scale (1/20)
 
 ------------------------------------------------
 
-graphToGraph' :: (Ord cl, Graph gr) => GraphvizParams Node nl el cl l -> gr nl el
+graphToGraph' :: (Ord cl, Graph gr) => GraphvizParams Node nl el cl l
+                 -> GraphvizCommand
+                 -> gr nl el
                  -> IO (gr (AttributeNode nl) (AttributeEdge el))
-graphToGraph' params gr = dotAttributes' (isDirected params) gr' dot
+graphToGraph' params com gr = dotAttributes' com (isDirected params) gr' dot
   where
     dot = graphToDot params' gr'
     params' = params { fmtEdge = setEdgeIDAttribute $ fmtEdge params }
     gr' = addEdgeIDs gr
 
 dotAttributes' :: (Graph gr, PPDotRepr dg Node, FromGeneralisedDot dg Node)
-                  => Bool -> gr nl (EdgeID el)
+                  => GraphvizCommand -> Bool -> gr nl (EdgeID el)
                   -> dg Node -> IO (gr (AttributeNode nl) (AttributeEdge el))
-dotAttributes' isDir gr dot
+dotAttributes' command isDir gr dot
   = augmentGraph gr . parseDG <$> graphvizWithHandle command dot DotOutput hGetDot
   where
     parseDG = (`asTypeOf` dot) . fromGeneralised
-    command = TwoPi

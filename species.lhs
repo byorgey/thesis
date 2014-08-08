@@ -333,7 +333,7 @@ permStructures
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
-import           SpeciesDiagrams                   (colors, mlocColor)
+import           SpeciesDiagrams                   (colors)
 
 import           Data.Graph.Inductive.Graph        (mkGraph)
 import           Data.Graph.Inductive.PatriciaTree
@@ -349,19 +349,19 @@ numNodes = 17
 endo :: Int -> Int
 endo n = fromJust (lookup n [(0,3),(1,3),(2,3),(3,7),(4,6),(5,6),(6,7),(7,8),(9,7),(8,10),(10,9),(11,10),(12,13),(13,13),(14,10),(15,9),(16,10)])
 
-data EndoStatus = InTree [Int] || InLoop [Int]
+data EndoStatus = InTree [Int] | InLoop [Int]
   deriving Show
 
 endoStatus :: Int -> (Int -> Int) -> EndoStatus
 endoStatus x f = endoStatus' [x] (f x)
   where
     endoStatus' (i:seen) y
-      || y == i = InLoop (i:seen)
-      || y `elem` seen = InTree (i : takeWhile (/= y) seen ++ [y])
-      || otherwise = endoStatus' (i : seen ++ [y]) (f y)
+      | y == i = InLoop (i:seen)
+      | y `elem` seen = InTree (i : takeWhile (/= y) seen ++ [y])
+      | otherwise = endoStatus' (i : seen ++ [y]) (f y)
 
 gr :: Gr () ()
-gr = mkGraph [(n,()) || n <- [0..numNodes-1]] [(n,endo n,()) || n <- [0..numNodes-1]]
+gr = mkGraph [(n,()) | n <- [0..numNodes-1]] [(n,endo n,()) | n <- [0..numNodes-1]]
 
 colorFor n = colors !! (fromJust $ findIndex (==n) [8,7,9,10,13])  -- $
 
@@ -371,7 +371,11 @@ dn n = circle 0.8 # fc c
           InLoop _ -> colorFor n
           InTree pth -> colorFor (last pth)
 
-dia = graphToDia dn (unsafePerformIO (graphToGraph' nonClusteredParams gr))
+de n1 n2
+  | n1 == n2  = connectPerim' (with & arrowShaft .~ arc (3/8 @@ turn) (1/8 @@ turn)) n1 n2 (5/8 @@ turn) (7/8 @@ turn)
+  | otherwise = connectOutside n1 n2
+
+dia = graphToDia dn de (unsafePerformIO (graphToGraph' nonClusteredParams TwoPi gr))
     # frame 0.5 # lwO 0.7
     \end{diagram}
     \caption{An example $\Sp{End}$-shape}
@@ -2875,7 +2879,7 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof,
   \tau = \id$ to something other than the identity.)
   \begin{figure}
     \centering
-    \begin{diagram}[width=300]
+    \begin{diagram}[width=250]
 import           Control.Lens                   (partsOf, traverse, (%~))
 import           Diagrams.Prelude               hiding (tau)
 
@@ -3197,7 +3201,7 @@ dia = theDia # centerXY # pad 1.1
 
 \begin{figure}
   \centering
-  \begin{diagram}[width=300]
+  \begin{diagram}[width=250]
 import           Control.Lens                   (traverse, unsafePartsOf)
 import           Data.List                      (permutations)
 import           Diagrams.TwoD.Layout.Tree
@@ -3293,7 +3297,7 @@ Similarly, the species $\Perm$ of permutations is given by $\Perm = \Bag \comp
   $\Sp R$-shape is shown in \pref{fig:rose-tree}.
   \begin{figure}
     \centering
-    \begin{diagram}[width=200]
+    \begin{diagram}[width=150]
 import SpeciesDiagrams
 
 dia = tree # centerXY # frame 0.5 # lwO 0.7
@@ -3634,15 +3638,76 @@ purposes.
 \begin{ex}
   Denote by $\mathfrak{a}$ the species of \emph{unrooted} trees, \ie
   trees in the pure graph-theoretic sense.  Also let $\mcal{A} = \X
-  \cdot (\Bag \comp \mcal{A})$ denote the species of rooted trees.  It
-  is difficult to get a direct algebraic handle on $\mathfrak{a}$;
-  however, we have the relation \[ \mathfrak{a}' = \Bag \comp
-  \mcal{A}, \] since an unrooted tree with a hole in it is equivalent
-  to the set of all the subtrees connected to the hole (note that they
-  become \emph{rooted} trees; their root is distinguished by virtue of
-  being the node adjacent to the hole).
+  \cdot (\Bag \comp \mcal{A})$ denote the species of rooted trees
+  (where each node can have any number of children, which are
+  unordered).  It is difficult to get a direct algebraic handle on
+  $\mathfrak{a}$; however, we have the relation \[ \mathfrak{a}' =
+  \Bag \comp \mcal{A}, \] since an unrooted tree with a hole in it is
+  equivalent to the set of all the subtrees connected to the hole
+  (\pref{fig:der-tree-pointed-trees}).  Note that the subtrees
+  connected to the hole become \emph{rooted} trees; their root is
+  distinguished by virtue of being the node adjacent to the hole.
 
-  \todo{picture}
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=350]
+import           SpeciesDiagrams                   (holeNode, mloc)
+
+import           Data.Graph.Inductive.Graph        (delNode, mkGraph)
+import           Data.Graph.Inductive.PatriciaTree
+import           Data.GraphViz
+import           Data.List                         (findIndex)
+import           Data.Maybe                        (fromJust)
+import           Data.Tree
+import           Data.Tuple                        (swap)
+import           Diagrams.TwoD.Layout.Tree
+import           System.IO.Unsafe
+
+import           GraphViz
+
+numNodes = 14
+
+gEdges = map swap [(5,8),(12,8),(4,8),(8,13),(1,13),(3,13),(2,3),(9,2),(0,13),(10,0),(6,0),(11,6),(7,6)]
+
+gr :: Gr () ()
+gr = mkGraph [(n,()) || n <- [0..numNodes-1]] (map (\(x,y) -> (x,y,())) gEdges)
+
+children r = map snd . filter ((==r) . fst) $ gEdges  -- $
+roots = children 13
+
+trees :: [Tree Int]
+trees = subForest (getTree 13)
+
+getTree r = Node r (map getTree (children r))
+
+dn 13 = holeNode # scale 1.5
+dn n  = mloc n # scale 1.5
+
+de n1 n2
+  || n1 == n2 = id
+  || otherwise = connectOutside' (with & arrowHead .~ noHead) n1 n2
+
+tree' = graphToDia dn de (unsafePerformIO (graphToGraph' nonClusteredParams TwoPi gr))
+  # frame 0.5 # lwO 0.7
+
+rTrees = hcat' (with & sep .~ 2) (map dTree trees)
+
+dTree = renderTree drn (~~) . symmLayout' (with & slHSep .~ 4 & slVSep .~ 3)
+  where
+    drn n || n `elem` roots = mloc n <> circle (width (mloc n :: D R2) / 2 + 0.2) # fc white
+          || otherwise      = mloc n
+
+dia =
+  hcat' (with & sep .~ 3)
+  [ tree' # centerY
+  , text "≅" # scale 3 <> phantom (square 3 :: D R2)
+  , rTrees # centerY # scale 1.5
+  ]
+  # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{$\mathfrak{a}' = \Bag \comp \mcal{A}$}
+    \label{fig:der-tree-pointed-trees}
+  \end{figure}
 \end{ex}
 
 \begin{ex}
@@ -3650,7 +3715,7 @@ purposes.
 
   \begin{figure}
     \centering
-    \begin{diagram}[width=300]
+    \begin{diagram}[width=250]
 import           SpeciesDiagrams
 
 ls = [2,0,1,3]
@@ -3715,65 +3780,10 @@ from calculus:
 The reader may enjoy working out \emph{combinatorial} interpretations
 of these laws.
 
-\subsection{Pointing}
-\label{sec:pointing}
+\subsection{Higher derivatives}
+\label{sec:higher-derivatives}
 
-\todo{don't \emph{define} pointing this way!  Define it in terms of
-  species of elements and Hadamard product?}
-
-The related operation of \term{pointing} can be defined in terms of
-the derivative as \[ \pt F = \X \sprod F'. \] As illustrated in
-\pref{fig:pointing}, an $\pt F$-structure can be thought of as an
-$F$-structure with one particular distinguished element.
-
-  \begin{figure}
-    \centering
-    \begin{diagram}[width=300]
-import           Data.Tree
-import           Diagrams.TwoD.Layout.Tree
-import           SpeciesDiagrams
-
-sampleT7' :: Tree (Either Int Int)
-sampleT7' = fmap (\n -> if n == 4
-                           then Left n
-                           else Right n) sampleT7
-
-derTree =
-  renderTree
-    (either (const holeNode) mloc)
-    (~~)
-    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
-
-pair x y = hcat
-  [ roundedRect' (width x + 1) ht (with & radiusTL .~ 1 & radiusBL .~ 1) <> x # centerXY
-  , roundedRect' (width y + 1) ht (with & radiusTR .~ 1 & radiusBR .~ 1) <> y # centerXY
-  ]
-  where
-    ht = max (height x) (height y) + 1
-
-xTreePair = pair (mloc 4) derTree
-
-pointedTree =
-  renderTree
-    (either ((<> (circle 1 # fc white)) . mloc) mloc)
-    (~~)
-    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
-  # centerXY
-
-dia = hcat' (with & sep .~ 2)
-   [ xTreePair
-   , text "≅" # scale 2
-   , pointedTree
-   ]
-   # frame 0.5
-   # lwO 0.7
-    \end{diagram}
-    \caption{Species pointing}
-    \label{fig:pointing}
-  \end{figure}
-
-\todo{Say something about constructive difference between pointing and
-  derivative?}
+\todo{Write me}
 
 \subsection{Up and down operators}
 \label{sec:up-down-operators}
@@ -3846,7 +3856,7 @@ dia =
   (\pref{fig:up-btree}).
   \begin{figure}
     \centering
-    \begin{diagram}[width=300]
+    \begin{diagram}[width=350]
 import           Diagrams.TwoD.Layout.Tree
 import           SpeciesDiagrams
 
@@ -3918,6 +3928,17 @@ species morphism $d : F' \to F$.
 \begin{ex}
   The species $\List$ of linear orders also has an apparent down
   operator, which simply removes the hole.
+
+\begin{rem}  % mbox needed to mitigate some strange interaction of rem
+             % environment and citet command, which makes "Remark"
+             % show up at the beginning of the *following* para.
+  \mbox{}\citet[p. 275, Example 8.56]{aguiar2010monoidal} define a down
+  operator on $\List$ which removes the hole \emph{if} it is in the
+  leftmost position, and ``sends the order to $0$'' otherwise.
+  However, this seems bogus.  First of all, it is not clear what is
+  meant by $0$ in this context; assuming it denotes the empty list, it
+  is not well-typed, since species morphisms must be label-preserving.
+\end{rem}
 \end{ex}
 
 \begin{ex}
@@ -3925,17 +3946,120 @@ species morphism $d : F' \to F$.
   with examples of down operators for the species $\Bin$ of binary
   trees.  For example, the two subtrees beneath the hole can be
   ``stacked'' and added under the leftmost leaf of the remaining
-  tree. \todo{picture.  Note that BST deletion can be seen as a down
+  tree (\pref{fig:down-btree-stack}), or nodes could be iteratively
+  ``promoted'' to fill the hole, say, preferring the left-hand node
+  when one is available (\pref{fig:down-btree-promote})
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=250]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+t1 = BNode (Just 3) (leaf (Just 0)) (BNode Nothing (BNode (Just 1) (leaf (Just 6)) (leaf (Just 2))) (BNode (Just 5) Empty (leaf (Just 4))))
+
+downOp :: BTree (Maybe a) -> BTree (Maybe a)
+downOp t = addLeftmost r (addLeftmost l t')
+  where
+    Just (t',l,r) = deleteHole t
+    deleteHole Empty = Nothing
+    deleteHole (BNode Nothing l r) = Just (Empty, l, r)
+    deleteHole t@@(BNode (Just a) l r) =
+      case (deleteHole l, deleteHole r) of
+        (Nothing,Nothing) -> Nothing
+        (Just (l', ls, rs), _) -> Just (BNode (Just a) l' r, ls, rs)
+        (_, Just (r', ls, rs)) -> Just (BNode (Just a) l r', ls, rs)
+
+addLeftmost t Empty = t
+addLeftmost a (BNode b l r) = BNode b (addLeftmost a l) r
+
+renderBT = fmap (maybe smallHoleNode labT)
+
+dia =
+  hcat' (with & sep .~ 0.5)
+    [ drawBinTree (renderBT t1)
+    , arrow 1 # translateY (-2)
+    , drawBinTree (renderBT $ downOp t1)  -- $
+    ]
+  # frame 0.5 # lwO 0.7
+    \end{diagram}
+    \caption{An example down operator on $\Bin$, via stacking}
+    \label{fig:down-btree-stack}
+  \end{figure}
+
+\todo{picture here to illustrate down operator via promotion}
+
+\todo{Note that BST deletion can be seen as a down
     operator on L-species.}
 \end{ex}
 
 \todo{Any relation to down operator of Conor?}
 \todo{Discussion of why this is interesting?}
 
+\subsection{Pointing}
+\label{sec:pointing}
+
+\todo{don't \emph{define} pointing this way!  Define it in terms of
+  species of elements and Hadamard product?}
+
+The related operation of \term{pointing} can be defined in terms of
+the derivative as \[ \pt F = \X \sprod F'. \] As illustrated in
+\pref{fig:pointing}, an $\pt F$-structure can be thought of as an
+$F$-structure with one particular distinguished element.
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           Data.Tree
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+sampleT7' :: Tree (Either Int Int)
+sampleT7' = fmap (\n -> if n == 4
+                           then Left n
+                           else Right n) sampleT7
+
+derTree =
+  renderTree
+    (either (const holeNode) mloc)
+    (~~)
+    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
+
+pair x y = hcat
+  [ roundedRect' (width x + 1) ht (with & radiusTL .~ 1 & radiusBL .~ 1) <> x # centerXY
+  , roundedRect' (width y + 1) ht (with & radiusTR .~ 1 & radiusBR .~ 1) <> y # centerXY
+  ]
+  where
+    ht = max (height x) (height y) + 1
+
+xTreePair = pair (mloc 4) derTree
+
+pointedTree =
+  renderTree
+    (either ((<> (circle 1 # fc white)) . mloc) mloc)
+    (~~)
+    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
+  # centerXY
+
+dia = hcat' (with & sep .~ 2)
+   [ xTreePair
+   , text "≅" # scale 2
+   , pointedTree
+   ]
+   # frame 0.5
+   # lwO 0.7
+    \end{diagram}
+    \caption{Species pointing}
+    \label{fig:pointing}
+  \end{figure}
+
+\todo{Say something about constructive difference between pointing and
+  derivative?}
+
 \section{Generalized differentiation}
 \label{sec:generalized-differentiation}
 
-\todo{Write me}
+\todo{Write me.  Has to go later, after discussion of closed
+  structure.}
 
 \section{Closed monoidal structures and elimination}
 \label{sec:closed}
