@@ -14,8 +14,7 @@ The theory of \term{combinatorial species}, introduced by
   structures} or \term{shapes}.  The algebraic nature of species is of
 particular interest in the context of data structures, and will be
 explored in depth in this chapter.  The theory can also be seen as a
-\term{categorification} of the theory of \term{generating functions};
-this will be explored more in \pref{chap:labelled}.
+\term{categorification} of the theory of \term{generating functions}.
 
 The present chapter begins by presenting an intuitive sense for
 species, along with a collection of examples, in
@@ -1330,6 +1329,72 @@ injection.
     sketchiest part of the proof.
   \end{itemize}
 \end{proof}
+
+\section{Generating functions}
+\label{sec:generating-functions}
+
+\term{Generating functions} are a well-known tool in combinatorics,
+used to manipulate sequences of interest by representing them as the
+coefficients of certain formal power series.  As Wilf says, ``A
+generating function is a clothesline on which we hang up a sequence of
+numbers for display.'' \citep{wilf-gfology}
+
+There are many types of generating functions; we will consider two in
+particular: \term{ordinary} generating functions (ogfs), and
+\term{exponential} generating functions (egfs).  Ordinary generating
+functions are of the form \[ \sum_{n \geq 0} a_n x^n \] and represent
+the sequence $a_0,a_1,a_2, \dots$.  For example, the ogf $x + 2x^2 +
+3x^3 + \dots$ represents the sequence $0,1,2,3,\dots$.  Exponential
+generating functions are of the form \[ \sum_{n \geq 0}
+a_n \frac{x^n}{n!}. \]  For example, the egf $1/(1-x) = 1 + x + x^2 + x^3
++ \dots = 1 + x + \frac{2x^2}{2} + \frac{6x^3}{6} + \dots$ represents
+the sequence $1,1,2,6,24,\dots$.
+
+This would be unremarkable if it were just a \emph{notation} for
+sequences, but it is much more.  The crucial point is that natural
+\emph{algebraic} operations on generating functions correspond to
+natural \emph{combinatorial} operations on the sequences they
+represent (or, more to the point, on the combinatorial objects the
+sequences are counting).  This theme will be explored throughout the
+chapter: as each combinatorial operation on species is introduced, its
+corresponding algebraic operation on generating functions will also be
+discussed.
+
+To each species $F$ we associate two generating
+functions\footnote{There are more, \eg the cycle index series and
+  asymmetry index series \citep{bll}, but these are outside the scope of
+  this dissertation.}, an egf $F(x)$ and an ogf $\unl{F}(x)$, defined
+as follows.
+\begin{defn}
+  The egf $F(x)$ associated to a species $F$ is defined by
+  \[ F(x) = \sum_{n \geq 0} f_n \frac{x^n}{n!}, \] where $f_n =
+  \size{(F\ n)}$ is the number of labelled $F$-shapes of size $n$.
+\end{defn}
+\begin{ex}
+  There are $n!$ labelled $\List$-shapes (that is, linear
+  orders) on $n$ labels, so \[ \List(x) = \sum_{n \geq 0} n!
+  \frac{x^n}{n!} = \sum_{n \geq 0} x^n = \frac{1}{1-x}. \] Note that
+  this is a \emph{formal} power series, and in particular we do not
+  worry about issues of convergence.
+\end{ex}
+
+\begin{defn}
+  The ogf $\unl F(x)$ associated to a species $F$ is defined by \[
+  \unl F(x) = \sum_{n \geq 0} \unl f_n x^n, \] where $\unl f_n =
+  \size{(F\ n/\sim)}$ is the number of distinct $F$-\emph{forms} (that
+  is, equivalence classes of $F$-shapes under relabelling) of size $n$.
+\end{defn}
+\begin{ex}
+  There is only one list form of each size, so \[ \unl \List(x) =
+  \sum_{n \geq 0} x^n = \frac{1}{1-x} \] as well.  Species for which
+  $F(x) = \unl F(x)$ are called \term{regular}, and are discussed in
+  more detail in \todo{WHERE?}.  For an example of a non-regular
+  species, the reader is invited to work out the egf and ogf for the
+  species $\Cyc$ of cycles.
+\end{ex}
+
+\todo{say something about how species are categorification of
+  generating functions}
 
 \section{Generalized species}
 \label{sec:generalized-species}
@@ -3156,6 +3221,9 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
 \section{Composition}
 \label{sec:composition}
 
+\todo{Use example of Par = $\Bag \comp \Bag_+$, then $T \times Par$
+  (from proposal)}
+
 We have already seen that arithmetic product can be thought of as a
 restricted sort of composition, where an $F$-structure contains
 $G$-structures all of the same shape (or vice versa).  More generally,
@@ -3782,8 +3850,6 @@ of these laws.
 
 \subsection{Higher derivatives}
 \label{sec:higher-derivatives}
-
-\todo{Write me}
 
 \subsection{Up and down operators}
 \label{sec:up-down-operators}
