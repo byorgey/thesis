@@ -919,7 +919,8 @@ by composition of functors.
   \end{equation}
   that is, $- \otimes B$ is left adjoint to $[B,-]$.  The object $[B,C]$ is
   called an \term{exponential} object, and can also be notated by $C^B$
-  or by $\expn B C$.
+  or by $\expn B C$.  The bifunctor $[-,-]$ is also called an
+  \term{internal Hom functor}.
 \end{defn}
 
 \begin{rem}

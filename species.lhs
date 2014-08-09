@@ -1901,8 +1901,59 @@ dia = tag 0 (decoratePath (pentagon 1) (map labT [0..4]))
   we will see how to generalize both proofs.
 \end{proof}
 
-As we will see in \pref{sec:closed}, $\Spe$ is also closed with
-respect to $\times$.
+\begin{prop}
+  $\Spe$ is Cartesian closed.
+\end{prop}
+
+If $\Lab$ is locally small and $\Str$ is complete and Cartesian
+closed, then $\fc \Lab \Str$ is also complete and Cartesian closed
+\citep{cart-closed-functor-cat}.  In particular, the exponential of
+$F,G : \Lab \to \Str$ is given by \[ G^F\ L = \eend{K \in \Lab}
+\prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example, $\B$, $\P$, $\BT$, and
+$\PT$ are all locally small, and $\Set$ and $\ST$ are complete and
+Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$, $\fc \BT \ST$, and
+$\fc \PT \ST$ are all complete and Cartesian closed as well.
+
+Let's unpack this result a bit in the specific case of $\fc \PT \ST$.
+By a dual argument to the one given in \pref{sec:coends-hott}, ends in
+$\ST$ over the groupoid $\PT$ are given by $\Pi$-types, \ie universal
+quantification; hence, we have
+\begin{align*}
+(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H\ n)^{G\ n} \\
+       &= (m : \N) \to (\Fin m \equiv \Fin n) \to G\ n \to H\ n \\
+       &\equiv (\Fin n \equiv \Fin n) \to G\ n \to H\ n
+\end{align*}
+where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
+only inhabited when $m = n$.
+
+Being Cartesian closed means there is an adjunction $- \times G \adj
+-^G$ between products and exponentials, which yields a natural
+isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
+\ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
+\PT \ST$ as natural transformations, and expanding the definition of
+$H^G$ derived above, this yields \[ \left( (n : \N) \to (F \times G)\
+  n \to H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n
+  \equiv \Fin n) \to G\ n \to H\ n \right). \] Intuitively, this says
+that a size-polymorphic function taking a Cartesian product shape $F
+\times G$ and yielding an $H$-shape of the same size is isomorphic to
+a size-polymorphic function taking a triple of an $F$-shape, a
+$G$-shape, \emph{and a permutation on $\Fin n$}, and yielding an
+$H$-shape.  The point is that an $(F \times G)$-shape consists not
+just of separate $F$- and $G$-shapes, but those shapes get to
+``interact'': in particular we need a permutation to tell us how the
+labels on the separate $F$- and $G$-shapes ``line up''.  An $(F \times
+G)$-shape encodes this information implicitly, by the fact that the
+two shapes share the exact same set of labels.
+
+Practically speaking, this result tells us how to express an
+eliminator for $(F \times G)$-shapes. (Note that $H$ can be something
+trivial like ``the species which contains just a single \cons{Bool} value
+for any set of labels''.)  That is, to be able to eliminate $(F \times
+G)$-shapes, it suffices to be able to eliminate $F$- and $G$-shapes
+individually, with an extra permutation supplied as an argument.
+
+Unfortunately, \todo{doesn't tell us about representing functions as
+  species, as one might naively expect}
 
 \subsection{Lifting monoids}
 \label{sec:lifting-monoids}
@@ -2538,6 +2589,16 @@ dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
 \end{ex}
 
 \later{Another example?}
+
+\begin{prop}
+  $(\Spe, \cdot, \One)$ is monoidal closed.
+\end{prop}
+
+Verification that it is monoidal \todo{is not hard and is left to the
+  reader??}.  A discussion of the internal Hom functor corresponding
+to partitional product must be postponed to
+\pref{sec:internal-Hom-pprod}, after discussing species
+differentiation.
 
 \subsection{Arithmetic product}
 \label{sec:arithmetic-product}
@@ -3733,6 +3794,8 @@ This explicit construction relies on \todo{what? Seems too
 \todo{Prove it is associative?}
 \todo{Distributes over sum and product?}
 
+\todo{internal Homs for composition?  At least cite?}
+
 \section{Functor composition}
 \label{sec:functor-composition}
 
@@ -4003,79 +4066,6 @@ Unfortunately, once again \[ \unl{(F')}(x) \neq \unl F'(x) \] in
 general, \todo{Explain why? Intuition?} though a corresponding
 equation does hold for cycle index series, which may be used to
 compute the ogf for a species defined via differentiation.
-
-\subsection{Higher derivatives}
-\label{sec:higher-derivatives}
-
-\citet[\Sect 8.11]{aguiar2010monoidal} describe a generalization of
-species derivatives to ``higher derivatives''.  The idea of higher
-derivatives in the context of functions of a single variable should be
-familiar: the usual derivative is the \emph{first} derivative, and by
-iterating this operation, one obtains notions of the second, third,
-\dots derivatives.  More abstractly, we generalize from a single
-notion of ``derivative'', $f'$, to a whole family of higher
-derivatives $f^{(n)}$, parameterized by a \emph{natural number} $n$.
-
-Note that taking the derivative of a polynomial reduces the degree of
-all its terms by one.  More generally, the $n$th derivative reduces
-the degrees by $n$.  According to the correspondence between species
-and generating functions, the \emph{degrees} of terms in a generating
-function correspond to the \emph{sizes} of label sets.  Recall that
-the general principle of the passage from generating functions to
-species is to replace natural number sizes by finite sets of labels
-having those sizes.  Accordingly, just as higher derivatives of
-generating functions are parameterized by a natural number which acts
-on the degree, higher derivatives of species are parameterized by
-a finite set which acts on the labels.
-
-\begin{defn}
-  For a species $F$ and finite set $K$, the $K$-derivative of $F$ is
-  defined by \[ F^{[K]}\ L = F\ (K \uplus L). \]
-\end{defn}
-Note that we recover the simple derivative of $F$ by setting $K =
-\singleton$.  An $F^{[K]}$-shape with labels $L$ is an $F$-shape
-populated by both $L$ \emph{and} $K$.  The occurrences of labels from
-$K$ can be thought of as ``$K$-indexed holes'', since they do not
-contribute to the size: \eg an ``$F^{[K]}$-shape of size $3$''
-consists of an $F$-shape with three labels that ``count'' towards the
-size as well as one ``hole'' for each element of $K$. For example,
-\pref{fig:higher-derivative-example} illustrates a $\Bin^{[K]}$-shape
-of size $3$, where $K = \{a,b,c,d,e\}$.
-\begin{figure}
-  \centering
-  \begin{diagram}[width=150]
-import           Data.Char                      (chr)
-import           Data.Tree
-import           Diagrams.TwoD.Layout.Tree
-import           SpeciesDiagrams
-
-sampleT7' :: Tree (Either Int Char)
-sampleT7' = fmap (\n -> if n > 2
-                           then Right (chr (n + 94))
-                           else Left n) sampleT7
-
-derTree =
-  renderTree
-    (either mloc khole)
-    (~~)
-    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
-
-khole c
-  = text [c] # fc (colors !! 2)
-  <>
-    circle 0.8
-  # lc (colors !! 2)
-  # fc white
-  # lwO 1.4
-  # dashingL [0.15,0.15] 0
-
-dia = derTree
-   # frame 0.5
-   # lwO 0.7
-  \end{diagram}
-  \caption{An example $\Bin^{[K]}$-shape}
-  \label{fig:higher-derivative-example}
-\end{figure}
 
 \subsection{Up and down operators}
 \label{sec:up-down-operators}
@@ -4404,66 +4394,138 @@ dia = hcat' (with & sep .~ 2)
 \todo{Say something about constructive difference between pointing and
   derivative?}
 
+\subsection{Higher derivatives}
+\label{sec:higher-derivatives}
+
+\citet[\Sect 8.11]{aguiar2010monoidal} describe a generalization of
+species derivatives to ``higher derivatives''.  The idea of higher
+derivatives in the context of functions of a single variable should be
+familiar: the usual derivative is the \emph{first} derivative, and by
+iterating this operation, one obtains notions of the second, third,
+\dots derivatives.  More abstractly, we generalize from a single
+notion of ``derivative'', $f'$, to a whole family of higher
+derivatives $f^{(n)}$, parameterized by a \emph{natural number} $n$.
+
+Note that taking the derivative of a polynomial reduces the degree of
+all its terms by one.  More generally, the $n$th derivative reduces
+the degrees by $n$.  According to the correspondence between species
+and generating functions, the \emph{degrees} of terms in a generating
+function correspond to the \emph{sizes} of label sets.  Recall that
+the general principle of the passage from generating functions to
+species is to replace natural number sizes by finite sets of labels
+having those sizes.  Accordingly, just as higher derivatives of
+generating functions are parameterized by a natural number which acts
+on the degree, higher derivatives of species are parameterized by
+a finite set which acts on the labels.
+
+\begin{defn}
+  For a species $F$ and finite set $K$, the $K$-derivative of $F$ is
+  defined by \[ \hder K F\ L = F\ (K \uplus L). \]
+\end{defn}
+Note that we recover the simple derivative of $F$ by setting $K =
+\singleton$, and that $\hder {\varnothing} F = F$.  An $\hder K F$-shape
+with labels $L$ is an $F$-shape populated by both $L$ \emph{and} $K$.
+The occurrences of labels from $K$ can be thought of as ``$K$-indexed
+holes'', since they do not contribute to the size: \eg an
+``$\hder K F$-shape of size $3$'' consists of an $F$-shape with three
+labels that ``count'' towards the size as well as one ``hole'' for
+each element of $K$. For example, \pref{fig:higher-derivative-example}
+illustrates a $\hder K \Bin$-shape of size $3$, where $K =
+\{a,b,c,d,e\}$.
+\begin{figure}
+  \centering
+  \begin{diagram}[width=150]
+import           Data.Char                      (chr)
+import           Data.Tree
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+sampleT7' :: Tree (Either Int Char)
+sampleT7' = fmap (\n -> if n > 2
+                           then Right (chr (n + 94))
+                           else Left n) sampleT7
+
+derTree =
+  renderTree
+    (either mloc khole)
+    (~~)
+    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
+
+khole c
+  = text [c] # fc (colors !! 2)
+  <>
+    circle 0.8
+  # lc (colors !! 2)
+  # fc white
+  # lwO 1.4
+  # dashingL [0.15,0.15] 0
+
+dia = derTree
+   # frame 0.5
+   # lwO 0.7
+  \end{diagram}
+  \caption{An example $\hder K \Bin$-shape}
+  \label{fig:higher-derivative-example}
+\end{figure}
+
+\subsection{Internal Hom for partitional product}
+\label{sec:internal-Hom-pprod}
+
+\newcommand{\phom}[2]{\hom[\bullet]{#1}{#2}}
+
+As promised, we now return to considering the existence of an internal
+Hom functor corresponding to partitional product.  We are looking for
+some $\phom - - : \Spe^\op \times \Spe \to \Spe$ for
+which \begin{equation} \label{eq:internal-Hom-pprod-adj}
+(\hom[\Spe]{F \cdot G}{H}) \iso (\hom[\Spe]{F}{(\phom G H)}). \end{equation}
+Intuitively, this is just like currying---although there are labels to
+contend with which make things more interesting.
+
+Recall that an $(F \cdot G)$-shape on $L$ is a partition $L_1 \uplus
+L_2 = L$ together with shapes from $F\ L_1$ and $G\ L_2$.  Another way
+of saying this is that an $(F \cdot G)$-shape consists of an $F$-shape
+and a $G$-shape on two different sets of labels, whose disjoint union
+constitutes the label set for the entire product shape.  Thus, a
+morphism out of $F \cdot G$ should be a morphism out of $F$, which
+produces another morphism that expects a $G$ and produces an $H$ on
+the disjoint union of the label sets from the $F$- and $G$-shapes.
+
+This can be formalized using the notion of higher derivatives
+developed in the previous subsection. In particular, define $\phom -
+-$ by \[ (\phom G H)\ L \defeq \hom[\Spe]{G}{\hder L H}. \]  Thta is,
+a $(\phom G H)$-shape with labels taken from $L$ is a species
+morphism, \ie a natural, label-preserving map, from $G$ to the
+$L$-derivative of $H$.  This definition is worth rereading a few times
+since it mixes levels in an initially surprising way---the
+\emph{shapes} of the species $\phom G H$ are \emph{species morphisms}
+between other species.  However, this should not ultimately be too
+surprising to anyone used to the idea of higher-order functions---that
+the output \emph{values} of a function can themselves be functions.
+
+Thus, a $(\phom G H)$-shape with labels from $L$ is a natural function
+that takes a $G$-shape as input, and produces an $H$-shape which uses
+the disjoint union of $L$ and the labels from $G$.  This is precisely
+what is needed to effectively ``curry'' a species morphism out of a
+product while properly keeping track of the labels, as illustrated in
+\pref{fig:internal-Hom-pprod-example}.
+
+\begin{figure}
+  \centering
+  \todo{transcribe the picture}
+  \caption{XXX write me}
+  \label{fig:internal-Hom-pprod-example}
+\end{figure}
+
+Formally, we have the adjunction \eqref{eq:internal-Hom-pprod-adj}.
+Note that the same result appears in \citet{kelly2005operads} in a
+slightly different guise. \todo{Fix this citation, look at citation as
+  it appears in Aguiar and Mahajan}
+
 \section{Generalized differentiation}
 \label{sec:generalized-differentiation}
 
 \todo{Write me.  Has to go later, after discussion of closed
   structure.}
-
-\section{Closed monoidal structures and elimination}
-\label{sec:closed}
-
-\paragraph{Cartesian closed} If $\Lab$ is locally small and $\Str$ is
-complete and Cartesian closed, then $\fc \Lab \Str$ is also complete
-and Cartesian closed \citep{cart-closed-functor-cat}.  In particular,
-the exponential of $F,G : \Lab \to \Str$ is given by \[ G^F\ L =
-\eend{K \in \Lab} \prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example, $\B$,
-$\P$, $\BT$, and $\PT$ are all locally small, and $\Set$ and $\ST$ are
-complete and Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$, $\fc
-\BT \ST$, and $\fc \PT \ST$ are all complete and Cartesian closed as
-well.
-
-Let's unpack this result a bit in the specific case of $\fc \PT \ST$.
-By a dual argument to the one given in \pref{sec:coends-hott}, ends in
-$\ST$ over the groupoid $\PT$ are given by $\Pi$-types, \ie universal
-quantification; hence, we have
-\begin{align*}
-(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H\ n)^{G\ n} \\
-       &= (m : \N) \to (\Fin m \equiv \Fin n) \to G\ n \to H\ n \\
-       &\equiv (\Fin n \equiv \Fin n) \to G\ n \to H\ n
-\end{align*}
-where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
-only inhabited when $m = n$.
-
-Being Cartesian closed means there is an adjunction $- \times G \adj
--^G$ between products and exponentials, which yields a natural
-isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
-\ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
-\PT \ST$ as natural transformations, and expanding the definition of
-$H^G$ derived above, this yields \[ \left( (n : \N) \to (F \times G)\
-  n \to H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n
-  \equiv \Fin n) \to G\ n \to H\ n \right). \] Intuitively, this says
-that a size-polymorphic function taking a Cartesian product shape $F
-\times G$ and yielding an $H$-shape of the same size is isomorphic to
-a size-polymorphic function taking a triple of an $F$-shape, a
-$G$-shape, \emph{and a permutation on $\Fin n$}, and yielding an
-$H$-shape.  The point is that an $(F \times G)$-shape consists not
-just of separate $F$- and $G$-shapes, but those shapes get to
-``interact'': in particular we need a permutation to tell us how the
-labels on the separate $F$- and $G$-shapes ``line up''.  An $(F \times
-G)$-shape encodes this information implicitly, by the fact that the
-two shapes share the exact same set of labels.
-
-Practically speaking, this result tells us how to express an
-eliminator for $(F \times G)$-shapes. (Note that $H$ can be something
-trivial like ``the species which contains just a single \cons{Bool} value
-for any set of labels''.)  That is, to be able to eliminate $(F \times
-G)$-shapes, it suffices to be able to eliminate $F$- and $G$-shapes
-individually, with an extra permutation supplied as an argument.
-
-\todo{Closed with respect to partitional product}
-
-\todo{Closed with respect to composition?}
 
 \section{Examples}
 \label{sec:examples}
