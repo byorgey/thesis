@@ -3804,7 +3804,7 @@ label to the existing set of labels:
 
 \begin{figure}
   \centering
-  \begin{diagram}[width=200]
+  \begin{diagram}[width=150]
 import           Data.Tree
 import           Diagrams.TwoD.Layout.Tree
 import           SpeciesDiagrams
@@ -4006,6 +4006,76 @@ compute the ogf for a species defined via differentiation.
 
 \subsection{Higher derivatives}
 \label{sec:higher-derivatives}
+
+\citet[\Sect 8.11]{aguiar2010monoidal} describe a generalization of
+species derivatives to ``higher derivatives''.  The idea of higher
+derivatives in the context of functions of a single variable should be
+familiar: the usual derivative is the \emph{first} derivative, and by
+iterating this operation, one obtains notions of the second, third,
+\dots derivatives.  More abstractly, we generalize from a single
+notion of ``derivative'', $f'$, to a whole family of higher
+derivatives $f^{(n)}$, parameterized by a \emph{natural number} $n$.
+
+Note that taking the derivative of a polynomial reduces the degree of
+all its terms by one.  More generally, the $n$th derivative reduces
+the degrees by $n$.  According to the correspondence between species
+and generating functions, the \emph{degrees} of terms in a generating
+function correspond to the \emph{sizes} of label sets.  Recall that
+the general principle of the passage from generating functions to
+species is to replace natural number sizes by finite sets of labels
+having those sizes.  Accordingly, just as higher derivatives of
+generating functions are parameterized by a natural number which acts
+on the degree, higher derivatives of species are parameterized by
+a finite set which acts on the labels.
+
+\begin{defn}
+  For a species $F$ and finite set $K$, the $K$-derivative of $F$ is
+  defined by \[ F^{[K]}\ L = F\ (K \uplus L). \]
+\end{defn}
+Note that we recover the simple derivative of $F$ by setting $K =
+\singleton$.  An $F^{[K]}$-shape with labels $L$ is an $F$-shape
+populated by both $L$ \emph{and} $K$.  The occurrences of labels from
+$K$ can be thought of as ``$K$-indexed holes'', since they do not
+contribute to the size: \eg an ``$F^{[K]}$-shape of size $3$''
+consists of an $F$-shape with three labels that ``count'' towards the
+size as well as one ``hole'' for each element of $K$. For example,
+\pref{fig:higher-derivative-example} illustrates a $\Bin^{[K]}$-shape
+of size $3$, where $K = \{a,b,c,d,e\}$.
+\begin{figure}
+  \centering
+  \begin{diagram}[width=150]
+import           Data.Char                      (chr)
+import           Data.Tree
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+sampleT7' :: Tree (Either Int Char)
+sampleT7' = fmap (\n -> if n > 2
+                           then Right (chr (n + 94))
+                           else Left n) sampleT7
+
+derTree =
+  renderTree
+    (either mloc khole)
+    (~~)
+    (symmLayout' (with & slHSep .~ 4 & slVSep .~ 4) sampleT7')
+
+khole c
+  = text [c] # fc (colors !! 2)
+  <>
+    circle 0.8
+  # lc (colors !! 2)
+  # fc white
+  # lwO 1.4
+  # dashingL [0.15,0.15] 0
+
+dia = derTree
+   # frame 0.5
+   # lwO 0.7
+  \end{diagram}
+  \caption{An example $\Bin^{[K]}$-shape}
+  \label{fig:higher-derivative-example}
+\end{figure}
 
 \subsection{Up and down operators}
 \label{sec:up-down-operators}
