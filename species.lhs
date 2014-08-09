@@ -4471,8 +4471,6 @@ dia = derTree
 \subsection{Internal Hom for partitional product}
 \label{sec:internal-Hom-pprod}
 
-\newcommand{\phom}[2]{\hom[\bullet]{#1}{#2}}
-
 As promised, we now return to considering the existence of an internal
 Hom functor corresponding to partitional product.  We are looking for
 some $\phom - - : \Spe^\op \times \Spe \to \Spe$ for
@@ -4507,19 +4505,80 @@ that takes a $G$-shape as input, and produces an $H$-shape which uses
 the disjoint union of $L$ and the labels from $G$.  This is precisely
 what is needed to effectively ``curry'' a species morphism out of a
 product while properly keeping track of the labels, as illustrated in
-\pref{fig:internal-Hom-pprod-example}.
+\pref{fig:internal-Hom-pprod-example}.  The top row of the diagram
+illustrates a particular instance of a species morphism from $\List
+\cdot \Bin$ to $\List$.  The bottom row shows the ``curried'' form,
+with a species morphism that sends a list to another species morphism,
+which in turn sends a tree to a higher derivative of a list,
+containing holes corresponding to the original list.
 
 \begin{figure}
   \centering
-  \todo{transcribe the picture}
-  \caption{XXX write me}
+  \begin{diagram}[width=300]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+import           Structures                     (pair)
+
+t = BNode 2 (leaf 1) (BNode 0 (leaf 3) Empty)
+l = ['b','a']
+
+r = [Left 3, Left 1, Right 'a', Left 0, Right 'b', Left 2]
+
+mloc2 c = text [c] <> circle 0.8 # fc (colors !! 2)
+
+ld = drawList' mloc2 l
+td = drawBinTree' (with & slHSep .~ 4 & slVSep .~ 3) (fmap mloc t)
+rd = drawList' (either mloc mloc2) r
+
+fun x y = hcat' (with & sep .~ 1)
+  [ x # centerY
+  , arrow 3
+  , y # centerY
+  ]
+
+lhs = fun (pair ld td) rd
+
+rhs = fun ld (enRect' 1 (fun td rd))
+
+dia =
+  vcat' (with & sep .~ 2)
+  [ lhs # centerX
+  , text "≅" # scale 2
+  , rhs # centerX
+  ]
+  # frame 1
+  # lwO 0.7
+  \end{diagram}
+  \caption{``Currying'' for partitional product of species}
   \label{fig:internal-Hom-pprod-example}
 \end{figure}
 
 Formally, we have the adjunction \eqref{eq:internal-Hom-pprod-adj}.
 Note that the same result appears in \citet{kelly2005operads} in a
-slightly different guise. \todo{Fix this citation, look at citation as
-  it appears in Aguiar and Mahajan}
+slightly different guise.
+
+This result hints at a close relationship between partitional product
+and higher derivatives.  In particular, both are defined using the
+\emph{same} monoidal structure on $\B$ (the one corresponding to
+disjoint union of finite sets), and this gives rise to the fundamental
+Leibniz-like law relating the two, \[ \hder L {(F \cdot G)} = \sum_{J
+  \uplus K = L} \hder J F \cdot \hder K G. \] Setting $L = \singleton$
+yields the familiar product rule for differentiation, \[ (F \cdot G)'
+= F' \cdot G + F \cdot G', \] since there are only two possibilities
+for $J$ and $K$ given $J \uplus K = \singleton$.  This generalizes
+easily to functor categories other than $\fc \B \Set$: any functor
+category which supports a Day convolution product also has a
+corresponding notion of higher derivatives, and a corresponding
+Leibniz law.
+
+This also suggests considering an alternate sort of higher derivative,
+based on the other monoidal structure on $\B$ (corresponding to
+Cartesian product of finite sets), and thus related to arithmetic
+product rather than partitional product.  In particular, we define the
+\term{arithmetic derivative} by \[ \ader K F\ L = F\ (K \times L). \]
+We have \[ (\hom[\Spe]{F \aprod G}{H}) \iso (\hom[\Spe]{F}{(\ahom G
+  H)}) \] where \[ \ahom G H \defeq (\hom[\Spe] {G}{\ader L H}). \]
+\todo{Describe some intuition here, with pictures.}
 
 \section{Generalized differentiation}
 \label{sec:generalized-differentiation}

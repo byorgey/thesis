@@ -323,6 +323,9 @@
 \newcommand{\id}{\ensuremath{\mathit{id}}}
 \newcommand{\Id}{\ensuremath{\mathit{Id}}}
 
+\newcommand{\ahom}[2]{\hom[\aprod]{#1}{#2}}
+\newcommand{\phom}[2]{\hom[\bullet]{#1}{#2}}
+
 \newcommand{\fc}[2]{\Hom{#1}{#2}}   % functor category
 
 % some standard categories
@@ -430,6 +433,7 @@
 \newcommand{\sprod}{\cdot}
 \newcommand{\fcomp}{\mathbin{\square}}
 \newcommand{\hder}[2]{{#2}^{[#1]}}
+\newcommand{\ader}[2]{{#2}^{\{#1\}}}
 
 \newcommand{\pointed}[1]{\ensuremath{{#1}^{\bullet}}}
 

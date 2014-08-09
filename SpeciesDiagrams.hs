@@ -243,9 +243,12 @@ unord ds = elts # centerXY
     maximum' d [] = d
     maximum' _ xs = maximum xs
 
-enRect :: (Semigroup a, TrailLike a, Alignable a, Enveloped a, HasOrigin a, V a ~ R2) => a -> a
-enRect d = roundedRect (w+0.5) (h+0.5) 0.5 <> d # centerXY
+enRect' :: (Semigroup a, TrailLike a, Alignable a, Enveloped a, HasOrigin a, V a ~ R2) => Double -> a -> a
+enRect' o d = roundedRect (w+o) (h+o) o <> d # centerXY
   where (w,h) = size2D d
+
+enRect :: (Semigroup a, TrailLike a, Alignable a, Enveloped a, HasOrigin a, V a ~ R2) => a -> a
+enRect = enRect' 0.5
 
 txt x = text x # fontSizeO 10 <> square 1 # lw none
 
