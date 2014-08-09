@@ -126,6 +126,8 @@
 \newcommand{\all}[1]{\forall #1.\;}
 \newcommand{\exist}[1]{\exists #1.\;}
 
+\newcommand{\ddx}{\frac{d}{dx}}
+
 \newcommand{\mcal}[1]{\ensuremath{\mathcal{#1}}}
 \let\Sect\S
 \renewcommand{\S}{\mcal S}
@@ -152,6 +154,7 @@
 
 \newcommand{\partition}{\vdash}
 \newcommand{\rectangle}{\Vdash}
+\newcommand{\numrect}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
 
 % problem: doesn't seem to adapt to different font sizes, even though
 % we use em units??

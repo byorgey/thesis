@@ -348,19 +348,19 @@ numNodes = 17
 endo :: Int -> Int
 endo n = fromJust (lookup n [(0,3),(1,3),(2,3),(3,7),(4,6),(5,6),(6,7),(7,8),(9,7),(8,10),(10,9),(11,10),(12,13),(13,13),(14,10),(15,9),(16,10)])
 
-data EndoStatus = InTree [Int] | InLoop [Int]
+data EndoStatus = InTree [Int] || InLoop [Int]
   deriving Show
 
 endoStatus :: Int -> (Int -> Int) -> EndoStatus
 endoStatus x f = endoStatus' [x] (f x)
   where
     endoStatus' (i:seen) y
-      | y == i = InLoop (i:seen)
-      | y `elem` seen = InTree (i : takeWhile (/= y) seen ++ [y])
-      | otherwise = endoStatus' (i : seen ++ [y]) (f y)
+      || y == i = InLoop (i:seen)
+      || y `elem` seen = InTree (i : takeWhile (/= y) seen ++ [y])
+      || otherwise = endoStatus' (i : seen ++ [y]) (f y)
 
 gr :: Gr () ()
-gr = mkGraph [(n,()) | n <- [0..numNodes-1]] [(n,endo n,()) | n <- [0..numNodes-1]]
+gr = mkGraph [(n,()) || n <- [0..numNodes-1]] [(n,endo n,()) || n <- [0..numNodes-1]]
 
 colorFor n = colors !! (fromJust $ findIndex (==n) [8,7,9,10,13])  -- $
 
@@ -371,8 +371,8 @@ dn n = circle 0.8 # fc c
           InTree pth -> colorFor (last pth)
 
 de n1 n2
-  | n1 == n2  = connectPerim' (with & arrowShaft .~ arc (3/8 @@ turn) (1/8 @@ turn)) n1 n2 (5/8 @@ turn) (7/8 @@ turn)
-  | otherwise = connectOutside n1 n2
+  || n1 == n2  = connectPerim' (with & arrowShaft .~ arc (3/8 @@@@ turn) (1/8 @@@@ turn)) n1 n2 (5/8 @@@@ turn) (7/8 @@@@ turn)
+  || otherwise = connectOutside n1 n2
 
 dia = graphToDia dn de (unsafePerformIO (graphToGraph' nonClusteredParams TwoPi gr))
     # frame 0.5 # lwO 0.7
@@ -1381,7 +1381,7 @@ as follows.
 \begin{defn}
   The ogf $\unl F(x)$ associated to a species $F$ is defined by \[
   \unl F(x) = \sum_{n \geq 0} \unl f_n x^n, \] where $\unl f_n =
-  \size{(F\ n/\sim)}$ is the number of distinct $F$-\emph{forms} (that
+  \size{(F\ n/\mathord{\sim})}$ is the number of distinct $F$-\emph{forms} (that
   is, equivalence classes of $F$-shapes under relabelling) of size $n$.
 \end{defn}
 \begin{ex}
@@ -1438,7 +1438,7 @@ functions itself was already well-developed, but no one had yet tried
 to apply category theory to it.
 
 The general idea is to ``blow everything up'', replacing natural
-numbers by sets; addition by disjoint union; product by pairingl and
+numbers by sets; addition by disjoint union; product by pairing; and
 so on.  In a way, one can see this process as ``imbuing everything
 with constructive significants''; this is one argument for the
 naturality of the theory of species being developed within a
@@ -1624,6 +1624,16 @@ lists
   $\Bin$.
 \end{ex}
 
+Species sum corresponds to the sum of generating functions: we have \[
+(F + G)(x) = F(x) + G(x) \quad \text{and} \quad \unl{(F + G)}(x) =
+\unl F(x) + \unl G(x). \] This is because the sum of two generating
+functions is computed by summing corresponding coefficients, \[
+\left(\sum_{n \geq 0} a_n x^n \right) + \left(\sum_{n \geq 0} b_n
+  x^n\right) = \sum_{n \geq 0} (a_n + b_n) x^n \] (and likewise for
+egfs), and since species sum is given by disjoint union, the number of
+$(F+G)$-shapes and -forms of a given size is the sum of the number of
+$F$- and $G$-shapes (respectively -forms) of that size.
+
 \begin{figure}
   \centering
   \begin{diagram}[width=250]
@@ -1651,6 +1661,9 @@ species sum:
   and on morphisms $\Zero$ sends every $\sigma$ to the unique function
   $\varnothing \to \varnothing$.
 \end{defn}
+
+We evidently have \[ \Zero(x) = \unl \Zero(x) = 0 + 0x + 0x^2 + \dots
+= 0. \]
 
 \begin{prop}
   $(+,\Zero)$ is a symmetric monoid on $\fc \B \Set$.
@@ -1826,17 +1839,36 @@ being superimposed.  This last view highlights the fact that $\times$
 is symmetric, but only up to isomorphism, since at root it still
 consists of an \emph{ordered} pair of shapes.
 
+In parallel with sum, we can see that \[ (F \times G)(x) = F(x) \times
+G(x) \quad \text{and} \quad \unl{(F \times G)}(x) = \unl F(x) \times
+\unl G(x), \] where \[ \left( \sum_{n \geq 0} a_n x^n\right) \times
+\left( \sum_{n \geq 0} b_n x^n \right) = \sum_{n \geq 0} (a_n b_n) x^n
+\] and \[ \left( \sum_{n \geq 0} a_n \frac{x^n}{n!} \right) \times
+\left( \sum_{n \geq 0} b_n \frac{x^n}{n!} \right) = \sum_{n \geq 0}
+(a_n b_n) \frac{x^n}{n!}
+\] denote the elementwise or \term{Hadamard} product of two
+generating functions.  This is not a particularly natural operation on
+generating functions (although it is easy to compute); in particular
+it is not what one usually thinks of as \emph{the} product of
+generating functions.  As we will see in \pref{sec:day}, there is a
+different combinatorial operation that corresponds to the usual
+product of generating functions.
+
 There is also a species, usually called $\Bag$, which is an identity
-element for Cartesian product.\footnote{The notation $\Bag$ comes for
-  the French \foreign{ensemble} (set), and is also a clever pun on the
-  fact that the exponential generating function for $\Bag$ is $e^x$.}
-Considering that we should have $(\Bag \times G)\ L = \Bag\ L \times
-G\ L \equiv G\ L$, the proper definition of $\Bag$ becomes clear:
+element for Cartesian product.  Considering that we should have $(\Bag
+\times G)\ L = \Bag\ L \times G\ L \equiv G\ L$, the proper definition
+of $\Bag$ becomes clear:
 
 \begin{defn}
   The species of \emph{sets}, $\Bag$, is defined as the constant functor
   yielding $\singleton$, that is, $\Bag\ L = \singleton$.
 \end{defn}
+
+The ogf for $\Bag$ is given by \[ \unl \Bag(x) = 1 + x + x^2 + \dots =
+\frac{1}{1-x}, \] and the egf by \[ \Bag(x) = 1 + x + \frac{x^2}{2!} +
+\frac{x^3}{3!} + \dots = e^x. \] Note that the notation $\Bag$ was
+probably chosen as an abbreviation for the French \foreign{ensemble}
+(set), but it is also a clever pun on the fact that $\Bag(x) = e^x$.
 
 \begin{figure}
   \centering
@@ -2282,8 +2314,8 @@ functions and which gives rise to the usual notion of product on
 algebraic data types.  For these reasons, partitional product is often
 simply referred to as ``product'', without any modifier.
 
-There is also another less well-known product, \term{arithmetic
-  product} \citep{Maia2008arithmetic}, which can be thought of as a
+There is also another lesser-known product, \term{arithmetic
+  product} \citep{maia2008arithmetic}, which can be thought of as a
 symmetric form of composition.  These two products arise in an
 analogous way, via a categorical construction known as \emph{Day
   convolution}.
@@ -2391,6 +2423,33 @@ dia
   \partition L$, $x \in F\ L_F$, and $y \in G\ L_G$.
 \end{defn}
 
+To compute the ogf of a product species $F \cdot G$, consider the
+product of ogfs \[ \unl F(x) \unl G(x) = \left( \sum_{n \geq 0} f_n x^n \right) \left(
+  \sum_{n \geq 0} g_n x^n \right) = \sum_{n \geq 0} \left( \sum_{0
+    \leq k \leq n} f_k g_{n-k} \right) x^n. \] Note that the inner sum
+$\sum_{0 \leq k \leq n} f_k g_{n-k}$ is indeed the number of $(F \cdot
+G)$-forms of size $n$: such forms necessarily consist of an $F$-form
+of size $k$ paired with a $G$-form of size $n-k$. Hence \[ \unl{(F
+  \cdot G)}(x) = \unl F(x) \unl G(x). \]
+
+The computation of the egf of a product species is similar.
+Consider:
+\begin{align*}
+  F(x)G(x) &= \left(\sum_{n \geq 0} f_n \frac{x^n}{n!} \right) \left(
+    \sum_{n \geq 0} g_n \frac{x^n}{n!} \right) \\
+  &= \sum_{n \geq 0} \left( \sum_{0 \leq k \leq n} \frac{f_k}{k!}
+    \frac{g_{n-k}}{(n-k)!} \right) x^n \\
+  &= \sum_{n \geq 0} \left( \sum_{0 \leq k \leq n} \binom{n}{k} f_k
+    g_{n-k} \right) \frac{x^n}{n!}.
+\end{align*}
+Again, we verify that the inner sum $\sum_{0 \leq k \leq n}
+\binom{n}{k} f_k g_{n-k}$ is the number of labelled $(F \cdot
+G)$-shapes of size $n$: for each $0 \leq k \leq n$, there are $\binom
+n k$ ways to partition the $n$ labels into two subsets of size $k$ and
+$n-k$, and then there are $f_k$ ways to make an $F$-shape on the first
+subset, and $g_{n-k}$ ways to make a $G$-shape on the second.  We
+therefore have \[ (F \cdot G)(x) = F(x) G(x) \] as well.
+
 The identity for partitional product should evidently be some species
 $\One$ such that \[ (\One \cdot G)\ L = \left(\biguplus_{L_F,L_G
     \partition L} \One\ L_F \times G\ L_G \right) \equiv G\ L. \] The only
@@ -2415,10 +2474,15 @@ $\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
   $\One$-shape, and it has no labels''; that is, the unit species thus
   denotes a sort of ``trivial'' or ``leaf'' structure containing no
   labels.  Intuitively, it corresponds to a Haskell type like
+  {\setlength{\belowdisplayskip}{0pt}
   \begin{spec}
     data Unit a = Unit
   \end{spec}
+  }
 \end{rem}
+
+The generating functions for $\One$ are given by \[ \One(x) = \unl
+\One(x) = 1. \]
 
 \begin{ex}
   The following example is due to \citet{joyal}. Recall that
@@ -2456,23 +2520,21 @@ cycs =
 
 dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
     \end{diagram}
-    \caption{Permutation = fixpoints $\times$ derangement}
+    \caption{Permutation = fixpoints $\cdot$ derangement}
     \label{fig:perm-der}
   \end{figure}
-  That is, algebraically, \[ \Perm = \Bag \cdot \Der. \] This does not
-  directly give us an expression for $\Der$, since there is no notion
-  of multiplicative inverse for species\footnote{Multiplicative
-    inverses can in fact be defined for suitable \emph{virtual}
-    species~\citep[Chapter 3]{bll}.  However, virtual species are
-    beyond the scope of this dissertation.}.  However, this is still a
-  useful characterization of derangements.  For example, as explained
-  further in \pref{chap:labelled}, every species has associated to it
-  an \term{exponential generating function} (egf), and the mapping
-  from species to generating functions is a homomorphism with respect
-  to (partitional) product.  Replacing $\Perm$ and $\Bag$ with their
-  egfs thus yields \[ \frac{1}{1-x} = e^x \cdot \Der(x), \] allowing
-  us to solve for the egf $\Der(x) = e^{-x}/(1-x)$, even though we
-  cannot make direct combinatorial sense out of $\Der = \Perm / \Bag$.
+  That is, algebraically, \begin{equation} \label{eq:perm-eq} \Perm =
+    \Bag \cdot \Der. \end{equation} This does not directly give us an
+  expression for $\Der$, since there is no notion of multiplicative
+  inverse for species\footnote{Multiplicative inverses can in fact be
+    defined for suitable \emph{virtual} species~\citep[Chapter
+    3]{bll}.  However, virtual species are beyond the scope of this
+    dissertation.}.  However, this is still a useful characterization
+  of derangements.  For example, since the mapping from species to
+  egfs is a homomorphism with respect to product, \eqref{eq:perm-eq}
+  becomes \[ \frac{1}{1-x} = e^x \cdot \Der(x). \] We can solve to
+  obtain the egf $\Der(x) = e^{-x}/(1-x)$, even though we cannot make
+  direct combinatorial sense out of $\Der = \Perm / \Bag$.
 \end{ex}
 
 \later{Another example?}
@@ -2483,7 +2545,7 @@ dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
 \newcommand{\aprod}{\boxtimes}
 
 There is another, more recently discovered monoidal structre on
-species known as \emph{arithmetic product} \citep{Maia2008arithmetic}.
+species known as \emph{arithmetic product} \citep{maia2008arithmetic}.
 The arithmetic product of the species $F$ and $G$, written $F \aprod
 G$, can intuitively be thought of as an ``$F$-assembly of cloned
 $G$-shapes'', that is, an $F$-shape containing multiple copies of a
@@ -2556,7 +2618,7 @@ dia = frame 0.2 . lwO 0.7 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
 \end{figure}
 
 A more formal definition requires the notion of a \term{rectangle} on
-a set~\citep{Maia2008arithmetic, baddeley2004transitive}, which plays
+a set~\citep{maia2008arithmetic, baddeley2004transitive}, which plays
 a role similar to that of set partition in the definition of
 partitional product. (So perhaps arithmetic product ought to be called
 \emph{rectangular product}.)  In particular, whereas a binary
@@ -2567,7 +2629,7 @@ the partitions to act like the ``rows'' and ``columns'' of a
 rectangular matrix, which have the defining characteristic that every
 pair of a row and a column have a single point of intersection.
 
-\begin{defn}[\citet{Maia2008arithmetic}]
+\begin{defn}[\citet{maia2008arithmetic}]
   \label{defn:rectangle}
   A \term{rectangle} on a set $L$ is a pair $(\pi, \tau)$ of families
   of subsets of $L$, such that
@@ -2682,6 +2744,18 @@ dia = mkRect [[0,2,5],[3,1,4]]
 
 \later{More examples?}
 
+The ogf for $F \aprod G$ is given by \[ \unl F(x) \aprod \unl G(x) = \left(
+  \sum_{n \geq 0} f_n x^n \right) \aprod \left( \sum_{n
+    \geq 0} g_n x^n \right) = \sum_{n \geq
+  0} \left( \sum_{d \mid n} f_d g_{n/d} \right) x^n, \] since an $(F
+\aprod G)$-form of size $n$ consists of a pair of an $F$-form and a
+$G$-form, whose sizes have a product of $n$.
+
+Likewise, the egf is \[ \sum_{n \geq 0} \left( \sum_{d \mid n}
+  \numrect{n}{d} f_d g_{n/d} \right) \frac{x^n}{n!}, \] where \[
+\numrect{n}{d} = \frac{n!}{d!(n/d)!} \] denotes the number of $d
+\times (n/d)$ rectangles on a set of size $n$.
+
 An identity element for arithmetic product should be some species $\X$
 such that \[ (\X \aprod G)\ L = \left(\biguplus_{L_\X, L_G \rectangle L} \X\
 L_\X \times G\ L_G\right) \iso G\ L. \] Thus we want $\X\ L_\X = \singleton$
@@ -2714,10 +2788,15 @@ This leads to the following definition:
   structure with no labels, it contains a single label, that is, it
   marks the spot where a single piece of data can go.  Intuitively, it corresponds
   to the Haskell data type
+  {\setlength{\belowdisplayskip}{0pt}
   \begin{spec}
     data X a = X a
   \end{spec}
+  }
 \end{rem}
+
+One can see that the egf and ogf for $\X$ are \[ \X(x) = \unl \X(x) =
+x. \]
 
 Species corresponding to a wide variety of standard data structures
 can be defined using $\X$.
@@ -3471,6 +3550,18 @@ dia = hcat' (with & sep .~ 2) (map (alignB . drawPShape . pShape) [0..3])
   \end{figure}
 \end{ex}
 
+As for generating functions, the mapping from species to egfs is
+indeed homomorphic with respect to composition: \[ (F \comp G)(x) =
+F(G(x)). \]  A direct combinatorial proof can be given, making use of
+\emph{Fa{\`a} di Bruno's formula}.
+
+On the other hand, in general, \[ \unl{(F \comp G)}(x) \neq \unl
+F(\unl G(x)). \] To compute ogfs for composed species, one may turn to
+\term{cycle index series}, which can be seen as a generalization of
+both egfs and ogfs, and which retain more information than either; see
+\citet[\Sect 1.2, \Sect 1.4]{bll} for details. \todo{Give some
+  intuition?}
+
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
 
@@ -3895,6 +3986,23 @@ from calculus:
 \end{gather*}
 The reader may enjoy working out \emph{combinatorial} interpretations
 of these laws.
+
+In addition, differentiation of species corresponds to differentiation
+of exponential generating functions, as one might hope. We have
+\begin{align*}
+\ddx (F(x)) &= \ddx \left( \sum_{n \geq 0} f_n
+  \frac{x^n}{n!} \right) \\
+&= \sum_{n \geq 1} f_n \frac{x^{n-1}}{(n-1)!} \\
+&= \sum_{n \geq 0} f_{n+1} \frac{x^n}{n!} \\
+&= \left(\ddx F\right)(x),
+\end{align*}
+since by definition the number of $(F')$-shapes of size $n$ is indeed
+equal to $f_{n+1}$, the number of $F$-shapes on $n+1$ labels.
+
+Unfortunately, once again \[ \unl{(F')}(x) \neq \unl F'(x) \] in
+general, \todo{Explain why? Intuition?} though a corresponding
+equation does hold for cycle index series, which may be used to
+compute the ogf for a species defined via differentiation.
 
 \subsection{Higher derivatives}
 \label{sec:higher-derivatives}
