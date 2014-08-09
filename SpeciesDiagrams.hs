@@ -283,7 +283,7 @@ tree = renderTree
 
 drawBinTree' :: SymmLayoutOpts (Diagram B R2) -> BTree (Diagram B R2) -> Diagram B R2
 drawBinTree' opts
-  = renderTree id (~~) . fromJust
+  = maybe mempty (renderTree id (~~))
   . symmLayoutBin' opts
 
 drawBinTree :: BTree (Diagram B R2) -> Diagram B R2

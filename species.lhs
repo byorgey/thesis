@@ -1393,8 +1393,56 @@ as follows.
   species $\Cyc$ of cycles.
 \end{ex}
 
-\todo{say something about how species are categorification of
-  generating functions}
+One can see that the mapping from species to generating functions
+discards information, compressing an entire set of shapes or forms
+into a single number (\pref{fig:species-gf-hom}).  Once one has
+defined the notion of species, it is not hard to come up with the
+notion of generating functions as a sort of ``structured summary'' of
+species.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=350]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+import           Structures                     hiding (text')
+
+dia =
+  (vcat' (with & sep .~ 3) . map alignR)
+  [ hcat' (with & sep .~ 3) [text' 8 "B", myBinTreeBuckets (with & showIndices .~ False)]
+  , hcat' (with & sep .~ 3) [text' 8 "B(x)", bucketed (map ((:[]) . text' 8 . show) [1,1,2,5,14,42])]
+  ]
+  # frame 0.5
+  # lwO 0.7
+
+myBinTreeBuckets opts
+  = bucketed' opts
+      ( map (map (pad 1.3 . centerXY . drawBinTree' (with & slHSep .~ 4 & slVSep .~ 3) . fmap (const genElt))) allBinTrees
+      # zipWith scale [1,1,0.5, 0.2, 0.2, 0.08]
+      )
+
+genElt = circle 0.8 # fc mlocColor
+  \end{diagram}
+  \caption{Correspondence between species and generating functions}
+  \label{fig:species-gf-hom}
+\end{figure}
+
+Historically, however, generating functions came first.  As Joyal
+makes explicit in the introduction to his seminal paper \textit{Une
+  Th{\'e}orie Combinatoire des {S}{\'e}ries Formelles}
+\citeyearpar{joyal}---in fact, it is even made explicit in the title of
+the paper itself---the biggest motivation for inventing species was to
+generalize the theory of generating functions, putting it on firmer
+combinatorial and categorical ground.  The theory of generating
+functions itself was already well-developed, but no one had yet tried
+to apply category theory to it.
+
+The general idea is to ``blow everything up'', replacing natural
+numbers by sets; addition by disjoint union; product by pairingl and
+so on.  In a way, one can see this process as ``imbuing everything
+with constructive significants''; this is one argument for the
+naturality of the theory of species being developed within a
+constructive type theory, as attempted by this dissertation.
 
 \section{Generalized species}
 \label{sec:generalized-species}
