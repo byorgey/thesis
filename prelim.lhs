@@ -496,6 +496,20 @@ precise inhabitant $a : A$. Up to propositional equality, there is at
 most one inhabitant of $P$, and hence no opportunity to convey
 information.
 
+An important related question is this: when can one define a function
+$\ptrunc{A} \to B$, when $B$ is \emph{not} a mere proposition?  It may
+seem that there is no useful way to construct such a function; at the
+very least, it is clear that the recursion principle cannot be applied
+directly.  However, there is a useful ``trick'' which makes it
+possible: if one can \emph{uniquely characterize} a particular value
+of $B$---that is, create a mere proposition $(b : B) \times
+Q(b)$---one can then define a function $\ptrunc{A} \to (b : B) \times
+Q(b)$ from a function $A \to (b : B) \times Q(b)$, and finally project
+out the $B$ to obtain a function $\ptrunc A \to B$.  This ``trick'' is
+detailed in the HoTT book~\citeyearpar[\Sect 3.9]{hottbook}; Exercise
+3.19 is an excellent exercise that also affords some good intuition
+for this phenomenon.
+
 %% Don't think I make any use of this later.
 %
 % Propositional truncation is also known as $(-1)$-truncation, and is
@@ -989,15 +1003,16 @@ dissertation.
 \paragraph{Coends}
 
 Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
-$T$, denoted $\coend{C} T(C,C)$,\footnote{Traditionally, $\coend{C}
-  T(C,C)$ is notated as $\int^C T(C,C)$.  However, the link to
-  calculus is extremely obscure and not very helpful for building
-  intuition. Moreover, using the traditional notation, it is hard to
-  keep straight the notation for coends ($\int^C T(C,C)$) and ends
-  ($\int_C T(C,C)$).  On the other hand, as I will show, $\coend C
-  T(C,C)$ (and $\eend C T(C,C)$ for ends) are deeply appropriate
-  notations, easy to keep straight, and help computer scientists and
-  logicians build on existing intuition.} is an object of $\D$ with
+$T$, denoted $\coend{C} T(C,C)$,\footnote{Traditionally, coends are
+  notated as $\int^C T(C,C)$, and ends as $\int_C T(C,C)$ (for
+  example, this is the notation used by \citet{mac1998categories}).
+  However, the link to calculus is extremely obscure and not very
+  helpful for building intuition. Moreover, using the traditional
+  notation, it is hard to keep ends and coends straight.  On the other
+  hand, as I will show, $\coend C T(C,C)$ and $\eend C T(C,C)$ are
+  deeply appropriate notations for coends and ends, repsectively; they
+  are easier to keep straight; and they help computer scientists and
+  logicians build on existing intuition.}  is an object of $\D$ with
 morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$ for every $X$, such
 that the
 diagram \[ \xymatrix@@dr{ T(X',X) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(X',X') \ar[d]^{\omega_{X'}} \\

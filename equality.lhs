@@ -1709,20 +1709,18 @@ element to $0$, the second smallest to $1$, and so on.  More formally:
   canonical inhabitant of $\linOrd(\Fin n)$, which we can turn into an
   inhabitant of $\linOrd(A)$ via transport.
 
-  \todo{This is using the ``uniquely characterize'' stuff re: prop
-    trunc but it seems that isn't discussed until after cor:BT-iso-PT.
-    Need to move the discussion, or something.}  The right-to-left
-  direction, while not hard to understand intuitively, is more subtle
-  from a constructive point of view.  The key observation is that the
-  smallest element of $A$ (according to the given linear order) is
-  uniquely determined, and hence we are justified in ``peeking'' at
-  the specific isomorphism contained in the propositional truncation
-  in order to construct it.  By induction on the size $n$, we can thus
-  enumerate the elements of $A$ in order to find the smallest.
-  We then proceed to recursively construct the isomorphism
-  corresponding to the linear order with the smallest element removed,
-  and then to add back the smallest element, incrementing the indices of
-  the remaining elements.
+  The right-to-left direction, while not hard to understand
+  intuitively, is more subtle from a constructive point of view.  The
+  key observation is that the smallest element of $A$ (according to
+  the given linear order) is uniquely determined, and hence we are
+  justified in ``peeking'' at the specific isomorphism contained in
+  the propositional truncation in order to construct it (see
+  \pref{sec:truncation}).  By induction on the size $n$, we can thus
+  enumerate the elements of $A$ in order to find the smallest.  We
+  then proceed to recursively construct the isomorphism corresponding
+  to the linear order with the smallest element removed, and then to
+  add back the smallest element, incrementing the indices of the
+  remaining elements.
 \end{proof}
 
 Paths bewteen elements of $\SetL$ are thus necessarily
@@ -1878,27 +1876,17 @@ surjective and thus an equivalence.  In particular, it has an inverse
 thus \[ \BT \iso \PT. \]
 \end{cor}
 
-The larger intuition here is about an answer to the question: when can
-one define a function $\ptrunc{A} \to B$, when $B$ is \emph{not} a
-mere proposition?  When $B$ is a mere proposition, it suffices to give
-a function $A \to B$.  On the other hand, if $B$ is not a mere
-proposition, it may seem that there is no useful way to construct a
-function $\ptrunc{A} \to B$.  However, this is not true: if one can
-\emph{uniquely characterize} a particular value of $B$---that is,
-create a mere proposition $(b : B) \times Q(b)$---one can then define
-a function $\ptrunc{A} \to (b : B) \times Q(b)$ from a function $A \to
-(b : B) \times Q(b)$, and finally project out the $B$ to obtain a
-function $\ptrunc A \to B$.  This ``trick'' is detailed in the HoTT
-book~\citeyearpar[\Sect 3.9]{hottbook}; Exercise 3.19 is an excellent
-exercise that also affords some good intuition for this phenomenon.
-
-Computationally speaking, $\size : \BT \to \PT$ does precisely what we
-thought was not allowed---its action on morphisms works by extracting
-concrete equivalences out of the finiteness proofs in the objects of
-$\BT$ and using them to construct the required permutation, just as in
-the construction of the anafunctor $\size : \B \to \P$ in
-\pref{sec:finiteness-sets}.  Indeed, we are not allowed to project
-finiteness evidence out from the propositional truncation when
+As a final remark, note that this is at root an instance of the
+``trick'' explained at the end of \pref{sec:truncation}, whereby a
+function $\ptrunc A \to B$ may be defined, even if $B$ is not a mere
+proposition, as long as the value of $B$ produced can be uniquely
+characterized.  Computationally speaking, $\size : \BT \to \PT$ does
+precisely what we thought was not allowed---its action on morphisms
+works by extracting concrete equivalences out of the finiteness proofs
+in the objects of $\BT$ and using them to construct the required
+permutation, just as in the construction of the anafunctor $\size : \B
+\to \P$ in \pref{sec:finiteness-sets}.  Indeed, we are not allowed to
+project finiteness evidence out from the propositional truncation when
 defining \emph{arbitrary} functors $\BT \to \PT$.  However, we are not
 interested in constructing \emph{any old} functor, but rather a very
 specific one, namely, an inverse to $\fin - : \PT \to \BT$---and the
