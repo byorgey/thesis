@@ -37,7 +37,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 
-\usepackage[]{showkeys}
+\usepackage[final]{showkeys}
 
 % \usepackage{breakurl}
 \usepackage{natbib}
