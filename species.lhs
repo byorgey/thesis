@@ -1946,11 +1946,11 @@ G)$-shape encodes this information implicitly, by the fact that the
 two shapes share the exact same set of labels.
 
 Practically speaking, this result tells us how to express an
-eliminator for $(F \times G)$-shapes. (Note that $H$ can be something
-trivial like ``the species which contains just a single \cons{Bool} value
-for any set of labels''.)  That is, to be able to eliminate $(F \times
-G)$-shapes, it suffices to be able to eliminate $F$- and $G$-shapes
-individually, with an extra permutation supplied as an argument.
+eliminator for $(F \times G)$-shapes.  That is, to be able to
+eliminate $(F \times G)$-shapes, it suffices to be able to eliminate
+$F$- and $G$-shapes individually, with an extra permutation supplied
+as an argument. \todo{To be treated more systematically in
+  \pref{sec:elim-species}}
 
 Unfortunately, \todo{doesn't tell us about representing functions as
   species, as one might naively expect}
@@ -4655,6 +4655,11 @@ dia =
 \end{figure}
 
 \todo{action of arithmetic derivative on egfs}
+
+\section{Eliminators for species}
+\label{sec:elim-species}
+
+\todo{Make an systematic list here of species eliminators.}
 
 \section{Examples}
 \label{sec:examples}

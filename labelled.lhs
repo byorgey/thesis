@@ -11,6 +11,8 @@
 \todo{Put stuff about unlabelled structures somewhere in here? Need to
   figure out what I even want to say about them.}
 
+\todo{Fix introduction, given that we have now already discussed
+  generating functions}
 The original motivation for the theory of species was not to give a
 unifying agebraic framework for studying combinatorial structures
 \latin{per se}.  Rather, the specific motivation was to provide new
@@ -1587,6 +1589,36 @@ dia = vcat' (with & sep .~ 5)
   \caption{Superimposing a tree and a list on shared data}
   \label{fig:tree-list-cp}
 \end{figure}
+
+\section{Eliminators for labelled structures}
+\label{sec:elim-labelled}
+
+\todo{Note that everything applies equally to $\fc \B \Set$ or to $\fc
+  \BT \ST$.}
+We have see how to \emph{construct} values of the type $\analytic F\
+A$ for various $F$; we now consider how to \emph{eliminate} them.  In
+particular, consider a function of type $\analytic F\ A \to B$, for
+some arbitrary set (type) $B$.  We compute as follows:
+\begin{sproof}
+  \stmt{\analytic F\ A \to B}
+  \reason{=}{definition}
+  \stmt{(\coend L F\ L \times (\iota\ L \to A)) \to B}
+  \reason{\iso}{$(- \to B)$ turns colimits into limits}
+  \stmt{\eend L (F\ L \times (\iota\ L \to A)) \to B}
+  \reason{\iso}{currying}
+  \stmt{\eend L F\ L \to ((\iota L \to A) \to B)}
+  \reason{\iso}{ends are natural transformations}
+  \stmt{\nt F ((\iota\ - \to A) \to B)}
+\end{sproof}
+
+Note that $((\iota\ - \to A) \to B)$ is a functor of type $\B \to
+\Set$, that is, a species, \todo{Add it as an example earlier?} which
+we will abbreviate $B^{A^-}$.  Hence the above derivation amounts to
+saying that a function $(\analytic F\ A \to B)$ eliminating an
+analytic functor is equivalent to a species morphism $F \to B^{A^-}$.
+We can therefore leverage the \todo{stuff from previous chapter}.
+
+\todo{go through some examples.}
 
 \section{Recursion and the implicit species theorem}
 \label{sec:recursion}
