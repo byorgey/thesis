@@ -448,3 +448,9 @@ drawPerm = hcat' (with & sep .~ 0.2) . map ((\l -> cyc' l 0.8) . map labT)
 
 smallHoleNode = circle labR # fc white # dashingL [0.05,0.05] 0
 holeNode = (circle 0.8 # fc white # dashingL [0.1,0.1] 0)
+
+fun x y = hcat' (with & sep .~ 1)
+  [ x # centerY
+  , arrow 3
+  , y # centerY
+  ]

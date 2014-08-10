@@ -4418,20 +4418,24 @@ generating functions are parameterized by a natural number which acts
 on the degree, higher derivatives of species are parameterized by
 a finite set which acts on the labels.
 
-\begin{defn}
+\begin{defn} \label{defn:higher-deriv}
   For a species $F$ and finite set $K$, the $K$-derivative of $F$ is
   defined by \[ \hder K F\ L = F\ (K \uplus L). \]
 \end{defn}
-Note that we recover the simple derivative of $F$ by setting $K =
-\singleton$, and that $\hder {\varnothing} F = F$.  An $\hder K F$-shape
-with labels $L$ is an $F$-shape populated by both $L$ \emph{and} $K$.
-The occurrences of labels from $K$ can be thought of as ``$K$-indexed
-holes'', since they do not contribute to the size: \eg an
-``$\hder K F$-shape of size $3$'' consists of an $F$-shape with three
-labels that ``count'' towards the size as well as one ``hole'' for
-each element of $K$. For example, \pref{fig:higher-derivative-example}
-illustrates a $\hder K \Bin$-shape of size $3$, where $K =
-\{a,b,c,d,e\}$.
+As should be clear from the above discussion, the exponential
+generating function corresponding to the $K$-derivative of $F$ is \[
+(\hder K F)(x) = F(x)^{(\size K)}. \] Note that we recover the simple
+derivative of $F$ by setting $K = \singleton$, and that $\hder
+{\varnothing} F = F$.
+
+An $\hder K F$-shape with labels $L$ is an $F$-shape populated by both
+$L$ \emph{and} $K$.  The occurrences of labels from $K$ can be thought
+of as ``$K$-indexed holes'', since they do not contribute to the size:
+\eg an ``$\hder K F$-shape of size $3$'' consists of an $F$-shape with
+three labels that ``count'' towards the size, as well as one ``hole''
+for each element of $K$. For example,
+\pref{fig:higher-derivative-example} illustrates a $\hder K
+\Bin$-shape of size $3$, where $K = \{a,b,c,d,e\}$.
 \begin{figure}
   \centering
   \begin{diagram}[width=150]
@@ -4468,7 +4472,11 @@ dia = derTree
   \label{fig:higher-derivative-example}
 \end{figure}
 
-\subsection{Internal Hom for partitional product}
+Higher derivatives generalize easily to any functor category $\fc \Lab
+\Str$ where $(\Lab, \oplus, I)$ is monoidal; we simply define \[ \hder
+K F\ L \defeq F\ (K \oplus L). \]
+
+\subsection{Internal Hom for partitional and arithmetic product}
 \label{sec:internal-Hom-pprod}
 
 As promised, we now return to considering the existence of an internal
@@ -4530,12 +4538,6 @@ ld = drawList' mloc2 l
 td = drawBinTree' (with & slHSep .~ 4 & slVSep .~ 3) (fmap mloc t)
 rd = drawList' (either mloc mloc2) r
 
-fun x y = hcat' (with & sep .~ 1)
-  [ x # centerY
-  , arrow 3
-  , y # centerY
-  ]
-
 lhs = fun (pair ld td) rd
 
 rhs = fun ld (enRect' 1 (fun td rd))
@@ -4565,11 +4567,10 @@ Leibniz-like law relating the two, \[ \hder L {(F \cdot G)} = \sum_{J
   \uplus K = L} \hder J F \cdot \hder K G. \] Setting $L = \singleton$
 yields the familiar product rule for differentiation, \[ (F \cdot G)'
 = F' \cdot G + F \cdot G', \] since there are only two possibilities
-for $J$ and $K$ given $J \uplus K = \singleton$.  This generalizes
-easily to functor categories other than $\fc \B \Set$: any functor
-category which supports a Day convolution product also has a
-corresponding notion of higher derivatives, and a corresponding
-Leibniz law.
+for $J$ and $K$ given $J \uplus K = \singleton$.  This generalizes to
+functor categories other than $\fc \B \Set$: any functor category
+which supports a Day convolution product also has a corresponding
+notion of higher derivatives, and a corresponding Leibniz law.
 
 This also suggests considering an alternate sort of higher derivative,
 based on the other monoidal structure on $\B$ (corresponding to
@@ -4578,13 +4579,82 @@ product rather than partitional product.  In particular, we define the
 \term{arithmetic derivative} by \[ \ader K F\ L = F\ (K \times L). \]
 We have \[ (\hom[\Spe]{F \aprod G}{H}) \iso (\hom[\Spe]{F}{(\ahom G
   H)}) \] where \[ \ahom G H \defeq (\hom[\Spe] {G}{\ader L H}). \]
-\todo{Describe some intuition here, with pictures.}
+This is a bit harder to visualize, but works on a similar principle to
+higher derivative for partitional product.  The problem, from a
+visualization point of view, is that no specific labels correspond to
+``holes''; an $\ader K F$-shape with labels taken from $L$ actually
+has $(\size K)(\size L)$ labels, with an entire $K$-indexed set of
+labels corresponding to each element of $L$.
+\pref{fig:internal-Hom-aprod-example} illustrates the adjunction: a
+natural, label-preserving map from an arithmetic product $F \aprod G$
+to some other species (here a cycle) corresponds to a nested map that
+takes each of $F$ and $G$ in turn and then produces a species on the
+product of their labels.
 
-\section{Generalized differentiation}
-\label{sec:generalized-differentiation}
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
 
-\todo{Write me.  Has to go later, after discussion of closed
-  structure.}
+grays  = map (\k -> blend k black white) [0, 0.2, 0.8, 1, 0.5]
+shapes = [circle 0.2, triangle 0.4, square 0.4]
+
+theTree = tree3 (\n -> mkLeaf (circle 0.4 # fc (grays !! n)) n)
+
+theList r = list2 (\n -> (mkLeaf ((shapes !! n) # rotateBy (-r) <> circle 0.4) n)) # rotateBy r
+
+grid = vcat' (with & sep .~ 0.5)
+  [ theTree # translateX 3.4
+  , hcat' (with & sep .~ 0.5)
+    [ theList (3/4)
+    , theGrid
+    ]
+  ]
+  where
+
+shapeGrid =
+  [ [ (shapes !! i) # fc (grays !! j)
+    || j <- [1,0,3,2,4]
+    ]
+  || i <- [0..2]
+  ]
+
+theGrid :: Diagram B R2
+theGrid = vcat . map hcat $ (map . map) (<> square 1) shapeGrid
+
+tree3 nd
+  = maybe mempty (renderTree nd (~~))
+  . uniqueXLayout 1 1
+  $ sampleBTree5
+
+list2 nd = hcat' (with & sep .~ 1 & catMethod .~ Distrib)
+  (map nd [0 :: Int .. 2])
+  <>
+  hrule 2 # alignL
+  where
+    aSty = with & arrowHead .~ noHead
+
+theCycle = cyc' (map (scale 2) $ concat shapeGrid) 5  -- $
+
+lhs = fun (grid # scale 2) theCycle
+
+rhs = fun (theList 0 # scale 2) (enRect' 1 (fun (theTree # scale 2) theCycle))
+
+dia =
+  vcat' (with & sep .~ 2)
+  [ lhs # centerX
+  , text "≅" # scale 2
+  , rhs # centerX
+  ]
+  # frame 1
+  # lwO 0.7
+  \end{diagram}
+  \caption{``Currying'' for arithmetic product of species}
+  \label{fig:internal-Hom-aprod-example}
+\end{figure}
+
+\todo{action of arithmetic derivative on egfs}
 
 \section{Examples}
 \label{sec:examples}
