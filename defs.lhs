@@ -294,8 +294,8 @@
 \newcommand{\Type}{\ensuremath{\mathcal{U}}}
 \newcommand{\FinType}{\ensuremath{\Type_{\mathrm{Fin}}}}
 \newcommand{\FinTypeT}{\ensuremath{\Type_{\ptrunc{\mathrm{Fin}}}}}
-\newcommand{\SetL}{\ensuremath{\SetT_{\mathrm{Fin}}}}
-\newcommand{\FinSetT}{\ensuremath{\SetT_{\ptrunc{\mathrm{Fin}}}}}
+\newcommand{\SetL}{\FinType}
+\newcommand{\FinSetT}{\FinTypeT}
 \newcommand{\sizesymb}{\#}
 \newcommand{\size}[1]{\ensuremath{\sizesymb#1}}
 

@@ -975,7 +975,7 @@ isomorphism. The following example will play an important role later.
 Another important example of an \hott{category} is an analogue to the
 usual category \Set of sets and functions.
 
-\begin{defn}[HoTT book, Examples 9.1.5 and 9.1.7]
+\begin{defn}[HoTT book, 9.1.5, 9.1.7]
   $\ST$ denotes the \hott{category} of sets, that is, the category
   whose objects are $0$-types, \ie sets, and whose morphisms are
   functions $A \to B$.
@@ -1558,14 +1558,38 @@ n$, with no mention of a specific bijection.  This is justified by the
 fact that, up to isomorphism, any bijection $A \bij \fin n$ is just as
 good as any other.
 
-This suggests a better encoding of finiteness in type theory, \[
-\FinTypeT \hdefeq (A : \Type) \times \ptrunc{(n : \N) \times (A \equiv
-  \Fin n)}, \] making use of propositional truncation to encode the
-fact that there \emph{merely exists} some size $n$ and an equivalence
-between $A$ and $\Fin n$, but without exposing a precise choice.  The
+This suggests a better encoding of finiteness in type theory.
+\begin{defn} \label{defn:FinSetT}
+  The type of finite sets is given by \[ \FinSetT \hdefeq (A : \Type)
+  \times \isFinite(A), \] where \[ \isFinite(A)
+  \hdefeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}. \]
+\end{defn}
+Here we make use of propositional truncation to encode the fact that
+there \emph{merely exists} some size $n$ and an equivalence between
+$A$ and $\Fin n$, but without exposing a precise choice.  The
 finiteness evidence is now irrelevant to paths in $\FinTypeT$, since
 there is always a path between any two elements of a truncated type.
-We also note the following:
+
+Note we will often abuse notation and write $A : \FinSetT$ instead of
+$(A,f) : \FinSetT$ where $f : \isFinite(A)$. We first record a few
+properties of $\FinSetT$.
+
+\begin{prop}
+  $\FinSetT$ is a $1$-type.
+\end{prop}
+\begin{proof}
+  We first show that if $(A,f) : \FinSetT$, then $A$ is a
+  set. Being a set is a mere proposition, so we may use the
+  equivalence $A \equiv \Fin n$ hidden inside $f$.  But $\Fin n$ is a
+  set, and equivalence preserves set-ness (\pref{lem:equiv-pres-set}),
+  so $A$ is a set as well.
+
+  Finally, since $\isFinite(A)$ is a mere proposition, paths between
+  $\FinSetT$ values are characterized by paths between their
+  underlying types. Since those types must be sets, \ie $0$-types,
+  $\FinSetT$ is consequently a $1$-type.
+\end{proof}
+
 \begin{prop} \label{prop:size-not-trunc}
   For any type $A$, \[ \ptrunc{(n : \N) \times (A \equiv \Fin n)} \equiv
   (n : \N) \times \ptrunc{A \equiv \Fin n}. \]
@@ -1606,30 +1630,11 @@ truncation does not really hide anything.
   \equiv \Fin n_2$, and thus $n_1 = n_2$ by \pref{lem:fin-iso-equal}.
 \end{proof}
 
-There is still one remaining problem, which is that $\FinTypeT$ is
-not a $1$-type, and hence $\tygrpd{-}$ does not apply. To solve this
-we may simply restrict to $0$-types $A$ (which is arguably a more
-faithful encoding of the situation in set theory anyway). This yields
-our final definition:
-
-\begin{defn} \label{defn:FinSetT}
-  The type of finite sets is given by \[ \FinSetT \hdefeq (A : \Type)
-  \times \isSet(A) \times \isFinite(A), \] where \[ \isFinite(A)
-  \hdefeq \ptrunc{(n : \N) \times (A \equiv \Fin n)}. \]
-\end{defn}
-We will often abuse notation and write $A : \FinSetT$ instead of
-$(A,s,f) : \FinSetT$ where $s : \isSet(A)$ and $f : \isFinite(A)$.
-Since $\isSet(A)$ and $\isFinite(A)$ are mere propositions, paths
-between $\FinSetT$ values are characterized by paths between their
-underlying types. Since those types must be sets, \ie $0$-types,
-$\FinSetT$ is consequently a $1$-type.
-
-We note in passing that although it is not possible to explicitly
-extract the equivalence with $\Fin n$ from a finite set, it can still
-be implicitly used to decide the equality of any two elements of a
-finite set.
+Although it is not possible to explicitly extract the equivalence with
+$\Fin n$ from a finite set, it can still be implicitly used for
+certain purposes, such as deciding the equality of any two elements.
 \begin{prop}
-  If $(A,s,f) : \FinSetT$, then $A$ has decidable equality.
+  If $(A,f) : \FinSetT$, then $A$ has decidable equality.
 \end{prop}
 \begin{proof}
 Let $x,y : A$; we must show $(x=y) + \lnot (x=y)$.  We first show that
@@ -1649,16 +1654,12 @@ are $\inl$ or both $\inr$, then $p = q$ again, since $x=y$ and $\lnot
 Since we are constructing a mere proposition, we may make use of the
 equivalence $A \equiv \Fin n$ contained in $f$.  In particular, $\Fin
 n$ has decidable equality, which we may transport along the
-equivalence (using univalence) to obtain decidable equality for $A$.
-That is, computationally speaking, given $x,y : A$, one may send them
+equivalence (using univalence for convenience, although its use here
+is not strictly necessary) to obtain decidable equality for $A$.  That
+is, computationally speaking, given $x,y : A$, one may send them
 across the equivalence to find their corresponding $\Fin n$ values,
 and then decide the equality of those $\Fin n$ values.
 \end{proof}
-
-\todo{Don't need $\isSet$ part of $\FinSetT$!  i.e. we don't need a
-  separate $\FinSetT$ definition at all, just $\FinTypeT$!  An
-  equivalence with $\Fin n$ (a set) already implies that $A$ must be a
-  set!!!  Arghhh!}
 
 Using $\FinSetT$, we can now finally define a HoTT counterpart to
 $\B$.
@@ -1688,23 +1689,14 @@ counterpart to $\B$, it yields a counterpart to $\L$, the category
 whose objects are finite sets \emph{equipped with linear orders}, and
 whose morphisms are \emph{order-preserving} bijections.
 
-For consistency, we first introduce a variant restricted to sets:
-\begin{defn}
-  The type of \emph{manifestly finite} sets is given by \[ \SetL
-  \hdefeq (A : \Type) \times \isSet(A) \times (n : \N) \times (A
-  \equiv \Fin n). \]
-\end{defn}
-Note that the definition of $\SetL$ is identical to that of
-$\FinSetT$, except for the absence of propositional truncation around
-the evidence of finiteness.
-
-The claim is that manifestly finite sets are the same as linearly
-ordered finite sets.  In one direction, the evident linear order on
-$\Fin n$ induces a corresponding linear order on $A$ via transport
-through an equivalence $A \equiv \Fin n$. Conversely, given a linear
-order on a \emph{finite} set $A$, we may construct an equivalence
-with $\Fin n$ by matching the smallest element to $0$, the second
-smallest to $1$, and so on.  More formally:
+For ease of reference, we will call $\FinType$ the type of
+\term{manifestly finite} sets.  The claim is that manifestly finite
+sets are the same as linearly ordered finite sets.  In one direction,
+the evident linear order on $\Fin n$ induces a corresponding linear
+order on $A$ via transport through the equivalence $A \equiv \Fin
+n$. Conversely, given a linear order on a \emph{finite} set $A$, we
+may construct an equivalence with $\Fin n$ by matching the smallest
+element to $0$, the second smallest to $1$, and so on.  More formally:
 
 \begin{prop}
   We have the equivalence
@@ -1735,12 +1727,12 @@ smallest to $1$, and so on.  More formally:
 
 Paths bewteen elements of $\SetL$ are thus necessarily
 order-preserving, since they correspond to paths between elements of
-$(A : \FinSetT) \times \linOrd(A)$. This constitutes an alternate
-proof of the fact that there is at most one path between any two
-elements of $\SetL$.  We can now define a counterpart to $\L$:
+$(A : \FinSetT) \times \linOrd(A)$. (Note that this constitutes an
+alternate proof of the fact that there is at most one path between any
+two elements of $\SetL$.)  We can now define a counterpart to $\L$:
 
 \begin{defn}
-  $\LT$ denotes \[ \LT \hdefeq \tygrpd{\SetL}, \] the groupoid of
+  Let $\LT$ denote \[ \LT \hdefeq \tygrpd{\SetL}, \] the groupoid of
   manifestly finite---\ie linearly ordered---sets, and
   (order-preserving) paths between them.
 \end{defn}
@@ -1754,11 +1746,9 @@ defining inverse functors $\fin - : \PT \to \BT$ and $\size : \BT \to
   essential idea is to send the natural number $n$ to the canonical
   finite set $\Fin n$, and permutations to paths.
   \begin{itemize}
-  \item On objects, $\fin n \hdefeq (\Fin n, s, \ptruncI{(n, \id)})$,
-    where $s$ is a proof that $\Fin n$ is a set\footnote{Again,
-      producing such a proof is nontrivial but standard; see the
-      discussion in \pref{sec:n-types}.}, and $\id : \Fin n \equiv
-    \Fin n$ witnesses the finiteness of $\Fin n$.
+  \item On objects, $\fin n \hdefeq (\Fin n, \ptruncI{(n, \id)})$,
+    where $\id : \Fin n \equiv \Fin n$ witnesses the finiteness of
+    $\Fin n$.
   \item Recall that a morphism $\psi : \hom[\PT] m n$ is an
     equivalence $\psi : \Fin m \equiv \Fin n$. Thus $\ua\ \psi : \Fin
     m = \Fin n$, and we define $\fin \psi \hdefeq u\ (\ua\ \psi) :
@@ -1843,7 +1833,7 @@ Now, what about $\fin - : \BT \to \PT$?  We have the following:
   $\fin -$ is essentially surjective.
 \end{prop}
 \begin{proof}
-  Given $(S,s,f) : \BT$, we must show that there merely exists some $n
+  Given $(S,f) : \BT$, we must show that there merely exists some $n
   : \PT$ such that $\fin n \iso S$---but this is precisely the
   content of the $\isFinite$ proof $f$.
 \end{proof}
