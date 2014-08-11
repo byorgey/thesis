@@ -4718,6 +4718,20 @@ generating functions.
 
 \todo{Make an systematic list here of species eliminators.}
 
+\begin{itemize}
+\item $\Zero$
+\item $\One$
+\item $\X$
+\item sum
+\item Cartesian product
+\item partitional product
+\item arithmetic product
+\item composition
+\end{itemize}
+
+\todo{talk about molecular and atomic species.}
+\todo{eliminator for atomic species, with quotienting.  How to derive formally?}
+
 \section{Examples}
 \label{sec:examples}
 
