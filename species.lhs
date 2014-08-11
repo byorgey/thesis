@@ -3649,8 +3649,9 @@ On the other hand, in general, \[ \unl{(F \comp G)}(x) \neq \unl
 F(\unl G(x)). \] To compute ogfs for composed species, one may turn to
 \term{cycle index series}, which can be seen as a generalization of
 both egfs and ogfs, and which retain more information than either; see
-\citet[\Sect 1.2, \Sect 1.4]{bll} for details. \todo{Give some
-  intuition?}
+\citet[\Sect 1.2, \Sect 1.4]{bll} for details. \later{Give some
+  intuition? Or maybe just re-figure out the intuition and include it
+  in future work about generating functions.}
 
 \subsection{Generalized composition}
 \label{sec:generalized-composition}

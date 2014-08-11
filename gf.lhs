@@ -9,6 +9,9 @@
   flesh this out and publish it at some point, whether or not it goes
   in my thesis.}
 
+\bay{Give intuitive explanation of why composition is not homomorphic
+  for ogfs, via generation algorithms?}
+
 \setcounter{section}{-1}
 \section{Introduction and motivation}
 \label{sec:motivation}
