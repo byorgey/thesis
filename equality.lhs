@@ -1666,7 +1666,7 @@ $\B$.
 
 \begin{defn}
   $\BT$ is defined by \[ \BT \hdefeq \tygrpd{\FinSetT}, \] the
-  groupoid of cardinal-finite sets and paths bewteen them.
+  groupoid of cardinal-finite sets and paths between them.
 \end{defn}
 
 \begin{rem}
@@ -1723,7 +1723,7 @@ element to $0$, the second smallest to $1$, and so on.  More formally:
   remaining elements.
 \end{proof}
 
-Paths bewteen elements of $\SetL$ are thus necessarily
+Paths between elements of $\SetL$ are thus necessarily
 order-preserving, since they correspond to paths between elements of
 $(A : \FinSetT) \times \linOrd(A)$. (Note that this constitutes an
 alternate proof of the fact that there is at most one path between any
