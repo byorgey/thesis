@@ -1008,7 +1008,7 @@ species which is \emph{weaker} (\ie coarser) than
 isomorphism/equality, known as \term{equipotence}.
 
 \begin{defn}
-  An \term{equipotence} bewteen species $F$ and $G$, denoted $F
+  An \term{equipotence} between species $F$ and $G$, denoted $F
   \equipot G$,\footnote{In the species literature, equipotence is
     usually denoted $F \jeq G$, but we are already using that symbol
     to denote judgmental equality.} is defined as an ``unnatural''

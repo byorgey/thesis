@@ -1010,7 +1010,7 @@ $T$, denoted $\coend{C} T(C,C)$,\footnote{Traditionally, coends are
   helpful for building intuition. Moreover, using the traditional
   notation, it is hard to keep ends and coends straight.  On the other
   hand, as I will show, $\coend C T(C,C)$ and $\eend C T(C,C)$ are
-  deeply appropriate notations for coends and ends, repsectively; they
+  deeply appropriate notations for coends and ends, respectively; they
   are easier to keep straight; and they help computer scientists and
   logicians build on existing intuition.}  is an object of $\D$ with
 morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$ for every $X$, such
