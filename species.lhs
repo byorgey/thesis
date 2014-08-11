@@ -1919,7 +1919,7 @@ By a dual argument to the one given in \pref{sec:coends-hott}, ends in
 $\ST$ over the groupoid $\PT$ are given by $\Pi$-types, \ie universal
 quantification; hence, we have
 \begin{align*}
-(H^G)_n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H\ n)^{G\ n} \\
+(H^G)\ n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H\ n)^{G\ n} \\
        &= (m : \N) \to (\Fin m \equiv \Fin n) \to G\ n \to H\ n \\
        &\equiv (\Fin n \equiv \Fin n) \to G\ n \to H\ n
 \end{align*}
@@ -1949,11 +1949,15 @@ Practically speaking, this result tells us how to express an
 eliminator for $(F \times G)$-shapes.  That is, to be able to
 eliminate $(F \times G)$-shapes, it suffices to be able to eliminate
 $F$- and $G$-shapes individually, with an extra permutation supplied
-as an argument. \todo{To be treated more systematically in
-  \pref{sec:elim-species}}
+as an argument. Eliminators for species shapes are treated more
+generally and systematically in \pref{sec:elim-species}.
 
-Unfortunately, \todo{doesn't tell us about representing functions as
-  species, as one might naively expect}
+Note that, unfortunately, the fact that $\Spe$ is Cartesian closed
+doesn't have anything to say about representing functions as species,
+as one might na\"ively expect.  However, it does allow us to
+internalize \emph{species morphisms} as species. \later{Explain the
+  sense in which this is true? See Aguiar \& Mahajan.  Although they
+  don't actually make it very clear.}
 
 \subsection{Lifting monoids}
 \label{sec:lifting-monoids}
@@ -2594,11 +2598,16 @@ dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
   $(\Spe, \cdot, \One)$ is monoidal closed.
 \end{prop}
 
-Verification that it is monoidal \todo{is not hard and is left to the
-  reader??}.  A discussion of the internal Hom functor corresponding
-to partitional product must be postponed to
-\pref{sec:internal-Hom-pprod}, after discussing species
-differentiation.
+\begin{proof}
+  We constructed $\One$ so as to be an identity for partitional
+  product.  Associativity of partitional product is not hard to prove,
+  and is left as an exercise for the reader.
+
+  A discussion of the internal Hom functor corresponding to
+  partitional product must be postponed to
+  \pref{sec:internal-Hom-pprod}, after discussing species
+  differentiation.
+\end{proof}
 
 \subsection{Arithmetic product}
 \label{sec:arithmetic-product}
@@ -3036,8 +3045,8 @@ very particular sort of monoidal structure on the target category.
 
 This operation is associative, and has as a unit $j(I)$ where $I$ is
 the unit for $\oplus$ and $j : \Lab \to \fc {\Lab^{\text{op}}} \Str$
-is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. \todo{For proof,
-  see ???}
+is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. See
+\citet{kelly2005operads} for proof.
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
@@ -3342,25 +3351,6 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
   otherwise, so this is equivalent to the species $\X$, as expected.
 \end{ex}
 
-% \begin{ex}
-%   \todo{Work out details here.  Do arithmetic product but in
-%     $\fc \P \Set$.}  Let's examine this in detail in the case of
-%   $\fc \P \Set$.  The monoidal structure on $\P$ is defined on objects
-%   as $m \otimes n = mn$.  On morphisms, given $f : \fin m \bij \fin m$
-%   and $g : \fin n \bij \fin n$, we have $f \otimes g : \fin{mn} \bij
-%   \fin{mn}$ defined by \todo{finish}.
-
-%   Instantiating the definition of Day convolution yields
-%   \begin{align*}
-%     (F \boxtimes G)\ n &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times
-%     \P(n, n_Fn_G) \\
-%     &= \coend{n_F,n_G} F\ n_F \times G\ n_G \times (\fin n \bij \fin
-%     {n_F n_G}) \\
-%     &= ? \\
-%     &= \biguplus_{d \mid n} F\ d \times G\ (n/d)
-%   \end{align*}
-% \end{ex}
-
 \begin{ex}
   We now verify that $\BT$ and $\ST$ have the right properties, so
   that partitional and arithmetic product are well-defined on
@@ -3408,9 +3398,6 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
 
 \section{Composition}
 \label{sec:composition}
-
-\todo{Use example of Par = $\Bag \comp \Bag_+$, then $T \times Par$
-  (from proposal)}
 
 We have already seen that arithmetic product can be thought of as a
 restricted sort of composition, where an $F$-structure contains
@@ -3504,9 +3491,12 @@ an $F$-shape.
 
 \begin{ex}
   As an example, we may define the species $\Par$ of \term{set
-    partitions}, illustrated in \pref{fig:partitions},
-  by \[ \Par = \Bag \comp \Bag_+.\]  That is, a set partition is a set
-  of \emph{non-empty} sets.
+    partitions}, illustrated in \pref{fig:partitions}, by \[ \Par =
+  \Bag \comp \Bag_+.\] That is, a set partition is a set of
+  \emph{non-empty} sets. Similarly, the species $\Perm$ of
+  permutations is given by $\Perm = \Bag \comp \Cyc$, a set of
+  \emph{cycles} (note that by convention, empty cycles are not
+  allowed).
   \begin{figure}
     \centering
     \begin{diagram}[width=400]
@@ -3541,9 +3531,48 @@ partStructures
     %$
   \end{figure}
 
-Similarly, the species $\Perm$ of permutations is given by $\Perm = \Bag \comp
-\Cyc$, a set of \emph{cycles} (note that cycles are non-empty by definition).
+Given the species $\Par$, we may define the species $\Bin \times \Par$
+of \term{partitioned trees}.  Structures of this species are labeled
+binary tree shapes with a superimposed partitioning of the labels (as
+illustrated in \pref{fig:partitioned-tree}), and can be used to model
+trees containing data elements with decidable equality; the partition
+indicates equivalence classes of elements.
 
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+t :: BTree Int
+t = BNode 4 (BNode 2 Empty (leaf 5)) (BNode 1 (BNode 0 Empty (leaf 3)) (leaf 6))
+
+dt = drawBinTree' (with & slHSep .~ 4 & slVSep .~ 3)
+
+partitionedTree
+  = dt (fmap (\n -> mloc n # named n) t)
+  # applyAll (map drawPart [[4],[2],[5,1],[0,6],[3]])
+
+drawPart :: [Int] -> Diagram B R2 -> Diagram B R2
+drawPart [n] = withName n $ \sub -> atop (circle 1.3 # moveTo (location sub) # partStyle)
+drawPart [n1,n2]
+  = withNames [n1,n2] $ \[s1,s2] ->
+      let p = location s1
+          q = location s2
+          c = alerp p q 0.5
+          x = distance p q + 3
+          r = direction (p .-. q)
+      in  beneath (circle 1.5 # scaleToX x # rotate r # moveTo c
+                     # partStyle)
+
+partStyle x = x # lw thick # dashingG [0.1,0.1] 0 # lc (colors !! 2)
+
+dia = partitionedTree
+    # frame 0.5 # lwO 0.7
+  \end{diagram}
+  \caption{A $(\Bin \times \Par)$-shape}
+  \label{fig:partitioned-tree}
+\end{figure}
 \end{ex}
 
 \begin{ex}
