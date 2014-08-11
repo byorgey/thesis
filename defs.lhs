@@ -426,6 +426,8 @@
 \newcommand{\Perm}{\Sp{S}}
 \newcommand{\Bin}{\Sp{B}}
 \newcommand{\Der}{\Sp{Der}}
+\newcommand{\Arbor}{\mcal{A}}
+\newcommand{\arbor}{\mathfrak{a}}
 
 \newcommand{\Zero}{\msf{0}}
 \newcommand{\One}{\msf{1}}

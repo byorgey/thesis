@@ -27,7 +27,8 @@ definition, \pref{sec:iso-equipotence} presents two equivalence
 relations on species, \term{isomorphism} and \term{equipotence}, and
 in particular sheds some new light on equipotence via the encoding of
 species in HoTT.  \todo{finish this introduction, once I have a better
-  idea of how the rest of the chapter will actually shake out.}
+  idea of how the rest of the chapter will actually shake out.  Talk
+  about generating functions, internal homs.}
 
 \section{Intuition and examples}
 \label{sec:species-intuition}
@@ -636,16 +637,19 @@ which amounts to the same thing.
 
   Given this shift in emphasis, one might think it more natural to
   define a set of labelled shapes along with a function mapping shapes
-  to the set of labels contained in them (indeed, down this path lies
-  the notion of \term{containers} \citep{abbott_categories_2003,
-    abbott_quotient, alti:cont-tcs, alti:lics09}) \todo{cite stuff
-    types?}.  Species can be seen as roughly dual to these
+  to the set of labels contained in them (indeed, down this path lie
+  the notions of \term{containers} \citep{abbott_categories_2003,
+    abbott_quotient, alti:cont-tcs, alti:lics09} and \term{stuff
+    types} \citep{baez2000finite, Byrne2005}).  Species can be seen as roughly dual to these
   shapes-to-labels mappings, giving the \term{fiber} of each label
   set.  This is parallel to the equivalence between the functor
   category $\Set^\N$ and the slice category $\Set/\N$~(see the
-  discussion under functor categories in \pref{sec:ct-fundamentals}),
-  though the details are more subtle since $\B$ is not discrete.
-  \later{Both formulations have their strengths and weaknesses; \dots}
+  discussion under functor categories in \pref{sec:ct-fundamentals}).
+  However, since $\B$ is not discrete, there is not an equivalence
+  between $\Set^\B$ and $\Set/\B$; this seems to account for the fact
+  that species and containers (and, more generally, operads and stuff
+  types/clubs \citep[p. 2]{kelly2005operads}) seem so closely related
+  but without a simply expressible relationship.
 \end{rem}
 
 \begin{rem}
@@ -3409,6 +3413,9 @@ given set of labels $L$, we first \emph{partition} $L$ into some
 number of nonempty subsets; create a $G$-shape over each subset; then
 create an $F$-shape over the resulting set of $G$-shapes.
 
+\subsection{Definition and examples}
+\label{sec:comp-defn-and-examples}
+
 Formally,
 \[ (F \comp G)\ L = \sum_{\pi \partition L} F\ \pi \times \prod_{p \in
   \pi} G\ p. \] \pref{fig:composition} shows an abstract
@@ -3643,15 +3650,21 @@ dia = hcat' (with & sep .~ 2) (map (alignB . drawPShape . pShape) [0..3])
 As for generating functions, the mapping from species to egfs is
 indeed homomorphic with respect to composition: \[ (F \comp G)(x) =
 F(G(x)). \]  A direct combinatorial proof can be given, making use of
-\emph{Fa{\`a} di Bruno's formula}.
+\emph{Fa{\`a} di Bruno's formula}~\citep{johnson2002curious}.
 
 On the other hand, in general, \[ \unl{(F \comp G)}(x) \neq \unl
-F(\unl G(x)). \] To compute ogfs for composed species, one may turn to
-\term{cycle index series}, which can be seen as a generalization of
-both egfs and ogfs, and which retain more information than either; see
-\citet[\Sect 1.2, \Sect 1.4]{bll} for details. \later{Give some
-  intuition? Or maybe just re-figure out the intuition and include it
-  in future work about generating functions.}
+F(\unl G(x)). \] \citet[Exercise 1.4.3]{bll} pose the specific
+counterexample of $\unl \Perm(x) \neq \unl \Bag(\unl \Cyc(x))$, which
+is not hard to show (hint: $\unl \Perm(x) = \prod_{k \geq 1}
+\frac{1}{1 - x^k}$ and $\unl \Cyc(x) = x + x^2 + x^3 + \dots =
+\frac{x}{1-x}$).  A more intuitive explanation of the failure of ogfs
+to be homomorphic with respect to composition---along with a
+characterization of the situations when homomorphism does hold---is
+left to future work.  In any case, to compute ogfs for composed
+species, one may turn to \term{cycle index series}, which can be seen
+as a generalization of both egfs and ogfs, and which retain more
+information than either; see \citet[\Sect 1.2, \Sect 1.4]{bll} for
+details.
 
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
@@ -3815,16 +3828,99 @@ identical to the definition given in \eqref{eq:comp-street}, except
 that $G^{\size K}$ has been replaced by $G^K$, which explicitly
 records a mapping from elements of $K$ to $G$-shapes.
 
-This explicit construction relies on \todo{what? Seems too
-  complicated, relies on lots of specific stuff about B and Set.  And
-  we don't need it in HoTT.}
+This explicit construction relies on a number of specific properties
+of $\B$ and $\Set$; it is unclear how it should generalize to other
+functor categories. Fortunately, in the particular case of $\fc \BT
+\ST$, in HoTT, this more complex construction is not necessary. The
+anafunctor $G^- : \B \to \Spe$ discussed earlier corresponds in HoTT
+to a regular functor $G^- : \BT \to (\fc \BT \ST)$: in a symmetric
+monoidal category, the $(\size K)$-ary tensor product of $G$ is unique
+up to isomorphism, which in an \hott{category} corresponds to actual
+equality.
 
-\todo{Discuss in HoTT. Discuss requirements in general.}
+More generally, if we focus on the high-level definition \[ (F \comp
+G)\ L = \coend K F\ K \times G^K\ L, \] leaving the definition of
+$G^K$ abstract, we can enumerate the properties required of a general
+functor category $\fc \Lab \Str$ to accommodate it: for starters,
+$\Str$ must have coends over $\Lab$, and $(\Str, \times)$ must be
+monoidal.  We can also say that, whatever the definition of $G^K$, it
+will involve partitional product---so we must add in all the
+requirements for that operation, enumerated in
+\pref{sec:day-convolution}.  In fact, this already covers the
+requirements of $\Str$ having coends and a monoid $\times$, so any
+functor category $\fc \Lab \Str$ which supports partitional product
+already supports composition as well.
 
-\todo{Prove it is associative?}
-\todo{Distributes over sum and product?}
+For a formal proof that composition is associative, see
+\citet[pp. 5--6]{kelly2005operads}, although some reflection on the
+intuitive idea of composition should be enough to convince: for
+example, a tree which contains cycles-of-lists is the same thing as a
+tree-of-cycles containing lists.
 
-\todo{internal Homs for composition?  At least cite?}
+Unlike the other monoidal structures on $\Spe$ (sum and Cartesian,
+arithmetic, and partitional product), composition is not symmetric.
+For example, consider that $(\Cyc \comp \List)\ 3 \not \iso (\List
+\comp \Cyc)\ 3$ \todo{picture --- needs new cycle creation function.
+  Partial attempt saved in CompNotSymmTemp.hs}
+
+\begin{prop}
+  $(\Spe, \comp, \X)$ is monoidal closed.
+\end{prop}
+\begin{proof}
+  We have already seen that $\comp$ is associative, and have argued
+  intuitively that $\X$ is an identity for composition. Note that since
+  composition is not symmetric, separate proofs are needed for $\X
+  \comp F \iso F$ and $F \comp \X \iso F$; for formal proofs see,
+  again, \citet{kelly2005operads}.  For the closed structure of
+  $(\Spe, \comp, \X)$, see \pref{sec:internal-Hom-comp}.
+\end{proof}
+
+Like associativity, the right-distributivity laws
+\begin{gather*}
+  (F + G) \comp H \iso (F \comp H) + (G \comp H) \\
+  (F \cdot G) \comp H \iso (F \comp H) \cdot (G \comp H)
+\end{gather*}
+are likewise easy to grasp on an intuitive level.  Their formal proofs
+are not too difficult; the second specifically requires an isomorphism
+$G^{K_1+K_2} \iso G^{K_1} \cdot G^{K_2}$, which ought to hold no
+matter what the definition of $G^K$.  \later{Include these proofs?}
+The reader may also enjoy discovering why the corresponding
+left-distributivity laws are false (although they do correspond to
+species \emph{morphisms} rather than isomorphisms).
+
+
+\subsection{Internal Hom for composition}
+\label{sec:internal-Hom-comp}
+
+We have seen that $(\Spe, \comp, \X)$ is monoidal; in this section we
+show that it is monoidal closed. Indeed, we can compute as follows
+(essentially the same computation also appears in
+\citet[p. 7]{kelly2005operads}, though in a more general form):
+
+\begin{sproof}
+  \stmt{\hom[\Spe]{F \comp G}{H}}
+  \reason{\iso}{natural transformations are ends}
+  \stmt{\eend L \hom[\Set] {(F \comp G)\ L}{H\ L}}
+  \reason{\iso}{definition of $\comp$}
+  \stmt{\eend L \hom[\Set]{(\coend K F\ K \times G^K\ L)}{H\ L}}
+  \reason{\iso}{$(\hom[\Set] - X)$ turns colimits into limits}
+  \stmt{\eend L \eend K \hom[\Set] {(F\ K \times G^K\ L)}{H\ L}}
+  \reason{\iso}{currying}
+  \stmt{\eend L \eend K \hom[\Set] {F\ K}{(\hom[\Set] {G^K\ L}{H\
+        L})}}
+  \reason{\iso}{$(\hom[\Set] X -)$ preserves limits}
+  \stmt{\eend K \hom[\Set] {F\ K}{\eend L (\hom[\Set] {G^K\ L}{H\
+        L})}}
+  \reason{\iso}{natural transformations are ends}
+  \stmt{\eend K \hom[\Set] {F\ K}{(\hom[\Spe] {G^K}{H})}}
+  \reason{\iso}{natural transformations are ends}
+  \stmt{\hom[\Spe] F {(\hom[\Spe] {G^-}{H})}}
+\end{sproof}
+
+Thus we have the adjunction \[ (\hom[\Spe]{F \comp G}{H}) \iso
+(\hom[\Spe]{F}{(\hom[\comp] G H)}), \] where \[ (\hom[\comp] G H) \defeq
+(\hom[\Spe]{G^-}{H}) \] is the species whose $K$-labelled shapes are
+species morphisms from $G^K$ to $H$. \todo{intuition, picture?}
 
 \section{Functor composition}
 \label{sec:functor-composition}
@@ -3945,13 +4041,13 @@ example, taking the derivative twice results in two \emph{different,
 purposes.
 
 \begin{ex}
-  Denote by $\mathfrak{a}$ the species of \emph{unrooted} trees, \ie
-  trees in the pure graph-theoretic sense.  Also let $\mcal{A} = \X
-  \cdot (\Bag \comp \mcal{A})$ denote the species of rooted trees
+  Denote by $\arbor$ the species of \emph{unrooted} trees, \ie
+  trees in the pure graph-theoretic sense.  Also let $\Arbor = \X
+  \cdot (\Bag \comp \Arbor)$ denote the species of rooted trees
   (where each node can have any number of children, which are
   unordered).  It is difficult to get a direct algebraic handle on
-  $\mathfrak{a}$; however, we have the relation \[ \mathfrak{a}' =
-  \Bag \comp \mcal{A}, \] since an unrooted tree with a hole in it is
+  $\arbor$; however, we have the relation \[ \arbor' =
+  \Bag \comp \Arbor, \] since an unrooted tree with a hole in it is
   equivalent to the set of all the subtrees connected to the hole
   (\pref{fig:der-tree-pointed-trees}).  Note that the subtrees
   connected to the hole become \emph{rooted} trees; their root is
@@ -3960,7 +4056,7 @@ purposes.
   \begin{figure}
     \centering
     \begin{diagram}[width=350]
-import           SpeciesDiagrams                   (holeNode, mloc)
+import           SpeciesDiagrams                   (holeNode, mloc, mlocColor)
 
 import           Data.Graph.Inductive.Graph        (delNode, mkGraph)
 import           Data.Graph.Inductive.PatriciaTree
@@ -3990,7 +4086,7 @@ trees = subForest (getTree 13)
 getTree r = Node r (map getTree (children r))
 
 dn 13 = holeNode # scale 1.5
-dn n  = mloc n # scale 1.5
+dn n  = mloc' n # scale 1.5
 
 de n1 n2
   || n1 == n2 = id
@@ -4003,8 +4099,11 @@ rTrees = hcat' (with & sep .~ 2) (map dTree trees)
 
 dTree = renderTree drn (~~) . symmLayout' (with & slHSep .~ 4 & slVSep .~ 3)
   where
-    drn n || n `elem` roots = mloc n <> circle (width (mloc n :: D R2) / 2 + 0.2) # fc white
-          || otherwise      = mloc n
+    drn n || n `elem` roots = mloc' n <> circle (width (mloc n :: D R2) / 2 + 0.2) # fc white
+          || otherwise      = mloc' n
+
+mloc' n || n < 10    = mloc n
+        || otherwise = text (show n) # scale 0.8 <> circle 0.8 # fc mlocColor
 
 dia =
   hcat' (with & sep .~ 3)
@@ -4014,7 +4113,7 @@ dia =
   ]
   # frame 0.5 # lwO 0.7
     \end{diagram}
-    \caption{$\mathfrak{a}' = \Bag \comp \mcal{A}$}
+    \caption{$\arbor' = \Bag \comp \Arbor$}
     \label{fig:der-tree-pointed-trees}
   \end{figure}
 \end{ex}
