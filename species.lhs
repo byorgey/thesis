@@ -3888,7 +3888,6 @@ The reader may also enjoy discovering why the corresponding
 left-distributivity laws are false (although they do correspond to
 species \emph{morphisms} rather than isomorphisms).
 
-
 \subsection{Internal Hom for composition}
 \label{sec:internal-Hom-comp}
 
@@ -3918,9 +3917,67 @@ show that it is monoidal closed. Indeed, we can compute as follows
 \end{sproof}
 
 Thus we have the adjunction \[ (\hom[\Spe]{F \comp G}{H}) \iso
-(\hom[\Spe]{F}{(\hom[\comp] G H)}), \] where \[ (\hom[\comp] G H) \defeq
-(\hom[\Spe]{G^-}{H}) \] is the species whose $K$-labelled shapes are
-species morphisms from $G^K$ to $H$. \todo{intuition, picture?}
+(\hom[\Spe]{F}{(\hom[\comp] G H)}), \] where \[ (\hom[\comp] G H)
+\defeq (\hom[\Spe]{G^-}{H}) \] is the species whose $K$-labelled
+shapes are species morphisms from $G^K$ to
+$H$. \pref{fig:internal-Hom-comp-example} illustrates an example: a
+species morphism from a binary tree of cycles to a rose tree is
+equivalent to a species morphism that takes the underlying tree shape
+on the label set $K$ and produces another species morphism, which
+itself expects a $K$-indexed partitional product of cycles, and
+produces a rose tree.  One can see how the composition is
+``decomposed'' into its constituent parts, with a new label type $K$
+introduced to mediate the relationship between them.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=400]
+import           Data.Tree
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+import           Structures                     (pair)
+
+mloc2 c = text [c] <> circle 0.8 # fc (colors !! 2)
+enc = fc white . enclose 0.5 0.5
+
+tData = BNode 2 (leaf 0) (BNode 1 (leaf 3) Empty)
+
+cycs = map (flip cyc' 0.8 . map (scale 0.4 . fc black . mloc))
+  [[1,3,7], [0], [2,4], [5,9,6,8]]
+
+t = scale 0.5 . drawBinTree' (with & slHSep .~ 4 & slVSep .~ 3) . fmap (mloc2 . ("abcd"!!)) $ tData
+toc = drawBinTree' (with & slHSep .~ 6 & slVSep .~ 4) (fmap (enc . (cycs!!)) tData)
+
+r :: Tree Int
+r = Node 7 [Node 9 [rleaf 4, rleaf 3, rleaf 2], rleaf 0, Node 1 [Node 5 [rleaf 8], rleaf 6]]
+  where rleaf n = Node n []
+
+rtree = scale 0.5 . renderTree mloc (~~) . symmLayout' (with & slHSep .~ 3 & slVSep .~ 4)  $ r
+
+kcycs = hcat' (with & sep .~ 1) (map mkCyc [0..3])
+  where
+    mkCyc i = vcat' (with & sep .~ 0.2)
+      [ mloc2 ("abcd" !! i) # scale 0.5
+      , vrule 1
+      , cycs !! i
+      ]
+
+lhs = fun toc rtree
+
+rhs = fun t (enRect' 1 (fun kcycs rtree))
+
+dia =
+  vcat' (with & sep .~ 2)
+  [ lhs # centerX
+  , text "≅" # scale 2
+  , rhs # centerX
+  ]
+  # frame 1
+  # lwO 0.7
+  \end{diagram}
+  \caption{Internal Hom for composition}
+  \label{fig:internal-Hom-comp-example}
+\end{figure}
 
 \section{Functor composition}
 \label{sec:functor-composition}
