@@ -3884,13 +3884,22 @@ functional programmers through the work of \citet{Huet_zipper},
 \citet{abbott_deriv}: the derivative of a type is its type of
 ``one-hole contexts''.  For example, \pref{fig:derivative-example}
 shows a $\Bin'$-shape, where $\Bin$ is the species of rooted binary
-trees.  There is a ``hole'' in a place where a label would normally
-be.
+trees; there is a ``hole'' in a place where a label would normally be.
 
-This section explores \todo{finish: basic differentiation, higher
-  derivatives, pointing}
+This section begins by presenting the formal definition of derivative
+for species, along with some examples (\pref{sec:basic-diff}).  Some
+related notions such as up and down operators
+(\pref{sec:up-down-operators}) and pointing (\pref{sec:pointing})
+follow.  The basic notion of differentiation does not generalize
+nicely to other functor categories, but this is rectified by a more
+general notion of higher derivatives, of which the usual notion of
+derivative is a special case (\pref{sec:higher-derivatives}).
+Finally, this notion of higher derivatives paves the way for
+discussing the internal Hom functors for partitional and arithmetic
+product (\pref{sec:internal-Hom-pprod-aprod}).
 
 \subsection{Differentiation in $\fc \B \Set$}
+\label{sec:basic-diff}
 
 Formally, we create a ``hole'' by adjoining a new distinguished
 label to the existing set of labels:
@@ -4093,20 +4102,27 @@ since by definition the number of $(F')$-shapes of size $n$ is indeed
 equal to $f_{n+1}$, the number of $F$-shapes on $n+1$ labels.
 
 Unfortunately, once again \[ \unl{(F')}(x) \neq \unl F'(x) \] in
-general, \todo{Explain why? Intuition?} though a corresponding
+general, \later{Explain why? Intuition?} though a corresponding
 equation does hold for cycle index series, which may be used to
 compute the ogf for a species defined via differentiation.
 
 \subsection{Up and down operators}
 \label{sec:up-down-operators}
 
-\citet[\Sect 8.12]{aguiar2010monoidal} define an \term{up operator} on
-a species $F$ as a species morphism $u : F \to F'$.  Since a species
-morphism is a natural, label-preserving map, an up operator must
-essentially ``add'' an extra ``hole'' somewhere in a shape. (Of course
-it can also rearrange existing labels, as long as it does so in a
-natural way that does not depend on the identity of the labels at
-all.)
+\citet[\Sect 8.12]{aguiar2010monoidal} define \term{up} and \term{down operators} on
+species; although the import or usefulness of up and down operators is
+not yet clear to me, my instinct tells me that they will be, so I
+include a brief disucssion of them here.
+
+\begin{defn}
+  An \term{up operator} on a species $F$ is a species morphism $u : F
+  \to F'$.
+\end{defn}
+Since a species morphism is a natural, label-preserving map, an up
+operator must essentially ``add'' an extra ``hole'' somewhere in a
+shape. (Of course it can also rearrange existing labels, as long as it
+does so in a natural way that does not depend on the identity of the
+labels at all.)
 
 \begin{ex}
   The species $\Bag$ of sets has a trivial up operator which sends the
@@ -4221,8 +4237,11 @@ dia =
   observation is left to future work.
 \end{ex}
 
-A \term{down operator} on a species $F$ is defined dually, as a
-species morphism $d : F' \to F$.
+A \term{down operator} on a species $F$ is defined dually:
+\begin{defn}
+  A \term{down operator} on a species $F$ is a species morphism $d :
+  F' \to F$.
+\end{defn}
 
 \begin{ex}
   Again, $\Bag$ has a trivial down operator, which is the inverse of
@@ -4362,19 +4381,19 @@ dia =
 \end{ex}
 
 \todo{Any relation to down operator of Conor?}
-\todo{Discussion of why this is interesting?}
 
 \subsection{Pointing}
 \label{sec:pointing}
 
-\todo{don't \emph{define} pointing this way!  Define it in terms of
-  species of elements and Hadamard product?}
-
-The related operation of \term{pointing} can be defined in terms of
-the derivative as \[ \pt F = \X \sprod F'. \] As illustrated in
-\pref{fig:pointing}, an $\pt F$-structure can be thought of as an
-$F$-structure with one particular distinguished element.
-
+\begin{defn}
+The operation of \term{pointing} can be defined in terms of the
+species of elements, $\varepsilon = \X \cdot \Rubbish$, and Cartesian
+product:
+ \[ \pt F = \varepsilon \times F. \]
+\end{defn}
+As illustrated on the left-hand side of \pref{fig:pointing}, an $\pt F$-structure can be
+thought of as an $F$-structure with one particular distinguished
+element.
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
@@ -4410,9 +4429,9 @@ pointedTree =
   # centerXY
 
 dia = hcat' (with & sep .~ 2)
-   [ xTreePair
+   [ pointedTree
    , text "≅" # scale 2
-   , pointedTree
+   , xTreePair
    ]
    # frame 0.5
    # lwO 0.7
@@ -4421,8 +4440,13 @@ dia = hcat' (with & sep .~ 2)
     \label{fig:pointing}
   \end{figure}
 
-\todo{Say something about constructive difference between pointing and
-  derivative?}
+  As is also illustrated in \pref{fig:pointing}, pointing can also be
+  expressed in terms of differentiation, \[ \pt F \iso \X \cdot F'. \]
+
+Similar laws hold for pointing as for differentiation; they are left
+for the reader to discover.
+
+\todo{Is there more to say about pointing?}
 
 \subsection{Higher derivatives}
 \label{sec:higher-derivatives}
@@ -4507,11 +4531,11 @@ Higher derivatives generalize easily to any functor category $\fc \Lab
 K F\ L \defeq F\ (K \oplus L). \]
 
 \subsection{Internal Hom for partitional and arithmetic product}
-\label{sec:internal-Hom-pprod}
+\label{sec:internal-Hom-pprod-aprod}
 
 As promised, we now return to considering the existence of an internal
 Hom functor corresponding to partitional product.  We are looking for
-some $\phom - - : \Spe^\op \times \Spe \to \Spe$ for
+some \[ \phom - - : \Spe^\op \times \Spe \to \Spe \] for
 which \begin{equation} \label{eq:internal-Hom-pprod-adj}
 (\hom[\Spe]{F \cdot G}{H}) \iso (\hom[\Spe]{F}{(\phom G H)}). \end{equation}
 Intuitively, this is just like currying---although there are labels to
@@ -4684,7 +4708,10 @@ dia =
   \label{fig:internal-Hom-aprod-example}
 \end{figure}
 
-\todo{action of arithmetic derivative on egfs}
+If $F(x) = \sum_{n \geq 0} f_n \frac{x^n}{n!}$, then \[ \ader K F(x) =
+\sum_{n \geq 0} f_{kn} \frac{x^n}{n!}, \] where $k = \size K$; I do
+not know whether there is a nice way to express this transformation on
+generating functions.
 
 \section{Eliminators for species}
 \label{sec:elim-species}
