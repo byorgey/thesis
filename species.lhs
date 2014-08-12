@@ -1293,15 +1293,13 @@ injection.
     molecular species are lists of a particular length quotiented by
     some symmetries: we let $H$ act on $\X^n$-shapes by permuting
     their elements, and consider equivalence classes of $\X^n$-shapes
-    corresponding to orbits under $H$.  For example, $\List_5$ is
-    given by $\X^5/1$, where $1$ denotes the trivial group; $\Bag_5$
-    is $\X^5/\S_5$, quotienting by all possible symmetries; $\C_5$ is
-    $\X^5/\Z_5$, quotienting by the cyclic group of size $5$.  The
-    study and classification of molecular and atomic species takes up
-    an entire section of \citet{bll}, and porting all of the
-    definitions and theorems there to HoTT would be a formidable
-    undertaking, though I expect it would yield considerable insight.
-    Such an undertaking is left to future work.
+    corresponding to orbits under $H$ (see
+    \pref{sec:molecular-atomic}). The study and classification of
+    molecular and atomic species takes up an entire section of
+    \citet{bll}, and porting all of the definitions and theorems there
+    to HoTT would be a formidable undertaking, though I expect it
+    would yield considerable insight.  Such an undertaking is left to
+    future work.
 
     In any case, an equivalence $F\ L \equiv M_1\ L + M_2\ L + M_3\ L
     + \dots$ should yield a canonical ordering on the classes of
