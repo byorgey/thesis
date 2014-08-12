@@ -4869,6 +4869,237 @@ If $F(x) = \sum_{n \geq 0} f_n \frac{x^n}{n!}$, then \[ \ader K F(x) =
 not know whether there is a nice way to express this transformation on
 generating functions.
 
+\section{Molecular and atomic species}
+\label{sec:molecular-atomic}
+
+\begin{defn}
+  A species \F\ is \term{molecular} if there is only a single
+  $F$-form, that is, all $F$-shapes are related by relabelling.
+\end{defn}
+\begin{ex}
+The species $\X^2$ of ordered pairs is molecular, since
+any two ordered pairs are related by relabeling.
+\end{ex}
+\begin{ex}
+  On the other hand, the species $\List$ of linear orderings is not
+  molecular, since list structures of different lengths are
+  fundamentally non-isomorphic.
+\end{ex}
+
+Clearly, any species of the form $F + G$ is not molecular (as long as
+$F$ and $G$ are not $\Zero$), since the set of $(F+G)$-forms consists
+of the disjoint union of the sets of $F$-forms and $G$-forms.  It
+turns out that the converse is true as well:
+\begin{prop}[\citet{yeh1985combinatorial,yeh-k-species}]
+  The molecular species are precisely those that cannot be decomposed
+  as the sum of two nonzero species.
+\end{prop}
+
+Molecular species can be characterized more deeply yet, via
+\term{quotient species}. Recall first the definition of a group
+action:
+
+\begin{defn}
+  An \term{action} of a group $G$ on a set $S$ is a function \[ - \act
+  - : G \times S \to S \] such that, for all $g,h \in G$ and $s \in S$,
+  \begin{itemize}
+  \item $\id \act s = s$, and
+  \item $g \act (h \act s) = (gh) \act s$.
+  \end{itemize}
+\end{defn}
+
+\begin{rem}
+  Note that this is identical to the definition of a monoid action
+  \citep{yorgey2012monoids}; the only difference is that $G$ has
+  inverses, but no special laws are needed to deal with the
+  interaction of inverses with the action.
+
+  If the action function is curried, $G \to (S \to S)$, then the laws
+  state that a group action must be a group homomorphism from $G$ into
+  the symmetric group of bijections on $S$.  Intuitively, a group
+  action can be thought of as describing symmetries of the set $S$.
+\end{rem}
+
+\begin{defn}
+  Let $H$ be a group and $F$ a species. $H$ is said to \term{act
+    naturally} on $F$ if there is a family of group actions \[ \rho_L
+  : H \times F\ L \to F\ L \] such that the following diagram
+  commutes for all $\sigma : L \bij K$: \[ \xymatrix{ H \times F\ L
+    \ar[r]^-{\rho_L} \ar[d]_{\id \times F\ \sigma} & F\ L \ar[d]^{F\
+      \sigma} \\ H \times F\ K \ar[r]_-{\rho_K} & F\ K} \]
+\end{defn}
+
+\begin{ex}
+  Intuitively, $H$ acts naturally on $F$ if its action does not depend
+  on the particular identity of the labels---that is, if it commutes
+  with relabelling.  For example, consider the species $\List_5$, of
+  linear orders on exactly 5 labels, and the cyclic group $\Z_5 = \{0,
+  \dots, 4\}$ under addition modulo $5$.  There is an action of $\Z_5$
+  on $\List_5$, where $n \in \Z_5$ sends the list $a_0, \dots, a_4$ to
+  the list $a_n, \dots, a_{n+4}$ (where the indices are taken modulo
+  $5$).  In other words, $n \in \Z_5$ ``rotates'' the list $n$ places
+  to the left.  It is clear that this is a group action (rotating a
+  list by $0$ places is indeed the identity; rotating by $m$ and then
+  by $n$ is the same as rotating by $m + n$).  It is also natural: the
+  action does not depend on the identity of the labels, and is fully
+  compatible with relabelling.
+\end{ex}
+
+\begin{ex}
+  $\Z_2$ has an action on $\List$ (the species of linear orders of
+  \emph{any} length) whereby the non-identity element acts on a linear
+  order by reversing it.
+\end{ex}
+
+\begin{ex}
+  $\Z_2$ also acts on $\List_{\geq 2}$ by swapping the first two
+  elements, and leaving the rest alone.
+\end{ex}
+
+\begin{defn}[Quotient species \citep{labelle1985quelques}]
+  Let $F$ be a species and let $H$ act naturally on $F$.  Then define
+  the \term{quotient species} $F/H$ as the species which sends the
+  finite set $L$ to the set of orbits of $F\ L$ under the action of
+  $H$.
+
+  Put another way, for $f_1, f_2 \in F\ L$, define $f_1 \sim f_2$ if there
+  is some $h \in H$ such that $h \act f_1 = f_2$; this defines an
+  equivalence relation on $F\ L$, and we define $(F/H)\ L$ to be the
+  set of equivalence classes under this equivalence relation.
+
+  For a given $\sigma : L \bij K$, we define $(F/H)\ \sigma : (F/H)\ L
+  \to (F/H)\ K$ by \[ F\ \sigma\ [f] \defeq [F\ \sigma\ f]. \] For
+  this to be well-defined, we must show that if $f_1 \sim f_2$ then $F\
+  \sigma\ f_1 \sim F\ \sigma\ f_2$.  This follows from the naturality
+  of the action of $H$: if $f_1 \sim f_2$, that is, there is some $h
+  \in H$ such that $h \act f_1 = f_2$, then $h \act (F\ \sigma\ f_1) =
+  F\ \sigma\ (h \act f_1) = F\ \sigma\ f_2$, that is, $F\ \sigma\ f_1
+  \sim F\ \sigma\ f_2$.  It is also easy to see that $F/H$ inherits
+  the functoriality of $F$.
+\end{defn}
+
+\begin{ex}
+  Consider again the action of $\Z_5$ on $\List_5$ described
+  previously. Each orbit under the action of $\Z_5$ contains five
+  elements: all the possible cyclic rotations of a given linear order.
+  In fact, $\List_5 / \Z_5$ is isomorphic to $\Cyc_5$, the species of
+  size-$5$ cycles. Each equivalence class of five lists is sent to the
+  unique cycle which results from ``gluing'' the beginning and end of
+  each list together; conversely, each cycle is sent to the
+  equivalence class consisting of all possible ways of cutting the
+  cycle to obtain a list (\pref{fig:iso-list-quot-cyc}).
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=300]
+import           Data.List                      (tails)
+import           SpeciesDiagrams
+
+baseList = [1,3,4,0,2]
+
+lists = map (take 5) . take 5 . tails . cycle $ baseList
+
+listCycles = enclose 0.5 0.5 $ vcat' (with & sep .~ 0.5) (map (drawList' labT) lists)
+
+theCycle = cyc' (map labT baseList) 1
+
+iff = arrow' (with & arrowTail .~ dart') 2
+
+dia = hcat' (with & sep .~ 1) [listCycles, iff, theCycle]
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{Isomorphism between $\List_5 / \Z_5$ and $\Cyc_5$}
+    \label{fig:iso-list-quot-cyc}
+  \end{figure}
+\end{ex}
+
+\begin{ex}
+  Considering the reversing action of $\Z_2$ on $\List$, shapes of the
+  quotient $\List / \Z_2$ consist of pairs of lists which are the
+  reverse of each other.  This can be thought of as the species of
+  ``unoriented lists'' (sometimes called the species of
+  \term{chains}).
+\end{ex}
+
+\begin{ex}
+  Considering the action of $\Z_2$ on $\List_{\geq 2}$ which swaps the
+  first two elements, the quotient $\List_{\geq 2} / \Z_2$ is
+  isomorphic to the species $\Bag_2 \cdot \List$
+  (\pref{fig:iso-l2z2-e2l}).
+
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=350]
+import           Data.List                      (tails)
+import           SpeciesDiagrams
+import           Structures                     (pair)
+
+baseList :: [Int]
+baseList = [1,3,4,0,2]
+
+swap2 :: [Int] -> [Int]
+swap2 (x:(y:zs)) = (y:x:zs)   -- Need the extra parens as workaround
+                              -- for haskell-src-exts pretty-printing bug (?)
+
+lists :: [[Int]]
+lists = [baseList, swap2 baseList]
+
+equivClass = enclose 0.5 0.5 $ vcat' (with & sep .~ 0.5) (map (drawList' labT) lists) -- $
+
+e2l = pair (cat' (3 ^& 1) (with & sep .~ 0.5) (map labT (take 2 baseList))) (drawList' labT (drop 2 baseList))
+
+iff = arrow' (with & arrowTail .~ dart') 2
+
+dia = hcat' (with & sep .~ 1) [equivClass, iff, e2l]
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{Isomorphism between $\List_{\geq 2} / \Z_2$ and $E_2 \cdot \List$}
+    \label{fig:iso-l2z2-e2l}
+  \end{figure}
+\end{ex}
+
+\todo{edit, dumped here from Haskell Symposium paper}
+
+\begin{itemize}
+\item Every molecular species is equivalent to $\X^n$ ``quotiented by
+  some symmetries''; in particular, the molecular species of size $n$
+  are in one-to-one correspondence with the conjugacy classes of
+  subgroups of the symmetric group $\S_n$.  This gives us a way to
+  completely classify molecular species and to compute with them
+  directly.  For example, there are four conjugacy classes of
+  subgroups of $\S_3$, each representing a different symmetry on three
+  locations: the trivial subgroup corresponds to $\X^3$ itself (no
+  symmetry); swapping two locations yields $\X \sprod \Bag_2$; cycling
+  the locations yields $\Cyc_3$; and identifying all the locations
+  yields $\Bag_3$.
+
+\item Every species can be written uniquely (up to isomorphism and
+  reordering of terms) as a sum of molecular species.  This, combined
+  with the previous fact, immediately gives us a complete
+  classification of all combinatorial species.
+\end{itemize}
+
+Now we see why species with no nontrivial symmetries can always be
+built from \One, \X, $+$, and $\sprod$: any species with no symmetries
+must be isomorphic to a sum of molecular species with no symmetries;
+but molecular species with no symmetries must be of the form $\X^n$.
+Hence regular species are always of the form $n_0 + n_1 \X + n_2 \X^2
++ \dots$ with $n_i \in \N$.  Adding a fixed point operator allows us
+to write down certain infinite such sums using only finite
+expressions.
+
+% \begin{defn}
+%   A species \F\ is \term{atomic} if it cannot be non-trivially
+%   decomposed as the product of two species.
+% \end{defn}
+
+% A very nice result due to Yeh is that every molecular species can be
+% written uniquely (up to isomorphism and reordering) as a finite
+% product $\A_1^{n_1} \A_2^{n_2} \dots \A_k^{n_k}$ of atomic species.
+
+
 \section{Eliminators for species}
 \label{sec:elim-species}
 

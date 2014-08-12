@@ -190,6 +190,9 @@
 % axiom of choice
 \newmsf{AC}
 
+% group action
+\newcommand{\act}{\odot}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Theorems etc.
 
