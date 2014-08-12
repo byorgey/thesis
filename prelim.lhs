@@ -447,7 +447,7 @@ respect all the equalities built by the higher constructors.
 
 This gives a natural way to build \term{quotient types}.  For example,
 consider the HIT $T : \Type$ with data constructors $\cons{TO} : T$ and
-$\cons{SO} : T \to T$, as well as a higher path constructor $\cons{P2}
+$\cons{TS} : T \to T$, as well as a higher path constructor $\cons{P2}
 : (t : T) \to t = \cons{TS}\ (\cons{TS}\ \cons{TO})$.  This
 corresponds to quotienting $\N$ by the reflexive transitive closure of
 the relation $n = n+2$.  In this case, we can see (and could even
