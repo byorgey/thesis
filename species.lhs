@@ -4944,6 +4944,12 @@ action:
 \end{ex}
 
 \begin{ex}
+  More generally, by Cayley's theorem, any group of order $n$ is
+  isomorphic to a group of permutations, and thus has a natural action
+  on $\List_n \iso \X^n$, given by permuting the list elements.
+\end{ex}
+
+\begin{ex}
   $\Z_2$ has an action on $\List$ (the species of linear orders of
   \emph{any} length) whereby the non-identity element acts on a linear
   order by reversing it.
@@ -5057,6 +5063,9 @@ dia = hcat' (with & sep .~ 1) [equivClass, iff, e2l]
     \label{fig:iso-l2z2-e2l}
   \end{figure}
 \end{ex}
+
+\todo{give brief explanation of key results re: molecular species,
+  conjugacy, etc.  Cite BLL, p. 143}
 
 \todo{edit, dumped here from Haskell Symposium paper}
 
