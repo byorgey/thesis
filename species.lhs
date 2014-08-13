@@ -3587,8 +3587,8 @@ dia = partitionedTree
 \begin{ex}
   The species $\Sp{R}$ of nonempty $n$-ary (``rose'') trees, with data
   stored at internal nodes, may be defined by the recursive species
-  equation \[ \Sp{R} = \X \sprod (\List \comp \Sp{R}). \] An example
-  $\Sp R$-shape is shown in \pref{fig:rose-tree}.
+  equation \[ \Rose = \X \sprod (\List \comp \Rose). \] An example
+  $\Rose$-shape is shown in \pref{fig:rose-tree}.
   \begin{figure}
     \centering
     \begin{diagram}[width=150]
@@ -3596,7 +3596,7 @@ import SpeciesDiagrams
 
 dia = tree # centerXY # frame 0.5 # lwO 0.7
     \end{diagram}
-    \caption{An example $\Sp R$-shape}
+    \caption{An example $\Rose$-shape}
     \label{fig:rose-tree}
   \end{figure}
   Note the use of $\List$ means the children of each node are linearly
@@ -3604,7 +3604,7 @@ dia = tree # centerXY # frame 0.5 # lwO 0.7
   graph-theoretic notion of a rooted tree, with no structure imposed
   on the neighbors of a particular node.
 
-  $\Sp{Plan} = \X \cdot (\Cyc \comp \Sp R)$ is the species of
+  $\Sp{Plan} = \X \cdot (\Cyc \comp \Rose)$ is the species of
   \emph{planar embeddings} of rooted trees, where the top-level
   subtrees of the root are ordered cyclically.  For all nodes other
   than the root, on the other hand, there is still a linear order on
@@ -4905,11 +4905,9 @@ finite expressions.
 
 However, there is a more abstract characterization of regular species
 which does a better job of capturing their essence.  We first define
-what we mean by the \term{symmetries} of a structure.  Recall that
-$\S_n$ denotes the term{symmetric group of order $n$}, which has
-\term{permutations} of size $n$ (that is, bijections between
-$\{1,\dots,n\}$ and itself) as elements, and composition of
-permutations as the group operation.
+the \term{symmetries} of a structure. Recall that $\S_n$ denotes the
+\term{symmetric group} of permutations on $n$ elements under
+composition.
 
 \begin{defn}
   A permutation $\sigma \in \S_n$ is a \term{symmetry} of an
@@ -4917,21 +4915,51 @@ permutations as the group operation.
   that is, $F\ \sigma\ f = f$.
 \end{defn}
 
-For example, \pref{fig:tree-of-sets} depicts a tree with a set of
-labels at each node. This structure has {many} nontrivial symmetries,
-such as the permutation which swaps $4$ and $6$ but leaves all the
-other labels unchanged; since $4$ and $6$ are in the same set,
-swapping them has no effect.
-
+\begin{ex}
+  The $\Cyc$-shape in the upper left of \pref{fig:cyc-symmetries} has
+  the cyclic permutation $(01234)$ as a symmetry, because applying it
+  to the labels results in the same cycle (in the upper right).  On
+  the other hand, $(12)$ is not a symmetry; it results in the cycle on
+  the lower left, which is not the same as the original cycle.
 \begin{figure}[htp]
   \centering
-  \caption{A labeled structure with nontrivial symmetries}
-  \label{fig:tree-of-sets}
-\end{figure}
+  \begin{diagram}[width=300]
+import           SpeciesDiagrams
 
-However, the binary trees shown in \pref{fig:relabeling} have only the
-trivial symmetry, since permuting their labels in any nontrivial way
-yields different trees.
+cyc1 = cyc' (map labT [0..4]) 1
+cyc2 = cyc' (map labT ([1..4]++ [0])) 1
+cyc3 = cyc' (map labT [0,2,1,3,4]) 1
+
+dia =
+  vcat' (with & sep .~ 0.5)
+  [ hcat' (with & sep .~ 0.5)
+    [ cyc1
+    , text "=" # scale 0.8 <> phantom (square 1 :: D R2)
+    , cyc2
+    ]
+  , (text "≠" # scale 0.8 <> phantom (square 1 :: D R2)) # rotateBy (-1/4)
+  , cyc3
+  ]
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{A symmetry and a non-symmetry of a $\Cyc$-shape}
+  \label{fig:cyc-symmetries}
+\end{figure}
+\end{ex}
+
+\begin{ex}
+  An $\List$-shape has no nontrivial symmetries: applying any
+  permutation other than the identity to a linear order results in a
+  different linear order.
+\end{ex}
+
+\begin{ex}
+  An $\Bag$-shape has all possible symmetries: applying any
+  permutation to the labels in a set results in the same set.
+\end{ex}
+
+We can now state the more abstract definition of regular species.
 
 \begin{defn}
   A species $F$ is \term{regular} if every $F$-shape has the identity
@@ -4939,13 +4967,19 @@ yields different trees.
   regular.
 \end{defn}
 
-It turns out that these two definitions are equivalent (with the
-slight caveat that we must allow countably infinite sums and products
-in the first definition). That species built from sum, product, and
-fixed point have no symmetries is not hard to see; less obvious is the
-fact that up to isomorphism, every species with no symmetries can be
-expressed in this way.  To understand why this is so, we turn to
-consider molecular species.
+\begin{ex}
+  Regular species include $\Zero$, $\One$, $\X$, linear orders
+  ($\List$), rooted binary trees ($\Bin$), rose trees ($\Rose$).
+  Non-regular species include sets ($\Bag$), cycles ($\Cyc$), and any
+  sum or product of a non-regular species with any other species.
+\end{ex}
+
+It turns out that these two definitions of regular species are
+equivalent. That species built from $\Zero$, $\One$, $\X$, sum,
+product, and fixed point have no symmetries is not hard to see
+intuitively; less obvious is the fact that up to isomorphism, every
+species with no symmetries can be expressed in this way.  To
+understand why this is so, we turn to consider molecular species.
 
 \begin{defn}
   A species \F\ is \term{molecular} if there is only a single
@@ -5192,12 +5226,12 @@ decomposition of $\List$ is \[ \List = \One + \X + \X^2 + \X^3 +
 \cdot \Bag_3) + \dots \]
 
 \begin{rem}
-  Incidentally, this shows that regular species \todo{define regular
-    species somewhere} can always be built from \One, \X, sum, and
-  partitional product: any regular species must be isomorphic to a sum
-  of regular molecular species; but regular molecular species must be
-  of the form $\X^n$.  Hence regular species are always of the form
-  $\sum_{n \geq 0} a_n \X^n$ with $a_n \in \N$.
+  We can now see why the two definitions of regular species given
+  previously are equivalent. Any regular species must be isomorphic to
+  a sum of regular molecular species; but regular molecular species
+  must be of the form $\X^n$.  Hence, up to isomorphism, regular
+  species are always of the form $\sum_{n \geq 0} a_n \X^n$ with $a_n
+  \in \N$.
 \end{rem}
 
 The story does not end here, however; molecular species can be
@@ -5229,6 +5263,13 @@ decomposed yet further.
 
 \section{Eliminators for species}
 \label{sec:elim-species}
+
+With the molecular and atomic decompositions of species under our
+belts, we now turn to consider \term{eliminators} for
+species---something \todo{combinatorialists don't really care about, etc}
+
+\todo{The name of the game is to characterize species morphisms out of
+certain species}
 
 \todo{Make an systematic list here of species eliminators.}
 

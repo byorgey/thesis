@@ -432,6 +432,7 @@
 \newcommand{\Der}{\Sp{Der}}
 \newcommand{\Arbor}{\mcal{A}}
 \newcommand{\arbor}{\mathfrak{a}}
+\newcommand{\Rose}{\Sp{R}}
 
 \newcommand{\Zero}{\msf{0}}
 \newcommand{\One}{\msf{1}}
