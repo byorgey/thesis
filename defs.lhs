@@ -329,6 +329,7 @@
 
 \newcommand{\ahom}[2]{\hom[\aprod]{#1}{#2}}
 \newcommand{\phom}[2]{\hom[\bullet]{#1}{#2}}
+\newcommand{\chom}[2]{\hom[\comp]{#1}{#2}}
 
 \newcommand{\fc}[2]{\Hom{#1}{#2}}   % functor category
 

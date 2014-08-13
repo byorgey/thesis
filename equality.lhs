@@ -644,7 +644,7 @@ relation =
 drawRelation t1 t2 rel
   = hcat' (with & sep .~ 2.5) [drawTable t1, drawTable t2]
   # applyAll
-    [connectOutside a b || (a,b) <- rel]
+    [connectOutside' (with & arrowHead .~ noHead) a b || (a,b) <- rel]
 
 drawJunction t1 t2 rel
   = hcat' (with & sep .~ 2.5) [drawTable t1, drawTable junction, drawTable t2]
@@ -668,7 +668,7 @@ dia =
   \label{fig:junction-table}
 \end{figure}
 
-\begin{defn} \label{defn:anafunctor}
+\begin{defn}[\citet{makkai1996avoiding}] \label{defn:anafunctor}
   An \term{anafunctor} $F : \C \to \D$ is defined as follows.
   \begin{itemize}
   \item There is a class $S$ of \term{specifications}.

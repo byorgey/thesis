@@ -680,13 +680,6 @@ positions\footnote{As Haskell programmers are well aware, writing
   A)}$.  This notation can be rigorously justified using \emph{ends};
 see \pref{sec:ends-coends}.
 
-% Not sure why I thought I needed this.
-
-% \paragraph{Sums and products}
-
-% \todo{Definitions?  Notation for universal morphisms; link to
-%   Haskell.  Note $\beta$ laws and so on.}
-
 \paragraph{Hom sets}
 
 In a similar vein, the set of morphisms between objects $A$ and $B$ in
@@ -1010,15 +1003,17 @@ Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
 $T$, denoted $\coend{C} T(C,C)$,\footnote{Traditionally, coends are
   notated as $\int^C T(C,C)$, and ends as $\int_C T(C,C)$ (for
   example, this is the notation used by \citet{mac1998categories}).
-  However, the link to calculus is extremely obscure and not very
-  helpful for building intuition. Moreover, using the traditional
-  notation, it is hard to keep ends and coends straight.  On the other
-  hand, as I will show, $\coend C T(C,C)$ and $\eend C T(C,C)$ are
-  deeply appropriate notations for coends and ends, respectively; they
-  are easier to keep straight; and they help computer scientists and
-  logicians build on existing intuition.}  is an object of $\D$ with
-morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$ for every $X$, such
-that the
+  However, the link to calculus is extremely obscure
+  \citep{mo-intuition-for-coends} and not very helpful for building
+  intuition. Moreover, using the traditional notation, it is hard to
+  keep ends and coends straight.  On the other hand, as I will show,
+  $\coend C T(C,C)$ and $\eend C T(C,C)$ are deeply appropriate
+  notations for coends and ends, respectively; they are easier to keep
+  straight; and they help computer scientists and logicians build on
+  existing intuition.  I am fairly certain I have seen this notation
+  used before, but cannot remember where; pointers are appreciated.}
+is an object of $\D$ with morphisms $\omega_X : T(X,X) \to \coend C
+T(C,C)$ for every $X$, such that the
 diagram \[ \xymatrix@@dr{ T(X',X) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(X',X') \ar[d]^{\omega_{X'}} \\
   T(X,X) \ar[r]_{\omega_X} & \coend C T(C,C) } \] commutes for all $X,
 X' : \C$ and $f : X \to X'$. (This square represents

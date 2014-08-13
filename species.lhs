@@ -1899,9 +1899,15 @@ dia = tag 0 (decoratePath (pentagon 1) (map labT [0..4]))
 \begin{proof}
   The proof is omitted, since it is almost exactly the same as the
   proof for $(+, \Zero)$; the only difference is the substitution of
-  Cartesian product of sets for disjoint union.  In the next section
-  we will see how to generalize both proofs.
+  Cartesian product of sets for disjoint union.
 \end{proof}
+
+In \pref{sec:lifting-monoids} we will see how to generalize both
+proofs.  First, we consider the internal Hom functor for Cartesian
+product.
+
+\subsection{Internal Hom for Cartesian product}
+\label{sec:internal-Hom-cprod}
 
 \begin{prop}
   $\Spe$ is Cartesian closed.
@@ -2611,7 +2617,7 @@ dia = pair fps cycs # frame 0.5
 
   A discussion of the internal Hom functor corresponding to
   partitional product must be postponed to
-  \pref{sec:internal-Hom-pprod}, after discussing species
+  \pref{sec:internal-Hom-pprod-aprod}, after discussing species
   differentiation.
 \end{proof}
 
@@ -3919,7 +3925,7 @@ show that it is monoidal closed. Indeed, we can compute as follows
 \end{sproof}
 
 Thus we have the adjunction \[ (\hom[\Spe]{F \comp G}{H}) \iso
-(\hom[\Spe]{F}{(\hom[\comp] G H)}), \] where \[ (\hom[\comp] G H)
+(\hom[\Spe]{F}{(\chom G H)}), \] where \[ (\chom G H)
 \defeq (\hom[\Spe]{G^-}{H}) \] is the species whose $K$-labelled
 shapes are species morphisms from $G^K$ to
 $H$. \pref{fig:internal-Hom-comp-example} illustrates an example: a
@@ -4790,7 +4796,7 @@ Cartesian product of finite sets), and thus related to arithmetic
 product rather than partitional product.  In particular, we define the
 \term{arithmetic derivative} by \[ \ader K F\ L = F\ (K \times L). \]
 We have \[ (\hom[\Spe]{F \aprod G}{H}) \iso (\hom[\Spe]{F}{(\ahom G
-  H)}) \] where \[ \ahom G H \defeq (\hom[\Spe] {G}{\ader L H}). \]
+  H)}) \] where \[ (\ahom G H) \defeq (\hom[\Spe] {G}{\ader L H}). \]
 This is a bit harder to visualize, but works on a similar principle to
 higher derivative for partitional product.  The problem, from a
 visualization point of view, is that no specific labels correspond to
@@ -4973,6 +4979,18 @@ We can now state the more abstract definition of regular species.
   Non-regular species include sets ($\Bag$), cycles ($\Cyc$), and any
   sum or product of a non-regular species with any other species.
 \end{ex}
+
+\begin{rem}
+  According to this definition, in addition to least fixed points,
+  regular species are also closed under Cartesian and arithmetic
+  product.  That is, if $F$ and $G$ are two species expressed entirely
+  in terms of $\One$, $\X$, sum, and partitional product, the
+  Cartesian or arithmetic products of $F$ and $G$ are both themselves
+  isomorphic to some species expressed using only those operations,
+  without any mention of Cartesian or arithmetic product.  This is
+  certainly far from obvious. \later{give an example of doing the
+    translation}
+\end{rem}
 
 It turns out that these two definitions of regular species are
 equivalent. That species built from $\Zero$, $\One$, $\X$, sum,
@@ -5261,30 +5279,74 @@ decomposed yet further.
   as the product of three and two atomic species, respectively.
 \end{ex}
 
-\section{Eliminators for species}
+\section{Species eliminators}
 \label{sec:elim-species}
 
 With the molecular and atomic decompositions of species under our
-belts, we now turn to consider \term{eliminators} for
-species---something \todo{combinatorialists don't really care about, etc}
+belt, we now turn to consider \term{eliminators} for
+species.  Generally speaking, this is not of much interest to
+combinatorialists, but will play an important role in using species as
+a basis for data types, to be explored in the next chapter.
 
-\todo{The name of the game is to characterize species morphisms out of
-certain species}
+The idea is to characterize outgoing species morphisms.  That is, for
+a given species $F$, what can one say about species morphisms $\hom F
+G$ for arbitrary species $G$?
 
-\todo{Make an systematic list here of species eliminators.}
+\paragraph{Zero}
 
-\begin{itemize}
-\item $\Zero$
-\item $\One$
-\item $\X$
-\item sum
-\item Cartesian product
-\item partitional product
-\item arithmetic product
-\item composition
-\end{itemize}
+Since $\Zero\ L = \varnothing$ for all label sets $L$, there is only a
+single species morphism $\hom \Zero G$ for any species $G$, namely, the
+one which consists of the empty function at every size.
 
-\todo{talk about molecular and atomic species.}
+\paragraph{One}
+
+There is only a single $\One$-shape, which has size zero, so a species
+morphism $\hom \One G$ is equivalent to a specified inhabitant of $G\
+\varnothing$.
+
+\paragraph{Singleton}
+
+By a similar argument, a species morphism $\hom \X G$ is equivalent to
+a specified inhabitant of $G\ \singleton$.
+
+\paragraph{Sum}
+
+Intuitively, a species morphism $\hom{(F + G)} H$ should correspond to a
+pair of morphisms $(\hom F H) \times (\hom G H)$, characterizing the
+morphism in terms of the two possible cases.  Indeed, this follows
+abstractly from the fact that contravariant Hom functors turn colimits
+(here, a coproduct of species) into limits (here, the product in
+$\Set$).  One may also calculate this result more directly by
+expanding the species morphism as an end and manipulating morphisms in
+$\Set$.
+
+\paragraph{Products}
+
+Species morphisms out of various types of product (Cartesian,
+partitional, and arithmetic) have already been characterized in terms
+of the internal Hom functors for these operations (see
+\pref{sec:internal-Hom-cprod} and
+\pref{sec:internal-Hom-pprod-aprod}):
+\begin{gather*}
+  (\hom {(F \times G)} H) \iso (\hom F {H^G}) \\
+  (\hom {(F \cdot G)} H) \iso (\hom F {(\phom G H)}) \\
+  (\hom {(F \aprod G)} H) \iso (\hom F {(\ahom G H)})
+\end{gather*}
+where $H^G$ is defined in \pref{sec:internal-Hom-cprod}, and $\phom G
+H$ and $\ahom G H$ are defined in
+\pref{sec:internal-Hom-pprod-aprod}. Note that in all three cases, one
+may continue to recursively characterize the results in terms of
+eliminators for $F$ and $G$.
+
+\paragraph{Composition}
+
+Species morphisms out of compositions have also already been
+characterized in terms of an internal Hom functor, in
+\pref{sec:internal-Hom-comp}: \[ (\hom {(F \comp G)} H) \iso (\hom F
+{(\chom G H)}). \]
+
+\paragraph{Molecular and atomic species}
+
 \todo{eliminator for atomic species, with quotienting.  How to derive formally?}
 
 \section{Examples}
