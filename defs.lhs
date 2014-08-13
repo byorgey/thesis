@@ -182,6 +182,7 @@
 \newcommand{\lequiv}{\leftrightarrow} % logical equivalence
 \renewcommand{\implies}{\to}
 \renewcommand{\iff}{\lequiv}
+\newcommand{\eqrel}{\sim}
 
 \newcommand{\pbij}{\subseteq}         % partial bijection
 
@@ -454,7 +455,7 @@
 \newcommand{\Str}{\mathfrak{S}}
 
 \newcommand{\equipot}{\mathrel{\stackrel{\#}{=}}}
-\newcommand{\relabel}{\sim}
+\newcommand{\relabel}{\approx}
 \DeclareMathOperator{\sh}{sh}
 
 \newcommand{\pt}[1]{#1^{\bullet}}

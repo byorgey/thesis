@@ -101,8 +101,11 @@ forgetfulness.
   can be thought of as ``structure-preserving correspondences''.
 \item $F \equipot G$ denotes the \term{equipotence} of two species,
   discussed in \pref{sec:iso-equipotence}.
-\item Finally, $f_1 \relabel f_2$ denotes equivalence up to
+\item $f_1 \relabel f_2$ denotes equivalence up to
   relabelling of species shapes, discussed in \pref{sec:unlabelled}.
+\item Finally, $x \eqrel y$ is often used in general to denote an
+  equivalence relation (whichever one happens to be under
+  consideration at the moment).
 \end{itemize}
 
 These notations are summarized in \pref{tab:sameness}.
@@ -119,7 +122,8 @@ These notations are summarized in \pref{tab:sameness}.
     $\lequiv$ & logical equivalence \\
     $\iso$ & isomorphism \\
     $\equipot$ & species equipotence \\
-    $\relabel$ & relabelling equivalence
+    $\relabel$ & relabelling equivalence \\
+    $\eqrel$ & generic equivalence relation
   \end{tabular}
   \caption{``Sameness'' relations}
   \label{tab:sameness}
@@ -1034,7 +1038,7 @@ Elements of the indexed coproduct look like pairs $(C, t)$ where $C
 want to consider two pairs $(C,t)$ and $(C', t')$ equivalent if they
 are related by the functoriality of $T$.  In particular, for each
 arrow $f : C \to C'$ in $\C$ and each $x \in T(C',C)$, we set $(C,
-T(f,1)\ x) \sim (C', T(1,f)\ x)$.  That is, we can always ``swap out
+T(f,1)\ x) \eqrel (C', T(1,f)\ x)$.  That is, we can always ``swap out
 $(C,t)$ for $(C',t')$'' as long as we have some way to map from $C$ to
 $C'$, and the associated values $t$ and $t'$ are related by the same
 mapping.  (More generally, even if the objects of $\D$ are not sets,

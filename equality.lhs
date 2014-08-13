@@ -1097,7 +1097,6 @@ equivalence relation induced by \eqref{eq:coend-diagram}.
 \newcommand{\llangle}{\langle\!\langle}
 \newcommand{\rrangle}{\rangle\!\rangle}
 \newcommand{\hcoendI}[2]{\llangle #1 , #2 \rrangle}
-\newcommand{\hcoendP}[3]{#1 \stackrel{#2}{\sim} #3}
 
 In HoTT, given some categories $\CT$ and $\DT$ and a functor $T :
 \CT^\op \times \CT \to \DT$, we can directly encode this quotient as a

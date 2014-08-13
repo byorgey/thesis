@@ -1383,7 +1383,7 @@ as follows.
 \begin{defn}
   The ogf $\unl F(x)$ associated to a species $F$ is defined by \[
   \unl F(x) = \sum_{n \geq 0} \unl f_n x^n, \] where $\unl f_n =
-  \size{(F\ n/\mathord{\sim})}$ is the number of distinct $F$-\emph{forms} (that
+  \size{(F\ n/\mathord{\relabel})}$ is the number of distinct $F$-\emph{forms} (that
   is, equivalence classes of $F$-shapes under relabelling) of size $n$.
 \end{defn}
 \begin{ex}
@@ -3072,9 +3072,9 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. See
   quintuples $(L_F, L_G, f, g, i)$, where $f \in F\ L_F$, $g \in G\
   L_G$, and $i : L \bij L_F \uplus L_G$ witnesses a partition of $L$
   into two subsets.  Then, as we have seen, the coend can be expressed
-  as a quotient $\quotient{R}{\sim}$, where every pair of bijections
+  as a quotient $\quotient{R}{\eqrel}$, where every pair of bijections
   $(\sigma_F : L_F \bij L_F', \sigma_G : L_G \bij L_G')$ induces an
-  equivalence of the form \[ (L_F, L_G, f, g, i) \sim (L_F',\; L_G',\;
+  equivalence of the form \[ (L_F, L_G, f, g, i) \eqrel (L_F',\; L_G',\;
   F\ \sigma_F\ f,\; G\ \sigma_G\ g,\; i \then (\sigma_F \uplus
   \sigma_G)). \] That is, $f \in F\ L_F$ is sent to $F\ \sigma_F\ f$
   (the relabelling of $f$ by $\sigma_F$); $g \in G\ L_G$ is sent to
@@ -3104,7 +3104,7 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. See
   by composition with a coproduct bijection $\sigma_F \uplus
   \sigma_G$.
 
-  Therefore, all the equivalence classes of $\quotient{R}{\sim}$ can
+  Therefore, all the equivalence classes of $\quotient{R}{\eqrel}$ can
   be represented canonically by a partition of $L$ into two disjoint
   subsets, along with a choice of $F$ and $G$ structures, giving rise
   to the earlier definition:
@@ -3320,7 +3320,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
 
   Again, letting $R \defeq \biguplus_{n_F, n_G} F_{n_F} \times G_{n_G}
   \times (\Fin n \bij \Fin {(n_F + n_G)})$, the coend is equivalent to
-  $\quotient{R}{\sim}$, where \[ (n_F, n_G, f, g, i) \sim (n_F,
+  $\quotient{R}{\eqrel}$, where \[ (n_F, n_G, f, g, i) \eqrel (n_F,
   n_G,\;F\ \sigma_F\ f,\;G\ \sigma_G\ g,\;i \then (\sigma_F +_\varphi
   \sigma_G)) \] for any $\sigma_F : \perm{(\Fin n_F)}$ and $\sigma_G :
   \perm{(\Fin n_G)}$.  Note that the meaning of $\sigma_F + \sigma_G$
@@ -4871,6 +4871,11 @@ If $F(x) = \sum_{n \geq 0} f_n \frac{x^n}{n!}$, then \[ \ader K F(x) =
 not know whether there is a nice way to express this transformation on
 generating functions.
 
+\section{Recursion and the implicit species theorem}
+\label{sec:implicit}
+
+\todo{write me!}
+
 \section{Regular, molecular and atomic species}
 \label{sec:molecular-atomic}
 
@@ -4884,12 +4889,25 @@ A first characterization of regular species is as follows:
   sums and products.
 \end{defn}
 Regular species thus roughly correspond to the usual notion of
-algebraic data types.
+algebraic data types in a language like Haskell or OCaml, with a few
+apparent differences.  First, programming languages do not actually
+allow \emph{infinite} sums or products.  For example, the species \[
+\X^2 + \X^3 + \X^5 + \X^7 + \X^{11} + \dots \] of prime-length lists
+is a well-defined regular species, but is not expressible as, say, a
+data type in Haskell\footnote{At least not in Haskell 2010.}.  Second,
+Haskell and OCaml also allow recursive algebraic data types.  However,
+this is not a real difference: the class of regular species is also
+closed under least fixed points (any implicit recursive definition of
+a species can in theory be unfolded into an infinite sum or product).
+Essentially, recursion in algebraic data types can be seen as a tool
+that allows \emph{some} infinite sums and products to be encoded via
+finite expressions.
 
-However, there is a more abstract characterization \todo{editing here}
-first define what we mean by the \term{symmetries} of a structure.
-Recall that $\S_n$ denotes the term{symmetric group of order $n$},
-which has \term{permutations} of size $n$ (that is, bijections between
+However, there is a more abstract characterization of regular species
+which does a better job of capturing their essence.  We first define
+what we mean by the \term{symmetries} of a structure.  Recall that
+$\S_n$ denotes the term{symmetric group of order $n$}, which has
+\term{permutations} of size $n$ (that is, bijections between
 $\{1,\dots,n\}$ and itself) as elements, and composition of
 permutations as the group operation.
 
@@ -5025,19 +5043,19 @@ action:
   finite set $L$ to the set of orbits of $F\ L$ under the action of
   $H$.
 
-  Put another way, for $f_1, f_2 \in F\ L$, define $f_1 \sim f_2$ if there
+  Put another way, for $f_1, f_2 \in F\ L$, define $f_1 \eqrel f_2$ if there
   is some $h \in H$ such that $h \act f_1 = f_2$; this defines an
   equivalence relation on $F\ L$, and we define $(F/H)\ L$ to be the
   set of equivalence classes under this equivalence relation.
 
   For a given $\sigma : L \bij K$, we define $(F/H)\ \sigma : (F/H)\ L
   \to (F/H)\ K$ by \[ F\ \sigma\ [f] \defeq [F\ \sigma\ f]. \] For
-  this to be well-defined, we must show that if $f_1 \sim f_2$ then $F\
-  \sigma\ f_1 \sim F\ \sigma\ f_2$.  This follows from the naturality
-  of the action of $H$: if $f_1 \sim f_2$, that is, there is some $h
+  this to be well-defined, we must show that if $f_1 \eqrel f_2$ then $F\
+  \sigma\ f_1 \eqrel F\ \sigma\ f_2$.  This follows from the naturality
+  of the action of $H$: if $f_1 \eqrel f_2$, that is, there is some $h
   \in H$ such that $h \act f_1 = f_2$, then $h \act (F\ \sigma\ f_1) =
   F\ \sigma\ (h \act f_1) = F\ \sigma\ f_2$, that is, $F\ \sigma\ f_1
-  \sim F\ \sigma\ f_2$.  It is also easy to see that $F/H$ inherits
+  \eqrel F\ \sigma\ f_2$.  It is also easy to see that $F/H$ inherits
   the functoriality of $F$.
 \end{defn}
 
