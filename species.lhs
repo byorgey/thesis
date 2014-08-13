@@ -2387,7 +2387,9 @@ general account of their common abstraction.
 The partitional product $F \sprod G$ of two species $F$ and $G$
 consists of paired $F$- and $G$-shapes, as with the Cartesian product,
 but with the labels \emph{partitioned} between the two shapes instead
-of replicated (\pref{fig:product}).
+of replicated (\pref{fig:product}).  Note that the sort of ``divided
+box'' with rounded corners used in \pref{fig:product} will often be
+used to schematically indicate a partitional product.
 
   \begin{figure}
     \centering
@@ -2397,6 +2399,7 @@ import           Diagrams.TwoD.Layout.Tree
 import           Diagrams.TwoD.Path.Metafont
 
 import           SpeciesDiagrams
+import           Structures (pair)
 
 connectAll l1 l2 n =
   withNames (map (l1 .>) [0 :: Int .. n-1]) $ \l1s ->
@@ -2407,10 +2410,10 @@ conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arri
 -- $
 
 sharedMem = vcat' (with & sep .~ 5)
-  [ hcat' (with & sep .~ 3)
-    [ wideTree (mkLeaf (circle 1) . ("l" .>) . (part1!!)) sampleBTree5 # centerY
-    , drawList (mkLeaf (circle 1) . ("l" .>) . (part2!!)) 3 # centerY
-    ] # centerXY
+  [ pair
+      (wideTree (mkLeaf (circle 1) . ("l" .>) . (part1!!)) sampleBTree5 # centerY)
+      (drawList (mkLeaf (circle 1) . ("l" .>) . (part2!!)) 3 # centerY)
+    # centerX
   , drawList (mkLeaf (square 2) . ("s" .>)) 8 # centerXY
   ]
   # connectAll "l" "s" 8
@@ -2423,10 +2426,10 @@ part1, part2 :: [Int]
 part1 = [3,0,1,2,6]
 part2 = [5,4,7]
 
-numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
-  [ wideTree (numbered . (part1!!)) sampleBTree5 # centerX
-  , drawList (numbered . (part2!!)) 3 # centerX
-  ]
+numbering =
+  pair
+    (wideTree (numbered . (part1!!)) sampleBTree5 # centerXY)
+    (drawList (numbered . (part2!!)) 3 # centerXY)
   where
     numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
 
@@ -2556,6 +2559,7 @@ The generating functions for $\One$ are given by \[ \One(x) = \unl
     \centering
     \begin{diagram}[width=300]
 import           SpeciesDiagrams
+import           Structures       (pair)
 
 dot = circle 0.2 # fc black
 
@@ -2566,7 +2570,7 @@ selfLoop d =
   where
     opts = with & arrowShaft .~ arc (7/8 @@@@ turn) (5/8 @@@@ turn) # reverseTrail
 
-fps = unord (replicate 3 (dot # selfLoop))
+fps = hcat' (with & sep .~ 0.5) (replicate 3 (dot # selfLoop))
 
 cycs :: Diagram B R2
 cycs =
@@ -2575,7 +2579,7 @@ cycs =
   , cyc' (replicate 2 dot) 0.8
   ]
 
-dia = hcat' (with & sep .~ 1) [fps, cycs] # frame 0.5
+dia = pair fps cycs # frame 0.5
     \end{diagram}
     \caption{Permutation = fixpoints $\cdot$ derangement}
     \label{fig:perm-der}
@@ -4867,8 +4871,63 @@ If $F(x) = \sum_{n \geq 0} f_n \frac{x^n}{n!}$, then \[ \ader K F(x) =
 not know whether there is a nice way to express this transformation on
 generating functions.
 
-\section{Molecular and atomic species}
+\section{Regular, molecular and atomic species}
 \label{sec:molecular-atomic}
+
+We now consider the three related notions of \term{regular},
+\term{molecular}, and \term{atomic} species.
+
+A first characterization of regular species is as follows:
+\begin{defn}
+  The class of \term{regular} species consists of the smallest class
+  containing $\Zero$, $\One$, and $\X$, and closed under (countable)
+  sums and products.
+\end{defn}
+Regular species thus roughly correspond to the usual notion of
+algebraic data types.
+
+However, there is a more abstract characterization \todo{editing here}
+first define what we mean by the \term{symmetries} of a structure.
+Recall that $\S_n$ denotes the term{symmetric group of order $n$},
+which has \term{permutations} of size $n$ (that is, bijections between
+$\{1,\dots,n\}$ and itself) as elements, and composition of
+permutations as the group operation.
+
+\begin{defn}
+  A permutation $\sigma \in \S_n$ is a \term{symmetry} of an
+  $F$-shape $f \in F\ L$ if and only if $\sigma$ fixes $f$,
+  that is, $F\ \sigma\ f = f$.
+\end{defn}
+
+For example, \pref{fig:tree-of-sets} depicts a tree with a set of
+labels at each node. This structure has {many} nontrivial symmetries,
+such as the permutation which swaps $4$ and $6$ but leaves all the
+other labels unchanged; since $4$ and $6$ are in the same set,
+swapping them has no effect.
+
+\begin{figure}[htp]
+  \centering
+  \caption{A labeled structure with nontrivial symmetries}
+  \label{fig:tree-of-sets}
+\end{figure}
+
+However, the binary trees shown in \pref{fig:relabeling} have only the
+trivial symmetry, since permuting their labels in any nontrivial way
+yields different trees.
+
+\begin{defn}
+  A species $F$ is \term{regular} if every $F$-shape has the identity
+  permutation as its only symmetry; such structures are also called
+  regular.
+\end{defn}
+
+It turns out that these two definitions are equivalent (with the
+slight caveat that we must allow countably infinite sums and products
+in the first definition). That species built from sum, product, and
+fixed point have no symmetries is not hard to see; less obvious is the
+fact that up to isomorphism, every species with no symmetries can be
+expressed in this way.  To understand why this is so, we turn to
+consider molecular species.
 
 \begin{defn}
   A species \F\ is \term{molecular} if there is only a single
@@ -5064,48 +5123,91 @@ dia = hcat' (with & sep .~ 1) [equivClass, iff, e2l]
   \end{figure}
 \end{ex}
 
-\todo{give brief explanation of key results re: molecular species,
-  conjugacy, etc.  Cite BLL, p. 143}
+We can now state the following beautiful result:
 
-\todo{edit, dumped here from Haskell Symposium paper}
+\begin{prop}[\citet{bll}]
+  Every molecular species is isomorphic to $\X^n / H$ for some natural
+  number $n$ and some subgroup $H$ of the symmetric group $\S_n$.
+  Moreover, $\X^n / G$ and $\X^n / H$ are isomorphic if and only if
+  $G$ and $H$ are conjugate (that is, if there exists some $\varphi
+  \in \S_n$ such that $G = \varphi H \varphi^{-1}$).
+\end{prop}
 
-\begin{itemize}
-\item Every molecular species is equivalent to $\X^n$ ``quotiented by
-  some symmetries''; in particular, the molecular species of size $n$
-  are in one-to-one correspondence with the conjugacy classes of
-  subgroups of the symmetric group $\S_n$.  This gives us a way to
-  completely classify molecular species and to compute with them
-  directly.  For example, there are four conjugacy classes of
-  subgroups of $\S_3$, each representing a different symmetry on three
-  locations: the trivial subgroup corresponds to $\X^3$ itself (no
-  symmetry); swapping two locations yields $\X \sprod \Bag_2$; cycling
-  the locations yields $\Cyc_3$; and identifying all the locations
-  yields $\Bag_3$.
+In particular, this means that, up to isomorphism, molecular species
+are in one-to-one correspondence with conjugacy classes of subgroups
+of $\S_n$.  This gives a complete classification of molecular
+species.  For example, it is not hard to verify that there are four
+conjugacy classes of subgroups of $\S_3$, yielding the four molecular
+species illustrated in \pref{fig:molec-three}.  The leftmost is
+$\X^3$, corresponding to the trivial group.  The second is $\X \cdot
+\Bag_2$, corresponding to the subgroups of $\S_3$ containing only a
+single swap.  The third is $\Cyc_3$, corresponding to $\Z_3$.  The
+last is $\Bag_3$, corresponding to $\S_3$ itself.
 
-\item Every species can be written uniquely (up to isomorphism and
-  reordering of terms) as a sum of molecular species.  This, combined
-  with the previous fact, immediately gives us a complete
-  classification of all combinatorial species.
-\end{itemize}
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import           SpeciesDiagrams
+import           Structures                     (pair)
 
-Now we see why species with no nontrivial symmetries can always be
-built from \One, \X, $+$, and $\sprod$: any species with no symmetries
-must be isomorphic to a sum of molecular species with no symmetries;
-but molecular species with no symmetries must be of the form $\X^n$.
-Hence regular species are always of the form $n_0 + n_1 \X + n_2 \X^2
-+ \dots$ with $n_i \in \N$.  Adding a fixed point operator allows us
-to write down certain infinite such sums using only finite
-expressions.
+dot = circle 0.3 # fc black
 
-% \begin{defn}
-%   A species \F\ is \term{atomic} if it cannot be non-trivially
-%   decomposed as the product of two species.
-% \end{defn}
+x3 = drawList' (const dot) [(),(),()]
+c3 = cyc' (replicate 3 dot) 0.8
+e3 = position (zip (triangle 1) (repeat dot))
+xe2 = pair dot (dot === strutY 0.5 === dot)
 
-% A very nice result due to Yeh is that every molecular species can be
-% written uniquely (up to isomorphism and reordering) as a finite
-% product $\A_1^{n_1} \A_2^{n_2} \dots \A_k^{n_k}$ of atomic species.
+dia = hcat' (with & sep .~ 1) [x3, xe2, c3, e3]
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{The four molecular species of size $3$}
+  \label{fig:molec-three}
+\end{figure}
 
+This can in fact be extended to a classification of all species: up to
+isomorphism, every species has a unique decomposition as a sum of
+molecular species. As a very simple example, the molecular
+decomposition of $\List$ is \[ \List = \One + \X + \X^2 + \X^3 +
+\dots. \] \citet[p. 141]{bll} give a more complex example: \[ \Arbor =
+\X + \X^2 + (\X^3 + \X \cdot \Bag_2) + (2\X^4 + \X^2 \cdot \Bag_2 + \X
+\cdot \Bag_3) + \dots \]
+
+\begin{rem}
+  Incidentally, this shows that regular species \todo{define regular
+    species somewhere} can always be built from \One, \X, sum, and
+  partitional product: any regular species must be isomorphic to a sum
+  of regular molecular species; but regular molecular species must be
+  of the form $\X^n$.  Hence regular species are always of the form
+  $\sum_{n \geq 0} a_n \X^n$ with $a_n \in \N$.
+\end{rem}
+
+The story does not end here, however; molecular species can be
+decomposed yet further.
+
+\begin{defn}
+  An \term{atomic} species $F \neq \One$ is one which is
+  indecomposable under partitional product. That is, $F$ is atomic if
+  $F = G \cdot H$ implies $G = \One$ or $H = \One$.
+\end{defn}
+
+\begin{thm}[\citet{yeh1985combinatorial}]
+  Every molecular species $M$ can be uniquely decomposed as a product
+  of atomic species \[ M = A_1^{n_1} \cdot A_2^{n_2} \dots
+  A_k^{n_k}.\]
+\end{thm}
+
+\begin{rem}
+  Of course ``unique'' here means ``unique up to isomorphism'', which
+  includes reordering of the factors.
+\end{rem}
+
+\begin{ex}
+  Of the four molecular species of size $3$ shown in
+  \pref{fig:molec-three}, only the last two ($\Cyc_3$ and $\Bag_3$)
+  are atomic.  The first two, $\X^3$ and $\X \cdot \Bag_2$, decompose
+  as the product of three and two atomic species, respectively.
+\end{ex}
 
 \section{Eliminators for species}
 \label{sec:elim-species}
