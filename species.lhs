@@ -5403,7 +5403,26 @@ case of atomic species.
 \label{sec:variants}
 
 \todo{Write an introduction here.  Mention species variants seen already.}
-\todo{Make a table of the operations and required properties for each.}
+
+\newcommand{\dayops}{$\cdot$, $\aprod$, $\comp$, $\partial$}
+\newcommand{\dayelims}{$\cdot$-E, $\aprod$-E}
+
+\begin{tabular}{lc||c||c||c||c||c}
+                                     & $+$, $\times$ & $+$-E      & $\times$-E & \dayops    & \dayelims  & $\comp$-E  \\
+                                     &               &            &            &            &            &            \\
+  $\Str$ monoidal                    & \checkmark    & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+  \dots coproduct                    &               & \checkmark &            &            &            &            \\
+  \dots symm., pres. colimits        &               &            &            & \checkmark & \checkmark & \checkmark \\
+  \dots left adjoint                 &               &            &            &            &            & \checkmark \\
+  $\Lab$ monoidal                    &               &            &            & \checkmark & \checkmark & \checkmark \\
+  $\Lab$ enriched over $\Str$        &               &            &            & \checkmark & \checkmark & \checkmark \\
+  $\Str$ coends over $\Lab$          &               &            &            & \checkmark & \checkmark & \checkmark \\
+  $\Lab$ locally small               &               &            & \checkmark &            &            &            \\
+  $\Str$ complete, Cart. closed      &               &            & \checkmark &            &            &            \\
+  $\fc \Lab \Str$ enriched over self &               &            &            &            & \checkmark & \checkmark
+\end{tabular}
+
+\todo{Explain table.}
 
 \subsection{Multisort species}
 \label{sec:multisort}
@@ -5449,11 +5468,27 @@ dia = (drawBinTree' (with & slVSep .~ 3 & slHSep .~ 4) . fmap drawSort $ t) -- $
 \end{ex}
 
 \begin{ex}
-  \todo{bicolored cycles}
+  $\Cyc \comp (\X + \Y)$ is the species of \term{bicolored cycles},
+  \ie cycles whose labels are colored with one of two colors
+  (\pref{fig:bicolored-cycle}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=150]
+import           SpeciesDiagrams
+
+elts = [mlocColor, colors !! 2, mlocColor, colors !! 2, mlocColor]
+
+dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{A bicolored cycle}
+    \label{fig:bicolored-cycle}
+  \end{figure}
 \end{ex}
 
 \begin{ex}
-  Graphs with labelled vertices and edges.
+  \todo{Graphs with labelled vertices and edges.}
 \end{ex}
 
 The notion of multisort species is particularly useful for the theory
@@ -5679,4 +5714,3 @@ $A$. \todo{Finish this proof.}
 
 \todo{Unlabelled structures, equivalence classes, and HITs} \bay{Where
   should this go?}
-
