@@ -720,12 +720,12 @@ convenient.\footnote{Traditionally the notation $[\C, \D]$ is also
   used, but $\fc \C \D$ is consistent with the general notation for
   \term{exponentials} explained in \pref{sec:monoids}; the functor
   category $\fc \C \D$ is an exponential object in the Cartesian
-  closed category $\Cat$.}  The notation $\D^\C$ is often helpful
-since intuition for exponents carries over to functor categories; for
-example, $\C^{\D + \E} \equiv \C^\D \times \C^\E$, $(\C \times \D)^\E
-\equiv \C^\E \times \D^\E$, and so on. (In fact, this is not specific
-to functor categories; for example, the second isomorphism holds in
-any Cartesian closed category.)
+  closed category of all small categories, $\Cat$.}  The notation
+$\D^\C$ is often helpful since intuition for exponents carries over to
+functor categories; for example, $\C^{\D + \E} \equiv \C^\D \times
+\C^\E$, $(\C \times \D)^\E \equiv \C^\E \times \D^\E$, and so on. (In
+fact, this is not specific to functor categories; for example, the
+second isomorphism holds in any Cartesian closed category.)
 
 Given a set $X$, the functor category $\Set^X$ (considering $X$ as a
 discrete category) is equivalent to the slice category $\Set / X$. In

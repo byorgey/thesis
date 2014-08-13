@@ -422,6 +422,7 @@
 \renewcommand{\Sp}{\msf}
 \newcommand{\X}{\Sp{X}}
 \newcommand{\Y}{\Sp{Y}}
+\newcommand{\ZZ}{\Sp{Z}}
 \newcommand{\F}{\Sp{F}}
 \newcommand{\G}{\Sp{G}}
 \newcommand{\List}{\Sp{L}}

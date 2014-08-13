@@ -28,7 +28,10 @@ relations on species, \term{isomorphism} and \term{equipotence}, and
 in particular sheds some new light on equipotence via the encoding of
 species in HoTT.  \todo{finish this introduction, once I have a better
   idea of how the rest of the chapter will actually shake out.  Talk
-  about generating functions, internal homs.}
+  about generating functions, internal homs.  Also talk about how
+  framework, listing requirements, etc. allows for a much more
+  ``modular'' approach, \ie add whatever features to your species you
+  want (HoTT-based, multisort, weighted, \etc)}
 
 \section{Intuition and examples}
 \label{sec:species-intuition}
@@ -5396,97 +5399,218 @@ via currying.  So in some sense we are only ``forced'' to use the
 above characterization of morphisms out of quotient species in the
 case of atomic species.
 
-\section{Examples}
-\label{sec:examples}
+\section{Other species variants}
+\label{sec:variants}
 
-\todo{Write an introduction here.}
+\todo{Write an introduction here.  Mention species variants seen already.}
+\todo{Make a table of the operations and required properties for each.}
 
 \subsection{Multisort species}
 \label{sec:multisort}
 
-\todo{General introduction to the concept of multisort species, and
-  usual definition.}
+Multisort species are a generalization of species in which the labels
+are classified according to multiple \term{sorts}.  We often use $\X$,
+$\Y$, $\ZZ$ or $\X_1$, $\X_2$, \dots to denote sorts.  In particular,
+(say) $\Y$ denotes the species, analogous to $\X$, for which there is
+a single shape containing a single label \emph{of sort $Y$} (and none
+of any other sort).  More generally, multisort species correspond to
+multivariate generating functions. See \citet[\S 4.2]{bll} for a
+precise definition, spelled out in detail.  For now, an intuitive
+sense is sufficient; we will give a more abstract (but no less precise)
+definition later.
 
-\todo{The idea is to show that this fits into our general setting,
-  which also widens its applicability.}
+\begin{ex}
+  Consider \[ \frak{T} = \Y + \X \cdot \frak{T}^2, \] the two-sort
+  species of binary trees with internal nodes and leaves labelled by
+  distinct sorts.  \pref{fig:bin-two-sort} illustrates an example
+  shape of this species, with one label sort represented by blue
+  circles, and the other by green squares.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=200]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
 
-\newcommand{\lcat}[1]{#1^*}
-\newcommand{\emptylist}{[\,]}
+t = nd 0 (nd 3 (lf 1) (nd 1 (lf 0) (lf 3))) (nd 2 (lf 2) (lf 4))
+  where
+    nd x l r = BNode (Left x) l r
+    lf x = BNode (Right x) Empty Empty
 
-\begin{defn}
-  Given a category $\C$, define the category $\lcat{\C}$ as follows.
-  \begin{itemize}
-  \item The objects of $\lcat{\C}$ are finite (possibly empty) lists
-    $[C_1, C_2, C_3, \dots]$ of objects from $\C$.
-  \item The morphisms from $[C_1, \dots, C_n]$ to $[D_1, \dots, D_n]$
-    are lists of morphisms $[f_1, \dots, f_n]$ with $f_i : C_i \to
-    D_i$.  Note there are no morphisms $[C_1, \dots, C_m] \to [D_1,
-    \dots, D_n]$ when $m \neq n$.
-  \end{itemize}
-\end{defn}
+drawSort (Left i) = mloc i
+drawSort (Right i) = text (show i) <> square 1.6 # fc (colors !! 2)
 
-\todo{Need to add more text here motivating these definitions and
-  propositions.  Will go much better once I get a better sense of
-  where this all is headed exactly, and which of these properties we
-  need and why.}
+dia = (drawBinTree' (with & slVSep .~ 3 & slHSep .~ 4) . fmap drawSort $ t) -- $
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{A two-sort species of binary trees}
+    \label{fig:bin-two-sort}
+  \end{figure}
+\end{ex}
 
-\begin{lem}
-  For any category $\C$, $\lcat{\C}$ is monoidal with list
-  concatenation |++| as the tensor product and the empty list as
-  the identity object.
-\end{lem}
+\begin{ex}
+  \todo{bicolored cycles}
+\end{ex}
 
-\renewcommand{\Cat}{\cat{Cat}}
+\begin{ex}
+  Graphs with labelled vertices and edges.
+\end{ex}
 
-\todo{Note that $\lcat{-}$ is a functor $\Cat \to \Cat$? (Is it?)}
+The notion of multisort species is particularly useful for the theory
+of implicit/recursive species \todo{finish this.  Depends on what
+  exactly I end up saying about implicit species.}
 
-\begin{defn}
-  Define the embedding functor $e : \C \to \lcat{\C}$ which sends $C$
-  to the singleton list $[C]$ and $f$ to $[f]$.
-\end{defn}
+\citet{bll} detail how to extend operations such as sum, partitional
+product, and composition to multisort species.  We give just one
+example here, that of composition. If $F$ is an $m$-sort species, and
+$(G_1, \dots, G_m)$ is an $m$-tuple of $n$-sort species, then $F \comp
+(G_1, \dots, G_m)$ is an $n$-sort species whose shapes consist of a
+top-level $F$-shape with $G_i$-shapes substituted for each label of
+sort $i$.
 
-\begin{prop}
-  $e$ is full and faithful.
-\end{prop}
+\begin{ex}
+  \todo{Need an example of generalized composition.}
+\end{ex}
 
-\begin{defn}
-  If $(\C, \otimes, I)$ is a monoidal category, we may define a
-  functor $F^\otimes : \lcat{\C} \to \C$ by:
-  \begin{itemize}
-  \item $F^\otimes\ \emptylist = I$
-  \item $F^\otimes\ [C_1, \dots, C_n] = C_1 \otimes \dots \otimes C_n$
-  \end{itemize}
-  and similarly for morphisms.
-\end{defn}
+However, defining multisort species and all the operations on them
+``from scratch'' is unnecessary; they can be defined abstractly as
+objects in a certain functor category, and hence fit into the abstract
+framework developed in the preceding sections.
 
-\begin{prop}
-  $F^\otimes$ is a (strict) monoidal functor.
-  \begin{proof}
-    $F^\otimes\ \emptylist = I$ by definition, and it is easy to check
-    that $F^\otimes\ (\ell_1 \plus \ell_2) = F^\otimes\ \ell_1 \otimes
-    F^\otimes\ \ell_2$.
-  \end{proof}
-\end{prop}
+\citet{bll} acknowledge as much in Exercise 2.4.6, but \todo{we take
+  it even farther\dots}
+
+Let $S$ be a finite set, which we think of as a collection of names
+for sorts, that is, each element $s \in S$ represents a different
+sort.  Let $\Lab$ be a category, which we think of as a category of
+labels (\eg $\B$).  Consider the functor category $\Lab^S$.  Objects
+of $\Lab^S$ are functors $S \to \Lab$, that is, an assignment of an
+object from $\Lab$ to each $s \in S$. Morphisms in $\Lab^S$ are
+natural transformations, that is, $S$-indexed families of
+$\Lab$-morphisms between corresponding objects of $\Lab$.  For
+example, in the case $\Lab = \B$, objects of $\B^S$ are just $S$-tuples of
+finite sets, and morphisms are $S$-tuples of bijections between them.
 
 \begin{rem}
-  Note that $F^\otimes$ is not, in general, an isomorphism.  In
-  particular, there may exist morphisms $C_1 \otimes \dots \otimes C_n
-  \to D_1 \otimes \dots \otimes D_n$ which do not arise as a tensorial
-  product of morphisms $f_i : C_i \to D_i$.  For example, in $(\Set,
-  +)$ we may define \todo{finish me}.
+  Recall that $\Set^S \iso \Set/S$ (\pref{sec:ct-fundamentals}).  It
+  is not the case that $\B^S \iso \B/S$, since objects of $\B/S$
+  consist of a finite set $L$ paired with a \emph{bijection} $L \bij
+  S$, which only allows one label of each sort.  However, it is
+  possible to consider the category whose objects are finite sets $L$
+  paired with a function $\chi : L \to S$, as in $\Set/S$, but whose
+  morphisms $(L_1,\chi_1) \to (L_2,\chi_2)$ are \emph{bijections}
+  $\sigma : L_1 \bij L_2$ such that $\chi_2 \comp \sigma = \chi_1$.
+  In other words, the objects are finite sets with sorts assigned to
+  their elements, and the morphisms are sort-preserving
+  bijections. This category is indeed equivalent to $\B^S$.
+
+  However, this construction only works because the objects of $\B$
+  are finite sets; in the general case we must stick
+  with $\Lab^S$.
 \end{rem}
 
-Given a functor category of generalized species $[\Lab, \Str]$, we may
-now form the category $[\lcat{\Lab}, \Str]$ of generalized multisort
-species.  In particular, $[\lcat{\B}, \Set]$ corresponds exactly to
-the notion of multisort species defined in \citet{bll}.
+\begin{defn}
+  For a finite set $S$, the \term{$S$-sort ($\Lab$,$\Str$)-species}
+  are functors \[ \Lab^S \to \Str. \]
+\end{defn}
 
-\todo{Note conditions under which this preserves the structure we care
-  about.  Need $\lcat{\Lab}$ to still be enriched over $\Str$.  We
-  have shown above that $\lcat{\Lab}$ preserves relevant monoidal
-  structure.  Hmm\dots multisort corresponds particularly to
-  interpreting lists using coproduct from underlying category\dots
-  where does that come from?}
+One can verify that taking $\Lab = \B$, $\Str = \Set$, and $S = \fin
+k$ for some $k \in \N$, we recover exactly the definition of $k$-sort
+species given by Bergeron \etal.
+
+The payoff is that we can now check that $\Lab^S$ inherits the
+relevant properties from $\Lab$, and thus conclude that $(\Lab^S,
+\Str)$-species inherit operations from $(\Lab,\Str)$-species.
+
+\begin{itemize}
+\item \todo{monoidal}
+\item \todo{groupoid?}
+\item \todo{enriched}
+\end{itemize}
+
+% \todo{After here, stuff left over from before, just get rid of it?  Or
+% is there anything I can still use?}
+
+% \todo{The idea is to show that this fits into our general setting,
+%   which also widens its applicability.}
+
+% \newcommand{\lcat}[1]{#1^*}
+% \newcommand{\emptylist}{[\,]}
+
+% \begin{defn}
+%   Given a category $\C$, define the category $\lcat{\C}$ as follows.
+%   \begin{itemize}
+%   \item The objects of $\lcat{\C}$ are finite (possibly empty) lists
+%     $[C_1, C_2, C_3, \dots]$ of objects from $\C$.
+%   \item The morphisms from $[C_1, \dots, C_n]$ to $[D_1, \dots, D_n]$
+%     are lists of morphisms $[f_1, \dots, f_n]$ with $f_i : C_i \to
+%     D_i$.  Note there are no morphisms $[C_1, \dots, C_m] \to [D_1,
+%     \dots, D_n]$ when $m \neq n$.
+%   \end{itemize}
+% \end{defn}
+
+% \todo{Need to add more text here motivating these definitions and
+%   propositions.  Will go much better once I get a better sense of
+%   where this all is headed exactly, and which of these properties we
+%   need and why.}
+
+% \begin{lem}
+%   For any category $\C$, $\lcat{\C}$ is monoidal with list
+%   concatenation |++| as the tensor product and the empty list as
+%   the identity object.
+% \end{lem}
+
+% \renewcommand{\Cat}{\cat{Cat}}
+
+% \todo{Note that $\lcat{-}$ is a functor $\Cat \to \Cat$? (Is it?)}
+
+% \begin{defn}
+%   Define the embedding functor $e : \C \to \lcat{\C}$ which sends $C$
+%   to the singleton list $[C]$ and $f$ to $[f]$.
+% \end{defn}
+
+% \begin{prop}
+%   $e$ is full and faithful.
+% \end{prop}
+
+% \begin{defn}
+%   If $(\C, \otimes, I)$ is a monoidal category, we may define a
+%   functor $F^\otimes : \lcat{\C} \to \C$ by:
+%   \begin{itemize}
+%   \item $F^\otimes\ \emptylist = I$
+%   \item $F^\otimes\ [C_1, \dots, C_n] = C_1 \otimes \dots \otimes C_n$
+%   \end{itemize}
+%   and similarly for morphisms.
+% \end{defn}
+
+% \begin{prop}
+%   $F^\otimes$ is a (strict) monoidal functor.
+%   \begin{proof}
+%     $F^\otimes\ \emptylist = I$ by definition, and it is easy to check
+%     that $F^\otimes\ (\ell_1 \plus \ell_2) = F^\otimes\ \ell_1 \otimes
+%     F^\otimes\ \ell_2$.
+%   \end{proof}
+% \end{prop}
+
+% \begin{rem}
+%   Note that $F^\otimes$ is not, in general, an isomorphism.  In
+%   particular, there may exist morphisms $C_1 \otimes \dots \otimes C_n
+%   \to D_1 \otimes \dots \otimes D_n$ which do not arise as a tensorial
+%   product of morphisms $f_i : C_i \to D_i$.  For example, in $(\Set,
+%   +)$ we may define \todo{finish me}.
+% \end{rem}
+
+% Given a functor category of generalized species $[\Lab, \Str]$, we may
+% now form the category $[\lcat{\Lab}, \Str]$ of generalized multisort
+% species.  In particular, $[\lcat{\B}, \Set]$ corresponds exactly to
+% the notion of multisort species defined in \citet{bll}.
+
+% \todo{Note conditions under which this preserves the structure we care
+%   about.  Need $\lcat{\Lab}$ to still be enriched over $\Str$.  We
+%   have shown above that $\lcat{\Lab}$ preserves relevant monoidal
+%   structure.  Hmm\dots multisort corresponds particularly to
+%   interpreting lists using coproduct from underlying category\dots
+%   where does that come from?}
 
 \subsection{Weighted species}
 \label{sec:weighted}
