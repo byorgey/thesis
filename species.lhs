@@ -5092,22 +5092,22 @@ action:
 \begin{defn}[Quotient species \citep{labelle1985quelques}]
   Let $F$ be a species and let $H$ act naturally on $F$.  Then define
   the \term{quotient species} $F/H$ as the species which sends the
-  finite set $L$ to the set of orbits of $F\ L$ under the action of
+  finite set of labels $L$ to the set of orbits of $F\ L$ under the action of
   $H$.
 
-  Put another way, for $f_1, f_2 \in F\ L$, define $f_1 \eqrel f_2$ if there
+  Put another way, for $f_1, f_2 \in F\ L$, define $f_1 \eqrel_H f_2$ if there
   is some $h \in H$ such that $h \act f_1 = f_2$; this defines an
   equivalence relation on $F\ L$, and we define $(F/H)\ L$ to be the
   set of equivalence classes under this equivalence relation.
 
   For a given $\sigma : L \bij K$, we define $(F/H)\ \sigma : (F/H)\ L
   \to (F/H)\ K$ by \[ F\ \sigma\ [f] \defeq [F\ \sigma\ f]. \] For
-  this to be well-defined, we must show that if $f_1 \eqrel f_2$ then $F\
-  \sigma\ f_1 \eqrel F\ \sigma\ f_2$.  This follows from the naturality
-  of the action of $H$: if $f_1 \eqrel f_2$, that is, there is some $h
+  this to be well-defined, we must show that if $f_1 \eqrel_H f_2$ then $F\
+  \sigma\ f_1 \eqrel_H F\ \sigma\ f_2$.  This follows from the naturality
+  of the action of $H$: if $f_1 \eqrel_H f_2$, that is, there is some $h
   \in H$ such that $h \act f_1 = f_2$, then $h \act (F\ \sigma\ f_1) =
   F\ \sigma\ (h \act f_1) = F\ \sigma\ f_2$, that is, $F\ \sigma\ f_1
-  \eqrel F\ \sigma\ f_2$.  It is also easy to see that $F/H$ inherits
+  \eqrel_H F\ \sigma\ f_2$.  It is also easy to see that $F/H$ inherits
   the functoriality of $F$.
 \end{defn}
 
@@ -5347,7 +5347,54 @@ characterized in terms of an internal Hom functor, in
 
 \paragraph{Molecular and atomic species}
 
-\todo{eliminator for atomic species, with quotienting.  How to derive formally?}
+We first consider molecular species, which by the discussion in the
+previous section are equivalent to $\X^n / H$ for some $H \subgroup
+\S_n$.  Unfolding definitions,
+\begin{sproof}
+  \stmt{\hom[\Spe]{\X^n / H}{G}}
+  \reason{=}{definition}
+  \stmt{\eend L \hom[\Set]{(\X^n/H)\ L}{G\ L}}
+  \reason{=}{definition of $F / H$}
+  \stmt{\eend L \hom[\Set]{(\X^n\ L) / \mathord{\eqrel_H}}{G\ L}}
+\end{sproof}
+where $f_1 \eqrel_H f_2$ iff there exists some $\sigma \in H$ such
+that $\X^n\ \sigma\ f_1 = f_2$.  We now note that a function out of a
+set of equivalence classes can be characterized as a function out of
+the underlying set which respects the equivalence relation.  That is,
+the last line of the computation above is isomorphic to \[ (f : \eend
+L \hom[\Set]{\X^n\ L}{G\ L}) \times ((\sigma \in H) \to (f = f \comp
+(\X^n\ \sigma)), \] a species morphism $\hom {\X^n}{G}$ paired with a
+proof that it respects the equivalence induced by $H$.  Note that the
+same argument applies unchanged to the more general case of a quotient
+species $F/H$.
+
+\begin{ex}
+  Consider species morphisms $\psi : \Cyc_5 \to \Bin_5$, from cycles
+  to binary trees of size $5$. (You may want to pause to think about
+  what such morphisms could look like.)
+
+  As noted earlier, $\Cyc_5 \iso \X^5 / \Z_5$.  So any $\psi : \Cyc_5
+  \to \Bin_5$ is isomorphic to a species morphism $\chi : \X^5 \to
+  \Bin_5$ together with a proof that $\chi = \chi \comp (\X^5\
+  \sigma)$ for all $\sigma \in \Z_5$.  By naturality of $\chi$, we
+  have $\chi \comp (\X^5\ \sigma) = (\Bin_5\ \sigma) \comp \chi$, and
+  hence $\chi = (\Bin_5\ \sigma) \comp \chi$.  However, we now see
+  that this was something of a trick ``example'': since $\Bin_5$ is
+  regular, $\Bin_5\ \sigma$ has no fixed points unless $\sigma = \id$,
+  and $\Z_5$ certainly contains nontrivial permutations.  Therefore no
+  such morphisms $\psi : \Cyc_5 \to \Bin_5$ can exist!
+\end{ex}
+
+\begin{ex}
+  \todo{An actual example. $\Cyc_{2n} \to \Bag_2 \comp \Cyc$?  $\Cyc
+    \to \Cyc$?}
+\end{ex}
+
+Finally, for molecular species which are not atomic, of course it is possible
+to decompose them as a product, and characterize morphisms out of them
+via currying.  So in some sense we are only ``forced'' to use the
+above characterization of morphisms out of quotient species in the
+case of atomic species.
 
 \section{Examples}
 \label{sec:examples}

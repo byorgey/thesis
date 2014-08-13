@@ -194,6 +194,8 @@
 % group action
 \newcommand{\act}{\odot}
 
+\newcommand{\subgroup}{\subseteq}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Theorems etc.
 
