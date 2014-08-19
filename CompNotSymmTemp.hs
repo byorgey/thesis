@@ -11,7 +11,7 @@ dot = circle 0.8 # fc black
 enc = fc white . enclose 1 1
 
 newCyc :: Double -> [Diagram B R2] -> Diagram B R2
-newCyc r ds = position (zip posns (zipWith named [0 :: Int ..] ds)) # markBorders
+newCyc r ds = position (zip posns (zipWith named [0 :: Int ..] ds)) <> circle r -- # markBorders
   where
     n = length ds
     triples = zip4 ([1 :: Int .. n-1] ++ [0])
@@ -34,9 +34,9 @@ cls = map (newCyc 2.5) ((map . map) (enc . drawList' (const dot) . flip replicat
 lcs = map (drawList' id) ((map . map) (enc . newCyc 2 . flip replicate dot) [[1,1,1],[2,1],[1,2],[3]])
 
 dia =
-  vcat' (with & sep .~ 2)
-  [ hcat' (with & sep .~ 3) cls
-  , hcat' (with & sep .~ 3) lcs
+  hcat' (with & sep .~ 6)
+  [ vcat' (with & sep .~ 3) cls # centerY
+  , vcat' (with & sep .~ 3) lcs # centerY
   ]
   # frame 0.5
   # lwO 0.7

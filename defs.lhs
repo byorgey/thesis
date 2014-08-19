@@ -430,6 +430,7 @@
 \newcommand{\Par}{\Sp{Par}}
 \newcommand{\Bag}{\Sp{E}}
 \newcommand{\Rubbish}{\bigcirc}
+\newcommand{\elts}{\varepsilon}
 \newcommand{\Cyc}{\Sp{C}}
 \newcommand{\Perm}{\Sp{S}}
 \newcommand{\Bin}{\Sp{B}}

@@ -5,6 +5,8 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
+\todo{Write something about relation to ADTs, with multisort used to
+  represent constructors?}
 \todo{Go through and add some back references to preliminaries chapter?}
 \todo{Need a story for building with both color or black/white
   figures}
@@ -2940,7 +2942,7 @@ dia = pairs
 \begin{ex}
   The species $\X \cdot \Bag$ is variously known as the species of
   \term{pointed sets} (which may be denoted $\pointed{\Bag}$) or the
-  species of \term{elements} (denoted $\varepsilon$).  $(\X \cdot
+  species of \term{elements} (denoted $\elts$).  $(\X \cdot
   \Bag)$-structures consist of a single distinguished label paired
   with an unstructured collection of any number of remaining
   labels. There are thus $n$ such structures on each label set of
@@ -3864,15 +3866,61 @@ already supports composition as well.
 
 For a formal proof that composition is associative, see
 \citet[pp. 5--6]{kelly2005operads}, although some reflection on the
-intuitive idea of composition should be enough to convince: for
-example, a tree which contains cycles-of-lists is the same thing as a
-tree-of-cycles containing lists.
+intuitive idea of composition should be enough to convince informally:
+for example, a tree which contains cycles-of-lists is the same thing
+as a tree-of-cycles containing lists.
 
 Unlike the other monoidal structures on $\Spe$ (sum and Cartesian,
 arithmetic, and partitional product), composition is not symmetric.
-For example, consider that $(\Cyc \comp \List)\ 3 \not \iso (\List
-\comp \Cyc)\ 3$ \todo{picture --- needs new cycle creation function.
-  Partial attempt saved in CompNotSymmTemp.hs}
+For example, as illustrated in \pref{fig:cyc-list-list-cyc}, there
+are different numbers of $(\Cyc \comp \List)$-forms and $(\List \comp
+\Cyc)$-forms of size $3$, and hence $\Cyc \comp \List \not \iso \List
+\comp \Cyc$. \later{Some sort of connection to Traversable?}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=150]
+import           Data.List                      (zip4)
+import           SpeciesDiagrams
+
+dot = circle 0.8 # fc black
+
+enc = fc white . enclose 1 1
+
+newCyc :: Double -> [Diagram B R2] -> Diagram B R2
+newCyc r ds = position (zip posns (zipWith named [0 :: Int ..] ds)) <> circle r -- # markBorders
+  where
+    n = length ds
+    triples = zip4 ([1 :: Int .. n-1] ++ [0])
+                posns (tail (cycle posns)) ((tail . tail) (cycle posns))
+    markBorders = withNames [0 :: Int .. n-1] $ \ss ->   -- $
+      applyAll (map (mark2Borders ss) triples)
+    mark2Borders ss (i,prev,cur,next) = id
+      -- where
+      --   pb = binarySearch
+    posns :: [P2]
+    posns
+      || n == 1 = [0 ^& r]
+      || otherwise = polygon (with & polyType .~ PolyRegular (length ds) r
+                                  & polyOrient .~ NoOrient
+                            )
+                    # rotateBy (1/4)
+
+cls = map (newCyc 2.5) ((map . map) (enc . drawList' (const dot) . flip replicate ()) [[1,1,1],[2,1],[3]])
+
+lcs = map (drawList' id) ((map . map) (enc . newCyc 2 . flip replicate dot) [[1,1,1],[2,1],[1,2],[3]])
+
+dia =
+  hcat' (with & sep .~ 6)
+  [ vcat' (with & sep .~ 3) cls # centerY
+  , vcat' (with & sep .~ 3) lcs # centerY
+  ]
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{$(\Cyc \comp \List)$- and $(\List \comp \Cyc)$-forms of size 3}
+  \label{fig:cyc-list-list-cyc}
+\end{figure}
 
 \begin{prop}
   $(\Spe, \comp, \X)$ is monoidal closed.
@@ -3999,20 +4047,20 @@ defined as endofunctors $\B \to \B$, the functor composition $F \fcomp
 G$ can literally be defined as the composition of $F$ and $G$ as
 functors, that is, \[ (F \fcomp G)\ L = F\ (G\ L). \] However, if
 species are viewed as functors $\B \to \Set$ then this operation is
-not well-typed as stated, and indeed feels somewhat unnatural.
+not well-typed as stated; we return to this problem after considering some
+intuition and examples.
 
 Intuitively, an $(F \fcomp G)$-shape on the set of labels $L$ can be
 thought of as consisting of \emph{all possible} $G$-shapes on the
 labels $L$, with an $F$-shape on this collection of $G$-shapes as
-labels. (It is this conflation of shapes and labels which gives
-functor composition an unnatural feeling from a typed point of view.)
-Functor composition thus has a similar relationship to partitional
-composition as Cartesian product has to partitional product.  With
-partitional product, the labels are partitioned into two disjoint
-sets, whereas with Cartesian products the labels are shared.  With
-partitional composition, the labels are partitioned into (any number
-of) subsets with a $G$-shape on each; with functor composition, the
-labels are shared among \emph{all possible} $G$-shapes.
+labels.  Functor composition thus has a similar relationship to
+partitional composition as Cartesian product has to partitional
+product.  With partitional product, the labels are partitioned into
+two disjoint sets, whereas with Cartesian products the labels are
+shared.  With partitional composition, the labels are partitioned into
+(any number of) subsets with a $G$-shape on each; with functor
+composition, the labels are shared among \emph{all possible}
+$G$-shapes.
 
 \begin{rem}
   There is no standard operation which directly creates an $F$-shape
@@ -4036,8 +4084,7 @@ labels are shared among \emph{all possible} $G$-shapes.
   $\Bag_2$; and so on.
 \end{ex}
 
-A more thorough investigation and generalization of functor
-composition is left to future work.
+\todo{Working here.  Explain in terms of left Kan extensions.}
 
 \section{Differentiation}
 \label{sec:differentiation}
@@ -4241,6 +4288,31 @@ dia = listCycEquiv
     \caption{$\List' = \List^2$}
     \label{fig:list-deriv}
   \end{figure}
+\end{ex}
+
+\begin{ex}
+  Well-scoped terms of the (untyped) lambda calculus may be
+  represented as shapes of the species \[ \Lambda = \elts + \Lambda^2
+  + \Lambda'. \] (This example appears implicitly---without an
+  explicit connection to species---in the work of
+  \citet{altenkirch2010monads}, and earlier also in that of
+  \citet{altenkirch1999monadic} and \citet{fiore2003abstract}.)
+  Labels correspond to (free) variables, that is, the elements of
+  $\Lambda\ V$ are well-scoped lambda calculus terms with free
+  variables taken from the set $V$.  The above equation for $\Lambda$
+  can thus be interpreted as saying that a lambda calculus term with
+  free variables in $V$ is either
+  \begin{itemize}
+    \item an element of $V$, \ie a variable
+      (recall that $\elts = \X \cdot \Bag = \X \cdot \Rubbish$ is the
+      species of elements)
+    \item a pair of terms (application), or
+    \item a lambda abstraction, represented by a term with free
+      variables taken from the set $\singleton \uplus V$.  The new
+      variable $\star$ of course represents the variable bound by the
+      abstraction.
+  \end{itemize}
+  The set of \emph{closed} terms is thus given by $\Lambda\ \varnothing$.
 \end{ex}
 
 The operation of species differentiation obeys laws which are familiar
@@ -4554,9 +4626,9 @@ dia =
 
 \begin{defn}
 The operation of \term{pointing} can be defined in terms of the
-species of elements, $\varepsilon = \X \cdot \Rubbish$, and Cartesian
+species of elements, $\elts = \X \cdot \Rubbish$, and Cartesian
 product:
- \[ \pt F = \varepsilon \times F. \]
+ \[ \pt F = \elts \times F. \]
 \end{defn}
 As illustrated on the left-hand side of \pref{fig:pointing}, an $\pt F$-structure can be
 thought of as an $F$-structure with one particular distinguished
