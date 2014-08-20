@@ -999,8 +999,6 @@ dissertation.
   type theory---e.g. can we assume parametricity for functions that
   abstract over things classified by |*|? Cite Bernardy et al.}
 
-\todo{Missing universal properties}
-
 \paragraph{Coends}
 
 Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
@@ -1021,7 +1019,9 @@ T(C,C)$ for every $X$, such that the
 diagram \[ \xymatrix@@dr{ T(X',X) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(X',X') \ar[d]^{\omega_{X'}} \\
   T(X,X) \ar[r]_{\omega_X} & \coend C T(C,C) } \] commutes for all $X,
 X' : \C$ and $f : X \to X'$. (This square represents
-\term{dinaturality} of $\omega$.)
+\term{dinaturality} of $\omega$.)  Additionally, a coend must satisfy
+an appropriate universal property guaranteeing its uniqueness up to
+isomorphism (see \citep[\Sect IX.5--6]{mac1998categories}).
 
 Since there must be morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$
 for every $C$, one's first try might be to implement the coend as an
@@ -1076,12 +1076,13 @@ is an object of $\D$ together with morphisms $\alpha_X : \eend C
 T(C,C) \to T(X,X)$ such that \[ \xymatrix@@dr{ \eend C T(C,C)
   \ar[r]^{\alpha_C} \ar[d]_{\alpha_{C'}} & T(C,C) \ar[d]^{T(1,f)} \\
   T(C',C') \ar[r]_{T(f,1)} & T(C,C') } \] commutes for all $C, C' :
-\C$ and $f : C \to C'$.  The end $\eend C T(C,C)$ can thus be
-``instantiated'' at any type $X$ by the morphism $\alpha_X$, and the
-dinaturality of $\alpha$ ensures that these instantiations all
-``behave uniformly''.  It should come as no surprise that ends in
-Haskell are given by universal quantification, that is, |forall c. T c
-c| \citep{kmett2008kan}.
+\C$ and $f : C \to C'$, together with an appropriate universal
+property.  The end $\eend C T(C,C)$ can thus be ``instantiated'' at
+any type $X$ by the morphism $\alpha_X$, and the dinaturality of
+$\alpha$ ensures that these instantiations all ``behave uniformly''.
+It should come as no surprise that ends in Haskell are given by
+universal quantification, that is, |forall c. T c c|
+\citep{kmett2008kan}.
 
 In fact, there is an even deeper connection between ends and Haskell's
 $\forall$ notation.  It is well-known in the Haskell community that
