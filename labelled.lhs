@@ -221,7 +221,11 @@ lanAdjoint h = homL (uncurry (yoneda' h))
   (like Joyal)?}
 
 We are now ready to consider Joyal's definition of \term{analytic
-  functors}~\citep{joyal86}.
+  functors}~\citep{joyal86}. \todo{Give more of an intro here?}
+
+\subsection{Definition and intuition}
+\label{sec:analytic-definition}
+
 \begin{defn}[Joyal]
   Given a species $F : \fc \B \Set$, the \term{analytic functor}
   $\analytic F$ corresponding to $F$ is given by $\lan \iota F$, the
@@ -230,7 +234,9 @@ We are now ready to consider Joyal's definition of \term{analytic
   arises in this way from some species.
 \end{defn}
 \[ \xymatrix{\B
-  \ar[dr]^{F} \ar@@{_{(}->}[d]_\iota \\ \Set \ar[r]_{\analytic F} & \Set } \]
+  \ar[dr]^{F} \ar@@{_{(}->}[d]_\iota \\ \Set \ar[r]_{\analytic F} &
+  \Set } \]
+
 We can think of $\analytic F$ as the polymorphic ``data type'' arising from
 the species $F$. The construction in \pref{prop:Lan-coend} tells us
 exactly what such a data type looks like: \[ \analytic F\ A = \coend L (\iota
@@ -304,6 +310,44 @@ Analytic functors have many nice properties: for example, they are
 closed under sums, products, composition, and least fixed
 points. \todo{cite. Joyal?} \todo{Expand.  Give a bit more
   context/justification.}
+
+\subsection{An attempt at generalized functor composition}
+\label{sec:functor-composition}
+
+\todo{This should move to after the discussion of labelled structures.}
+
+Recall from \pref{sec:functor-composition} that if species are taken
+to be functors $\B \to \B$, then one can define the \term{functor
+  composition} $G \fcomp F$ to be the literal composition of $G$ and
+$F$, that is, $(G \fcomp F)\ L = G\ (F\ L)$.  However, if species are
+taken as functors $\B \to \Set$ it is not clear how to generalize this
+idea.  With the idea of analytic functors under our belt we are ready
+to consider one possible idea (which does not work).
+
+It seems we must begin by restricting ourselves to functors $F, G : \B
+\to \FinSet$; we cannot use infinite sets of shapes as label sets.  In
+that case, as observed previously, functors $\B \to \FinSet$ are
+essentially equivalent to functors $\B \to \B$, so in fact defining
+functor composition for species $\B \to \FinSet$ is not difficult.
+However, it still does not give us any idea of how to generalize to
+$(\Lab,\Str)$-species.
+
+There is another possibility: given some embedding functor $\iota :
+\Lab \to \Str$ (with some mild restrictions), there is a monoidal
+structure on $\fc \Lab \Str$, given by $G \bullet F = F \comp (\lan
+\iota G)$, that is, \[ \xymatrix{ & \Lab \ar[d]^\iota \ar[dr]^G \\
+  \Lab \ar[r]_F & \Str \ar[r]_{\lan \iota G} & \Str } \]
+\citep{altenkirch2010monads}.  Unfortunately, if we examine the
+special case of $\B \to \FinSet$, we can see that this monoidal
+structure is \emph{not} the same as functor composition.  To see the
+difference, suppose $G : \B \to \FinSet$ is some species all of whose
+shapes contain each label exactly once.  Note that $\lan \iota G$ is
+by definition $\analytic G$, the analytic functor corresponding to
+$G$.  Therefore, $(\analytic G \comp F)$-shapes on $L$ consist of
+$G$-structures containing $(F\ L)$-shapes as data.  Note that any
+particular $(F\ L)$-shape can occur multiple times or none at all.  In
+contrast, a $(G \fcomp F)$-shape contains every possible $F$-shape
+exactly once.
 
 \subsection{Analytic functors and generating functions}
 \label{sec:analytic-generating}
