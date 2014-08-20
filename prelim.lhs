@@ -1081,10 +1081,12 @@ dinaturality of $\alpha$ ensures that these instantiations all
 Haskell are given by universal quantification, that is, |forall c. T c
 c| \citep{kmett2008kan}.
 
-The connection between ends and Haskell's $\forall$ notation can be
-extended even further. \later{improve previous sentence.  What am I
-  really trying to say here?}  Given two functors $F, G : \C \to \D$,
-consider the bifunctor \[ \Hom{F -}{G -} : \C^\op \times \C \to
+In fact, there is an even deeper connection between ends and Haskell's
+$\forall$ notation.  It is well-known in the Haskell community that
+polymorphic---\ie universally quantified---functions ``correspond'' to
+natural transformations, via parametricity; this correspondence can be
+made formally precise as follows.  Given two functors $F, G : \C \to
+\D$, consider the bifunctor \[ \Hom{F -}{G -} : \C^\op \times \C \to
 \Set, \] which sends objects $X, Y \in C$ to the set of morphisms
 $\Hom[\D] {F\ X}{G\ Y}$, and acts on morphisms $f : X' \to X$ and $g :
 Y \to Y'$ by \[ (\Hom{F\ f}{G\ g})\ h = G\ g \comp h \comp F\ f. \]
@@ -1100,7 +1102,7 @@ naturality for $\alpha$.  Thus an end over $\Hom{F-}{G-}$ is precisely
 a natural transformation, that is, \[ (\eend C \Hom{F\ C}{G\ C}) \iso
 (\nt F G). \] This formally justifies using the notation $\eend C
 \Hom{F\ C}{G\ C}$ for natural transformations between $F$ and
-$G$. \later{cite catsters videos? or something else?}
+$G$, just as in Haskell. \later{cite catsters videos? or something else?}
 
 \subsection{The Yoneda lemma}
 \label{sec:yoneda}
