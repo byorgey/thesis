@@ -4313,7 +4313,18 @@ dia = listCycEquiv
       variable $\star$ of course represents the variable bound by the
       abstraction.
   \end{itemize}
-  The set of \emph{closed} terms is thus given by $\Lambda\ \varnothing$.
+  The set of \emph{closed} terms is thus given by $\Lambda\
+  \varnothing$.  Note that there are infinitely many terms with any
+  given number of free variables, so this is not useful for doing
+  \emph{combinatorics}; as an equation of generating functions,
+  $\Lambda(x) = \elts(x) + \Lambda^2(x) + \Lambda'(x)$ has no
+  solution.  To do combinatorics with lambda terms one must also count
+  applications and abstractions as contributing to the size, \eg using
+  a two-sort species (\pref{sec:multisort}) like \[ \Xi = \X \cdot
+  \Bag + \Y \cdot \Xi^2 + \Y \cdot \frac{\partial}{\partial \X} \Xi \]
+  which uses labels of sort $\Y$ to mark occurrences of applications
+  and abstractions; see \citet{grygiel2013counting,
+    lescanne2013counting}.
 \end{ex}
 
 The operation of species differentiation obeys laws which are familiar
