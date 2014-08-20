@@ -5,6 +5,7 @@
 \chapter{Equality and Finiteness}
 \label{chap:equality}
 
+\todo{Improve this introduction --- mention contributions.}
 Before delving into combinatorial species proper, we must first tackle
 some foundational issues---in particular, how equality and finiteness
 are handled in a constructive setting.  As we will see, these topics

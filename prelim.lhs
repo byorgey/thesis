@@ -999,6 +999,8 @@ dissertation.
   type theory---e.g. can we assume parametricity for functions that
   abstract over things classified by |*|? Cite Bernardy et al.}
 
+\todo{Missing universal properties}
+
 \paragraph{Coends}
 
 Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over

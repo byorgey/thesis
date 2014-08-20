@@ -2959,6 +2959,7 @@ dia = pairs
   in the $\Bag$-structures or not---but the associated data structures
   are certainly different.
 
+  \todo{Rethink this.  Figure out precise technical foundations.}
   \todo{add forward reference to part of \pref{chap:labelled}
     discussing foundations for this}
   To emphasize the difference, we will write $\Rubbish$ for the
