@@ -856,7 +856,7 @@ of the definition to keep in mind is that a functor $F : \C \to \D$ is
 to $F$), notated $F \adj G$, if and only if \[ (\Hom[\D]{F A}{B}) \iso
 (\Hom[\C]{A}{G B}), \] that is, if there is some natural isomorphism
 matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
-\to G B$ in $\C$.
+\to G B$ in $\C$ natural in $A$ and $B$.
 
 One example familiar to functional programmers is \emph{currying}, \[
 (\Hom{A \times B} C) \iso (\Hom A {(\Hom B C)}), \] which corresponds to
