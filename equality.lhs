@@ -1824,7 +1824,7 @@ That is, a fully faithful, essentially surjective functor is an
 equivalence given AC; a fully faithful, \emph{split} essentially
 surjective functor is an equivalence \emph{without} AC.
 
-Now, what about $\fin - : \BT \to \PT$?  We have the following:
+Now, what about $\fin - : \PT \to \BT$?  We have the following:
 
 \begin{prop}
   $\fin -$ is essentially surjective.
