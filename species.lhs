@@ -4048,8 +4048,9 @@ defined as endofunctors $\B \to \B$, the functor composition $F \fcomp
 G$ can literally be defined as the composition of $F$ and $G$ as
 functors, that is, \[ (F \fcomp G)\ L = F\ (G\ L). \] However, if
 species are viewed as functors $\B \to \Set$ then this operation is
-not well-typed as stated; we return to this problem after considering some
-intuition and examples.
+not well-typed as stated, and indeed feels somewhat unnatural.  This
+problem is discussed further \todo{XXX where?}, after analytic
+functors.
 
 Intuitively, an $(F \fcomp G)$-shape on the set of labels $L$ can be
 thought of as consisting of \emph{all possible} $G$-shapes on the
@@ -4084,8 +4085,6 @@ $G$-shapes.
   undirected instead of directed edges, one can replace $\X^2$ by
   $\Bag_2$; and so on.
 \end{ex}
-
-\todo{Working here.  Explain in terms of left Kan extensions.}
 
 \section{Differentiation}
 \label{sec:differentiation}
