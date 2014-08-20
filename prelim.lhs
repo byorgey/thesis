@@ -913,7 +913,9 @@ given here:
 \begin{defn}
   A monoidal category is \term{symmetric} if there is additionally a
   natural isomorphism $\gamma : \all{AB}{A \otimes B \iso B \otimes
-    A}$.
+    A}$ such that $\gamma_{AB} \comp \gamma_{BA} = \id$ (along with
+  some coherence conditions; see \citet[\Sect
+  VII.7]{mac1998categories}).
 \end{defn}
 
 For example, $\Set$ is symmetric monoidal under both Cartesian product
