@@ -1395,7 +1395,7 @@ as follows.
   There is only one list form of each size, so \[ \unl \List(x) =
   \sum_{n \geq 0} x^n = \frac{1}{1-x} \] as well.  Species for which
   $F(x) = \unl F(x)$ are called \term{regular}, and are discussed in
-  more detail in \todo{WHERE?}.  For an example of a non-regular
+  more detail in \pref{sec:molecular-atomic}.  For an example of a non-regular
   species, the reader is invited to work out the egf and ogf for the
   species $\Cyc$ of cycles.
 \end{ex}

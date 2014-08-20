@@ -281,7 +281,7 @@ frequent---though hidden---use of the axiom of choice.
 \subsection{Unique isomorphism and generalized ``the''}
 \label{sec:generalized-the}
 
-\todo{Make the link between ``the'' and ``definite description'' (aka $\iota$,
+\later{Make the link between ``the'' and ``definite description'' (aka $\iota$,
 as well as Hilbert's choice operator, $\epsilon$).}
 
 In category theory, one is typically interested in specifying objects
