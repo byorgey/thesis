@@ -9,7 +9,7 @@ Before delving into combinatorial species proper, we must first tackle
 some foundational issues---in particular, how equality and finiteness
 are handled in a constructive setting.  As we will see, these topics
 require much more care in a constructive setting than in a
-constructive one, but the extra care pays off in the form of deeper
+classical one, but the extra care pays off in the form of deeper
 insight and even (in the case of finiteness) practical
 implementations.
 
