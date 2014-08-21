@@ -5,6 +5,7 @@
 \chapter{Equality and Finiteness}
 \label{chap:equality}
 
+\todo{Improve this introduction --- mention contributions.}
 Before delving into combinatorial species proper, we must first tackle
 some foundational issues---in particular, how equality and finiteness
 are handled in a constructive setting.  As we will see, these topics
@@ -280,7 +281,7 @@ frequent---though hidden---use of the axiom of choice.
 \subsection{Unique isomorphism and generalized ``the''}
 \label{sec:generalized-the}
 
-\todo{Make the link between ``the'' and ``definite description'' (aka $\iota$,
+\later{Make the link between ``the'' and ``definite description'' (aka $\iota$,
 as well as Hilbert's choice operator, $\epsilon$).}
 
 In category theory, one is typically interested in specifying objects

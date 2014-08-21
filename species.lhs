@@ -1395,7 +1395,7 @@ as follows.
   There is only one list form of each size, so \[ \unl \List(x) =
   \sum_{n \geq 0} x^n = \frac{1}{1-x} \] as well.  Species for which
   $F(x) = \unl F(x)$ are called \term{regular}, and are discussed in
-  more detail in \todo{WHERE?}.  For an example of a non-regular
+  more detail in \pref{sec:molecular-atomic}.  For an example of a non-regular
   species, the reader is invited to work out the egf and ogf for the
   species $\Cyc$ of cycles.
 \end{ex}
@@ -2959,6 +2959,7 @@ dia = pairs
   in the $\Bag$-structures or not---but the associated data structures
   are certainly different.
 
+  \todo{Rethink this.  Figure out precise technical foundations.}
   \todo{add forward reference to part of \pref{chap:labelled}
     discussing foundations for this}
   To emphasize the difference, we will write $\Rubbish$ for the
@@ -4047,8 +4048,9 @@ defined as endofunctors $\B \to \B$, the functor composition $F \fcomp
 G$ can literally be defined as the composition of $F$ and $G$ as
 functors, that is, \[ (F \fcomp G)\ L = F\ (G\ L). \] However, if
 species are viewed as functors $\B \to \Set$ then this operation is
-not well-typed as stated; we return to this problem after considering some
-intuition and examples.
+not well-typed as stated, and indeed feels somewhat unnatural.  This
+problem is discussed further \todo{XXX where?}, after analytic
+functors.
 
 Intuitively, an $(F \fcomp G)$-shape on the set of labels $L$ can be
 thought of as consisting of \emph{all possible} $G$-shapes on the
@@ -4083,8 +4085,6 @@ $G$-shapes.
   undirected instead of directed edges, one can replace $\X^2$ by
   $\Bag_2$; and so on.
 \end{ex}
-
-\todo{Working here.  Explain in terms of left Kan extensions.}
 
 \section{Differentiation}
 \label{sec:differentiation}
@@ -4312,7 +4312,18 @@ dia = listCycEquiv
       variable $\star$ of course represents the variable bound by the
       abstraction.
   \end{itemize}
-  The set of \emph{closed} terms is thus given by $\Lambda\ \varnothing$.
+  The set of \emph{closed} terms is thus given by $\Lambda\
+  \varnothing$.  Note that there are infinitely many terms with any
+  given number of free variables, so this is not useful for doing
+  \emph{combinatorics}; as an equation of generating functions,
+  $\Lambda(x) = \elts(x) + \Lambda^2(x) + \Lambda'(x)$ has no
+  solution.  To do combinatorics with lambda terms one must also count
+  applications and abstractions as contributing to the size, \eg using
+  a two-sort species (\pref{sec:multisort}) like \[ \Xi = \X \cdot
+  \Bag + \Y \cdot \Xi^2 + \Y \cdot \frac{\partial}{\partial \X} \Xi \]
+  which uses labels of sort $\Y$ to mark occurrences of applications
+  and abstractions; see \citet{grygiel2013counting,
+    lescanne2013counting}.
 \end{ex}
 
 The operation of species differentiation obeys laws which are familiar

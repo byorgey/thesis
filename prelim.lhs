@@ -913,7 +913,9 @@ given here:
 \begin{defn}
   A monoidal category is \term{symmetric} if there is additionally a
   natural isomorphism $\gamma : \all{AB}{A \otimes B \iso B \otimes
-    A}$.
+    A}$ such that $\gamma_{AB} \comp \gamma_{BA} = \id$ (along with
+  some coherence conditions; see \citet[\Sect
+  VII.7]{mac1998categories}).
 \end{defn}
 
 For example, $\Set$ is symmetric monoidal under both Cartesian product
@@ -1017,7 +1019,9 @@ T(C,C)$ for every $X$, such that the
 diagram \[ \xymatrix@@dr{ T(X',X) \ar[r]^{T(1,f)} \ar[d]_{T(f,1)} & T(X',X') \ar[d]^{\omega_{X'}} \\
   T(X,X) \ar[r]_{\omega_X} & \coend C T(C,C) } \] commutes for all $X,
 X' : \C$ and $f : X \to X'$. (This square represents
-\term{dinaturality} of $\omega$.)
+\term{dinaturality} of $\omega$.)  Additionally, a coend must satisfy
+an appropriate universal property guaranteeing its uniqueness up to
+isomorphism (see \citep[\Sect IX.5--6]{mac1998categories}).
 
 Since there must be morphisms $\omega_X : T(X,X) \to \coend C T(C,C)$
 for every $C$, one's first try might be to implement the coend as an
@@ -1072,17 +1076,20 @@ is an object of $\D$ together with morphisms $\alpha_X : \eend C
 T(C,C) \to T(X,X)$ such that \[ \xymatrix@@dr{ \eend C T(C,C)
   \ar[r]^{\alpha_C} \ar[d]_{\alpha_{C'}} & T(C,C) \ar[d]^{T(1,f)} \\
   T(C',C') \ar[r]_{T(f,1)} & T(C,C') } \] commutes for all $C, C' :
-\C$ and $f : C \to C'$.  The end $\eend C T(C,C)$ can thus be
-``instantiated'' at any type $X$ by the morphism $\alpha_X$, and the
-dinaturality of $\alpha$ ensures that these instantiations all
-``behave uniformly''.  It should come as no surprise that ends in
-Haskell are given by universal quantification, that is, |forall c. T c
-c| \citep{kmett2008kan}.
+\C$ and $f : C \to C'$, together with an appropriate universal
+property.  The end $\eend C T(C,C)$ can thus be ``instantiated'' at
+any type $X$ by the morphism $\alpha_X$, and the dinaturality of
+$\alpha$ ensures that these instantiations all ``behave uniformly''.
+It should come as no surprise that ends in Haskell are given by
+universal quantification, that is, |forall c. T c c|
+\citep{kmett2008kan}.
 
-The connection between ends and Haskell's $\forall$ notation can be
-extended even further. \later{improve previous sentence.  What am I
-  really trying to say here?}  Given two functors $F, G : \C \to \D$,
-consider the bifunctor \[ \Hom{F -}{G -} : \C^\op \times \C \to
+In fact, there is an even deeper connection between ends and Haskell's
+$\forall$ notation.  It is well-known in the Haskell community that
+polymorphic---\ie universally quantified---functions ``correspond'' to
+natural transformations, via parametricity; this correspondence can be
+made formally precise as follows.  Given two functors $F, G : \C \to
+\D$, consider the bifunctor \[ \Hom{F -}{G -} : \C^\op \times \C \to
 \Set, \] which sends objects $X, Y \in C$ to the set of morphisms
 $\Hom[\D] {F\ X}{G\ Y}$, and acts on morphisms $f : X' \to X$ and $g :
 Y \to Y'$ by \[ (\Hom{F\ f}{G\ g})\ h = G\ g \comp h \comp F\ f. \]
@@ -1098,7 +1105,7 @@ naturality for $\alpha$.  Thus an end over $\Hom{F-}{G-}$ is precisely
 a natural transformation, that is, \[ (\eend C \Hom{F\ C}{G\ C}) \iso
 (\nt F G). \] This formally justifies using the notation $\eend C
 \Hom{F\ C}{G\ C}$ for natural transformations between $F$ and
-$G$. \later{cite catsters videos? or something else?}
+$G$, just as in Haskell. \later{cite catsters videos? or something else?}
 
 \subsection{The Yoneda lemma}
 \label{sec:yoneda}
