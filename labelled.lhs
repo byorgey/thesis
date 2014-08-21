@@ -284,7 +284,7 @@ out of an analytic functor arises in this way.  That is, every
 polymorphic function out of $\analytic F\ A$ is ``just a reshaping'': it is
 equivalent to a process consisting of splitting $\analytic F\ A$ into a
 labelled shape and a mapping from labels to data, followed by a
-``reshaping''---an application some species morphism to the
+``reshaping''---an application of some species morphism to the
 shape---and concluding with re-combining the new shape with the data
 mapping.
 
