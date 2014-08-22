@@ -1202,15 +1202,15 @@ see why.  A path $K = K$ corresponds to a permutation on $K$, but
 with the permutation.  Thinking of the finiteness evidence as giving a
 linear order on $K$, another way to say this is that permutations $K =
 K$ need not be order-preserving.  Naturality is not satisfied,
-therefore, since applying the standard transform directly may give
+therefore, since applying the fundamental transform directly may give
 results completely incompatible with those obtained by applying a
-non-order-preserving permutation followed by the standard transform.
+non-order-preserving permutation followed by the fundamental transform.
 
-\citet[p. 22]{bll} note that the standard transform \emph{is} in fact
+\citet[p. 22]{bll} note that the fundamental transform \emph{is} in fact
 compatible with \emph{order-preserving} bijections.  If we take
 species as functors $\L \to \Set$, where $\L$ is the groupoid of
 finite sets equipped with linear orders, along with order-preserving
-bijections, then the standard transform is indeed a natural
+bijections, then the fundamental transform is indeed a natural
 isomorphism between $\List$ and $\Perm$.  Such species are called
 $\L$-species, and are discussed further in \pref{sec:L-species}.  For
 the moment we note only that in HoTT, $\L$ corresponds exactly to
@@ -1226,7 +1226,7 @@ Back in $\FinSetT$, however, in order to use the linear order
 associated to each finite set $K$, we must produce a mere proposition.
 We cannot directly produce an equivalence---but we certainly can
 produce the propositional truncation of one.  In particular we can
-encode the standard transform as a function of type \[ \chi : (K :
+encode the fundamental transform as a function of type \[ \chi : (K :
 \FinSetT) \to \ptrunc{\List\ K \equiv \Perm\ K}. \] This is precisely
 the right way to encode equipotence in HoTT.  For suppose we know that
 $\List\ K$ is finite of size $n$, that is, we have an inhabitant of
