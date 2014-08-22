@@ -25,7 +25,7 @@ of the \term{axiom of choice} (AC), which is frequently used in
 practice but inadmissible in a constructive setting.  One of the main
 reasons that AC is used frequently in the context of category theory
 in particular has to do with the difference between equality and
-isomorphism. several approaches to doing without AC are outlined,
+isomorphism. Several approaches to doing without AC are outlined,
 culminating in showing (\pref{sec:ct-hott},
 \pref{sec:finiteness-hott}) that it is completely unnecessary when
 formulating category theory inside of HoTT.
@@ -752,7 +752,7 @@ aOpts = with & gaps .~ Local 0.2 & headLength .~ Local 0.4
   and identities, we have \[ F_{s,t}(\id_C) \then F_{t,s}(\id_C) =
   F_{s,s}(\id_C \then \id_C) = F_{s,s}(\id_C) = \id_{\rana{F}(s)}, \] so
   $F_{s,t}(\id_C)$ and $F_{t,s}(\id_C)$ constitute an isomorphism
-  between $F_S(C)$ and $F_t(C)$.
+  between $F_s(C)$ and $F_t(C)$.
 \end{rem}
 
 \begin{rem}
@@ -1825,7 +1825,7 @@ That is, a fully faithful, essentially surjective functor is an
 equivalence given AC; a fully faithful, \emph{split} essentially
 surjective functor is an equivalence \emph{without} AC.
 
-Now, what about $\fin - : \BT \to \PT$?  We have the following:
+Now, what about $\fin - : \PT \to \BT$?  We have the following:
 
 \begin{prop}
   $\fin -$ is essentially surjective.
