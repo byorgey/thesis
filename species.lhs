@@ -4802,7 +4802,7 @@ the disjoint union of the label sets from the $F$- and $G$-shapes.
 
 This can be formalized using the notion of higher derivatives
 developed in the previous subsection. In particular, define $\phom -
--$ by \[ (\phom G H)\ L \defeq \hom[\Spe]{G}{\hder L H}. \]  Thta is,
+-$ by \[ (\phom G H)\ L \defeq \hom[\Spe]{G}{\hder L H}. \]  That is,
 a $(\phom G H)$-shape with labels taken from $L$ is a species
 morphism, \ie a natural, label-preserving map, from $G$ to the
 $L$-derivative of $H$.  This definition is worth rereading a few times
