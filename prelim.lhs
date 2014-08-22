@@ -504,17 +504,17 @@ information.
 
 An important related question is this: when can one define a function
 $\ptrunc{A} \to B$, when $B$ is \emph{not} a mere proposition?  It may
-seem that there is no useful way to construct such a function; at the
-very least, it is clear that the recursion principle cannot be applied
-directly.  However, there is a useful ``trick'' which makes it
-possible: if one can \emph{uniquely characterize} a particular value
-of $B$---that is, create a mere proposition $(b : B) \times
-Q(b)$---one can then define a function $\ptrunc{A} \to (b : B) \times
-Q(b)$ from a function $A \to (b : B) \times Q(b)$, and finally project
-out the $B$ to obtain a function $\ptrunc A \to B$.  This ``trick'' is
-detailed in the HoTT book~\citeyearpar[\Sect 3.9]{hottbook}; Exercise
-3.19 is an excellent exercise that also affords some good intuition
-for this phenomenon.
+seem that the answer is ``never''; at the very least, it is clear that
+the recursion principle cannot be applied directly.  However, there is
+a useful ``trick'' which makes it possible: if one can \emph{uniquely
+  characterize} a particular value of $B$---that is, create a
+predicate $Q : B \to \Type$ such that $(b : B) \times Q(b)$ is a mere
+proposition---one can then define a function $\ptrunc{A} \to (b : B)
+\times Q(b)$ from a function $A \to (b : B) \times Q(b)$, and finally
+project out the $B$ to obtain a function $\ptrunc A \to B$.  This
+``trick'' is detailed in the HoTT book~\citeyearpar[\Sect
+3.9]{hottbook}; Exercise 3.19 is an excellent exercise that also
+affords some good intuition for this phenomenon.
 
 Finally, note that, as in the HoTT book (see Chapter 3), the adjective
 ``mere'' will be used more generally to refer to truncated things.  In
@@ -555,10 +555,9 @@ in the dissertation.
   $L_2$.  This is a fundamental operation in HoTT, and is also central
   to the definition of species (\pref{sec:species-definition}).  In
   fact, when constructing species with HoTT as a foundation, transport
-  simply comes ``for free'' \todo{make sure this is emphasized
-    later}---in contrast to using set theory as a foundation, in which
-  case transport must be tediously defined (and proved correct) for
-  each new species.
+  simply comes ``for free''---in contrast to using set theory as a
+  foundation, in which case transport must be tediously defined (and
+  proved correct) for each new species.
 \item The \term{univalence axiom} (\pref{sec:equivalence-univalence})
   and \term{higher inductive types} (\pref{sec:HITs}) make for a rich
   notion of propositional equality, over which the ``user'' has a
@@ -817,6 +816,7 @@ A na\"ive first attempt is as follows:
   there are inverse functors $\BackForth \C F G \D$, such that $GF =
   1_\C$ and $FG = 1_\D$.
 \end{defn}
+\todo{entering edits here}
 This definition has the right idea in general, but it is subtly
 flawed.  In fact, it is somewhat ``evil'', in that it talks about
 \emph{equality} of functors ($GF$ and $FG$ must be \emph{equal to} the
