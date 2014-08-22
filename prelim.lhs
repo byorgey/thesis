@@ -35,7 +35,7 @@ is neither exhaustive nor prescriptive:
 \item Greek metavariables (especially $\alpha$, $\beta$, $\sigma$,
   $\tau$, $\phi$, $\psi$) often range over bijections.
 \item Blackboard bold metavariables (\eg $\C$, $\D$, $\E$) range over
-  categories.
+  categories, as do fraktur variables such as $\Lab$ and $\Str$.
 \item Names of specific categories use boldface (\eg $\Set$, $\Cat$,
   $\Spe$, $\B$, $\P$).
 \item Names of certain type-theoretic constructs or categories use a
