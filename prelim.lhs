@@ -486,18 +486,6 @@ all values considered equal.  This is called the \term{propositional
 which can intuitively be thought of as the proposition ``$A$ is
 inhabited''.
 
-Finally, note that, as in the HoTT book (see Chapter 3), the adjective
-``mere'' will be used more generally to refer to truncated things.  In
-particular, an important example is the distinction between the
-type \[ (a : A) \times B(a), \] pronounced ``there
-\emph{constructively} exists an $A$ such that $B$'', and its
-truncation \[ \ptrunc{(a : A) \times B(a)}, \] pronounced ``there
-\emph{merely} exists an $A$ such that $B$''.  The latter more
-closely corresponds to the notion of existence in classical
-logic---given an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we know
-only that some $(a:A)$ satisfying $B$ exists, without necessarily
-getting to know its identity.
-
 If we have an inhabitant of $\ptrunc A$, we know some $a : A$ must
 have been used to construct it.  However, the induction principle for
 $\ptrunc A$ places some restructions on when we are allowed to look at
@@ -527,6 +515,18 @@ out the $B$ to obtain a function $\ptrunc A \to B$.  This ``trick'' is
 detailed in the HoTT book~\citeyearpar[\Sect 3.9]{hottbook}; Exercise
 3.19 is an excellent exercise that also affords some good intuition
 for this phenomenon.
+
+Finally, note that, as in the HoTT book (see Chapter 3), the adjective
+``mere'' will be used more generally to refer to truncated things.  In
+particular, an important example is the distinction between the
+type \[ (a : A) \times B(a), \] pronounced ``there
+\emph{constructively} exists an $A$ such that $B$'', and its
+truncation \[ \ptrunc{(a : A) \times B(a)}, \] pronounced ``there
+\emph{merely} exists an $A$ such that $B$''.  The latter more
+closely corresponds to the notion of existence in classical
+logic---given an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we know
+only that some $(a:A)$ satisfying $B$ exists, without necessarily
+getting to know its identity.
 
 %% Don't think I make any use of this later.
 %
