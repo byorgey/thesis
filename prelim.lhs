@@ -390,11 +390,13 @@ many complications.  It is therefore useful to have a vocabulary for
 explicitly talking about types with limited higher-order structure.
 
 \begin{defn}
-  A \term{proposition}, or \term{$(-1)$-type}, is a type for which any
+  A \term{mere proposition}, or \term{$(-1)$-type}, is a type for which any
   two inhabitants are propositionally equal.
 \end{defn}
 
-Intuitively, the only interesting thing that can be said about a
+There word ``mere'' is often used for emphasis (``\emph{mere}
+proposition'') but is also sometimes dropped (``proposition'').
+Intuitively, the only interesting thing that can be said about a mere
 proposition is whether it is inhabited or not. Although it may have
 many \emph{syntactically} different inhabitants, they are all equal
 and hence internally indistinguishable.  Such types are called
@@ -473,7 +475,7 @@ of HITs, see \citet{Angiuli2014patch}.
 The last important concept from HoTT to touch upon is
 \term{propositional truncation}, which is also an example of a
 nontrivial higher inductive type.  If $A$ is a type, then $\ptrunc{A}$
-is also a type, with an data constructor $\ptruncI - : A \to
+is also a type, with a data constructor $\ptruncI - : A \to
 \ptrunc{A}$ that allows injecting values of $A$ into $\ptrunc{A}$.
 However, in addition to being able to construct \emph{values} of
 $\ptrunc A$, there is also a way to construct \emph{paths} between
@@ -483,6 +485,18 @@ all values considered equal.  This is called the \term{propositional
   truncation} of $A$ since it evidently turns $A$ into a proposition,
 which can intuitively be thought of as the proposition ``$A$ is
 inhabited''.
+
+Finally, note that, as in the HoTT book (see Chapter 3), the adjective
+``mere'' will be used more generally to refer to truncated things.  In
+particular, an important example is the distinction between the
+type \[ (a : A) \times B(a), \] pronounced ``there
+\emph{constructively} exists an $A$ such that $B$'', and its
+truncation \[ \ptrunc{(a : A) \times B(a)}, \] pronounced ``there
+\emph{merely} exists an $A$ such that $B$''.  The latter more
+closely corresponds to the notion of existence in classical
+logic---given an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we know
+only that some $(a:A)$ satisfying $B$ exists, without necessarily
+getting to know its identity.
 
 If we have an inhabitant of $\ptrunc A$, we know some $a : A$ must
 have been used to construct it.  However, the induction principle for
