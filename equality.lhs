@@ -374,6 +374,14 @@ Instead, we must use the axiom of choice, which yields a choice
 function $\Ob \D \to \Ob \C$, and this function can serve as the
 object mapping of the functor $G$.
 
+\begin{rem}
+  It should be noted that without AC, protoequivalence is actually not
+  even an equivalence relation on categories. To fix this, one must
+  pass to the notion of a \term{weak equivalence} of categories, which
+  consists of a \emph{span} of protoequivalences
+  \citep{nlab-weak-equiv}.
+\end{rem}
+
 So AC is required to prove that every protoequivalence is an
 equivalence.  In fact, the association goes deeper yet: it turns out
 that the statement
