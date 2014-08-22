@@ -4696,7 +4696,7 @@ dia = hcat' (with & sep .~ 2)
 Similar laws hold for pointing as for differentiation; they are left
 for the reader to discover.
 
-\todo{Is there more to say about pointing?}
+\later{Is there more to say about pointing?}
 
 \subsection{Higher derivatives}
 \label{sec:higher-derivatives}
@@ -4966,7 +4966,7 @@ generating functions.
 \section{Recursion and the implicit species theorem}
 \label{sec:implicit}
 
-\todo{write me!}
+\todo{write me! Should I put it here, or later after talking about multisort?}
 
 \section{Regular, molecular and atomic species}
 \label{sec:molecular-atomic}
@@ -5471,12 +5471,13 @@ species $F/H$.
   such morphisms $\psi : \Cyc_5 \to \Bin_5$ can exist!
 \end{ex}
 
-\begin{ex}
-  \todo{An actual example. $\Cyc_{2n} \to \Bag_2 \comp \Cyc$?  $\Cyc
-    \to \Cyc$?}
-\end{ex}
+\later{An actual example}
+% \begin{ex}
+%   \todo{An actual example. $\Cyc_{2n} \to \Bag_2 \comp \Cyc$?  $\Cyc
+%     \to \Cyc$?}
+% \end{ex}
 
-Finally, for molecular species which are not atomic, of course it is possible
+For molecular species which are not atomic, of course it is possible
 to decompose them as a product, and characterize morphisms out of them
 via currying.  So in some sense we are only ``forced'' to use the
 above characterization of morphisms out of quotient species in the
@@ -5499,7 +5500,7 @@ case of atomic species.
   \dots left adjoint                 &               &            &            &            &            & \checkmark \\
   $\Lab$ monoidal                    &               &            &            & \checkmark & \checkmark & \checkmark \\
   $\Lab$ enriched over $\Str$        &               &            &            & \checkmark & \checkmark & \checkmark \\
-  $\Str$ coends over $\Lab$          &               &            &            & \checkmark & \checkmark & \checkmark \\
+  $\Str$ has coends over $\Lab$      &               &            &            & \checkmark & \checkmark & \checkmark \\
   $\Lab$ locally small               &               &            & \checkmark &            &            &            \\
   $\Str$ complete, Cart. closed      &               &            & \checkmark &            &            &            \\
   $\fc \Lab \Str$ enriched over self &               &            &            &            & \checkmark & \checkmark
@@ -5570,13 +5571,13 @@ dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
   \end{figure}
 \end{ex}
 
-\begin{ex}
-  \todo{Graphs with labelled vertices and edges.}
-\end{ex}
-
-The notion of multisort species is particularly useful for the theory
-of implicit/recursive species \todo{finish this.  Depends on what
-  exactly I end up saying about implicit species.}
+\later{Graphs with labelled vertices and edges. Not obvious how to
+  write down an algebraic expression for it; see BLL 2.4.}
+% \begin{ex}
+%   As another example, consider the two-sort species of simple graphs
+%   whose vertices are labelled by one sort, and edges by another
+%   (illustrated in ...)
+% \end{ex}
 
 \citet{bll} detail how to extend operations such as sum, partitional
 product, and composition to multisort species.  We give just one
@@ -5584,30 +5585,46 @@ example here, that of composition. If $F$ is an $m$-sort species, and
 $(G_1, \dots, G_m)$ is an $m$-tuple of $n$-sort species, then $F \comp
 (G_1, \dots, G_m)$ is an $n$-sort species whose shapes consist of a
 top-level $F$-shape with $G_i$-shapes substituted for each label of
-sort $i$.
+sort $i$.  Of course, this presentation assumes a linear ordering on
+the sorts of $F$; more generally, if the sorts of $F$ are indexed by
+some finite set $S$, then $F$ can be composed with an $S$-indexed
+tuple of $T$-sort species, resulting in a $T$-sort species.
 
-\begin{ex}
-  \todo{Need an example of generalized composition.}
-\end{ex}
+\later{Example of generalized composition?}
+% \begin{ex}
+%   \todo{Need an example of generalized composition.}
+% \end{ex}
 
-However, defining multisort species and all the operations on them
-``from scratch'' is unnecessary; they can be defined abstractly as
-objects in a certain functor category, and hence fit into the abstract
-framework developed in the preceding sections.
+\begin{rem}
+  Multisort species are often notated using ``multi-argument
+  function'' notation, for example, \[ \H(\X,\Y) = \X + \Y^2. \] This
+  makes clear which singleton species are being used to represent the
+  various sorts, and makes it possible to refer to them positionally
+  as well.  This notation also meshes well with the notion of
+  generalized composition just introduced: writing something like
+  $\H(F,G)$ can be interpreted as $\H \comp (F,G)$ and corresponds
+  exactly to the substitution of $F$ and $G$ for $\X$ and $\Y$.
+\end{rem}
 
-\citet{bll} acknowledge as much in Exercise 2.4.6, but \todo{we take
-  it even farther\dots}
+Defining multisort species and all the operations on them (such as
+composition) ``from scratch'' is unnecessary; they can be defined
+abstractly as objects in a certain functor category, and hence fit
+into the abstract framework developed in the preceding sections.
+\citet{bll} acknowledge as much in Exercise 2.4.6, but only as
+something of an afterthought; the following development is quite a bit
+more general than the intended solution to the exercise.
 
-Let $S$ be a finite set, which we think of as a collection of names
-for sorts, that is, each element $s \in S$ represents a different
-sort.  Let $\Lab$ be a category, which we think of as a category of
-labels (\eg $\B$).  Consider the functor category $\Lab^S$.  Objects
-of $\Lab^S$ are functors $S \to \Lab$, that is, an assignment of an
-object from $\Lab$ to each $s \in S$. Morphisms in $\Lab^S$ are
-natural transformations, that is, $S$-indexed families of
-$\Lab$-morphisms between corresponding objects of $\Lab$.  For
-example, in the case $\Lab = \B$, objects of $\B^S$ are just $S$-tuples of
-finite sets, and morphisms are $S$-tuples of bijections between them.
+Let $S$ be a finite set, thought of as a collection of names for
+sorts, that is, each element $s \in S$ represents a different sort.
+Let $\Lab$ be a category, thought of as a category of labels (\eg
+$\B$).  Now consider the functor category $\Lab^S$ (with $S$
+considered as a discrete category, as usual).  Objects of $\Lab^S$ are
+functors $S \to \Lab$, that is, an assignment of an object from $\Lab$
+to each $s \in S$. Morphisms in $\Lab^S$ are natural transformations,
+that is, $S$-indexed families of $\Lab$-morphisms between
+corresponding objects of $\Lab$.  For example, in the case $\Lab =
+\B$, objects of $\B^S$ are just $S$-tuples of finite sets, and
+morphisms are $S$-tuples of bijections between them.
 
 \begin{rem}
   Recall that $\Set^S \iso \Set/S$ (\pref{sec:ct-fundamentals}).  It
@@ -5615,36 +5632,56 @@ finite sets, and morphisms are $S$-tuples of bijections between them.
   consist of a finite set $L$ paired with a \emph{bijection} $L \bij
   S$, which only allows one label of each sort.  However, it is
   possible to consider the category whose objects are finite sets $L$
-  paired with a function $\chi : L \to S$, as in $\Set/S$, but whose
-  morphisms $(L_1,\chi_1) \to (L_2,\chi_2)$ are \emph{bijections}
-  $\sigma : L_1 \bij L_2$ such that $\chi_2 \comp \sigma = \chi_1$.
-  In other words, the objects are finite sets with sorts assigned to
-  their elements, and the morphisms are sort-preserving
-  bijections. This category is indeed equivalent to $\B^S$.
+  paired with a \emph{function} $\chi : L \to S$, as in $\Set/S$, but
+  whose morphisms $(L_1,\chi_1) \to (L_2,\chi_2)$ are
+  \emph{bijections} $\sigma : L_1 \bij L_2$ such that $\chi_2 \comp
+  \sigma = \chi_1$.  In other words, the objects are finite sets with
+  sorts assigned to their elements, and the morphisms are
+  sort-preserving bijections. This category is indeed equivalent to
+  $\B^S$.
 
   However, this construction only works because the objects of $\B$
-  are finite sets; in the general case we must stick
-  with $\Lab^S$.
+  are sets; in the general case we must stick with $\Lab^S$.
 \end{rem}
 
 \begin{defn}
-  For a finite set $S$, the \term{$S$-sort ($\Lab$,$\Str$)-species}
-  are functors \[ \Lab^S \to \Str. \]
+  For a finite set $S$, define \term{$S$-sort ($\Lab$,$\Str$)-species}
+  as functors \[ \Lab^S \to \Str. \]
 \end{defn}
 
 One can verify that taking $\Lab = \B$, $\Str = \Set$, and $S = \fin
 k$ for some $k \in \N$, we recover exactly the definition of $k$-sort
-species given by Bergeron \etal.
+species given by Bergeron \etal
 
 The payoff is that we can now check that $\Lab^S$ inherits the
 relevant properties from $\Lab$, and thus conclude that $(\Lab^S,
-\Str)$-species inherit operations from $(\Lab,\Str)$-species.
+\Str)$-species inherit operations from $(\Lab,\Str)$-species.  Simply
+unfolding definitions is then enough to describe the action of the
+operations on $S$-sort species.
 
 \begin{itemize}
 \item \todo{monoidal}
 \item \todo{groupoid?}
 \item \todo{enriched}
 \end{itemize}
+
+\todo{Edit the following, dumped here from Haskell Symposium paper}
+The notion of multisort species is particularly useful in formulating
+the theory of implicitly defined (\ie recursive) species.  In
+particular, suppose $\H(\X,\Y)$ is some two-sort species can write an
+implicit equation for \F\ in the form $\F = \H(\X,\F)$, where $\H$ is
+a two-sort species.  For example, if $\H(\X,\Y) = \One + \X \sprod \Y$
+then $\L = \H(\X,\L)$ is the implicit equation defining the species of
+lists.  Now the necessary conditions for the implicit species theorem
+to apply can now be stated precisely:
+\begin{itemize}
+\item $\H(\Zero,\Zero) = \Zero$ (no structures on the empty label set)
+\item $\frac{\partial \H}{\partial \Y}(\Zero, \Zero) = \Zero$ (\F\
+  does not trivially reduce to itself) \todo{better intuitive explanation?}
+\end{itemize}
+% The following note was copied here from my Haskell Symposium paper,
+% not sure what I had in mind
+% \poss{example of not getting confused about zippers?}
 
 % \todo{After here, stuff left over from before, just get rid of it?  Or
 % is there anything I can still use?}
