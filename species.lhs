@@ -3421,23 +3421,30 @@ restricted sort of composition, where an $F$-structure contains
 $G$-structures all of the same shape (or vice versa).  More generally,
 there is an unrestricted version of composition, where $(F \comp
 G)$-shapes consist of $F$-shapes containing \emph{arbitrary}
-$G$-shapes.  In more detail, to create an $(F \comp G)$-shape over a
-given set of labels $L$, we first \emph{partition} $L$ into some
-number of nonempty subsets; create a $G$-shape over each subset; then
-create an $F$-shape over the resulting set of $G$-shapes.
+$G$-shapes.  That is, intuitively, to create an $(F \comp G)$-shape
+over a given set of labels $L$, we first \emph{partition} $L$ into
+subsets; create a $G$-shape over each subset; then create an $F$-shape
+over the resulting set of $G$-shapes.
 
 \subsection{Definition and examples}
 \label{sec:comp-defn-and-examples}
 
-Formally,
-\[ (F \comp G)\ L = \sum_{\pi \partition L} F\ \pi \times \prod_{p \in
-  \pi} G\ p. \] \pref{fig:composition} shows an abstract
-representation of the definition, and \pref{fig:composition-example}
-shows a concrete example of a $(\Bin \comp \List_+)$-shape.
-
-  \begin{figure}
-    \centering
-    \begin{diagram}[width=250]
+We begin with a traditional formal definition,
+\begin{equation} \label{eq:composition-trad}
+  (F \comp G)\ L = \sum_{\pi \partition L} F\ \pi \times \prod_{p \in
+    \pi} G\ p
+\end{equation}
+(there are some subtle issues with this definition, to be discussed
+shortly, but it will suffice to consider the general idea and some
+examples). \pref{fig:composition} shows an abstract representation of
+the definition, in which labels are shown as dots, and shapes are
+represented abstractly as arcs drawn across edges leading to the
+labels contained in the shape, identified by the name of a species.
+So the diagram illustrates how an $(F \comp G)$-shape consists
+abstractly of a top-level $F$-shape with subordinate $G$-shapes.
+\begin{figure}
+  \centering
+  \begin{diagram}[width=250]
 import SpeciesDiagrams
 
 theDia = struct 6 "F∘G"
@@ -3457,11 +3464,14 @@ theDia = struct 6 "F∘G"
          )
 
 dia = theDia # centerXY # pad 1.1
-    \end{diagram}
-    \caption{Generic species composition}
-    \label{fig:composition}
-  \end{figure}
+  \end{diagram}
+  \caption{Generic species composition}
+  \label{fig:composition}
+\end{figure}
 
+\begin{ex}
+  \pref{fig:composition-example} shows a concrete example of a $(\Bin
+  \comp \List_+)$-shape, a binary tree containing nonempty lists.
 \begin{figure}
   \centering
   \begin{diagram}[width=250]
@@ -3495,19 +3505,7 @@ dia = treeOfLists # frame 0.5 # lwO 0.7
   \caption{An example $(\Bin \comp \List_+)$-shape}
   \label{fig:composition-example}
 \end{figure}
-
-One can see that in addition to being the identity for $\aprod$, $\X$
-is the (two-sided) identity for $\comp$ as well, since an $F$-shape
-containing singletons and a singleton $F$-shape are both isomorphic to
-an $F$-shape.
-
-\begin{rem}
-  If the family of shapes on any particular set of labels is required
-  to be finite (\eg if species are defined as functors $\B \to
-  \FinSet$), then one must add the restriction that $G\ \varnothing =
-  \varnothing$. Otherwise, $(F \comp G)\ L$ may contain infinitely
-  many shapes with arbitrary numbers of empty $G$-shapes.
-\end{rem}
+\end{ex}
 
 \begin{ex}
   As an example, we may define the species $\Par$ of \term{set
@@ -3515,8 +3513,7 @@ an $F$-shape.
   \Bag \comp \Bag_+.\] That is, a set partition is a set of
   \emph{non-empty} sets. Similarly, the species $\Perm$ of
   permutations is given by $\Perm = \Bag \comp \Cyc$, a set of
-  \emph{cycles} (note that by convention, empty cycles are not
-  allowed).
+  \emph{cycles}.
   \begin{figure}
     \centering
     \begin{diagram}[width=400]
@@ -3660,6 +3657,18 @@ dia = hcat' (with & sep .~ 2) (map (alignB . drawPShape . pShape) [0..3])
   \end{figure}
 \end{ex}
 
+In addition to being the identity for $\aprod$, $\X$ is the
+(two-sided) identity for $\comp$ as well.  We have \[ (\X \comp G)\ L
+= \sum_{\pi \partition L} \X\ \pi \times \prod_{p \in \pi} G\ p, \] in
+which $\X\ \pi$ is $\varnothing$ (cancelling the summands in which it
+occurs) except in the case where $\pi$ is the singleton partition
+$\{L\}$, in which case the summand is isomorphic to $G\ L$.  On the
+other side, \[ (F \comp \X)\ L = \sum_{\pi \partition L} F\ \pi \times
+\prod_{p \in \pi} \X\ p; \] the only way to get a product in which
+none of the $\X\ p$ are $\varnothing$ is when $\pi \iso L$ is the
+complete partition of $L$ into singleton subsets, in which case we
+again have something isomorphic to $F\ L$.
+
 As for generating functions, the mapping from species to egfs is
 indeed homomorphic with respect to composition: \[ (F \comp G)(x) =
 F(G(x)). \]  A direct combinatorial proof can be given, making use of
@@ -3678,6 +3687,40 @@ species, one may turn to \term{cycle index series}, which can be seen
 as a generalization of both egfs and ogfs, and which retain more
 information than either; see \citet[\Sect 1.2, \Sect 1.4]{bll} for
 details.
+
+As hinted previously, the formal definition of composition given in
+\eqref{eq:composition-trad} requires additional qualification; in
+particular, it requires delicate treatment with regard to partitions
+and infinite families of shapes.  To see the issue, let $\Bin$ and
+$\List$ be the species of binary trees and lists.  Consider the
+species $\Bin \comp \List$, whose shapes should consist of binary
+trees containing lists at their nodes.  Intuitively, this gives rise
+to infinite families of shapes such as those illustrated in
+\pref{fig:bin-comp-list-inf}, which are all of size $1$.
+
+\begin{figure}
+  \centering
+  \todo{Make this diagram}
+  \caption{An infinite family of $(\Bin \comp \List)$-shapes of size $1$}
+  \label{fig:bin-comp-list-inf}
+\end{figure}
+
+There are several possible rections, depending on the exact setting in
+which we are working.
+\begin{itemize}
+\item If we are working in $(\fc \B \Set)$, where infinite families of
+  shapes all of the same size are explicitly allowed, then this should
+  be allowed, and is exactly the meaning that composition ought to
+  have.  Note, however, that this means we would need to allow
+  $\pi \partition L$ to include ``partitions'' with arbitrary numbers
+  of \emph{empty} parts (to correspond to the empty lists).
+  Typically, the notation $\pi \partition L$ denotes partitions into
+  \emph{nonempty} parts.
+\item On the other hand, if we are working in $(\fc \B \FinSet)$, as
+  is more traditional in a combinatorial setting, this \emph{must not}
+  be allowed.  One possibility would be to simply insist that
+  $\pi \partition L$ in \eqref{eq:composition-trad} \todo{working here}
+\end{itemize}
 
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
