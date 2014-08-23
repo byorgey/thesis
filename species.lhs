@@ -3719,7 +3719,8 @@ which we are working.
 \item On the other hand, if we are working in $(\fc \B \FinSet)$, as
   is more traditional in a combinatorial setting, this \emph{must not}
   be allowed.  One possibility would be to simply insist that
-  $\pi \partition L$ in \eqref{eq:composition-trad} \todo{working here}
+  $\pi \partition L$ in \eqref{eq:composition-trad} excludes
+  partitions with empty parts, as is usual. \todo{working here}
 \end{itemize}
 
 \subsection{Generalized composition}
