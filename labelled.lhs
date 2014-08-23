@@ -10,6 +10,7 @@
 
 \todo{Put stuff about unlabelled structures somewhere in here? Need to
   figure out what I even want to say about them.}
+\todo{Talk about bag vs rubbish?}
 
 \todo{Fix introduction, given that we have now already discussed
   generating functions}

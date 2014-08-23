@@ -45,7 +45,7 @@ is neither exhaustive nor prescriptive:
 \item Metavariables $F$, $G$, $H$ range over functors (and in particular
   over species).
 \item Names of specific species use a sans-serif font (\eg $\X$, $\Bag$,
-  $\List$, $\Cyc$).
+  $\List$, $\Cyc$, $\Bin$, $\Rose$).
 \end{itemize}
 
 This dissertation also features a menagerie of notations to indicate
@@ -70,11 +70,11 @@ forgetfulness.
   introduce a \term{definitional} equality; that is, $x \defeq y$ is a
   definition of $x$ rather than a proposition asserting the equality
   of two things.
-\item $A \bij B$ denotes the set of \emph{bijections} between sets (or
-  types) $A$ and $B$.  That is, if $f : A \bij B$ then $f$ is a
-  function from $A$ to $B$ which possesses both a left and right
-  inverse (denoted $f^{-1}$).  Note that in set theory, sets which are
-  in bijection are typically not equal.
+\item $A \bij B$ denotes the set (or type) of \emph{bijections}
+  between sets (or types) $A$ and $B$.  That is, if $f : A \bij B$
+  then $f$ is a function from $A$ to $B$ which possesses both a left
+  and right inverse (denoted $f^{-1}$).  Note that in set theory, sets
+  which are in bijection are typically not equal.
 \item In homotopy type theory, $\jeq$ denotes \term{judgmental} equality, not to be
   confused with propositional equality ($=$).
 \item The symbol $\hdefeq$ also denotes a definitional equality, but
@@ -86,11 +86,12 @@ forgetfulness.
   equivalence can be thought of as a ``very well-behaved'' bijection,
   \ie a bijection with some extra coherence conditions.
 \item $A \lequiv B$ denotes that $A$ and $B$ are \term{logically
-    equivalent}, that is, that each logically implies the other.  Via
-  the logical interpretation of types as propositions, this is also to
-  say that there exist functions $A \to B$ and $B \to A$.  Logical
-  equivalence is thus a weaker notion than bijection or equivalence,
-  since there is no requirement that the functions be inverse.
+    equivalent}, that is, that each logically implies the other; more
+  familiarly, it can also be read as ``if and only if''.  Via the logical
+  interpretation of types as propositions, this is also to say that
+  there exist functions $A \to B$ and $B \to A$.  Logical equivalence
+  is thus a weaker notion than bijection or equivalence, since there
+  is no requirement that the functions be inverse.
 \item An \term{isomorphism} is an invertible arrow in a category
   (\pref{sec:category-theory}), and is denoted by $A \iso B$.  The
   precise meaning of $\iso$ thus depends on the category under
@@ -816,24 +817,16 @@ A na\"ive first attempt is as follows:
   there are inverse functors $\BackForth \C F G \D$, such that $GF =
   1_\C$ and $FG = 1_\D$.
 \end{defn}
-\todo{entering edits here}
+
 This definition has the right idea in general, but it is subtly
-flawed.  In fact, it is somewhat ``evil'', in that it talks about
-\emph{equality} of functors ($GF$ and $FG$ must be \emph{equal to} the
-identity).  However, two functors $H$ and $J$ can be isomorphic
-without being equal, if there is a natural isomorphism between
-them---that is, a pair of natural transformations $\phi : \nt H J$ and
-$\psi : \nt J H$ such that $\phi \circ \psi$ and $\psi \circ \phi$ are
-both equal to the identity natural transformation.\footnote{The astute
-  reader may well ask: but how do we know \emph{this} is a non-evil
-  definition of isomorphism between \emph{functors}?  Is it turtles
-  all the way down (up)?  This is a subtle point, but it turns out
-  that it is not evil to talk about equality of natural
-  transformations, since for the usual notion of category there is no
-  higher structure after natural transformations, \ie no nontrivial
-  morphisms (and hence no nontrivial isomorphisms) between natural
-  transformations.} For example, consider the functors given
-by the Haskell types
+flawed.  It talks about \emph{equality} of functors ($GF$ and $FG$
+must be \emph{equal to} the identity).  However, two functors $H$ and
+$J$ can be isomorphic without being equal.  In particular, two
+functors are \term{naturally isomorphic} if there is a pair of natural
+transformations $\phi : \nt H J$ and $\psi : \nt J H$ such that $\phi
+\circ \psi$ and $\psi \circ \phi$ are both equal to the identity
+natural transformation.  For example, consider the functors given by
+the Haskell types
 \begin{spec}
 data Rose a = Node a [Rose a]
 data Fork a = Leaf a | Fork (Fork a) (Fork a)
@@ -842,19 +835,34 @@ These are obviously not \emph{equal}, but they are isomorphic, in the
 sense that there are natural transformations, \ie polymorphic
 functions, |rose2fork :: forall a. Rose a -> Fork a| and |fork2rose ::
 forall a. Fork a -> Rose a|, such that |rose2fork . fork2rose = id|
-and |fork2rose . rose2fork = id| \citep{yorgey-2010-species, hinze2010reason}.
+and |fork2rose . rose2fork = id| \citep{yorgey-2010-species,
+  hinze2010reason}.
 
-Here, then, is a better definition:
+The above definition therefore violates the \term{principle of
+  equivalence}---to be discussed in more detail in
+\pref{sec:AC}---which states that properties of mathematical
+structures should be invariant under isomorphism.
+
 \begin{defn} \label{defn:cat-equiv} Categories $\C$ and $\D$ are
   \term{equivalent} if there are functors $\BackForth \C F G \D$ which
   are inverse up to natural isomorphism, that is, there are natural
   isomorphisms $GF \iso 1_\C$ and $FG \iso 1_\D$.
 \end{defn}
 
-So the compositions of the functors $F$ and $G$ do not \emph{literally}
-have to be the identity functor, but only (naturally) \emph{isomorphic} to
-it.  This does turn out to be a well-behaved notion of sameness for
-categories. \later{citation, or pointer to further reading.}
+So the compositions of the functors $F$ and $G$ do not
+\emph{literally} have to be the identity functor, but only (naturally)
+\emph{isomorphic} to it.\footnote{The astute reader may have noted
+  that the stated definition of natural isomorphism of functors
+  mentioned \emph{equality} of natural isomorphism---do we also need
+  to replace this with some sort of isomorphism to avoid violating the
+  principle of equivalence?  Is it turtles all the way down (up)?
+  This is a subtle point, but it turns out that it's just fine to talk
+  about equality of natural transformations. For the usual notion of
+  category, there is no higher structure after natural
+  transformations, \ie no nontrivial morphisms (and hence no
+  nontrivial isomorphisms) between natural transformations.}  Here,
+then, is a better definition: This does turn out to be a well-behaved
+notion of sameness for categories~\citet{nlab-equiv-cat}.
 
 There is much more to say about equivalence of categories;
 \pref{sec:AC} picks up the thread with a much fuller discussion of the
@@ -867,10 +875,10 @@ The topic of \term{adjunctions} is much too large to adequately cover
 here.  For the purposes of this dissertation, the most important form
 of the definition to keep in mind is that a functor $F : \C \to \D$ is
 \term{left adjoint} to $G : \D \to \C$ (and $G$ \term{right adjoint}
-to $F$), notated $F \adj G$, if and only if \[ (\Hom[\D]{F A}{B}) \iso
-(\Hom[\C]{A}{G B}), \] that is, if there is some natural isomorphism
-matching morphisms $F A \to B$ in the category $\D$ with morphisms $A
-\to G B$ in $\C$ natural in $A$ and $B$.
+to $F$), notated $F \adj G$, if and only if \[ \all {A B} (\Hom[\D]{F
+  A}{B}) \iso (\Hom[\C]{A}{G B}), \] that is, if there is some natural
+isomorphism matching morphisms $F A \to B$ in the category $\D$ with
+morphisms $A \to G B$ in $\C$.
 
 One example familiar to functional programmers is \emph{currying}, \[
 (\Hom{A \times B} C) \iso (\Hom A {(\Hom B C)}), \] which corresponds to
@@ -938,9 +946,9 @@ category, consider the functor category $\C \to \C$, with the monoid given
 by composition of functors.
 
 \begin{defn}
-  A monoidal category $\C$ is \term{closed} if there some bifunctor $[-,-]
-  : \C^\op \times \C \to \C$ such that there is a natural
-  isomorphism
+  A monoidal category $(\C,\otimes,I)$ is \term{closed} if there some
+  bifunctor $[-,-] : \C^\op \times \C \to \C$ such that there is a
+  natural isomorphism
   \begin{equation} \label{eq:currying}
    \all{ABC}{(\Hom {A \otimes B} C) \iso (\Hom A {[B,C]})},
   \end{equation}
@@ -1019,7 +1027,7 @@ Given a functor $T : \C^\op \times \C \to \D$, a \term{coend} over
 $T$, denoted $\coend{C} T(C,C)$,\footnote{Traditionally, coends are
   notated as $\int^C T(C,C)$, and ends as $\int_C T(C,C)$ (for
   example, this is the notation used by \citet{mac1998categories}).
-  However, the link to calculus is extremely obscure
+  However, the link to calculus is somewhat obscure
   \citep{mo-intuition-for-coends} and not very helpful for building
   intuition. Moreover, using the traditional notation, it is hard to
   keep ends and coends straight.  On the other hand, as I will show,
@@ -1075,6 +1083,11 @@ required to be a functor from $\C^\op \times \C$ since the
 representation type may occur both co- and contravariantly in the
 interface.
 
+Coends preserve colimits; for example, in $\Set$, \[ (\coend A F\ A +
+G\ A) \iso (\coend A F\ A) + (\coend A G\ A). \] (This is one place
+where using integral notation actually helps with intuition---but only
+for coends.)
+
 \begin{rem}
   Note that $\coend {L_1, L_2} \dots$ is used as an abbrevation for a
   coend over the product category $\Lab \times \Lab$. (Given
@@ -1115,11 +1128,17 @@ that \[ \xymatrix@@dr@@=4pc{ \eend C \Hom{F\ C}{G\ C}
   \Hom{F\ C'}{G\ C'} \ar[r]_{- \comp F\ f} & \Hom{F\ C}{G\ C'} } \]
 commutes.  Reading off the edges of this diagram, we have $\alpha_{C'}
 \comp F\ f = G g \comp \alpha_C$---precisely the definition of
-naturality for $\alpha$.  Thus an end over $\Hom{F-}{G-}$ is precisely
+naturality for $\alpha$. Thus an end over $\Hom{F-}{G-}$ is precisely
 a natural transformation, that is, \[ (\eend C \Hom{F\ C}{G\ C}) \iso
-(\nt F G). \] This formally justifies using the notation $\eend C
-\Hom{F\ C}{G\ C}$ for natural transformations between $F$ and
-$G$, just as in Haskell. \later{cite catsters videos? or something else?}
+(\nt F G). \] This is sometimes called the \term{naturality
+  formula}~\citep{caccamo2001higher}, and formally justifies using the
+notation $\eend C \Hom{F\ C}{G\ C}$ for natural transformations
+between $F$ and $G$, just as in Haskell. (See also
+\citet{catsters-ends-2, catsters-ends-3}.)
+
+Dually to coends, which preserve colimits, ends preserve limits.  For
+example, in $\Set$, \[ (\eend A F\ A \times G\ A) \iso (\eend A F\ A)
+\times (\eend A G\ A). \]
 
 \subsection{The Yoneda lemma}
 \label{sec:yoneda}
@@ -1133,10 +1152,11 @@ trying to implement a function of type |Functor f => f a -> (forall
 b. (a -> b) -> f b)| and its inverse---doing so successfully will give
 some intuition into the nature of the lemma and why it is true.
 
-The Yoneda lemma is not used in much depth in this dissertation, but
-only as a step in a few symbolic proofs.
+The functor $j : \C^\op \to (\fc \C \Set)$ defined on objects by $j(A)
+\defeq (\hom A -)$ is known as the \term{Yoneda embedding}.  As a
+corollary of the Yoneda lemma, $j$ is full and faithful.
 
-\later{Cite Edward blog posts, further reading.}
+\todo{Cite Edward blog posts, further reading.}
 
 \subsection{Groupoids}
 \label{sec:groupoids}

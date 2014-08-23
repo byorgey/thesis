@@ -140,7 +140,7 @@ import Data.Maybe (fromJust)
 dia =
   hcat' (with & sep .~ 0.5)
   [ unord (map labT [0..2])
-  , mkArrow 2 (txt "T")
+  , mkArrow 2 (txt "B")
   , treeStructures # scale 0.5
   ]
   # centerXY
@@ -194,27 +194,23 @@ dia =
 \end{ex}
 
 \begin{ex}
-  The species $\msf{Mob}$ of \emph{mobiles} consists of non-empty binary trees
-  where each node has exactly zero or two subtrees, and sibling
-  subtrees are considered to be ``unordered'', as illustrated in
-  \pref{fig:mobiles}.
+  The species $\msf{Mob}$ of \emph{mobiles} consists of non-empty
+  binary trees where each node has exactly zero or two subtrees, and
+  sibling subtrees are considered to be ``unordered''.
+  \pref{fig:mobiles} shows a single example $\msf{Mob}$-shape, drawn
+  in four (equivalent) ways.
   \begin{figure}
     \centering
-    \begin{diagram}[width=400]
+    \begin{diagram}[width=200]
 import           Data.List.Split                (chunksOf)
 import           Data.Maybe                     (fromJust)
 import           Diagrams.TwoD.Layout.Tree
 import           SpeciesDiagrams
 
-dia =
-  hcat' (with & sep .~ 0.5)
-  [ unord (map labT [0..4])
-  , mkArrow 2 (txt "Mob")
-  , mobiles # scale 0.5
-  ]
-  # centerXY
-  # pad 1.1
-  # lwO 0.7
+dia = mobiles
+    # centerXY
+    # frame 0.5
+    # lwO 0.7
 
 enumMobiles :: [a] -> [BTree a]
 enumMobiles []  = []
@@ -227,6 +223,12 @@ enumMobiles xxs
     ,  r <- enumMobiles zs
     ]
 
+mobileRotations :: BTree a -> [BTree a]
+mobileRotations Empty = [Empty]
+mobileRotations t@@(BNode _ Empty Empty) = [t]
+mobileRotations (BNode x l r) = concat
+  [ [BNode x l' r', BNode x r' l'] || l' <- mobileRotations l, r' <- mobileRotations r ]
+
 drawMobile
   = renderTree id corner . fromJust
   . symmLayoutBin' (with & slHSep .~ 1.5)
@@ -237,16 +239,17 @@ drawMobile
 
 mobiles
   = centerXY
-  . vcat' (with & sep .~ 0.5)
-  . map (centerX . hcat' (with & sep .~ 0.5))
-  . chunksOf 10
+  . vcat' (with & sep .~ 1)
+  . map (centerX . hcat' (with & sep .~ 1))
+  . chunksOf 2
   . map (drawMobile . fmap labT)
+  . mobileRotations
+  . (!!15)
   . enumMobiles
-  $ [0..4]
+  $ [0..4]  -- $
     \end{diagram}
-    \caption{The species $\msf{Mob}$ of mobiles}
+    \caption{An example $\msf{Mob}$-shape, drawn in four equivalent ways}
     \label{fig:mobiles}
-    %$
   \end{figure}
   Algebraically, \[ \msf{Mob} = \X + \X \cdot (\Bag_2 \comp
   \msf{Mob}), \] that is, a mobile is either a single label, or a
@@ -259,7 +262,7 @@ mobiles
   describes shapes that consist of an ordered cycle of labels.  One
   way to think of the species of cycles is as a quotient of the
   species of lists, where two lists are considered equivalent if one
-  is a cyclic rotation of the other.
+  is a cyclic rotation of the other (see \pref{sec:molecular-atomic}).
   \begin{figure}
     \centering
     \begin{diagram}[width=400]
@@ -376,9 +379,15 @@ dn n = circle 0.8 # fc c
           InLoop _ -> colorFor n
           InTree pth -> colorFor (last pth)
 
+loopStyle = lw veryThick . dashingG [0.2,0.2] 0
+
 de n1 n2
-  || n1 == n2  = connectPerim' (with & arrowShaft .~ arc (3/8 @@@@ turn) (1/8 @@@@ turn)) n1 n2 (5/8 @@@@ turn) (7/8 @@@@ turn)
-  || otherwise = connectOutside n1 n2
+  || n1 == n2  = connectPerim' (with & arrowShaft .~ arc (3/8 @@@@ turn) (1/8 @@@@ turn) & shaftStyle %~ loopStyle) n1 n2 (5/8 @@ turn) (7/8 @@ turn)
+  || otherwise = case (endoStatus n1 endo, endoStatus n2 endo) of
+                   (InLoop _, InLoop _)
+                     -> connectOutside' (with & shaftStyle %~ loopStyle) n1 n2
+                   _
+                     -> connectOutside n1 n2
 
 dia = graphToDia dn de (unsafePerformIO (graphToGraph' nonClusteredParams TwoPi gr))
     # frame 0.5 # lwO 0.7
@@ -441,10 +450,10 @@ dia = graphToDia dn de (unsafePerformIO (graphToGraph' nonClusteredParams TwoPi 
 
   \citet{joyal} makes use of this characterization in giving an
   elegant combinatorial proof of Cayley's formula, namely, that there
-  are $n^{n-2}$ (unrooted, unordered, arbitrary arity) labelled trees
-  of size $n$.  One can likewise give characterizations of the species
-  of endofunctions with various special properties, such as
-  injections, surjections, and involutions.
+  are $n^{n-2}$ labelled trees (in the graph-theoretic sense) of size
+  $n$.  One can likewise give characterizations of the species of
+  endofunctions with various special properties, such as injections,
+  surjections, and involutions.
 \end{ex}
 
 In a computational context, it is important to keep in mind the
@@ -466,7 +475,7 @@ data; this will be made precise in~\pref{chap:labelled}.
 
 Informally, as we have seen, a species is a family of labelled shapes.
 Crucially, the actual labels used ``shouldn't matter'': for example,
-we should get the ``same'' family binary trees no matter what labels
+we should get the ``same'' family of binary trees no matter what labels
 we want to use.  This intuition is made precise in the formal
 definition of combinatorial species as \emph{functors}.  In fact, one
 of the reasons Joyal's work was so groundbreaking was that it brought
@@ -608,10 +617,11 @@ which amounts to the same thing.
 
 \begin{rem}
   Typically, the sets of shapes $F\ L$ are required to be
-  \emph{finite}, that is, species are defined as functors into the
-  category of \emph{finite} sets.  Of course, this is important if the
-  goal is to \emph{count} things!  However, nothing in the present work
-  hinges on this restriction, so it is simpler to drop it.
+  \emph{finite}, that is, species are defined as functors $\B \to
+  \FinSet$ into the category of \emph{finite} sets.  Of course, this
+  is important if the goal is to \emph{count} things!  However,
+  nothing in the present work hinges on this restriction, so it is
+  simpler to drop it.
 
   It should be noted, however, that requiring finiteness in this way
   is no great restriction: requiring each \emph{particular} set of
@@ -635,10 +645,10 @@ which amounts to the same thing.
   distinctions on the size of the set, and so on.  Instead of thinking
   of functors $\B \to \Set$ as computational, it is better to think of
   them as \emph{descriptive}.  We begin with some entire family of
-  labelled shapes, and want to classify them by the labels that they
-  use. A functor $\B \to \Set$ is then a convenient technical device
-  for organizing such a classification: it describes a family of
-  labelled shapes \emph{indexed by} their labels.
+  labelled shapes, and want to classify them according to the labels
+  that they use. A functor $\B \to \Set$ is then a convenient
+  technical device for organizing such a classification: it describes
+  a family of labelled shapes \emph{indexed by} their labels.
 
   Given this shift in emphasis, one might think it more natural to
   define a set of labelled shapes along with a function mapping shapes
@@ -674,12 +684,12 @@ which amounts to the same thing.
 \label{sec:cardinality-restr}
 
 For any species $F$ and natural number $n$, we may define \[ F_n\ L
-\defeq \begin{cases} F\ L & $\size L = n$ \\ \varnothing &
+\defeq \begin{cases} F\ L & if $\size L = n$ \\ \varnothing &
   \text{otherwise} \end{cases}. \] That is, $F_n$ is the restriction
 of $F$ to label sets of size exactly $n$.  For example, $\Bag$ is the
-species of sets (of any size); $\Bag_4$ is the species of sets of size
+species of sets of any size; $\Bag_4$ is the species of sets of size
 $4$.  This is well-defined since the action of a species is determined
-independently on sets of each size.  More abstractly, as noted
+independently on label sets of each size.  More abstractly, as noted
 previously, $\B$ (and $\P$) are disconnected categories, so functors
 out of them are equivalent to a disjoint union of individual functors
 out of each connected component; replacing the component functors at
@@ -751,15 +761,12 @@ exploring and generalizing this structure.
 \subsection{Species in HoTT}
 \label{sec:species-hott}
 
-\todo{Mention encoding primitive species as HITs somewhere, probably
-  interspersed throughout when those primitive species come up.}
-
 We now turn to ``porting'' the category of species from set theory
 into HoTT.  Recall that $\BT$ denotes the \hott{groupoid} with
-objects \[ \FinSetT \defeq (A : \Type) \times \isSet(A) \times
-\isFinite(A), \] where \[ \isFinite(A) \defeq \ptrunc{(n : \N) \times
-  (A \equiv \Fin n)}, \] and with morphisms given by
-paths. \later{mention something about $\PT$ here?}
+objects \[ \FinSetT \defeq (A : \Type) \times \isFinite(A), \]
+where \[ \isFinite(A) \defeq \ptrunc{(n : \N) \times (A \equiv \Fin
+  n)}, \] and with morphisms given by paths. \later{mention something
+  about $\PT$ here?}
 % Recall
 % also that $\PT$ denotes the \hott{groupoid} whose objects are natural
 % numbers and whose morphisms $\hom[\PT] m n$ are equivalences $\Fin m
@@ -767,14 +774,15 @@ paths. \later{mention something about $\PT$ here?}
 % $0$-types (sets) and functions.
 
 \begin{defn}
-  A \term{constructive species} is an \hott{functor} $F : \BT \to
-  \ST$.  We use $\Spe = \fc \BT \ST$ to refer to the \hott{category}
-  of constructive species.  Note this is the same name as the category
-  $\fc \B \Set$ of set-theoretic species; while technically ambiguous
-  this should not cause confusion since it should always be clear from
-  the context whether we are working in set theory or in HoTT.
-  Likewise, when working in the context of HoTT we will often simply
-  say ``species'' instead of ``constructive species''.
+  A \term{constructive species}, or \hott{species}, is an
+  \hott{functor} $F : \BT \to \ST$.  We use $\Spe = \fc \BT \ST$ to
+  refer to the \hott{category} of constructive species.  Note this is
+  the same name as the category $\fc \B \Set$ of set-theoretic
+  species; while technically ambiguous, this should not cause confusion
+  since it should always be clear from the context whether we are
+  working in set theory or in HoTT.  Likewise, when working in the
+  context of HoTT we will often simply say ``species'' instead of
+  ``constructive species''.
 \end{defn}
 
 It is not necessarily clear at this point whether this is an
@@ -890,7 +898,7 @@ dia = permStructures
   \label{fig:different-form-perms}
 \end{figure}
 
-We can formalize these ideas as follows.
+We can formalize this idea as follows.
 
 \begin{defn}
   Given a species $F$ and $F$-shapes $f_1 : F\ L_1$ and $f_2 : F\
@@ -1020,8 +1028,8 @@ isomorphism/equality, known as \term{equipotence}.
   isomorphism between $F$ and $G$---that is, two families of functions
   $\varphi_L : F\ L \to G\ L$ and $\psi_L : G\ L \to F\ L$ such that
   $\varphi_L \comp \psi_L = \psi_L \comp \varphi_L = \id$ for every
-  finite set $L$.  Note in particular there is \emph{no} requirement
-  of naturality for $\varphi$ or $\psi$.
+  finite set $L$.  Note in particular there is no requirement
+  that $\varphi$ or $\psi$ be natural.
 \end{defn}
 
 We can see that an equipotence preserves the \emph{number} of shapes
@@ -1165,7 +1173,8 @@ first, ``obvious'' proof, which sends $\sigma$ to the list whose $i$th
 element is $\sigma(i)$, we can see that it also can be generalized to
 work for any finite set $L$ equipped with a linear order.  In
 particular, being equipped with a linear order is equivalent to being
-equipped with a bijection to $\Fin n$.
+equipped with a bijection to $\Fin n$, as explained in
+\pref{sec:manifestly-finite}.
 
 Intuitively, then, the reason that these two families of bijections
 are not natural is that they do not work \emph{uniformly} for all sets
@@ -1176,17 +1185,14 @@ determines how the bijections work.
 Considering this from the viewpoint of HoTT yields additional insight.
 A family of functions like $\varphi_K$ would typically correspond in
 HoTT to a function of type \[ \varphi : (K : \FinSetT) \to \List\ K
-\to \Perm\ K. \] However, note that any function of this type is
-automatically natural in $K$.
-
-It is certainly possible to implement a function with the above type
-(for example, one which sends each list to the cyclic permutation with
-elements in the same order), but as we have seen, it is not possible
-to implement one which is invertible.  Writing an invertible such
-function also requires a linear ordering on the type $K$.  We could,
-of course, simply take a linear ordering as an extra argument, \[
-\varphi : (K : \FinSetT) \to \cons{LinOrd}\ K \to \List\ K \to \Perm\
-K. \]
+\to \Perm\ K. \] It is certainly possible to implement a function with
+the above type (for example, one which sends each list to the cyclic
+permutation with elements in the same order), but as we have seen, it
+is not possible to implement one which is invertible.  Writing an
+invertible such function also requires a linear ordering on the type
+$K$.  We could, of course, simply take a linear order as an extra
+argument, \[ \varphi : (K : \FinSetT) \to \cons{LinOrd}\ K \to \List\
+K \to \Perm\ K. \]
 
 Alternatively, recall that $K$ contains evidence of its finiteness in
 the form of an equivalence $K \equiv \Fin n$.  This equivalence
@@ -1206,21 +1212,14 @@ therefore, since applying the fundamental transform directly may give
 results completely incompatible with those obtained by applying a
 non-order-preserving permutation followed by the fundamental transform.
 
-\citet[p. 22]{bll} note that the fundamental transform \emph{is} in fact
-compatible with \emph{order-preserving} bijections.  If we take
-species as functors $\L \to \Set$, where $\L$ is the groupoid of
-finite sets equipped with linear orders, along with order-preserving
+\citet[p. 22]{bll} note that the fundamental transform \emph{is} in
+fact compatible with \emph{order-preserving} bijections.  If we
+consider functors $\L \to \Set$, where $\L$ is the groupoid of finite
+sets equipped with linear orders, along with order-preserving
 bijections, then the fundamental transform is indeed a natural
-isomorphism between $\List$ and $\Perm$.  Such species are called
-$\L$-species, and are discussed further in \pref{sec:L-species}.  For
-the moment we note only that in HoTT, $\L$ corresponds exactly to
-$\SetL$, \ie the variant of $\FinSetT$ \emph{without} a propositional
-truncation hiding the finiteness evidence.  The objects of $\SetL$ are
-finite sets ($0$-types) along with a natural number $n$ and an
-equivalence to $\Fin n$, which, as we have seen, is equivalent to a
-linear ordering.  The morphisms are just paths, which, as the proof of
-\pref{prop:U-fin-set} demonstrates, should be thought of as
-order-preserving bijections.
+isomorphism between $\List$ and $\Perm$.  Such functors are called
+$\L$-species, and are discussed further in \pref{sec:L-species}
+\todo{where?}.
 
 Back in $\FinSetT$, however, in order to use the linear order
 associated to each finite set $K$, we must produce a mere proposition.
@@ -1243,7 +1242,7 @@ K$.
 One might expect that there are other ways to obtain an equipotence.
 That is, the correspondence between $\List$ and $\Perm$ is not a
 natural isomorphism because it additionally requires a linear order
-structure on the labels.  Might there be other equipotences which
+structure on the labels; might there be other equipotences which
 require other sorts of structure on the labels?
 
 I conjecture that a linear order is as strong as one could ever want;
@@ -1298,13 +1297,13 @@ injection.
     molecular species are lists of a particular length quotiented by
     some symmetries: we let $H$ act on $\X^n$-shapes by permuting
     their elements, and consider equivalence classes of $\X^n$-shapes
-    corresponding to orbits under $H$ (see
-    \pref{sec:molecular-atomic}). The study and classification of
-    molecular and atomic species takes up an entire section of
-    \citet{bll}, and porting all of the definitions and theorems there
-    to HoTT would be a formidable undertaking, though I expect it
-    would yield considerable insight.  Such an undertaking is left to
-    future work.
+    corresponding to orbits under $H$.  (For a fuller discussion of
+    such quotient species, see \pref{sec:molecular-atomic}.) The study
+    and classification of, molecular and atomic species takes up an
+    entire section of \citet{bll}, and porting all of the definitions
+    and theorems there to HoTT would be a formidable undertaking,
+    though I expect it would yield considerable insight.  Such an
+    undertaking is left to future work.
 
     In any case, an equivalence $F\ L \equiv M_1\ L + M_2\ L + M_3\ L
     + \dots$ should yield a canonical ordering on the classes of
@@ -1344,7 +1343,7 @@ injection.
 used to manipulate sequences of interest by representing them as the
 coefficients of certain formal power series.  As Wilf says, ``A
 generating function is a clothesline on which we hang up a sequence of
-numbers for display.'' \citep{wilf-gfology}
+numbers for display'' \citep{wilf-gfology}.
 
 There are many types of generating functions; we will consider two in
 particular: \term{ordinary} generating functions (ogfs), and
@@ -1369,7 +1368,7 @@ discussed.
 
 To each species $F$ we associate two generating
 functions\footnote{There are more, \eg the cycle index series and
-  asymmetry index series \citep{bll}, but these are outside the scope of
+  asymmetry index series \citep{bll}, but they are outside the scope of
   this dissertation.}, an egf $F(x)$ and an ogf $\unl{F}(x)$, defined
 as follows.
 \begin{defn}
@@ -1438,16 +1437,16 @@ Historically, however, generating functions came first.  As Joyal
 makes explicit in the introduction to his seminal paper \textit{Une
   Th{\'e}orie Combinatoire des {S}{\'e}ries Formelles}
 \citeyearpar{joyal}---in fact, it is even made explicit in the title of
-the paper itself---the biggest motivation for inventing species was to
+the paper itself---the main motivation for inventing species was to
 generalize the theory of generating functions, putting it on firmer
 combinatorial and categorical ground.  The theory of generating
 functions itself was already well-developed, but no one had yet tried
-to apply category theory to it.
+to view it through a categorical lens.
 
 The general idea is to ``blow everything up'', replacing natural
 numbers by sets; addition by disjoint union; product by pairing; and
 so on.  In a way, one can see this process as ``imbuing everything
-with constructive significants''; this is one argument for the
+with constructive significance''; this is one argument for the
 naturality of the theory of species being developed within a
 constructive type theory, as attempted by this dissertation.
 
@@ -1466,30 +1465,31 @@ functor categories. The rest of this chapter examines such generalized
 species in detail.
 
 First, sections \pref{sec:lifted}--\pref{sec:differentiation} examine
-particular species operations in the context of general functor
-categories $\fc \Lab \Str$, in order to identify precisely what
-properties of $\Lab$ and $\Str$ are necessary to define each
-operation. That is, starting ``from scratch'', we will build up a
-generic notion of species that supports the operations we are
-interested in. In the process, we get a much clearer picture of where
-the operations ``come from''.  In particular, $\B$ and \Set enjoy many
-special properties as categories (for example, \Set is cartesian
-closed, has all limits and colimits, and so on), and it is
-enlightening to see precisely which of these properties are required
-in which situations.  Although more general versions of specific
-operations have been defined previously \citep{Fiore08} \todo{cite
-  some other things?}, I am not aware of any previous systematic
-generalization similar to this work.  In particular, the general
-categorical treatments of arithmetic product
-(\pref{sec:arithmetic-product}) and weighted species
-(\pref{sec:weighted}) appear to be new.
+species operations---in particular, six monoidal structures along with
+differentiation---in the context of general functor categories $\fc
+\Lab \Str$, in order to identify precisely what properties of $\Lab$
+and $\Str$ are necessary to define each operation. That is, starting
+``from scratch'', we will build up a generic notion of species that
+supports the operations we are interested in. In the process, we get a
+much clearer picture of where the operations ``come from''.  In
+particular, $\B$ and \Set enjoy many special properties as categories
+(for example, \Set is cartesian closed, has all limits and colimits,
+and so on), and it is enlightening to see precisely which of these
+properties are required in which situations.  Although more general
+versions of specific operations have been defined previously
+\citep{kelly2005operads, Fiore08, lack2014combinatorial}, I am not
+aware of any previous systematic generalization similar to this work.
+In particular, the general categorical treatments of arithmetic
+product (\pref{sec:arithmetic-product}), multisort species
+(\pref{sec:multisort}), and weighted species (\pref{sec:weighted})
+appear to be new.
 
 Along the way, we will explore particular instantiations of the
 general framework. Each instantiation arises from considering
 particular categories in place of $\B$ and $\Set$.  To keep these
 functor categories straight, the word ``species'' will be used for
 $\fc \B \Set$, and ``generalized species'' (or, more specifically,
-``$\fc \Lab \Str$-species'')\footnote{Not to be confused with the
+``$(\fc \Lab \Str)$-species'')\footnote{Not to be confused with the
   generalized species of~\citet{Fiore08}, who define
   ``$(A,B)$-species'' as functors from $\B A$ (a generalization of
   $\B$) to $\hat B$, the category of presheaves $B^\op \to \Set$ over
@@ -1498,7 +1498,11 @@ defining a particular species operation in $\fc \B \Set$, then
 generalizes it to arbitrary functor categories $\fc \Lab \Str$, and
 exhibits examples in other functor categories.
 
-The remaining sections, \todo{fill in}, examine other specific
+\todo{Finish this once I have a better idea how the remaining sections
+  will go.  Don't just list them, give some high-level idea of what
+  they are doing.}  After working through the operations, The
+remaining sections, \pref{sec:implicit}--\pref{sec:unlabelled}
+\todo{fix this if I change sections around}, examine other specific
 generalizations of species, such as \todo{fill in}?
 
 \section{Lifted monoids: sum and Cartesian product}
@@ -1517,30 +1521,30 @@ categories.
 
 The \emph{sum} of two species is given by their disjoint union: an $(F
 + G)$-shape is either an $F$-shape \emph{or} a $G$-shape, together
-with a tag to distinguish them (\pref{fig:sum}).
+with a tag to distinguish them.
 
-  \begin{figure}
-    \centering
-    \begin{diagram}[width=250]
-import SpeciesDiagrams
+%   \begin{figure}
+%     \centering
+%     \begin{diagram}[width=250]
+% import SpeciesDiagrams
 
-theDia
-  = hcat' (with & sep .~ 1)
-    [ struct 5 "F+G"
-    , text' 1 "="
-    , vcat
-      [ struct 5 "F"
-      , text' 0.5 "OR"
-      , struct 5 "G"
-      ]
-      # centerY
-    ]
+% theDia
+%   = hcat' (with & sep .~ 1)
+%     [ struct 5 "F+G"
+%     , text' 1 "="
+%     , vcat
+%       [ struct 5 "F"
+%       , text' 0.5 "OR"
+%       , struct 5 "G"
+%       ]
+%       # centerY
+%     ]
 
-dia = theDia # centerXY # pad 1.1
-    \end{diagram}
-    \caption{Species sum}
-    \label{fig:sum}
-  \end{figure}
+% dia = theDia # centerXY # pad 1.1
+%     \end{diagram}
+%     \caption{Species sum}
+%     \label{fig:sum}
+%   \end{figure}
 
 \begin{defn}
   Given $F, G : \B \to \Set$, their sum $F + G : \B \to \Set$ is
@@ -1653,12 +1657,12 @@ trees
   = map (drawBinTreeWide . fmap labT)
   $ enumTrees [0,1 :: Int]  -- $
   \end{diagram}
-  \caption{The species $\Bin + \Bin$}
+  \caption{$(\Bin + \Bin)\ 2$}
   \label{fig:bin-plus-bin}
 \end{figure}
 
 There is also a primitive species which is an identity element for
-species sum:
+species sum.
 
 \begin{defn}
   The \term{zero} or \term{empty} species,
@@ -1708,8 +1712,8 @@ We evidently have \[ \Zero(x) = \unl \Zero(x) = 0 + 0x + 0x^2 + \dots
 Stepping back a bit, we can see that this monoidal structure on
 species arises straightforwardly from the corresponding monoidal
 structure on sets: the sum of two functors is defined as the pointwise
-sum of their outputs, and likewise \Zero, the identity for the sum of
-species, is defined as the functor which pointwise returns
+coproduct of their outputs, and likewise \Zero, the identity for the
+sum of species, is defined as the functor which pointwise returns
 $\varnothing$, the identity for the coproduct of sets.  This general
 construction will be spelled out in \pref{sec:lifting-monoids}.
 First, however, we turn to the formally similar operation of
@@ -1731,8 +1735,8 @@ a canonical singleton type $\TyOne$.)
   defined on objects by $ (F \times G)\ L = F\ L \times G\ L.$
 \end{defn}
 This is the ``obvious'' definition of product for species, though as
-we will see it is not the most natural from a combinatorial point of
-view.  Nonetheless, it is the simplest to define and is thus worth
+we will see it is not the most natural one from a combinatorial point
+of view.  Nonetheless, it is the simplest to define and is thus worth
 studying first.  The action of $(F \times G)$ on morphisms,
 functoriality, \etc are omitted; the details are exactly parallel to
 the definition of species sum, and are presented much more generally
@@ -1873,9 +1877,9 @@ of $\Bag$ becomes clear:
 
 The ogf for $\Bag$ is given by \[ \unl \Bag(x) = 1 + x + x^2 + \dots =
 \frac{1}{1-x}, \] and the egf by \[ \Bag(x) = 1 + x + \frac{x^2}{2!} +
-\frac{x^3}{3!} + \dots = e^x. \] Note that the notation $\Bag$ was
-probably chosen as an abbreviation for the French \foreign{ensemble}
-(set), but it is also a clever pun on the fact that $\Bag(x) = e^x$.
+\frac{x^3}{3!} + \dots = e^x. \] The notation $\Bag$ was probably
+chosen as an abbreviation of the French \foreign{ensemble} (set), but
+it is also a clever pun on the fact that $\Bag(x) = e^x$.
 
 \begin{figure}
   \centering
@@ -2358,15 +2362,16 @@ showing that lifting preserves adjunctions.
   the property of being a coproduct can be described in terms of an
   adjunction: in particular, $+$ is a coproduct if and only if it is
   left adjoint to the diagonal functor $\Delta : \Str \to \Str \times
-  \Str$.\footnote{Proving this takes a bit of work but mostly just
-    involves unfolding definitions, and is left as a nice exercise for
-    the interested reader.}  Since lifting preserves adjunctions
-  (\pref{lem:lift-adj}), we must have $+^\Lab \adj \Delta^\Lab$. But
-  note we have $\Delta^\Lab : \Str^\Lab \to (\Str \times \Str)^\Lab
-  \iso \Str^\Lab \times \Str^\Lab$, with $\Delta^\Lab (F) = \Delta
-  \comp F \iso (F,F)$, so in fact $\Delta^\Lab$ is the diagonal
-  functor on $\Str^\Lab$.  Hence $+^\Lab$, being left adjoint to the
-  diagonal functor, is indeed a coproduct on $\Str^\Lab$.
+  \Str$.\footnote{Proving this standard fact takes a bit of work but
+    mostly just involves unfolding definitions, and is left as a nice
+    exercise for the interested reader.}  Since lifting preserves
+  adjunctions (\pref{lem:lift-adj}), we must have $+^\Lab \adj
+  \Delta^\Lab$. But note we have $\Delta^\Lab : \Str^\Lab \to (\Str
+  \times \Str)^\Lab \iso \Str^\Lab \times \Str^\Lab$, with
+  $\Delta^\Lab (F) = \Delta \comp F \iso (F,F)$, so in fact
+  $\Delta^\Lab$ is the diagonal functor on $\Str^\Lab$.  Hence
+  $+^\Lab$, being left adjoint to the diagonal functor, is indeed a
+  coproduct on $\Str^\Lab$.
 
   Of course, this dualizes to products as well, which are
   characterized by being right adjoint to the diagonal functor.
@@ -2483,15 +2488,16 @@ dia
   sets, and $L_F,L_G
   \partition L$ denotes that $L_F$ and $L_G$ constitute a partition of
   $L$, (\ie $L_F \union L_G = L$ and $L_F \intersect L_G =
-  \varnothing$).  (Note that $L_F$ and $L_G$ may be empty.)  In words,
-  an $(F \cdot G)$-shape with labels taken from $L$ consists of some
+  \varnothing$); note that $L_F$ and $L_G$ may be empty.  In words, an
+  $(F \cdot G)$-shape with labels taken from $L$ consists of some
   partition of $L$ into two disjoint subsets, with an $F$-shape on one
   subset and a $G$-shape on the other.
 
   On morphisms, $(F \cdot G)\ \sigma$ is the function \[
   (L_F,L_G, x, y) \mapsto (\sigma\ L_F, \sigma\ L_G, F\ (\sigma
   \vert_{L_F})\ x, G\ (\sigma \vert_{L_G})\ y), \] where $L_F,L_G
-  \partition L$, $x \in F\ L_F$, and $y \in G\ L_G$.
+  \partition L$, $x \in F\ L_F$, and $y \in G\ L_G$.  That is,
+  $\sigma$ acts independently on the two subsets of $L$.
 \end{defn}
 
 To compute the ogf of a product species $F \cdot G$, consider the
@@ -2504,7 +2510,6 @@ of size $k$ paired with a $G$-form of size $n-k$. Hence \[ \unl{(F
   \cdot G)}(x) = \unl F(x) \unl G(x). \]
 
 The computation of the egf of a product species is similar.
-Consider:
 \begin{align*}
   F(x)G(x) &= \left(\sum_{n \geq 0} f_n \frac{x^n}{n!} \right) \left(
     \sum_{n \geq 0} g_n \frac{x^n}{n!} \right) \\
@@ -2542,7 +2547,7 @@ $\varnothing,L \partition L$) and $\One\ L_F = \varnothing$ for all other $L_F$
 \begin{rem}
   Recall that one should not think of $\One$ as doing case analysis.
   Rather, a more intuitive way to think of it is ``there is a single
-  $\One$-shape, and it has no labels''; that is, the unit species thus
+  $\One$-shape, and it has no labels''; that is, the unit species
   denotes a sort of ``trivial'' or ``leaf'' structure containing no
   labels.  Intuitively, it corresponds to a Haskell type like
   {\setlength{\belowdisplayskip}{0pt}
@@ -2612,21 +2617,21 @@ dia = pair fps cycs # frame 0.5
 \later{Another example?}
 
 \begin{prop}
-  $(\Spe, \cdot, \One)$ is monoidal closed.
+  $(\Spe, \cdot, \One)$ is symmetric monoidal.
 \end{prop}
 
 \begin{proof}
   We constructed $\One$ so as to be an identity for partitional
-  product.  Associativity of partitional product is not hard to prove,
-  and is left as an exercise for the reader.
-
-  A discussion of the internal Hom functor corresponding to
-  partitional product must be postponed to
-  \pref{sec:internal-Hom-pprod-aprod}, after discussing species
-  differentiation.
+  product.  Associativity and symmetry of partitional product are not
+  hard to prove, and are left as an exercise for the reader.
 \end{proof}
 
-\subsection{Arithmetic product}
+In fact, $(\Spe, \cdot, \One)$ is closed as well, but a discussion of
+the internal Hom functor corresponding to partitional product must be
+postponed to \pref{sec:internal-Hom-pprod-aprod}, after discussing
+species differentiation.
+
+\subsection{Arithmetic/rectangular product}
 \label{sec:arithmetic-product}
 
 \newcommand{\aprod}{\boxtimes}
@@ -2645,7 +2650,7 @@ which points out the symmetry more clearly, is to think of a
 rectangular grid of labels, together with an $F$-shape labelled by
 the rows of the grid, and a $G$-shape labelled by the
 columns. \pref{fig:arithmetic-product} illustrates these intuitions
-with the arithmetic product of a tree and a list.
+with the arithmetic product $\Bin \aprod \List$.
 
 \begin{figure}
   \centering
@@ -2707,7 +2712,7 @@ dia = frame 0.2 . lwO 0.7 . centerXY . vcat' (with & sep .~ 2) . map centerXY $
 A more formal definition requires the notion of a \term{rectangle} on
 a set~\citep{maia2008arithmetic, baddeley2004transitive}, which plays
 a role similar to that of set partition in the definition of
-partitional product. (So perhaps arithmetic product ought to be called
+partitional product. (So arithmetic product can also be called
 \emph{rectangular product}.)  In particular, whereas a binary
 partition of a set $L$ is a decomposition of $L$ into a sum, a
 rectangle on $L$ can be thought of as a decomposition into a product.
@@ -2954,22 +2959,8 @@ dia = pairs
   correspond either to a bag data structure, or instead to a ``sink''
   where we throw labels to which we do not wish to associate any
   data. This makes no difference from a purely combinatorial point of
-  view---for example, there are the same number of $(\X \cdot
-  \Bag)$-structures on $n$ labels whether we ``care about'' the labels
-  in the $\Bag$-structures or not---but the associated data structures
-  are certainly different.
-
-  \todo{Rethink this.  Figure out precise technical foundations.}
-  \todo{add forward reference to part of \pref{chap:labelled}
-    discussing foundations for this}
-  To emphasize the difference, we will write $\Rubbish$ for the
-  variant of $\Bag$ where we ``do not care'' about the labels, and
-  continue to write $\Bag$ when we do.  Thus, $\X \cdot \Bag$ is the
-  species of pointed sets, whose associated data structures store a
-  bag of elements with one element distinguished, whereas $\X \cdot
-  \Rubbish$ is the species of elements, whose associated data
-  structures store just a single data element corresponding to a
-  single chosen label.
+  view, but will make a difference in \pref{chap:labelled}; see
+  \todo{where?} in particular.
 \end{ex}
 
 \begin{ex}
@@ -2997,20 +2988,24 @@ replaced by an \emph{object} of some other category.
     enriched over $\D$} consists of
   \begin{itemize}
   \item a collection of objects $O$;
-  \item for every pair of objects $A,B \in O$, an object $\hom A B \in \D$;
-  \item for each object $A \in O$, a morphism $I \to \hom A A$ in
+  \item for every pair of objects $A,B \in O$, a corresponding object
+    of $\D$, which we notate $\hom A B$;
+  \item for each object $A \in O$, a morphism $I \to (\hom A A)$ in
     $\D$, which ``picks out'' the identity morphism for each object;
   \item for every three objects $A,B,C \in O$, a morphism
     $\comp_{A,B,C} : (\hom B C) \otimes (\hom A B) \to (\hom A C)$
     representing composition.
   \end{itemize}
   Of course, identity and composition have to satisfy the usual laws,
-  expressed via commutative diagrams.
+  expressed via commutative diagrams.  Note we are technically
+  overloading the $\hom{}{}$ notation, but it is natural to extend it
+  from denoting hom sets to denoting hom objects in general.
 \end{defn}
-Note that any category can be seen as an enriched category over
-$\Set$.  We also often say that a category $\C$ \term{is enriched
-  over} $\D$ if there exists some functor $\hom - - : \C^\op \times \C
-\to \D$ satisfying the above criteria.
+Enriched categories and categories are notionally distinct, but we
+often conflate them.  In particular, any category can be seen as an
+enriched category over $\Set$, and we also often say that a category
+$\C$ \term{is enriched over} $\D$ if there exists some functor $\hom -
+- : \C^\op \times \C \to \D$ satisfying the above criteria.
 
 We can now give the definition of Day convolution.  The essential
 idea, first described by Brian Day~\cite{day1970closed}, is to
@@ -3019,7 +3014,7 @@ construct a monoidal structure on a functor category $[\Lab^\op,
 category $\Lab$.  In particular, Day convolution requires
 \begin{itemize}
 \item a monoidal structure $\oplus$ on the domain $\Lab$;
-\item that $\Lab$ be enriched over $\Str$, so morphisms of $\Lab$ can
+\item that $\Lab$ be enriched over $\Str$, so hom sets of $\Lab$ can
   be seen as objects in $\Str$;
 \item a symmetric monoidal structure $\otimes$ on the codomain $\Str$
   (satisfying an additional technical requirement, to be explained
@@ -3047,8 +3042,9 @@ colimits---the distributive law $(X \times (Y + Z) \iso X \times Y + X
 bifunctor in $\Set$ does not preserve colimits; it is not the case,
 for example, that $X + (Y + Z) \iso (X + Y) + (X + Z)$.  The important
 point to note is that Day convolution can be instantiated using
-\emph{any} monoidal structure on the source category, but requires a
-very particular sort of monoidal structure on the target category.
+\emph{any} monoidal structure on the source category $\Lab$, but
+requires a very particular sort of monoidal structure on the target
+category $\Str$.
 
 \begin{defn}
   Given the above conditions, the Day convolution product of $F, G :
@@ -3058,20 +3054,22 @@ very particular sort of monoidal structure on the target category.
 
 \begin{rem}
   Since groupoids are self-dual, we may ignore the $-^\op$ in the
-  common case that $\Lab$ is a groupoid.
+  common case that $\Lab$ is a groupoid.  Note that $F\ L_F$ and $G\
+  L_G$ are objects in $\Str$, and $(\Hom[\Lab]{L}{L_F \oplus L_G})$ is
+  a hom set in $\Lab$, viewed as an object in $\Str$ as well.
 \end{rem}
 
-This operation is associative, and has as a unit $j(I)$ where $I$ is
-the unit for $\oplus$ and $j : \Lab \to \fc {\Lab^{\text{op}}} \Str$
-is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. See
+This operation is associative, and has as a unit $j(I)$, where $I$ is
+the unit for $\oplus$ and $j : \Lab \to (\fc {\Lab^{\text{op}}} \Str)$
+is the co-Yoneda embedding, that is, $j(L) = (\hom[\Lab] - L)$. See
 \citet{kelly2005operads} for proof.
 
 \begin{ex}
   Let's begin by looking at the traditional setting of $\Lab = \B$ and
   $\Str = \Set$.  As noted in~\pref{sec:groupoids}, $\B$ has a
   monoidal structure given by disjoint union of finite sets. $\B$ is
-  indeed enriched over $\Set$, which is also cocomplete and has a
-  symmetric monoidal structure given by Cartesian product.
+  indeed enriched over $\Set$, which is also cocomplete and has an
+  appropriate symmetric monoidal structure given by Cartesian product.
 
   Specializing the definition to this case, we obtain
   \begin{align*}
@@ -3079,8 +3077,8 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. See
     (L \bij L_F \uplus L_G).
   \end{align*}
   We can simplify this further by characterizing the coend more
-  explicitly.  Let $R \defeq \biguplus_{L_F, L_G} F\ L_F \times G\ L_G
-  \times (L \bij L_F \uplus L_G)$; elements of $R$ look like
+  explicitly.  Let \[ R \defeq \biguplus_{L_F, L_G} F\ L_F \times G\ L_G
+  \times (L \bij L_F \uplus L_G). \] Elements of $R$ look like
   quintuples $(L_F, L_G, f, g, i)$, where $f \in F\ L_F$, $g \in G\
   L_G$, and $i : L \bij L_F \uplus L_G$ witnesses a partition of $L$
   into two subsets.  Then, as we have seen, the coend can be expressed
@@ -3091,8 +3089,8 @@ is the Yoneda embedding, that is, $j(L) = \Lab(-,L)$. See
   \sigma_G)). \] That is, $f \in F\ L_F$ is sent to $F\ \sigma_F\ f$
   (the relabelling of $f$ by $\sigma_F$); $g \in G\ L_G$ is sent to
   $G\ \sigma_G\ g$; and $i : L \bij L_F \uplus L_G$ is sent to \[
-  \xymatrixcolsep{4pc} \xymatrix{L \ar[r]^-{\bij}_-i & L_F \uplus L_G
-    \ar[r]^-{\bij}_-{\sigma_F \uplus \sigma_G} & L_F' \uplus L_G'}. \]
+  \xymatrixcolsep{4pc} \xymatrix{L \ar[r]^-{\sim}_-i & L_F \uplus L_G
+    \ar[r]^-{\sim}_-{\sigma_F \uplus \sigma_G} & L_F' \uplus L_G'}. \]
 
   When are two elements of $R$ \emph{inequivalent}, that is, when can we be
   certain two elements of $R$ are not related by a pair of
@@ -3378,7 +3376,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     corresponding to the coproduct and product of types. Note that
     when combining two finite types, their finiteness evidence must be
     somehow combined to create evidence for the finiteness of their
-    product/coproduct.  For example, given equivalences $A \equiv \Fin
+    product or coproduct.  For example, given equivalences $A \equiv \Fin
     m$ and $B \equiv \Fin n$, one must create an equivalence $A + B
     \equiv \Fin {(m + n)}$ (in the case of coproduct) or $A \times B
     \equiv \Fin {(mn)}$ (in the case of product). In the first case,
@@ -3398,7 +3396,8 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
     between the underlying sets, and because by \pref{cor:path-pres-set},
     $A = B$ is a set when $A$ and $B$ are.
   \item We have already seen that there is a symmetric monoidal
-    structure on $\ST$ given by the product of types.
+    structure on $\ST$ given by the product of types, which does
+    preserve colimits.
   \item Finally, $\ST$ does have coends over $\BT$.  In fact, since
     $\BT$ is a groupoid, recall from \pref{sec:coends-hott}
     that coends are just $\Sigma$-types.
@@ -4088,6 +4087,11 @@ $G$-shapes.
 
 \section{Differentiation}
 \label{sec:differentiation}
+
+\todo{cite ``general combinatorial differential operators'', Dan
+  Piponi blog posts, Mike Stay blog post.  Cite conor StackOverflow
+  answer re: down, naperian.  Lots of rich material related to
+  differentiation remaining to be worked out.}
 
 The derivative of container types is a notion already familiar to many
 functional programmers through the work of \citet{Huet_zipper},

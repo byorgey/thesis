@@ -263,20 +263,23 @@ that the axiom of choice implies the law of excluded middle
 10.1.14]{hottbook}!  Working as we are in a type theory based on
 intuitionistic logic, we must therefore reject the axiom of choice.
 
-It is worth noting that within HoTT, the notion of a ``non-empty'' set
-can be defined in a more nuanced way.  The best way to model what
-classical mathematicians mean when they say ``$S$ is non-empty'' is
-probably not with a negation, but instead with the \emph{propositional
-  truncation} of the statement that $S$ contains an
-element~\citep[Chapter 3]{hottbook}.  This more faithfully mirrors the
-way mathematicians use it, for example, in reasoning such as ``$S$ is
-non-empty, so let $s \in S$ \dots''.  Non-emptiness does in fact imply
-an inhabitant, but such an inhabitant can only be used to prove
-propositions.
+\begin{rem}
+  It is worth noting that within HoTT, the notion of a ``non-empty''
+  set can be defined in a more nuanced way.  The best way to model
+  what classical mathematicians mean when they say ``$S$ is
+  non-empty'' is probably not with a negation, but instead with the
+  \emph{propositional truncation} of the statement that $S$ contains
+  an element~\citep[Chapter 3]{hottbook}.  This more faithfully
+  mirrors the way mathematicians use it, for example, in reasoning
+  such as ``$S$ is non-empty, so let $s \in S$ \dots''.  Non-emptiness
+  does in fact imply an inhabitant, but such an inhabitant can only be
+  used to prove propositions.
+\end{rem}
 
-Na\"ively
-Traditional category theory (founded in set theory) makes
-frequent---though hidden---use of the axiom of choice.
+Unfortunately, traditional category theory (founded in set theory)
+makes frequent---though hidden---use of the axiom of choice.  The next
+sections explain the places where it occurs and some approaches to
+doing without it.
 
 \subsection{Unique isomorphism and generalized ``the''}
 \label{sec:generalized-the}
@@ -390,7 +393,7 @@ that the statement
 \end{equation}
 (let's call this the ``Axiom of Protoequivalence'', or AP) not only
 requires AC, but is \emph{equivalent} to it, in the sense that AC is
-derivable given AP as an axiom \citep{cat-equivalence-AC}!
+derivable given AP as an axiom \citep{nlab-AoC}!
 
 On purely intuitive grounds, however, it still ``feels'' like AP
 ``ought to be'' true.  The particular choice of functor $G : \D \to
@@ -420,7 +423,7 @@ There are also, however, several more creative options:
 \begin{enumerate}[resume]
 \item In a classical setting, one can avoid AC and affirm (an analogue
   of) AP by generalizing the notion of functor to that of
-  \term{anafunctor}~\cite{makkai1996avoiding}.  Essentially, an
+  \term{anafunctor}~\citep{makkai1996avoiding}.  Essentially, an
   anafunctor is a functor ``defined only up to unique isomorphism''.
   It turns out that the appropriate analogue of AP, where ``functor''
   has been replaced by ``anafunctor'', is indeed true---and neither
@@ -541,7 +544,7 @@ easy to imagine what the identity morphism of cliques must be---the
 one which maps each $A_i$ to $A_j$ via $u_{ij}$.  However, composition
 of clique morphisms is more subtle.  Suppose we have three cliques
 with morphisms $\xymatrix{(I,A,u) \ar[r]^f & (J,B,v) \ar[r]^g &
-  (K,C,q)}$.  We must define a collection of morphisms
+  (K,C,w)}$.  We must define a collection of morphisms
 $\xymatrix{A_i \ar[r]^{h_{ik}} & C_k}$.  For any given $A_i$ and
 $C_k$, we have morphisms from $A_i$ to each of the $B_j$, and from
 each of the $B_j$ to $C_k$, with a representative example shown below.
@@ -562,8 +565,8 @@ choice of $j$, since everything in sight commutes.  Specifically,
 \reason{=}{$v_{jl} \then v_{lj} = v_{jj} = \id$}
 \stmt{f_{ij} \then v_{jl} \then v_{lj} \then g_{jk}}
 \reason{=}{$f$, $g$ are clique morphisms}
-\stmt{u_{ii} \then f_{il} \then g_{lk} \then q_{kk}}
-\reason{=}{$u_{ii} = \id$; $q_{kk} = \id$}
+\stmt{u_{ii} \then f_{il} \then g_{lk} \then w_{kk}}
+\reason{=}{$u_{ii} = \id$; $w_{kk} = \id$}
 \stmt{f_{il} \then g_{lk}.}
 \end{sproof}
 Since $J$ is non-empty, it must contain some element $j$ which we may
@@ -924,12 +927,14 @@ We begin with the definition of a \term{precategory}.
 One might wonder why the term \term{precategory} is used for something
 that seems to be a direct port of the definition of a category from
 set theory into HoTT.  The reason is that the usual formal definition
-of categories as expressed in set theory is incomplete, seeing as
-categories come equipped with an extra \emph{social} convention
-regarding their use, namely ``don't be evil'', \ie don't violate the
+of categories as expressed in set theory is incomplete:
+categories in fact come equipped with an extra \emph{social} convention
+regarding their use---namely, ``don't be evil'', \ie don't violate the
 principle of equivalence.  In HoTT, we can formally encode this social
 convention as an axiom, which makes categories much nicer to work with
-in practice (after all, the social convention is not arbitrary).
+in practice (after all, the social convention is not arbitrary, but
+encodes what category theorists have found to be a particularly nice
+way to do category theory).
 
 \begin{defn}
   An \term{isomorphism} in $\CT$ is a morphism $f : \hom X Y$
@@ -1078,9 +1083,8 @@ associativity and the identity laws hold up to \emph{equality} rather
 than just isomorphism.  In HoTT-based category theory, however,
 functors between \hott{categories}---as opposed to precategories---are
 naturally isomorphic if and only if they are equal (HoTT book, Theorem
-9.2.5).  Thus, in HoTT, there is no difference between strict and
-non-strict monoidal categories (though there is still a difference for
-precategories).
+9.2.5).  Thus, there is no difference between strict and
+non-strict monoidal \hott{categories}.
 
 \subsection{Coends in HoTT}
 \label{sec:coends-hott}
@@ -1137,7 +1141,7 @@ are supplied automatically by HoTT's richer system of equality.
 
 Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about \term{finiteness},
-first using set-theoretic foundations, and then in HoTT.  The material
+first using set-theoretic foundations, and then using HoTT.  The material
 in this section and the next (other than the lemmas and theorems cited
 from the HoTT book) is, to my knowledge, novel.
 
@@ -1146,15 +1150,16 @@ and $\P$ the groupoid of natural numbers and permutations.  In
 classical category theory, $\P$ is a \term{skeleton} of
 $\B$---roughly, we may think of it as the result of replacing each
 equivalence class of isomorphic objects in $\B$ with a single object.
-In this case, we can identify each equivalence class of isomorphic
-finite sets with a \emph{size}, the only property of sets which is
-invariant under isomorphism.  The relationship between $\B$ and $\P$
-is central to the concept of finiteness: passing from $\B$ to $\P$
-corresponds to taking the \emph{size} of finite sets, and passing from
-$\P$ to $\B$ corresponds to constructing canonical finite sets of a
-given size.  The study of $\B$ and $\P$ is also critical for the study
-of species; as we will shortly see in \pref{chap:species}, traditional
-species are defined as functors $\B \to \Set$.
+In this case, we identify each equivalence class of isomorphic finite
+sets with a natural number \emph{size}---size being the one property
+of sets which is invariant under isomorphism.  The relationship
+between $\B$ and $\P$ is central to the concept of finiteness: passing
+from $\B$ to $\P$ corresponds to taking the \emph{size} of finite
+sets, and passing from $\P$ to $\B$ corresponds to constructing
+canonical finite sets of a given size.  The study of $\B$ and $\P$ is
+also critical for the theory of species; as we will shortly see in
+\pref{chap:species}, traditional species are defined as functors $\B
+\to \Set$.
 
 It is a simple result in classical category theory that every category
 is equivalent to its skeletons.  This equivalence allows one to pass
@@ -1163,18 +1168,18 @@ freely back and forth between functors $\B \to \Set$ and functors $\P
 species.  However, we are interested in the \emph{computational}
 content of this equivalence, and it is here that we run into trouble.
 After the foregoing discussion of cliques and anafunctors, the idea of
-quotienting out by equivalences classes of isomorphic objects ought to
+quotienting out by equivalence classes of isomorphic objects ought to
 make us squeamish---and, indeed, the proof that $\B$ and $\P$ are
 equivalent requires AC.
 
 In more detail, it is easy to define a functor $\fin - : \P \to \B$
-which sends $n$ to $\fin n$ and preserves morphisms; defining an
-inverse functor $\size - : \B \to \P$ is more problematic. We can send
-each set $S$ to its size $\size S$, but we must send a bijection $S
-\bij T$ to a permutation $\fin{\size S} \bij \fin{\size T}$, and there
-is no obvious way to pick one.  For example, suppose $S =
-\{\text{cat}, \text{dog}, \text{moose}\}$ and $T =
-\{
+which sends the natural number $n$ to the finite set $\fin n$ and
+preserves morphisms; defining an inverse functor $\size - : \B \to
+\P$, however, is more problematic. We can send each set $S$ to its
+size $\size S$, but we must send each bijection $S \bij T$ to a
+permutation $\fin{\size S} \bij \fin{\size T}$, and there is no
+obvious way to pick one.  For example, suppose $S = \{\text{cat},
+\text{dog}, \text{moose}\}$ and $T = \{
 \begin{diagram}[width=10]
   dia = circle 1 # frame 0.1
 \end{diagram}
@@ -1201,27 +1206,27 @@ inverse functor $\size - : \B \to \P$, only in the presence of AC.
 Concretely, we can use AC to choose an arbitrary bijection $\varphi_S
 : S \bij \fin{\size S}$ for each finite set $S$, somehow matching up
 $S$ with the canonical set of size $\size S$. Given $\alpha : S \bij
-T$ we can then construct $\xymatrix{ \fin{\size S}
+T$ we can then construct \[ \xymatrix{ \fin{\size S}
   \ar[r]^-{\varphi_S^{-1}} & S \ar[r]^\alpha & T \ar[r]^-{\varphi_T} &
-  \fin{\size T}}$.  As is familiar by now, this use of AC is
-``benign'' in the sense that all choices yield equivalent functors;
-this construction using AC thus in some sense yields a well-defined
-functor but has no computational interpretation.
+  \fin{\size T}}. \] This use of AC is ``benign'' in the sense that
+all choices yield equivalent functors; this construction using AC thus
+in some sense yields a well-defined functor but has no computational
+interpretation.
 
 We can avoid the use of AC by constructing an \emph{anafunctor} $\size
 - : \B \to \P$ instead of a functor.  In particular, as the class of
 specifications $S_{\size{}}$, we choose the class of sets paired with
-bijections to canonical finite sets of the appropriate size, $\sum_{T
-  \in \B} (T \bij \fin{\size T})$.  The function $\lana {\size{}} :
-S_{\size{}} \to \Ob \B$ simply forgets the chosen bijection,
-$\lana{\size{}}\ (T,\varphi) = T$, and $\rana{\size{}} : S_{\size{}}
-\to \Ob \P$ sends finite sets to their size, $\rana{\size{}}\
-(T,\varphi) = \size T$.  Note that both $\lana{\size{}}$ and
-$\rana{\size{}}$ ignore $\varphi$, which is instead needed to define
-the action of $\size{}$ on morphisms.  In particular, given $\alpha :
-S \bij T$ in $\B$, we define $\sizesymb_{(S,\varphi_S),
-  (T,\varphi_T)}(\alpha) = \varphi_S^{-1} \then \alpha \then
-\varphi_T$, which can be visualized as
+bijections to canonical finite sets of the appropriate size, \[
+\sum_{T \in \B} (T \bij \fin{\size T}). \] The function $\lana
+{\size{}} : S_{\size{}} \to \Ob \B$ simply forgets the chosen
+bijection, that is, $\lana{\size{}}\ (T,\varphi) = T$, and
+$\rana{\size{}} : S_{\size{}} \to \Ob \P$ sends finite sets to their
+size, $\rana{\size{}}\ (T,\varphi) = \size T$.  Note that both
+$\lana{\size{}}$ and $\rana{\size{}}$ ignore $\varphi$, which is
+instead needed to define the action of $\size{}$ on morphisms.  In
+particular, given $\alpha : S \bij T$ in $\B$, we define
+$\sizesymb_{(S,\varphi_S), (T,\varphi_T)}(\alpha) = \varphi_S^{-1}
+\then \alpha \then \varphi_T$, which can be visualized as
 \[
 \xymatrix{S \ar[d]_\alpha & \fin{\size S} \ar[l]_-{\varphi_S^{-1}}
   \ar@@{.>}[d]^{\size \alpha} \\
@@ -1283,7 +1288,8 @@ This definition gets off the ground since the empty set is vacuously
 hereditarily finite.  As is usual in set theory, this definition is
 interpreted inductively, so there cannot be any infinitely descending
 membership chains.  Hereditarily finite sets are thus identified with
-finitely-branching, finite-depth trees.
+finitely-branching, finite-depth trees (with no inherent order given
+to sibling nodes).
 
 Now consider the groupoid $\cat{H}$ obtained by replacing ``finite''
 with ``hereditarily finite'' in the definition of $\B$.  That is, the
@@ -1317,10 +1323,21 @@ since there may be many possible encodings with the right properties.
 \section{Finiteness in HoTT}
 \label{sec:finiteness-hott}
 
-\todo{add some subsections, this is getting a bit long}
-
 We now turn to developing counterparts to the groupoids $\P$ and $\B$
-in type theory.  First, a few necessary lemmas:
+in type theory.  \pref{sec:finiteness-prelims} presents some necessary
+lemmas and defines $\PT$ as a type-theoretic analogue to
+$\P$. \pref{sec:cardinal-finiteness} then presents the theory of
+cardinal-finiteness in HoTT and uses it to define $\BT$, a
+type-theoretic analogue to $\B$. This leads to an interesting tangent
+exploring ``manifestly finite'' sets and their relation to linear
+orders in \pref{sec:manifestly-finite}; finally, \pref{sec:P-B-equiv}
+ties things together by considering the equivalence of $\PT$ and
+$\BT$, in particular showing how using HoTT as a foundation allows us
+to avoid the axiom of choice.
+
+\subsection{Preliminaries}
+\label{sec:finiteness-prelims}
+
 \begin{lem} \label{lem:equiv-pres-set}
   Equivalence preserves sets, that is, if $A$ and
   $B$ are sets, then so is $A \equiv B$.
@@ -1329,9 +1346,9 @@ in type theory.  First, a few necessary lemmas:
   $(A \equiv B) \equiv ((f : A \to B) \times \cons{isequiv}(f))$, where
   $\cons{isequiv}(f)$ is a mere proposition expressing the fact that
   $f$ is an equivalence (\ie has a suitable inverse).  This is a set
-  since $\cons{isequiv}(f)$ is a mere proposition (and hence a set),
+  since $\cons{isequiv}(f)$ is a mere proposition and hence a set,
   $A \to B$ is a set whenever $B$ is, and $\times$ takes sets to sets
-  \citep[Lemma 3.3.4, Examples 3.1.5 and 3.1.6]{hottbook}.
+  [HoTT book, Lemma 3.3.4, Examples 3.1.5 and 3.1.6].
 \end{proof}
 
 \begin{cor} \label{cor:path-pres-set}
@@ -1372,7 +1389,7 @@ in type theory.  First, a few necessary lemmas:
       equivalence?}  This construction corresponds more generally to
     the \term{Gordon complementary bijection
       principle}~\citep{gordon1983sieve}, to be discussed in more
-    detail in \pref{sec:gcbp}.
+    detail in \pref{sec:gcbp} \todo{is this going to be included?}.
   \end{itemize}
 \end{proof}
 
@@ -1438,10 +1455,10 @@ dia = hcat' (with & sep .~ 2)
 \end{figure}
 
 \begin{rem}
-  It is somewhat strange that the above proof has so much
+  It seems somewhat strange that the above proof has so much
   computational content---the required manipulations of equivalences
   are quite nontrivial---when the end goal is to prove a mere
-  proposition.  I do not know whether there is a better proof.
+  proposition.  I do not know whether there is a simpler proof.
 \end{rem}
 
 Constructing a type-theoretic counterpart to $\P$ is
@@ -1458,6 +1475,9 @@ It is easy to check that this satisfies the axioms for an
 \hott{category}, the salient points being that $\Fin m \equiv \Fin n$ is
 a set by \pref{lem:equiv-pres-set}, and $\isotoid$ follows from
 \pref{lem:fin-iso-equal}.
+
+\subsection{Cardinal-finiteness}
+\label{sec:cardinal-finiteness}
 
 Developing a counterpart to $\B$ is more subtle.  The first order of
 business is to decide how to port the concept of a ``finite set''.
@@ -1578,7 +1598,7 @@ $A$ and $\Fin n$, but without exposing a precise choice.  The
 finiteness evidence is now irrelevant to paths in $\FinTypeT$, since
 there is always a path between any two elements of a truncated type.
 
-Note we will often abuse notation and write $A : \FinSetT$ instead of
+In an abuse of notation, we will often write $A : \FinSetT$ instead of
 $(A,f) : \FinSetT$ where $f : \isFinite(A)$. We first record a few
 properties of $\FinSetT$.
 
@@ -1687,15 +1707,18 @@ $\B$.
   choice of finiteness evidence.
 \end{rem}
 
-With the definition of $\BT$ and associated machinery under our belts,
-we now return to one of our first attempts, \[ \FinType \hdefeq (A :
-\Type) \times (n : \N) \times (A \equiv \Fin n). \] Recall that
-$\FinType$ turned out to be unsuitable as a basis for $\B$ because it
-has at most one path between any two elements.  However, $\FinType$
-turns out to be quite interesting in its own right; instead of a
-counterpart to $\B$, it yields a counterpart to $\L$, the category
-whose objects are finite sets \emph{equipped with linear orders}, and
-whose morphisms are \emph{order-preserving} bijections.
+\subsection{Manifestly finite sets and linear orders}
+\label{sec:manifestly-finite}
+
+We now return to our first attempt at encoding cardinal-finiteness, \[
+\FinType \hdefeq (A : \Type) \times (n : \N) \times (A \equiv \Fin
+n). \] Recall that $\FinType$ turned out to be unsuitable as a basis
+for $\B$ because it has at most one path between any two elements.
+However, $\FinType$ turns out to be quite interesting in its own
+right; instead of a counterpart to $\B$, it yields a counterpart to
+$\L$, the category whose objects are finite sets \emph{equipped with
+  linear orders}, and whose morphisms are \emph{order-preserving}
+bijections.
 
 For ease of reference, we will call $\FinType$ the type of
 \term{manifestly finite} sets.  The claim is that manifestly finite
@@ -1743,7 +1766,10 @@ two elements of $\SetL$.)  We can now define a counterpart to $\L$:
   (order-preserving) paths between them.
 \end{defn}
 
-We now turn to the equivalence of $\PT$ and $\BT$, with a goal of
+\subsection{Equivalence of $\PT$ and $\BT$}
+\label{sec:P-B-equiv}
+
+Finally, we turn to the equivalence of $\PT$ and $\BT$, with a goal of
 defining inverse functors $\fin - : \PT \to \BT$ and $\size : \BT \to
 \PT$.  We begin with $\fin -$.
 
@@ -1800,7 +1826,7 @@ from the HoTT book):
 \begin{defn}
   A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
   \term{split essentially surjective} if for each object $D : \DT$
-  there \emph{constructively} exists an object $C : \CT$ such that $F\
+  there \emph{constructively exists} an object $C : \CT$ such that $F\
   C \iso D$. That is, \[ \msf{splitEssSurj}(F) \hdefeq (D : \DT) \to (C :
   \CT) \times (F\ C \iso D). \]
 \end{defn}
@@ -1808,7 +1834,7 @@ from the HoTT book):
 \begin{defn}
   A functor $F : \CT \to \DT$ between precategories $\CT$ and $\DT$ is
   \term{essentially surjective} if for each object $D : \DT$ there
-  \emph{merely} exists an object $C : \CT$ such that $F\ C \iso D$. That
+  \emph{merely exists} an object $C : \CT$ such that $F\ C \iso D$. That
   is, \[ \msf{essSurj}(F) \hdefeq (D : \DT) \to \ptrunc{ (C : \CT)
     \times (F\ C \iso D) }. \]
 \end{defn}
@@ -1831,7 +1857,7 @@ strong notion.  In particular:
 
 That is, a fully faithful, essentially surjective functor is an
 equivalence given AC; a fully faithful, \emph{split} essentially
-surjective functor is an equivalence \emph{without} AC.
+surjective functor is an equivalence even without AC.
 
 Now, what about $\fin - : \PT \to \BT$?  We have the following:
 
@@ -1881,7 +1907,7 @@ Since $\fin -$ is a fully faithful and essentially surjective
 functor out of a category, it is in fact \emph{split} essentially
 surjective and thus an equivalence.  In particular, it has an inverse
 (up to natural isomorphism) which we call $\size : \BT \to \PT$, and
-thus \[ \BT \iso \PT. \]
+thus \[ \size{} : \BT \iso \PT : \fin -. \]
 \end{cor}
 
 As a final remark, note that this is at root an instance of the

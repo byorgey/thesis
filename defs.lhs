@@ -429,7 +429,7 @@
 \newcommand{\T}{\Sp{T}}
 \newcommand{\Par}{\Sp{Par}}
 \newcommand{\Bag}{\Sp{E}}
-\newcommand{\Rubbish}{\bigcirc}
+\newcommand{\Rubbish}{\Bag}
 \newcommand{\elts}{\varepsilon}
 \newcommand{\Cyc}{\Sp{C}}
 \newcommand{\Perm}{\Sp{S}}
