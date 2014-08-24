@@ -154,8 +154,8 @@ Given a function $f : A \to B$, an element $b \in B$, and subsets $X
 \begin{itemize}
 \item $f(X) = \{ f(a) \mid a \in X \}$ denotes the image of $X$
 under $f$;
-\item $f^{-1}(b) = \{ a \in A \mid f(a) = b \}$ denotes the preimage or
-  inverse image of $b$;
+\item $f^{-1}(b) = \{ a \in A \mid f(a) = b \}$ denotes the preimage
+  or \term{fiber} of $b$;
 \item $f^{-1}(Y) = \Union_{b \in Y} f^{-1}(b) = \{ a \in A \mid f(a) \in Y
   \}$ likewise denotes the preimage of an entire set.
 \end{itemize}

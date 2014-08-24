@@ -3429,7 +3429,7 @@ over the resulting set of $G$-shapes.
 \subsection{Definition and examples}
 \label{sec:comp-defn-and-examples}
 
-We begin with a traditional formal definition,
+We begin with the formal definition of \citet{bll}:
 \begin{equation} \label{eq:composition-trad}
   (F \comp G)\ L = \sum_{\pi \partition L} F\ \pi \times \prod_{p \in
     \pi} G\ p
@@ -3705,13 +3705,13 @@ to infinite families of shapes such as those illustrated in
   \label{fig:bin-comp-list-inf}
 \end{figure}
 
-There are several possible rections, depending on the exact setting in
-which we are working.
+There are several possible rections to \pref{fig:bin-comp-list-inf},
+depending on the exact setting in which we are working.
 \begin{itemize}
-\item If we are working in $(\fc \B \Set)$, where infinite families of
-  shapes all of the same size are explicitly allowed, then this should
-  be allowed, and is exactly the meaning that composition ought to
-  have.  Note, however, that this means we would need to allow
+\item If we are working in $(\fc \B \Set)$, where the set of shapes on
+  a given set of labels may be infinite, then this should be allowed,
+  and is exactly the meaning that composition ought to have in this
+  case.  Note, however, that this means we would need to allow
   $\pi \partition L$ to include ``partitions'' with arbitrary numbers
   of \emph{empty} parts (to correspond to the empty lists).
   Typically, the notation $\pi \partition L$ denotes partitions into
@@ -3720,17 +3720,45 @@ which we are working.
   is more traditional in a combinatorial setting, this \emph{must not}
   be allowed.  One possibility would be to simply insist that
   $\pi \partition L$ in \eqref{eq:composition-trad} excludes
-  partitions with empty parts, as is usual. \todo{working here}
+  partitions with empty parts, as is usual. But as we have just seen,
+  this does not generalize nicely to $(\fc \B \Set)$, and in any case
+  it would still be a bit strange, since, for example, $\Bin \comp
+  \List$ and $\Bin \comp \List_+$ would ``silently'' end up being the
+  same.  It is better to front the issue by simply insisting that $F
+  \comp G$ is only defined when $G\ \varnothing = \varnothing$.
 \end{itemize}
+
+We can reformulate the definition of composition in a better way which
+naturally allows for empty parts, and which also makes for a clearer
+path to a generalized notion of composition (to be discussed in the
+next section).  This was, in fact, the definition originally used by
+\citet{Joyal}. \todo{Make sure this is true} The idea is to use
+another finite set $P$, representing parts of a partition, and a
+function $\chi : L \to P$ which assigns each $l \in L$ to some $p \in
+P$.  The fibers of $\chi$, \ie the sets $\chi^{-1}(p)$ for $p \in P$,
+thus constitute a partition of $L$.  Note, however, that this
+naturally allows for empty parts, since $\chi$ may not be surjective.
+We then say that an $(F \comp G)$-shape on the labels $L$ consists of
+some set $P$, a partition function $\chi : L \to P$, an $F$-shape on
+$P$, and $G$-shapes on the fibers of $\chi$.  However, we must also
+quotient out by bijections between $P$ and other finite sets; the
+precise identity of $P$ should not matter.  We can thus define $(F
+\comp G)$ using a coend: \[ (F \comp G)\ L = \coend {P \in \B}
+\sum_{\chi : L \to P} F\ P \times \prod_{p \in P} G\ (\chi^{-1}\
+p). \] In the case that $G\ \varnothing = \varnothing$ is required,
+only surjective $\chi$ will result in shapes, so the coend reduces to
+the original definition \eqref{eq:composition-trad}, using the
+notation $\pi \partition L$ with its usual meaning of a partition into
+nonempty parts.
 
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
 
-We first show how to carry out the definition of composition in $\fc \B
-\Set$ more abstractly, and then discuss how it may be generalized to
-other functor categories $\fc \Lab \Str$.
-\citet{street2012monoidal} gives the following abstract
-definition of composition:
+We first show how to carry out the definition of composition in $\fc
+\B \Set$ even more abstractly, and then discuss how it may be
+generalized to other functor categories $\fc \Lab \Str$.
+\citet{street2012monoidal} gives the following abstract definition of
+composition:
 \begin{equation} \label{eq:comp-street}
 (F \comp G)\ L = \coend{K} F\ K \times G^{\size K}\ L,
 \end{equation}
