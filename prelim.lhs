@@ -593,6 +593,10 @@ well~\citep{martin1982constructive}.
 \section{Category theory}
 \label{sec:category-theory}
 
+\todo{Add a discussion of hom functors: bifunctors, contra- and
+  co-variant, turn colimits into limits on the left and preserve
+  limits on the right.}
+
 This dissertation makes extensive use of category theory, which is the
 natural language in which to explore species and related concepts.  A
 full understanding of the contents of this dissertation requires an

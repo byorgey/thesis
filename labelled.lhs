@@ -313,7 +313,7 @@ points. \todo{cite. Joyal?} \todo{Expand.  Give a bit more
   context/justification.}
 
 \subsection{An attempt at generalized functor composition}
-\label{sec:functor-composition}
+\label{sec:gen-functor-composition}
 
 \todo{This should move to after the discussion of labelled structures.}
 

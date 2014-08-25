@@ -444,7 +444,7 @@
 
 \newcommand{\sprod}{\cdot}
 \newcommand{\fcomp}{\mathbin{\square}}
-\newcommand{\hder}[2]{{#2}^{[#1]}}
+\newcommand{\hder}[2]{{#2}^{(#1)}}
 \newcommand{\ader}[2]{{#2}^{\{#1\}}}
 
 \newcommand{\pointed}[1]{\ensuremath{{#1}^{\bullet}}}

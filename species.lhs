@@ -3587,7 +3587,7 @@ partStyle x = x # lw thick # dashingG [0.1,0.1] 0 # lc (colors !! 2)
 dia = partitionedTree
     # frame 0.5 # lwO 0.7
   \end{diagram}
-  \caption{A $(\Bin \times \Par)$-shape}
+  \caption{An example $(\Bin \times \Par)$-shape}
   \label{fig:partitioned-tree}
 \end{figure}
 \end{ex}
@@ -3696,12 +3696,51 @@ $\List$ be the species of binary trees and lists.  Consider the
 species $\Bin \comp \List$, whose shapes should consist of binary
 trees containing lists at their nodes.  Intuitively, this gives rise
 to infinite families of shapes such as those illustrated in
-\pref{fig:bin-comp-list-inf}, which are all of size $1$.
+\pref{fig:bin-comp-list-inf}, which are all of size $2$.
 
 \begin{figure}
   \centering
-  \todo{Make this diagram}
-  \caption{An infinite family of $(\Bin \comp \List)$-shapes of size $1$}
+  \begin{diagram}[width=350]
+import           Data.Maybe                     (fromJust)
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+exampleTree 0 = leaf (Just [0,1])
+exampleTree n = BNode (Just [0,1]) (emptyTree 0) (emptyTree (n-1))
+
+emptyTree :: Int -> BTree (Maybe [Int])
+emptyTree 0 = leaf Nothing
+emptyTree n = BNode Nothing (emptyTree 0) (emptyTree (n-1))
+
+enc g = fc white . enclose g 0.3
+
+drawExampleTree
+  = renderTree (maybe (enc 2.1 mempty) (enc 0.5 . fc black . drawList' mloc)) (~~)
+  . fromJust
+  . symmLayoutBin' (with & slHSep .~ 4 & slVSep .~ 3)
+  . exampleTree
+
+dots = hcat' (with & sep .~ 1) (replicate 3 dot)
+  where dot = circle 0.2 # fc black
+
+dia =
+  (
+    ( hcat' (with & sep .~ 3)
+      [ drawExampleTree 0
+      , drawExampleTree 1
+      , drawExampleTree 2
+      ]
+    )
+    # centerY
+  ||||||
+    strutX 3
+  ||||||
+    dots
+  )
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{An infinite family of $(\Bin \comp \List)$-shapes of size $2$}
   \label{fig:bin-comp-list-inf}
 \end{figure}
 
@@ -3731,25 +3770,27 @@ depending on the exact setting in which we are working.
 We can reformulate the definition of composition in a better way which
 naturally allows for empty parts, and which also makes for a clearer
 path to a generalized notion of composition (to be discussed in the
-next section).  This was, in fact, the definition originally used by
-\citet{Joyal}. \todo{Make sure this is true} The idea is to use
-another finite set $P$, representing parts of a partition, and a
-function $\chi : L \to P$ which assigns each $l \in L$ to some $p \in
-P$.  The fibers of $\chi$, \ie the sets $\chi^{-1}(p)$ for $p \in P$,
-thus constitute a partition of $L$.  Note, however, that this
-naturally allows for empty parts, since $\chi$ may not be surjective.
-We then say that an $(F \comp G)$-shape on the labels $L$ consists of
-some set $P$, a partition function $\chi : L \to P$, an $F$-shape on
-$P$, and $G$-shapes on the fibers of $\chi$.  However, we must also
-quotient out by bijections between $P$ and other finite sets; the
-precise identity of $P$ should not matter.  We can thus define $(F
-\comp G)$ using a coend: \[ (F \comp G)\ L = \coend {P \in \B}
-\sum_{\chi : L \to P} F\ P \times \prod_{p \in P} G\ (\chi^{-1}\
-p). \] In the case that $G\ \varnothing = \varnothing$ is required,
-only surjective $\chi$ will result in shapes, so the coend reduces to
-the original definition \eqref{eq:composition-trad}, using the
-notation $\pi \partition L$ with its usual meaning of a partition into
-nonempty parts.
+next section).  In fact, \citet[p. 11]{Joyal} already mentions this as
+an alternative defintion. The idea is to use another finite set $P$,
+representing parts of a partition, and a function $\chi : L \to P$
+which assigns each $l \in L$ to some $p \in P$.  The fibers of $\chi$,
+\ie the sets $\chi^{-1}(p)$ for $p \in P$, thus constitute a partition
+of $L$.  Note, however, that this naturally allows for empty parts,
+since $\chi$ may not be surjective.  We then say that an $(F \comp
+G)$-shape on the labels $L$ consists of some set $P$, a partition
+function $\chi : L \to P$, an $F$-shape on $P$, and $G$-shapes on the
+fibers of $\chi$.  However, we must also quotient out by bijections
+between $P$ and other finite sets; the precise identity of $P$ should
+not matter.  We can thus define $(F \comp G)$ using a coend:
+\begin{equation} \label{eq:composition-fibers}
+(F \comp G)\ L = \coend {P \in \B} \sum_{\chi : L \to P} F\ P \times \prod_{p \in P} G\
+  (\chi^{-1}\ p).
+\end{equation}
+In the case that $G\ \varnothing = \varnothing$ is required, only
+surjective $\chi$ will result in shapes, so the coend reduces to the
+original definition \eqref{eq:composition-trad}, using the notation
+$\pi \partition L$ with its usual meaning of a partition into nonempty
+parts.
 
 \subsection{Generalized composition}
 \label{sec:generalized-composition}
@@ -3770,6 +3811,15 @@ $K$, paired with $\size K$-many $G$-shapes, with the labels from $L$
 partitioned among all the $G$-shapes.  The coend abstracts over $K$,
 ensuring that the precise choice of ``internal'' labels does not
 matter up to isomorphism.
+
+\begin{rem}
+  Note how this corresponds to the second definition of composition
+  given in \eqref{eq:composition-fibers}.  In particular, binary
+  partitional product allows for the labels to be partitioned into the
+  empty subset and the entire subset, so an iterated partitional
+  product corresponds to partitions which contain an arbitrary number
+  of empty parts.
+\end{rem}
 
 However, this definition is somewhat puzzling from a constructive
 point of view, since it would seem that $G^{\size K}$ retains no
@@ -3799,8 +3849,8 @@ an object $C \in \C$ to the $K$-tuple containing only copies of $C$.
 Consider $\C = \FinSet$.  Given any discrete category $K$, the
 diagonal functor $\Delta_K : \FinSet \to \FinSet^K$ has both a left
 and right adjoint, which we call $\Sigma_K$ and $\Pi_K$: \[ \Sigma_K
-\adj \Delta_K \adj \Pi_K. \] In particular, $\Sigma_K : \Set^K \to
-\Set$ constructs $K$-indexed coproducts, and $\Pi_K$ constructs
+\adj \Delta_K \adj \Pi_K. \] In particular, $\Sigma_K : \FinSet^K \to
+\FinSet$ constructs $K$-indexed coproducts, and $\Pi_K$ constructs
 indexed products. (In the special case $K = \disc{\cat{2}}$,
 $\Sigma_{\disc{\cat{2}}}$ and $\Pi_{\disc{\cat{2}}}$ resolve to the
 familiar notions of disjoint union and Cartesian product of
@@ -3820,14 +3870,14 @@ Now consider $\C = \B$.  $\Delta_K$ does not have adjoints in $\B$; in
 fact, categorical products and coproducts can be exactly characterized
 as adjoints to $\Delta_{\disc{\cat{2}}}$, and we have already seen
 that $\B$ does not have categorical products or coproducts.  However,
-we can simply take $\Pi_K, \Sigma_K : \FinSet^K \to \FinSet$ and
-restrict them to functors $\B^K \to \B$.  This is well-defined since
-$\FinSet$ and $\B$ have the same objects, and $\Pi_K$ and $\Sigma_K$
-produce only isomorphisms when applied to isomorphisms.  For example,
-if $\alpha : A \bij A'$, $\beta : B \bij B'$, and $\gamma : C \bij
-C'$, then $\Pi_{\disc{\cat{3}}} (\alpha, \beta, \gamma)$ is the
-isomorphism $\alpha \times \beta \times \gamma : A \times B \times C
-\bij A' \times B' \times C'$.
+we can take $\Pi_K, \Sigma_K : \FinSet^K \to \FinSet$ and restrict
+them to functors $\B^K \to \B$.  This is well-defined since $\FinSet$
+and $\B$ have the same objects, and $\Pi_K$ and $\Sigma_K$ produce
+only isomorphisms when applied to isomorphisms.  For example, if
+$\alpha : A \bij A'$, $\beta : B \bij B'$, and $\gamma : C \bij C'$,
+then $\Pi_{\disc{\cat{3}}} (\alpha, \beta, \gamma)$ is the isomorphism
+$\alpha \times \beta \times \gamma : A \times B \times C \bij A'
+\times B' \times C'$.
 
 We can now define a general notion of indexed species product. For a
 species $F : \fc \B \Set$ and $K \in \B$ a finite set, $F^K : \fc \B
@@ -3914,7 +3964,7 @@ that $G^{\size K}$ has been replaced by $G^K$, which explicitly
 records a mapping from elements of $K$ to $G$-shapes.
 
 This explicit construction relies on a number of specific properties
-of $\B$ and $\Set$; it is unclear how it should generalize to other
+of $\B$ and $\Set$, and it is unclear how it should generalize to other
 functor categories. Fortunately, in the particular case of $\fc \BT
 \ST$, in HoTT, this more complex construction is not necessary. The
 anafunctor $G^- : \B \to \Spe$ discussed earlier corresponds in HoTT
@@ -3995,15 +4045,12 @@ dia =
 \end{figure}
 
 \begin{prop}
-  $(\Spe, \comp, \X)$ is monoidal closed.
+  $(\Spe, \comp, \X)$ is monoidal.
 \end{prop}
 \begin{proof}
-  We have already seen that $\comp$ is associative, and have argued
-  intuitively that $\X$ is an identity for composition. Note that since
-  composition is not symmetric, separate proofs are needed for $\X
-  \comp F \iso F$ and $F \comp \X \iso F$; for formal proofs see,
-  again, \citet{kelly2005operads}.  For the closed structure of
-  $(\Spe, \comp, \X)$, see \pref{sec:internal-Hom-comp}.
+  We have already seen that $\comp$ is associative and that $\X$ is an
+  identity for composition. For formal proofs in a more generalized
+  setting see, again, \citet{kelly2005operads}.
 \end{proof}
 
 Like associativity, the right-distributivity laws
@@ -4011,8 +4058,8 @@ Like associativity, the right-distributivity laws
   (F + G) \comp H \iso (F \comp H) + (G \comp H) \\
   (F \cdot G) \comp H \iso (F \comp H) \cdot (G \comp H)
 \end{gather*}
-are likewise easy to grasp on an intuitive level.  Their formal proofs
-are not too difficult; the second specifically requires an isomorphism
+are easy to grasp on an intuitive level.  Their formal proofs are not
+too difficult; the second specifically requires an isomorphism
 $G^{K_1+K_2} \iso G^{K_1} \cdot G^{K_2}$, which ought to hold no
 matter what the definition of $G^K$.  \later{Include these proofs?}
 The reader may also enjoy discovering why the corresponding
@@ -4033,12 +4080,12 @@ show that it is monoidal closed. Indeed, we can compute as follows
   \stmt{\eend L \hom[\Set] {(F \comp G)\ L}{H\ L}}
   \reason{\iso}{definition of $\comp$}
   \stmt{\eend L \hom[\Set]{(\coend K F\ K \times G^K\ L)}{H\ L}}
-  \reason{\iso}{$(\hom[\Set] - X)$ turns colimits into limits}
+  \reason{\iso}{$(\hom[\Set] - {H\ L})$ turns colimits into limits}
   \stmt{\eend L \eend K \hom[\Set] {(F\ K \times G^K\ L)}{H\ L}}
   \reason{\iso}{currying}
   \stmt{\eend L \eend K \hom[\Set] {F\ K}{(\hom[\Set] {G^K\ L}{H\
         L})}}
-  \reason{\iso}{$(\hom[\Set] X -)$ preserves limits}
+  \reason{\iso}{$(\hom[\Set] {F\ K} -)$ preserves limits}
   \stmt{\eend K \hom[\Set] {F\ K}{\eend L (\hom[\Set] {G^K\ L}{H\
         L})}}
   \reason{\iso}{natural transformations are ends}
@@ -4120,16 +4167,18 @@ G$ can literally be defined as the composition of $F$ and $G$ as
 functors, that is, \[ (F \fcomp G)\ L = F\ (G\ L). \] However, if
 species are viewed as functors $\B \to \Set$ then this operation is
 not well-typed as stated, and indeed feels somewhat unnatural.  This
-problem is discussed further \todo{XXX where?}, after analytic
-functors.
+problem is discussed further in \pref{sec:gen-functor-composition}.
+For the most part, incorporating functor composition into this
+framework is left to future work, but it is worth describing briefly
+here.
 
-Intuitively, an $(F \fcomp G)$-shape on the set of labels $L$ can be
+An $(F \fcomp G)$-shape on the set of labels $L$ can intuitively be
 thought of as consisting of \emph{all possible} $G$-shapes on the
 labels $L$, with an $F$-shape on this collection of $G$-shapes as
 labels.  Functor composition thus has a similar relationship to
 partitional composition as Cartesian product has to partitional
 product.  With partitional product, the labels are partitioned into
-two disjoint sets, whereas with Cartesian products the labels are
+two disjoint sets, whereas with Cartesian product the labels are
 shared.  With partitional composition, the labels are partitioned into
 (any number of) subsets with a $G$-shape on each; with functor
 composition, the labels are shared among \emph{all possible}
@@ -4228,8 +4277,8 @@ on $L$ plus one additional distinguished label.  It is therefore
 slightly misleading to draw the distinguished extra label as an
 indistinct ``hole'', as in \pref{fig:derivative-example}, since, for
 example, taking the derivative twice results in two \emph{different,
-  distinguishable} holes.  But it is still a good intuition for most
-purposes.
+  distinguishable} holes.  But thinking of ``holes'' is still a good
+intuition for most purposes.
 
 \begin{ex}
   Denote by $\arbor$ the species of \emph{unrooted} trees, \ie
@@ -4237,7 +4286,7 @@ purposes.
   \cdot (\Bag \comp \Arbor)$ denote the species of rooted trees
   (where each node can have any number of children, which are
   unordered).  It is difficult to get a direct algebraic handle on
-  $\arbor$; however, we have the relation \[ \arbor' =
+  $\arbor$; however, we have the relation \[ \arbor' \iso
   \Bag \comp \Arbor, \] since an unrooted tree with a hole in it is
   equivalent to the set of all the subtrees connected to the hole
   (\pref{fig:der-tree-pointed-trees}).  Note that the subtrees
@@ -4304,13 +4353,13 @@ dia =
   ]
   # frame 0.5 # lwO 0.7
     \end{diagram}
-    \caption{$\arbor' = \Bag \comp \Arbor$}
+    \caption{$\arbor' \iso \Bag \comp \Arbor$}
     \label{fig:der-tree-pointed-trees}
   \end{figure}
 \end{ex}
 
 \begin{ex}
-  $\Cyc' = \List$, as illustrated in \pref{fig:cycle-deriv}.
+  $\Cyc' \iso \List$, as illustrated in \pref{fig:cycle-deriv}.
 
   \begin{figure}
     \centering
@@ -4331,13 +4380,13 @@ dia = derCycEquiv
    # frame 0.5
    # lwO 0.7
     \end{diagram}
-    \caption{$\Cyc' = \List$}
+    \caption{$\Cyc' \iso \List$}
     \label{fig:cycle-deriv}
   \end{figure}
 \end{ex}
 
 \begin{ex}
-  $\List' = \List^2$, as illustrated in \pref{fig:list-deriv}.
+  $\List' \iso \List^2$, as illustrated in \pref{fig:list-deriv}.
   \begin{figure}
     \centering
     \begin{diagram}[width=300]
@@ -4361,7 +4410,7 @@ dia = listCycEquiv
    # frame 0.5
    # lwO 0.7
     \end{diagram}
-    \caption{$\List' = \List^2$}
+    \caption{$\List' \iso \List^2$}
     \label{fig:list-deriv}
   \end{figure}
 \end{ex}
@@ -4380,11 +4429,11 @@ dia = listCycEquiv
   free variables in $V$ is either
   \begin{itemize}
     \item an element of $V$, \ie a variable
-      (recall that $\elts = \X \cdot \Bag = \X \cdot \Rubbish$ is the
+      (recall that $\elts = \X \cdot \Rubbish$ is the
       species of elements)
     \item a pair of terms (application), or
     \item a lambda abstraction, represented by a term with free
-      variables taken from the set $\singleton \uplus V$.  The new
+      variables taken from the set $V \uplus \singleton$.  The new
       variable $\star$ of course represents the variable bound by the
       abstraction.
   \end{itemize}
@@ -4405,12 +4454,12 @@ dia = listCycEquiv
 The operation of species differentiation obeys laws which are familiar
 from calculus:
 \begin{gather*}
-  \One' = \Zero \\
-  \X' = \One \\
-  \Bag' = \Bag \\
-  (F + G)' = F' + G' \\
-  (F \cdot G)' = F' \cdot G + F \cdot G' \\
-  (F \comp G)' = (F' \comp G) \cdot G'
+  \One' \iso \Zero \\
+  \X' \iso \One \\
+  \Bag' \iso \Bag \\
+  (F + G)' \iso F' + G' \\
+  (F \cdot G)' \iso F' \cdot G + F \cdot G' \\
+  (F \comp G)' \iso (F' \comp G) \cdot G'
 \end{gather*}
 The reader may enjoy working out \emph{combinatorial} interpretations
 of these laws.
@@ -4479,7 +4528,7 @@ dia =
 \begin{ex}
   The species $\List$ of linear orders has an up operator which adds a
   hole in the leftmost position (\pref{fig:up-list}).  There is a
-  similar operator which adds a hole at the end of a list.  In fact,
+  similar operator which adds a hole in the rightmost position.  In fact,
   there are many other examples (particularly since species maps are
   allowed to do something completely different at every size), but
   these are two of the most apparent.
@@ -4545,25 +4594,25 @@ dia =
 \end{ex}
 
 \begin{ex}
-  The species $\Cyc$ of cycles, on the other hand, has no up operator.
-  There is no way to define a \emph{natural} map $\varphi : \Cyc \to
-  \List$ (recall that $\Cyc' = \List$).  If there were such a
-  $\varphi$, we would have, for example \[ \xymatrix{ \Cyc\ \cat{2}
-    \ar[r]^{\varphi_\cat{2}} \ar[d]_{\Cyc\ \sigma} & \List\ \cat{2}
-    \ar[d]^{\List\ \sigma} \\ \Cyc\ \cat{2} \ar[r]_{\varphi_{\cat{2}}}
-    & \List\ \cat{2}} \] where $\cat{2} = \{0,1\}$ is a two-element
-  set, and $\sigma : \cat{2} \bij \cat{2}$ is the permutation that
-  swaps $0$ and $1$.  The problem is that $C\ \sigma$ is the identity
-  on $\Cyc\ \cat{2}$, but $\List\ \sigma$ is not the identity on
-  $\List\ \cat{2}$, so this square cannot possibly commute.
+  The species $\Cyc$ of cycles, on the other hand, has no up
+  operator. Recall that $\Cyc' = \List$; there is no way to define a
+  \emph{natural} map $\varphi : \Cyc \to \List$.  As a counterexample,
+  consider \[ \xymatrix{ \Cyc\ \cat{2} \ar[r]^{\varphi_\cat{2}}
+    \ar[d]_{\Cyc\ \sigma} & \List\ \cat{2} \ar[d]^{\List\ \sigma} \\
+    \Cyc\ \cat{2} \ar[r]_{\varphi_{\cat{2}}} & \List\ \cat{2}} \]
+  where $\cat{2} = \{0,1\}$ is a two-element set, and $\sigma :
+  \cat{2} \bij \cat{2}$ is the permutation that swaps $0$ and $1$.
+  The problem is that $C\ \sigma$ is the identity on $\Cyc\ \cat{2}$,
+  but $\List\ \sigma$ is not the identity on $\List\ \cat{2}$, so this
+  square cannot possibly commute.
 
-  Generalizing from this example, we intuitively expect that there is
+  Generalizing from this example, one intuitively expects that there is
   no up operator whenever taking the derivative ``breaks some
   symmetry'', as in the case of $\Cyc$.  Formalizing this intuitive
   observation is left to future work.
 \end{ex}
 
-A \term{down operator} on a species $F$ is defined dually:
+\term{Down operators} are defined dually, as one would expect:
 \begin{defn}
   A \term{down operator} on a species $F$ is a species morphism $d :
   F' \to F$.
@@ -4578,7 +4627,7 @@ A \term{down operator} on a species $F$ is defined dually:
   Although we saw previously that the species $\Cyc$ of cycles has no
   up operator, it has an immediately apparent down operator, namely,
   the natural map $\Cyc' \to \Cyc$ which removes the hole from a
-  cycle, that is, glues together the two ends of a list.
+  cycle, that is, which glues together the two ends of a list.
   \begin{figure}
     \centering
     \begin{diagram}[width=250]
@@ -4600,7 +4649,7 @@ dia = downCyc
    # frame 0.5
    # lwO 0.7
     \end{diagram}
-    \caption{An example down operator on $\Cyc$}
+    \caption{A down operator on $\Cyc$}
     \label{fig:down-cyc}
   \end{figure}
 \end{ex}
@@ -4697,16 +4746,14 @@ dia =
     \label{fig:down-btree-promote}
   \end{figure}
 
-  This last operator is somewhat reminiscent of deletion from a binary
-  search tree or a heap.  Those algorithms rely on a linear order on
-  the labels, and hence do not qualify as natural species morphisms.
-  However, they do indeed qualify as down operators on the
-  $\L$-species of binary search trees and heaps,
+  These operators are somewhat reminiscent of deletion from data
+  structures such as binary search trees or heaps.  Those algorithms
+  rely on a linear order on the labels, and hence do not qualify as
+  natural species morphisms.  However, they do indeed qualify as down
+  operators on the $\L$-species of binary search trees and heaps,
   respectively. \todo{Forward or backward reference to somewhere else
     we talk about $\L$-species.}
 \end{ex}
-
-\todo{Any relation to down operator of Conor?}
 
 \subsection{Pointing}
 \label{sec:pointing}
@@ -4804,16 +4851,16 @@ a finite set which acts on the labels.
 \end{defn}
 As should be clear from the above discussion, the exponential
 generating function corresponding to the $K$-derivative of $F$ is \[
-(\hder K F)(x) = F(x)^{(\size K)}. \] Note that we recover the simple
-derivative of $F$ by setting $K = \singleton$, and that $\hder
-{\varnothing} F = F$.
+(\hder K F)(x) = F^{(\size K)}(x), \] \ie the $(\size K)$-th
+derivative of $F$. Note that we recover the simple derivative of $F$
+by setting $K = \singleton$. Note also that $\hder {\varnothing} F = F$.
 
 An $\hder K F$-shape with labels $L$ is an $F$-shape populated by both
 $L$ \emph{and} $K$.  The occurrences of labels from $K$ can be thought
-of as ``$K$-indexed holes'', since they do not contribute to the size:
-\eg an ``$\hder K F$-shape of size $3$'' consists of an $F$-shape with
-three labels that ``count'' towards the size, as well as one ``hole''
-for each element of $K$. For example,
+of as ``$K$-indexed holes'', since they do not contribute to the size.
+For example, an ``$\hder K F$-shape of size $3$'' consists of an
+$F$-shape with three labels that ``count'' towards the size, as well
+as one ``hole'' for each element of $K$.
 \pref{fig:higher-derivative-example} illustrates a $\hder K
 \Bin$-shape of size $3$, where $K = \{a,b,c,d,e\}$.
 \begin{figure}
