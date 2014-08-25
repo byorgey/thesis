@@ -5086,11 +5086,6 @@ If $F(x) = \sum_{n \geq 0} f_n \frac{x^n}{n!}$, then \[ \ader K F(x) =
 not know whether there is a nice way to express this transformation on
 generating functions.
 
-\section{Recursion and the implicit species theorem}
-\label{sec:implicit}
-
-\todo{write me! Should I put it here, or later after talking about multisort?}
-
 \section{Regular, molecular and atomic species}
 \label{sec:molecular-atomic}
 
@@ -5199,6 +5194,13 @@ We can now state the more abstract definition of regular species.
   without any mention of Cartesian or arithmetic product.  This is
   certainly far from obvious. \later{give an example of doing the
     translation}
+
+  This definition also shows why regular species can be characterized
+  as those for which $F(x) = \unl F(x)$: with no symmetries, each
+  $F$-form of size $n$ corresponds to $n!$ distinct labelled shapes.
+  Hence \[ F(x) = \sum_{n \geq 0} f_n \frac{x^n}{n!} = \sum_{n \geq 0}
+  \unl{f_n} n! \frac{x^n}{n!} = \sum_{n \geq 0} \unl{f_n} x^n = \unl
+  F(x). \]
 \end{rem}
 
 It turns out that these two definitions of regular species are
@@ -5788,108 +5790,6 @@ operations on $S$-sort species.
 \item \todo{enriched}
 \end{itemize}
 
-\todo{Edit the following, dumped here from Haskell Symposium paper}
-The notion of multisort species is particularly useful in formulating
-the theory of implicitly defined (\ie recursive) species.  In
-particular, suppose $\H(\X,\Y)$ is some two-sort species can write an
-implicit equation for \F\ in the form $\F = \H(\X,\F)$, where $\H$ is
-a two-sort species.  For example, if $\H(\X,\Y) = \One + \X \sprod \Y$
-then $\L = \H(\X,\L)$ is the implicit equation defining the species of
-lists.  Now the necessary conditions for the implicit species theorem
-to apply can now be stated precisely:
-\begin{itemize}
-\item $\H(\Zero,\Zero) = \Zero$ (no structures on the empty label set)
-\item $\frac{\partial \H}{\partial \Y}(\Zero, \Zero) = \Zero$ (\F\
-  does not trivially reduce to itself) \todo{better intuitive explanation?}
-\end{itemize}
-% The following note was copied here from my Haskell Symposium paper,
-% not sure what I had in mind
-% \poss{example of not getting confused about zippers?}
-
-% \todo{After here, stuff left over from before, just get rid of it?  Or
-% is there anything I can still use?}
-
-% \todo{The idea is to show that this fits into our general setting,
-%   which also widens its applicability.}
-
-% \newcommand{\lcat}[1]{#1^*}
-% \newcommand{\emptylist}{[\,]}
-
-% \begin{defn}
-%   Given a category $\C$, define the category $\lcat{\C}$ as follows.
-%   \begin{itemize}
-%   \item The objects of $\lcat{\C}$ are finite (possibly empty) lists
-%     $[C_1, C_2, C_3, \dots]$ of objects from $\C$.
-%   \item The morphisms from $[C_1, \dots, C_n]$ to $[D_1, \dots, D_n]$
-%     are lists of morphisms $[f_1, \dots, f_n]$ with $f_i : C_i \to
-%     D_i$.  Note there are no morphisms $[C_1, \dots, C_m] \to [D_1,
-%     \dots, D_n]$ when $m \neq n$.
-%   \end{itemize}
-% \end{defn}
-
-% \todo{Need to add more text here motivating these definitions and
-%   propositions.  Will go much better once I get a better sense of
-%   where this all is headed exactly, and which of these properties we
-%   need and why.}
-
-% \begin{lem}
-%   For any category $\C$, $\lcat{\C}$ is monoidal with list
-%   concatenation |++| as the tensor product and the empty list as
-%   the identity object.
-% \end{lem}
-
-% \renewcommand{\Cat}{\cat{Cat}}
-
-% \todo{Note that $\lcat{-}$ is a functor $\Cat \to \Cat$? (Is it?)}
-
-% \begin{defn}
-%   Define the embedding functor $e : \C \to \lcat{\C}$ which sends $C$
-%   to the singleton list $[C]$ and $f$ to $[f]$.
-% \end{defn}
-
-% \begin{prop}
-%   $e$ is full and faithful.
-% \end{prop}
-
-% \begin{defn}
-%   If $(\C, \otimes, I)$ is a monoidal category, we may define a
-%   functor $F^\otimes : \lcat{\C} \to \C$ by:
-%   \begin{itemize}
-%   \item $F^\otimes\ \emptylist = I$
-%   \item $F^\otimes\ [C_1, \dots, C_n] = C_1 \otimes \dots \otimes C_n$
-%   \end{itemize}
-%   and similarly for morphisms.
-% \end{defn}
-
-% \begin{prop}
-%   $F^\otimes$ is a (strict) monoidal functor.
-%   \begin{proof}
-%     $F^\otimes\ \emptylist = I$ by definition, and it is easy to check
-%     that $F^\otimes\ (\ell_1 \plus \ell_2) = F^\otimes\ \ell_1 \otimes
-%     F^\otimes\ \ell_2$.
-%   \end{proof}
-% \end{prop}
-
-% \begin{rem}
-%   Note that $F^\otimes$ is not, in general, an isomorphism.  In
-%   particular, there may exist morphisms $C_1 \otimes \dots \otimes C_n
-%   \to D_1 \otimes \dots \otimes D_n$ which do not arise as a tensorial
-%   product of morphisms $f_i : C_i \to D_i$.  For example, in $(\Set,
-%   +)$ we may define \todo{finish me}.
-% \end{rem}
-
-% Given a functor category of generalized species $[\Lab, \Str]$, we may
-% now form the category $[\lcat{\Lab}, \Str]$ of generalized multisort
-% species.  In particular, $[\lcat{\B}, \Set]$ corresponds exactly to
-% the notion of multisort species defined in \citet{bll}.
-
-% \todo{Note conditions under which this preserves the structure we care
-%   about.  Need $\lcat{\Lab}$ to still be enriched over $\Str$.  We
-%   have shown above that $\lcat{\Lab}$ preserves relevant monoidal
-%   structure.  Hmm\dots multisort corresponds particularly to
-%   interpreting lists using coproduct from underlying category\dots
-%   where does that come from?}
-
 \subsection{Weighted species}
 \label{sec:weighted}
 
@@ -5940,6 +5840,20 @@ $A$. \todo{Finish this proof.}
 
 \todo{Give some examples.}
 
+\subsection{\hott{species}}
+\label{sec:h-species}
+
+Although they have been discussed throughout the preceding chapter, it
+is worth explicitly collecting here some results about \hott{species},
+that is, $(\fc \BT \ST)$-species constructed within HoTT.  One notable
+point that should be emphasized is that, due to transport, \emph{any}
+function $f : \FinTypeT \to \SetT$ automatically gives rise to an
+\hott{species}, that is, a functor $\BT \to \ST$. Morphisms in $\BT$
+are paths $A = B$, which via transport automatically and functorially
+give rise to functions $f(A) \to f(B)$.
+
+\todo{What else to say about \hott{species}?}=
+
 \subsection{$\L$-species}
 
 \subsection{Other examples}
@@ -5957,3 +5871,122 @@ $A$. \todo{Finish this proof.}
 
 \todo{Unlabelled structures, equivalence classes, and HITs} \bay{Where
   should this go?}
+
+\section{Recursive species}
+\label{sec:recursive}
+
+We close out this chapter with a brief discussion of recursively
+defined species, which have been used in examples throughout this
+chapter.  Suppose $\H(\X,\Y)$ is some two-sort species.  A recursive
+species $F$ can then be expressed implicitly in the form \[ \F =
+\H(\X,\F). \] For example, if $\H(\X,\Y) = \X \sprod (\List \comp \Y)$
+then $\Rose = \H(\X,\Rose)$ is the implicit equation defining the
+species of rose trees. The following theorem asserts that, under some
+mild conditions on $\H$, we can unambiguously assign meaning to such
+implicitly defined species.
+\begin{thm}[Implicit Species Theorem, \citet{bll}]
+  Let $\H$ be a two-sort species satisfying
+  \begin{itemize}
+  \item $\H(\Zero,\Zero) \iso \Zero$
+  \item $\frac{\partial \H}{\partial \Y}(\Zero, \Zero) \iso \Zero$
+\end{itemize}
+Then there exists a species $F$, unique up to isomorphism,
+satisfying \[ F \iso \H(X,F), \] with $F(\Zero) \iso \Zero$.
+\end{thm}
+
+\begin{rem}
+  Recall that the notation $\H(\Zero,\Zero) = \H \comp (\Zero,\Zero)$
+  denotes the composition of the two-sort species $\H$ with the pair
+  of one-sort species $(\Zero,\Zero)$.  These criteria are thus
+  expressed in the form of species isomorphisms, but in this
+  particular case they could equally well be expressed in terms of the
+  action of $\H$ on empty label sets, \eg $\H(\varnothing,
+  \varnothing) = \varnothing$.
+\end{rem}
+
+The proof essentially proceeds by constructing $F$ as the infinite
+expansion \[ F = \H(\X, \H(\X, \H(\X, \dots))); \] the conditions on
+$\H$ ensure that this is well-defined.  In particular, since
+$\frac{\partial \H}{\partial \Y}$-shapes have a single hole in the
+place of a $\Y$, which is the placeholder for recursive occurrences,
+$\frac{\partial \H}{\partial \Y}(\Zero,\Zero) \iso \Zero$ means that
+there are no $\H(\X,\Y)$-shapes consisting solely of (some constant
+multiple of) a $\Y$.  Such shapes would allow a recursive step that
+did not make any ``progress'' using up $\X$'s, resulting in infinitely
+large shapes of size $0$.  For details of the proof, see \citet[\Sect
+3.2]{bll}.
+
+The implicit species theorem can also be suitably generalized to
+systems of mutually recursive equations; see \citet{bll} as well as
+\citet{pivoteau-11-algorithms}.
+
+Many common examples of recursively defined species, such as $\List =
+\One + \X \cdot \List$, or $\Bin = \One + \X \cdot \B^2$, do not
+actually satisfy the premises of the implicit species theorem, in
+particular the requirement that $\H(\Zero,\Zero) \iso \Zero$.  In both
+the above cases we instead have $\H(\Zero,\Zero) \iso \One$.  However,
+we can state a slight variant of the implicit species theorem which
+allows us to unambiguously assign meaning to such definitions, as
+follows.  This approach is used in an ad-hoc manner by \citet{bll};
+see, for example, Example 3.2.3 on p. 195.  It also appeared in a
+sketchy form in my Haskell Symposium paper
+\citep{yorgey-2010-species}; I have never otherwise seen it
+written down explicitly.
+
+\begin{thm}[Implicit Species Theorem, variant]
+  Let $\H(\X,\Y)$ be a two-sort species satisfying \[ \frac{\partial
+    \H}{\partial \Y}(\Zero,\Zero) \iso \Zero \] and \[ \H(\Zero,\Y)
+  \iso n, \] where $n \in \N$ represents the species $\underbrace{\One
+    + \dots + \One}_n$ with $n$ shapes of size $0$.  Then there exists
+  a species $F$, unique up to isomorphism, satisfying \[ F \iso
+  \H(\X,F) \] with $F(\Zero) \iso n$.
+\end{thm}
+
+\begin{proof}
+  Since $\H(\Zero,\Y) \iso n$, there is some two-sort species
+  $\H^+$ such that $\H$ can be uniquely decomposed as
+  \[ \H(\X,\Y) \iso n + \H^+(\X,\Y) \] (this follows from an analogue
+  of the molecular decomposition theorem for multisort species).  Note
+  that $\H^+(\Zero,\Y) \iso \Zero$ and $\partial \H/\partial \Y
+  = \partial \H^+ / \partial \Y$.
+
+  Now define \[ \H^{n+}(\X,\Y) \defeq \H^+(\X,n + \Y). \] Note that
+  $\partial \H^{n+} / \partial \Y = \partial \H^+ / \partial \Y$ (by
+  the chain rule for differentiation), which is in turn equal to
+  $\partial \H / \partial \Y$.  We also have \[ \H^{n+}(\Zero,\Zero) =
+  \H^+(\Zero,n) \iso \Zero. \] Thus, $\H^{n+}$ satisfies the criteria
+  for the Implicit Species Theorem, and we conclude there uniquely
+  exists a species $F^+$ satisfying $F^+ \iso \H^{n+}(\X,F^+)$, with
+  $F^+(\Zero) \iso \Zero$.
+
+  Finally, let $F \defeq n + F^+$, in which case
+  \begin{align*}
+    F &= n + F^+ \\
+    &\iso n + \H^{n+}(\X, F^+) \\
+    &= n + \H^+(\X, n + F^+) \\
+    &\iso \H(\X, n + F^+) \\
+    &= \H(\X,F).
+  \end{align*}
+
+  So $F = n + F^+$ is a solution to $F = \H(\X,F)$.  The uniqueness of
+  $F$ follows from the uniqueness of $F^+$: if $F_1$ and $F_2$ are
+  both solutions to $F = \H(\X,F)$, then they both decompose as $F_i =
+  n + F_i^+$, and the $F_i^+$ both satisfy $F_i^+ =
+  \H^{n+}(\X,F_i^+)$; hence $F_1^+ \iso F_2^+$ but then $F_1 \iso
+  F_2$.
+\end{proof}
+
+\begin{rem}
+  The condition $\H(\Zero,\Y) \iso n$, as opposed to the weaker
+  condition $\H(\Zero,\Zero) \iso n$, is critical.  For example,
+  consider the implicit equation \[ Q = \One + \X + Q^2. \] In this
+  case $\H(\X,\Y) = \One + \X + \Y^2$ satisfies $\frac{\partial
+    \H}{\partial \Y}(\Zero,\Zero) \iso \Zero$ and $\H(\Zero,\Zero)
+  \iso \One$, but $\H(\Zero,\Y) \iso \One + \Y^2 \not \iso n$.  In
+  fact, $Q$ is ill-defined: by always picking the $Q^2$ branch and
+  never $\X$, and putting $\One$ at the leaves, one can construct
+  infinitely many trees of size $0$.
+\end{rem}
+
+\todo{Say something about situation with $\fc \B \Set$ species?  Can
+  we do away with restrictions on $\H(\Zero,\Zero)$ and so on?}
