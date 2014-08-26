@@ -684,7 +684,7 @@ which amounts to the same thing.
 \label{sec:cardinality-restr}
 
 For any species $F$ and natural number $n$, we may define \[ F_n\ L
-\defeq \begin{cases} F\ L & if $\size L = n$ \\ \varnothing &
+\defeq \begin{cases} F\ L & \text{if } \size L = n \\ \varnothing &
   \text{otherwise} \end{cases}. \] That is, $F_n$ is the restriction
 of $F$ to label sets of size exactly $n$.  For example, $\Bag$ is the
 species of sets of any size; $\Bag_4$ is the species of sets of size
@@ -5090,17 +5090,16 @@ generating functions.
 \label{sec:molecular-atomic}
 
 We now consider the three related notions of \term{regular},
-\term{molecular}, and \term{atomic} species.
-
-A first characterization of regular species is as follows:
-\begin{defn}
+\term{molecular}, and \term{atomic} species.  \term{Regular} species,
+roughly speaking, are those that correspond to algebraic data types in
+Haskell or OCaml.  A first characterization is as follows:
+\begin{defn} \label{defn:regular-closed}
   The class of \term{regular} species consists of the smallest class
   containing $\Zero$, $\One$, and $\X$, and closed under (countable)
   sums and products.
 \end{defn}
-Regular species thus roughly correspond to the usual notion of
-algebraic data types in a language like Haskell or OCaml, with a few
-apparent differences.  First, programming languages do not actually
+There are a few apparent differences between regular species and
+algebraic data types.  First, programming languages do not actually
 allow \emph{infinite} sums or products.  For example, the species \[
 \X^2 + \X^3 + \X^5 + \X^7 + \X^{11} + \dots \] of prime-length lists
 is a well-defined regular species, but is not expressible as, say, a
@@ -5169,17 +5168,17 @@ dia =
   permutation to the labels in a set results in the same set.
 \end{ex}
 
-We can now state the more abstract definition of regular species.
-
+We can now state the more abstract definition of regular species; this
+definition and \pref{defn:regular-closed} turn out to be equivalent.
 \begin{defn}
   A species $F$ is \term{regular} if every $F$-shape has the identity
-  permutation as its only symmetry; such structures are also called
+  permutation as its only symmetry. Such shapes are also called
   regular.
 \end{defn}
 
 \begin{ex}
   Regular species include $\Zero$, $\One$, $\X$, linear orders
-  ($\List$), rooted binary trees ($\Bin$), rose trees ($\Rose$).
+  ($\List$), rooted binary trees ($\Bin$), and rose trees ($\Rose$).
   Non-regular species include sets ($\Bag$), cycles ($\Cyc$), and any
   sum or product of a non-regular species with any other species.
 \end{ex}
@@ -5187,13 +5186,16 @@ We can now state the more abstract definition of regular species.
 \begin{rem}
   According to this definition, in addition to least fixed points,
   regular species are also closed under Cartesian and arithmetic
-  product.  That is, if $F$ and $G$ are two species expressed entirely
-  in terms of $\One$, $\X$, sum, and partitional product, the
-  Cartesian or arithmetic products of $F$ and $G$ are both themselves
-  isomorphic to some species expressed using only those operations,
-  without any mention of Cartesian or arithmetic product.  This is
-  certainly far from obvious. \later{give an example of doing the
-    translation}
+  product, since the Cartesian or arithmetic product of two regular
+  shapes is also regular.  That is, Cartesian and arithmetic product
+  cannot introduce any symmetries if none are present. Given the
+  previous definition, this means that if $F$ and $G$ are two species
+  expressed entirely in terms of $\One$, $\X$, sum, and partitional
+  product, the Cartesian or arithmetic products of $F$ and $G$ are
+  both themselves isomorphic to some species expressed using only
+  those operations, without any mention of Cartesian or arithmetic
+  product.  This is certainly far from obvious. \later{give an example
+    of doing the translation}
 
   This definition also shows why regular species can be characterized
   as those for which $F(x) = \unl F(x)$: with no symmetries, each
@@ -5203,12 +5205,11 @@ We can now state the more abstract definition of regular species.
   F(x). \]
 \end{rem}
 
-It turns out that these two definitions of regular species are
-equivalent. That species built from $\Zero$, $\One$, $\X$, sum,
-product, and fixed point have no symmetries is not hard to see
-intuitively; less obvious is the fact that up to isomorphism, every
-species with no symmetries can be expressed in this way.  To
-understand why this is so, we turn to consider molecular species.
+That species built from $\Zero$, $\One$, $\X$, sum, product, and fixed
+point have no symmetries is not hard to see intuitively; less obvious
+is the fact that up to isomorphism, every species with no symmetries
+can be expressed in this way.  To understand why this is so, we turn
+to consider molecular species.
 
 \begin{defn}
   A species \F\ is \term{molecular} if there is only a single
@@ -5216,13 +5217,19 @@ understand why this is so, we turn to consider molecular species.
 \end{defn}
 \begin{ex}
 The species $\X^2$ of ordered pairs is molecular, since
-any two ordered pairs are related by relabeling.
+any two ordered pairs are related by relabelling.
 \end{ex}
 \begin{ex}
   On the other hand, the species $\List$ of linear orderings is not
   molecular, since list structures of different lengths are
   fundamentally non-isomorphic.
 \end{ex}
+
+Any two shapes with different numbers of labels are unrelated by
+relabelling.  Thus, any molecular species $M$ necessarily has a
+\term{size}, \ie some $n \in \N$ such that all $M$-shapes have size
+$n$.  In other words, $M \iso M_n$ (where $M_n$ is the restriction of
+$M$ to cardinality $n$; see \pref{sec:cardinality-restr}).
 
 Clearly, any species of the form $F + G$ is not molecular (as long as
 $F$ and $G$ are not $\Zero$), since the set of $(F+G)$-forms consists
@@ -5360,9 +5367,9 @@ dia = hcat' (with & sep .~ 1) [listCycles, iff, theCycle]
 
 \begin{ex}
   Considering the reversing action of $\Z_2$ on $\List$, shapes of the
-  quotient $\List / \Z_2$ consist of pairs of lists which are the
-  reverse of each other.  This can be thought of as the species of
-  ``unoriented lists'' (sometimes called the species of
+  quotient $\List / \Z_2$ consist of (unordered) pairs of lists which
+  are the reverse of each other.  This can be thought of as the
+  species of ``unoriented lists'' (sometimes called the species of
   \term{chains}).
 \end{ex}
 
@@ -5415,15 +5422,15 @@ We can now state the following beautiful result:
 \end{prop}
 
 In particular, this means that, up to isomorphism, molecular species
-are in one-to-one correspondence with conjugacy classes of subgroups
-of $\S_n$.  This gives a complete classification of molecular
-species.  For example, it is not hard to verify that there are four
-conjugacy classes of subgroups of $\S_3$, yielding the four molecular
-species illustrated in \pref{fig:molec-three}.  The leftmost is
-$\X^3$, corresponding to the trivial group.  The second is $\X \cdot
-\Bag_2$, corresponding to the subgroups of $\S_3$ containing only a
-single swap.  The third is $\Cyc_3$, corresponding to $\Z_3$.  The
-last is $\Bag_3$, corresponding to $\S_3$ itself.
+of size $n$ are in one-to-one correspondence with conjugacy classes of
+subgroups of $\S_n$.  This gives a complete classification of
+molecular species.  For example, it is not hard to verify that there
+are four conjugacy classes of subgroups of $\S_3$, yielding the four
+molecular species illustrated in \pref{fig:molec-three}.  The leftmost
+is $\X^3$, corresponding to the trivial group.  The second is $\X
+\cdot \Bag_2$, corresponding to the subgroups of $\S_3$ containing
+only a single swap.  The third is $\Cyc_3$, corresponding to $\Z_3$.
+The last is $\Bag_3$, corresponding to $\S_3$ itself.
 
 \begin{figure}
   \centering
@@ -5547,7 +5554,7 @@ where $H^G$ is defined in \pref{sec:internal-Hom-cprod}, and $\phom G
 H$ and $\ahom G H$ are defined in
 \pref{sec:internal-Hom-pprod-aprod}. Note that in all three cases, one
 may continue to recursively characterize the results in terms of
-eliminators for $F$ and $G$.
+eliminators for $F$ and $G$. \todo{I believe that for $F$, but for $G$\dots?}
 
 \paragraph{Composition}
 
@@ -5574,7 +5581,7 @@ set of equivalence classes can be characterized as a function out of
 the underlying set which respects the equivalence relation.  That is,
 the last line of the computation above is isomorphic to \[ (f : \eend
 L \hom[\Set]{\X^n\ L}{G\ L}) \times ((\sigma \in H) \to (f = f \comp
-(\X^n\ \sigma)), \] a species morphism $\hom {\X^n}{G}$ paired with a
+(\X^n\ \sigma)), \] \ie a species morphism $\hom {\X^n}{G}$ paired with a
 proof that it respects the equivalence induced by $H$.  Note that the
 same argument applies unchanged to the more general case of a quotient
 species $F/H$.
@@ -5608,14 +5615,39 @@ via currying.  So in some sense we are only ``forced'' to use the
 above characterization of morphisms out of quotient species in the
 case of atomic species.
 
+\later{eliminators via Conor ``down'' operator}
+
 \section{Other species variants}
 \label{sec:variants}
 
-\todo{Write an introduction here.  Mention species variants seen already.}
+As explained in \todo{where?}, one of the goals of this chapter is to
+explore ``species-like things'' which are functors in some category
+$(\fc \Lab \Str)$.  We have seen a few variants already:
+\begin{itemize}
+\item $\fc \B \Set$
+\item $\fc \B \FinSet$, a slightly more traditional notion of species
+  which is more appropriate for doing combinatorics.
+\item $\fc \P \Set$, species as families of shapes organized by
+  \emph{size} instead of by labels.
+\item $\fc \BT \ST$, species as constructed in HoTT.
+\end{itemize}
+There are quite a few other possible variants, some of which we
+explore in this section.
+
+First, we gather and summarize the properties needed on $\Lab$ and
+$\Str$ to support the operations we have studied.  The data are
+summarized in \pref{tab:properties}.  At the head of each column is an
+operation or group of operations.  In general, $\odot$-E denotes the
+eliminator for $\odot$; in some cases the eliminator for a given
+operation requires different or additional properties than the
+operation itself.  $\partial$ indicates (higher) differentiation.  The
+rows are labelled by properties, to be elaborated below.
 
 \newcommand{\dayops}{$\cdot$, $\aprod$, $\comp$, $\partial$}
 \newcommand{\dayelims}{$\cdot$-E, $\aprod$-E}
 
+\begin{table}
+\centering
 \begin{tabular}{lc||c||c||c||c||c}
                                      & $+$, $\times$ & $+$-E      & $\times$-E & \dayops    & \dayelims  & $\comp$-E  \\
                                      &               &            &            &            &            &            \\
@@ -5623,18 +5655,46 @@ case of atomic species.
   \dots coproduct                    &               & \checkmark &            &            &            &            \\
   \dots symm., pres. colimits        &               &            &            & \checkmark & \checkmark & \checkmark \\
   \dots left adjoint                 &               &            &            &            &            & \checkmark \\
+  $\Lab$ locally small               &               &            & \checkmark &            &            &            \\
+  $\Str$ complete, Cart. closed      &               &            & \checkmark &            &            &            \\
   $\Lab$ monoidal                    &               &            &            & \checkmark & \checkmark & \checkmark \\
   $\Lab$ enriched over $\Str$        &               &            &            & \checkmark & \checkmark & \checkmark \\
   $\Str$ has coends over $\Lab$      &               &            &            & \checkmark & \checkmark & \checkmark \\
-  $\Lab$ locally small               &               &            & \checkmark &            &            &            \\
-  $\Str$ complete, Cart. closed      &               &            & \checkmark &            &            &            \\
   $\fc \Lab \Str$ enriched over self &               &            &            &            & \checkmark & \checkmark
 \end{tabular}
+\caption{Properties of $(\fc \Lab \Str)$ needed for species operations}
+\label{tab:properties}
+\end{table}
 
-\todo{Explain table.}
+\begin{itemize}
+\item All operations require $\Str$ to be monoidal.  Some require
+  additional properties of this monoidal structure:
+  \begin{itemize}
+  \item The eliminator for $+$ assumes that it is derived from the
+    actual coproduct in $\Str$.
+  \item All the operations built on Day convolution or something
+    similar require the monoidal structure on $\Str$ to be symmetric,
+    and to preserve colimits.  It suffices, but is not necessary, for
+    the monoidal product to be a left adjoint.
+  \item On the other hand, the eliminator for $\comp$ really does
+    require the monoidal product to be a left adjoint.
+  \end{itemize}
+\item The eliminator for Cartesian product, which corresponds to
+  Cartesian closure of $(\fc \Lab \Str)$, requires that $\Lab$ be
+  locally small and $\Str$ complete and Cartesian closed.
+\item Again, the operators defined via Day convolution and related
+  operators require that $\Lab$ be monoidal and enriched over $\Str$,
+  and that $\Str$ have coends over $\Lab$.
+\item Finally, eliminators for partitional and arithmetic product and
+  for composition require $(\fc \Lab \Str)$ to be enriched over
+  itself: for example, in the context of $(\fc \B \Set)$ we end up
+  treating a species morphism as itself being a species.
+\end{itemize}
 
 \subsection{Multisort species}
 \label{sec:multisort}
+
+\todo{explain promise of this ``modular'' approach?}
 
 Multisort species are a generalization of species in which the labels
 are classified according to multiple \term{sorts}.  We often use $\X$,
@@ -5642,10 +5702,10 @@ $\Y$, $\ZZ$ or $\X_1$, $\X_2$, \dots to denote sorts.  In particular,
 (say) $\Y$ denotes the species, analogous to $\X$, for which there is
 a single shape containing a single label \emph{of sort $Y$} (and none
 of any other sort).  More generally, multisort species correspond to
-multivariate generating functions. See \citet[\S 4.2]{bll} for a
-precise definition, spelled out in detail.  For now, an intuitive
-sense is sufficient; we will give a more abstract (but no less precise)
-definition later.
+multivariate generating functions. See \citet[\Sect 4.2]{bll} for a
+precise, detailed definition, spelled out in detail.  For now, an
+intuitive sense is sufficient; we will give a more abstract (but no
+less precise) definition later.
 
 \begin{ex}
   Consider \[ \frak{T} = \Y + \X \cdot \frak{T}^2, \] the two-sort
@@ -5736,11 +5796,11 @@ composition) ``from scratch'' is unnecessary; they can be defined
 abstractly as objects in a certain functor category, and hence fit
 into the abstract framework developed in the preceding sections.
 \citet{bll} acknowledge as much in Exercise 2.4.6, but only as
-something of an afterthought; the following development is quite a bit
-more general than the intended solution to the exercise.
+something of an afterthought; the following development is yet more
+general than the intended solution to the exercise.
 
 Let $S$ be a finite set, thought of as a collection of names for
-sorts, that is, each element $s \in S$ represents a different sort.
+sorts; that is, each element $s \in S$ represents a different sort.
 Let $\Lab$ be a category, thought of as a category of labels (\eg
 $\B$).  Now consider the functor category $\Lab^S$ (with $S$
 considered as a discrete category, as usual).  Objects of $\Lab^S$ are
@@ -5793,6 +5853,7 @@ operations on $S$-sort species.
 \subsection{Weighted species}
 \label{sec:weighted}
 
+\todo{Take this out.  Just mention.}
 \todo{General explanation and intuition for weighted species, and usual definition.}
 
 \newcommand{\A}{\bbb{A}}
@@ -5813,7 +5874,7 @@ coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \todo{finish}
 
 Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
 weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
-categorical product in $\Str/A$ is the set $\{(x,y) \mid x \in X, y
+categorical product in $\Set/A$ is the set $\{(x,y) \mid x \in X, y
 \in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not a very
 useful notion of product in this context: intuitively, taking a
 product of weighted objects should yield a combined object with some
@@ -5856,7 +5917,27 @@ give rise to functions $f(A) \to f(B)$.
 
 \subsection{$\L$-species}
 
+Consider the category $\L$ of linear orders and order-preserving
+bijections (discussed previously in \todo{where?}).  An
+\term{$L$-species} is defined as a functor $\L \to \Set$.  The theory
+of $\L$-species is large and fascinating; for example, it allows one
+to solve differential equations over species, and to define a notion
+of intergration dual to differentiation.  More practically, it allows
+modelling data structures with ordering constraints, such as binary
+search trees and heaps.  Unfortunately there is not time or space to
+include more on the theory here.  For now, we simply note that $(\fc
+\L \Set)$ has many of the required properties:
+\begin{itemize}
+\item $\L$ is indeed monoidal; in fact, there are many interesting
+  choices regarding how to combine linear orders. \todo{expand on this?}
+\item $\L$ is indeed enriched over $\Set$.
+\item $\Set$ has coends over $\L$ \todo{?}
+\item \todo{other properties!}
+\end{itemize}
+
 \subsection{Other examples}
+
+There are many other examples
 
 \todo{$\Cat$-valued species.}
 \todo{Vector species.}
