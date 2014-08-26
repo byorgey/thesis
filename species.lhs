@@ -5876,19 +5876,21 @@ give rise to functions $f(A) \to f(B)$.
 \label{sec:recursive}
 
 We close out this chapter with a brief discussion of recursively
-defined species, which have been used in examples throughout this
-chapter.  Suppose $\H(\X,\Y)$ is some two-sort species.  A recursive
-species $F$ can then be expressed implicitly in the form \[ \F =
-\H(\X,\F). \] For example, if $\H(\X,\Y) = \X \sprod (\List \comp \Y)$
-then $\Rose = \H(\X,\Rose)$ is the implicit equation defining the
-species of rose trees. The following theorem asserts that, under some
-mild conditions on $\H$, we can unambiguously assign meaning to such
-implicitly defined species.
-\begin{thm}[Implicit Species Theorem, \citet{bll}]
+defined species, which have been used in examples throughout.  Given a
+recursive equation of the form \[ F = \dots F \dots, \] we can turn
+the right-hand side into a two-sort species $\H(\X,\Y)$, with $\Y$
+replacing the recursive occurrences of $F$.  For example, the
+recursive equation \[ \Rose \iso \X \cdot (\List \comp \Rose) \]
+corresponds to the two-sort species $\H(\X,\Y) = \X \cdot (\List \comp
+\Y)$.  We then define $\Rose$ as the least fixed point (if it exists)
+of $\H(\X,-)$, that is, a solution to $\Rose \iso \H(\X,\Rose)$. The
+following theorem expresses the conditions on $\H$ under which such
+fixed point solutions exist.
+\begin{thm}[Implicit Species Theorem, \citep{bll}]
   Let $\H$ be a two-sort species satisfying
   \begin{itemize}
   \item $\H(\Zero,\Zero) \iso \Zero$
-  \item $\frac{\partial \H}{\partial \Y}(\Zero, \Zero) \iso \Zero$
+  \item $\displaystyle \frac{\partial \H}{\partial \Y}(\Zero, \Zero) \iso \Zero$
 \end{itemize}
 Then there exists a species $F$, unique up to isomorphism,
 satisfying \[ F \iso \H(X,F), \] with $F(\Zero) \iso \Zero$.
@@ -5905,35 +5907,38 @@ satisfying \[ F \iso \H(X,F), \] with $F(\Zero) \iso \Zero$.
 \end{rem}
 
 The proof essentially proceeds by constructing $F$ as the infinite
-expansion \[ F = \H(\X, \H(\X, \H(\X, \dots))); \] the conditions on
+expansion \[ F = \H(\X, \H(\X, \H(\X, \dots))). \] The conditions on
 $\H$ ensure that this is well-defined.  In particular, since
-$\frac{\partial \H}{\partial \Y}$-shapes have a single hole in the
-place of a $\Y$, which is the placeholder for recursive occurrences,
+$(\partial \H / \partial \Y)$-shapes have a single hole in the place
+of a $\Y$, which is the placeholder for recursive occurrences of $F$,
 $\frac{\partial \H}{\partial \Y}(\Zero,\Zero) \iso \Zero$ means that
 there are no $\H(\X,\Y)$-shapes consisting solely of (some constant
 multiple of) a $\Y$.  Such shapes would allow a recursive step that
-did not make any ``progress'' using up $\X$'s, resulting in infinitely
-large shapes of size $0$.  For details of the proof, see \citet[\Sect
-3.2]{bll}.
-
-The implicit species theorem can also be suitably generalized to
-systems of mutually recursive equations; see \citet{bll} as well as
-\citet{pivoteau-11-algorithms}.
+did not ``use'' any $\X$'s, resulting in infinitely large shapes of
+size $0$.  For details of the proof, see \citet[\Sect 3.2]{bll}.  The
+implicit species theorem can also be suitably generalized to systems
+of mutually recursive equations; see \citet{bll} as well as
+\citet{Pivoteau2012}.
 
 Many common examples of recursively defined species, such as $\List =
-\One + \X \cdot \List$, or $\Bin = \One + \X \cdot \B^2$, do not
+\One + \X \cdot \List$, or $\Bin = \One + \X \cdot \Bin^2$, do not
 actually satisfy the premises of the implicit species theorem, in
 particular the requirement that $\H(\Zero,\Zero) \iso \Zero$.  In both
 the above cases we instead have $\H(\Zero,\Zero) \iso \One$.  However,
 we can state a slight variant of the implicit species theorem which
-allows us to unambiguously assign meaning to such definitions, as
-follows.  This approach is used in an ad-hoc manner by \citet{bll};
-see, for example, Example 3.2.3 on p. 195.  It also appeared in a
-sketchy form in my Haskell Symposium paper
-\citep{yorgey-2010-species}; I have never otherwise seen it
-written down explicitly.
+allows us to unambiguously assign meaning to such definitions.  The
+basic idea can be seen by considering the case of $\List = \One + \X
+\cdot \List$.  Decompose $\List$ as $\List = \One + \List_+$, so
+$\List_+ = \X \cdot \List \iso \X \cdot (\One + \List_+)$.  Then
+$\H(\X,\Y) = \X \cdot (\One + \Y)$ does satisfy the premises of the
+Implicit Species Theorem, so $\List_+$ is well-defined, and hence so
+is $\List = \One + \List_+$.  This approach is used, implicitly and in
+an ad-hoc manner, by \citet{bll}; see, for example, Example 3.2.3 on
+p. 195.  It also appears in a sketchy form in my Haskell Symposium
+paper \citep{yorgey-2010-species}; I have never otherwise seen it
+formalized explicitly.
 
-\begin{thm}[Implicit Species Theorem, variant]
+\begin{thm}[Implicit Species Theorem II]
   Let $\H(\X,\Y)$ be a two-sort species satisfying \[ \frac{\partial
     \H}{\partial \Y}(\Zero,\Zero) \iso \Zero \] and \[ \H(\Zero,\Y)
   \iso n, \] where $n \in \N$ represents the species $\underbrace{\One
@@ -5944,35 +5949,41 @@ written down explicitly.
 
 \begin{proof}
   Since $\H(\Zero,\Y) \iso n$, there is some two-sort species
-  $\H^+$ such that $\H$ can be uniquely decomposed as
-  \[ \H(\X,\Y) \iso n + \H^+(\X,\Y) \] (this follows from an analogue
+  $\H_+$ such that $\H$ can be uniquely decomposed as
+  \[ \H(\X,\Y) \iso n + \H_+(\X,\Y) \] (this follows from an analogue
   of the molecular decomposition theorem for multisort species).  Note
-  that $\H^+(\Zero,\Y) \iso \Zero$ and $\partial \H/\partial \Y
-  = \partial \H^+ / \partial \Y$.
+  that $\H_+(\Zero,\Y) \iso \Zero$ and $\partial \H/\partial \Y
+  = \partial \H_+ / \partial \Y$.
 
-  Now define \[ \H^{n+}(\X,\Y) \defeq \H^+(\X,n + \Y). \] Note that
-  $\partial \H^{n+} / \partial \Y = \partial \H^+ / \partial \Y$ (by
-  the chain rule for differentiation), which is in turn equal to
-  $\partial \H / \partial \Y$.  We also have \[ \H^{n+}(\Zero,\Zero) =
-  \H^+(\Zero,n) \iso \Zero. \] Thus, $\H^{n+}$ satisfies the criteria
-  for the Implicit Species Theorem, and we conclude there uniquely
-  exists a species $F^+$ satisfying $F^+ \iso \H^{n+}(\X,F^+)$, with
-  $F^+(\Zero) \iso \Zero$.
+  Now define \[ \H_{n+}(\X,\Y) \defeq \H_+(\X,n + \Y). \] Note that
+  \[ \frac{\partial \H_{n+}}{\partial \Y}(\X,\Y) = \frac{\partial
+    \H_+}{\partial \Y}(\X,n+\Y) = \frac{\partial \H}{\partial
+    \Y}(\X,n+\Y) \] (the first equality follows from the chain rule
+  for differentiation).  Thus \[ \frac{\partial \H_{n+}}{\partial
+    \Y}(\Zero,\Zero) = \frac{\partial \H}{\partial \Y}(\Zero, n) \]
+  \todo{Fix this proof.  This needs to be zero but I don't know why.
+    Are the premises of the theorem not correct?  Can I come up with a
+    counterexample?  Or do they already imply what I need somehow?}
 
-  Finally, let $F \defeq n + F^+$, in which case
+  We also have \[ \H_{n+}(\Zero,\Zero) = \H_+(\Zero,n) \iso \Zero. \]
+  Thus, $\H_{n+}$ satisfies the criteria for the Implicit Species
+  Theorem, and we conclude there uniquely exists a species $F_+$
+  satisfying $F_+ \iso \H_{n+}(\X,F_+)$, with $F_+(\Zero) \iso \Zero$.
+
+  Finally, let $F \defeq n + F_+$, in which case
   \begin{align*}
-    F &= n + F^+ \\
-    &\iso n + \H^{n+}(\X, F^+) \\
-    &= n + \H^+(\X, n + F^+) \\
-    &\iso \H(\X, n + F^+) \\
+    F &= n + F_+ \\
+    &\iso n + \H_{n+}(\X, F_+) \\
+    &= n + \H_+(\X, n + F_+) \\
+    &\iso \H(\X, n + F_+) \\
     &= \H(\X,F).
   \end{align*}
 
-  So $F = n + F^+$ is a solution to $F = \H(\X,F)$.  The uniqueness of
-  $F$ follows from the uniqueness of $F^+$: if $F_1$ and $F_2$ are
+  So $F = n + F_+$ is a solution to $F = \H(\X,F)$.  The uniqueness of
+  $F$ follows from the uniqueness of $F_+$: if $F_1$ and $F_2$ are
   both solutions to $F = \H(\X,F)$, then they both decompose as $F_i =
   n + F_i^+$, and the $F_i^+$ both satisfy $F_i^+ =
-  \H^{n+}(\X,F_i^+)$; hence $F_1^+ \iso F_2^+$ but then $F_1 \iso
+  \H_{n+}(\X,F_i^+)$; hence $F_1^+ \iso F_2^+$ but then $F_1 \iso
   F_2$.
 \end{proof}
 
