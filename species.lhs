@@ -5852,7 +5852,7 @@ function $f : \FinTypeT \to \SetT$ automatically gives rise to an
 are paths $A = B$, which via transport automatically and functorially
 give rise to functions $f(A) \to f(B)$.
 
-\todo{What else to say about \hott{species}?}=
+\todo{What else to say about \hott{species}?}
 
 \subsection{$\L$-species}
 
@@ -5939,8 +5939,7 @@ paper \citep{yorgey-2010-species}; I have never otherwise seen it
 formalized explicitly.
 
 \begin{thm}[Implicit Species Theorem II]
-  Let $\H(\X,\Y)$ be a two-sort species satisfying \[ \frac{\partial
-    \H}{\partial \Y}(\Zero,\Zero) \iso \Zero \] and \[ \H(\Zero,\Y)
+  Let $\H(\X,\Y)$ be a two-sort species satisfying \[ \H(\Zero,\Y)
   \iso n, \] where $n \in \N$ represents the species $\underbrace{\One
     + \dots + \One}_n$ with $n$ shapes of size $0$.  Then there exists
   a species $F$, unique up to isomorphism, satisfying \[ F \iso
@@ -5955,15 +5954,21 @@ formalized explicitly.
   that $\H_+(\Zero,\Y) \iso \Zero$ and $\partial \H/\partial \Y
   = \partial \H_+ / \partial \Y$.
 
+  Moreover, $\H(\Zero,\Y) \iso n$ means that other than the constant
+  term $n$, every term of the molecular decomposition of $\H$ must
+  contain a factor of $\X$.  In other words, $\H_+(\X,\Y) \iso \X
+  \cdot \mcal G(\X,\Y)$ for some species $\mcal G$.  Thus we have
+  $\frac{\partial \H}{\partial \Y}(\X,\Y) = \X \cdot \frac{\partial
+    \mcal G}{\partial \Y}(\X,\Y)$, and in particular $\frac{\partial
+    \H}{\partial \Y}(\Zero,\Y) \iso \Zero$ as well.
+
   Now define \[ \H_{n+}(\X,\Y) \defeq \H_+(\X,n + \Y). \] Note that
   \[ \frac{\partial \H_{n+}}{\partial \Y}(\X,\Y) = \frac{\partial
     \H_+}{\partial \Y}(\X,n+\Y) = \frac{\partial \H}{\partial
     \Y}(\X,n+\Y) \] (the first equality follows from the chain rule
   for differentiation).  Thus \[ \frac{\partial \H_{n+}}{\partial
-    \Y}(\Zero,\Zero) = \frac{\partial \H}{\partial \Y}(\Zero, n) \]
-  \todo{Fix this proof.  This needs to be zero but I don't know why.
-    Are the premises of the theorem not correct?  Can I come up with a
-    counterexample?  Or do they already imply what I need somehow?}
+    \Y}(\Zero,\Zero) = \frac{\partial \H}{\partial \Y}(\Zero, n) =
+  \Zero. \]
 
   We also have \[ \H_{n+}(\Zero,\Zero) = \H_+(\Zero,n) \iso \Zero. \]
   Thus, $\H_{n+}$ satisfies the criteria for the Implicit Species
@@ -5998,6 +6003,3 @@ formalized explicitly.
   never $\X$, and putting $\One$ at the leaves, one can construct
   infinitely many trees of size $0$.
 \end{rem}
-
-\todo{Say something about situation with $\fc \B \Set$ species?  Can
-  we do away with restrictions on $\H(\Zero,\Zero)$ and so on?}
