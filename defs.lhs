@@ -368,6 +368,9 @@
 
 \newcommand{\fin}[1]{\ensuremath{[#1]}}
 
+% ring of weights
+\newcommand{\W}{\bbb{W}}
+
 % generic categories
 \newcommand{\D}{\bbb{D}}
 \newcommand{\E}{\bbb{E}}

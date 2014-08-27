@@ -5665,6 +5665,7 @@ rows are labelled by properties, to be elaborated below.
 \caption{Properties of $(\fc \Lab \Str)$ needed for species operations}
 \label{tab:properties}
 \end{table}
+\todo{When/why is it required for $\Lab$ to be a groupoid??}
 
 \begin{itemize}
 \item All operations require $\Str$ to be monoidal.  Some require
@@ -5845,16 +5846,76 @@ unfolding definitions is then enough to describe the action of the
 operations on $S$-sort species.
 
 \begin{itemize}
-\item \todo{monoidal}
-\item \todo{groupoid?}
-\item \todo{enriched}
+\item $\Lab^S$ inherits all the monoidal structure of $\Lab$, as seen
+  in \pref{sec:lifting-monoids}.
+\item $\Lab^S$ is a groupoid whenever $\Lab$ is.
+\item If $\Lab$ is enriched over $\Str$ and $\Str$ has finite
+  products, then $\Lab^S$ can be seen as enriched over $\Str$ as well:
+  morphisms in $\Lab^S$ are represented by $S$-indexed products of
+  morphisms in $\Lab$.
+\item $\Lab^S$ is locally small whenever $\Lab$ is.
+\item \todo{$\Str$ has coends over $\Lab^S$?}
+\item \todo{$\fc {\Lab^S} \Str$ enriched over itself?}
 \end{itemize}
+
+We can thus instantiate the generic definitions to obtain notions of
+sum, Cartesian, arithmetic, and partitional product, and
+differentiation (along with corresponding eliminators) for multisort
+species.
+
+One operation that we do \emph{not} obtain quite so easily is
+composition: the generic definition relied on a definition of the
+``$K$-fold partitional product'' $G^K$ where, in this case, $G :
+\Lab^S \to \Str$ and $K \in \Lab^S$.  It is not \latin{a priori} clear
+what should be meant by the $K$-fold partitional product of $G$ where
+$K$ itself is a collection of labels of different sorts.  We could
+ignore the sorts on $K$, using a monoidal structure on $\Lab$ to
+reduce $K$ to an object of $\Lab$; for example, in $\fc {\B^S}{\Set}$,
+given some collection of finite sets $K$, each corresponding to a
+different sort, we can simply take their coproduct.  This results in a
+notion of composition $F \comp G$ where we simply ignore the sorts on
+the labels of $F$, replacing each with a (sorted) $G$-shape.  This
+certainly yields a monoid on $\fc {\Lab^S}{\Str}$, but one that does
+not really make use of the sorts at all.
+
+The generalized notion of composition defined earlier, on the other
+hand, is not a monoid on $\fc {\Lab^S}{\Str}$ (indeed, it is not a
+monoid at all).  Instead, it has the type \[ - \comp - : (\fc
+{\Lab^S}{\Str}) \to (\fc {\Lab^T} \Str)^S \to (\fc {\Lab^T}{\Str}). \]
+This seems somewhat reminiscent of a relative monad
+\citep{altenkirch2010monads}; exploring the connection is left to
+future work.
 
 \subsection{Weighted species}
 \label{sec:weighted}
 
-\todo{Take this out.  Just mention.}
-\todo{General explanation and intuition for weighted species, and usual definition.}
+\citet[\Sect 2.3]{bll} define a notion of \term{weighted species},
+where each shape is assigned a \term{weight} from some polynomial ring
+of weights $\W$.  For example, consider the weighted species of binary
+trees where the weight of each tree is its number of leaves.  This can
+be represented by the species $\Bin_\ell$,
+\begin{align*}
+\Bin_\ell &= \One + \Bin_{\ell+} \\
+\Bin_{\ell+} &= \X_\ell + \Sp{2} \cdot \X \cdot \Bin_{\ell+} + \X \cdot \Bin_{\ell+}^2.
+\end{align*}
+That is, a leaf-weighted tree is either empty, or a nonempty
+leaf-weighted tree; a nonempty leaf-weighted tree is either a single
+node with weight $\ell$ (here $\ell$ is a formal parameter
+representing the weight of a single leaf), or a node paired with a
+single nonempty leaf-weighted tree (in two ways---either as the left
+or right child), or a node paired with two nonempty leaf-weighted
+trees.  Given $\X_\ell(x) = \ell x$, one can compute the egf for
+$\Bin_\ell$ as \[ \Bin_\ell(x) = 1 + \ell x + 2\ell x^2 + (4 \ell +
+\ell^2) x^3 + (8\ell + 6 \ell^2) x^4 + \dots \] A term of the form
+$a_{i,n}\ell^i x^n$ indicates that there are $a_{i,n}$ labelled trees
+with $i$ leaves and size $n$.  One can verify that, for example, eight
+of the size-$4$ binary trees have only a single leaf (namely, the
+trees consisting of a single unbranching chain of nodes, with three
+binary choices of direction at the internal nodes for a total of $2^3
+= 8$), and six have two leaves.  Substituting $\ell = 1$ recovers the
+unweighted egf $\Bin(x) = 1 + 1 + 2x^2 + 5x^3 + 14x^4 + \dots$ In
+general, weighted species thus correspond to refinements of unweighted
+species.
 
 \newcommand{\A}{\bbb{A}}
 
@@ -5865,7 +5926,7 @@ morphisms of $\Str$.
 
 The first thing to note is that $\Str/A$ inherits coproducts from
 $\Str$: given two weighted objects $(X, \omega_X)$ and $(Y,
-\omega_Y)$, we can uniquely construct a weaighting $(X+Y, [\omega_X,
+\omega_Y)$, we can uniquely construct a weighting $(X+Y, [\omega_X,
 \omega_Y])$:
 \[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
   \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
@@ -5942,16 +6003,6 @@ There are many other examples
 \todo{$\Cat$-valued species.}
 \todo{Vector species.}
 \todo{Species from category of partial bijections/prisms.}
-
-\subsection{Example species}
-\label{sec:example-species}
-
-\todo{Bounded tree width graphs}
-
-\section{Unlabelled species}
-
-\todo{Unlabelled structures, equivalence classes, and HITs} \bay{Where
-  should this go?}
 
 \section{Recursive species}
 \label{sec:recursive}
