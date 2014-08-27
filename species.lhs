@@ -4751,8 +4751,8 @@ dia =
   rely on a linear order on the labels, and hence do not qualify as
   natural species morphisms.  However, they do indeed qualify as down
   operators on the $\L$-species of binary search trees and heaps,
-  respectively. \todo{Forward or backward reference to somewhere else
-    we talk about $\L$-species.}
+  respectively (see \pref{sec:manifestly-finite} and
+  \pref{sec:L-species}).
 \end{ex}
 
 \subsection{Pointing}
@@ -5854,13 +5854,29 @@ operations on $S$-sort species.
   morphisms in $\Lab^S$ are represented by $S$-indexed products of
   morphisms in $\Lab$.
 \item $\Lab^S$ is locally small whenever $\Lab$ is.
-\item \todo{$\Str$ has coends over $\Lab^S$?}
-\item \todo{$\fc {\Lab^S} \Str$ enriched over itself?}
+\item $\Str$ has coends over $\Lab^S$ as long as it has products and
+  coends over $\Lab$, which we can argue as follows. Since $S$
+  is discrete, everything in $\Lab^S$ naturally decomposes into
+  discrete $S$-indexed collections.  For example, a morphism in
+  $\Lab^S$ is isomorphic to an $S$-indexed collection of morphisms in
+  $\Lab$, a functor $\Lab^S \to \Str$ is isomorphic to an $S$-indexed
+  product of functors $\Lab \to \Str$, and so on.  Note that
+  $(\Lab^S)^\op \times \Lab^S \iso (\Lab^\op)^S \times \Lab^S \iso
+  (\Lab^\op \times \Lab)^S$, so a functor $T : (\Lab^S)^\op \times
+  \Lab^S \to \Str$ can also be decomposed in this way.  In particular,
+  this means that, as long as $\Str$ has $S$-indexed products, we may
+  construct the coend $\coend L T(L,L)$ componentwise, that is, \[
+  \coend L T(L,L) \defeq \prod_{s \in S} \coend K T_s(K,K), \] where
+  $T_s$ denotes the $s$-component of the decomposition of $T$.  One
+  can check that this defines a valid coend.
+\item By a similar argument, $\fc {\Lab^S} \Str$ is enriched over
+  itself as long as $\fc \Lab \Str$ is enriched over itself, and
+  $\Str$ (and hence $\fc \Lab \Str$) has products.
 \end{itemize}
 
 We can thus instantiate the generic definitions to obtain notions of
 sum, Cartesian, arithmetic, and partitional product, and
-differentiation (along with corresponding eliminators) for multisort
+differentiation (along with corresponding eliminators) for $S$-sort
 species.
 
 One operation that we do \emph{not} obtain quite so easily is
@@ -5918,6 +5934,7 @@ general, weighted species thus correspond to refinements of unweighted
 species.
 
 \newcommand{\A}{\bbb{A}}
+\todo{Come back to this.  Can we fit this in the framework?}
 
 Given some object $A \in \Str$, consider the slice category $\Str/A$.
 We can interpret objects of $\Str/A$ as objects of $\Str$ paired with
@@ -5977,9 +5994,10 @@ give rise to functions $f(A) \to f(B)$.
 \todo{What else to say about \hott{species}?}
 
 \subsection{$\L$-species}
+\label{sec:L-species}
 
 Consider the category $\L$ of linear orders and order-preserving
-bijections (discussed previously in \todo{where?}).  An
+bijections (discussed previously in \pref{sec:manifestly-finite}).  An
 \term{$L$-species} is defined as a functor $\L \to \Set$.  The theory
 of $\L$-species is large and fascinating; for example, it allows one
 to solve differential equations over species, and to define a notion
@@ -5988,21 +6006,35 @@ modelling data structures with ordering constraints, such as binary
 search trees and heaps.  Unfortunately there is not time or space to
 include more on the theory here.  For now, we simply note that $(\fc
 \L \Set)$ has many of the required properties:
+
 \begin{itemize}
 \item $\L$ is indeed monoidal; in fact, there are many interesting
   choices regarding how to combine linear orders. \todo{expand on this?}
-\item $\L$ is indeed enriched over $\Set$.
-\item $\Set$ has coends over $\L$ \todo{?}
-\item \todo{other properties!}
+\item $\L$ is clearly a groupoid, locally small, and enriched over $\Set$.
+\item $\Set$ is cocomplete and hence has coends over $\L$.
+\item \todo{$(\fc \L \Set)$ enriched over itself?}
+\item Since objects in $\L$ are finite sets, the indexed partitional
+  product $G^K$ can be defined in exactly the same way as in the case
+  of $\fc \B \Set$.
 \end{itemize}
 
 \subsection{Other examples}
 
-There are many other examples
+Many other examples appear in the literature, for example,
+\begin{itemize}
+\item $\Vect$-valued species \citep{joyal86, aguiar2010monoidal}, \ie
+  functors $\B \to \Vect$, which send finite sets of labels to
+  \emph{vector spaces} of shapes. \todo{say more?}
+\item $\Cat$-valued species \citep{XXX} \todo{citation?  Baez \&
+    Dolan?  Generalized Euler characteristic.}, \ie functors $\B \to
+  \Cat$ which send finite sets of labels to \emph{categories} of
+  shapes. \todo{say more?}
+\item \todo{Generalized species of Fiore \etal}
+\item \todo{Forward reference to species from category of partial bijections/prisms?}
+\end{itemize}
 
-\todo{$\Cat$-valued species.}
-\todo{Vector species.}
-\todo{Species from category of partial bijections/prisms.}
+In each case, one can verify the required properties and automatically
+obtain definitions of the various operations.
 
 \section{Recursive species}
 \label{sec:recursive}

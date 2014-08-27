@@ -342,7 +342,6 @@
 \newcategory{Set}     % sets and total functions
 \newcategory{FinSet}  % finite sets
 \newcategory{Grp}     % groups
-\newcategory{Vect}    % vector spaces
 \newcategory{Cat}     % (small) categories
 \newcategory{Spe}     % species
 \newcategory{CSpe}    % constructive species
@@ -351,6 +350,7 @@
 \newcategory{B}       % finite sets and bijections
 \newcategory{P}       % naturals and permutations
 \newcategory{L}       % finite linear orders and order-preserving bijections
+\newcommand{\Vect}{\cat{Vec}}    % vector spaces
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}
