@@ -5703,9 +5703,9 @@ $\Y$, $\ZZ$ or $\X_1$, $\X_2$, \dots to denote sorts.  In particular,
 a single shape containing a single label \emph{of sort $Y$} (and none
 of any other sort).  More generally, multisort species correspond to
 multivariate generating functions. See \citet[\Sect 4.2]{bll} for a
-precise, detailed definition, spelled out in detail.  For now, an
-intuitive sense is sufficient; we will give a more abstract (but no
-less precise) definition later.
+precise, detailed definition.  For now, an intuitive sense is
+sufficient; we will give a more abstract (but no less precise)
+definition later.
 
 \begin{ex}
   Consider \[ \frak{T} = \Y + \X \cdot \frak{T}^2, \] the two-sort
