@@ -832,7 +832,7 @@ The same thing can also be defined at a higher level in terms of
 spans: \[ \xymatrix@@dr{ \Spec \times_\D \bbb{T} \ar[d]_{\lana F'}
   \ar[r]^{\rana G'} & \bbb{T} \ar[d]_{\lana G} \ar[r]^{\rana G} & \E
   \\ \Spec \ar[d]_{\lana F} \ar[r]^{\rana F} & \D \\ \C } \] $\Cat$ is
-cocomplete, and in particular has pullbacks, so we may construct a new
+complete, and in particular has pullbacks, so we may construct a new
 anafunctor from $\C$ to $\E$ by taking a pullback of $\rana F$ and
 $\lana G$ and then composing appropriately, as illustrated in the
 diagram.
