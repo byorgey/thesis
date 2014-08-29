@@ -2931,9 +2931,9 @@ dia = pairs
 \begin{ex}
   Recall that $\List$ denotes the species of lists, \ie linear
   orderings.  Besides the interpretation of recursion, to be explored
-  in \todo{where?}, we have now seen all the necessary pieces to
-  understand the algebraic definition of $\List$: \[ \List = \One + \X
-  \cdot \List. \] That is, a list structure is either the trivial
+  in \pref{sec:recursive}, we have now seen all the necessary pieces
+  to understand the algebraic definition of $\List$: \[ \List = \One +
+  \X \cdot \List. \] That is, a list structure is either the trivial
   structure on zero labels, or a single label paired with a list
   structure on the remainder of the labels.  We also have $\List =
   \One + \X + \X^2 + \X^3 + \dots$.
@@ -5620,9 +5620,10 @@ case of atomic species.
 \section{Other species variants}
 \label{sec:variants}
 
-As explained in \todo{where?}, one of the goals of this chapter is to
-explore ``species-like things'' which are functors in some category
-$(\fc \Lab \Str)$.  We have seen a few variants already:
+As explained in \pref{sec:generalized-species}, one of the goals of
+this chapter is to explore ``species-like things'' which are functors
+in some category $(\fc \Lab \Str)$.  We have seen a few variants
+already:
 \begin{itemize}
 \item $\fc \B \Set$
 \item $\fc \B \FinSet$, a slightly more traditional notion of species
@@ -5694,8 +5695,6 @@ rows are labelled by properties, to be elaborated below.
 
 \subsection{Multisort species}
 \label{sec:multisort}
-
-\todo{explain promise of this ``modular'' approach?}
 
 Multisort species are a generalization of species in which the labels
 are classified according to multiple \term{sorts}.  We often use $\X$,
