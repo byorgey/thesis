@@ -1,0 +1,1335 @@
+%% -*- mode: LaTeX; compile-command: "mk" -*-
+
+%include thesis.fmt
+
+\chapter{Species variants}
+\label{chap:variants}
+
+\todo{edit this intro}
+As explained in \pref{sec:generalized-species}, one of the goals of
+this chapter is to explore ``species-like things'' which are functors
+in some category $(\fc \Lab \Str)$.  We have seen a few variants
+already:
+\begin{itemize}
+\item $\fc \B \Set$
+\item $\fc \B \FinSet$, a slightly more traditional notion of species
+  which is more appropriate for doing combinatorics.
+\item $\fc \P \Set$, species as families of shapes organized by
+  \emph{size} instead of by labels.
+\item $\fc \BT \ST$, species as constructed in HoTT.
+\end{itemize}
+There are quite a few other possible variants, some of which we
+explore in this section.
+
+First, we gather and summarize the properties needed on $\Lab$ and
+$\Str$ to support the operations we have studied.  The data are
+summarized in \pref{tab:properties}.  At the head of each column is an
+operation or group of operations.  In general, $\odot$-E denotes the
+eliminator for $\odot$; in some cases the eliminator for a given
+operation requires different or additional properties than the
+operation itself.  $\partial$ indicates (higher) differentiation.  The
+rows are labelled by properties, to be elaborated below.
+
+\newcommand{\dayops}{$\cdot$, $\aprod$, $\comp$, $\partial$}
+\newcommand{\dayelims}{$\cdot$-E, $\aprod$-E}
+
+\begin{table}
+\centering
+\begin{tabular}{lc||c||c||c||c||c}
+                                     & $+$, $\times$ & $+$-E      & $\times$-E & \dayops    & \dayelims  & $\comp$-E  \\
+                                     &               &            &            &            &            &            \\
+  $\Str$ monoidal                    & \checkmark    & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+  \dots coproduct                    &               & \checkmark &            &            &            &            \\
+  \dots symm., pres. colimits        &               &            &            & \checkmark & \checkmark & \checkmark \\
+  \dots left adjoint                 &               &            &            &            &            & \checkmark \\
+  $\Lab$ locally small               &               &            & \checkmark &            &            &            \\
+  $\Str$ complete, Cart. closed      &               &            & \checkmark &            &            &            \\
+  $\Lab$ monoidal                    &               &            &            & \checkmark & \checkmark & \checkmark \\
+  $\Lab$ enriched over $\Str$        &               &            &            & \checkmark & \checkmark & \checkmark \\
+  $\Str$ has coends over $\Lab$      &               &            &            & \checkmark & \checkmark & \checkmark \\
+  $\fc \Lab \Str$ enriched over self &               &            &            &            & \checkmark & \checkmark
+\end{tabular}
+\caption{Properties of $(\fc \Lab \Str)$ needed for species operations}
+\label{tab:properties}
+\end{table}
+\todo{When/why is it required for $\Lab$ to be a groupoid??}
+
+\begin{itemize}
+\item All operations require $\Str$ to be monoidal.  Some require
+  additional properties of this monoidal structure:
+  \begin{itemize}
+  \item The eliminator for $+$ assumes that it is derived from the
+    actual coproduct in $\Str$.
+  \item All the operations built on Day convolution or something
+    similar require the monoidal structure on $\Str$ to be symmetric,
+    and to preserve colimits.  It suffices, but is not necessary, for
+    the monoidal product to be a left adjoint.
+  \item On the other hand, the eliminator for $\comp$ really does
+    require the monoidal product to be a left adjoint.
+  \end{itemize}
+\item The eliminator for Cartesian product, which corresponds to
+  Cartesian closure of $(\fc \Lab \Str)$, requires that $\Lab$ be
+  locally small and $\Str$ complete and Cartesian closed.
+\item Again, the operators defined via Day convolution and related
+  operators require that $\Lab$ be monoidal and enriched over $\Str$,
+  and that $\Str$ have coends over $\Lab$.
+\item Finally, eliminators for partitional and arithmetic product and
+  for composition require $(\fc \Lab \Str)$ to be enriched over
+  itself: for example, in the context of $(\fc \B \Set)$ we end up
+  treating a species morphism as itself being a species.
+\end{itemize}
+
+\section{Multisort species}
+\label{sec:multisort}
+
+Multisort species are a generalization of species in which the labels
+are classified according to multiple \term{sorts}.  We often use $\X$,
+$\Y$, $\ZZ$ or $\X_1$, $\X_2$, \dots to denote sorts.  In particular,
+(say) $\Y$ denotes the species, analogous to $\X$, for which there is
+a single shape containing a single label \emph{of sort $Y$} (and none
+of any other sort).  More generally, multisort species correspond to
+multivariate generating functions. See \citet[\Sect 4.2]{bll} for a
+precise, detailed definition.  For now, an intuitive sense is
+sufficient; we will give a more abstract (but no less precise)
+definition later.
+
+\begin{ex}
+  Consider \[ \frak{T} = \Y + \X \cdot \frak{T}^2, \] the two-sort
+  species of binary trees with internal nodes and leaves labelled by
+  distinct sorts.  \pref{fig:bin-two-sort} illustrates an example
+  shape of this species, with one label sort represented by blue
+  circles, and the other by green squares.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=200]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+t = nd 0 (nd 3 (lf 1) (nd 1 (lf 0) (lf 3))) (nd 2 (lf 2) (lf 4))
+  where
+    nd x l r = BNode (Left x) l r
+    lf x = BNode (Right x) Empty Empty
+
+drawSort (Left i) = mloc i
+drawSort (Right i) = text (show i) <> square 1.6 # fc (colors !! 2)
+
+dia = (drawBinTree' (with & slVSep .~ 3 & slHSep .~ 4) . fmap drawSort $ t) -- $
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{A two-sort species of binary trees}
+    \label{fig:bin-two-sort}
+  \end{figure}
+\end{ex}
+
+\begin{ex}
+  $\Cyc \comp (\X + \Y)$ is the species of \term{bicolored cycles},
+  \ie cycles whose labels are colored with one of two colors
+  (\pref{fig:bicolored-cycle}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=150]
+import           SpeciesDiagrams
+
+elts = [mlocColor, colors !! 2, mlocColor, colors !! 2, mlocColor]
+
+dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{A bicolored cycle}
+    \label{fig:bicolored-cycle}
+  \end{figure}
+\end{ex}
+
+\later{Graphs with labelled vertices and edges. Not obvious how to
+  write down an algebraic expression for it; see BLL 2.4.}
+% \begin{ex}
+%   As another example, consider the two-sort species of simple graphs
+%   whose vertices are labelled by one sort, and edges by another
+%   (illustrated in ...)
+% \end{ex}
+
+\citet{bll} detail how to extend operations such as sum, partitional
+product, and composition to multisort species.  We give just one
+example here, that of composition. If $F$ is an $m$-sort species, and
+$(G_1, \dots, G_m)$ is an $m$-tuple of $n$-sort species, then $F \comp
+(G_1, \dots, G_m)$ is an $n$-sort species whose shapes consist of a
+top-level $F$-shape with $G_i$-shapes substituted for each label of
+sort $i$.  Of course, this presentation assumes a linear ordering on
+the sorts of $F$; more generally, if the sorts of $F$ are indexed by
+some finite set $S$, then $F$ can be composed with an $S$-indexed
+tuple of $T$-sort species, resulting in a $T$-sort species.
+
+\later{Example of generalized composition?}
+% \begin{ex}
+%   \todo{Need an example of generalized composition.}
+% \end{ex}
+
+\begin{rem}
+  Multisort species are often notated using ``multi-argument
+  function'' notation, for example, \[ \H(\X,\Y) = \X + \Y^2. \] This
+  makes clear which singleton species are being used to represent the
+  various sorts, and makes it possible to refer to them positionally
+  as well.  This notation also meshes well with the notion of
+  generalized composition just introduced: writing something like
+  $\H(F,G)$ can be interpreted as $\H \comp (F,G)$ and corresponds
+  exactly to the substitution of $F$ and $G$ for $\X$ and $\Y$.
+\end{rem}
+
+Defining multisort species and all the operations on them (such as
+composition) ``from scratch'' is unnecessary; they can be defined
+abstractly as objects in a certain functor category, and hence fit
+into the abstract framework developed in the preceding sections.
+\citet{bll} acknowledge as much in Exercise 2.4.6, but only as
+something of an afterthought; the following development is yet more
+general than the intended solution to the exercise.
+
+Let $S$ be a finite set, thought of as a collection of names for
+sorts; that is, each element $s \in S$ represents a different sort.
+Let $\Lab$ be a category, thought of as a category of labels (\eg
+$\B$).  Now consider the functor category $\Lab^S$ (with $S$
+considered as a discrete category, as usual).  Objects of $\Lab^S$ are
+functors $S \to \Lab$, that is, an assignment of an object from $\Lab$
+to each $s \in S$. Morphisms in $\Lab^S$ are natural transformations,
+that is, $S$-indexed families of $\Lab$-morphisms between
+corresponding objects of $\Lab$.  For example, in the case $\Lab =
+\B$, objects of $\B^S$ are just $S$-tuples of finite sets, and
+morphisms are $S$-tuples of bijections between them.
+
+\begin{rem}
+  Recall that $\Set^S \iso \Set/S$ (\pref{sec:ct-fundamentals}).  It
+  is not the case that $\B^S \iso \B/S$, since objects of $\B/S$
+  consist of a finite set $L$ paired with a \emph{bijection} $L \bij
+  S$, which only allows one label of each sort.  However, it is
+  possible to consider the category whose objects are finite sets $L$
+  paired with a \emph{function} $\chi : L \to S$, as in $\Set/S$, but
+  whose morphisms $(L_1,\chi_1) \to (L_2,\chi_2)$ are
+  \emph{bijections} $\sigma : L_1 \bij L_2$ such that $\chi_2 \comp
+  \sigma = \chi_1$.  In other words, the objects are finite sets with
+  sorts assigned to their elements, and the morphisms are
+  sort-preserving bijections. This category is indeed equivalent to
+  $\B^S$.
+
+  However, this construction only works because the objects of $\B$
+  are sets; in the general case we must stick with $\Lab^S$.
+\end{rem}
+
+\begin{defn}
+  For a finite set $S$, define \term{$S$-sort ($\Lab$,$\Str$)-species}
+  as functors \[ \Lab^S \to \Str. \]
+\end{defn}
+
+One can verify that taking $\Lab = \B$, $\Str = \Set$, and $S = \fin
+k$ for some $k \in \N$, we recover exactly the definition of $k$-sort
+species given by Bergeron \etal
+
+The payoff is that we can now check that $\Lab^S$ inherits the
+relevant properties from $\Lab$, and thus conclude that $(\Lab^S,
+\Str)$-species inherit operations from $(\Lab,\Str)$-species.  Simply
+unfolding definitions is then enough to describe the action of the
+operations on $S$-sort species.
+
+\begin{itemize}
+\item $\Lab^S$ inherits all the monoidal structure of $\Lab$, as seen
+  in \pref{sec:lifting-monoids}.
+\item $\Lab^S$ is a groupoid whenever $\Lab$ is.
+\item If $\Lab$ is enriched over $\Str$ and $\Str$ has finite
+  products, then $\Lab^S$ can be seen as enriched over $\Str$ as well:
+  morphisms in $\Lab^S$ are represented by $S$-indexed products of
+  morphisms in $\Lab$.
+\item $\Lab^S$ is locally small whenever $\Lab$ is.
+\item $\Str$ has coends over $\Lab^S$ as long as it has products and
+  coends over $\Lab$, which we can argue as follows. Since $S$
+  is discrete, everything in $\Lab^S$ naturally decomposes into
+  discrete $S$-indexed collections.  For example, a morphism in
+  $\Lab^S$ is isomorphic to an $S$-indexed collection of morphisms in
+  $\Lab$, a functor $\Lab^S \to \Str$ is isomorphic to an $S$-indexed
+  product of functors $\Lab \to \Str$, and so on.  Note that
+  $(\Lab^S)^\op \times \Lab^S \iso (\Lab^\op)^S \times \Lab^S \iso
+  (\Lab^\op \times \Lab)^S$, so a functor $T : (\Lab^S)^\op \times
+  \Lab^S \to \Str$ can also be decomposed in this way.  In particular,
+  this means that, as long as $\Str$ has $S$-indexed products, we may
+  construct the coend $\coend L T(L,L)$ componentwise, that is, \[
+  \coend L T(L,L) \defeq \prod_{s \in S} \coend K T_s(K,K), \] where
+  $T_s$ denotes the $s$-component of the decomposition of $T$.  One
+  can check that this defines a valid coend.
+\item By a similar argument, $\fc {\Lab^S} \Str$ is enriched over
+  itself as long as $\fc \Lab \Str$ is enriched over itself, and
+  $\Str$ (and hence $\fc \Lab \Str$) has products.
+\end{itemize}
+
+We can thus instantiate the generic definitions to obtain notions of
+sum, Cartesian, arithmetic, and partitional product, and
+differentiation (along with corresponding eliminators) for $S$-sort
+species.
+
+One operation that we do \emph{not} obtain quite so easily is
+composition: the generic definition relied on a definition of the
+``$K$-fold partitional product'' $G^K$ where, in this case, $G :
+\Lab^S \to \Str$ and $K \in \Lab^S$.  It is not \latin{a priori} clear
+what should be meant by the $K$-fold partitional product of $G$ where
+$K$ itself is a collection of labels of different sorts.  We could
+ignore the sorts on $K$, using a monoidal structure on $\Lab$ to
+reduce $K$ to an object of $\Lab$; for example, in $\fc {\B^S}{\Set}$,
+given some collection of finite sets $K$, each corresponding to a
+different sort, we can simply take their coproduct.  This results in a
+notion of composition $F \comp G$ where we simply ignore the sorts on
+the labels of $F$, replacing each with a (sorted) $G$-shape.  This
+certainly yields a monoid on $\fc {\Lab^S}{\Str}$, but one that does
+not really make use of the sorts at all.
+
+The generalized notion of composition defined earlier, on the other
+hand, is not a monoid on $\fc {\Lab^S}{\Str}$ (indeed, it is not a
+monoid at all).  Instead, it has the type \[ - \comp - : (\fc
+{\Lab^S}{\Str}) \to (\fc {\Lab^T} \Str)^S \to (\fc {\Lab^T}{\Str}). \]
+This seems somewhat reminiscent of a relative monad
+\citep{altenkirch2010monads}; exploring the connection is left to
+future work.
+
+\section{Weighted species}
+\label{sec:weighted}
+
+\citet[\Sect 2.3]{bll} define a notion of \term{weighted species},
+where each shape is assigned a \term{weight} from some polynomial ring
+of weights $\W$.  For example, consider the weighted species of binary
+trees where the weight of each tree is its number of leaves.  This can
+be represented by the species $\Bin_\ell$,
+\begin{align*}
+\Bin_\ell &= \One + \Bin_{\ell+} \\
+\Bin_{\ell+} &= \X_\ell + \Sp{2} \cdot \X \cdot \Bin_{\ell+} + \X \cdot \Bin_{\ell+}^2.
+\end{align*}
+That is, a leaf-weighted tree is either empty, or a nonempty
+leaf-weighted tree; a nonempty leaf-weighted tree is either a single
+node with weight $\ell$ (here $\ell$ is a formal parameter
+representing the weight of a single leaf), or a node paired with a
+single nonempty leaf-weighted tree (in two ways---either as the left
+or right child), or a node paired with two nonempty leaf-weighted
+trees.  Given $\X_\ell(x) = \ell x$, one can compute the egf for
+$\Bin_\ell$ as \[ \Bin_\ell(x) = 1 + \ell x + 2\ell x^2 + (4 \ell +
+\ell^2) x^3 + (8\ell + 6 \ell^2) x^4 + \dots \] A term of the form
+$a_{i,n}\ell^i x^n$ indicates that there are $a_{i,n}$ labelled trees
+with $i$ leaves and size $n$.  One can verify that, for example, eight
+of the size-$4$ binary trees have only a single leaf (namely, the
+trees consisting of a single unbranching chain of nodes, with three
+binary choices of direction at the internal nodes for a total of $2^3
+= 8$), and six have two leaves.  Substituting $\ell = 1$ recovers the
+unweighted egf $\Bin(x) = 1 + 1 + 2x^2 + 5x^3 + 14x^4 + \dots$ In
+general, weighted species thus correspond to refinements of unweighted
+species.
+
+\newcommand{\A}{\bbb{A}}
+\todo{Come back to this.  Can we fit this in the framework?}
+
+Given some object $A \in \Str$, consider the slice category $\Str/A$.
+We can interpret objects of $\Str/A$ as objects of $\Str$ paired with
+a ``weighting''; morphisms in $\Str/A$ are thus ``weight-preserving''
+morphisms of $\Str$.
+
+The first thing to note is that $\Str/A$ inherits coproducts from
+$\Str$: given two weighted objects $(X, \omega_X)$ and $(Y,
+\omega_Y)$, we can uniquely construct a weighting $(X+Y, [\omega_X,
+\omega_Y])$:
+\[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
+  \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
+  \ar[dl]^{\omega_Y} \\ & A & } \] To see that this is indeed the
+coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \todo{finish}
+
+Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
+weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
+categorical product in $\Set/A$ is the set $\{(x,y) \mid x \in X, y
+\in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not a very
+useful notion of product in this context: intuitively, taking a
+product of weighted objects should yield a combined object with some
+sort of combined weight, instead of limiting us to cases where the
+weights match.
+
+Instead of requiring $\Str$ to have pullbacks, we can define a
+different sort of monoidal product on $\Str/A$ if we assume that
+$\Str$ has products and $A$ is a monoid object, that is, there exist
+morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
+\todo{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
+\omega_Y)$ by
+\[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
+  \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
+by $\eta$.
+%% xymatrix{ \singleton \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
+One can check that $\otimes$ inherits monoidal structure from
+$A$. \todo{Finish this proof.}
+
+\todo{Show that this gives the usual notion of weighted species.}
+
+\todo{Show that this construction preserves the properties we care
+  about.}
+
+\todo{Give some examples.}
+
+\section{\hott{species}}
+\label{sec:h-species}
+
+Although they have been discussed throughout the preceding chapter, it
+is worth explicitly collecting here some results about \hott{species},
+that is, $(\fc \BT \ST)$-species constructed within HoTT.  One notable
+point that should be emphasized is that, due to transport, \emph{any}
+function $f : \FinTypeT \to \SetT$ automatically gives rise to an
+\hott{species}, that is, a functor $\BT \to \ST$. Morphisms in $\BT$
+are paths $A = B$, which via transport automatically and functorially
+give rise to functions $f(A) \to f(B)$.
+
+\todo{What else to say about \hott{species}?}
+
+\section{$\L$-species}
+\label{sec:L-species}
+
+Consider the category $\L$ of linear orders and order-preserving
+bijections (discussed previously in \pref{sec:manifestly-finite}).  An
+\term{$L$-species} is defined as a functor $\L \to \Set$.  The theory
+of $\L$-species is large and fascinating; for example, it allows one
+to solve differential equations over species, and to define a notion
+of intergration dual to differentiation.  More practically, it allows
+modelling data structures with ordering constraints, such as binary
+search trees and heaps.  Unfortunately there is not time or space to
+include more on the theory here.  For now, we simply note that $(\fc
+\L \Set)$ has many of the required properties:
+
+\begin{itemize}
+\item $\L$ is indeed monoidal; in fact, there are many interesting
+  choices regarding how to combine linear orders. \todo{expand on this?}
+\item $\L$ is clearly a groupoid, locally small, and enriched over $\Set$.
+\item $\Set$ is cocomplete and hence has coends over $\L$.
+\item \todo{$(\fc \L \Set)$ enriched over itself?}
+\item Since objects in $\L$ are finite sets, the indexed partitional
+  product $G^K$ can be defined in exactly the same way as in the case
+  of $\fc \B \Set$.
+\end{itemize}
+
+\section{Other examples}
+
+Many other examples appear in the literature, for example,
+\begin{itemize}
+\item $\Vect$-valued species \citep{joyal86, aguiar2010monoidal}, \ie
+  functors $\B \to \Vect$, which send finite sets of labels to
+  \emph{vector spaces} of shapes. \todo{say more?}
+\item $\Cat$-valued species \citep{XXX} \todo{citation?  Baez \&
+    Dolan?  Generalized Euler characteristic.}, \ie functors $\B \to
+  \Cat$ which send finite sets of labels to \emph{categories} of
+  shapes. \todo{say more?}
+\item \todo{Generalized species of Fiore \etal}
+\item \todo{Forward reference to species from category of partial bijections/prisms?}
+\end{itemize}
+
+In each case, one can verify the required properties and automatically
+obtain definitions of the various operations.
+
+
+\section{Injections and coinjections}
+\label{sec:injections}
+
+As a final, larger example, which will play an important role in
+\pref{chap:labelled}, we develop the theory of species based on
+injections and their dual, coinjections.  The development will be
+carried out in HoTT, though it works equally well in set theory.
+
+\subsection{Copartial bijections}
+\label{sec:copartial-bijections}
+
+We begin by exploring the notion of a \term{copartial bijection}, a
+bijection which is allowed to be partial in the backwards direction,
+as illustrated in \pref{fig:copartial-bijection}.  Clasically, a
+copartial bijection is the same as an injection; constructively, we
+must take care to distinguish them.
+
+\begin{rem}
+  A \term{bijection} in HoTT is taken to be a pair of inverse
+  functions. Recall that in general, this may not be the same as an
+  \emph{equivalence}, although in the specific case of sets
+  ($0$-types) the notions of bijection and equivalence do coincide.
+  The following discussion sticks mostly to the terminology of
+  ``bijections'' but may occasionally mention ``equivalences'' as well.
+\end{rem}
+
+The basic idea is to introduce a type of evidence witnessing the fact
+that one set ($0$-type) is a ``subset'' of another, written $A
+\cpbij B$.\footnote{There should be no problem in generalizing
+  copartial bijections to copartial equivalences which work over any
+  types, using an appropriate notion of copartial adjoint equivalences.
+  However, there is no need for such generalization in the present
+  work, so we stick to the simpler case of $0$-types.} Of course there
+is no subtyping in HoTT, so there is no literal sense in which one
+type can be a subset of another. However, the situation can be
+modelled using constructive evidence for the embedding of one type
+into another.  In order to focus the discussion, we begin with copartial
+bijections between arbitrary sets, and only later restrict to finite
+ones.
+
+\begin{defn} \label{defn:pbij}
+  A \term{copartial bijection} $f : A \cpbij B$ between two sets $A$
+  and $B$ is given by:
+\begin{itemize}
+\item an embedding function $\embed f : A \to B$ (in a slight abuse of
+  notation, we will often simply use $f$, rather than $\embed f$, to
+  refer to the embedding function),
+\item a projection function $\project f : B \to \TyOne + A$,
+\end{itemize}
+together with two round-trip laws:
+\begin{itemize}
+\item $\project f \comp \embed f = \inr$, and
+\item for all $a: A$ and $b : B$, if $\project f\ b = \inr\ a$
+  then $\embed f\ a = b$.
+\end{itemize}
+\end{defn}
+
+That is, $A \cpbij B$ witnesses that there is a $1$-$1$
+correspondence between all the elements of $A$ and \emph{some}
+(possibly all) of the elements of $B$, as pictured in
+\pref{fig:copartial-bijection}. This concept is also known as a
+\term{prism} in the Haskell \pkg{lens} library~\citep{lens}.
+
+There is also a more elegant, though perhaps less intuitive,
+formulation of the round-trip laws in \pref{defn:pbij}.
+
+\begin{prop} \label{prop:rt-adj} The round-trip laws given in
+  \pref{defn:pbij} are equivalent to
+  \begin{equation} \label{eq:rt-adj}
+    \all {a b} (\embed f\ a = b) \leftrightarrow (\inr\ a = \project f\ b).
+  \end{equation}
+\end{prop}
+
+\begin{proof}
+  Since the laws in question are all mere propositions, it suffices to
+  show that they are logically equivalent; moreover, since the
+  right-to-left direction of \eqref{eq:rt-adj} is precisely the second
+  round-trip law, it suffices to show that the left-to-right direction
+  is logically equivalent to the first round-trip law.  In one direction,
+  \eqref{eq:rt-adj} implies the first round-trip law, by setting $b =
+  \embed f\ a$. Conversely, given the first round trip law,
+  \begin{sproof}
+    \stmt{\embed f\ a = b}
+    \reason{\implies}{apply $\project f$ to both sides}
+    \stmt{\project f\ (\embed f\ a) = \project f\ b}
+    \reason{\iff}{first round-trip law}
+    \stmt{\inr\ a = \project f\ b.}
+  \end{sproof}
+\end{proof}
+
+\begin{rem}
+  Equation \eqref{eq:rt-adj} is strongly reminiscent of an adjunction.  However,
+  I do not know whether there is a suitable sense in which it can
+  actually be seen as one.
+\end{rem}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=150]
+import           SpeciesDiagrams
+
+dia = hcat' (with & sep .~ 3) [mkSet [0 :: Int .. 3], mkSet "abcdef"]
+  # drawPBij pb1
+  # applyAll (map toTop "cf")
+  # lwO 0.7
+  # frame 0.5
+
+toTop n = withName n $ \s ->  -- $
+  let topPt = location s .+^ (1.2 *^ unitX)
+      aOpts = pBijAOpts & arrowTail .~ noTail & shaftStyle %~ dashingL [2,2] 0
+  in  atop ((arrowBetween' aOpts (location s) topPt) <> text "⊤" # scale 0.3 # moveTo topPt)
+  \end{diagram}
+  \caption{A typical copartial bijection}
+  \label{fig:copartial-bijection}
+\end{figure}
+
+As an aid in discussing copartial bijections we define $\pInv(f)$ which
+together with $f : A \to B$ constitutes a copartial bijection $A
+\cpbij B$.
+
+\begin{defn}
+  A \term{partial inverse} $\pInv(f)$ to $f : A \to B$ is defined so
+  that \[ (A \cpbij B) \jeq (f : A \to B) \times \pInv(f), \] that
+  is, \[ \pInv(f) \hdefeq (g : B \to \TyOne + A) \times (\all {a b}
+  (f\ a = b) \lequiv (\inr\ a = g\ b)). \]
+\end{defn}
+
+We also define some notation to make working with copartial bijections
+more convenient.
+
+\begin{defn}
+  First, for any types $A$ and $B$, there is a canonical copartial
+  bijection $A \cpbij A + B$, which we denote simply by $\inl$;
+  similarly, $\inr : B \cpbij A + B$.
+
+  For the remainder, assume there is a copartial bijection $p : K \cpbij
+  L$.
+  \begin{itemize}
+  \item $\embed p\ K$ denotes the image of $K$ under $p$, that is, the
+    set of values in $L$ in the range of $\embed p$; we often simply
+    write $p\ K$ instead of $\embed p\ K$.
+  \item $\restr K p : K \bij p\ K$ denotes the bijection
+    between $K$ and the image of $K$ in $L$.
+  \item When some $q : K' \cpbij K$ is understood from the context, we
+    also write $\restr {K'} p$ as an abbreviation for $\restr {K'} {(p
+      \comp q)}$, the bijection between $K'$ and the image of $K'$ in
+    $L$ under the composite $(p \comp q)$.
+  \item $\extra p = \{ l : L \mid \project l = \inl\ \unit \}$ denotes
+    the ``extra'' values in $L$ which are not in the image of $K$.
+  \item $\extrabij p$ denotes the canonical bijection $K + \extra p
+    \bij L$. \later{better notation for this?}
+  \end{itemize}
+\end{defn}
+
+We now turn to the category structure on copartial bijections.
+
+\begin{prop}
+  Copartial bijections compose, that is, there is an associative
+  operation \[ - \comp - : (B \cpbij C) \to (A \cpbij B) \to (A
+  \cpbij C). \]
+\end{prop}
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import SpeciesDiagrams
+
+sets = [mkSet [100 :: Int, 101], mkSet [0 :: Int .. 3], mkSet "abcdef"]
+
+composite = hcat' (with & sep .~ 3) sets
+  # drawPBij pb1 # drawPBij pb2
+
+result = hcat' (with & sep .~ 3) [sets !! 0, sets !! 2]
+  # drawPBij (pbComp pb1 pb2)
+
+dia = hcat' (with & sep .~ 2)
+  [ composite
+  , text "="
+  , result
+  ]
+  # lwO 0.7
+  # frame 0.5
+  \end{diagram}
+  \caption{Composition of copartial bijections}
+  \label{fig:copartial-bij-compose}
+\end{figure}
+
+\begin{proof}
+  This can be intuitively grasped by studying a diagram such as the
+  one shown in \pref{fig:copartial-bij-compose}.
+
+  More formally, we set $\embed{(g \comp f)} = \embed g \comp \embed f$ and
+  $\project{(g \comp f)} = \project f \kcomp \project g$, where $-
+  \kcomp -$ denotes Kleisli composition for the $\TyOne + -$ monad
+  (\ie |(<=<) :: (b -> Maybe c) -> (a -> Maybe b) -> (a -> Maybe c)|
+  in Haskell). Associativity thus follows from the associativity of
+  function composition and Kleisli composition.  In the following
+  proof we also make use of $(-)^* : (A \to \TyOne + B) \to (\TyOne + A
+  \to \TyOne + B)$, \ie |(=<<)| in Haskell.
+
+  To show the required round-trip property we reason as follows.
+  \begin{sproof}
+    \stmt{\embed{(g \comp f)}\ a = c}
+    \reason{\iff}{definition}
+    \stmt{(\embed g \comp \embed f)\ a = c}
+    \reason{\iff}{take $b = \embed f\ a$}
+    \stmt{\exist b \embed f\ a = b \land \embed g\ b = c}
+    \reason{\iff}{round-trip laws for $f$ and $g$}
+    \stmt{\exist b \inr\ a = \project f\ b \land \inr\ b = \project g\
+      c}
+    \reason{\iff}{definition of |=<<|; case analysis}
+    \stmt{\inr\ a = (\project f)^*\ (\project g\ c)}
+    \reason{\iff}{Kleisli composition}
+    \stmt{\inr\ a = (\project f \kcomp \project g)\ c}
+    \reason{\iff}{definition}
+    \stmt{\inr\ a = \project {(g \comp f)}\ c}
+  \end{sproof}
+\end{proof}
+
+\begin{prop}
+  Copartial bijections form an \hott{category}, $\STSub$, with sets as
+  objects.
+\end{prop}
+
+\begin{proof}
+  The identity morphism $\id : A \cpbij A$ is given by $\embed \id
+  = \id$ and $\project \id = \inr$.  The identity laws follow from the
+  fact that $\id$ is the identity for function composition, and $\inr$
+  is the identity for Kleisli composition.
+
+  $\BTSub$ is thus a precategory.  It remains only to show that
+  isomorphism is equivalent to equality.  An isomorphism $A \iso B$ is
+  given by $f : A \cpbij B$ and $g : B \cpbij A$ such that $f
+  \comp g = \id = g \comp f$.  Note that we have $\embed f : A \to B$
+  and $\embed g : B \to A$ with $\embed f \comp \embed g = \embed{(f
+    \comp g)} = \embed \id = \id$, and likewise for $\embed g \comp
+  \embed f$.  Thus, $\embed f$ and $\embed g$ constitute a bijection
+  $A \bij B$; since $A$ and $B$ are sets, this is the same as an
+  equivalence $A \equiv B$, and hence by univalence an equality $A =
+  B$.
+\end{proof}
+
+\begin{rem}
+  Note that a bijection $f : A \bij B$ can be made into a copartial
+  bijection $h : A \cpbij B$ trivially by setting $\embed h = f$ and
+  $\project h = \inr \comp f^{-1}$, and moreover that this is a
+  homomorphism with respect to composition; that is, the category of
+  bijections embeds into the category of copartial bijections as a
+  subcategory.  We will usually not bother to note the conversion,
+  simply using bijections as if they were copartial bijections when
+  convenient.\footnote{In fact, using the \pkg{lens} library---and
+    more generally, using a van Laarhoven formulation of
+    lenses~\cite{XXX}\todo{cite}---this all works out automatically:
+    the representations of bijections (isomorphisms) and copartial
+    bijections (prisms) are such that the former simply \emph{are} the
+    latter, and they naturally compose via the standard function
+    composition operator.}
+\end{rem}
+
+\subsection{Finite copartial bijections}
+\label{sec:fin-copartial-bijections}
+
+Finally, we turn to the theory of copartial bijections on \emph{finite}
+sets. In the case of finite sets, it turns out that copartial bijections
+$A \cpbij B$ can be more simply characterized as injective
+functions $A \inj B$.  This might seem ``obvious'', and indeed, it is
+straightforward in a classical setting.  One direction, namely,
+converting a copartial bijection into an injection, is straightforward
+in HoTT as well (\pref{lem:pbij-is-inj}). However, to produce a
+copartial bijection from an injection, we must be able to recover the
+computational content of the backwards direction, and this depends on
+the ability to enumerate the elements of $A$.  Recall that the
+computational evidence for the finiteness of $A$ is propositionally
+truncated (\pref{defn:FinSetT}), so it is not \latin{a priori} obvious
+that we are allowed do this.  However, given a function $f : A \to B$,
+its partial inverse (if any exists) is uniquely determined,
+independent of the evidence for the finiteness of $A$
+(\pref{lem:pinv-mere-prop}), so such evidence may be used in the
+construction of a partial inverse (\pref{lem:inj-is-pbij}).
+
+\begin{defn} \label{defn:injection} The type of \term{injections} $A
+  \inj B$ is defined in HoTT analogously to the usual definition in
+  set theory:
+  \[ A \inj B \hdefeq (f : A \to B) \times \isInjective(f), \]
+  where \[ \isInjective(f) \hdefeq \prod_{a_1, a_2 : A} (f\ a_1 = f\ a_2)
+  \to (a_1 = a_2). \]
+\end{defn}
+
+\begin{rem}
+  Note that $\isInjective(f)$ is a mere proposition when $A$ is a set:
+  given $i, j : \isInjective(f)$, for all $a_1, a_2 : A$ and $e : f\ a_1
+  = f\ a_2$, we have $i\ a_1\ a_2\ e = j\ a_1\ a_2\ e$ (since they are
+  parallel paths between elements of a set) and hence $i = j$ by
+  function extensionality.
+\end{rem}
+
+\begin{lem} \label{lem:pbij-is-inj}
+  Every copartial bijection is an injection, that is, $(A \cpbij B)
+  \to (A \inj B)$.
+\end{lem}
+
+\begin{proof}
+  Let $f : A \cpbij B$.  Then $\embed f : A \to B$ is
+  injective:
+  \begin{sproof}
+    \stmt{\embed f\ a_1 = \embed f\ a_2}
+    \reason{\implies}{apply $\project f$ to both sides}
+    \stmt{\project f\ (\embed f\ a_1) = \project f\ (\embed f\ a_2)}
+    \reason{\iff}{$f$ is a copartial bijection}
+    \stmt{\inr\ a_1 = \inr\ a_2}
+    \reason{\iff}{$\inr$ is injective}
+    \stmt{a_1 = a_2.}
+  \end{sproof}
+\end{proof}
+
+\begin{lem} \label{lem:pinv-mere-prop}
+  If $A$ and $B$ are sets and $f : A \to B$, then $\pInv(f)$ is a mere
+  proposition.
+\end{lem}
+
+\begin{proof}
+  Let $(g, p), (g', p') : \pInv(f)$.  That is, $g, g' : B
+  \to \TyOne + A$, and
+  \begin{itemize}
+  \item $p : \all {a b} (f\ a = b) \lequiv (\inr\ a = g\ b) $, and
+  \item $p' : \all {a b} (f\ a = b) \lequiv (\inr\ a = g'\ b)$.
+  \end{itemize}
+  We must show that $(g, p) = (g', p')$.  To this end we
+  first show $g = g'$.  By function extensionality it suffices to show
+  that $g\ b = g'\ b$ for arbitrary $b : B$.  We proceed by case
+  analysis on $g\ b$ and $g'\ b$:
+  \begin{itemize}
+  \item If $g\ b = g'\ b = \inl\ \unit$ we are done.
+  \item Next, suppose $g\ b = \inr\ a$ and $g'\ b = \inr\ a'$.  Then
+    by $p$ and $p'$ we have $f\ a = b = f\ a'$, whence $a = a'$
+    since by \pref{lem:pbij-is-inj} we know $f$ is injective.
+  \item Finally, suppose $g\ b = \inr\ a$ and $g'\ b = \inl\ \unit$
+    (the other case is symmetric).  In that case $f\ a = b$ by $p$,
+    and hence, substituting, $g'\ (f\ a) = \inl\ \unit$.  However,
+    recall that $p'$ implies $g'\ (f\ a) = \inr\ a$, a contradiction.
+  \end{itemize}
+
+  Letting $r : g = g'$ denote the equality just constructed, we
+  complete the argument by noting that $r_*(p)$ and $p'$ are parallel
+  paths between elements of a set, and hence equal.
+\end{proof}
+
+\begin{lem} \label{lem:inj-is-pbij}
+  If $A$ is a finite set and $B$ a set with decidable equality,
+  then \[ (A \inj B) \to (A \cpbij B). \]
+\end{lem}
+
+\begin{proof}
+  Let $f : A \to B$ be an injective function; we must construct $h : A
+  \cpbij B$.  First, we set $\embed h = f$.  It remains to
+  construct $\pInv(\embed h)$, which is a mere proposition by
+  \pref{lem:pinv-mere-prop}.  Thus, by the recursion principle for
+  propositional truncation, we are justified in using the constructive
+  evidence of $A$'s finiteness, that is, its cardinality $n : \N$ and
+  equivalence $\sigma : A \equiv \Fin n$.  We define $\project h : B \to
+  \TyOne + A$ on an input $b : B$ as follows: by recursion on $n$,
+  find the smallest $k : \Fin n$ such that $\embed h\ (\sigma^{-1}\ k) =
+  b$.  If such a $k$ exists, yield $\inr\ (\sigma^{-1}\ k)$; otherwise,
+  yield $\inl\ \unit$.
+
+  Finally, we establish the round-trip law $\all {a b} (\embed h\ a = b)
+  \leftrightarrow (\inr\ a = \project h\ b)$.
+  \begin{itemize}
+  \item[$(\rightarrow)$] Suppose $\embed h\ a = b$.  Then
+    $\project h\ b$ will certainly find some $k : \Fin n$ with
+    $\embed h\ (\sigma^{-1}\ k) = b$, and thus $\project h\ b = \inr\
+    (\sigma^{-1}\ k)$; since $\embed h$ is injective it must actually be
+    the case that $\sigma^{-1}\ k = a$.
+  \item[$(\leftarrow)$] This follows directly from the definition
+    of $\project h$.
+  \end{itemize}
+\end{proof}
+
+\begin{prop} \label{prop:inj-equiv-pbij}
+  For $A$ a finite set and $B$ a set with decidable equality,
+  \[ (A \inj B) \equiv (A \cpbij B). \]
+\end{prop}
+
+\begin{proof}
+  \pref{lem:pbij-is-inj} and \pref{lem:inj-is-pbij} establish
+  functions in both directions.  It is easy to see that they act as
+  the identity on the underlying $f : A \to B$ functions, and the
+  remaining components are mere propositions by
+  \pref{lem:pinv-mere-prop} and the remark following
+  \pref{defn:injection}.  Thus the functions defined by
+  \pref{lem:pbij-is-inj} and \pref{lem:inj-is-pbij} are inverse.
+\end{proof}
+
+\begin{defn}
+  Denote by $\BTSub$ the \hott{category} of finite sets and copartial
+  bijections (\ie injections).  That is, objects in $\BTSub$ are
+  values of type $\FinSetT \jeq (A : \Type) \times
+  \isFinite(A)$, and morphisms $\hom[\BTSub] {(A,f_A)}
+  {(B,f_B)}$ are copartial bijections $A \cpbij B$.  Showing that
+  this is indeed an \hott{category} is left as an easy exercise.
+\end{defn}
+
+$\BTSub$ also has a corresponding skeleton category, just like $\BT$:
+
+\begin{defn}
+  Denote by $\PTSub$ the \hott{category} whose objects are natural
+  numbers and whose morphisms are given by $\hom[\PTSub] m n \hdefeq \Fin m
+  \inj \Fin n$. The proof that this is an \hott{category} is also left
+  as an exercise.
+\end{defn}
+
+\begin{rem}
+  $\PTSub$ has $m!\binom{n}{m}$ distinct morphisms $\hom m n$, since
+  there are $\binom n m$ ways to choose the $m$ distinct objects in
+  the image of the morphism, and $m!$ ways to permute the mapping.
+  Note this this means there are zero morphisms when $m > n$, and
+  exactly $n!$ morphisms $\hom n n$.
+\end{rem}
+
+\begin{prop} \label{prop:btsub-iso-ptsub}
+  $\BTSub \iso \PTSub$.
+\end{prop}
+
+\begin{proof}
+  The proof is similar to the proof that $\BT$ is equivalent to $\PT$
+  (\pref{cor:BT-iso-PT}).  We define a functor $\fin{-}_{\cpbij} :
+  \PTSub \to \BTSub$ which sends $n$ to $(\Fin n, \ptruncI{(n,\id)})$
+  (just like the functor $\fin - : \PT \to \BT$ defined in
+  \pref{defn:functor-fin}), and which sends $\iota : \hom[\PT] m n
+  \jeq \Fin m \inj \Fin n$ to the corresponding copartial bijection
+  (\pref{prop:inj-equiv-pbij}).  It is not hard to show that this
+  functor is full, faithful, and essentially surjective, which by
+  \pref{prop:splitEssSurj-equiv} and \pref{cor:essSurj-splitEssSurj}
+  implies that $\fin{-}_{\cpbij} : \PTSub \to \BTSub$ is one half of an
+  equivalence. \later{actually flesh this out?}
+\end{proof}
+
+\subsection{Partial species}
+\label{sec:partial-species}
+
+In a combinatorial setting, one is primarily interested in
+\emph{counting} \todo{finish.  Computationally we want to model
+  partiality.  Give some motivating examples.}
+
+\begin{defn}
+  A \term{partial species} is a functor $F : \BTSub \to \ST$.  We
+  denote by $\PSpe = \fc \BTSub \ST$ the functor category of partial
+  species.
+\end{defn}
+
+\begin{rem}
+  Since $\BTSub \iso \PTSub$ (\pref{prop:btsub-iso-ptsub}) partial
+  species are also equivalent to functors $\PTSub \to \ST$.
+\end{rem}
+
+Since the objects of \BTSub\ are the same as the objects of \BT, the
+object mapping of a partial species is similar to that of a normal
+species.  That is, one can still think of a partial species as mapping
+a finite set of labels to a set of structures ``built from'' those
+labels.
+
+A partial species $F$ also has an action on morphisms: it must lift
+any copartial bijection $K \cpbij L$ to a function $F\ K \to F\ L$.  Of
+course, bijections are (trivially) copartial bijections, so this includes the
+familiar case of ``relabelling''; bijections are isomorphisms in
+$\BTSub$, and functors necessarily preserve isomorphisms, so
+bijections on labels are still sent to bijections between structures.
+
+The case of strictly copartial bijections, that is, $K \cpbij L$ where
+$\size K < \size L$, is more interesting.  Each structure in the set
+$F\ K$, with labels in $K$, must map to a structure in $F\ L$, given
+an embedding of $K$ into $L$.  Intuitively, this can be thought of as
+introducing ``extra'' labels which must be incorporated into the
+structure in a suitably canonical way.  However, the copartial bijection
+$p : K \cpbij L$ affords no structure whatsoever on the ``extra''
+labels (that is, those $l \in L$ for which $\project p\ l = \inl\ 
+\unit$).  So it is not acceptable, for example, to prepend the extra
+labels to the front of a list structure, since there is no canonical
+way to choose an ordering on the extra labels.  The only feasible
+approach is to simply attach the extra labels in a \emph{set}, as
+illustrated in \pref{fig:lift-strict-pbij}.
+
+\begin{figure}
+  \centering
+  \todo{make a diagram.  Tree maps to tree + set.}
+
+%% Working on this:
+
+% import           Data.Char
+% import           SpeciesDiagrams
+
+% dia = hcat' (with & sep .~ 3) [mkSet' (scale 0.3 . mloc) [0 :: Int .. 3], mkSet' (scale 0.3 . mloc . (subtract (ord 'a')) . ord) "abcdef"]
+%   # drawPBij pb1
+% --  # applyAll (map toTop "cf")
+%   # lwO 0.7
+%   # frame 0.5
+
+% toTop n = withName n $ \s ->  -- $
+%   let topPt = location s .+^ (1.2 *^ unitX)
+%       aOpts = pBijAOpts & arrowTail .~ noTail & shaftStyle %~ dashingL [2,2] 0
+%   in  atop ((arrowBetween' aOpts (location s) topPt) <> text "⊤" # scale 0.3 # moveTo topPt)
+
+  \caption{Lifting a strictly copartial bijection}
+  \label{fig:lift-strict-pbij}
+\end{figure}
+
+Moreover, note that one cannot adjoin a \emph{new} set of labels with
+every lift.  Performing multiple lifts would then result in multiple
+sets of extra labels (\eg a list of such sets), but this fails to be
+functorial, since \todo{explain.  Reference diagram.}
+
+\begin{figure}
+  \centering
+  \todo{make a diagram.  Non-commuting diagram of adjoining multiple
+    extra sets vs all at once.}
+  \caption{TODO write me}
+  \label{fig:XXX}
+\end{figure}
+
+So the only option is to have \emph{every} partial species structure
+accompanied by a set of ``extra'' labels (which may be
+empty). Transporting along a strictly copartial bijection results in
+some labels being added to the set.
+
+Intuitively, every normal species $F$ gives rise to a partial species
+$\prt F$ which ``acts like'' the species $F \cdot \Bag$.  In fact,
+along these lines we can formally define a fully faithful embedding of
+\Spe into \PSpe.
+
+\todo{Combinatorics of partial species, \eg generating functions.
+  Partial species are like having things ``up to'' the given size.
+  Explain why there is not an equivalence.  Problem is that partial
+  species do not necessarily preserve injectivity.  Talk about
+  intuition from generating functions and partial sums.  Can't undo
+  operation of taking ``partial sums'' in this case because it might
+  not preserve information---ie can't subtract $G\ (n-1)$ from $G\
+  n$.}
+
+\begin{defn}
+  The functor $\prt - : \Spe \to \PSpe$ is defined as follows.
+
+  First consider the action of $\prt -$ on objects, that is, species
+  $F : \BT \to \ST$.  We define $\prt F : \BTSub \to \ST$ as the
+  partial species which
+  \begin{itemize}
+  \item sends the finite set of labels $K$ to the set of structures
+    $(F \cdot \Bag)\ K$, and
+  \item lifts the copartial bijection $p : K \cpbij L$ to a function
+    $\prt p : \prt F\ K \to \prt F\ L$.  \todo{insert picture here?} This function takes as input
+    a structure of type $(F \cdot \Bag)\ K$, that is, a tuple \[ (K_1,
+    K_2, f, \unit, \sigma) \] where $f : F\ K_1$ is a $K_1$-labelled
+    $F$-structure, the unit value $\unit$ represents a $K_2$-labeled
+    set, and $\sigma : K \bij K_1 + K_2$ witnesses that $K_1$ and
+    $K_2$ form a partition of the label set $K$.  As output, $\prt p$
+    yields \[ (L_1, L_2 + \extra p, F\ (\restr{K_1}{p_1})\ f, \unit,
+    \psi), \] where
+    \begin{itemize}
+    \item $p_1$ is the ``restriction of $p$ to $K_1$'', that is, the
+      composite copartial bijection
+      \[ p_1 : \xymatrix{K_1 \ar[r]^-{\cpbij}_-{\inl} & K_1 + K_2
+        \ar[r]^-{\sim}_-{\sigma^{-1}} & K \ar[r]^{\cpbij}_{p} & L}. \]
+      Similarly, $p_2 : K_2 \cpbij L$.
+    \item $L_1 = p_1\ K_1$ is the image of $K_1$ under the restricted
+      copartial bijection $p_1$.  Similarly, $L_2 = p_2\ K_2$. Note that
+      we ``throw in the extra labels'' by using the coproduct $L_2 +
+      \extra p$ as the second set of labels.
+    \item Recall that $\restr {K_1} {p_1} : K_1 \bij p_1\ K_1$; thus
+      $F\ (\restr {K_1} {p_1})\ f$ denotes the relabelling of the
+      $F$-structure $f$ from $K_1$ to $p\ K_1 = L_1$.
+    \item $\psi : L \bij L_1 + (L_2 + \extra p)$ is given by the composite
+    \[ \xymatrixcolsep{4pc} \xymatrix{L \ar[r]^-{\sim}_-{\extrabij p} & p\ K +
+      \extra p} \] \todo{finish.}
+    \end{itemize}
+  \end{itemize}
+  We must verify that this defines a valid functor $\BTSub \to
+  \ST$. \todo{finish}
+
+  Next, consider the action of $\prt -$ on morphisms, that is, natural
+  transformations $\varphi : \all L F\ L \to G\ L$ where $F$ and $G$
+  are species.  Define $(\prt \varphi)_L : \prt F\ L \to \prt G\ L$
+  by \[ (L_1, L_2, f, \unit, \sigma) \mapsto (L_1, L_2, \varphi_{L_1}\
+  f, \unit, \sigma). \] For this to be natural the following square
+  must commute for all $F, G : \BT \to \ST$, all $\varphi : \all L F\
+  L \to G\ L$, and all $p : K \cpbij L$:
+  \[ \xymatrix
+       { \prt F\ K \ar[d]_{\prt F\ p} \ar[r]^{(\prt \varphi)_K}
+       & \prt G\ K \ar[d]^{\prt G\ p}
+      \\ \prt F\ L                    \ar[r]_{(\prt \varphi)_L}
+       & \prt G\ L
+       }
+  \]
+  Consider an arbitrary element $(K_1, K_2, f, \unit, \sigma)$ of the
+  top-left corner.  Note that the action of $\prt \varphi$ on a
+  five-tuple only affects the middle value, and likewise note that the
+  action of $\prt F\ p$ and $\prt G\ p$ are identical on all but the
+  middle value (that is, the middle value is the only one affected by
+  $F$ or $G$ specifically).  Thus, it suffices to consider only the
+  fate of $f$ as it travels both paths around the square.
+  Travelling around the left and bottom sides yields
+  \[ \varphi_{L_1}\ (F\ (\restr{K_1}{p_1})\ f), \] whereas the top and
+  right sides yield \[ G\ (\restr{K_1}{p_1})\ (\varphi_{K_1}\ f). \]
+  These are equal by naturality of $\varphi$.
+
+  Finally, it is easy to verify that $\prt -$ itself satisfies the
+  functor laws, since the mapping \[ (L_1, L_2, f, \unit, \sigma)
+  \mapsto (L_1, L_2, \varphi_{L_1}\ f, \unit, \sigma) \] clearly
+  preserves identity and composition of natural transformations.
+\end{defn}
+
+\begin{prop}
+  $\prt - : \Spe \to \PSpe$ is full.
+\end{prop}
+
+\begin{proof}
+  \todo{prove me}
+\end{proof}
+
+\begin{prop}
+  $\prt - : \Spe \to \PSpe$ is faithful.
+\end{prop}
+
+\begin{proof}
+  \todo{prove me}
+\end{proof}
+
+\todo{Is the functor $\prt -$ monoidal? Intuitively, yes for $+$, no
+  for $\cdot$.  Probably not for $\comp$.}
+
+\todo{Labelled structures with partial species; memory layout.}
+
+
+\section{The Gordon complementary bijection principle}
+
+\todo{Not sure what to do with this.}
+
+Suppose $A_0, A_1, B_0, B_1$ are types with bijections $f_0 : A_0 \bij
+B_0$ and $f_1 : A_1 \bij B_1$.  Then it's clear how to construct a
+bijection $f : A_0 + A_1 \bij B_0 + B_1$: one just takes $f
+= f_0 + f_1$, as illustrated in \pref{fig:adding-bijections}.
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import Bijections
+
+dia =
+  (vcat' (with & sep .~ 1) . map centerX)
+  [ hcat' (with & sep .~ 2)
+    [ drawBComplex $ bc0 # labelBC "f₀"  -- $
+    , plus
+    , drawBComplex $ bc1 # labelBC "f₁"  -- $
+    ]
+  , equals
+  , drawBComplex $ parC bc0 bc1 # labelBC "f = f₀ + f₁"  -- $
+  ]
+  # centerXY
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{Adding bijections}
+  \label{fig:adding-bijections}
+\end{figure}
+
+So computing the ``sum'' of two bijections is not hard. What about the
+\emph{difference}?  That is, given $f : A_0 + A_1 \bij B_0 + B_1$ and
+$f_1 : A_1 \bij B_1$, can we compute some $f_0 : A_0 \bij B_0$
+(\pref{fig:subtracting-bijections})?
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import           Bijections
+
+dia =
+  (vcat' (with & sep .~ 1) . map centerX)
+  [ hcat' (with & sep .~ 2)
+    [ drawBComplex $   -- $
+      [a0,a1] .- bij01 # labelBij "f" -.. [b0,b1]
+    , minus
+    , drawBComplex $ bc1 # labelBC "f₁"  -- $
+    ]
+  , equals
+  , mconcat
+    [ text' 3 "?"
+    , drawBComplex $ [a0] .- emptyBij # labelBij "f₀" -.. [b0]  -- $
+    ]
+  ]
+  # centerXY
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{Subtracting bijections?}
+  \label{fig:subtracting-bijections}
+\end{figure}
+
+Though it is obvious that $\size A_0 = \size B_0$, it is not \latin{a
+  priori} obvious whether it is possible to actually construct a
+bijection between them.  The problem, as can be seen in
+\pref{fig:subtracting-bijections}, is that $f$ may mix up elements
+among the $A_i$ and $B_i$---that is, one cannot simply, say, take the
+restriction of $f$ to $A_0$, since the image of $A_0$ under $f$ may
+intersect both $B_0$ and $B_1$.
+
+However, it turns out that this is possible, via the \term{Gordon
+  complementary bijection principle} \todo{cite}.  You might want to
+stop and think about it for a while at this point.  If you know some
+Haskell, try filling in the definition of `subtractIso`:
+
+> {-# LANGUAGE TypeOperators #-}
+>
+> import Prelude hiding ((.), id)
+> import Control.Category
+>
+> data a :<->: b = (a -> b) :<->: (b -> a)
+>   -- Invariant: the two functions are inverse.
+>
+> applyIso :: (a :<->: b) -> (a -> b)
+> applyIso (f :<->: _) = f
+>
+> invert :: (a :<->: b) -> (b :<->: a)
+> invert (f :<->: g) = (g :<->: f)
+>
+> instance Category (:<->:) where
+>   id = id :<->: id
+>   (f1 :<->: g1) . (f2 :<->: g2) = (f1 . f2) :<->: (g2 . g1)
+>
+> subtractIso :: (Either a0 a1 :<->: Either b0 b1) -> (a1 :<->: b1) -> (a0 :<->: b0)
+> subtractIso = undefined
+
+% Instead of defining the GCBP via a bunch of symbols, or even by exhibiting
+% some code, I will begin by *drawing* it for you:
+
+% ```{.dia width='450'}
+% import           Bijections
+% import           Control.Lens ((&), (.~))
+
+% gcbp = drawBComplex . flattenA $
+%     bc01' .- ebij1 -. bc01' .- ebij1 -.. bc01'
+%   where
+%     ebij1 = colorBij colorMap $
+%             emptyBij `parBij` (bij1 & labelBij "f₁⁻¹")
+%     bc01' = map2 (colorBij colorMap . labelBij "f") bc01
+%     colorMap = orbitsToColorMap
+%                  [red, green, blue, orange, purple]
+%                  (orbits
+%                    (bijToRel bij01)
+%                    (bijToRel ebij1)
+%                  )
+
+% gcbpEqn =
+%   (vcat' (with & sep .~ 1) . map centerX)
+%   [ hcat' (with & sep .~ 2)
+%     [ drawBComplex $
+%       [a0,a1] .- bij01 # labelBij "f" -.. [b0,b1]
+%     , minus
+%     , drawBComplex $ bc1 # labelBC "f₁"
+%     ]
+%   , equals
+%   , gcbp
+%   ]
+
+% -- XXX draw resulting bijection
+
+% dia = gcbpEqn
+%   # centerXY # pad 1.1
+%   # sized (Width 2)
+% ```
+
+% Here's the idea in words: start with an element in $A_0$ (that's the
+% yellow set in the illustration above), and apply $f$.  If we get something in $B_0$ (blue),
+% great---we're done!  Otherwise, we have something in $B_1$ (red), so
+% we apply $f_1^{-1}$ to send us back over to $B_0$ (green), and from
+% there we apply $f$ again and repeat.  In the above example, you can
+% see that the first two elements of $A_0$ land in $B_0$ immediately;
+% for the third, we have to iterate three times (or perhaps we should
+% say "two and a half times").
+
+% Here's a more complicated example:
+
+% ```{.dia width='450'}
+% import Bijections
+% import Control.Lens ((&), (.~))
+% import Data.Bits (xor)
+% import Data.Typeable (cast)
+% import Diagrams.Core.Names
+
+% a2 = nset 4 yellow
+% b2 = nset 4 blue
+% a3 = nset 5 green
+% b3 = nset 5 red
+
+% bc3 = [a3] .- bij3 -.. [b3]
+
+% bij3 = [bijFun [0..4] (Just . (\n -> if n == 4 then 4 else xor 1 n))]
+
+% bij23 = [with & bijData .~ tableToFun tab23]
+% tab23 = zip (('a' ||> toNamesI [0..3]) ++ ('b' ||> toNamesI [0..4]))
+%             [ 'b' ||@@ 0, 'a' ||@@ 0, 'b' ||@@ 1, 'a' ||@@ 1
+%             , 'b' ||@@ 2, 'a' ||@@ 2, 'b' ||@@ 3, 'b' ||@@ 4, 'a' ||@@ 3
+%             ]
+
+% bc23 = [a2,a3] .- bij23 -.. [b2,b3]
+
+% gcbp = drawBComplex . flattenA $
+%   bc23' .- ebij3 -. bc23' .- ebij3 -. bc23' .- ebij3 -.. bc23'
+%   where
+%     ebij3 = emptyBij `parBij` (bij3 & labelBij "f₁⁻¹")
+%     bc23' = map2 (labelBij "f") bc23
+
+% gcbpEqn =
+%   (vcat' (with & sep .~ 1) . map centerX)
+%   [ hcat' (with & sep .~ 2)
+%     [ drawBComplex $
+%       [a2,a3] .- bij23 # labelBij "f" -.. [b2,b3]
+%     , minus
+%     , drawBComplex $ bc3 # labelBC "f₁"
+%     ]
+%   , equals
+%   , gcbp
+%   ]
+
+% dia = gcbpEqn
+%   # centerXY # pad 1.1
+%   # sized (Width 2)
+
+% ```
+
+% We need to show that this gives a well-defined bijection---that it
+% terminates, first of all, and that it gives us a mapping which really
+% is a bijection.
+
+% The "usual" proof goes something like this: XXX
+
+% However, we can apprehend the validity of the GCBP more directly and
+% intuitively.  Consider "extending to infinity" the iteration in both
+% directions.
+
+% XXX picture.
+
+% Since we have created this picture by simply copying the same
+% bijections over and over, it obviously has translational
+% symmetry---moving it one unit to the left or right doesn't change
+% anything.  Let's consider the different types of paths that show up in
+% this kind of picture.
+
+% First, can there be bi-infinite paths?  Sure, there can be, but any
+% such path must necessarily stay entirely within the bottom half of the
+% picture, since the top half of the picture only contains *ends* of
+% paths.  Since our goal is to construct a bijection between the top
+% sets we can therefore ignore bi-infinite paths.
+
+% Can there be *half*-infinite paths, *i.e.* paths which have a starting
+% point in the top half of the picture but then wander around in the
+% bottom half forever?  No, because XXX it will intersect its copies
+% (explain this better).  Therefore, every path that is not bi-infinite
+% must have two endpoints in the top half of the picture.
+
+% Finally, it's easy to see that every point belongs to a unique
+% path. (XXX why?)
+
+% The GCBP in Haskell
+% -------------------
+
+% Here's my implementation of `subtractIso`:
+
+% > subtractIso' :: (Either a0 a1 :<->: Either b0 b1) -> (a1 :<->: b1) -> (a0 :<->: b0)
+% > subtractIso' a0a1__b0b1 a1__b1 =
+% >     (iter (applyIso a0a1__b0b1) (applyIso $ invert a1__b1) . Left)
+% >     :<->:
+% >     (iter (applyIso $ invert a0a1__b0b1) (applyIso $ a1__b1) . Left)
+% >   where
+% >     iter a0a1_b0b1 b1_a1 a0a1 =
+% >       case a0a1_b0b1 a0a1 of
+% >         Left  b0 -> b0
+% >         Right b1 -> iter a0a1_b0b1 b1_a1 (Right (b1_a1 b1))
+
+% It feels sort of ugly---in fact, it is the exact computational
+% analogue of the usual proof of the GCBP (though it's missing quite a
+% bit, in particular a proof of termination and a proof that the output
+% really is a bijection).  Given that I don't like the usual proof, it's
+% no surprise that I find this code ugly.  I don't like the fact that it
+% projects functions out of the input bijections and uses them to
+% construct the two directions of the output bijection separately.  I'd
+% rather work entirely in terms of operations on bijections.  I don't
+% know whether that is possible.  I'd be very interested to see what
+% others come up with.
+
+% The Garsia-Milne involution principle
+% -------------------------------------
+
+% Further reading
+% ---------------
+
+% XXX Cite Garsia-Milne paper(s).  Don't recommend actually reading
+% it/them.
+
+% Came out of trying to prove partition identities. XXX cite Wilf paper
+% tying a bunch of this together.
+
+
+\begin{prop}[Gordon complementary bijection principle]
+  For finite sets $A_1$, $A_2$, $B_1$, and $B_2$, if $A_1 + B_1
+  \equiv A_2 + B_2$ and $B_1 \equiv B_2$, then $A_1 \equiv A_2$.
+\end{prop}
+
+\todo{Explain intuition.  Can use some text from half-written blog
+  post.}
+
+\begin{proof}
+  \todo{Figure out a good constructive proof!}
+\end{proof}

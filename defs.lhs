@@ -184,7 +184,7 @@
 \renewcommand{\iff}{\lequiv}
 \newcommand{\eqrel}{\sim}
 
-\newcommand{\pbij}{\subseteq}         % partial bijection
+\newcommand{\cpbij}{\subseteq}         % copartial bijection
 
 \newcommand{\quotient}[2]{#1 \mathbin{/} \mathord{#2}}
 
@@ -356,10 +356,10 @@
 \newcommand{\PT}{\mcal{P}}
 \newcommand{\LT}{\mcal{L}}
 
-\newcommand{\prt}[1]{\ensuremath{#1_{\pbij}}}
+\newcommand{\prt}[1]{\ensuremath{#1_{\cpbij}}}
 \newcommand{\STSub}{\prt \ST}
 \newcommand{\BTSub}{\prt \BT}
-\newcommand{\PTSub}{\ensuremath{\PT_{\leq}}}
+\newcommand{\PTSub}{\ensuremath{\PT_{\inj}}}
 
 \newcommand{\extra}[1]{#1_{\TyOne}}
 \newcommand{\extrabij}[1]{\tilde{#1}}  % #1^{\sim}

@@ -413,13 +413,17 @@ drawPBij (PBij as f) = applyAll [ conn a (f a) | a <- as ]
 
 pBijAOpts = with & arrowTail .~ spike' & gaps .~ Local 0.3 & lengths .~ Local 0.3
 
-mkSet names
+mkSet = mkSet' (const dot)
+  where
+    dot = circle 0.2 # fc black
+
+mkSet' dn names
   = enclose 0.5 1
   . vcat' (with & sep .~ 0.5)
   . zipWith named names
-  $ repeat dot
-  where
-    dot = circle 0.2 # fc black
+  . map dn
+  $ names
+
 
 
 pb1 :: PBij Int Char
