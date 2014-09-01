@@ -1114,13 +1114,13 @@ equivalence relation induced by \eqref{eq:coend-diagram}.
 In HoTT, given some categories $\CT$ and $\DT$ and a functor $T :
 \CT^\op \times \CT \to \DT$, we can directly encode this quotient as a
 higher inductive type $\exists T$.  We first introduce a data
-constructor \[ \hcoendI{-}{-} : X \to T(X,X) \to \exists T. \] So far
-this is equivalent to the $\Sigma$-type $\sum_C T(C,C)$, which
+constructor \[ \hcoendI{-}{-} : (X : \CT) \to T(X,X) \to \exists T. \]
+So far this is equivalent to the $\Sigma$-type $\sum_C T(C,C)$, which
 corresponds to the disjoint union $\biguplus_C T(C,C)$.  However, we
-also introduce a path constructor with type \[ (X,X' : \CT) \to (f :
-\hom X {X'}) \to \hcoendI X {T(f,1)\ t} = \hcoendI{X'}{T(1,f)\ t} \]
-which ensures that the commutative diagram \eqref{eq:coend-diagram} is
-satisfied.
+also introduce a path constructor with type \[ (X,X' : \CT) \to (t :
+T(X',X)) \to (f : \hom X {X'}) \to \hcoendI X {T(f,1)\ t} =
+\hcoendI{X'}{T(1,f)\ t} \] which ensures that the commutative diagram
+\eqref{eq:coend-diagram} is satisfied.
 
 It is already convenient to be able to work directly with a data type
 representing a coend.  The special case where $\CT$ is a groupoid is
