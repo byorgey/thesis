@@ -87,14 +87,14 @@ for some good intuition with a computational bent, see
     want notations for the left and right adjoints of precomposition.
     I nevertheless adopt the notation $\lan J F$ for left Kan
     extensions, and hope this does not cause confusion.}, is a functor
-  $\E \to \D$ characterized by the isomorphism
+  $\E \to \D$ characterized by the natural isomorphism
   \begin{equation} \label{eq:lan}
-    (\nt {\lan{J}{F}} G) \iso (\nt F {G \comp J}),
+    \all G (\nt {\lan{J}{F}} G) \iso (\nt F {G \comp J}),
   \end{equation}
-  natural in $G$. (Note that the left-hand side consists of natural
-  transformations between functors $\E \to \D$, whereas the right-hand
-  side are between functors $\C \to \D$.) If this isomorphism exists
-  for all $F$, then we may say even more succinctly that the left Kan
+  (Note that the left-hand side consists of natural transformations
+  between functors $\E \to \D$, whereas the right-hand side are
+  between functors $\C \to \D$.) If this isomorphism exists for all
+  $F$, then we may say even more succinctly that the left Kan
   extension functor $\lan J -$ is left adjoint to the precomposition
   functor $- \comp J$.
 \end{defn}
@@ -122,7 +122,7 @@ a computation or reduction rule.
 The above gives an abstract characterization of left Kan extensions;
 under suitable conditions we can explicitly construct them.
 \begin{prop} \label{prop:Lan-coend}
-  When $\D$ has coends over $\C$ and $\C$ has all coproducts, $\lan J
+  When $\D$ has coends over $\C$ and $\D$ has all coproducts, $\lan J
   F$ can be constructed explicitly as a coend:
 \begin{equation} \label{eq:lan-coend}
   (\lan J F)\ E = \coend{C} (\Hom {J\ C} E) \cdot F\ C.
@@ -137,6 +137,11 @@ As a Haskell type, this construction corresponds to
 data Lan j f a where
   Lan :: (f c, j c -> a) -> Lan j f a
 \end{spec}
+\begin{rem}
+  Giving the pair in the order |(j c -> a, f c)| would correspond more
+  closely to the abstract definition above; however, the given order
+  makes some of the subsequent code a bit nicer.
+\end{rem}
 The @kan-extensions@ package~\citep{kmett-kan-extensions}
 contains a similar definition. Of course, this type is quite a bit
 less general than the abstract definition given above---in particular,

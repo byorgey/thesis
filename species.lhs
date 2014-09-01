@@ -1969,6 +1969,8 @@ $F$- and $G$-shapes individually, with an extra permutation supplied
 as an argument. Eliminators for species shapes are treated more
 generally and systematically in \pref{sec:elim-species}.
 
+\todo{Redo this para.  Presumably we can interpret STLC in the
+  category of species.}
 Note that, unfortunately, the fact that $\Spe$ is Cartesian closed
 doesn't have anything to say about representing functions as species,
 as one might na\"ively expect.  However, it does allow us to
@@ -1978,6 +1980,9 @@ internalize \emph{species morphisms} as species. \later{Explain the
 
 \subsection{Lifting monoids}
 \label{sec:lifting-monoids}
+
+\todo{incorporate comment from Derek Elkins (see comment in source)}
+% I'm pretty sure most of the stuff from Lemma 3.6.9 is simply a consequence of (C => -) being a (2-)functor on Cat, and, furthermore, as a right adjoint it preserves limits.  So, for example, Lemma 3.6.9 is: let d \in D be represented as d : 1 -> D.  The d^C : (1^C -> D^C) ~ (1 -> D^C) ~ (C -> D).  A bifunctor F : DxD -> D leads to F^C : ((DxD)^C -> D^C) ~ (D^C x D^C) -> D^C.}
 
 Both these constructions generalize readily. In fact, any monoidal
 structure on a category $\Str$ can be lifted to one on $\fc \Lab \Str$

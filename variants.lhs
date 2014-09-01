@@ -516,6 +516,15 @@ formulation of the round-trip laws in \pref{defn:pbij}.
   Equation \eqref{eq:rt-adj} is strongly reminiscent of an adjunction.  However,
   I do not know whether there is a suitable sense in which it can
   actually be seen as one.
+  \todo{from Derek Elkins: This may not be viewable as an adjunction,
+    but it's easily cast as an instance of parameterized
+    representability, namely b.inr a = f<-(b) is represented by f->(a)
+    parametric in a. This means f-> is characterized by a universal
+    property.  The universal arrow (the unit) is inr a ~ f<-(f->(a)).
+    The first round-trip law is this universal arrow; the second is
+    the existence part of the "there exists a unique f such that ..."
+    of the standard universal property dance.  Uniqueness is a given
+    for mere propositions.}
 \end{rem}
 
 \begin{figure}
@@ -755,13 +764,9 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
   analysis on $g\ b$ and $g'\ b$:
   \begin{itemize}
   \item If $g\ b = g'\ b = \inl\ \unit$ we are done.
-  \item Next, suppose $g\ b = \inr\ a$ and $g'\ b = \inr\ a'$.  Then
-    by $p$ and $p'$ we have $f\ a = b = f\ a'$, whence $a = a'$
-    since by \pref{lem:pbij-is-inj} we know $f$ is injective.
-  \item Finally, suppose $g\ b = \inr\ a$ and $g'\ b = \inl\ \unit$
-    (the other case is symmetric).  In that case $f\ a = b$ by $p$,
-    and hence, substituting, $g'\ (f\ a) = \inl\ \unit$.  However,
-    recall that $p'$ implies $g'\ (f\ a) = \inr\ a$, a contradiction.
+  \item If $g\ b = \inr\ a$ then by $p$ and $p'$ we also have $g'\ b =
+    \inr\ a$ and hence $g\ b = g'\ b$; a symmetric argument handles
+    the case $g'\ b = \inr\ a$.
   \end{itemize}
 
   Letting $r : g = g'$ denote the equality just constructed, we
