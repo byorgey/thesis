@@ -270,7 +270,11 @@ HoTT distinguishes between two different types of equality:
   from one to the other.  As we will see, the analogue of this
   intuition in type theory is the fact that a path of type $x = y$ can
   have \emph{nontrivial computational content} specifying how to
-  convert between $x$ and $y$.
+  convert between $x$ and $y$.  There is a special value $\refl_A : A
+  = A$ which witnesses the reflexivity of propositional equality, and
+  corresponds to a ``trivial path with no computational content'';
+  but, as the discussion above indicates, there can be other
+  inhabitants of path types besides $\refl$.
 
   Note that it is possible (and often useful!) to have nontrivial
   higher-order paths, \ie paths between paths, paths between paths
@@ -395,7 +399,7 @@ explicitly talking about types with limited higher-order structure.
   two inhabitants are propositionally equal.
 \end{defn}
 
-There word ``mere'' is often used for emphasis (``\emph{mere}
+The word ``mere'' is often used for emphasis (``\emph{mere}
 proposition'') but is also sometimes dropped (``proposition'').
 Intuitively, the only interesting thing that can be said about a mere
 proposition is whether it is inhabited or not. Although it may have
@@ -455,7 +459,7 @@ respect all the equalities built by the higher constructors.
 This gives a natural way to build \term{quotient types}.  For example,
 consider the HIT $T : \Type$ with data constructors $\cons{TO} : T$ and
 $\cons{TS} : T \to T$, as well as a higher path constructor $\cons{P2}
-: (t : T) \to t = \cons{TS}\ (\cons{TS}\ \cons{TO})$.  This
+: (t : T) \to t = \cons{TS}\ (\cons{TS}\ t)$.  This
 corresponds to quotienting $\N$ by the reflexive transitive closure of
 the relation $n = n+2$.  In this case, we can see (and could even
 prove formally) that $T$ is equivalent to the type $\mathbf{2}$ with
