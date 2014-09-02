@@ -345,12 +345,12 @@
 \newcategory{Cat}     % (small) categories
 \newcategory{Spe}     % species
 \newcategory{CSpe}    % constructive species
-\newcategory{PSpe}    % partial species
 \newcategory{Hask}    % Haskell types and functions
 \newcategory{B}       % finite sets and bijections
 \newcategory{P}       % naturals and permutations
 \newcategory{L}       % finite linear orders and order-preserving bijections
 \newcommand{\Vect}{\cat{Vec}}    % vector spaces
+\newcommand{\PSpe}{\ensuremath{\prt \Spe}}    % copartial species
 
 \newcommand{\BT}{\mcal{B}}
 \newcommand{\PT}{\mcal{P}}

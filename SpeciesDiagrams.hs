@@ -400,6 +400,9 @@ objs = enclose 1 1 . vcat' (with & sep .~ 1.5) . (map (\n -> dot # named n))
 data PBij a b where
   PBij :: [a] -> (a -> b) -> PBij a b
 
+applyPBij :: PBij a b -> (a -> b)
+applyPBij (PBij _ f) = f
+
 pbComp :: PBij b c -> PBij a b -> PBij a c
 pbComp (PBij _ f) (PBij as g) = PBij as (f . g)
 

@@ -19,9 +19,12 @@ already:
 \item $\fc \BT \ST$, species as constructed in HoTT.
 \end{itemize}
 There are quite a few other possible variants, some of which we
-explore in this section.
+explore in this chapter.
 
-First, we gather and summarize the properties needed on $\Lab$ and
+\section{Generalized species properties}
+\label{sec:generalized-species-properties}
+
+We first gather and summarize the properties needed on $\Lab$ and
 $\Str$ to support the operations we have studied.  The data are
 summarized in \pref{tab:properties}.  At the head of each column is an
 operation or group of operations.  In general, $\odot$-E denotes the
@@ -78,6 +81,10 @@ rows are labelled by properties, to be elaborated below.
   itself: for example, in the context of $(\fc \B \Set)$ we end up
   treating a species morphism as itself being a species.
 \end{itemize}
+
+In each of the following sections we describe a particular species
+variant, identifying the categories $\Lab$ and $\Str$, and verifying
+which of the above properties hold.
 
 \section{Multisort species}
 \label{sec:multisort}
@@ -151,15 +158,22 @@ dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
 % \end{ex}
 
 \citet{bll} detail how to extend operations such as sum, partitional
-product, and composition to multisort species.  We give just one
-example here, that of composition. If $F$ is an $m$-sort species, and
-$(G_1, \dots, G_m)$ is an $m$-tuple of $n$-sort species, then $F \comp
-(G_1, \dots, G_m)$ is an $n$-sort species whose shapes consist of a
-top-level $F$-shape with $G_i$-shapes substituted for each label of
-sort $i$.  Of course, this presentation assumes a linear ordering on
-the sorts of $F$; more generally, if the sorts of $F$ are indexed by
-some finite set $S$, then $F$ can be composed with an $S$-indexed
-tuple of $T$-sort species, resulting in a $T$-sort species.
+product, and composition to multisort species.  For example,
+partitional product is straightforward: an $(F \cdot G)$-shape over a
+given collection of labels (of multiple sorts) corresponds to a pair
+of an $F$-shape and $G$-shape over a binary partition of the
+collection (which can also be thought of as a collection of binary
+partitions over each sort).  As another example, composition can also
+be extended to multisort species---although, as we will see, it does
+not follow quite as naturally from the single-sort setting.  If $F$ is
+an $m$-sort species, and $(G_1, \dots, G_m)$ is an $m$-tuple of
+$n$-sort species, then $F \comp (G_1, \dots, G_m)$ is an $n$-sort
+species whose shapes consist of a top-level $F$-shape with
+$G_i$-shapes substituted for each label of sort $i$.  Of course, this
+presentation assumes a linear ordering on the sorts of $F$; more
+generally, if the sorts of $F$ are indexed by some finite set $S$,
+then $F$ can be composed with an $S$-indexed tuple of $T$-sort
+species, resulting in a $T$-sort species.
 
 \later{Example of generalized composition?}
 % \begin{ex}
@@ -180,10 +194,11 @@ tuple of $T$-sort species, resulting in a $T$-sort species.
 Defining multisort species and all the operations on them (such as
 composition) ``from scratch'' is unnecessary; they can be defined
 abstractly as objects in a certain functor category, and hence fit
-into the abstract framework developed in the preceding sections.
-\citet{bll} acknowledge as much in Exercise 2.4.6, but only as
-something of an afterthought; the following development is yet more
-general than the intended solution to the exercise.
+into the abstract framework developed in \pref{chap:species} and
+outlined in \pref{sec:generalized-species-properties}.  \citet{bll}
+acknowledge as much in Exercise 2.4.6, but only as something of an
+afterthought; the following development is yet more general than the
+intended solution to the exercise.
 
 Let $S$ be a finite set, thought of as a collection of names for
 sorts; that is, each element $s \in S$ represents a different sort.
@@ -262,7 +277,8 @@ operations on $S$-sort species.
 We can thus instantiate the generic definitions to obtain notions of
 sum, Cartesian, arithmetic, and partitional product, and
 differentiation (along with corresponding eliminators) for $S$-sort
-species.
+species.  For example, the notion of partitional product obtained in
+this way is precisely the definition given above.
 
 One operation that we do \emph{not} obtain quite so easily is
 composition: the generic definition relied on a definition of the
@@ -403,32 +419,14 @@ include more on the theory here.  For now, we simply note that $(\fc
   of $\fc \B \Set$.
 \end{itemize}
 
-\section{Other examples}
-
-Many other examples appear in the literature, for example,
-\begin{itemize}
-\item $\Vect$-valued species \citep{joyal86, aguiar2010monoidal}, \ie
-  functors $\B \to \Vect$, which send finite sets of labels to
-  \emph{vector spaces} of shapes. \todo{say more?}
-\item $\Cat$-valued species \citep{XXX} \todo{citation?  Baez \&
-    Dolan?  Generalized Euler characteristic.}, \ie functors $\B \to
-  \Cat$ which send finite sets of labels to \emph{categories} of
-  shapes. \todo{say more?}
-\item \todo{Generalized species of Fiore \etal}
-\item \todo{Forward reference to species from category of partial bijections/prisms?}
-\end{itemize}
-
-In each case, one can verify the required properties and automatically
-obtain definitions of the various operations.
-
-
-\section{Injections and coinjections}
-\label{sec:injections}
+\section{Copartial species}
+\label{sec:copartial-species-sec}
 
 As a final, larger example, which will play an important role in
 \pref{chap:labelled}, we develop the theory of species based on
-injections and their dual, coinjections.  The development will be
-carried out in HoTT, though it works equally well in set theory.
+injections (and their dual, coinjections, in the subsequent section).
+The development will be carried out in HoTT, though it works equally
+well in set theory.
 
 \subsection{Copartial bijections}
 \label{sec:copartial-bijections}
@@ -641,7 +639,7 @@ dia = hcat' (with & sep .~ 2)
     \reason{\iff}{round-trip laws for $f$ and $g$}
     \stmt{\exist b \inr\ a = \project f\ b \land \inr\ b = \project g\
       c}
-    \reason{\iff}{definition of |=<<|; case analysis}
+    \reason{\iff}{definition of $(-)^*$; case analysis}
     \stmt{\inr\ a = (\project f)^*\ (\project g\ c)}
     \reason{\iff}{Kleisli composition}
     \stmt{\inr\ a = (\project f \kcomp \project g)\ c}
@@ -661,7 +659,7 @@ dia = hcat' (with & sep .~ 2)
   fact that $\id$ is the identity for function composition, and $\inr$
   is the identity for Kleisli composition.
 
-  $\BTSub$ is thus a precategory.  It remains only to show that
+  $\STSub$ is thus a precategory.  It remains only to show that
   isomorphism is equivalent to equality.  An isomorphism $A \iso B$ is
   given by $f : A \cpbij B$ and $g : B \cpbij A$ such that $f
   \comp g = \id = g \comp f$.  Note that we have $\embed f : A \to B$
@@ -864,31 +862,29 @@ $\BTSub$ also has a corresponding skeleton category, just like $\BT$:
   equivalence. \later{actually flesh this out?}
 \end{proof}
 
-\subsection{Partial species}
-\label{sec:partial-species}
+\subsection{Copartial species}
+\label{sec:copartial-species-subsec}
 
-In a combinatorial setting, one is primarily interested in
-\emph{counting} \todo{finish.  Computationally we want to model
-  partiality.  Give some motivating examples.}
+\todo{Say something here.}
 
 \begin{defn}
-  A \term{partial species} is a functor $F : \BTSub \to \ST$.  We
-  denote by $\PSpe = \fc \BTSub \ST$ the functor category of partial
+  A \term{copartial species} is a functor $F : \BTSub \to \ST$.  We
+  denote by $\PSpe = \fc \BTSub \ST$ the functor category of copartial
   species.
 \end{defn}
 
 \begin{rem}
-  Since $\BTSub \iso \PTSub$ (\pref{prop:btsub-iso-ptsub}) partial
+  Since $\BTSub \iso \PTSub$ (\pref{prop:btsub-iso-ptsub}) copartial
   species are also equivalent to functors $\PTSub \to \ST$.
 \end{rem}
 
 Since the objects of \BTSub\ are the same as the objects of \BT, the
-object mapping of a partial species is similar to that of a normal
-species.  That is, one can still think of a partial species as mapping
+object mapping of a copartial species is similar to that of a normal
+species.  That is, one can still think of a copartial species as mapping
 a finite set of labels to a set of structures ``built from'' those
 labels.
 
-A partial species $F$ also has an action on morphisms: it must lift
+A copartial species $F$ also has an action on morphisms: it must lift
 any copartial bijection $K \cpbij L$ to a function $F\ K \to F\ L$.  Of
 course, bijections are (trivially) copartial bijections, so this includes the
 familiar case of ``relabelling''; bijections are isomorphisms in
@@ -911,24 +907,35 @@ illustrated in \pref{fig:lift-strict-pbij}.
 
 \begin{figure}
   \centering
-  \todo{make a diagram.  Tree maps to tree + set.}
 
-%% Working on this:
+  \begin{diagram}[width=200]
+import           Data.Char
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+import           Structures                     (pair)
 
-% import           Data.Char
-% import           SpeciesDiagrams
+t = BNode 1 (leaf 3) (BNode 2 (leaf 0) Empty)
 
-% dia = hcat' (with & sep .~ 3) [mkSet' (scale 0.3 . mloc) [0 :: Int .. 3], mkSet' (scale 0.3 . mloc . (subtract (ord 'a')) . ord) "abcdef"]
-%   # drawPBij pb1
-% --  # applyAll (map toTop "cf")
-%   # lwO 0.7
-%   # frame 0.5
+c2i = subtract (ord 'a') . ord
 
-% toTop n = withName n $ \s ->  -- $
-%   let topPt = location s .+^ (1.2 *^ unitX)
-%       aOpts = pBijAOpts & arrowTail .~ noTail & shaftStyle %~ dashingL [2,2] 0
-%   in  atop ((arrowBetween' aOpts (location s) topPt) <> text "⊤" # scale 0.3 # moveTo topPt)
+s = hcat' (with & sep .~ 3) [mkSet' (scale 0.3 . mloc) [0 :: Int .. 3], mkSet' (scale 0.3 . mloc . c2i) "abcdef"]
+  # drawPBij pb1
+  # lwO 0.7
+  # frame 0.5
 
+t4 = scale 0.5 . drawBinTree' tOpts . fmap (mloc) $ t  -- $
+t6 = scale 0.5 . drawBinTree' tOpts . fmap (mloc . c2i . applyPBij pb1) $ t  -- $
+t6' = pair t6 (hcat' (with & sep .~ 0.5) (scale 0.5 [mloc 2, mloc 5]))
+
+tOpts = with & slHSep .~ 4 & slVSep .~ 3
+
+ts = hcat' (with & sep .~ 0.5) . map centerY $   -- $
+  [t4, arrow' (with & arrowTail .~ dart') 2, t6']
+
+dia = (vcat' (with & sep .~ 1) . map centerX) [s # scale 1.5, ts]
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
   \caption{Lifting a strictly copartial bijection}
   \label{fig:lift-strict-pbij}
 \end{figure}
@@ -936,53 +943,37 @@ illustrated in \pref{fig:lift-strict-pbij}.
 Moreover, note that one cannot adjoin a \emph{new} set of labels with
 every lift.  Performing multiple lifts would then result in multiple
 sets of extra labels (\eg a list of such sets), but this fails to be
-functorial, since \todo{explain.  Reference diagram.}
+functorial, since separately lifting two copartial bijections
+(resulting in a list of two extra sets) would be different than
+lifting their composition (resulting in only one).  So the only option
+is to have \emph{every} copartial species structure accompanied by a set
+of ``extra'' labels (which may be empty). Transporting along a
+strictly copartial bijection results in some labels being added to the
+set.
 
-\begin{figure}
-  \centering
-  \todo{make a diagram.  Non-commuting diagram of adjoining multiple
-    extra sets vs all at once.}
-  \caption{TODO write me}
-  \label{fig:XXX}
-\end{figure}
-
-So the only option is to have \emph{every} partial species structure
-accompanied by a set of ``extra'' labels (which may be
-empty). Transporting along a strictly copartial bijection results in
-some labels being added to the set.
-
-Intuitively, every normal species $F$ gives rise to a partial species
+Intuitively, every normal species $F$ gives rise to a copartial species
 $\prt F$ which ``acts like'' the species $F \cdot \Bag$.  In fact,
 along these lines we can formally define a fully faithful embedding of
 \Spe into \PSpe.
-
-\todo{Combinatorics of partial species, \eg generating functions.
-  Partial species are like having things ``up to'' the given size.
-  Explain why there is not an equivalence.  Problem is that partial
-  species do not necessarily preserve injectivity.  Talk about
-  intuition from generating functions and partial sums.  Can't undo
-  operation of taking ``partial sums'' in this case because it might
-  not preserve information---ie can't subtract $G\ (n-1)$ from $G\
-  n$.}
 
 \begin{defn}
   The functor $\prt - : \Spe \to \PSpe$ is defined as follows.
 
   First consider the action of $\prt -$ on objects, that is, species
   $F : \BT \to \ST$.  We define $\prt F : \BTSub \to \ST$ as the
-  partial species which
+  copartial species which
   \begin{itemize}
   \item sends the finite set of labels $K$ to the set of structures
     $(F \cdot \Bag)\ K$, and
   \item lifts the copartial bijection $p : K \cpbij L$ to a function
-    $\prt p : \prt F\ K \to \prt F\ L$.  \todo{insert picture here?} This function takes as input
-    a structure of type $(F \cdot \Bag)\ K$, that is, a tuple \[ (K_1,
-    K_2, f, \unit, \sigma) \] where $f : F\ K_1$ is a $K_1$-labelled
-    $F$-structure, the unit value $\unit$ represents a $K_2$-labeled
-    set, and $\sigma : K \bij K_1 + K_2$ witnesses that $K_1$ and
-    $K_2$ form a partition of the label set $K$.  As output, $\prt p$
-    yields \[ (L_1, L_2 + \extra p, F\ (\restr{K_1}{p_1})\ f, \unit,
-    \psi), \] where
+    $\prt p : \prt F\ K \to \prt F\ L$.  \later{insert picture here?}
+    This function takes as input a structure of type $(F \cdot \Bag)\
+    K$, that is, a tuple \[ (K_1, K_2, f, \unit, \sigma) \] where $f :
+    F\ K_1$ is a $K_1$-labelled $F$-structure, the unit value $\unit$
+    represents a $K_2$-labeled set, and $\sigma : K \bij K_1 + K_2$
+    witnesses that $K_1$ and $K_2$ form a partition of the label set
+    $K$.  As output, $\prt p$ yields \[ (L_1, L_2 + \extra p, F\
+    (\restr{K_1}{p_1})\ f, \unit, \psi), \] where
     \begin{itemize}
     \item $p_1$ is the ``restriction of $p$ to $K_1$'', that is, the
       composite copartial bijection
@@ -1055,7 +1046,112 @@ along these lines we can formally define a fully faithful embedding of
 \todo{Is the functor $\prt -$ monoidal? Intuitively, yes for $+$, no
   for $\cdot$.  Probably not for $\comp$.}
 
-\todo{Labelled structures with partial species; memory layout.}
+The above discussion might lead one to believe that $\prt -$ must also
+be essentially surjective, \ie that there is an equivalence of
+categories $\Spe \iso \PSpe$.  However, this is not the case. To see
+why, we consider the connection between species, copartial species,
+and generating functions.
+
+According to our intuition so far, a copartial species corresponds to
+a regular species with a set of ``extra labels'' possibly attached.
+\todo{Add picture of $F$ to $F \cdot \Bag$ transformation---``partial
+  sums''.  Discuss operator on shapes before talking about generating
+  functions.}  Note that \[ ||(F \cdot \Bag)\ n|| = \sum_{0 \leq k
+  \leq n} ||(F \cdot \Bag)\ k||, \] that is, for any species $F$, the
+number of $(F \cdot \Bag)$-shapes of size $n$ is equal to the sum of
+the number of $F$-shapes of all sizes from $0$ to $n$.  This is
+because an $(F \cdot \Bag)$-shape consists of an $F$-shape, of any
+size from $0$ to $n$, paired with a (unique) $\Bag$-shape on the
+remaining labels.  In terms of generating functions, the operator $-
+\cdot \Bag(x) = - \cdot e^x$ corresponds to a prefix sum on
+coefficients: \[ - \cdot e^x : (a_0 + a_1x + a_2x^2 + \dots) \mapsto
+(a_0 + (a_0 + a_1)x + (a_0 + a_1 + a_2)x^2 + \dots). \] As an operator
+on generating functions, this has an inverse, given by
+\begin{equation} \label{eq:prefix-sum-inverse}
+  (b_0 + b_1x
+  + b_2x^2 + \dots) \mapsto (b_0 + (b_1 - b_0)x + (b_2 - b_1)x^2 +
+  \dots).
+\end{equation}
+
+Consider, then, an attempted proof that $\prt - : \Spe \to \PSpe$ is
+essentially surjective.  Given a copartial species $S \in \PSpe$, this
+would require us to produce some $F \in \Spe$ such that $\prt F \iso
+S$.  Thinking of $\prt F$ as intuitively acting like $F \cdot \Bag$,
+\ie a So, if $S$ really corresponds to a ``prefix sum'' of some
+species $F$, then we should ideally be able to construct $F$ via an
+operation similar to \eqref{eq:prefix-sum-inverse}.  That is (passing
+to $\fc \P \Set$ and $\fc \PTSub \ST$), we would define
+\begin{align*}
+F\ 0 &\defeq S\ 0 \\
+F\ (n+1) &\defeq S\ (n+1) - S\ n.
+\end{align*}
+However, we must make sense of this subtraction.  We cannot simply
+take a set difference (indeed, set difference makes no sense in the
+context of HoTT).  What is needed is some sort of canonical injection
+$\iota : S\ n \inj S\ (n+1)$, in which case we could make sense of $S\
+(n+1) - S\ n$ as the elements of $S\ (n+1)$ not in the image of
+$\iota$.  In the case of species of the form $F \cdot \Bag$, there
+indeed exists such a canonical injection, which sends each shape in
+$(F \cdot \Bag)\ n$ to the same shape with the extra label $n$
+adjoined to the set.  The whole point, however, is that we are
+\emph{trying to prove} that every $S \in \PSpe$ is of this form.  We
+must therefore come up with some injection $S\ n \inj S\ (n+1)$
+without any intensional knowledge about $S$.
+
+This is precisely where we get stuck.  There is, of course, a
+canonical injection $\Fin n \inj \Fin {n+1}$, but the functoriality of
+$S$ only guarantees that this lifts to a \emph{function} $S\ n \to S\
+(n+1)$---functors may preserve isomorphisms, but in general, they need
+not preserve monomorphisms.  This insight guides us to a
+counterexample.  Consider the $(\fc \BTSub \ST)$-species whose shapes
+\emph{of size $5$ or smaller} consist of a linear order paired with a
+set, and \emph{on larger sizes} simply consist of a
+set. \todo{picture} One may verify that this does, in fact, describe a
+valid functor $\BTSub \to \ST$.  The ``problem'' is that it does not
+``preserve information'': above size $5$ the shapes all ``collapse'',
+and information about smaller shapes is lost.  Our intuition that all
+copartial species shapes must ``come equipped with a set'' of labels
+was correct, but there is some latitude in the way the rest of the
+shape is handled.
+
+We may also, therefore, consider the subcategory $\BTSub
+\hookrightarrow \ST$ of \emph{monomorphism-preserving} functors $\fc
+\BTSub \ST$; along the lines sketched above, we can indeed prove an
+equivalence between this category and $\Spe$.  At present, the pros
+and cons of considering $\PSpe$ versus this subcategory are not clear
+to me.
+
+\section{Partial species}
+\label{sec:partial-species}
+
+We now consider the dual category $\BTSub^\op$, whose objects are
+finite sets and whose morphisms are partial bijections, \ie
+coinjections, and written $K \supseteq L$.  These can be thought of as
+partially defined functions which are both injective and surjective.
+
+Species corresponding to $\fc {\BTSub^\op} \ST$ were studied by
+\citet{schmitt93hopfalgebras}, and correspond to species with a
+natural notion of ``induced subspecies''.  That is, \todo{finish}
+
+\section{Other species variants}
+\label{sec:other-species-variants}
+
+Many other examples of species variants appear in the literature. For
+example:
+\begin{itemize}
+\item $\Vect$-valued species \citep{joyal86, aguiar2010monoidal}, \ie
+  functors $\B \to \Vect$, which send finite sets of labels to
+  \emph{vector spaces} of shapes. \todo{say more?}
+\item $\Cat$-valued species \citep{XXX} \todo{citation?  Baez \&
+    Dolan?  Generalized Euler characteristic.}, \ie functors $\B \to
+  \Cat$ which send finite sets of labels to \emph{categories} of
+  shapes. \todo{say more?}
+\item \todo{Generalized species of Fiore \etal}
+\item \todo{Forward reference to species from category of partial bijections/prisms?}
+\end{itemize}
+
+In each case, one can verify the required properties and automatically
+obtain definitions of the various operations.
 
 
 \section{The Gordon complementary bijection principle}

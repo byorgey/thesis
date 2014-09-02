@@ -8,6 +8,9 @@
 \section{Future work}
 \label{sec:future-work}
 
+\todo{Tons of future work.  Feel like I have just scratched the
+  surface---entire research program.}
+
 Theory of molecular and atomic species---translate into HoTT, and see
 precisely what assumptions are needed where.  Will probably shed light
 on the theory as well as have practical applications.
@@ -20,3 +23,7 @@ simply to prevent such infinite families, and hence are not needed in
 such a setting.  It would be interesting to explore minimal criteria
 for analogues of the implicit species theorems in more generalized
 settings
+
+\todo{multisort composition etc.}
+
+\todo{$\BTSub$ and all the attendant stuff!}
