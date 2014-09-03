@@ -930,7 +930,7 @@ t6' = pair t6 (hcat' (with & sep .~ 0.5) (scale 0.5 [mloc 2, mloc 5]))
 tOpts = with & slHSep .~ 4 & slVSep .~ 3
 
 ts = hcat' (with & sep .~ 0.5) . map centerY $   -- $
-  [t4, arrow' (with & arrowTail .~ dart') 2, t6']
+  [t4, arrow 2, t6']
 
 dia = (vcat' (with & sep .~ 1) . map centerX) [s # scale 1.5, ts]
   # frame 0.5
@@ -1054,19 +1054,75 @@ and generating functions.
 
 According to our intuition so far, a copartial species corresponds to
 a regular species with a set of ``extra labels'' possibly attached.
-\todo{Add picture of $F$ to $F \cdot \Bag$ transformation---``partial
-  sums''.  Discuss operator on shapes before talking about generating
-  functions.}  Note that \[ ||(F \cdot \Bag)\ n|| = \sum_{0 \leq k
-  \leq n} ||(F \cdot \Bag)\ k||, \] that is, for any species $F$, the
-number of $(F \cdot \Bag)$-shapes of size $n$ is equal to the sum of
-the number of $F$-shapes of all sizes from $0$ to $n$.  This is
-because an $(F \cdot \Bag)$-shape consists of an $F$-shape, of any
-size from $0$ to $n$, paired with a (unique) $\Bag$-shape on the
-remaining labels.  In terms of generating functions, the operator $-
-\cdot \Bag(x) = - \cdot e^x$ corresponds to a prefix sum on
-coefficients: \[ - \cdot e^x : (a_0 + a_1x + a_2x^2 + \dots) \mapsto
-(a_0 + (a_0 + a_1)x + (a_0 + a_1 + a_2)x^2 + \dots). \] As an operator
-on generating functions, this has an inverse, given by
+Consider, therefore, the relationship of the species $F$ to the
+species $F \cdot \Bag$.  An $(F \cdot \Bag)$-shape of size $n$
+consists of an $F$-shape, of \emph{any} size from $0$ to $n$, paired
+with a (unique) $\Bag$-shape on the remaining labels.  $F \cdot \Bag$
+thus represents a sort of ``prefix sum'' of $F$, where the collection
+of $(F \cdot \Bag)$-shapes of size $n$ consists of the sum of all
+$F$-shapes of sizes $0$ through $n$.  This is illustrated in
+\pref{fig:prefix-sum}.
+\begin{figure}
+  \centering
+  \begin{diagram}[width=300]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+import           Structures                     (pair)
+
+genBTreeShapes :: Int -> [BTree ()]
+genBTreeShapes 0 = [Empty]
+genBTreeShapes n = [ BNode () l r
+                   || k <- [0..n-1]
+                   , l <- genBTreeShapes k
+                   , r <- genBTreeShapes (n - k - 1)]
+
+dot c = circle 1 # fc c
+emptyDia = square 1 # fc black # frame 0.5
+
+drawBinTreeWE :: Diagram B R2 -> SymmLayoutOpts (Diagram B R2) -> BTree (Diagram B R2) -> Diagram B R2
+drawBinTreeWE e _ Empty = e
+drawBinTreeWE _ opts t = drawBinTree' opts t
+
+genTreeDias n = genBTreeShapes n
+  # map (drawT n)
+
+drawT n = drawBinTreeWE emptyDia (with & slHSep .~ 3 & slVSep .~ 3)
+        . fmap (const (dot (colors !! n)))
+
+f = map genTreeDias [0 .. 3]
+  # map (alignL . hcat' (with & sep .~ 1.5))
+  # vcat' (with & sep .~ 2)
+  # frame 0.5
+  # lwO 0.7
+
+genTreeBagDias n = map (genTreeBagDias' n) [0 .. n]
+                 # hcat' (with & sep .~ 1)
+                 # alignL
+  where
+    genTreeBagDias' n k = genBTreeShapes (n - k)
+      # map (\t -> drawT (n-k) t # if k == 0 then id else flip pair (mkS k))
+      # hcat' (with & sep .~ 1)
+      # alignT
+    mkS 0 = mempty
+    mkS 1 = dot mlocColor
+    mkS 2 = (vcat' (with & sep .~ 1) (replicate 2 (dot mlocColor)))
+    mkS k = position (zip (regPoly k 3) (repeat (dot mlocColor)))
+
+fe = map genTreeBagDias [0..3]
+   # vcat' (with & sep .~ 2)
+
+dia = vcat' (with & sep .~ 6) (map centerX [f, fe])
+  # frame 1
+  # lwO 0.7
+  \end{diagram}
+  \caption{$\Bin \cdot \Bag$ (bottom) is the prefix sum of $\Bin$ (top)}
+  \label{fig:prefix-sum}
+\end{figure}
+In terms of generating functions, the operator $- \cdot \Bag(x) = -
+\cdot e^x$ indeed corresponds to a prefix sum on coefficients: \[ -
+\cdot e^x : (a_0 + a_1x + a_2x^2 + \dots) \mapsto (a_0 + (a_0 + a_1)x
++ (a_0 + a_1 + a_2)x^2 + \dots). \] Note that as an operator on
+generating functions, this has an inverse, given by
 \begin{equation} \label{eq:prefix-sum-inverse}
   (b_0 + b_1x
   + b_2x^2 + \dots) \mapsto (b_0 + (b_1 - b_0)x + (b_2 - b_1)x^2 +
@@ -1104,15 +1160,52 @@ $S$ only guarantees that this lifts to a \emph{function} $S\ n \to S\
 (n+1)$---functors may preserve isomorphisms, but in general, they need
 not preserve monomorphisms.  This insight guides us to a
 counterexample.  Consider the $(\fc \BTSub \ST)$-species whose shapes
-\emph{of size $5$ or smaller} consist of a linear order paired with a
+\emph{of size $5$ or smaller} consist of a binary tree paired with a
 set, and \emph{on larger sizes} simply consist of a
-set. \todo{picture} One may verify that this does, in fact, describe a
-valid functor $\BTSub \to \ST$.  The ``problem'' is that it does not
-``preserve information'': above size $5$ the shapes all ``collapse'',
-and information about smaller shapes is lost.  Our intuition that all
-copartial species shapes must ``come equipped with a set'' of labels
-was correct, but there is some latitude in the way the rest of the
-shape is handled.
+set (\pref{fig:copartial-species-collapse}).
+
+\begin{figure}
+  \centering
+  \begin{diagram}[width=200]
+import           Data.Char
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+import           Structures                     (pair)
+
+t = BNode 1 (leaf 3) (leaf 2)
+
+c2i = subtract (ord 'a') . ord
+
+s = hcat' (with & sep .~ 3) [mkSet' (scale 0.3 . mloc) [0 :: Int .. 3], mkSet' (scale 0.3 . mloc . c2i) "abcdef"]
+  # drawPBij pb1
+  # lwO 0.7
+  # frame 0.5
+
+t3 = scale 0.5 . drawBinTree' tOpts . fmap (mloc) $ t  -- $
+t4' = pair t3 (scale 0.5 (mloc 0))
+
+set6 = enclose 0.5 0.5 (position (zip (pentagon 1.5 # rotateBy (2/5)) (map (scale 0.5 . mloc) [0..4])))
+
+tOpts = with & slHSep .~ 4 & slVSep .~ 3
+
+collapse = hcat' (with & sep .~ 0.5) . map centerY $   -- $
+  [t4', arrow 2, set6]
+
+dia = (vcat' (with & sep .~ 1) . map centerX) [s # scale 1.5, collapse]
+  # frame 0.5
+  # lwO 0.7
+  \end{diagram}
+  \caption{A copartial species which loses information}
+  \label{fig:copartial-species-collapse}
+\end{figure}
+
+One may verify that this does, in fact, describe a valid functor
+$\BTSub \to \ST$.  However, it does not ``preserve information'':
+above size $5$ the shapes all ``collapse'', and information about
+smaller shapes is lost.  The intuition that all copartial species
+shapes must ``come equipped with a set'' of labels is correct, in a
+sense, but there is some latitude in the way the rest of the shape is
+handled.
 
 We may also, therefore, consider the subcategory $\BTSub
 \hookrightarrow \ST$ of \emph{monomorphism-preserving} functors $\fc
@@ -1130,8 +1223,16 @@ coinjections, and written $K \supseteq L$.  These can be thought of as
 partially defined functions which are both injective and surjective.
 
 Species corresponding to $\fc {\BTSub^\op} \ST$ were studied by
-\citet{schmitt93hopfalgebras}, and correspond to species with a
-natural notion of ``induced subspecies''.  That is, \todo{finish}
+\citet{schmitt93hopfalgebras} (under the name ``species with
+restriction'', or ``$R$-species''), and correspond to species with a
+natural notion of ``induced subspecies''.  That is, $F : \BTSub^\op
+\to \ST$ must lift morphisms of the form $K \supseteq L$ to functions
+$F\ K \to F\ L$.  Instead of adding more labels, this operation may
+\emph{delete} labels.  Examples include the species of lists, where
+labels may simply be deleted, keeping the rest of the labels in the
+same order; similarly, the species of cycles; and the species of
+simple graphs, where the lifting operation corresponds to forming
+induced subgraphs (\pref{fig:induced-subgraph}).
 
 \section{Other species variants}
 \label{sec:other-species-variants}
