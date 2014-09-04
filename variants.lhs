@@ -510,20 +510,20 @@ formulation of the round-trip laws in \pref{defn:pbij}.
   \end{sproof}
 \end{proof}
 
-\begin{rem}
-  Equation \eqref{eq:rt-adj} is strongly reminiscent of an adjunction.  However,
-  I do not know whether there is a suitable sense in which it can
-  actually be seen as one.
-  \todo{from Derek Elkins: This may not be viewable as an adjunction,
-    but it's easily cast as an instance of parameterized
-    representability, namely b.inr a = f<-(b) is represented by f->(a)
-    parametric in a. This means f-> is characterized by a universal
-    property.  The universal arrow (the unit) is inr a ~ f<-(f->(a)).
-    The first round-trip law is this universal arrow; the second is
-    the existence part of the "there exists a unique f such that ..."
-    of the standard universal property dance.  Uniqueness is a given
-    for mere propositions.}
-\end{rem}
+% \begin{rem}
+%   Equation \eqref{eq:rt-adj} is strongly reminiscent of an adjunction.  However,
+%   I do not know whether there is a suitable sense in which it can
+%   actually be seen as one.
+%   \todo{from Derek Elkins: This may not be viewable as an adjunction,
+%     but it's easily cast as an instance of parameterized
+%     representability, namely b.inr a = f<-(b) is represented by f->(a)
+%     parametric in a. This means f-> is characterized by a universal
+%     property.  The universal arrow (the unit) is inr a ~ f<-(f->(a)).
+%     The first round-trip law is this universal arrow; the second is
+%     the existence part of the "there exists a unique f such that ..."
+%     of the standard universal property dance.  Uniqueness is a given
+%     for mere propositions.}
+% \end{rem}
 
 \begin{figure}
   \centering
@@ -681,11 +681,11 @@ dia = hcat' (with & sep .~ 2)
   simply using bijections as if they were copartial bijections when
   convenient.\footnote{In fact, using the \pkg{lens} library---and
     more generally, using a van Laarhoven formulation of
-    lenses~\cite{XXX}\todo{cite}---this all works out automatically:
-    the representations of bijections (isomorphisms) and copartial
-    bijections (prisms) are such that the former simply \emph{are} the
-    latter, and they naturally compose via the standard function
-    composition operator.}
+    lenses~\citep{jaskelioff2014representation}---this all works out
+    automatically: the representations of bijections (isomorphisms)
+    and copartial bijections (prisms) are such that the former simply
+    \emph{are} the latter, and they naturally compose via the standard
+    function composition operator.}
 \end{rem}
 
 \subsection{Finite copartial bijections}
@@ -865,7 +865,9 @@ $\BTSub$ also has a corresponding skeleton category, just like $\BT$:
 \subsection{Copartial species}
 \label{sec:copartial-species-subsec}
 
-\todo{Say something here.}
+The point of the foregoing machinery is that we can now use the
+category $\BTSub$ as the category of labels for a new notion of
+species.
 
 \begin{defn}
   A \term{copartial species} is a functor $F : \BTSub \to \ST$.  We
@@ -989,11 +991,11 @@ along these lines we can formally define a fully faithful embedding of
       $F$-structure $f$ from $K_1$ to $p\ K_1 = L_1$.
     \item $\psi : L \bij L_1 + (L_2 + \extra p)$ is given by the composite
     \[ \xymatrixcolsep{4pc} \xymatrix{L \ar[r]^-{\sim}_-{\extrabij p} & p\ K +
-      \extra p} \] \todo{finish.}
+      \extra p}. \]
     \end{itemize}
   \end{itemize}
-  We must verify that this defines a valid functor $\BTSub \to
-  \ST$. \todo{finish}
+  \later{We must verify that this defines a valid functor $\BTSub \to
+  \ST$.}
 
   Next, consider the action of $\prt -$ on morphisms, that is, natural
   transformations $\varphi : \all L F\ L \to G\ L$ where $F$ and $G$
@@ -1027,24 +1029,29 @@ along these lines we can formally define a fully faithful embedding of
   preserves identity and composition of natural transformations.
 \end{defn}
 
-\begin{prop}
-  $\prt - : \Spe \to \PSpe$ is full.
-\end{prop}
+% \begin{prop}
+%   $\prt - : \Spe \to \PSpe$ is full.
+% \end{prop}
 
-\begin{proof}
-  \todo{prove me}
-\end{proof}
+% \begin{proof}
+%   \todo{prove me}
+% \end{proof}
 
-\begin{prop}
-  $\prt - : \Spe \to \PSpe$ is faithful.
-\end{prop}
+% \begin{prop}
+%   $\prt - : \Spe \to \PSpe$ is faithful.
+% \end{prop}
 
-\begin{proof}
-  \todo{prove me}
-\end{proof}
+% \begin{proof}
+%   \todo{prove me}
+% \end{proof}
 
-\todo{Is the functor $\prt -$ monoidal? Intuitively, yes for $+$, no
+\later{Is the functor $\prt -$ monoidal? Intuitively, yes for $+$, no
   for $\cdot$.  Probably not for $\comp$.}
+
+\later{Prove this.}
+\begin{conj}
+  $\prt -$ is full and faithful.
+\end{conj}
 
 The above discussion might lead one to believe that $\prt -$ must also
 be essentially surjective, \ie that there is an equivalence of
@@ -1214,6 +1221,25 @@ equivalence between this category and $\Spe$.  At present, the pros
 and cons of considering $\PSpe$ versus this subcategory are not clear
 to me.
 
+Finally, we consider which of the properties from
+\pref{tab:properties} hold for $\fc \BTSub \ST$.
+\begin{itemize}
+\item Since the target category is just $\ST$ we automatically get all
+  the properties required of $\Str$ alone (\eg monoidal, complete, and
+  Cartesian closed); $\ST$ is also cocomplete and so has coends over
+  $\BTSub$.
+\item $\BTSub$ is locally small.
+\item $\BTSub$ is monoidal: though it does not have products or
+  coproducts, it is not hard to see that it has monoidal structures
+  corresponding to the Cartesian product and disjoint union of finite
+  sets.  Given injections $f : S_1 \inj T_1$ and $g : S_2 \inj T_2$ we
+  can use them to form the evident injections $S_1 \uplus S_2 \inj T_1
+  \uplus T_2$ and $S_1 \times S_2 \inj T_1 \times T_2$.
+\item $\BTSub$ is enriched over $\Str$, since its morphisms can be
+  seen as injective functions.
+% \item \todo{$\fc \BTSub \ST$ enriched over itself?}
+\end{itemize}
+
 \section{Partial species}
 \label{sec:partial-species}
 
@@ -1232,7 +1258,16 @@ $F\ K \to F\ L$.  Instead of adding more labels, this operation may
 labels may simply be deleted, keeping the rest of the labels in the
 same order; similarly, the species of cycles; and the species of
 simple graphs, where the lifting operation corresponds to forming
-induced subgraphs (\pref{fig:induced-subgraph}).
+induced subgraphs. \later{make a picture}
+
+When we consider the properties in \pref{tab:properties}, however, we
+find in particular that $\BTSub^\op$ is not enriched over $\ST$, since
+coinjections are not, in general, total functions.  This rules out all
+species operations other than sum and Cartesian product. \todo{Working
+  here.  Should phrase this a little less confidently.}
+
+Copartial and partial species will have an interesting role to play in
+\pref{chap:labelled}.
 
 \section{Other species variants}
 \label{sec:other-species-variants}
@@ -1242,116 +1277,114 @@ example:
 \begin{itemize}
 \item $\Vect$-valued species \citep{joyal86, aguiar2010monoidal}, \ie
   functors $\B \to \Vect$, which send finite sets of labels to
-  \emph{vector spaces} of shapes. \todo{say more?}
-\item $\Cat$-valued species \citep{XXX} \todo{citation?  Baez \&
-    Dolan?  Generalized Euler characteristic.}, \ie functors $\B \to
-  \Cat$ which send finite sets of labels to \emph{categories} of
-  shapes. \todo{say more?}
+  \emph{vector spaces} of shapes. \later{say more?}
+\item $\Cat$-valued species \citep{baez2000finite}, \ie functors $\B
+  \to \Cat$ which send finite sets of labels to \emph{categories} of
+  shapes. \later{say more?}
 \item \todo{Generalized species of Fiore \etal}
-\item \todo{Forward reference to species from category of partial bijections/prisms?}
 \end{itemize}
 
 In each case, one can verify the required properties and automatically
 obtain definitions of the various operations.
 
 
-\section{The Gordon complementary bijection principle}
+% \section{The Gordon complementary bijection principle}
 
-\todo{Not sure what to do with this.}
+% \todo{Not sure what to do with this.}
 
-Suppose $A_0, A_1, B_0, B_1$ are types with bijections $f_0 : A_0 \bij
-B_0$ and $f_1 : A_1 \bij B_1$.  Then it's clear how to construct a
-bijection $f : A_0 + A_1 \bij B_0 + B_1$: one just takes $f
-= f_0 + f_1$, as illustrated in \pref{fig:adding-bijections}.
+% Suppose $A_0, A_1, B_0, B_1$ are types with bijections $f_0 : A_0 \bij
+% B_0$ and $f_1 : A_1 \bij B_1$.  Then it's clear how to construct a
+% bijection $f : A_0 + A_1 \bij B_0 + B_1$: one just takes $f
+% = f_0 + f_1$, as illustrated in \pref{fig:adding-bijections}.
 
-\begin{figure}
-  \centering
-  \begin{diagram}[width=200]
-import Bijections
+% \begin{figure}
+%   \centering
+%   \begin{diagram}[width=200]
+% import Bijections
 
-dia =
-  (vcat' (with & sep .~ 1) . map centerX)
-  [ hcat' (with & sep .~ 2)
-    [ drawBComplex $ bc0 # labelBC "f₀"  -- $
-    , plus
-    , drawBComplex $ bc1 # labelBC "f₁"  -- $
-    ]
-  , equals
-  , drawBComplex $ parC bc0 bc1 # labelBC "f = f₀ + f₁"  -- $
-  ]
-  # centerXY
-  # frame 0.5
-  # lwO 0.7
-  \end{diagram}
-  \caption{Adding bijections}
-  \label{fig:adding-bijections}
-\end{figure}
+% dia =
+%   (vcat' (with & sep .~ 1) . map centerX)
+%   [ hcat' (with & sep .~ 2)
+%     [ drawBComplex $ bc0 # labelBC "f₀"  -- $
+%     , plus
+%     , drawBComplex $ bc1 # labelBC "f₁"  -- $
+%     ]
+%   , equals
+%   , drawBComplex $ parC bc0 bc1 # labelBC "f = f₀ + f₁"  -- $
+%   ]
+%   # centerXY
+%   # frame 0.5
+%   # lwO 0.7
+%   \end{diagram}
+%   \caption{Adding bijections}
+%   \label{fig:adding-bijections}
+% \end{figure}
 
-So computing the ``sum'' of two bijections is not hard. What about the
-\emph{difference}?  That is, given $f : A_0 + A_1 \bij B_0 + B_1$ and
-$f_1 : A_1 \bij B_1$, can we compute some $f_0 : A_0 \bij B_0$
-(\pref{fig:subtracting-bijections})?
+% So computing the ``sum'' of two bijections is not hard. What about the
+% \emph{difference}?  That is, given $f : A_0 + A_1 \bij B_0 + B_1$ and
+% $f_1 : A_1 \bij B_1$, can we compute some $f_0 : A_0 \bij B_0$
+% (\pref{fig:subtracting-bijections})?
 
-\begin{figure}
-  \centering
-  \begin{diagram}[width=200]
-import           Bijections
+% \begin{figure}
+%   \centering
+%   \begin{diagram}[width=200]
+% import           Bijections
 
-dia =
-  (vcat' (with & sep .~ 1) . map centerX)
-  [ hcat' (with & sep .~ 2)
-    [ drawBComplex $   -- $
-      [a0,a1] .- bij01 # labelBij "f" -.. [b0,b1]
-    , minus
-    , drawBComplex $ bc1 # labelBC "f₁"  -- $
-    ]
-  , equals
-  , mconcat
-    [ text' 3 "?"
-    , drawBComplex $ [a0] .- emptyBij # labelBij "f₀" -.. [b0]  -- $
-    ]
-  ]
-  # centerXY
-  # frame 0.5
-  # lwO 0.7
-  \end{diagram}
-  \caption{Subtracting bijections?}
-  \label{fig:subtracting-bijections}
-\end{figure}
+% dia =
+%   (vcat' (with & sep .~ 1) . map centerX)
+%   [ hcat' (with & sep .~ 2)
+%     [ drawBComplex $   -- $
+%       [a0,a1] .- bij01 # labelBij "f" -.. [b0,b1]
+%     , minus
+%     , drawBComplex $ bc1 # labelBC "f₁"  -- $
+%     ]
+%   , equals
+%   , mconcat
+%     [ text' 3 "?"
+%     , drawBComplex $ [a0] .- emptyBij # labelBij "f₀" -.. [b0]  -- $
+%     ]
+%   ]
+%   # centerXY
+%   # frame 0.5
+%   # lwO 0.7
+%   \end{diagram}
+%   \caption{Subtracting bijections?}
+%   \label{fig:subtracting-bijections}
+% \end{figure}
 
-Though it is obvious that $\size A_0 = \size B_0$, it is not \latin{a
-  priori} obvious whether it is possible to actually construct a
-bijection between them.  The problem, as can be seen in
-\pref{fig:subtracting-bijections}, is that $f$ may mix up elements
-among the $A_i$ and $B_i$---that is, one cannot simply, say, take the
-restriction of $f$ to $A_0$, since the image of $A_0$ under $f$ may
-intersect both $B_0$ and $B_1$.
+% Though it is obvious that $\size A_0 = \size B_0$, it is not \latin{a
+%   priori} obvious whether it is possible to actually construct a
+% bijection between them.  The problem, as can be seen in
+% \pref{fig:subtracting-bijections}, is that $f$ may mix up elements
+% among the $A_i$ and $B_i$---that is, one cannot simply, say, take the
+% restriction of $f$ to $A_0$, since the image of $A_0$ under $f$ may
+% intersect both $B_0$ and $B_1$.
 
-However, it turns out that this is possible, via the \term{Gordon
-  complementary bijection principle} \todo{cite}.  You might want to
-stop and think about it for a while at this point.  If you know some
-Haskell, try filling in the definition of `subtractIso`:
+% However, it turns out that this is possible, via the \term{Gordon
+%   complementary bijection principle} \todo{cite}.  You might want to
+% stop and think about it for a while at this point.  If you know some
+% Haskell, try filling in the definition of `subtractIso`:
 
-> {-# LANGUAGE TypeOperators #-}
->
-> import Prelude hiding ((.), id)
-> import Control.Category
->
-> data a :<->: b = (a -> b) :<->: (b -> a)
->   -- Invariant: the two functions are inverse.
->
-> applyIso :: (a :<->: b) -> (a -> b)
-> applyIso (f :<->: _) = f
->
-> invert :: (a :<->: b) -> (b :<->: a)
-> invert (f :<->: g) = (g :<->: f)
->
-> instance Category (:<->:) where
->   id = id :<->: id
->   (f1 :<->: g1) . (f2 :<->: g2) = (f1 . f2) :<->: (g2 . g1)
->
-> subtractIso :: (Either a0 a1 :<->: Either b0 b1) -> (a1 :<->: b1) -> (a0 :<->: b0)
-> subtractIso = undefined
+% > {-# LANGUAGE TypeOperators #-}
+% >
+% > import Prelude hiding ((.), id)
+% > import Control.Category
+% >
+% > data a :<->: b = (a -> b) :<->: (b -> a)
+% >   -- Invariant: the two functions are inverse.
+% >
+% > applyIso :: (a :<->: b) -> (a -> b)
+% > applyIso (f :<->: _) = f
+% >
+% > invert :: (a :<->: b) -> (b :<->: a)
+% > invert (f :<->: g) = (g :<->: f)
+% >
+% > instance Category (:<->:) where
+% >   id = id :<->: id
+% >   (f1 :<->: g1) . (f2 :<->: g2) = (f1 . f2) :<->: (g2 . g1)
+% >
+% > subtractIso :: (Either a0 a1 :<->: Either b0 b1) -> (a1 :<->: b1) -> (a0 :<->: b0)
+% > subtractIso = undefined
 
 % Instead of defining the GCBP via a bunch of symbols, or even by exhibiting
 % some code, I will begin by *drawing* it for you:
@@ -1524,14 +1557,14 @@ Haskell, try filling in the definition of `subtractIso`:
 % tying a bunch of this together.
 
 
-\begin{prop}[Gordon complementary bijection principle]
-  For finite sets $A_1$, $A_2$, $B_1$, and $B_2$, if $A_1 + B_1
-  \equiv A_2 + B_2$ and $B_1 \equiv B_2$, then $A_1 \equiv A_2$.
-\end{prop}
+% \begin{prop}[Gordon complementary bijection principle]
+%   For finite sets $A_1$, $A_2$, $B_1$, and $B_2$, if $A_1 + B_1
+%   \equiv A_2 + B_2$ and $B_1 \equiv B_2$, then $A_1 \equiv A_2$.
+% \end{prop}
 
-\todo{Explain intuition.  Can use some text from half-written blog
-  post.}
+% \todo{Explain intuition.  Can use some text from half-written blog
+%   post.}
 
-\begin{proof}
-  \todo{Figure out a good constructive proof!}
-\end{proof}
+% \begin{proof}
+%   \todo{Figure out a good constructive proof!}
+% \end{proof}
