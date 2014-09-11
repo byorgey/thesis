@@ -17,6 +17,8 @@
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 
+\newcommand{\Int}{\cons{Int}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Package imports
 

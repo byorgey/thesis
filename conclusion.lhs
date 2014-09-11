@@ -27,3 +27,5 @@ settings
 \todo{multisort composition etc.}
 
 \todo{$\BTSub$ and all the attendant stuff!}
+
+\todo{generic programming}

@@ -85,3 +85,74 @@ b^{\C(a,G b)} \] can be instead written as the Haskell-like \[
 the hom set $\C(a, G b)$ and the power $H b^{\C(\dots)}$ using $\to$.
 It should be emphasized that this notation is perfectly rigorous, and
 not just an ``approximation'' in Haskell.
+
+
+%%% More stuff pasted from proposal below.  It's mostly outdated at
+%%% this point.
+
+% In particular, I aim to begin answering
+% the question:
+% \begin{quote}
+%   \textbf{What benefits can be derived from using the mathematical
+%     theory of species as a foundational theory of data structures?}
+% \end{quote}
+% Answers to this question can take many forms.  What would a
+% programming language with ``species types'' look like?  Can we use
+% species theory as a tool for working with existing algebraic data
+% types?  Specifically, the contributions of the proposed research are
+% threefold:
+% \begin{enumerate}
+% \item A significant part of the proposed work will consist in
+%   synthesizing and re-presenting relevant parts of the theory of
+%   species in a way that is accessible to others in the programming
+%   languages community and the wider computer science community. This
+%   will be a significant contribution: as explained above, the existing
+%   literature on species is relatively inaccessible to programming
+%   language researchers.  My strong background in mathematics and
+%   experience in teaching and writing make me an ideal ``ambassador''
+%   to bridge the two worlds.  There is also much remaining to be
+%   explored---areas of the theory neglected or unexplored by
+%   mathematicians, but relevant to the theory of data types.  My blog
+%   post at
+%   \url{http://byorgey.wordpress.com/2012/08/24/unordered-tuples-and-type-algebra/}
+%   contains one example.
+
+%   \pref{sec:species}, which contains a brief exposition of relevant
+%   parts of the theory of species, is not merely background for
+%   understanding the rest of the proposal.  It also serves as a sample:
+%   my proposed dissertation will contain a greatly expanded and
+%   improved version of the presentation which I hope can serve as the
+%   standard reference on combinatorial species for those in the
+%   computer science community.
+
+% \item The second contribution will be to lay the theoretical groundwork for
+%   understanding species as a foundation for data types.  That is, if
+%   one wanted to design a programming language with ``species types''
+%   from the ground up---if one was to take the theory of species as the
+%   starting point rather than the theory of algebraic data types---what
+%   would it look like, and how would one understand the implementation
+%   from a theoretical point of view?
+%   Section~\ref{sec:species-as-data-types} presents some preliminary
+%   results in this direction and lays out a roadmap for the remaining
+%   theory to be developed.
+
+% \item Third, the theory of species can be used to build practical
+%   tools for working with existing algebraic data types.  Towards this
+%   end I have developed a library, written in Haskell, for computing
+%   with species and facilitating application of the theory to existing
+%   data types.  Section~\ref{sec:species-library} explains the current
+%   features of the library and proposes new features to be added.
+
+%   Simply writing a library is not necessarily worth being called a
+%   research contribution, but this library represents such a
+%   contribution for two reasons: first, it can serve as a practical
+%   outworking of the material outlined in
+%   \pref{sec:species-as-data-types}; second, and more importantly,
+%   there has been very little work bringing species into a
+%   \emph{strongly typed} context.  Working out how best to do this may
+%   result in some interesting lessons for generic programming; at the
+%   very least it will serve as a case study on some of Haskell's more
+%   advanced type system features~\citep{schrijvers2008type,
+%     yorgey2012promotion, eisenberg2012singletons}.
+
+% \end{enumerate}
