@@ -243,13 +243,13 @@ result when given permutations of the same elements as inputs).
 The grand vision of this research program, then, is to create and
 exploit a bridge between the theory of species and the theory and
 practice of programming languages. This dissertation represents just a
-first step in this research program, laying the theoretical groundwork
+first step in this larger program, laying the theoretical groundwork
 necessary for its continued pursuit.
 
 \todo{subsection here?}
 
 To even get started building a bridge between species and data types
-requires a lot more than one might na\"ively expect.  The fundamental
+requires more work than one might na\"ively expect.  The fundamental
 problem is that the theory of species is traditionally couched in
 untyped, classical set theory.  To talk about data types, however, we
 want to work in \emph{typed} and \emph{constructive} foundations.
@@ -257,5 +257,53 @@ Attempting to port species to a typed, constructive setting reveals
 many implicit assumptions that must be made explicit, as well as
 implicit uses of reasoning principles, such as the axiom of choice,
 which are incompatible with constructive foundations.  The bulk of
-\pref{chap:equality} is dedicated to the required \todo{what} which
-makes it possible to \todo{what}.
+\pref{chap:equality} is dedicated to this sort of foundational
+groundwork which makes it possible to talk about species in a typed,
+constructive setting.  In particular, the biggest issues concern
+\todo{what? equality and... stuff}, and the recently developed
+\term{homotopy type theory} \citep{hottbook} turns out to be exactly
+what is wanted to \todo{what}.  \todo{List more specific contributions
+  here?}
+
+\pref{chap:species} goes on to present the theory of species itself.
+Much of the chapter is not novel in a technical sense.  One of the
+main contributions of the chapter, instead, is simply to organize and
+present some relevant aspects of the theory for a functional
+programming audience.  The existing species literature is almost
+entirely written for either hard-core combinatorialists or hard-core
+category theorists, and is not very accessible to the typical FP
+practitioner.  Any attempt to make species relevant to computer
+scientists must therefore first address this accessibility gap.  I
+cannot say that I have accomplished this---doing a proper job of it
+would really require a book.  In any case, I hope that this is at
+least a good start.
+
+However, since \pref{chap:species} is already attempting to present at
+least two different variants of species---one traditional one based on
+set theory, and one novel one based on homotopy type theory---it
+``bites the bullet'' and considers \emph{arbitrary} functor
+categories, elucidating the categorical properties required to support
+each species operation.  Although many individual species
+generalizations have been considered in the past, this systematic
+consideration of the minimal features needed to support each operation
+seems novel.  This allows operations to be defined for whole classes
+of species-like things at once, and in some cases even allows for
+``species-like things'' to be constructed in a modular way, by
+applying constructions known to preserve the required properties.
+
+\pref{chap:variants} goes on to explore particular species variants,
+evaluated through the grid constructed in \pref{chap:species}.  Some
+variants have already been considered in the literature; others, such
+as the notions of partial and copartial species considered in
+\pref{sec:copartial-species-sec} and \pref{sec:partial-species}, are
+novel.
+
+Finally, \pref{chap:labelled} considers extending species to
+\term{labelled data structures}.  The notion of \term{analytic
+  functors}, as introduced by \citet{joyal86}, turns out to be exactly
+the right framework in which to consider labelled data structures.
+Analytic functors are considered in the context of partial and
+copartial species, which, it is hoped, can serve as a foundation for
+further work codifying data structures backed by memory storage (in
+applications where the memory layout really matters, \eg linear
+algebra libraries).
