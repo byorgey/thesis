@@ -3775,7 +3775,7 @@ depending on the exact setting in which we are working.
 We can reformulate the definition of composition in a better way which
 naturally allows for empty parts, and which also makes for a clearer
 path to a generalized notion of composition (to be discussed in the
-next section).  In fact, \citet[p. 11]{Joyal} already mentions this as
+next section).  In fact, \citet[p. 11]{joyal} already mentions this as
 an alternative defintion. The idea is to use another finite set $P$,
 representing parts of a partition, and a function $\chi : L \to P$
 which assigns each $l \in L$ to some $p \in P$.  The fibers of $\chi$,

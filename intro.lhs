@@ -5,8 +5,6 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-\todo{Probably need to go through and add some subsection headings.}
-
 \bay{Big themes yet to mention: Principle of equivalence. Set theory
   vs type theory, constructive foundations.  Note that this
   dissertation sits in a somewhat awkward place, with feet in both the
@@ -29,7 +27,6 @@ trees with integer values stored in the leaves as follows:
 data Tree  =  Leaf Int
            |  Branch Tree Tree
 \end{code}
-
 Algebraically, we can think of this as defining the type which is the
 least solution to the equation $T = \Int + T \times T$.  This
 description says that a |Tree| is either an |Int| (tagged with |Leaf|)
@@ -44,30 +41,30 @@ practical---of programming with recursive data structures via
 \term{folds} and \term{unfolds} \citep{bananas, gibbons-calcfp}. A
 fold gives a principled way to compute a ``summary value'' from a data
 structure; dually, an unfold builds up a data structure from an
-initial ``seed value''.  For example, a fold for |Tree| can be
-implemented as
-\begin{code}
-treeFold :: (Int -> a) -> (a -> a -> a) -> Tree -> a
-treeFold f _ (Leaf i)      = f i
-treeFold f g (Branch l r)  = g (treeFold f g l) (treeFold f g r)
-\end{code}
-The |treeFold| function captures the essential pattern of recursion
-over |Tree| data structures.  We can use |treeFold| to, say, compute
-the product of all the |Int| values stored in a tree:
-\begin{code}
-treeProd :: Tree -> Int
-treeProd = treeFold id (*)
-\end{code}
-Indeed, |treeFold| is \emph{universal} in the sense that anything we
-might wish to compute from a |Tree| can be accomplished with
-|treeFold|.  Such folds are guaranteed to exist for any algebraic data
-type---in fact, it is not hard to automatically generate the fold for
-a data type, given its algebraic description.  There are several
-Haskell libraries which can do this generation, including
-|derive|~\citep{derive} and |DrIFT|~\citep{DrIFT}. The Charity
-programming language~\citep{charity} was also designed so that all
-computation over inductive types was based on automatically-derived
-folds.
+initial ``seed value''.  % For example, a fold for |Tree| can be
+% implemented as
+% \begin{code}
+% treeFold :: (Int -> a) -> (a -> a -> a) -> Tree -> a
+% treeFold f _ (Leaf i)      = f i
+% treeFold f g (Branch l r)  = g (treeFold f g l) (treeFold f g r)
+% \end{code}
+% The |treeFold| function captures the essential pattern of recursion
+% over |Tree| data structures.  We can use |treeFold| to, say, compute
+% the product of all the |Int| values stored in a tree:
+% \begin{code}
+% treeProd :: Tree -> Int
+% treeProd = treeFold id (*)
+% \end{code}
+% Indeed, |treeFold| is \emph{universal} in the sense that anything we
+% might wish to compute from a |Tree| can be accomplished with
+% |treeFold|.  Such folds are guaranteed to exist for any algebraic data
+% type---in fact, it is not hard to automatically generate the fold for
+% a data type, given its algebraic description.  There are several
+% Haskell libraries which can do this generation, including
+% |derive|~\citep{derive} and |DrIFT|~\citep{DrIFT}. The Charity
+% programming language~\citep{charity} was also designed so that all
+% computation over inductive types was based on automatically-derived
+% folds.
 
 % % Folds are ubiquitous---even languages without direct support for
 % % algebraic data types often make use of them.  For example, \emph{How
@@ -112,30 +109,29 @@ successful in the area of combinatorics.  First introduced by
 \citet{joyal}, it is a unified theory of \term{combinatorial
   structures} or \term{shapes}. Its immediate goal was to generalize
 the existing theory of \term{generating functions}, a central tool in
-\term{enumerative combinatorics} (the branch of mathematics concerned
-with counting abstract structures). \todo{More details here? What has
-  it accomplished?  Unifies generating function techniques.  Elegantly
-  rederive classical results in combinatorics, e.g. Cayley on number
-  of trees, combinatorial interpretation \& proof of Lagrange
-  inversion, \& some new results (?)}
+enumerative combinatorics (the branch of mathematics concerned with
+counting abstract structures). More broadly, it introduced a framework---
+similar to algebraic data types---in which many combinatorial objects
+of interest could be constructed algebraically, and in which those
+algebraic descriptions can be used to reason about, manipulate, and
+derive properties of the combinatorial structures.  The theory of
+species has been used to give elegant new proofs of classical results
+(for example, Cayley's theorem giving the number of labelled
+trees~\citep{joyal}), and some new results as well (for example, a
+combinatorial interpretation and proof of Lagrange
+inversion~\citep[Chap. 3]{bll}).
 
-Both the theory of algebraic data types and the theory of
-combinatorial species have a similar algebraic flavor.  For example,
-the \emph{species} of binary parenthesizations (\ie binary trees with
-data stored in the leaves) can be defined by the recursive species
+Not only do the theory of algebraic data types and the theory of
+combinatorial species have a similar algebraic flavor in general, but
+the specific details are tantalizingly parallel.  For example, the
+\emph{species} of binary parenthesizations (\ie binary trees with data
+stored in the leaves) can be defined by the recursive species
 equation \[ \Sp{P} = \X + \Sp{P} \cdot \X \cdot \Sp{P} \] which
-closely parallels the Haskell definition given above.  This is
-tantalizing, since the theory of functional programming languages has
-a long history of fruitful borrowing from pure mathematics, as, for
-example, in the case of category theory.  However, there has yet to be
-a comprehensive treatment of the precise connections between the
-theory of algebraic data types and the theory of combinatorial
-species. \citet{bll} give a comprehensive treatment of the theory of
-species, but their book is written primarily from a mathematical point
-of view and is only tangentially concerned with issues of computation.
-It is also written in a style that makes it relatively inaccessible to
-researchers in the programming languages community---it assumes quite
-a bit of mathematical background that many PL researchers do not have.
+closely parallels the Haskell definition given above.  The theory of
+functional programming languages has a long history of fruitful
+borrowing from pure mathematics, as, for example, in the case of
+category theory; so the fruit seems ripe for picking in the case of
+combinatorial species.
 
 The connection between species and computation was first explored by
 Flajolet, Salvy, and Zimmermann, with their work on
@@ -150,32 +146,42 @@ species as a framework to extend the usual notion of algebraic data
 types, and described some preliminary work adding species types to
 Haskell.  More recently, Joachim Kock has done some theoretical work
 generalizing species, ``container types'', and several other notions
-of ``extended data type''~\citep{kock2012data}.  \todo{What to say
-  about this?  Something about Homotopy Type Theory.  It used to say
-  ``Via Kock's work, it looks like there may be some interesting
-  connections between the theory of species and the recent work in
-  Homotopy Type Theory---though it remains quite inaccessible to most
-  in the programming languages community.''}
+of ``extended data type''~\citep{kock2012data}.  (Most interestingly,
+Kock's work seems to point to the central relevance of homotopy type
+theory~\citep{hottbook}, which also emerges as a central player in
+this dissertation.)
 
-The investigations in this dissertation all arise from considering the
-central question, \textbf{what is the connection between species and
-  algebraic data types?}  A precise connection between the two could
-have many exciting implications.  For example, it would allow taking
-much of the mathematical theory developed on the basis of
-species---for example, enumeration, uniform random generation of
-structures via Boltzmann sampling \todo{cite}, \todo{what else?}---and
-applying it directly to algebraic data types.  It is also possible
-that exploring the theory of species in an explicitly computational
-setting will yield additional insights that can be contributed back
-into a combinatorial setting.
+However, there has still yet to be a comprehensive treatment of the
+precise connections between the theory of algebraic data types and the
+theory of combinatorial species. \citet{bll} give a comprehensive
+treatment of the theory of species, but their book is written
+primarily from a mathematical point of view and is only tangentially
+concerned with issues of computation.  It is also written in a style
+that makes it relatively inaccessible to researchers in the
+programming languages community---it assumes quite a bit of
+mathematical background that many PL researchers do not have.
+
+The investigations in this dissertation, therefore, all arise from
+considering the central question, \textbf{what is the connection
+  between species and algebraic data types?}  A precise connection
+between the two could have many exciting implications.  It would allow
+taking much of the mathematical theory developed on the basis of
+species---for example, enumeration, exhaustive generation, and uniform
+random generation of structures via Boltzmann sampling
+\citep{Duchon-2002-Boltzmann, duchon-2004-boltzmann,
+  flajolet2007boltzmann, roussel2009boltzmann}---and applying it
+directly to algebraic data types.  It is also possible that exploring
+the theory of species in an explicitly computational setting will
+yield additional insights that can be contributed back into a
+combinatorial setting.
 
 There is also the promise of using species not just as a tool to
 understand and work with algebraic data types in better ways, but
 directly as a foundation upon which to build (a richer notion) of
 algebraic data types.  This is particularly interesting due to the
 ability of the theory of species to talk about structures which do not
-correspond to algebraic data types---particularly structures which
-involve \term{symmetry} and \term{sharing}.
+correspond to algebraic data types in the usual sense---particularly
+structures which involve \term{symmetry} and \term{sharing}.
 
 A data structure with \term{symmetry} is one whose elements can be
 permuted in certain ways without affecting its identity.  For example,
@@ -183,13 +189,11 @@ permuting the elements of a bag always results in the same bag.
 Likewise, the elements of an ordered cycle may be cyclically permuted
 without affecting the cycle.  By contrast, a typical binary tree
 structure has no symmetry: any permutation of the elements may result
-in a different tree.  In fact, every algebraic data structure has no
-symmetry, since every element in an algebraic structure can be
-uniquely identified by a \emph{path} from the root of the structure to
-the element, so permuting the elements always results in an observably
-different value.
-
-\todo{More about symmetry---example pictures or something?}
+in a different tree.  In fact, every data structure of some algebraic
+data type has no symmetry, since every element in an algebraic
+structure can be uniquely identified by a \emph{path} from the root of
+the structure to the element, so permuting the elements always results
+in an observably different value.
 
 A data structure with \term{sharing} is one in which different parts
 of the structure may refer to the same subpart.  For example, consider
@@ -240,13 +244,16 @@ undirected graph is always symmetric) and that functions respect
 abstract structure (\eg\ any function on bags should give the same
 result when given permutations of the same elements as inputs).
 
+The promise of using the theory of species as a foundation for data
+types is to be able to declare data types with symmetry and sharing,
+with built-in compiler support ensuring that working with such data
+types is ``correct by construction''.
+
 The grand vision of this research program, then, is to create and
 exploit a bridge between the theory of species and the theory and
 practice of programming languages. This dissertation represents just a
 first step in this larger program, laying the theoretical groundwork
 necessary for its continued pursuit.
-
-\todo{subsection here?}
 
 To even get started building a bridge between species and data types
 requires more work than one might na\"ively expect.  The fundamental
