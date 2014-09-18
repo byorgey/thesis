@@ -36,6 +36,7 @@
 \usepackage{url}
 \usepackage{footmisc}
 \usepackage{enumitem}
+\usepackage{verse}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 
