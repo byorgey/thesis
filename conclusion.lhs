@@ -29,3 +29,5 @@ settings
 \todo{$\BTSub$ and all the attendant stuff!}
 
 \todo{generic programming}
+
+\todo{``storage'' stuff}
