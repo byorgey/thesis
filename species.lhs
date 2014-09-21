@@ -7,9 +7,6 @@
 
 \todo{Write something about relation to ADTs, with multisort used to
   represent constructors?}
-\todo{Go through and add some back references to preliminaries chapter?}
-\todo{Need a story for building with both color or black/white
-  figures}
 
 The theory of \term{combinatorial species}, introduced by
 \citet{joyal}, is a unified, algebraic theory of \term{combinatorial
@@ -1844,8 +1841,7 @@ dia
 \end{figure}
 One can think of two distinct shapes, with labels duplicated between
 them. One can think of the labels as \emph{pointers} for locations in
-a shared memory (this view will be explored more in \pref{sec:sharing}
-\todo{really?}).  Finally, one can think of the shapes themselves as
+a shared memory.  Finally, one can think of the shapes themselves as
 being superimposed.  This last view highlights the fact that $\times$
 is symmetric, but only up to isomorphism, since at root it still
 consists of an \emph{ordered} pair of shapes.
