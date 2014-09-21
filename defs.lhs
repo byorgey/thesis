@@ -74,7 +74,10 @@
 \cfoot[\fancyplain{}{\footnotesize\thepage}]{\fancyplain{}{\footnotesize\thepage}}
 \lhead[\fancyplain{}{}]{\fancyplain{}{}}
 \rhead[\fancyplain{}{}]{\fancyplain{}{}}
-\chead[\fancyplain{}{\textbf{DRAFT --- \today}}]{\fancyplain{}{\textbf{DRAFT --- \today}}}
+\ifdraft
+\chead[\fancyplain{}{\textbf{DRAFT ---
+    \today}}]{\fancyplain{}{\textbf{DRAFT --- \today}}}
+\fi
 \renewcommand{\headrulewidth}{0pt}
 \setlength{\headheight}{15pt}
 
