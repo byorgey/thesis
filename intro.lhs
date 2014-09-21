@@ -272,6 +272,9 @@ constructive setting.  In particular, the biggest issues concern
 what is wanted to \todo{what}.  \todo{List more specific contributions
   here?}
 
+\todo{Explain how some chapters have a presentational/pedagogical
+  contribution as well as novel technical material.}
+
 \pref{chap:species} goes on to present the theory of species itself.
 Much of the chapter is not novel in a technical sense.  One of the
 main contributions of the chapter, instead, is simply to organize and

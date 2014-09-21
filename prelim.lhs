@@ -6,8 +6,6 @@
 \chapter{Preliminaries}
 \label{chap:prelim}
 
-\todo{Add forwards and backwards references.}
-
 The main content of this dissertation builds upon a great deal of
 mathematical formalism, particularly from set theory, category theory,
 and type theory.  To say that this chapter attempts to make the
@@ -16,12 +14,12 @@ disheartening to those readers who find there are still gaps between
 this document's assumptions and their background knowledge.  Rather,
 the purpose of this chapter is to provide a brief overview of the
 necessary technical background, giving definitions, important
-intuitions, and references for further reading.  \todo{Make sure it is
-  so!} Readers who merely need to fill in a few gaps may find such
-brief treatments sufficient; it is hoped that readers with less
-background will find it a useful framework and source of intuition for
-furthering their own learning, making use of the provided references
-to read about things not covered here.
+intuitions, and references for further reading. Readers who merely
+need to fill in a few gaps may find such brief treatments sufficient;
+it is hoped that readers with less background will find it a useful
+framework and source of intuition for furthering their own learning,
+making use of the provided references to read about things not covered
+here.
 
 \section{Metavariable conventions and notation}
 \label{sec:metavariables}
@@ -527,10 +525,11 @@ particular, an important example is the distinction between the
 type \[ (a : A) \times B(a), \] pronounced ``there
 \emph{constructively} exists an $A$ such that $B$'', and its
 truncation \[ \ptrunc{(a : A) \times B(a)}, \] pronounced ``there
-\emph{merely} exists an $A$ such that $B$''.  The latter more
-closely corresponds to the notion of existence in classical
-logic---given an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we know
-only that some $(a:A)$ satisfying $B$ exists, without necessarily
+\emph{merely} exists an $A$ such that $B$''.  The latter more closely
+corresponds to the notion of existence in classical logic, since
+classically one can prove an existence statement without specifying an
+inhabitant. Given an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we
+know only that some $(a:A)$ satisfying $B$ exists, without necessarily
 getting to know its identity.
 
 %% Don't think I make any use of this later.
@@ -596,10 +595,6 @@ well~\citep{martin1982constructive}.
 
 \section{Category theory}
 \label{sec:category-theory}
-
-\todo{Add a discussion of hom functors: bifunctors, contra- and
-  co-variant, turn colimits into limits on the left and preserve
-  limits on the right.}
 
 This dissertation makes extensive use of category theory, which is the
 natural language in which to explore species and related concepts.  A
@@ -709,6 +704,15 @@ a category $\C$ is usually denoted $\C(A,B)$ or
 $\mathrm{Hom}_\C(A,B)$, but I will also occasionally use the notation
 $\Hom A B$, or $\Hom[\C] A B$ when the category $\C$ should be explicitly
 indicated.
+
+$\Hom[\C] - - : \C^\op \times \C \to \Set$ is a bifunctor,
+contravariant in its first argument and covariant in the second
+argument; its action on morphisms is given by \[ (\Hom[\C] f g)\ h = f
+\then h \then g. \] We will often have occasion to make use of the
+fact that $\Hom X -$ preserves limits (for example, $(\Hom X {Y \times
+  Z}) \iso (\Hom X Y) \times (\Hom X Z)$), and, dually, $\Hom - X$
+turns colimits into limits (for example, in a category with coproducts
+and products, $(\Hom {Y + Z} {X}) \iso (\Hom Y X) \times (\Hom Z X)$).
 
 \paragraph{Slice categories}
 
@@ -1164,7 +1168,9 @@ The functor $j : \C^\op \to (\fc \C \Set)$ defined on objects by $j(A)
 \defeq (\hom A -)$ is known as the \term{Yoneda embedding}.  As a
 corollary of the Yoneda lemma, $j$ is full and faithful.
 
-\todo{Cite Edward blog posts, further reading.}
+For further reading and intuition about the Yoneda lemma, see, for
+example, \citet{baez1999yoneda}, \citet{piponi2006yoneda}, or
+\citet{kmett2011yoneda}.
 
 \subsection{Groupoids}
 \label{sec:groupoids}

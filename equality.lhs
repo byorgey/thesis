@@ -5,7 +5,6 @@
 \chapter{Equality and Finiteness}
 \label{chap:equality}
 
-\todo{Improve this introduction --- mention contributions.}
 Before delving into combinatorial species proper, we must first tackle
 some foundational issues---in particular, how equality and finiteness
 are handled in a constructive setting.  As we will see, these topics
@@ -26,8 +25,8 @@ practice but inadmissible in a constructive setting.  One of the main
 reasons that AC is used frequently in the context of category theory
 in particular has to do with the difference between equality and
 isomorphism. Several approaches to doing without AC are outlined,
-culminating in showing (\pref{sec:ct-hott},
-\pref{sec:finiteness-hott}) that it is completely unnecessary when
+culminating in explaining (\pref{sec:ct-hott},
+\pref{sec:finiteness-hott}) why it is completely unnecessary when
 formulating category theory inside of HoTT.
 
 Interwoven with the story of equality and the axiom of choice is a
@@ -40,10 +39,19 @@ evidence may be used.  Finiteness turns out to play an important role
 in the theory of species, which are \term{labelled} by finite
 sets.
 
+The key contributions of this chapter are
+\begin{itemize}
+\item a synthesis and presentation of many topics relevant to equality and
+  finiteness (the axiom of choice, equivalence of categories,
+  anafunctors, cliques, and some relevant results in HoTT) in a way
+  accessible to functional programmers;
+\item a development of the theory of \term{cardinal-finite sets} in HoTT;
+\item development of HoTT-based analogues to the categories $\B$,
+  $\P$, and $\L$.
+\end{itemize}
+
 \later{Definitional equality. Leibniz equality. Judgmental
   equality. Equivalence.  Principle of equivalence.}
-
-\later{cite my blog posts}
 
 \section{The axiom of choice (and how to avoid it)}
 \label{sec:AC}
@@ -1388,8 +1396,11 @@ to avoid the axiom of choice.
     $e$. \later{Formal proof that the resulting $e'$ is an
       equivalence?}  This construction corresponds more generally to
     the \term{Gordon complementary bijection
-      principle}~\citep{gordon1983sieve}, to be discussed in more
-    detail in \pref{sec:gcbp} \todo{is this going to be included?}.
+      principle}~\citep{gordon1983sieve}, whereby a bijection $A_1
+    \bij B_1$ can be constructively ``subtracted'' from a bijection
+    $(A_0 + A_1) \bij (B_0 + B_1)$, yielding a bijection $A_0 \bij
+    B_0$.  (Unfortunately, I do not currently know of a good way to
+    encode the proof in a constructive logic.)
   \end{itemize}
 \end{proof}
 
