@@ -5,9 +5,6 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
-\todo{Write something about relation to ADTs, with multisort used to
-  represent constructors?}
-
 The theory of \term{combinatorial species}, introduced by
 \citet{joyal}, is a unified, algebraic theory of \term{combinatorial
   structures} or \term{shapes}.  The algebraic nature of species is of
@@ -15,22 +12,24 @@ particular interest in the context of data structures, and will be
 explored in depth in this chapter.  The theory can also be seen as a
 \term{categorification} of the theory of \term{generating functions}.
 
-The present chapter begins by presenting an intuitive sense for
-species, along with a collection of examples, in
-\pref{sec:species-intuition}.  \pref{sec:species-definition} presents
-the formal definition of species and related definitions, along with
-more commentary and intuition.  The same section also discusses an
-encoding of species within homotopy type theory
-(\pref{sec:species-hott}).  As a close follow-up to the formal
-definition, \pref{sec:iso-equipotence} presents two equivalence
-relations on species, \term{isomorphism} and \term{equipotence}, and
-in particular sheds some new light on equipotence via the encoding of
-species in HoTT.  \todo{finish this introduction, once I have a better
-  idea of how the rest of the chapter will actually shake out.  Talk
-  about generating functions, internal homs.  Also talk about how
-  framework, listing requirements, etc. allows for a much more
-  ``modular'' approach, \ie add whatever features to your species you
-  want (HoTT-based, multisort, weighted, \etc)}
+The present chapter begins in \pref{sec:species-intuition} by
+presenting an intuitive sense for species along with a collection of
+examples.  \pref{sec:species-definition} presents the formal
+definition of species and related definitions, along with more
+commentary and intuition.  The same section also discusses an encoding
+of species within homotopy type theory (\pref{sec:species-hott}).  As
+a close follow-up to the formal definition, \pref{sec:iso-equipotence}
+presents two equivalence relations on species, \term{isomorphism} and
+\term{equipotence}, and in particular sheds some new light on
+equipotence via the encoding of species in
+HoTT. \pref{sec:generating-functions} introduces \term{generating
+  functions}, and \pref{sec:generalized-species} lays out a program
+for the rest of the chapter, considering arbitrary functor categories
+in place of traditional species, and determining the properties
+necessary to support each species operation.  The rest of the chapter
+presents a collection of standard operations on species, with examples
+and discussion of each, along with analysis of the properties required
+for each.
 
 \section{Intuition and examples}
 \label{sec:species-intuition}
@@ -1215,8 +1214,7 @@ consider functors $\L \to \Set$, where $\L$ is the groupoid of finite
 sets equipped with linear orders, along with order-preserving
 bijections, then the fundamental transform is indeed a natural
 isomorphism between $\List$ and $\Perm$.  Such functors are called
-$\L$-species, and are discussed further in \pref{sec:L-species}
-\todo{where?}.
+$\L$-species, and are discussed further in \pref{sec:L-species}.
 
 Back in $\FinSetT$, however, in order to use the linear order
 associated to each finite set $K$, we must produce a mere proposition.
@@ -1494,13 +1492,6 @@ $\fc \B \Set$, and ``generalized species'' (or, more specifically,
 defining a particular species operation in $\fc \B \Set$, then
 generalizes it to arbitrary functor categories $\fc \Lab \Str$, and
 exhibits examples in other functor categories.
-
-\todo{Finish this once I have a better idea how the remaining sections
-  will go.  Don't just list them, give some high-level idea of what
-  they are doing.}  After working through the operations, The
-remaining sections, \pref{sec:implicit}--\pref{sec:unlabelled}
-\todo{fix this if I change sections around}, examine other specific
-generalizations of species, such as \todo{fill in}?
 
 \section{Lifted monoids: sum and Cartesian product}
 \label{sec:lifted}
@@ -1965,19 +1956,17 @@ $F$- and $G$-shapes individually, with an extra permutation supplied
 as an argument. Eliminators for species shapes are treated more
 generally and systematically in \pref{sec:elim-species}.
 
-\todo{Redo this para.  Presumably we can interpret STLC in the
-  category of species.}
-Note that, unfortunately, the fact that $\Spe$ is Cartesian closed
-doesn't have anything to say about representing functions as species,
-as one might na\"ively expect.  However, it does allow us to
-internalize \emph{species morphisms} as species. \later{Explain the
-  sense in which this is true? See Aguiar \& Mahajan.  Although they
-  don't actually make it very clear.}
+On the surface, the fact that $\Spe$ is Cartesian closed only allows
+us to internalize \emph{species morphisms} as species, but not to
+interpret functions between data types.  $\Spe$ being Cartesian closed
+does mean that the simply typed lambda calculus can be interpreted
+internally to $\Spe$; but it is not yet clear to me what this would
+mean on an intuitive level.
 
 \subsection{Lifting monoids}
 \label{sec:lifting-monoids}
 
-\todo{incorporate comment from Derek Elkins (see comment in source)}
+% comment from Derek Elkins:
 % I'm pretty sure most of the stuff from Lemma 3.6.9 is simply a consequence of (C => -) being a (2-)functor on Cat, and, furthermore, as a right adjoint it preserves limits.  So, for example, Lemma 3.6.9 is: let d \in D be represented as d : 1 -> D.  The d^C : (1^C -> D^C) ~ (1 -> D^C) ~ (C -> D).  A bifunctor F : DxD -> D leads to F^C : ((DxD)^C -> D^C) ~ (D^C x D^C) -> D^C.}
 
 Both these constructions generalize readily. In fact, any monoidal
@@ -2103,7 +2092,9 @@ how monoids (and many other structures of interest) can be lifted from
 a category $\Str$ to a functor category $\fc \Lab \Str$.  The
 high-level ideas of this construction seem to be ``folklore'', but I
 have been unable to find any detailed published account, so it seemed
-good to include it here for completeness.
+good to include some proofs here for completeness.  Unfortunately, the
+proof presented here is still incomplete; as future work I hope to
+completely understand the proof in detail.
 
 We must first develop some technical machinery regarding functor
 categories.  In particular, we show how to lift objects, functors, and
@@ -2240,42 +2231,30 @@ category recording the arity of the diagram.
   conditions to check, but they all fall out easily.
 \end{proof}
 
-One important thing to note is that the above proof is constructive,
-and we can thus make statements about the particular diagram produced.
-In particular, it is the case that \todo{Argue that the lifted diagram
-  defined in this proof is ``about'' (\ie has as its vertices and
-  edges) the lifted versions of the vertices and edges of the original
-  diagram.}
+At this point there is a gap in the proof.  To know that this lifting
+does the right thing, one must show that the lifted diagram defined
+above is ``about'' (\ie has as its vertices and edges) the lifted
+versions of the vertices and edges of the original diagram.  Even this
+is still not quite enough; to really know that the lifted diagram
+``says the same thing'' as the unlifted diagram, we need to show not
+just that the vertices and edges of the lifted diagram are lifted
+versions of the original diagram's vertices and edges, but that these
+lifted vertices and edges are themselves composed of lifted versions
+of the components of the originals. For example, we want to ensure
+that the lifting of the example diagram shown above still expresses
+coherence of the lifted associator with respect to the lifted tensor
+product. It is not enough to have vertices like $(((A \oplus B) \oplus
+C) \oplus D)^\D$; we must show this is the same as $((A^\D \oplus^\D
+B^\D) \oplus^\D C^\D) \oplus^\D D^\D$, so that it says something about
+the lifted tensor product $\oplus^\D$.
 
-We have seen that we can lift a diagram in $\C$ to a diagram in
-$\C^\D$, and even that the lifted diagram is related to the original
-in a nice way. However, this is still not quite enough.  In
-particular, to really know that the lifted diagram ``says the same
-thing'' as the unlifted diagram, we need to show not just that the
-vertices and edges of the lifted diagram are lifted versions of the
-original diagram's vertices and edges, but that these lifted vertices
-and edges are themselves composed of lifted versions of the components
-of the originals. For example, we want to ensure that the lifting of
-the example diagram shown above still expresses coherence of the
-lifted associator with respect to the lifted tensor product. It is
-not enough to have vertices like $(((A \oplus B) \oplus C) \oplus
-D)^\D$; we must show this is the same as $((A^\D \oplus^\D B^\D)
-\oplus^\D C^\D) \oplus^\D D^\D$, so that it says something about the
-lifted tensor product $\oplus^\D$.
+The basic idea would be to write down a formal syntax for the functors
+and natural transformations that may constitute a diagram, and show
+that the lifting of an expression is the same as the original
+expression with its atomic elements each replaced by their lifting.
 
-The basic idea is to write down a formal syntax for the functors and
-natural transformations that may constitute a diagram, and show that
-the lifting of an expression is the same as the original expression
-with its atomic elements each replaced by their lifting.
-
-\todo{more here}
-
-\begin{thm} \label{thm:lift-expressions}
-\todo{Theorem here about lifting expressions/diagrams.}
-\end{thm}
-
-We now have the necessary tools to show how monoids lift into a
-functor category.
+Assuming this result for now, we can go on to show how monoids lift
+into a functor category.
 
 \begin{thm} \label{thm:lift-monoid}
   Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a
@@ -2286,8 +2265,9 @@ functor category.
 
 \begin{proof}
   Immediate from Propositions \ref{lem:lift-object},
-  \ref{lem:lift-functor}, and \ref{lem:lift-nt}, and
-  \pref{thm:lift-expressions}.
+  \ref{lem:lift-functor}, and \ref{lem:lift-nt}, and our assumed
+  result that diagrams lift to diagrams which ``say the same thing''
+  as the original, but say it ``about'' lifted things.
 \end{proof}
 
 In \pref{prop:lift-monoid-simple} it was claimed that this lifting
@@ -2300,8 +2280,9 @@ already show that symmetry and distributivity are preserved:
 
 \begin{proof}
   Symmetry is given by a natural isomorphism $\all {X Y} {X \otimes Y
-  \equiv Y \otimes X}$. By \pref{thm:lift-expressions}, this lifts to a natural isomorphism
-  $\all {F G} {F \otimes^\Lab G \equiv G \otimes^\Lab F}$.
+    \equiv Y \otimes X}$. By our previous assumption, this lifts to a
+  natural isomorphism $\all {F G} {F \otimes^\Lab G \equiv G
+    \otimes^\Lab F}$.
 \end{proof}
 
 \begin{prop}
@@ -2314,8 +2295,8 @@ already show that symmetry and distributivity are preserved:
   transformation $\all {X Y Z} {X \times Y + X \times Z \to X \times
     (Y + Z)}$, given by
   $\fork{\choice{\pi_1}{\pi_1}}{\choice{\pi_2}{\pi_2}}$.  The category
-  is \term{distributive} if this is an isomorphism.  Again by
-  \pref{thm:lift-expressions}, such an isomorphism lifts to another
+  is \term{distributive} if this is an isomorphism.  Again by our
+  assumption about lifting, such an isomorphism lifts to another
   natural isomorphism \[ \all {F G H} {(F \times^\Lab G) +^\Lab (F
     \times^\Lab H) \to F \times^\Lab (G +^\Lab H)}. \]
 \end{proof}
@@ -2960,8 +2941,8 @@ dia = pairs
   correspond either to a bag data structure, or instead to a ``sink''
   where we throw labels to which we do not wish to associate any
   data. This makes no difference from a purely combinatorial point of
-  view, but will make a difference in \pref{chap:labelled}; see
-  \todo{where?} in particular.
+  view, but makes a difference when considering labelled structures
+  (\pref{chap:labelled}).
 \end{ex}
 
 \begin{ex}

@@ -149,6 +149,26 @@ dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
   \end{figure}
 \end{ex}
 
+\begin{ex}
+  Recall the example from \pref{sec:basic-diff}, in which open terms
+  of the untyped lambda calculus are modeled using the species \[
+  \Lambda = \elts + \Lambda^2 + \Lambda'. \] However, this species
+  does not correctly model the size of lambda calculus terms.
+  \pref{sec:basic-diff} suggested instead using the multisort
+  species \[ \Xi = \X \cdot \Bag + \Y \cdot \Xi^2 + \Y \cdot
+  \frac{\partial}{\partial \X} \Xi. \] An even better idea is to use a
+  three-sort species, as in \[ \Xi = \X \cdot \E + \Y \cdot \Xi^2 + \Z
+  \cdot \frac{\partial}{\partial \X} \Xi, \] where $\X$ stands in for
+  variables, $\Y$ for applications, and $\Z$ for lambdas.
+
+  In general, any algebraic data type may be modelled by a multisort
+  species, with one sort corresponding to each constructor.  The
+  singletons of a given sort count occurrences of the corresponding
+  construct, and ensure that species structures of a finite size
+  correspond to data structures that take only a finite amount of
+  memory.
+\end{ex}
+
 \later{Graphs with labelled vertices and edges. Not obvious how to
   write down an algebraic expression for it; see BLL 2.4.}
 % \begin{ex}
