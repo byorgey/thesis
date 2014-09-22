@@ -5,11 +5,10 @@
 \chapter{Species variants}
 \label{chap:variants}
 
-\todo{edit this intro}
 As explained in \pref{sec:generalized-species}, one of the goals of
-this chapter is to explore ``species-like things'' which are functors
-in some category $(\fc \Lab \Str)$.  We have seen a few variants
-already:
+the previous chapter was to determine the properties needed to define
+operations on ``variant species'', \ie functors in some category $(\fc
+\Lab \Str)$.  We have seen a few variants already:
 \begin{itemize}
 \item $\fc \B \Set$
 \item $\fc \B \FinSet$, a slightly more traditional notion of species
@@ -55,7 +54,7 @@ rows are labelled by properties, to be elaborated below.
 \caption{Properties of $(\fc \Lab \Str)$ needed for species operations}
 \label{tab:properties}
 \end{table}
-\todo{When/why is it required for $\Lab$ to be a groupoid??}
+\later{When/why is it required for $\Lab$ to be a groupoid??}
 
 \begin{itemize}
 \item All operations require $\Str$ to be monoidal.  Some require
@@ -355,54 +354,62 @@ general, weighted species thus correspond to refinements of unweighted
 species.
 
 \newcommand{\A}{\bbb{A}}
-\todo{Come back to this.  Can we fit this in the framework?}
-
-Given some object $A \in \Str$, consider the slice category $\Str/A$.
+It seems that it should be possible to fit weighted species into the
+same framework, by considering a slice category $\Str/A$.
 We can interpret objects of $\Str/A$ as objects of $\Str$ paired with
 a ``weighting''; morphisms in $\Str/A$ are thus ``weight-preserving''
-morphisms of $\Str$.
+morphisms of $\Str$.  Traditional weighted species would then correspond to
+functors $\fc \B {(\Set/\A)}$ for some polynomial ring $\A$; more
+generally, one can add weighting to any species variant $\fc \Lab
+\Str$ by passing to $\fc \Lab {(\Str/A)}$ for some appropriate choice
+of $A \in \Str$.  Verifying this construction, in particular the
+properties of $A$ which give rise to the appropriate species
+operations on weighted species, is left to future work.
 
-The first thing to note is that $\Str/A$ inherits coproducts from
-$\Str$: given two weighted objects $(X, \omega_X)$ and $(Y,
-\omega_Y)$, we can uniquely construct a weighting $(X+Y, [\omega_X,
-\omega_Y])$:
-\[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
-  \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
-  \ar[dl]^{\omega_Y} \\ & A & } \] To see that this is indeed the
-coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \todo{finish}
+% The first thing to note is that $\Str/A$ inherits coproducts from
+% $\Str$: given two weighted objects $(X, \omega_X)$ and $(Y,
+% \omega_Y)$, we can uniquely construct a weighting $(X+Y, [\omega_X,
+% \omega_Y])$:
+% \[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
+%   \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
+%   \ar[dl]^{\omega_Y} \\ & A & } \] To see that this is indeed the
+% coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \todo{finish}
 
-Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
-weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
-categorical product in $\Set/A$ is the set $\{(x,y) \mid x \in X, y
-\in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not a very
-useful notion of product in this context: intuitively, taking a
-product of weighted objects should yield a combined object with some
-sort of combined weight, instead of limiting us to cases where the
-weights match.
+% Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
+% weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
+% categorical product in $\Set/A$ is the set $\{(x,y) \mid x \in X, y
+% \in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not a very
+% useful notion of product in this context: intuitively, taking a
+% product of weighted objects should yield a combined object with some
+% sort of combined weight, instead of limiting us to cases where the
+% weights match.
 
-Instead of requiring $\Str$ to have pullbacks, we can define a
-different sort of monoidal product on $\Str/A$ if we assume that
-$\Str$ has products and $A$ is a monoid object, that is, there exist
-morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
-\todo{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
-\omega_Y)$ by
-\[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
-  \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
-by $\eta$.
-%% xymatrix{ \singleton \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
-One can check that $\otimes$ inherits monoidal structure from
-$A$. \todo{Finish this proof.}
+% Instead of requiring $\Str$ to have pullbacks, we can define a
+% different sort of monoidal product on $\Str/A$ if we assume that
+% $\Str$ has products and $A$ is a monoid object, that is, there exist
+% morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
+% \todo{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
+% \omega_Y)$ by
+% \[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
+%   \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
+% by $\eta$.
+% %% xymatrix{ \singleton \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
+% One can check that $\otimes$ inherits monoidal structure from
+% $A$. \todo{Finish this proof.}
 
-\todo{Show that this gives the usual notion of weighted species.}
+% \todo{Show that this gives the usual notion of weighted species.}
 
-\todo{Show that this construction preserves the properties we care
-  about.}
+% \todo{Show that this construction preserves the properties we care
+%   about.}
 
-\todo{Give some examples.}
+% \todo{Give some examples.}
 
 \section{\hott{species}}
 \label{sec:h-species}
 
+\todo{This should go somewhere else.  Also emphasize what I wrote
+  to... was it Jay?  Whatever he said ``this would make a great
+  paragraph to go in...''}
 Although they have been discussed throughout the preceding chapter, it
 is worth explicitly collecting here some results about \hott{species},
 that is, $(\fc \BT \ST)$-species constructed within HoTT.  One notable
@@ -411,8 +418,6 @@ function $f : \FinTypeT \to \SetT$ automatically gives rise to an
 \hott{species}, that is, a functor $\BT \to \ST$. Morphisms in $\BT$
 are paths $A = B$, which via transport automatically and functorially
 give rise to functions $f(A) \to f(B)$.
-
-\todo{What else to say about \hott{species}?}
 
 \section{$\L$-species}
 \label{sec:L-species}
@@ -430,10 +435,11 @@ include more on the theory here.  For now, we simply note that $(\fc
 
 \begin{itemize}
 \item $\L$ is indeed monoidal; in fact, there are many interesting
-  choices regarding how to combine linear orders. \todo{expand on this?}
+  choices regarding how to combine linear orders. \later{expand on this?}
 \item $\L$ is clearly a groupoid, locally small, and enriched over $\Set$.
 \item $\Set$ is cocomplete and hence has coends over $\L$.
-\item \todo{$(\fc \L \Set)$ enriched over itself?}
+\item $(\fc \L \Set)$ is enriched over itself, for reasons similar to
+  $(\fc \B \Set)$.
 \item Since objects in $\L$ are finite sets, the indexed partitional
   product $G^K$ can be defined in exactly the same way as in the case
   of $\fc \B \Set$.
@@ -1284,7 +1290,9 @@ When we consider the properties in \pref{tab:properties}, however, we
 find in particular that $\BTSub^\op$ is not enriched over $\ST$, since
 coinjections are not, in general, total functions.  This rules out all
 species operations other than sum and Cartesian product. \todo{Working
-  here.  Should phrase this a little less confidently.}
+  here.  Should phrase this a little less confidently.  Go on to say
+  that we actually want to consider the category of sets and partial
+  functions.}
 
 Copartial and partial species will have an interesting role to play in
 \pref{chap:labelled}.
@@ -1295,12 +1303,20 @@ Copartial and partial species will have an interesting role to play in
 Many other examples of species variants appear in the literature. For
 example:
 \begin{itemize}
-\item $\Vect$-valued species \citep{joyal86, aguiar2010monoidal}, \ie
+\item $\Vect$-valued species, \ie
   functors $\B \to \Vect$, which send finite sets of labels to
-  \emph{vector spaces} of shapes. \later{say more?}
-\item $\Cat$-valued species \citep{baez2000finite}, \ie functors $\B
-  \to \Cat$ which send finite sets of labels to \emph{categories} of
-  shapes. \later{say more?}
+  \emph{vector spaces} of shapes. Joyal had these in mind from the
+  beginning \citep{joyal86}, and they seem to play a central role in
+  more recent work as well (see, for example,
+  \citet{aguiar2010monoidal}), though I do not yet have a good
+  intuition for them.
+\item $\Cat$-valued species, \ie functors $\B \to \Cat$ which send
+  finite sets of labels to \emph{categories} of shapes. Intriguingly,
+  in the case of groupoids in particular, a suitable notion of
+  cardinality/Euler characteristic can be defined for categories
+  \citep{baez2000finite}, allowing $\Cat$-valued species to be seen as
+  a categorification of generating functions with positive
+  \emph{rational} coefficients.
 \item \todo{Generalized species of Fiore \etal}
 \end{itemize}
 
