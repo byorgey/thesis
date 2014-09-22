@@ -255,6 +255,8 @@ practice of programming languages. This dissertation represents just a
 first step in this larger program, laying the theoretical groundwork
 necessary for its continued pursuit.
 
+\todo{general paragraph here about equality vs isomorphism and so on?}
+
 To even get started building a bridge between species and data types
 requires more work than one might na\"ively expect.  The fundamental
 problem is that the theory of species is traditionally couched in
@@ -266,54 +268,63 @@ implicit uses of reasoning principles, such as the axiom of choice,
 which are incompatible with constructive foundations.  The bulk of
 \pref{chap:equality} is dedicated to this sort of foundational
 groundwork which makes it possible to talk about species in a typed,
-constructive setting.  In particular, the biggest issues concern
-\todo{what? equality and... stuff}, and the recently developed
+constructive setting.  In particular, the biggest issues are the
+difference between \term{equality} and \term{isomorphism}, and the
+constructive encoding of \term{finiteness} (which is itself related
+issues to equality and isomorphism). The recently developed
 \term{homotopy type theory} \citep{hottbook} turns out to be exactly
-what is wanted to \todo{what}.  \todo{List more specific contributions
-  here?}
-
-\todo{Explain how some chapters have a presentational/pedagogical
-  contribution as well as novel technical material.}
+what is wanted to encode everything in a parsimonious way.  The
+development of cardinal-finite sets in HoTT (along with a related
+concept I term ``manifestly finite sets'') seems to be novel, as is
+the development of HoTT analogues of the set-theoretic groupoids $\B$
+and $\P$.
 
 \pref{chap:species} goes on to present the theory of species itself.
 Much of the chapter is not novel in a technical sense.  One of the
 main contributions of the chapter, instead, is simply to organize and
-present some relevant aspects of the theory for a functional
-programming audience.  The existing species literature is almost
-entirely written for either hard-core combinatorialists or hard-core
-category theorists, and is not very accessible to the typical FP
-practitioner.  Any attempt to make species relevant to computer
-scientists must therefore first address this accessibility gap.  I
-cannot say that I have accomplished this---doing a proper job of it
-would really require a book.  In any case, I hope that this is at
-least a good start.
+present some relevant aspects of the theory for a functional programming
+audience.  The existing species literature is almost entirely written
+for either hard-core combinatorialists or hard-core category
+theorists, and is not very accessible to the typical FP practitioner.
+Any attempt to make species relevant to computer scientists must
+therefore first address this accessibility gap.  I cannot say that I
+have accomplished this---doing a proper job of it would really require
+a book.  In any case, I hope that this is at least a good start.
 
-However, since \pref{chap:species} is already attempting to present at
-least two different variants of species---one traditional one based on
-set theory, and one novel one based on homotopy type theory---it
-``bites the bullet'' and considers \emph{arbitrary} functor
-categories, elucidating the categorical properties required to support
-each species operation.  Although many individual species
-generalizations have been considered in the past, this systematic
-consideration of the minimal features needed to support each operation
-seems novel.  This allows operations to be defined for whole classes
-of species-like things at once, and in some cases even allows for
-``species-like things'' to be constructed in a modular way, by
-applying constructions known to preserve the required properties.
+However, \pref{chap:species} does also make a few novel technical
+contributions---for example, a characterization of equipotence in terms
+of manifestly finite sets, and a careful discussion of finite versus
+infinite families of structures and the relation to species
+composition.  Most importantly, since \pref{chap:species} is already
+attempting to present at least two different variants of species---the
+traditional definition based on set theory, and a novel variant based
+on homotopy type theory---it ``bites the bullet'' and considers
+\emph{arbitrary} functor categories, elucidating the categorical
+properties required to support each species operation.  Although many
+individual species generalizations have been considered in the past,
+this systematic consideration of the minimal features needed to
+support each operation seems novel.  This allows operations to be
+defined for whole classes of species-like things at once, and in some
+cases even allows for species-like things to be constructed in a
+modular way, by applying constructions known to preserve the required
+properties.
 
 \pref{chap:variants} goes on to explore particular species variants,
 evaluated through the grid constructed in \pref{chap:species}.  Some
 variants have already been considered in the literature; others, such
-as the notions of partial and copartial species considered in
-\pref{sec:copartial-species-sec} and \pref{sec:partial-species}, are
-novel.
+as the notion of copartial species considered in
+\pref{sec:copartial-species-sec}, are novel.
 
 Finally, \pref{chap:labelled} considers extending species to
 \term{labelled data structures}.  The notion of \term{analytic
   functors}, as introduced by \citet{joyal86}, turns out to be exactly
 the right framework in which to consider labelled data structures.
-Analytic functors are considered in the context of partial and
-copartial species, which, it is hoped, can serve as a foundation for
-further work codifying data structures backed by memory storage (in
-applications where the memory layout really matters, \eg linear
-algebra libraries).
+Analytic functors can be most generally defined in terms of \term{Kan
+  extensions}, and so the chapter opens with a presentation of Kan
+extensions, once again aimed at functional programmers.  \todo{Put
+  something here about intro and elim forms?}  Analytic functors are
+considered in the context of partial and copartial species, which, it
+is hoped, can serve as a foundation for further work codifying data
+structures backed by memory storage (in applications where the memory
+layout really matters, \eg linear algebra libraries). \todo{Make sure
+  this part actually gets written!}

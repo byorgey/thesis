@@ -5654,19 +5654,25 @@ Many common examples of recursively defined species, such as $\List =
 \One + \X \cdot \List$, or $\Bin = \One + \X \cdot \Bin^2$, do not
 actually satisfy the premises of the implicit species theorem, in
 particular the requirement that $\H(\Zero,\Zero) \iso \Zero$.  In both
-the above cases we instead have $\H(\Zero,\Zero) \iso \One$.  However,
-we can state a slight variant of the implicit species theorem which
-allows us to unambiguously assign meaning to such definitions.  The
-basic idea can be seen by considering the case of $\List = \One + \X
-\cdot \List$.  Decompose $\List$ as $\List = \One + \List_+$, so
+the above cases we instead have $\H(\Zero,\Zero) \iso \One$.  The
+Implicit Species Theorem only gives sufficient, but not necessary,
+conditions for well-foundedness; we would like to have a different
+theorem that tells us when equations such those governing $\List$ and
+$\Bin$ are well-founded. \citet{Pivoteau2012} prove quite a general
+theorem which is applicable to this case, and is moreover even
+applicable to mutually recursive systems of species equations.  Its
+very generality somewhat obscures the essential ideas, however, so we
+give a ``baby'' version of the theorem here.
+
+The basic idea can be seen by considering the case of $\List = \One +
+\X \cdot \List$.  Decompose $\List$ as $\List = \One + \List_+$, so
 $\List_+ = \X \cdot \List \iso \X \cdot (\One + \List_+)$.  Then
 $\H(\X,\Y) = \X \cdot (\One + \Y)$ does satisfy the premises of the
 Implicit Species Theorem, so $\List_+$ is well-defined, and hence so
 is $\List = \One + \List_+$.  This approach is used, implicitly and in
 an ad-hoc manner, by \citet{bll}; see, for example, Example 3.2.3 on
 p. 195.  It also appears in a sketchy form in my Haskell Symposium
-paper \citep{yorgey-2010-species}; I have never otherwise seen it
-formalized explicitly.
+paper \citep{yorgey-2010-species}.
 
 \begin{thm}[Implicit Species Theorem II]
   Let $\H(\X,\Y)$ be a two-sort species satisfying \[ \H(\Zero,\Y)
