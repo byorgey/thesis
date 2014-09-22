@@ -561,7 +561,12 @@ in the dissertation.
   fact, when constructing species with HoTT as a foundation, transport
   simply comes ``for free''---in contrast to using set theory as a
   foundation, in which case transport must be tediously defined (and
-  proved correct) for each new species.
+  proved correct) for each new species.  In other words, within HoTT
+  it is simply impossible to write down an invalid species; any
+  function giving the action of a species on objects extends
+  automatically to a functor.  In a material set theory, on the other
+  hand, it is quite possible to define non-functorial functions on
+  objects.
 \item The \term{univalence axiom} (\pref{sec:equivalence-univalence})
   and \term{higher inductive types} (\pref{sec:HITs}) make for a rich
   notion of propositional equality, over which the ``user'' has a
@@ -1018,7 +1023,7 @@ language with first-class functions, the class of functions
 % \subsection{Enriched categories}
 % \label{sec:enriched}
 
-% \todo{Write me.  Basic definitions; powers and copowers.}
+% \later{Write me.  Basic definitions; powers and copowers.}
 
 \subsection{Ends and coends}
 \label{sec:ends-coends}

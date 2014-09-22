@@ -18,7 +18,14 @@ operations on ``variant species'', \ie functors in some category $(\fc
 \item $\fc \BT \ST$, species as constructed in HoTT.
 \end{itemize}
 There are quite a few other possible variants, some of which we
-explore in this chapter.
+explore in this chapter.  Multisort species (\pref{sec:multisort}),
+weighted species (\pref{sec:weighted}), and $\L$-species
+(\pref{sec:L-species}) are all standard species variants which can be
+seen as functors between certain categories other than $\B$ and
+$\Set$; yet more variants are mentioned in
+\pref{sec:other-species-variants}.  \pref{sec:copartial-species-sec}
+and \pref{sec:partial-species} develop a larger example of a novel
+species variant.
 
 \section{Generalized species properties}
 \label{sec:generalized-species-properties}
@@ -196,7 +203,7 @@ species, resulting in a $T$-sort species.
 
 \later{Example of generalized composition?}
 % \begin{ex}
-%   \todo{Need an example of generalized composition.}
+%   \later{Need an example of generalized composition.}
 % \end{ex}
 
 \begin{rem}
@@ -373,7 +380,7 @@ operations on weighted species, is left to future work.
 % \[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
 %   \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
 %   \ar[dl]^{\omega_Y} \\ & A & } \] To see that this is indeed the
-% coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \todo{finish}
+% coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \later{finish}
 
 % Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
 % weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
@@ -388,36 +395,21 @@ operations on weighted species, is left to future work.
 % different sort of monoidal product on $\Str/A$ if we assume that
 % $\Str$ has products and $A$ is a monoid object, that is, there exist
 % morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
-% \todo{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
+% \later{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
 % \omega_Y)$ by
 % \[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
 %   \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
 % by $\eta$.
 % %% xymatrix{ \singleton \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
 % One can check that $\otimes$ inherits monoidal structure from
-% $A$. \todo{Finish this proof.}
+% $A$. \later{Finish this proof.}
 
-% \todo{Show that this gives the usual notion of weighted species.}
+% \later{Show that this gives the usual notion of weighted species.}
 
-% \todo{Show that this construction preserves the properties we care
+% \later{Show that this construction preserves the properties we care
 %   about.}
 
-% \todo{Give some examples.}
-
-\section{\hott{species}}
-\label{sec:h-species}
-
-\todo{This should go somewhere else.  Also emphasize what I wrote
-  to... was it Jay?  Whatever he said ``this would make a great
-  paragraph to go in...''}
-Although they have been discussed throughout the preceding chapter, it
-is worth explicitly collecting here some results about \hott{species},
-that is, $(\fc \BT \ST)$-species constructed within HoTT.  One notable
-point that should be emphasized is that, due to transport, \emph{any}
-function $f : \FinTypeT \to \SetT$ automatically gives rise to an
-\hott{species}, that is, a functor $\BT \to \ST$. Morphisms in $\BT$
-are paths $A = B$, which via transport automatically and functorially
-give rise to functions $f(A) \to f(B)$.
+% \later{Give some examples.}
 
 \section{$\L$-species}
 \label{sec:L-species}
@@ -445,10 +437,44 @@ include more on the theory here.  For now, we simply note that $(\fc
   of $\fc \B \Set$.
 \end{itemize}
 
+\section{Other species variants}
+\label{sec:other-species-variants}
+
+Many other examples of species variants appear in the literature. For
+example:
+\begin{itemize}
+\item $\Vect$-valued species, \ie
+  functors $\B \to \Vect$, which send finite sets of labels to
+  \emph{vector spaces} of shapes. Joyal had these in mind from the
+  beginning \citep{joyal86}, and they seem to play a central role in
+  more recent work as well (see, for example,
+  \citet{aguiar2010monoidal}), though I do not yet have a good
+  intuition for them.
+\item $\Cat$-valued species, \ie functors $\B \to \Cat$ which send
+  finite sets of labels to \emph{categories} of shapes. Intriguingly,
+  in the case of groupoids in particular, a suitable notion of
+  cardinality/Euler characteristic can be defined for categories
+  \citep{baez2000finite}, allowing $\Cat$-valued species to be seen as
+  a categorification of generating functions with positive
+  \emph{rational} coefficients.
+\item \citet{Fiore08} define a generalized notion of species,
+  parameterized over arbitrary small categories $A$ and $B$, as
+  functors in the category \[ \fc {\B A} {(\Hom {B^\op} \Set)}. \] $\B
+  A$ is a generalization of $\B$ such that $\B \cat{1} \iso \B$; the
+  objects are tuples of objects from $A$, labelled by the elements of
+  some finite set from $\B$, and the morphisms permute the labelled
+  $A$-objects according to some bijection on the finite set elements.
+  They go on to show that this functor category has all the same
+  important properties as $\fc \B \Set$.
+\end{itemize}
+
+In each case, one can verify the required properties and automatically
+obtain definitions of the various operations.
+
 \section{Copartial species}
 \label{sec:copartial-species-sec}
 
-As a final, larger example, which will play an important role in
+As a final, larger example, which will also recur in
 \pref{chap:labelled}, we develop the theory of species based on
 injections (and their dual, coinjections, in the subsequent section).
 The development will be carried out in HoTT, though it works equally
@@ -540,7 +566,7 @@ formulation of the round-trip laws in \pref{defn:pbij}.
 %   Equation \eqref{eq:rt-adj} is strongly reminiscent of an adjunction.  However,
 %   I do not know whether there is a suitable sense in which it can
 %   actually be seen as one.
-%   \todo{from Derek Elkins: This may not be viewable as an adjunction,
+%   \later{from Derek Elkins: This may not be viewable as an adjunction,
 %     but it's easily cast as an instance of parameterized
 %     representability, namely b.inr a = f<-(b) is represented by f->(a)
 %     parametric in a. This means f-> is characterized by a universal
@@ -1060,7 +1086,7 @@ along these lines we can formally define a fully faithful embedding of
 % \end{prop}
 
 % \begin{proof}
-%   \todo{prove me}
+%   \later{prove me}
 % \end{proof}
 
 % \begin{prop}
@@ -1068,7 +1094,7 @@ along these lines we can formally define a fully faithful embedding of
 % \end{prop}
 
 % \begin{proof}
-%   \todo{prove me}
+%   \later{prove me}
 % \end{proof}
 
 \later{Is the functor $\prt -$ monoidal? Intuitively, yes for $+$, no
@@ -1263,7 +1289,7 @@ Finally, we consider which of the properties from
   \uplus T_2$ and $S_1 \times S_2 \inj T_1 \times T_2$.
 \item $\BTSub$ is enriched over $\Str$, since its morphisms can be
   seen as injective functions.
-% \item \todo{$\fc \BTSub \ST$ enriched over itself?}
+% \item \later{$\fc \BTSub \ST$ enriched over itself?}
 \end{itemize}
 
 \section{Partial species}
@@ -1296,311 +1322,3 @@ species operations other than sum and Cartesian product. \todo{Working
 
 Copartial and partial species will have an interesting role to play in
 \pref{chap:labelled}.
-
-\section{Other species variants}
-\label{sec:other-species-variants}
-
-Many other examples of species variants appear in the literature. For
-example:
-\begin{itemize}
-\item $\Vect$-valued species, \ie
-  functors $\B \to \Vect$, which send finite sets of labels to
-  \emph{vector spaces} of shapes. Joyal had these in mind from the
-  beginning \citep{joyal86}, and they seem to play a central role in
-  more recent work as well (see, for example,
-  \citet{aguiar2010monoidal}), though I do not yet have a good
-  intuition for them.
-\item $\Cat$-valued species, \ie functors $\B \to \Cat$ which send
-  finite sets of labels to \emph{categories} of shapes. Intriguingly,
-  in the case of groupoids in particular, a suitable notion of
-  cardinality/Euler characteristic can be defined for categories
-  \citep{baez2000finite}, allowing $\Cat$-valued species to be seen as
-  a categorification of generating functions with positive
-  \emph{rational} coefficients.
-\item \todo{Generalized species of Fiore \etal}
-\end{itemize}
-
-In each case, one can verify the required properties and automatically
-obtain definitions of the various operations.
-
-
-% \section{The Gordon complementary bijection principle}
-
-% \todo{Not sure what to do with this.}
-
-% Suppose $A_0, A_1, B_0, B_1$ are types with bijections $f_0 : A_0 \bij
-% B_0$ and $f_1 : A_1 \bij B_1$.  Then it's clear how to construct a
-% bijection $f : A_0 + A_1 \bij B_0 + B_1$: one just takes $f
-% = f_0 + f_1$, as illustrated in \pref{fig:adding-bijections}.
-
-% \begin{figure}
-%   \centering
-%   \begin{diagram}[width=200]
-% import Bijections
-
-% dia =
-%   (vcat' (with & sep .~ 1) . map centerX)
-%   [ hcat' (with & sep .~ 2)
-%     [ drawBComplex $ bc0 # labelBC "f₀"  -- $
-%     , plus
-%     , drawBComplex $ bc1 # labelBC "f₁"  -- $
-%     ]
-%   , equals
-%   , drawBComplex $ parC bc0 bc1 # labelBC "f = f₀ + f₁"  -- $
-%   ]
-%   # centerXY
-%   # frame 0.5
-%   # lwO 0.7
-%   \end{diagram}
-%   \caption{Adding bijections}
-%   \label{fig:adding-bijections}
-% \end{figure}
-
-% So computing the ``sum'' of two bijections is not hard. What about the
-% \emph{difference}?  That is, given $f : A_0 + A_1 \bij B_0 + B_1$ and
-% $f_1 : A_1 \bij B_1$, can we compute some $f_0 : A_0 \bij B_0$
-% (\pref{fig:subtracting-bijections})?
-
-% \begin{figure}
-%   \centering
-%   \begin{diagram}[width=200]
-% import           Bijections
-
-% dia =
-%   (vcat' (with & sep .~ 1) . map centerX)
-%   [ hcat' (with & sep .~ 2)
-%     [ drawBComplex $   -- $
-%       [a0,a1] .- bij01 # labelBij "f" -.. [b0,b1]
-%     , minus
-%     , drawBComplex $ bc1 # labelBC "f₁"  -- $
-%     ]
-%   , equals
-%   , mconcat
-%     [ text' 3 "?"
-%     , drawBComplex $ [a0] .- emptyBij # labelBij "f₀" -.. [b0]  -- $
-%     ]
-%   ]
-%   # centerXY
-%   # frame 0.5
-%   # lwO 0.7
-%   \end{diagram}
-%   \caption{Subtracting bijections?}
-%   \label{fig:subtracting-bijections}
-% \end{figure}
-
-% Though it is obvious that $\size A_0 = \size B_0$, it is not \latin{a
-%   priori} obvious whether it is possible to actually construct a
-% bijection between them.  The problem, as can be seen in
-% \pref{fig:subtracting-bijections}, is that $f$ may mix up elements
-% among the $A_i$ and $B_i$---that is, one cannot simply, say, take the
-% restriction of $f$ to $A_0$, since the image of $A_0$ under $f$ may
-% intersect both $B_0$ and $B_1$.
-
-% However, it turns out that this is possible, via the \term{Gordon
-%   complementary bijection principle} \todo{cite}.  You might want to
-% stop and think about it for a while at this point.  If you know some
-% Haskell, try filling in the definition of `subtractIso`:
-
-% > {-# LANGUAGE TypeOperators #-}
-% >
-% > import Prelude hiding ((.), id)
-% > import Control.Category
-% >
-% > data a :<->: b = (a -> b) :<->: (b -> a)
-% >   -- Invariant: the two functions are inverse.
-% >
-% > applyIso :: (a :<->: b) -> (a -> b)
-% > applyIso (f :<->: _) = f
-% >
-% > invert :: (a :<->: b) -> (b :<->: a)
-% > invert (f :<->: g) = (g :<->: f)
-% >
-% > instance Category (:<->:) where
-% >   id = id :<->: id
-% >   (f1 :<->: g1) . (f2 :<->: g2) = (f1 . f2) :<->: (g2 . g1)
-% >
-% > subtractIso :: (Either a0 a1 :<->: Either b0 b1) -> (a1 :<->: b1) -> (a0 :<->: b0)
-% > subtractIso = undefined
-
-% Instead of defining the GCBP via a bunch of symbols, or even by exhibiting
-% some code, I will begin by *drawing* it for you:
-
-% ```{.dia width='450'}
-% import           Bijections
-% import           Control.Lens ((&), (.~))
-
-% gcbp = drawBComplex . flattenA $
-%     bc01' .- ebij1 -. bc01' .- ebij1 -.. bc01'
-%   where
-%     ebij1 = colorBij colorMap $
-%             emptyBij `parBij` (bij1 & labelBij "f₁⁻¹")
-%     bc01' = map2 (colorBij colorMap . labelBij "f") bc01
-%     colorMap = orbitsToColorMap
-%                  [red, green, blue, orange, purple]
-%                  (orbits
-%                    (bijToRel bij01)
-%                    (bijToRel ebij1)
-%                  )
-
-% gcbpEqn =
-%   (vcat' (with & sep .~ 1) . map centerX)
-%   [ hcat' (with & sep .~ 2)
-%     [ drawBComplex $
-%       [a0,a1] .- bij01 # labelBij "f" -.. [b0,b1]
-%     , minus
-%     , drawBComplex $ bc1 # labelBC "f₁"
-%     ]
-%   , equals
-%   , gcbp
-%   ]
-
-% -- XXX draw resulting bijection
-
-% dia = gcbpEqn
-%   # centerXY # pad 1.1
-%   # sized (Width 2)
-% ```
-
-% Here's the idea in words: start with an element in $A_0$ (that's the
-% yellow set in the illustration above), and apply $f$.  If we get something in $B_0$ (blue),
-% great---we're done!  Otherwise, we have something in $B_1$ (red), so
-% we apply $f_1^{-1}$ to send us back over to $B_0$ (green), and from
-% there we apply $f$ again and repeat.  In the above example, you can
-% see that the first two elements of $A_0$ land in $B_0$ immediately;
-% for the third, we have to iterate three times (or perhaps we should
-% say "two and a half times").
-
-% Here's a more complicated example:
-
-% ```{.dia width='450'}
-% import Bijections
-% import Control.Lens ((&), (.~))
-% import Data.Bits (xor)
-% import Data.Typeable (cast)
-% import Diagrams.Core.Names
-
-% a2 = nset 4 yellow
-% b2 = nset 4 blue
-% a3 = nset 5 green
-% b3 = nset 5 red
-
-% bc3 = [a3] .- bij3 -.. [b3]
-
-% bij3 = [bijFun [0..4] (Just . (\n -> if n == 4 then 4 else xor 1 n))]
-
-% bij23 = [with & bijData .~ tableToFun tab23]
-% tab23 = zip (('a' ||> toNamesI [0..3]) ++ ('b' ||> toNamesI [0..4]))
-%             [ 'b' ||@@ 0, 'a' ||@@ 0, 'b' ||@@ 1, 'a' ||@@ 1
-%             , 'b' ||@@ 2, 'a' ||@@ 2, 'b' ||@@ 3, 'b' ||@@ 4, 'a' ||@@ 3
-%             ]
-
-% bc23 = [a2,a3] .- bij23 -.. [b2,b3]
-
-% gcbp = drawBComplex . flattenA $
-%   bc23' .- ebij3 -. bc23' .- ebij3 -. bc23' .- ebij3 -.. bc23'
-%   where
-%     ebij3 = emptyBij `parBij` (bij3 & labelBij "f₁⁻¹")
-%     bc23' = map2 (labelBij "f") bc23
-
-% gcbpEqn =
-%   (vcat' (with & sep .~ 1) . map centerX)
-%   [ hcat' (with & sep .~ 2)
-%     [ drawBComplex $
-%       [a2,a3] .- bij23 # labelBij "f" -.. [b2,b3]
-%     , minus
-%     , drawBComplex $ bc3 # labelBC "f₁"
-%     ]
-%   , equals
-%   , gcbp
-%   ]
-
-% dia = gcbpEqn
-%   # centerXY # pad 1.1
-%   # sized (Width 2)
-
-% ```
-
-% We need to show that this gives a well-defined bijection---that it
-% terminates, first of all, and that it gives us a mapping which really
-% is a bijection.
-
-% The "usual" proof goes something like this: XXX
-
-% However, we can apprehend the validity of the GCBP more directly and
-% intuitively.  Consider "extending to infinity" the iteration in both
-% directions.
-
-% XXX picture.
-
-% Since we have created this picture by simply copying the same
-% bijections over and over, it obviously has translational
-% symmetry---moving it one unit to the left or right doesn't change
-% anything.  Let's consider the different types of paths that show up in
-% this kind of picture.
-
-% First, can there be bi-infinite paths?  Sure, there can be, but any
-% such path must necessarily stay entirely within the bottom half of the
-% picture, since the top half of the picture only contains *ends* of
-% paths.  Since our goal is to construct a bijection between the top
-% sets we can therefore ignore bi-infinite paths.
-
-% Can there be *half*-infinite paths, *i.e.* paths which have a starting
-% point in the top half of the picture but then wander around in the
-% bottom half forever?  No, because XXX it will intersect its copies
-% (explain this better).  Therefore, every path that is not bi-infinite
-% must have two endpoints in the top half of the picture.
-
-% Finally, it's easy to see that every point belongs to a unique
-% path. (XXX why?)
-
-% The GCBP in Haskell
-% -------------------
-
-% Here's my implementation of `subtractIso`:
-
-% > subtractIso' :: (Either a0 a1 :<->: Either b0 b1) -> (a1 :<->: b1) -> (a0 :<->: b0)
-% > subtractIso' a0a1__b0b1 a1__b1 =
-% >     (iter (applyIso a0a1__b0b1) (applyIso $ invert a1__b1) . Left)
-% >     :<->:
-% >     (iter (applyIso $ invert a0a1__b0b1) (applyIso $ a1__b1) . Left)
-% >   where
-% >     iter a0a1_b0b1 b1_a1 a0a1 =
-% >       case a0a1_b0b1 a0a1 of
-% >         Left  b0 -> b0
-% >         Right b1 -> iter a0a1_b0b1 b1_a1 (Right (b1_a1 b1))
-
-% It feels sort of ugly---in fact, it is the exact computational
-% analogue of the usual proof of the GCBP (though it's missing quite a
-% bit, in particular a proof of termination and a proof that the output
-% really is a bijection).  Given that I don't like the usual proof, it's
-% no surprise that I find this code ugly.  I don't like the fact that it
-% projects functions out of the input bijections and uses them to
-% construct the two directions of the output bijection separately.  I'd
-% rather work entirely in terms of operations on bijections.  I don't
-% know whether that is possible.  I'd be very interested to see what
-% others come up with.
-
-% The Garsia-Milne involution principle
-% -------------------------------------
-
-% Further reading
-% ---------------
-
-% XXX Cite Garsia-Milne paper(s).  Don't recommend actually reading
-% it/them.
-
-% Came out of trying to prove partition identities. XXX cite Wilf paper
-% tying a bunch of this together.
-
-
-% \begin{prop}[Gordon complementary bijection principle]
-%   For finite sets $A_1$, $A_2$, $B_1$, and $B_2$, if $A_1 + B_1
-%   \equiv A_2 + B_2$ and $B_1 \equiv B_2$, then $A_1 \equiv A_2$.
-% \end{prop}
-
-% \todo{Explain intuition.  Can use some text from half-written blog
-%   post.}
-
-% \begin{proof}
-%   \todo{Figure out a good constructive proof!}
-% \end{proof}

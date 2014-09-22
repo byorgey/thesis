@@ -768,3 +768,8 @@ morphism $F \to B^{A^-}$.  We can therefore leverage the \todo{stuff
   from previous chapter}.
 
 \todo{go through some examples.}
+
+\section{Analytic functors for partial and copartial species}
+\label{sec:analytic-partial}
+
+\todo{Write me.  Also decide where it should go.}

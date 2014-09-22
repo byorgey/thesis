@@ -5,12 +5,6 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-\bay{Big themes yet to mention: Principle of equivalence. Set theory
-  vs type theory, constructive foundations.  Note that this
-  dissertation sits in a somewhat awkward place, with feet in both the
-  worlds of set theory and type theory; hopefully it can serve as a
-  bridge.}
-
 The theory of \term{algebraic data types} has had a profound impact on
 the practice of programming, especially in functional languages.  The
 basic idea is that types can be built up \term{algebraically} from a
@@ -256,6 +250,11 @@ first step in this larger program, laying the theoretical groundwork
 necessary for its continued pursuit.
 
 \todo{general paragraph here about equality vs isomorphism and so on?}
+\bay{Big themes yet to mention: Principle of equivalence. Set theory
+  vs type theory, constructive foundations.  Note that this
+  dissertation sits in a somewhat awkward place, with feet in both the
+  worlds of set theory and type theory; hopefully it can serve as a
+  bridge.}
 
 To even get started building a bridge between species and data types
 requires more work than one might na\"ively expect.  The fundamental
@@ -326,5 +325,6 @@ extensions, once again aimed at functional programmers.  \todo{Put
 considered in the context of partial and copartial species, which, it
 is hoped, can serve as a foundation for further work codifying data
 structures backed by memory storage (in applications where the memory
-layout really matters, \eg linear algebra libraries). \todo{Make sure
-  this part actually gets written!}
+layout really matters, \eg linear algebra libraries). \todo{Take
+  out/alter this sentence depending on what actually ends up getting
+  written.}

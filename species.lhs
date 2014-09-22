@@ -5590,7 +5590,7 @@ species $F/H$.
 
 \later{An actual example}
 % \begin{ex}
-%   \todo{An actual example. $\Cyc_{2n} \to \Bag_2 \comp \Cyc$?  $\Cyc
+%   \later{An actual example. $\Cyc_{2n} \to \Bag_2 \comp \Cyc$?  $\Cyc
 %     \to \Cyc$?}
 % \end{ex}
 
