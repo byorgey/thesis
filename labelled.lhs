@@ -8,17 +8,7 @@
 \chapter{Labelled structures}
 \label{chap:labelled}
 
-\todo{Talk about bag vs rubbish?}
-
-\todo{Fix introduction, given that we have now already discussed
-  generating functions}
-The original motivation for the theory of species was not to give a
-unifying agebraic framework for studying combinatorial structures
-\latin{per se}.  Rather, the specific motivation was to provide new
-justification and a unifying context for an existing body of
-techniques involving \term{generating functions}.
-
-\todo{Continue introduction.}
+\later{Talk about bag vs rubbish}
 
 Now that we have a foundation for describing labelled shapes, the next
 step is to extend them into full-blown \emph{data structures} by
@@ -57,8 +47,9 @@ properties of labelled structures from corresponding properties of
 labelled shapes.  This chapter begins with an overview of \term{Kan
   extensions} (\pref{sec:kan-extensions}) and \term{analytic functors}
 (\pref{sec:analytic-functors}), which provide the theoretical basis
-for extending labelled shapes to labelled structures.  \todo{Continue
-  this description/outline once the rest of the chapter shakes out.}
+for extending labelled shapes to labelled structures.  It then
+continues to briefly discuss introduction and elimination forms for
+labelled structures, and outline some directions for future work.
 
 \section{Kan extensions}
 \label{sec:kan-extensions}
@@ -319,8 +310,7 @@ of as a mapping from a linearly ordered set of labels to data.
 
 Analytic functors have many nice properties: for example, they are
 closed under sums, products, composition, and least fixed
-points. \todo{cite. Joyal?} \todo{Expand.  Give a bit more
-  context/justification.}
+points \citep{Joyal86}.
 
 \subsection{Analytic functors and generating functions}
 \label{sec:analytic-generating}
@@ -409,7 +399,7 @@ morphisms so this does not come up.
   the set of all even numbers has no upper bound in $\N$.
 \end{ex}
 
- \todo{Some example of a filtered category with nontrivial
+ \later{Some example of a filtered category with nontrivial
     parallel morphisms, which is not cocomplete?  See email.}
 
 \begin{ex}
@@ -580,9 +570,6 @@ species $F$, whose values consist of a labelled $F$-shape paired with
 a map assigning a data value to each label.  It will be convenient,
 however, to be able to explicitly work with label types.
 
-\subsection{Simple labelled structures}
-\label{sec:simple-labelled}
-
 \begin{defn}
   Given a species $F$, the type of \term{labelled structures} over $F$
   is a bifunctor $\lab F : \B \times \Set \to \Set$,
@@ -600,15 +587,15 @@ $\Lab$ is a groupoid, in which case $\LStr F \sigma A = (\iota
 Note that the same definition applies equally well in HoTT, replacing
 $\B$ and $\Set$ with $\BT$ and $\ST$.
 
-\subsection{Generalized labelled structures}
-\label{sec:generalized-labelled}
+% \subsection{Generalized labelled structures}
+% \label{sec:generalized-labelled}
 
-To generalize labelled structures to $(\fc \Lab \Str)$-species where
-$\Lab$ is not a groupoid, we must split the parameter $L$ into two,
-one each for the contravariant and covariant occurrences: \[ \GLStr F
-K L A \defeq (\iota K \to A) \times F\ L. \]
+% To generalize labelled structures to $(\fc \Lab \Str)$-species where
+% $\Lab$ is not a groupoid, we must split the parameter $L$ into two,
+% one each for the contravariant and covariant occurrences: \[ \GLStr F
+% K L A \defeq (\iota K \to A) \times F\ L. \]
 
-\subsection{An attempt at generalized functor composition}
+\section{An attempt at generalized functor composition}
 \label{sec:gen-functor-composition}
 
 Recall from \pref{sec:functor-composition} that if species are taken
@@ -756,12 +743,11 @@ $\Fin 1 + \under L \equiv \under{\cons{inc}(L)}$.
 \section{Eliminators for labelled structures}
 \label{sec:elim-labelled}
 
-\todo{Note that everything applies equally to $\fc \B \Set$ or to $\fc
-  \BT \ST$.}
 We have see how to \emph{construct} values of the type $\analytic F\
 A$ for various $F$; we now consider how to \emph{eliminate} them.  In
-particular, consider a function of type $\analytic F\ A \to B$, for
-some arbitrary set (type) $B$.  We compute as follows:
+particular, consider a morphism $\analytic F\ A \to B$, for
+some arbitrary object $B$.  We compute as follows, noting that
+these computations apply equally in $(\fc \B \Set)$ or $(\fc \BT \ST)$:
 \begin{sproof}
   \stmt{\analytic F\ A \to B}
   \reason{=}{definition}
@@ -775,10 +761,10 @@ some arbitrary set (type) $B$.  We compute as follows:
 \end{sproof}
 
 Note that $((\iota\ - \to A) \to B)$ is a functor of type $\B \to
-\Set$, that is, a species, \todo{Add it as an example earlier?} which
-we will abbreviate $B^{A^-}$.  Hence the above derivation amounts to
-saying that a function $(\analytic F\ A \to B)$ eliminating an
-analytic functor is equivalent to a species morphism $F \to B^{A^-}$.
-We can therefore leverage the \todo{stuff from previous chapter}.
+\Set$, that is, a species, which we will abbreviate $B^{A^-}$.  Hence
+the above derivation amounts to saying that a function $(\analytic F\
+A \to B)$ eliminating an analytic functor is equivalent to a species
+morphism $F \to B^{A^-}$.  We can therefore leverage the \todo{stuff
+  from previous chapter}.
 
 \todo{go through some examples.}
