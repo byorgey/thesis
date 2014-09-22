@@ -40,7 +40,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 
-\usepackage[final]{showkeys}
+\usepackage[draft]{showkeys}
 
 % \usepackage{breakurl}
 \usepackage{natbib}
@@ -493,9 +493,11 @@
 \newif\ifcomments\commentstrue
 \newif\ifallcomments\allcommentsfalse
 
+\newcounter{todocount}
+
 \ifcomments
 \newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
-\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}\addtocounter{todocount}{1}}
 \else
 \newcommand{\authornote}[3]{}
 \newcommand{\todo}[1]{}

@@ -4191,11 +4191,6 @@ $G$-shapes.
 \section{Differentiation}
 \label{sec:differentiation}
 
-\todo{cite ``general combinatorial differential operators'', Dan
-  Piponi blog posts, Mike Stay blog post.  Cite conor StackOverflow
-  answer re: down, naperian.  Lots of rich material related to
-  differentiation remaining to be worked out.}
-
 The derivative of container types is a notion already familiar to many
 functional programmers through the work of \citet{Huet_zipper},
 \citet{mcbride:derivative, mcbride_clowns_2008} and
@@ -4215,6 +4210,12 @@ derivative is a special case (\pref{sec:higher-derivatives}).
 Finally, this notion of higher derivatives paves the way for
 discussing the internal Hom functors for partitional and arithmetic
 product (\pref{sec:internal-Hom-pprod-aprod}).
+
+There is much more that can be said about differentiation
+\citep{Menni2008, labelle2009general, piponi2010divided,
+  piponi2010constraining, stay2014q, McBrideNaperian}; in general,
+there seems to remain a great deal of rich material on differentiation
+waiting to be explored.
 
 \subsection{Differentiation in $\fc \B \Set$}
 \label{sec:basic-diff}
@@ -5536,7 +5537,9 @@ where $H^G$ is defined in \pref{sec:internal-Hom-cprod}, and $\phom G
 H$ and $\ahom G H$ are defined in
 \pref{sec:internal-Hom-pprod-aprod}. Note that in all three cases, one
 may continue to recursively characterize the results in terms of
-eliminators for $F$ and $G$. \todo{I believe that for $F$, but for $G$\dots?}
+an eliminator for $F$. It ought to be the case that the internal Hom
+functors can likewise be characterized in terms of an eliminator for
+$G$, although the details are not yet clear to me.
 
 \paragraph{Composition}
 
