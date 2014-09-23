@@ -249,12 +249,9 @@ practice of programming languages. This dissertation represents just a
 first step in this larger program, laying the theoretical groundwork
 necessary for its continued pursuit.
 
-\todo{general paragraph here about equality vs isomorphism and so on?}
-\bay{Big themes yet to mention: Principle of equivalence. Set theory
-  vs type theory, constructive foundations.  Note that this
-  dissertation sits in a somewhat awkward place, with feet in both the
-  worlds of set theory and type theory; hopefully it can serve as a
-  bridge.}
+\later{general paragraph here about equality vs isomorphism and so on?
+  Big themes yet to mention: Principle of equivalence. Set theory vs
+  type theory, constructive foundations.}
 
 To even get started building a bridge between species and data types
 requires more work than one might na\"ively expect.  The fundamental
@@ -321,9 +318,9 @@ the right framework in which to consider labelled data structures.
 Analytic functors can be most generally defined in terms of \term{Kan
   extensions}, and so the chapter opens with a presentation of Kan
 extensions, once again aimed at functional programmers.  Analytic
-functors are considered in the context of partial and copartial
-species, which, it is hoped, can serve as a foundation for further
-work codifying data structures backed by memory storage (in
-applications where the memory layout really matters, \eg linear
-algebra libraries). \todo{Take out/alter this sentence depending on
-  what actually ends up getting written.}
+functors are considered in the context of copartial species, which, it
+is hoped, can serve as a foundation for further work codifying data
+structures backed by memory storage (in applications where the memory
+layout really matters, \eg linear algebra libraries), and also for
+partial species, which may help model situations where data need not
+be associated to every label.

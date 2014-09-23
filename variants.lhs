@@ -1314,11 +1314,8 @@ induced subgraphs. \later{make a picture}
 
 When we consider the properties in \pref{tab:properties}, however, we
 find in particular that $\BTSub^\op$ is not enriched over $\ST$, since
-coinjections are not, in general, total functions.  This rules out all
-species operations other than sum and Cartesian product. \todo{Working
-  here.  Should phrase this a little less confidently.  Go on to say
-  that we actually want to consider the category of sets and partial
-  functions.}
-
-Copartial and partial species will have an interesting role to play in
-\pref{chap:labelled}.
+coinjections are not, in general, total functions.  Instead of $\ST$,
+we actually want to consider the category $\STp$ of sets and
+\emph{partial} functions. One may check that $\STp$ is monoidal,
+complete, and Cartesian closed, has coends over $\BTSub^\op$, and that
+$\BTSub^\op$ is indeed enriched over $\STp$.

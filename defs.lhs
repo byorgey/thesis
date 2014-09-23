@@ -40,7 +40,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 
-\usepackage[draft]{showkeys}
+\usepackage[final]{showkeys}
 
 % \usepackage{breakurl}
 \usepackage{natbib}
@@ -289,6 +289,7 @@
 \newcommand{\CT}{\mcal{C}}
 \newcommand{\DT}{\mcal{D}}
 \newcommand{\ST}{\mcal{S}}
+\newcommand{\STp}{\ST_{\rightharpoonup}}
 \newcommand{\SetT}{\msf{Set}}
 \newcommand{\idT}{\msf{id}}
 
@@ -484,13 +485,13 @@
 \newcommand{\analytic}[1]{\widehat{#1}}
 
 \newcommand{\lab}[1]{\langle #1 \rangle}
-\newcommand{\LStr}[3]{{\lab #1}_{#2}\ {#3}}
-\newcommand{\GLStr}[4]{{\lab #1}^{#2}_{#3}\ {#4}}
+\newcommand{\LStr}[3]{{\lab {#1}}_{#2}\ {#3}}
+\newcommand{\GLStr}[4]{{\lab {#1}}^{#2}_{#3}\ {#4}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Comments
 
-\newif\ifcomments\commentstrue
+\newif\ifcomments\commentsfalse
 \newif\ifallcomments\allcommentsfalse
 
 \newcounter{todocount}

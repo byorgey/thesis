@@ -539,27 +539,6 @@ Note, however, that the covariant finite powerset functor $FP : \Set
 \emph{finite} subsets, is analytic; it corresponds to the species
 $\Bag^2$.
 
-\subsection{Generalized analytic functors}
-\label{sec:gen-analytic-functors}
-
-In general, suppose we have a functor $F : \Lab \to \Str$, as well as
-a functor $\iota : \Lab \to \Str$.  We can define \[ \analytic F
-\defeq \coend L (\hom{\iota\ L}{A}) \cdot F\ L \] as long as
-\begin{itemize}
-\item $\Str$ is copowered over $\Set$, \ie has all coproducts, and
-\item $\Str$ has coends over $\Lab$.
-\end{itemize}
-
-As a particular example, the definition of analytic functors ports
-almost unchanged into homotopy type theory: we merely replace the
-set-theoretic categories $\B$ and $\Set$ with the homotopy-theoretic
-$\BT$ and $\ST$, respectively, yielding \[ \analytic F\ A = \coend L
-(\hom[\ST] {\iota\ L} A) \times F\ L, \] where $\iota : \B \to \S$ is
-the evident injection which acts on morphisms via transport.
-Recalling that coends in HoTT are just $\Sigma$-types, and that
-morphisms in $\ST$ are functions, we have \[ \analytic F\ A = \sum_{L
-  : \BT} (\iota\ L \to A) \times F\ L. \]
-
 % \section{Labelled structures}
 % \label{sec:labelled-structures}
 
@@ -651,8 +630,6 @@ order to introduce a labelled structure of shape $F \cdot G$, one
 simply gives a pair of a labelled $F$-structure and a labelled
 $G$-structure; this should come as no surprise.
 
-% \todo{Edit. Dumped here from description of product from paper.}
-
 % %%% XXX remove me
 % \newcommand{\under}[1]{\floor{#1}}
 % \newcommand{\lift}[1]{\ceil{#1}}
@@ -674,8 +651,6 @@ $G$-structure; this should come as no surprise.
 
 % %% XXX remove me
 % \newcommand{\StoreNP}{\mapsto}
-
-% \todo{Edit. Dumped here from paper.}
 
 % As an example, we may now encode the standard algebraic data type of
 % lists, represented by the inductively-defined species satisfying
@@ -782,7 +757,112 @@ morphism $F \to B^{A^-}$.  We can therefore characterize labelled
 structure eliminators in terms of the species eliminators described in
 \pref{sec:elim-species}.
 
+\subsection{Generalized analytic functors}
+\label{sec:gen-analytic-functors}
+
+In general, suppose we have a functor $F : \Lab \to \Str$, as well as
+a functor $\iota : \Lab \to \Str$.  We can define \[ \analytic F
+\defeq \coend L (\hom{\iota\ L}{A}) \cdot F\ L \] as long as
+\begin{itemize}
+\item $\Str$ is copowered over $\Set$, \ie has all coproducts, and
+\item $\Str$ has coends over $\Lab$.
+\end{itemize}
+
+As a particular example, the definition of analytic functors ports
+almost unchanged into homotopy type theory: we merely replace the
+set-theoretic categories $\B$ and $\Set$ with the homotopy-theoretic
+$\BT$ and $\ST$, respectively, yielding \[ \analytic F\ A = \coend L
+(\hom[\ST] {\iota\ L} A) \times F\ L, \] where $\iota : \B \to \S$ is
+the evident injection which acts on morphisms via transport.
+Recalling that coends in HoTT are just $\Sigma$-types, and that
+morphisms in $\ST$ are functions, we have \[ \analytic F\ A = \sum_{L
+  : \BT} (\iota\ L \to A) \times F\ L. \]
+
+The following section gives another example, of analytic functors over
+partial and copartial species.
+
 \section{Analytic functors for partial and copartial species}
 \label{sec:analytic-partial}
 
-\todo{Write me.  Also decide where it should go.}
+A variant of labelled structures that one might consider is one which
+``takes the coend off'', exposing the labels in the type: \[ \LStr F L
+A \defeq (\iota L \to A) \times F\ L. \] We have seen that
+introduction and elimination forms for labelled structures are
+straightforward, for example, eliminating $\analytic {(F \cdot G)}\ A
+\iso (\analytic F \times \analytic G)\ A \iso \analytic F\ A \ =
+\analytic G\ A$ just amounts to eliminating a pair.  However,
+eliminating $\LStr F L A$ is not so straightforward; in particular we
+do \emph{not} have $\LStr {F \cdot G} L A \iso \LStr F L A \times
+\LStr G L A$, since the labels $L$ need to be partitioned between the
+two shapes.
+
+However, we can recover something along these lines using copartial
+species (\pref{sec:copartial-species-sec}); the idea is that $\LStr F
+L A$ will contain a shape on some \emph{subset} of the labels $L$.
+One way to think of this is as having some large ``shared memory''
+indexed by $L$, and a labelled structure $\LStr F L A$ gives us a
+``view'' onto some (but not necessarily all) of the data in memory.
+Thus, it is possible to decompose a product as $\LStr {F \cdot G} L A
+\to \LStr F L A \times \LStr G L A$ (note this is \emph{not} an
+isomorphism), breaking an $F \cdot G$ structure into two separate
+shapes referencing data contained in the same shared memory.  Aside
+from allowing us to express an eliminator for such labelled products,
+from an operational point of view, this may also be exactly what we
+want when dealing with data structures whose memory allocation really
+matters: doing a decomposition operation should not allocate any new
+storage, but simply yield new shapes with labels pointing into
+existing storage.
+
+More formally, consider constructing analytic functors over copartial
+species $\fc \BTSub \ST$.  There is a natural injection $\iota :
+\BTSub \to \ST$, which we can use to define such analytic functors via
+the usual Kan extension formula, $\analytic F \defeq \coend L
+(\hom{\iota\ L}{A}) \cdot F\ L$.  The commuting condition for the
+coend is shown in \pref{fig:copartial-analytic-coend}. Here $\sigma :
+K \subseteq L$ is a copartial bijection from $K$ into $L$.
+\begin{figure}
+  \centering
+  \[ \xymatrix@@+2pc@@dr{ (\iota L \to A) \times F\ K \ar[r]^{\id \times F\
+      \sigma} \ar[d]_{(\iota \sigma \to A) \times \id} & (\iota L \to
+    A)
+    \times F\ L \ar[d] \\
+    (\iota K \to A) \times F\ K \ar[r] & \coend L (\iota L \to A)
+    \times F\ L} \]
+  \caption{The commuting condition for analytic functors over copartial species}
+  \label{fig:copartial-analytic-coend}
+\end{figure}
+Since $\sigma : K \subseteq L$, the top of the diagram represents a
+labelled shape (of type $F\ K$) with its data ``living inside'' some
+larger shared memory labelled by $L$.  Following the right-hand arrow
+amounts to explicitly expanding the shape with the extra labels (\eg
+throwing the extra labels into the ``catch-all'' set); following the
+left-hand arrow amounts to throwing away the extra data which is not
+explicitly referenced by the $F$-shape.  According to the diagram,
+these must both inject into the coend in a way that renders them
+indistinguishable: intuitively, this means that if we have a shape
+with data living in a larger shared memory, we cannot observe anything
+about the data values not explicitly referenced by the shape.
+
+We can also consider analytic functors over partial species in $\fc
+{\BTSub^\op} {\STp}$, using the natural inclusion functor $\iota :
+\BTSub^\op \to \STp$.  The commutative diagram for the
+coend looks almost identical to the one in
+\pref{fig:copartial-analytic-coend}, but is interpreted somewhat
+differently.  In particular, note that the arrows now represent
+\emph{partial} functions.  In addition, $\sigma : K \supseteq L$
+is a constructive witness that $K$ is a superset of $L$.  Thus, $\iota
+L \to A) \times F\ K$ is a shape with labels taken from $K$ along with
+a partial mapping from only \emph{some} of those labels to data
+values.  Following the right-hand arrow amounts to taking a subshape
+of $F$ corresponding to the labels that do map to data; following the
+left-hand arrow amounts to expanding the domain of the mapping with
+extra labels for which the mapping is undefined.
+
+More work is needed to flesh out the details, but it seems that this
+may allow us to model structures where we do not wish to store data
+associated with every label.  For example, $\X \cdot \Bag$ may
+represent a pointed set, but it may also represent the species of
+``elements'', where we really only care about the data associated with
+the label of $\X$, and do not wish to associate data to all the labels
+contained in the set.
+

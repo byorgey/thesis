@@ -68,9 +68,9 @@ avenues for continued work in this area.
   create tools that allow algebraic data types to be manipulated via
   generic ``views'' as species.
 
-\item There is much more to explore with respect to $\BTSub$ and its
-  related notions of species. In particular, \todo{finish this once
-    I've written more about it.}
+% \item There is much more to explore with respect to $\BTSub$ and its
+%   related notions of species. In particular, \later{finish this once
+%     I've written more about it.}
 
 \item It seems that there ought to be some sort of connection between
   species and linear logic.  In general, labels are ``treated
@@ -83,11 +83,10 @@ avenues for continued work in this area.
   investigate the possibility of a real, deeper connection between
   species and linear logic.
 
-\item An earlier version of \pref{chap:labelled} considered a variant
-  of $\analytic F A$ which ``removed the coend'', exposing the labels
-  in the type: \[ \LStr F L A \defeq (\iota L \to A) \times F\ L. \]
-  However, one quickly runs into trouble managing the labels, and it
-  is not clear whether there is any benefit to being able to
+\item \pref{sec:analytic-partial} considered a variant of $\analytic F
+  A$ which ``removed the coend'', exposing the labels in the type: \[
+  \LStr F L A \defeq (\iota L \to A) \times F\ L. \] It is still not
+  clear, however, whether there is any benefit to being able to
   explicitly talk about the label type in this way.  Coming up with a
   more precise story about such ``exposed'' labelled structures---or
   showing conclusively why one does not want to work with them---would
