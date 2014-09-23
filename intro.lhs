@@ -320,11 +320,10 @@ Finally, \pref{chap:labelled} considers extending species to
 the right framework in which to consider labelled data structures.
 Analytic functors can be most generally defined in terms of \term{Kan
   extensions}, and so the chapter opens with a presentation of Kan
-extensions, once again aimed at functional programmers.  \todo{Put
-  something here about intro and elim forms?}  Analytic functors are
-considered in the context of partial and copartial species, which, it
-is hoped, can serve as a foundation for further work codifying data
-structures backed by memory storage (in applications where the memory
-layout really matters, \eg linear algebra libraries). \todo{Take
-  out/alter this sentence depending on what actually ends up getting
-  written.}
+extensions, once again aimed at functional programmers.  Analytic
+functors are considered in the context of partial and copartial
+species, which, it is hoped, can serve as a foundation for further
+work codifying data structures backed by memory storage (in
+applications where the memory layout really matters, \eg linear
+algebra libraries). \todo{Take out/alter this sentence depending on
+  what actually ends up getting written.}
