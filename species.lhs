@@ -1244,7 +1244,7 @@ I conjecture that a linear order is as strong as one could ever want;
 that is, for any species which are provably equipotent, there exists a
 proof making use of a linear order on the set of labels.
 
-\begin{conj}
+\begin{conj} \label{conj:linear-equipotence}
   The type of natural isomorphisms with access to a linear order is
   logically equivalent to the type of equipotences. That is, for all
   species $F$ and $G$, \[ ((L : \SetL) \to (F\ L \equiv G\ L)) \lequiv

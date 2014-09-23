@@ -235,16 +235,18 @@ definition is less useful in a generalized setting.
   \ar[dr]^{F} \ar@@{_{(}->}[d]_\iota \\ \Set \ar[r]_{\analytic F} &
   \Set } \]
 
-We can think of $\analytic F$ as the polymorphic ``data type'' arising from
-the species $F$. The construction in \pref{prop:Lan-coend} tells us
-exactly what such a data type looks like: \[ \analytic F\ A = \coend L (\iota
-L \to A) \times F\ L. \]  That is, given a set $A$, a value in $\analytic F\
-A$ consists of an $L$-labelled $F$-shape together with a function (\ie
-a morphism in $\Set$) from $\iota L$ to $A$.  The coend means that the
-choice of a particular label set $L$ does not matter: any two values
-$f : (\iota L \to A) \times F\ L$ and $g : (\iota L' \to A) \times F\
-L' $ are considered equal if there is some bijection $\sigma : L \bij
-L'$ which sends $f$ to $g$.
+We can think of $\analytic F$ as the polymorphic ``data type'' arising
+from the species $F$. The construction in \pref{prop:Lan-coend} tells
+us exactly what structures of such a data type look like: \[ \analytic
+F\ A = \coend L (\iota L \to A) \times F\ L. \] We call inhabitants of
+$\analytic F\ A$ \term{labelled structures}.  That is, given a set
+$A$, a labelled structure of type $\analytic F\ A$ consists of an
+$L$-labelled $F$-shape together with a function (\ie a morphism in
+$\Set$) from $\iota L$ to $A$.  The coend means that the choice of a
+particular label set $L$ does not matter: any two values $f : (\iota L
+\to A) \times F\ L$ and $g : (\iota L' \to A) \times F\ L' $ are
+considered equal if there is some bijection $\sigma : L \bij L'$ which
+sends $f$ to $g$.
 
 Moreover, the natural isomorphism \eqref{eq:lan} in this case
 becomes \[ (\nt {\analytic F} G) \iso (\nt F {G \iota}), \] that is,
@@ -285,12 +287,12 @@ underlying shape, and then functorially applying the associated data
 mapping.  Note in particular that |lanAdjoint| is an
 \emph{isomorphism}, which means that \emph{every} polymorphic function
 out of an analytic functor arises in this way.  That is, every
-polymorphic function out of $\analytic F\ A$ is ``just a reshaping'': it is
-equivalent to a process consisting of splitting $\analytic F\ A$ into a
-labelled shape and a mapping from labels to data, followed by a
-``reshaping''---an application of some species morphism to the
-shape---and concluding with re-combining the new shape with the data
-mapping.
+polymorphic function out of $\analytic F\ A$ is ``just a reshaping'':
+it is equivalent to a process consisting of splitting a labelled
+structure of type $\analytic F\ A$ into a labelled shape and a mapping
+from labels to data, followed by a ``reshaping''---an application of
+some species morphism to the shape---and concluding with re-combining
+the new shape with the data mapping.
 
 Such a reshaping only has access to the labelled shape, and not to the
 values of type $A$, so it obviously cannot depend on them. However,
@@ -307,10 +309,6 @@ of \citet{jay-shapely}.  Shapely types essentially correspond to
 analytic functors over $\L$-species; shapely types are those which
 decompose into a shape and a \emph{list} of data, which can be thought
 of as a mapping from a linearly ordered set of labels to data.
-
-Analytic functors have many nice properties: for example, they are
-closed under sums, products, composition, and least fixed
-points \citep{Joyal86}.
 
 \subsection{Analytic functors and generating functions}
 \label{sec:analytic-generating}
@@ -562,30 +560,30 @@ Recalling that coends in HoTT are just $\Sigma$-types, and that
 morphisms in $\ST$ are functions, we have \[ \analytic F\ A = \sum_{L
   : \BT} (\iota\ L \to A) \times F\ L. \]
 
-\section{Labelled structures}
-\label{sec:labelled-structures}
+% \section{Labelled structures}
+% \label{sec:labelled-structures}
 
-$\analytic F$ thus represents the ``data type'' corresponding to the
-species $F$, whose values consist of a labelled $F$-shape paired with
-a map assigning a data value to each label.  It will be convenient,
-however, to be able to explicitly work with label types.
+% $\analytic F$ thus represents the ``data type'' corresponding to the
+% species $F$, whose values consist of a labelled $F$-shape paired with
+% a map assigning a data value to each label.  It will be convenient,
+% however, to be able to explicitly work with label types.
 
-\begin{defn}
-  Given a species $F$, the type of \term{labelled structures} over $F$
-  is a bifunctor $\lab F : \B \times \Set \to \Set$,
-  defined by \[ \LStr F L A = (\iota L \to A) \times F\ L. \]
-\end{defn}
+% \begin{defn}
+%   Given a species $F$, the type of \term{labelled structures} over $F$
+%   is a bifunctor $\lab F : \B \times \Set \to \Set$,
+%   defined by \[ \LStr F L A = (\iota L \to A) \times F\ L. \]
+% \end{defn}
 
-We evidently have $\analytic F\ A = \coend L \LStr F L A$, that is,
-labelled structures are obtained from analytic functors by ``taking
-the coend off'', exposing the set of labels as a parameter.
-$\LStr F L -$ is clearly functorial.  Note, however, that $L$ appears
-both co- and contravariantly, so $\LStr F - A$ is functorial only if
-$\Lab$ is a groupoid, in which case $\LStr F \sigma A = (\iota
-(\sigma^{-1}) \to A) \times F \sigma$.
+% We evidently have $\analytic F\ A = \coend L \LStr F L A$, that is,
+% labelled structures are obtained from analytic functors by ``taking
+% the coend off'', exposing the set of labels as a parameter.
+% $\LStr F L -$ is clearly functorial.  Note, however, that $L$ appears
+% both co- and contravariantly, so $\LStr F - A$ is functorial only if
+% $\Lab$ is a groupoid, in which case $\LStr F \sigma A = (\iota
+% (\sigma^{-1}) \to A) \times F \sigma$.
 
-Note that the same definition applies equally well in HoTT, replacing
-$\B$ and $\Set$ with $\BT$ and $\ST$.
+% Note that the same definition applies equally well in HoTT, replacing
+% $\B$ and $\Set$ with $\BT$ and $\ST$.
 
 % \subsection{Generalized labelled structures}
 % \label{sec:generalized-labelled}
@@ -631,65 +629,84 @@ particular $(F\ L)$-shape can occur multiple times or none at all.  In
 contrast, a $(G \fcomp F)$-shape contains every possible $F$-shape
 exactly once.
 
-\section{Operations on labelled structures}
+\section{Introduction and elimination forms for labelled structures}
 \label{sec:labelled-operations}
 
-\todo{Edit. Dumped here from description of product from paper.}
-
-%%% XXX remove me
-\newcommand{\under}[1]{\floor{#1}}
-\newcommand{\lift}[1]{\ceil{#1}}
-
-One introduces a labelled $(F \sprod G)$-shape by pairing a labelled
-$F$-shape and a labelled $G$-shape, using a label set isomorphic to
-the coproduct of the two label types:
+Deriving and fully working out introduction forms for analytic
+functors and labelled structures remains future work.  However, much
+of the work has already been done.  For example, \citet{joyal86} shows
+that analytic functors are closed under sums, products, composition,
+and least fixed points; moreover, the mapping $F \mapsto \analytic F$
+from species to their corresponding analytic functors is homomorphic
+with respect to these operations. For example, one has
 \begin{align*}
-  - \sprod_- - &: (\under{L_1} + \under{L_2} \equiv \under{L}) \to F\ L_1
-  \to G\ L_2 \to (F \sprod G)\ L \\
-  - \lab{\sprod}_- - &: (\under{L_1} + \under{L_2} \equiv \under{L}) \to \LStr F {L_1} A \to \LStr G {L_2} A \to
-  \LStr {F \sprod G} L A
+   \analytic{(F + G)} &= \analytic F + \analytic G \\
+   \analytic{(F \cdot G)} &= \analytic F \times \analytic G \\
+   \analytic{(F \comp G)} &= \analytic F \comp \analytic G \\
+   \analytic{\One} &= \Delta_\One \\
+   \analytic{\X} & = \id
 \end{align*}
-We use here (and for the rest of the paper) the notational convention that
-the isomorphism arguments are given first, but are written as subscripts
-in mathematical notation.
+(for proof, see \citet{joyal86}).  This means that, for example, in
+order to introduce a labelled structure of shape $F \cdot G$, one
+simply gives a pair of a labelled $F$-structure and a labelled
+$G$-structure; this should come as no surprise.
+
+% \todo{Edit. Dumped here from description of product from paper.}
+
+% %%% XXX remove me
+% \newcommand{\under}[1]{\floor{#1}}
+% \newcommand{\lift}[1]{\ceil{#1}}
+
+% One introduces a labelled $(F \sprod G)$-shape by pairing a labelled
+% $F$-shape and a labelled $G$-shape, using a label set isomorphic to
+% the coproduct of the two label types:
+% \begin{align*}
+%   - \sprod_- - &: (\under{L_1} + \under{L_2} \equiv \under{L}) \to F\ L_1
+%   \to G\ L_2 \to (F \sprod G)\ L \\
+%   - \lab{\sprod}_- - &: (\under{L_1} + \under{L_2} \equiv \under{L}) \to \LStr F {L_1} A \to \LStr G {L_2} A \to
+%   \LStr {F \sprod G} L A
+% \end{align*}
+% We use here (and for the rest of the paper) the notational convention that
+% the isomorphism arguments are given first, but are written as subscripts
+% in mathematical notation.
 
 
 
-%% XXX remove me
-\newcommand{\StoreNP}{\mapsto}
+% %% XXX remove me
+% \newcommand{\StoreNP}{\mapsto}
 
-\todo{Edit. Dumped here from paper.}
+% \todo{Edit. Dumped here from paper.}
 
-As an example, we may now encode the standard algebraic data type of
-lists, represented by the inductively-defined species satisfying
-$\List \equiv \One + (\X \sprod \List)$ (for convenience, in what
-follows we leave implicit the constructor witnessing this
-equivalence).  We can then define the usual constructors $\cons{nil}$
-and $\cons{cons}$ as follows:
-\begin{align*}
-  &\cons{nil} : \LStr{\List}{\Fin 0} A \\
-  &\cons{nil} \defeq \lab{\inl} \lab{\One} \\
-  &\cons{cons} : A \to \LStr \List L A \to (\Fin 1 + \under L \equiv
-  \under{L'}) \to \LStr \List {L'} A \\
-  &\cons{cons}\ a\ (|shape|,|elts|)\ e \defeq (\inr\ (\cons{x} \sprod_e
-  |shape|), |append|\ e\ (|allocate|\ (\lambda x. a))\ |elts|)
-\end{align*}
-The interesting thing to note here is the extra equivalence passed as
-an argument to $\cons{cons}$, specifying the precise way in which the
-old label type augmented with an extra distinguished label is
-isomorphic to the new label type.  Again, one might intuitively expect
-something like \[ \cons{cons} : A \to \LStr \List L A \to \LStr \List
-{\lift{\Fin 1} + L} A, \] but this is nonsensical: we cannot take the
-coproduct of two elements of $\FinType$, as it is underspecified.  For
-implementations of $\StoreNP - -$ which make use of the equivalence to
-$\Fin n$ stored in $\FinType$ values (we give an example of one such
-implementation in \pref{sec:vecmap}), the extra equivalence given as
-an argument to \cons{cons} allows us to influence the particular way
-in which the list elements are stored in memory.  For lists, this is
-not very interesting, and we would typically use a variant $\cons{cons'}
-: A \to \LStr \List L A \to \LStr \List {\cons{inc}(L)} A$ making use of a
-canonical construction $\cons{inc}(-) : \FinType \to \FinType$ with
-$\Fin 1 + \under L \equiv \under{\cons{inc}(L)}$.
+% As an example, we may now encode the standard algebraic data type of
+% lists, represented by the inductively-defined species satisfying
+% $\List \equiv \One + (\X \sprod \List)$ (for convenience, in what
+% follows we leave implicit the constructor witnessing this
+% equivalence).  We can then define the usual constructors $\cons{nil}$
+% and $\cons{cons}$ as follows:
+% \begin{align*}
+%   &\cons{nil} : \LStr{\List}{\Fin 0} A \\
+%   &\cons{nil} \defeq \lab{\inl} \lab{\One} \\
+%   &\cons{cons} : A \to \LStr \List L A \to (\Fin 1 + \under L \equiv
+%   \under{L'}) \to \LStr \List {L'} A \\
+%   &\cons{cons}\ a\ (|shape|,|elts|)\ e \defeq (\inr\ (\cons{x} \sprod_e
+%   |shape|), |append|\ e\ (|allocate|\ (\lambda x. a))\ |elts|)
+% \end{align*}
+% The interesting thing to note here is the extra equivalence passed as
+% an argument to $\cons{cons}$, specifying the precise way in which the
+% old label type augmented with an extra distinguished label is
+% isomorphic to the new label type.  Again, one might intuitively expect
+% something like \[ \cons{cons} : A \to \LStr \List L A \to \LStr \List
+% {\lift{\Fin 1} + L} A, \] but this is nonsensical: we cannot take the
+% coproduct of two elements of $\FinType$, as it is underspecified.  For
+% implementations of $\StoreNP - -$ which make use of the equivalence to
+% $\Fin n$ stored in $\FinType$ values (we give an example of one such
+% implementation in \pref{sec:vecmap}), the extra equivalence given as
+% an argument to \cons{cons} allows us to influence the particular way
+% in which the list elements are stored in memory.  For lists, this is
+% not very interesting, and we would typically use a variant $\cons{cons'}
+% : A \to \LStr \List L A \to \LStr \List {\cons{inc}(L)} A$ making use of a
+% canonical construction $\cons{inc}(-) : \FinType \to \FinType$ with
+% $\Fin 1 + \under L \equiv \under{\cons{inc}(L)}$.
 
 % \section{Sharing}
 % \label{sec:sharing}
@@ -740,14 +757,11 @@ $\Fin 1 + \under L \equiv \under{\cons{inc}(L)}$.
 %   \label{fig:tree-list-cp}
 % \end{figure}
 
-\section{Eliminators for labelled structures}
-\label{sec:elim-labelled}
-
-We have see how to \emph{construct} values of the type $\analytic F\
-A$ for various $F$; we now consider how to \emph{eliminate} them.  In
-particular, consider a morphism $\analytic F\ A \to B$, for
-some arbitrary object $B$.  We compute as follows, noting that
-these computations apply equally in $(\fc \B \Set)$ or $(\fc \BT \ST)$:
+Now consider how to \emph{eliminate} labelled structures.  In
+particular, given a labelled structure type $\analytic F\ A$, consider
+a morphism $\analytic F\ A \to B$, for some arbitrary object $B$.  We
+compute as follows, noting that these computations apply equally in
+$(\fc \B \Set)$ or $(\fc \BT \ST)$:
 \begin{sproof}
   \stmt{\analytic F\ A \to B}
   \reason{=}{definition}
@@ -763,11 +777,10 @@ these computations apply equally in $(\fc \B \Set)$ or $(\fc \BT \ST)$:
 Note that $((\iota\ - \to A) \to B)$ is a functor of type $\B \to
 \Set$, that is, a species, which we will abbreviate $B^{A^-}$.  Hence
 the above derivation amounts to saying that a function $(\analytic F\
-A \to B)$ eliminating an analytic functor is equivalent to a species
-morphism $F \to B^{A^-}$.  We can therefore leverage the \todo{stuff
-  from previous chapter}.
-
-\todo{go through some examples.}
+A \to B)$ eliminating a labelled structure is equivalent to a species
+morphism $F \to B^{A^-}$.  We can therefore characterize labelled
+structure eliminators in terms of the species eliminators described in
+\pref{sec:elim-species}.
 
 \section{Analytic functors for partial and copartial species}
 \label{sec:analytic-partial}
