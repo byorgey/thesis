@@ -195,7 +195,7 @@ Note that AC is \emph{independent} of the usual set theory foundations
 (the so-called \emph{Zermelo-Fraenkel axioms}, or ZF), in the sense
 that it is consistent to add either AC or its negation to ZF.  It is
 somewhat controversial since it has some (seemingly) strange
-consequences, \eg the Banach-Tarski paradox~\cite{wagon1993banach}.
+consequences, \eg the Banach-Tarski paradox~\citep{wagon1993banach}.
 However, most mathematicians have come to accept it, and work (in
 principle) within ZF extended with AC, known as ZFC.
 
