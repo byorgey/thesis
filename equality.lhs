@@ -333,7 +333,7 @@ of categories:
 \begin{repdefn}{defn:cat-equiv}
   An \term{equivalence} between $\C$
   and $\D$ is given by functors $\BackForth \C F G \D$ which are
-  inverse up to natural isomorphism, that is, $GF \iso 1_\C$ and $FG
+  inverse up to natural isomorphism, that is, $1_\C \iso GF$ and $FG
   \iso 1_\D$.
 \end{repdefn}
 In set theory, a function is a bijection---that is, an isomorphism of
