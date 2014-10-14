@@ -6,13 +6,14 @@
 \usepackage[outputdir=diagrams]{diagrams-latex}
 \graphicspath{{images/}}
 
+\usepackage{graphicx}
 \usepackage{prettyref}
 \usepackage{xspace}
 \usepackage{ulem}
 
 \usepackage{../defs}
 
-\newif \iftodos \todostrue
+\newif \iftodos \todosfalse
 
 % argh, this isn't working
 \renewcommand{\todo}[1]{\iftodos{\usebeamercolor[fg]{alerted text} [TODO: #1]}\fi}
@@ -93,7 +94,7 @@
 \renewcommand{\eg}{\textit{e.g.}\xspace}
 
 \title{Combinatorial Species and Labelled Structures}
-\date{PhD Dissertation Defense \\ October 14, 2014 }
+\date{PhD dissertation defense \\ October 14, 2014 }
 \author{Brent Yorgey}
 \titlegraphic{}  % \includegraphics[width=2in]{foo}
 
@@ -135,9 +136,7 @@
   }
   \onslide<4->{
   \begin{minipage}{0.23\linewidth}
-    \begin{center}
-      \todo{bridge}
-    \end{center}
+    \noindent \hspace*{-0.4in} \includegraphics[width=1.4\linewidth]{bridge}
   \end{minipage}
   }
   \onslide<3->{
@@ -712,9 +711,65 @@ treeStructures n
 
 \end{frame}
 
-\begin{frame}{Algebraic operations on species}
-  \todo{Examples of algebraic operations: sum, product.  Then explain
-    algebraic expression for tree.}
+\begin{frame}[fragile]{The algebra of species}
+  \begin{itemize}
+    \item<2-> Sum: $(F + G)\ L = F\ L \uplus G\ L$
+    \item<3-> Product:
+\begin{center}
+\begin{diagram}[width=75]
+import           Data.List.Split
+import           Diagrams.TwoD.Layout.Tree
+import           Diagrams.TwoD.Path.Metafont
+
+import           SpeciesDiagrams
+import           Structures (pair)
+
+connectAll l1 l2 n =
+  withNames (map (l1 .>) [0 :: Int .. n-1]) $ \l1s ->
+  withNames (map (l2 .>) [0 :: Int .. n-1]) $ \l2s ->
+  applyAll (zipWith conn l1s l2s)
+
+conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
+-- $
+
+sharedMem = vcat' (with & sep .~ 5)
+  [ pair
+      (wideTree (mkLeaf (circle 1) . ("l" .>) . (part1!!)) sampleBTree5 # centerY)
+      (drawList (mkLeaf (circle 1) . ("l" .>) . (part2!!)) 3 # centerY)
+    # centerX
+  , drawList (mkLeaf (square 2) . ("s" .>)) 8 # centerXY
+  ]
+  # connectAll "l" "s" 8
+  # centerXY # pad 1.1
+
+perm1 = id
+perm2 = id
+
+part1, part2 :: [Int]
+part1 = [3,0,1,2,6]
+part2 = [5,4,7]
+
+numbering =
+  pair
+    (wideTree (numbered . (part1!!)) sampleBTree5 # centerXY)
+    (drawList (numbered . (part2!!)) 3 # centerXY)
+  where
+    numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
+
+dia
+  = frame 0.5 . lwO 0.7 . centerXY
+  . vcat' (with & sep .~ 4) . map centerXY
+  $
+  [ numbering
+  ]
+\end{diagram}
+    %$
+\end{center}
+\item<4-> $\Zero$, $\One$, $\X$, $\Bag$, $\Cyc$, \dots
+\item<5-> Cartesian product, arithmetic product, composition, derivative, \dots
+  \end{itemize}
+
+  \onslide<6-> \[ T = \One + \X \cdot T^2 \]
 \end{frame}
 
 \begin{frame}{Species, formally}
@@ -767,7 +822,7 @@ treeStructures n
   \end{minipage}
   \begin{minipage}{0.23\linewidth}
     \begin{center}
-      \todo{bridge}
+    \noindent \hspace*{-0.4in} \includegraphics[width=1.4\linewidth]{bridge}
     \end{center}
   \end{minipage}
   \begin{minipage}{0.33\linewidth}
@@ -1023,8 +1078,9 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
   See dissertation for:
   \begin{itemize}
   \item How HoTT solves other issues (\eg axiom of choice)
-  \item \todo{What else?}
+  \item More on category theory, finiteness, and related issues in HoTT
   \end{itemize}
+  \todo{More stuff here?  Not sure what\dots}
 \end{frame}
 
 % \begin{frame}
@@ -1089,8 +1145,197 @@ mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
   \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Labels as memory addresses}
+  \begin{center}
+      \begin{diagram}[width=200]
+import           Data.List.Split
+import           Diagrams.TwoD.Layout.Tree
+import           Diagrams.TwoD.Path.Metafont
+
+import           SpeciesDiagrams
+
+connectAll l1 l2 n perm =
+  withNames (map (l1 .>) [0 :: Int .. n-1]) $ \l1s ->
+  withNames (map (l2 .>) [0 :: Int .. n-1]) $ \l2s ->
+  applyAll (zipWith conn l1s (perm l2s))
+
+conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
+-- $
+
+sharedMem = vcat' (with & sep .~ 5)
+  [ hcat' (with & sep .~ 3)
+    [ wideTree (mkLeaf (circle 1) . ("l1" .>)) sampleBTree7 # centerY
+    , drawList (mkLeaf (circle 1) . ("l2" .>)) 7 # centerY
+    ] # centerXY
+  , drawList (mkLeaf (square 2) . ("s" .>)) 7 # centerXY
+  ]
+  # connectAll "l1" "s" 7 perm1
+  # connectAll "l2" "s" 7 perm2
+  # centerXY # pad 1.1
+
+perm1 = id
+perm2 = concat . map reverse . chunksOf 2
+
+asFun :: ([Int] -> [Int]) -> Int -> Int
+asFun perm i = perm [0..6] !! i
+
+numbering = hcat' (with & sep .~ 3) . map centerXY $  -- $
+  [ wideTree numbered sampleBTree7 # centerX
+  , drawList (numbered . asFun perm2) 7 # centerX
+  ]
+  where
+    numbered n = mkLeaf (text (show n) # fc black <> circle 1) ()
+
+listOnTree = wideTree (mkLeaf (circle 1)) sampleBTree7
+  # cCurve 1 0 (1/4 @@@@ turn)
+  # cStr   0 3
+  # cCurve 3 2 (1/2 @@@@ turn)
+  # cStr   2 5
+  # cCurve 5 4 (1/4 @@@@ turn)
+  # cCurve 4 6 (0 @@@@ turn)
+  where
+    cCurve :: Int -> Int -> Angle -> Diagram B R2 -> Diagram B R2
+    cCurve n1 n2 a =
+      connectPerim'
+        (superASty & arrowShaft .~ arc (0 @@@@ turn) (1/5 @@@@ turn) # reverseTrail)
+        n1 n2
+        a (a ^+^ (1/4 @@@@ turn))
+    cStr :: Int -> Int -> Diagram B R2 -> Diagram B R2
+    cStr   = connectOutside' superASty
+
+superASty   = with & shaftStyle %~ dashingG [0.3,0.3] 0 . lw medium
+                   & arrowHead .~ spike
+                   & headLength .~ Local 1
+
+treeOnList = drawList (mkLeaf (circle 1)) 7
+  # top 1 0
+  # top 1 5
+  # top 3 2
+  # bot 0 3
+  # bot 5 4
+  # bot 5 6
+  where
+    top = conn True
+    bot = conn False
+    conn :: Bool -> Int -> Int -> Diagram B R2 -> Diagram B R2
+    conn isTop x y = connectPerim'
+        (superASty & arrowShaft .~ (arc (zeroV) (3/8  @@@@ turn) # adjShaft))
+        x y pAng pAng
+      where
+        adjShaft || (x < y) /= isTop = id
+                 || otherwise        = reverseTrail
+        pAng || isTop     = 1/4 @@@@ turn
+             || otherwise = 3/4 @@@@ turn
+
+super = (hcat' (with & sep .~ 5) . map centerXY) [listOnTree, treeOnList]
+
+dia
+  = frame 0.5 . centerXY . lwO 0.7
+  . vcat' (with & sep .~ 4) . map centerXY
+  $
+  [ numbering
+  , sharedMem
+  ]
+  \end{diagram}
+  %$
+  \end{center}
+\end{frame}
+
 \begin{frame}{Labels as memory addresses}
-  \todo{Make a slide about this.}
+  \begin{center}
+    Promise: instantiate framework with right functor category $\Lab
+    \to \Str$, and we get species operations and data structures
+    (analytic functors) for free.
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \begin{center}
+    \begin{diagram}[width=200]
+import           Data.List.Split
+import           Diagrams.TwoD.Layout.Tree
+import           Diagrams.TwoD.Path.Metafont
+
+import           SpeciesDiagrams
+
+connectAll l1 l2 ns perm =
+  withNames (map (l1 .>) ns) $ \l1s ->
+  withNames (map (l2 .>) ns) $ \l2s ->
+  applyAll (zipWith conn l1s (perm l2s))
+
+conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
+-- $
+
+sharedMem = vcat' (with & sep .~ 5)
+  [ hcat' (with & sep .~ 3)
+    [ wideTree (mkLeaf (circle 1) . ("l1" .>) . (+2)) sampleBTree7 # centerY
+    ] # centerXY
+  , drawList (mkLeaf (square 2) . ("s" .>)) 11 # centerXY
+  ]
+  # connectAll "l1" "s" [2..8 :: Int] perm1
+  # centerXY # pad 1.1
+
+perm1 = id
+perm2 = concat . map reverse . chunksOf 2
+
+asFun :: ([Int] -> [Int]) -> Int -> Int
+asFun perm i = perm [0..6] !! i
+
+dia
+  = frame 0.5 . centerXY . lwO 0.7
+  . vcat' (with & sep .~ 4) . map centerXY
+  $    -- $
+  [ sharedMem
+  ]
+    \end{diagram}
+
+    $\BTSub$---variant of $\B$ where morphisms are \emph{injections}
+    rather than bijections.
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Labels as memory addresses}
+  \begin{center}
+    \begin{diagram}[width=100]
+import           Data.List.Split
+import           Diagrams.TwoD.Layout.Tree
+import           Diagrams.TwoD.Path.Metafont
+
+import           SpeciesDiagrams
+
+connectAll l1 l2 ns perm =
+  withNames (map (l1 .>) ns) $ \l1s ->
+  withNames (map (l2 .>) ns) $ \l2s ->
+  applyAll (zipWith conn l1s (perm l2s))
+
+conn l1 l2 = beneath (lc grey . metafont $ location l1 .- leaving unit_Y <> arriving unit_Y -. endpt (location l2))
+-- $
+
+sharedMem = vcat' (with & sep .~ 5)
+  [ hcat' (with & sep .~ 3)
+    [ wideTree (mkLeaf (circle 1) . ("l1" .>)) sampleBTree7 # centerY
+    ] # centerXY
+  , drawList (mkLeaf (square 2) . ("s" .>)) 5 # centerXY
+  ]
+  # connectAll "l1" "s" [0 .. 4 :: Int] perm1
+  # centerXY # pad 1.1
+
+perm1 = id
+perm2 = concat . map reverse . chunksOf 2
+
+asFun :: ([Int] -> [Int]) -> Int -> Int
+asFun perm i = perm [0..6] !! i
+
+dia
+  = frame 0.5 . centerXY . lwO 0.7
+  . vcat' (with & sep .~ 4) . map centerXY
+  $    -- $
+  [ sharedMem
+  ]
+    \end{diagram}
+
+    $\BTSub^\op$
+  \end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1100,17 +1345,54 @@ mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-  \todo{My proposal turned out to be a 5- or 10-year research
-    program!  This is a good start.}
+\begin{frame}[fragile]
+  \begin{overprint}
+    \onslide<1>
+    \begin{center}
+      \begin{diagram}[width=300]
+import Proposal
+
+dia = proposalDia 1 # lwO 0.7 # frame 1
+      \end{diagram}
+    \end{center}
+
+    \onslide<2>
+    \begin{center}
+      \begin{diagram}[width=300]
+import Proposal
+
+dia = proposalDia 2 # lwO 0.7 # frame 1
+      \end{diagram}
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      \begin{diagram}[width=300]
+import Proposal
+
+dia = proposalDia 3 # lwO 0.7 # frame 1
+      \end{diagram}
+    \end{center}
+  \end{overprint}
+
 \end{frame}
 
 \begin{frame}{Future work}
   \begin{itemize}
-  \item Future thing!
-  \item Other future thing!
+  \item Computational aspects of generating functions
+  \item Formalizing theory of molecular and atomic species
+  \item Applications to generic programming
+  \item Applications to memory layout
+  \item Connections to linear logic?
   \end{itemize}
-  \todo{finish}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    Thank you! \bigskip
+
+    \noindent \includegraphics[width=1in]{BinTree}
+  \end{center}
 \end{frame}
 
 \end{document}
