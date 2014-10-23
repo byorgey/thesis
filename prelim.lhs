@@ -8,26 +8,19 @@
 
 The main content of this dissertation builds upon a great deal of
 mathematical formalism, particularly from set theory, category theory,
-and type theory.  To say that this chapter attempts to make the
-dissertation ``self-contained'' would be ludicrous---not to mention
-disheartening to those readers who find there are still gaps between
-this document's assumptions and their background knowledge.  Rather,
-the purpose of this chapter is to provide a brief overview of the
+and type theory.  This chapter provides a brief overview of the
 necessary technical background, giving definitions, important
 intuitions, and references for further reading. Readers who merely
 need to fill in a few gaps may find such brief treatments sufficient;
 it is hoped that readers with less background will find it a useful
-framework and source of intuition for furthering their own learning,
-making use of the provided references to read about things not covered
-here.
+framework and source of intuition for furthering their own learning.
 
 \section{Metavariable conventions and notation}
 \label{sec:metavariables}
 
 A great many variables and named entities appear in this
 dissertation.  To aid the reader's comprehension, the following
-metavariable conventions are (mostly) adhered to, although this list
-is neither exhaustive nor prescriptive:
+metavariable conventions are (mostly) adhered to:
 \begin{itemize}
 \item Metavariables $f$, $g$, $h$ range over functions.
 \item Greek metavariables (especially $\alpha$, $\beta$, $\sigma$,
@@ -36,8 +29,8 @@ is neither exhaustive nor prescriptive:
   categories, as do fraktur variables such as $\Lab$ and $\Str$.
 \item Names of specific categories use boldface (\eg $\Set$, $\Cat$,
   $\Spe$, $\B$, $\P$).
-\item Names of certain type-theoretic constructs or categories use a
-  calligraphic font (\eg $\Type$, $\BT$, $\PT$, $\ST$).
+\item Names of types or categories defined within homotopy type theory
+  often use a calligraphic font (\eg $\Type$, $\BT$, $\PT$, $\ST$).
 \item Metavariables $A$, $B$, $C$, range over arbitrary sets or types.
 \item Metavariables $K$, $L$ range over \emph{finite} sets or types.
 \item Metavariables $F$, $G$, $H$ range over functors (and in particular
@@ -73,8 +66,10 @@ forgetfulness.
   then $f$ is a function from $A$ to $B$ which possesses both a left
   and right inverse (denoted $f^{-1}$).  Note that in set theory, sets
   which are in bijection are typically not equal.
-\item In homotopy type theory, $\jeq$ denotes \term{judgmental} equality, not to be
-  confused with propositional equality ($=$).
+\item In homotopy type theory, $\jeq$ denotes \term{judgmental}
+  equality, not to be confused with propositional equality ($=$).  A
+  fuller discussion of judgmental versus propositional equality can be
+  found in \pref{sec:HoTT-equality}.
 \item The symbol $\hdefeq$ also denotes a definitional equality, but
   in homotopy type theory rather than set theory. The symbol
   emphasizes the fact that a definition introduces a judgmental rather
@@ -213,10 +208,10 @@ level is appropriate in the context.
 HoTT also allows inductive definitions.  For example, $\N : \Type_0$
 denotes the inductively-defined type of natural numbers, with
 constructors $\zero : \N$ and $\suc : \N \to \N$; we will use Arabic
-notation like $3$ as a shorthand for $\suc\ (\suc\ (\suc \zero))$. We
+notation like $3$ as a shorthand for $\suc\ (\suc\ (\suc\ \zero))$. We
 also have $\Fin : \N \to \Type_0$, which denotes the usual indexed
-type of finite sets, with constructors $\fzero : \Fin (\suc n)$ and
-$\fsuc : \Fin n \to \Fin (\suc n)$.  For example, one can check that
+type of finite sets, with constructors $\fzero : \Fin (\suc\ n)$ and
+$\fsuc : \Fin n \to \Fin (\suc\ n)$.  For example, one can check that
 $\Fin 3$ has the three inhabitants $\fzero$, $\fsuc\ \fzero$, and
 $\fsuc\ (\fsuc\ \fzero)$, and that in general $\Fin n$ is the
 type-theoretic counterpart to $\fin n = \{0, 1, \dots, n-1\}$.
@@ -262,17 +257,17 @@ HoTT distinguishes between two different types of equality:
   Inhabitants of $x = y$ are often called \term{paths} from $x$ to
   $y$; the intuition, taken from homotopy theory, is to think of paths
   between points in a topological space.  The most important aspect of
-  this intuition to note is that a path from a point $x$ to a point
-  $y$ does not witness the fact that $x$ and $y$ are literally the
-  \emph{same} point, but rather specifies a \emph{process} for getting
-  from one to the other.  As we will see, the analogue of this
-  intuition in type theory is the fact that a path of type $x = y$ can
-  have \emph{nontrivial computational content} specifying how to
-  convert between $x$ and $y$.  There is a special value $\refl_A : A
-  = A$ which witnesses the reflexivity of propositional equality, and
-  corresponds to a ``trivial path with no computational content'';
-  but, as the discussion above indicates, there can be other
-  inhabitants of path types besides $\refl$.
+  this intuition is that a path from a point $x$ to a point $y$ does
+  not witness the fact that $x$ and $y$ are literally the \emph{same}
+  point, but rather specifies a \emph{process} for getting from one to
+  the other.  The analogue of this intuition in type theory is the
+  fact that a path of type $x = y$ can have \emph{nontrivial
+    computational content} specifying how to convert between $x$ and
+  $y$.  There is a special value $\refl_A : A = A$ which witnesses the
+  reflexivity of propositional equality, and corresponds to a
+  ``trivial path with no computational content''; but, as the
+  discussion above indicates, there can be other inhabitants of path
+  types besides $\refl$.
 
   Note that it is possible (and often useful!) to have nontrivial
   higher-order paths, \ie paths between paths, paths between paths
@@ -287,13 +282,13 @@ for paths, or \term{path induction}.  Path induction applies when
 trying to prove a statement of the form
 \begin{equation} \label{eq:path-ind-form}
 \all {x,y} {(p : x = y) \to
-  P(p,x,y)}.
+  P(x,y,p)}.
 \end{equation}
 There is also an equivalent induction principle, \term{based path
   induction}, which applies when proving a statement of the form \[
-\all x {(x = y) \to P(x)}, \] where $y$ is fixed.  Crucially, however,
-neither can be used to prove statements of the form $(x = y) \to P$
-where both $x$ and $y$ are fixed.
+\all x {(p : x = y) \to P(x, p)}, \] where $y$ is fixed.  Crucially,
+however, neither can be used to prove statements of the form $(p : x =
+y) \to P(p)$ where both $x$ and $y$ are fixed.
 
 For the precise details of (based) path induction, see the HoTT
 book~\citep{hottbook}. For this work, however, a simple intuition
@@ -455,22 +450,22 @@ also come with an induction principle requiring uses of the values to
 respect all the equalities built by the higher constructors.
 
 This gives a natural way to build \term{quotient types}.  For example,
-consider the HIT $T : \Type$ with data constructors $\cons{TO} : T$ and
-$\cons{TS} : T \to T$, as well as a higher path constructor $\cons{P2}
-: (t : T) \to t = \cons{TS}\ (\cons{TS}\ t)$.  This
-corresponds to quotienting $\N$ by the reflexive transitive closure of
-the relation $n = n+2$.  In this case, we can see (and could even
+consider the HIT $T : \Type$ with data constructors $\cons{TO} : T$
+and $\cons{TS} : T \to T$, as well as a higher path constructor
+$\cons{P2} : (t : T) \to t = \cons{TS}\ (\cons{TS}\ t)$.  This
+corresponds to quotienting $\N$ by the reflexive, transitive closure
+of the relation $n = n+2$.  In this case, we can see (and could even
 prove formally) that $T$ is equivalent to the type $\mathbf{2}$ with
 two inhabitants.  However, if we really have in mind the quotient
-$\N/(n = n+2)$ it may be more convenient to work with it
-directly---for example, defining functions $T \to A$ essentially by
-giving a function $f : \N \to A$ and proving separately that $f$
-is compatible the equality $n = n+2$, rather than directly defining a
-function $\mathbf{2} \to A$.  In any case, there are also many HITs
-which are not equivalent to some standard inductive type, so the
-presence of HITs really does represent a large jump in expressive
-power.  For a good example of a nontrivial ``real-world'' application
-of HITs, see \citet{Angiuli2014patch}.
+$\N/(n = n+2)$, instead of the type $\mathbf{2}$, it may be more
+convenient to work with it directly using the HIT $T$.  For example,
+in order to define functions $T \to A$, one specifies a function $f :
+\N \to A$ and then proves separately that $f$ is compatible with the
+equality $n = n+2$.  In any case, there are also many HITs which are
+not equivalent to some standard inductive type, so the presence of
+HITs really does represent a large jump in expressive power.  For a
+good example of a nontrivial ``real-world'' application of HITs, see
+\citet{Angiuli2014patch}.
 
 \subsection{Truncation}
 \label{sec:truncation}
@@ -490,47 +485,46 @@ which can intuitively be thought of as the proposition ``$A$ is
 inhabited''.
 
 If we have an inhabitant of $\ptrunc A$, we know some $a : A$ must
-have been used to construct it.  However, the induction principle for
-$\ptrunc A$ places some restructions on when we are allowed to look at
+have been used to construct it.  However, the recursion principle for
+$\ptrunc A$ places some restrictions on when we are allowed to look at
 the underlying $a : A$.  In particular, to construct a function
 $\ptrunc A \to P$, one must give a function $f : A \to P$, along with
 a proof that $f$ respects the equalities introduced by the higher
 constructor of $\ptrunc A$.  Hence \emph{all} the outputs of $f$ must
 be equal---that is, $P$ must be a proposition.  Intuitively, this
-means that one is allowed to ``look at'' the value of type $A$ hidden
+means that one is allowed to look at the value of type $A$ hidden
 inside a value of $\ptrunc A$, as long as one ``promises not to reveal
-the secret''.  Producing an inhabitant of a proposition $P$ counts as
-such a promise, because it cannot ``leak'' any information about the
-precise inhabitant $a : A$. Up to propositional equality, there is at
-most one inhabitant of $P$, and hence no opportunity to convey
-information.
+the secret''.  Keeping this promise means producing an inhabitant of a
+\emph{proposition} $P$, because it cannot ``leak'' any information
+about the precise inhabitant $a : A$. Up to propositional equality,
+there is at most one inhabitant of $P$, and hence no opportunity to
+convey information.
 
 An important related question is this: when can one define a function
 $\ptrunc{A} \to B$, when $B$ is \emph{not} a mere proposition?  It may
 seem that the answer is ``never''; at the very least, it is clear that
 the recursion principle cannot be applied directly.  However, there is
-a useful ``trick'' which makes it possible: if one can \emph{uniquely
+a useful trick which makes it possible: if one can \emph{uniquely
   characterize} a particular value of $B$---that is, create a
 predicate $Q : B \to \Type$ such that $(b : B) \times Q(b)$ is a mere
 proposition---one can then define a function $\ptrunc{A} \to (b : B)
 \times Q(b)$ from a function $A \to (b : B) \times Q(b)$, and finally
 project out the $B$ to obtain a function $\ptrunc A \to B$.  This
 ``trick'' is detailed in the HoTT book~\citeyearpar[\Sect
-3.9]{hottbook}; Exercise 3.19 is an excellent exercise that also
-affords some good intuition for this phenomenon.
+3.9]{hottbook}; Exercise 3.19 affords some good intuition for this phenomenon.
 
-Finally, note that, as in the HoTT book (see Chapter 3), the adjective
-``mere'' will be used more generally to refer to truncated things.  In
-particular, an important example is the distinction between the
-type \[ (a : A) \times B(a), \] pronounced ``there
-\emph{constructively} exists an $A$ such that $B$'', and its
-truncation \[ \ptrunc{(a : A) \times B(a)}, \] pronounced ``there
-\emph{merely} exists an $A$ such that $B$''.  The latter more closely
-corresponds to the notion of existence in classical logic, since
-classically one can prove an existence statement without specifying an
-inhabitant. Given an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we
-know only that some $(a:A)$ satisfying $B$ exists, without necessarily
-getting to know its identity.
+As in the HoTT book (see Chapter 3), the adjective ``mere'' will be
+used more generally to refer to truncated things.  In particular, an
+important example is the distinction between the type \[ (a : A)
+\times B(a), \] pronounced ``there \emph{constructively} exists an $A$
+such that $B$'', and its truncation \[ \ptrunc{(a : A) \times
+  B(a)}, \] pronounced ``there \emph{merely} exists an $A$ such that
+$B$''.  The latter more closely corresponds to the notion of existence
+in classical logic, since classically one can prove an existence
+statement without specifying an inhabitant. Given an inhabitant of
+$\ptrunc{(a:A) \times B(a)}$, we know only that some $(a:A)$
+satisfying $B$ exists, without necessarily getting to know its
+identity.
 
 %% Don't think I make any use of this later.
 %

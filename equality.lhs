@@ -1380,11 +1380,11 @@ to avoid the axiom of choice.
     (\suc \dots) \to \Fin \zero$, which can be used to produce an
     element of $\Fin \zero = \bot$, from which anything follows.
   \item In the case when both are a successor, we have
-    $\Fin{(\suc{n_1'})} \equiv \Fin{(\suc{n_2'})}$, which is
+    $\Fin{(\suc\ n_1')} \equiv \Fin{(\suc\ n_2')}$, which is
     equivalent to $\top + \Fin{n_1'} \equiv \top + \Fin{n_2'}$.  If we
     can conclude that $\Fin{n_1'} \equiv \Fin{n_2'}$, the inductive
-    hypothesis then yields $n_1' = n_2'$, from which $\suc{n_1'} =
-    \suc{n_2}'$ follows immediately.  The implication $(\top +
+    hypothesis then yields $n_1' = n_2'$, from which $\suc\ n_1' =
+    \suc\ n_2'$ follows immediately.  The implication $(\top +
     \Fin{n_1'} \equiv \top + \Fin{n_2'}) \to (\Fin{n_1'} \equiv
     \Fin{n_2'})$ is true, but not quite as straightforward to show as
     one might think! In particular, an equivalence $(\top + \Fin{n_1'}

@@ -134,14 +134,14 @@ species in automated algorithm analysis.  However, their work was all
 carried out in a dynamically typed setting.
 
 The first to think about species specifically in the context of
-strongly typed functional programming were Carette and Uszkay
-\citep{Carette_Uszkay_2008_species}, who explored the potential of
+strongly typed functional programming were
+\citet{Carette_Uszkay_2008_species}, who explored the potential of
 species as a framework to extend the usual notion of algebraic data
 types, and described some preliminary work adding species types to
 Haskell.  More recently, Joachim Kock has done some theoretical work
 generalizing species, ``container types'', and several other notions
 of ``extended data type''~\citep{kock2012data}.  (Most interestingly,
-Kock's work seems to point to the central relevance of homotopy type
+Kock's work points to the central relevance of homotopy type
 theory~\citep{hottbook}, which also emerges as a central player in
 this dissertation.)
 
@@ -171,7 +171,7 @@ combinatorial setting.
 
 There is also the promise of using species not just as a tool to
 understand and work with algebraic data types in better ways, but
-directly as a foundation upon which to build (a richer notion) of
+directly as a foundation upon which to build (a richer notion of)
 algebraic data types.  This is particularly interesting due to the
 ability of the theory of species to talk about structures which do not
 correspond to algebraic data types in the usual sense---particularly
@@ -183,7 +183,7 @@ permuting the elements of a bag always results in the same bag.
 Likewise, the elements of an ordered cycle may be cyclically permuted
 without affecting the cycle.  By contrast, a typical binary tree
 structure has no symmetry: any permutation of the elements may result
-in a different tree.  In fact, every data structure of some algebraic
+in a different tree.  In fact, every structure of an algebraic
 data type has no symmetry, since every element in an algebraic
 structure can be uniquely identified by a \emph{path} from the root of
 the structure to the element, so permuting the elements always results
@@ -266,7 +266,7 @@ which are incompatible with constructive foundations.  The bulk of
 groundwork which makes it possible to talk about species in a typed,
 constructive setting.  In particular, the biggest issues are the
 difference between \term{equality} and \term{isomorphism}, and the
-constructive encoding of \term{finiteness} (which is itself related
+constructive encoding of \term{finiteness} (which is itself related to
 issues to equality and isomorphism). The recently developed
 \term{homotopy type theory} \citep{hottbook} turns out to be exactly
 what is wanted to encode everything in a parsimonious way.  The
@@ -283,11 +283,9 @@ audience.  The existing species literature is almost entirely written
 for either hard-core combinatorialists or hard-core category
 theorists, and is not very accessible to the typical FP practitioner.
 Any attempt to make species relevant to computer scientists must
-therefore first address this accessibility gap.  I cannot say that I
-have accomplished this---doing a proper job of it would really require
-a book.  In any case, I hope that this is at least a good start.
+therefore first address this accessibility gap.
 
-However, \pref{chap:species} does also make a few novel technical
+\pref{chap:species} does also make a few novel technical
 contributions---for example, a characterization of equipotence in terms
 of manifestly finite sets, and a careful discussion of finite versus
 infinite families of structures and the relation to species
