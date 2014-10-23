@@ -1071,6 +1071,7 @@ dia = decorateLocatedTrail (triangle (fromIntegral (n+2)) # rotateBy (1/2))
   \item yields insight into the mathematics (equipotence, $\L$-species).
   \end{itemize} \bigskip
 
+  \onslide<2->
   In HoTT, it is \emph{impossible to write down invalid species}.
 \end{frame}
 
@@ -1140,7 +1141,7 @@ mapsto (l,x) = hcat' (with & sep .~ 0.5) [mloc l, a, elt x]
   \item<4-> correspond to generating functions
   \item<5-> are closed under many operations of interest (sum,
     product, fixed point \dots)
-  \item<6-> can be defined via \emph{Kan extensions}
+  \item<6-> can be defined via \emph{coends/Kan extensions}
   \item<7-> correspond to $\Sigma$-types in HoTT
   \end{itemize}
 \end{frame}
