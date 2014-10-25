@@ -237,7 +237,7 @@ implementing a function of this type is a simple exercise!  The
 intuitive idea can be grasped by implementing a non-dependent
 analogue, say, a Haskell function of type |(i -> (a,c)) -> (i -> a, i
 -> c)|.  This is quite easy to implement, and the dependent version is
-essentially no harder; only the types that get more complicated, not
+essentially no harder; only the types get more complicated, not
 the implementation.  So what's going on here?  Why is AC so
 controversial if it is simply \emph{true} in type theory?
 
@@ -302,7 +302,7 @@ to (half-jokingly) as \emph{evil}.  More positively, the
 \term{principle of equivalence} states that properties of mathematical
 structures should be invariant under isomorphism.  This principle
 leads naturally to speaking of ``the'' object having some property,
-when in fact there may be many objects with the given property, but
+when in fact there may be many objects with the given property but
 all such objects are uniquely isomorphic; this cannot cause confusion
 if the principle of equivalence is in effect.
 
@@ -315,7 +315,7 @@ functor one must resort to the axiom of choice to arbitrarily choose
 particular outputs.  This seems like a fairly ``benign'' use of AC: if
 we have a collection of equivalence classes, where the elements in
 each class are all uniquely isomorphic, then using AC to pick one
-representative from each really ``does not matter'', in the sense that
+representative from each really ``does not matter'' in the sense that
 we cannot tell the difference between different choices (as long as we
 refrain from evil).  Unfortunately, even such ``benign'' use of AC
 still poses a problem for computation.
@@ -403,11 +403,11 @@ that the statement
 requires AC, but is \emph{equivalent} to it, in the sense that AC is
 derivable given AP as an axiom \citep{nlab-AoC}!
 
-On purely intuitive grounds, however, it still ``feels'' like AP
-``ought to be'' true.  The particular choice of functor $G : \D \to
-\C$ ``doesn't matter'', since it makes no difference up to
+On purely intuitive grounds, however, it still feels like AP
+ought to be true.  The particular choice of functor $G : \D \to
+\C$ doesn't matter, since it makes no difference up to
 isomorphism.  One is therefore left in the awkward position of having
-two logically equivalent statements which it seems ``ought to be''
+two logically equivalent statements which it seems ought to be
 respectively affirmed and rejected.
 
 Obviously this is not a tenable state of affairs; there are (at least)
@@ -415,7 +415,7 @@ four options for resolving the situation.
 
 \begin{enumerate}
 \item If one is feeling particularly rational, one can simply say,
-  ``Since AC and AP are equivalent, and I reject AC, I must therefore
+  ``Since AC and AP are equivalent and I reject AC, I must therefore
   reject AP as well; my \emph{feelings} about it are irrelevant.''
 \end{enumerate}
 
@@ -435,7 +435,7 @@ There are also, however, several more creative options:
   anafunctor is a functor ``defined only up to unique isomorphism''.
   It turns out that the appropriate analogue of AP, where ``functor''
   has been replaced by ``anafunctor'', is indeed true---and neither
-  requires nor implies AC.  Anafunctors ``act like'' functors in a
+  requires nor implies AC.  Anafunctors act like functors in a
   sufficiently strong sense that one can simply do category theory
   using anafunctors in place of functors.  However, one also has to
   replace natural transformations with ``ananatural transformations'',
@@ -452,7 +452,7 @@ There are also, however, several more creative options:
   true.  However, this version of ``essential surjectivity'' is rather
   strong, in that it forces you to make choices you might prefer not
   to make: for each $D \in \D$ there might be many isomorphic $C \in
-  \C$ to choose from, with no ``canonical'' choice, and it is annoying
+  \C$ to choose from, with no canonical choice, and it is annoying
   (again, a philosophical rather than technical consideration!) to be
   forced to choose one.
 
@@ -472,6 +472,10 @@ There are also, however, several more creative options:
   detail in \pref{sec:ct-hott}.
 \end{enumerate}
 
+Ultimately, this last option using HoTT is the best.  However, to
+fully appreciate it, it is helpful to first explore the notion of
+anafunctors, and the closely related notion of cliques.
+
 \subsection{Cliques}
 \label{sec:cliques}
 
@@ -486,14 +490,13 @@ explained in \pref{sec:anafunctors}.
 
 The theory of cliques (and of anafunctors) amounts to a way of doing
 (set-theoretic) category theory without using the axiom of choice.
-However, building category theory directly within homotopy type theory
+However, building category theory directly in homotopy type theory
 (\pref{sec:ct-hott}), instead of set theory, also obviates the need
 for the axiom of choice, but without the extra complication of
 anafunctors.  This subsection and the next, therefore, are not
-strictly prerequisite to the remainder of this dissertation.  However,
-explaining these ideas clearly is an important contribution in and of
-itself, and helps build intuition for the success of homotopy type
-theory, explained in \pref{sec:finiteness-hott}.
+strictly prerequisite to the remainder of this dissertation, but they
+help build intuition for the success of homotopy type theory,
+explained in \pref{sec:finiteness-hott}.
 
 \begin{defn}
   A \term{clique} $(I,A,u)$ in a category
@@ -513,11 +516,10 @@ theory, explained in \pref{sec:finiteness-hott}.
 
 \begin{rem}
   There are two things worth pointing out about this definition.
-  First, note that the same object may occur multiple times in the
-  collection $A$---that is, multiple different values of $I$ may index
-  the same object of $\C$.  Second, note that the last two conditions
-  together imply $u_{ij} = u_{ji}^{-1}$, since $u_{ij} \then u_{ji} =
-  u_{ii} = id$.
+  First, the same object may occur multiple times in the collection
+  $A$---that is, multiple different values of $I$ may index the same
+  object of $\C$.  Second, the last two conditions together imply
+  $u_{ij} = u_{ji}^{-1}$, since $u_{ij} \then u_{ji} = u_{ii} = id$.
 \end{rem}
 
 A clique can thus be visualized as a graph-theoretic clique in a
@@ -549,7 +551,7 @@ objects.
 As one would expect, the class of cliques and clique morphisms in a
 category $\C$ itself forms a category, which we call $\clq \C$.  It is
 easy to imagine what the identity morphism of cliques must be---the
-one which maps each $A_i$ to $A_j$ via $u_{ij}$.  However, composition
+one that maps each $A_i$ to $A_j$ via $u_{ij}$.  However, composition
 of clique morphisms is more subtle.  Suppose we have three cliques
 with morphisms $\xymatrix{(I,A,u) \ar[r]^f & (J,B,v) \ar[r]^g &
   (K,C,w)}$.  We must define a collection of morphisms
@@ -578,14 +580,16 @@ choice of $j$, since everything in sight commutes.  Specifically,
 \stmt{f_{il} \then g_{lk}.}
 \end{sproof}
 Since $J$ is non-empty, it must contain some element $j$ which we may
-arbitrarily use to define the $h_{ik}$.  If defining the theory of
-cliques within HoTT instead of set theory, this can be done in an even
-more principled way: the fact that $J$ is non-empty should be modeled
-by its propositional truncation, $\ptrunc J$. This means that \emph{in
-  order} to be able to use the particular value of $J$ hidden inside
-the truncation, we \emph{must} show that the $h_{ik}$ thus defined are
-independent of the choice of $j$.
-
+arbitrarily use to define the $h_{ik}$.
+\begin{rem}
+  If defining the theory of cliques within HoTT instead of set theory,
+  this can be done in an even more principled way: the fact that $J$
+  is non-empty should be modeled by its propositional truncation,
+  $\ptrunc J$. This means that \emph{in order} to be able to use the
+  particular value of $J$ hidden inside the truncation, we \emph{must}
+  show that the $h_{ik}$ thus defined are independent of the choice of
+  $j$.
+\end{rem}
 The idea now is to replace functors $\C \to \D$ with functors $\C \to
 \clq \D$, which map objects of $\C$ to entire equivalence classes of
 objects in $\D$, instead of arbitrarily picking some object from each
@@ -594,7 +598,7 @@ in defining such functors.  However, it is somewhat cumbersome to
 replace $\D$ by $\clq \D$ in this way.  To make it tenable, one could
 imagine defining a new notion of ``clique functor'' $F : \C
 \stackrel{\clq{}}{\to} \D$ given by a regular functor $\C \to \clq
-\D$, and showing that these clique functors ``act like'' functors in
+\D$, and showing that these clique functors act like functors in
 suitable ways.  For example, it is easy to see that any regular
 functor $\C \to \D$ can be made into a trivial functor $\C \to \clq
 \D$, by sending each $C \in \C$ to the singleton clique containing
@@ -610,7 +614,7 @@ the theory of \emph{anafunctors}.
 
 As an intuition for anafunctors it is helpful to keep in mind the
 equivalent concept of functors $\C \to \clq \D$---both represent
-functors whose ``values are specified only up to unique isomorphsim''.
+functors whose values are specified only up to unique isomorphsim.
 Such functors represent a many-to-many relationship between objects of
 $\C$ and objects of $\D$.  Normal functors, as with any function, may
 of course map multiple objects of
@@ -705,7 +709,7 @@ dia =
   one) if there is some $s$ for which $D \iso F_s(C)$.
 
   The idea now is to impose additional conditions which ensure that
-  $F$ ``acts like'' a regular functor $\C \to \D$.
+  $F$ acts like a regular functor $\C \to \D$.
   \begin{itemize}
   \item Functors are defined on all objects; so we require each object
     of $\C$ to have at least one specification $s$ which corresponds
@@ -792,7 +796,7 @@ is somewhat less intuitive but usually more convenient to work with.
 \end{defn}
 
 \begin{rem}
-  Note that in this definition, $\lana{F}$ must be \emph{strictly}
+  In this definition, $\lana{F}$ must be \emph{strictly}
   (as opposed to \emph{essentially}) surjective on objects, that is,
   for every $C \in \C$ there is some $S \in \Spec$ such that
   $\lana{F}(S) = C$, rather than only requiring $\lana{F}(S) \iso
@@ -862,7 +866,7 @@ everything into an anafunctor, and translating functor operations and
 properties into corresponding operations and properties of
 anafunctors.  However, this is tediously complex (imagine if an
 introductory category theory textbook followed up the definition of
-categories with the definition of anafunctors!), and, as we will see,
+categories with the definition of anafunctors!) and, as we will see,
 ultimately unnecessary. By founding category theory on
 HoTT instead of set theory, we can avoid the axiom of choice without
 incurring such complexity overhead.  In a sense, HoTT takes all the
@@ -872,23 +876,23 @@ theory, so that ``normal'' functors secrectly become anafunctors.
 \section{Category theory in HoTT}
 \label{sec:ct-hott}
 
-As hinted earlier, category theory works much more nicely when founded
-in HoTT instead of set theory.  Intuitively, the main reason is that
-in set theory the only notion of equality (extensional equality of
-sets) is too impoverished---one really wants to work up to
-\emph{isomorphism} rather than literal equality, and the mismatch
-between isomorphism and strict equality introduces all sorts of
-difficulties and extra work.  For example, many concepts have subtly
-different ``strict'' and/or ``weak'' variants, having to do with the
-sort of equality used in the definition.  In contrast, via the
-univalence axiom, HoTT has a very rich---yet coherent---notion of
-equality that is able to encompass isomorphism in categories.
+Category theory works much better when founded in HoTT instead of set
+theory.  Primarily, this is because in set theory the only
+notion of equality (extensional equality of sets) is too
+impoverished---one really wants to work up to \emph{isomorphism}
+rather than literal equality, and the mismatch between isomorphism and
+strict equality introduces all sorts of difficulties and extra work.
+For example, many concepts have subtly different ``strict'' and/or
+``weak'' variants, having to do with the sort of equality used in the
+definition.  In contrast, via the univalence axiom, HoTT has a very
+rich---yet coherent---notion of equality that is able to encompass
+isomorphism in categories.
 
 This section lays out a few relevant definitions along with some
 intuition and commentary.  A fuller treatment may be found in Chapter
 9 of the HoTT book~\citeyearpar{hottbook}.  Generally, the term
 ``\hott{widget}'' is used to refer to widgets as defined in HoTT, to
-distinguish from widgets as defined in set theory.  Note that there is
+distinguish from widgets as defined in set theory.  There is
 nothing fundamentally new in this section, but it is valuable to
 collect and synthesize the particularly relevant bits of information
 which are otherwise scattered throughout the HoTT book.
@@ -924,7 +928,7 @@ We begin with the definition of a \term{precategory}.
   The restriction that $\hom X Y$ is a \emph{set}, \ie a $0$-type
   (rather than an arbitrary type) is important: otherwise one runs
   into problems with coherence of the identity and associativity laws,
-  and extra laws become necessary.  Down this path lies $n$-categories
+  and extra laws become necessary.  Down this path lie $n$-categories
   or even $(\infty,1)$-categories; but to model traditional
   ($1$-)categories, it suffices for $\hom X Y$ to be a $0$-type.  In
   particular, this means that the identity and associativity laws,
@@ -980,9 +984,10 @@ An \hott{groupoid} is an \hott{category} where every morphism is an
 isomorphism. The following example will play an important role later.
 
 \begin{defn}
-  Any $1$-type $T$ gives rise to an \hott{groupoid} $\tygrpd{T}$ where the
-  objects are values $a : T$, and $\hom a b \hdefeq (a = b)$, that
-  is, morphisms from $a$ to $b$ are paths $p : a = b$.
+  Any $1$-type $T$ gives rise to an \hott{groupoid} $\tygrpd{T}$ where
+  the objects are values $a : T$ and morphisms are equalities $\hom a
+  b \hdefeq (a = b)$, that is, morphisms from $a$ to $b$ are paths $p
+  : a = b$.
 \end{defn}
 
 \begin{proof}
@@ -1206,12 +1211,11 @@ permutation should it be sent?  Knowing that the size of
 $\{\text{cat}, \text{dog}, \text{moose}\}$ is $3$ does not tell us
 anything about how to match up animals with $\{0,1,2\}$.
 
-More abstractly, $\fin - : \P \to \B$ is fully faithful and
-essentially surjective (every finite set is in bijection with $\fin n$
-for some $n$); this yields an equivalence of categories, and hence an
-inverse functor $\size - : \B \to \P$, only in the presence of AC.
-
-Concretely, we can use AC to choose an arbitrary bijection $\varphi_S
+Abstractly, $\fin - : \P \to \B$ is fully faithful and essentially
+surjective (every finite set is in bijection with $\fin n$ for some
+$n$); this yields an equivalence of categories, and hence an inverse
+functor $\size - : \B \to \P$, only in the presence of AC.  More
+concretely, we can use AC to choose an arbitrary bijection $\varphi_S
 : S \bij \fin{\size S}$ for each finite set $S$, somehow matching up
 $S$ with the canonical set of size $\size S$. Given $\alpha : S \bij
 T$ we can then construct \[ \xymatrix{ \fin{\size S}
@@ -1347,14 +1351,14 @@ to avoid the axiom of choice.
 \label{sec:finiteness-prelims}
 
 \begin{lem} \label{lem:equiv-pres-set}
-  Equivalence preserves sets, that is, if $A$ and
+  Equivalence preserves set-ness, that is, if $A$ and
   $B$ are sets, then so is $A \equiv B$.
 \end{lem}
 \begin{proof}
   $(A \equiv B) \equiv ((f : A \to B) \times \cons{isequiv}(f))$, where
   $\cons{isequiv}(f)$ is a mere proposition expressing the fact that
   $f$ is an equivalence (\ie has a suitable inverse).  This is a set
-  since $\cons{isequiv}(f)$ is a mere proposition and hence a set,
+  since $\cons{isequiv}(f)$ is a mere proposition (and hence a set),
   $A \to B$ is a set whenever $B$ is, and $\times$ takes sets to sets
   [HoTT book, Lemma 3.3.4, Examples 3.1.5 and 3.1.6].
 \end{proof}
@@ -1379,28 +1383,28 @@ to avoid the axiom of choice.
     equivalence in the appropriate direction gives a function $\Fin
     (\suc \dots) \to \Fin \zero$, which can be used to produce an
     element of $\Fin \zero = \bot$, from which anything follows.
-  \item In the case when both are a successor, we have
-    $\Fin{(\suc\ n_1')} \equiv \Fin{(\suc\ n_2')}$, which is
-    equivalent to $\top + \Fin{n_1'} \equiv \top + \Fin{n_2'}$.  If we
-    can conclude that $\Fin{n_1'} \equiv \Fin{n_2'}$, the inductive
-    hypothesis then yields $n_1' = n_2'$, from which $\suc\ n_1' =
-    \suc\ n_2'$ follows immediately.  The implication $(\top +
-    \Fin{n_1'} \equiv \top + \Fin{n_2'}) \to (\Fin{n_1'} \equiv
-    \Fin{n_2'})$ is true, but not quite as straightforward to show as
-    one might think! In particular, an equivalence $(\top + \Fin{n_1'}
-    \equiv \top + \Fin{n_2'})$ may not match the $\top$ values with
-    each other.  As illustrated in \pref{fig:gcbp-Maybe}, given $e :
-    (\top + \Fin{n_1'} \equiv \top + \Fin{n_2'})$, it suffices to
-    define $e'(e^{-1}\ \unit) = e\ \unit$, with the rest of $e' :
-    \Fin{n_1'} \equiv \Fin{n_2'}$ defined as a restriction of
-    $e$. \later{Formal proof that the resulting $e'$ is an
-      equivalence?}  This construction corresponds more generally to
-    the \term{Gordon complementary bijection
-      principle}~\citep{gordon1983sieve}, whereby a bijection $A_1
-    \bij B_1$ can be constructively ``subtracted'' from a bijection
-    $(A_0 + A_1) \bij (B_0 + B_1)$, yielding a bijection $A_0 \bij
-    B_0$.  (Unfortunately, I do not currently know of a good way to
-    encode the proof in a constructive logic.)
+  \item In the case when both are a successor, we have $\Fin{(\suc\
+      n_1')} \equiv \Fin{(\suc\ n_2')}$, which is equivalent to $\top
+    + \Fin{n_1'} \equiv \top + \Fin{n_2'}$.  If we can conclude that
+    $\Fin{n_1'} \equiv \Fin{n_2'}$, the inductive hypothesis then
+    yields $n_1' = n_2'$, from which $\suc\ n_1' = \suc\ n_2'$ follows
+    immediately.  The implication $(\top + \Fin{n_1'} \equiv \top +
+    \Fin{n_2'}) \to (\Fin{n_1'} \equiv \Fin{n_2'})$ is true, but not
+    quite as straightforward to show as one might think! In
+    particular, an equivalence $(\top + \Fin{n_1'} \equiv \top +
+    \Fin{n_2'})$ may not match the $\top$ values with each other.  As
+    illustrated in \pref{fig:gcbp-Maybe}, given $e : (\top +
+    \Fin{n_1'} \equiv \top + \Fin{n_2'})$, it suffices to define
+    $e'(e^{-1}\ \unit) = e\ \unit$, with the rest of $e' : \Fin{n_1'}
+    \equiv \Fin{n_2'}$ defined as a restriction of $e$. \later{Formal
+      proof that the resulting $e'$ is an equivalence?}  This
+    construction corresponds more generally to the \term{Gordon
+      complementary bijection principle}~\citep{gordon1983sieve},
+    whereby a bijection $A_1 \bij B_1$ can be constructively
+    ``subtracted'' from a bijection $(A_0 + A_1) \bij (B_0 + B_1)$,
+    yielding a bijection $A_0 \bij B_0$.  (Unfortunately, I do not
+    currently know of a good way to encode a proof of the fully
+    general bijection principle in a constructive logic.)
   \end{itemize}
 \end{proof}
 
@@ -1484,7 +1488,7 @@ now straightforward.
 \end{defn}
 It is easy to check that this satisfies the axioms for an
 \hott{category}, the salient points being that $\Fin m \equiv \Fin n$ is
-a set by \pref{lem:equiv-pres-set}, and $\isotoid$ follows from
+a set by \pref{lem:equiv-pres-set} and that $\isotoid$ follows from
 \pref{lem:fin-iso-equal}.
 
 \subsection{Cardinal-finiteness}
@@ -1510,7 +1514,7 @@ Our first try at encoding this in type theory is
 \[ \FinType \hdefeq (A : \Type) \times (n : \N) \times (A \equiv \Fin n). \]
 
 We would like to build a groupoid having such finite types as objects,
-and equivalences between them as morphisms.  Recall that given some
+and equivalences between them as morphisms.  Recall that, given some
 $1$-type $A$, the groupoid $\tygrpd{A}$ has values $(a : A)$ as its
 objects and paths $a = b$ as its morphisms.  For this to be
 applicable, we must check that $\FinType$ is a $1$-type. In fact, it
@@ -1650,7 +1654,7 @@ truncation does not really hide anything.
   recursion principle for propositional truncation.  Recall that this
   recursion principle only applies in the case that the result is a
   mere proposition; in this case, the result is itself a propositional
-  truncation which is a mere proposition by construction.
+  truncation, which is a mere proposition by construction.
 
   In the other direction, define \[ g(\ptruncI{(n, e)}) = (n,\ptruncI
   e), \] which is clearly inverse to $f$.  It remains only to show
@@ -1741,10 +1745,11 @@ may construct an equivalence with $\Fin n$ by matching the smallest
 element to $0$, the second smallest to $1$, and so on.  More formally:
 
 \begin{prop}
-  We have the equivalence
-  \[ \SetL \equiv (A : \FinSetT) \times \linOrd(A), \] where $\linOrd(A)$ is
-  suitably defined as an antisymmetric, transitive, total binary
-  relation on $A$.
+  Manifestly finite sets are equivalent to linear orderings of finite
+  sets, that is,
+  \[ \SetL \equiv (A : \FinSetT) \times \linOrd(A), \] where
+  $\linOrd(A)$ is suitably defined as the (constructive) existence of
+  an antisymmetric, transitive, total binary relation on $A$.
 \end{prop}
 \begin{proof}
   As described above, the left-to-right direction is easy: there is a
@@ -1812,7 +1817,7 @@ property of $\fin -$:
   For any $m, n : \PT$, we must exhibit an equivalence between
   $(\hom[\PT] m n) \jeq (\Fin m \equiv \Fin n)$ and $(\hom[\BT] {\fin
     m} {\fin n}) \jeq (\fin m = \fin n) \equiv (\Fin m = \Fin
-  n)$---such an equivalence is given by univalence.
+  n)$. such an equivalence is given by univalence.
 \end{proof}
 
 On the other hand, it is not at all obvious how to directly define a
@@ -1854,7 +1859,7 @@ It turns out that being split essentially surjective is a rather
 strong notion.  In particular:
 
 \begin{prop} \label{prop:splitEssSurj-equiv}
-  For any precategories $\CT$ and $\DT$ and a functor $F : \CT \to
+  For any precategories $\CT$ and $\DT$ and functor $F : \CT \to
   \DT$, $F$ is fully faithful and split essentially surjective if and
   only if it is an equivalence.
 \end{prop}
@@ -1933,7 +1938,7 @@ permutation, just as in the construction of the anafunctor $\size : \B
 \to \P$ in \pref{sec:finiteness-sets}.  Indeed, we are not allowed to
 project finiteness evidence out from the propositional truncation when
 defining \emph{arbitrary} functors $\BT \to \PT$.  However, we are not
-interested in constructing \emph{any old} functor, but rather a very
+interested in constructing any old functor, but rather a very
 specific one, namely, an inverse to $\fin - : \PT \to \BT$---and the
 inverse is uniquely determined.  In essence, the construction of
 $\size$ proceeds by first constructing a functor paired with a proof
