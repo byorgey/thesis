@@ -486,32 +486,37 @@ inhabited''.
 
 If we have an inhabitant of $\ptrunc A$, we know some $a : A$ must
 have been used to construct it.  However, the recursion principle for
-$\ptrunc A$ places some restrictions on when we are allowed to look at
-the underlying $a : A$.  In particular, to construct a function
-$\ptrunc A \to P$, one must give a function $f : A \to P$, along with
-a proof that $f$ respects the equalities introduced by the higher
-constructor of $\ptrunc A$.  Hence \emph{all} the outputs of $f$ must
-be equal---that is, $P$ must be a proposition.  Intuitively, this
-means that one is allowed to look at the value of type $A$ hidden
-inside a value of $\ptrunc A$, as long as one ``promises not to reveal
-the secret''.  Keeping this promise means producing an inhabitant of a
+$\ptrunc A$ places some restrictions on how we are allowed to use the
+underlying $a : A$.  In particular, to construct a function $\ptrunc A
+\to P$, one must give a function $f : A \to P$, along with a proof
+that $f$ respects the equalities introduced by the higher constructor
+of $\ptrunc A$.  Hence \emph{all} the outputs of $f$ must be
+equal---that is, $P$ must be a mere proposition.  That is, a function
+$A \to P$ can be used to construct a function $\ptrunc A \to P$ if and
+only if $P$ is a mere proposition.  Intuitively, this means that one
+is allowed to look at the value of type $A$ hidden inside a value of
+$\ptrunc A$, as long as one ``promises not to reveal the secret''.
+Keeping this promise means producing an inhabitant of a
 \emph{proposition} $P$, because it cannot ``leak'' any information
 about the precise inhabitant $a : A$. Up to propositional equality,
 there is at most one inhabitant of $P$, and hence no opportunity to
 convey information.
 
-An important related question is this: when can one define a function
-$\ptrunc{A} \to B$, when $B$ is \emph{not} a mere proposition?  It may
-seem that the answer is ``never''; at the very least, it is clear that
-the recursion principle cannot be applied directly.  However, there is
-a useful trick which makes it possible: if one can \emph{uniquely
-  characterize} a particular value of $B$---that is, create a
-predicate $Q : B \to \Type$ such that $(b : B) \times Q(b)$ is a mere
-proposition---one can then define a function $\ptrunc{A} \to (b : B)
-\times Q(b)$ from a function $A \to (b : B) \times Q(b)$, and finally
-project out the $B$ to obtain a function $\ptrunc A \to B$.  This
-``trick'' is detailed in the HoTT book~\citeyearpar[\Sect
-3.9]{hottbook}; Exercise 3.19 affords some good intuition for this phenomenon.
+What about defining a function $\ptrunc{A} \to B$, when $B$ is
+\emph{not} a mere proposition?  In this case, the recursion principle
+for propositional truncation cannot be applied directly.  However,
+there is a useful trick which makes it possible: if one can
+\emph{uniquely characterize} a particular value of $B$---that is,
+create a predicate $Q : B \to \Type$ such that $(b : B) \times Q(b)$
+is a mere proposition---one can then define a function $\ptrunc{A} \to
+(b : B) \times Q(b)$ from a function $A \to (b : B) \times Q(b)$, and
+finally project out the $B$ to obtain a function $\ptrunc A \to B$.
+Since the function guarantees to always construct the same, uniquely
+characterized value of $B$ for any input type $A$, it cannot reveal
+any information about the particular value of $A$ it is given.
+This trick is detailed in the HoTT book~\citeyearpar[\Sect
+3.9]{hottbook}; Exercise 3.19 affords some good intuition for this
+phenomenon.
 
 As in the HoTT book (see Chapter 3), the adjective ``mere'' will be
 used more generally to refer to truncated things.  In particular, an
@@ -520,11 +525,10 @@ important example is the distinction between the type \[ (a : A)
 such that $B$'', and its truncation \[ \ptrunc{(a : A) \times
   B(a)}, \] pronounced ``there \emph{merely} exists an $A$ such that
 $B$''.  The latter more closely corresponds to the notion of existence
-in classical logic, since classically one can prove an existence
-statement without specifying an inhabitant. Given an inhabitant of
-$\ptrunc{(a:A) \times B(a)}$, we know only that some $(a:A)$
-satisfying $B$ exists, without necessarily getting to know its
-identity.
+in classical logic: classically, given a proof of an existence
+statement, it may not be possible to extract an actual witness. Given
+an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we know only that some
+$(a:A)$ satisfying $B$ exists, without getting to know its identity.
 
 %% Don't think I make any use of this later.
 %
@@ -554,22 +558,21 @@ in the dissertation.
   to the definition of species (\pref{sec:species-definition}).  In
   fact, when constructing species with HoTT as a foundation, transport
   simply comes ``for free''---in contrast to using set theory as a
-  foundation, in which case transport must be tediously defined (and
-  proved correct) for each new species.  In other words, within HoTT
-  it is simply impossible to write down an invalid species; any
-  function giving the action of a species on objects extends
-  automatically to a functor.  In a material set theory, on the other
-  hand, it is quite possible to define non-functorial functions on
-  objects.
+  foundation, where transport must be tediously defined (and proved
+  correct) for each new species.  In other words, within HoTT it is
+  simply impossible to write down an invalid species; any function
+  giving the action of a species on objects extends automatically to a
+  functor.  In a material set theory, on the other hand, it is quite
+  possible to define non-functorial functions on objects.
 \item The \term{univalence axiom} (\pref{sec:equivalence-univalence})
   and \term{higher inductive types} (\pref{sec:HITs}) make for a rich
   notion of propositional equality, over which the ``user'' has a
   relatively high degree of control.  For example, using higher
   inductive types, it is easy to define various quotient types which
-  would be tedious to define and work with in MLTT.  One particular
-  manifestation of this general idea is \term{coends}
-  (\pref{sec:ends-coends}) which can be directly defined as a higher
-  inductive type (\pref{sec:coends-hott}).
+  would be tedious to define and work with in Martin-L\"of type
+  theory.  One particular manifestation of this general idea is
+  \term{coends} (\pref{sec:ends-coends}) which can be directly defined
+  as a higher inductive type (\pref{sec:coends-hott}).
 \item Homotopy type theory allows doing category theory without using
   the axiom of choice (\pref{sec:AC}, \pref{sec:ct-hott}), which is
   essential in a constructive or computational setting.  It also makes
@@ -599,9 +602,9 @@ This dissertation makes extensive use of category theory, which is the
 natural language in which to explore species and related concepts.  A
 full understanding of the contents of this dissertation requires an
 intermediate-level background in category theory, but a grasp of the
-basics should suffice to understand much of it.  In particular, a
-quick introduction to necessary concepts beyond the bare fundamentals
-is presented here, with useful intuition and references for further
+basics should suffice to understand the overall ideas.  A quick
+introduction to necessary concepts beyond the bare fundamentals is
+presented here, with useful intuition and references for further
 reading.  It is hoped that this section can serve as a useful guide
 for ``bootstrapping'' one's knowledge of category theory, for those
 readers who are so inclined.
@@ -628,7 +631,7 @@ excellent references on the subject \citep{lawvere2009conceptual,
   awodey2006category, pierce1991basic, barr1990category,
   mac1998categories}.
 
-Note that the notations $f \then g = g \comp f$ are both used to
+The notations $f \then g = g \comp f$ are both used to
 denote composition of morphisms.
 
 \paragraph{Standard categories}
@@ -657,8 +660,9 @@ throughout this work.
 \item $\Grp$, the category of groups and group homomorphisms.
 \item $\Vect_K$, the category of vector spaces over the field $K$,
   together with linear maps.
-\item $\Hask$, the category of Haskell types and
-  functions.\footnote{Technically, this is a polite fiction, and
+\item $\Hask$, the category whose objects are Haskell types and
+  morphisms are (total) functions definable in
+  Haskell.\footnote{Technically, this is a polite fiction, and
     requires pretending that $\bot$ does not exist.  Fortunately,
     laziness does not play an important role in this work.}
 \end{itemize}
@@ -672,16 +676,15 @@ $B : \C,\D \to \E$ turns out to be equivalent to a regular
 (one-argument) functor $B : \C \times \D \to \E$, where $\C \times \D$
 denotes the \term{product category} of $\C$ with $\D$.  Product
 categories are given by the usual universal product construction in
-$\Cat$, the category of all (small) categories; objects in $\C \times
-\D$ are pairs of objects from $\C$ and $\D$, and likewise morphisms in
-$\C \times \D$ are pairs of morphisms from $\C$ and
-$\D$. One place that bifunctors come up often is in the context of
-monoidal categories; see~\pref{sec:monoids}.
+$\Cat$; objects in $\C \times \D$ are pairs of objects from $\C$ and
+$\D$, and likewise morphisms in $\C \times \D$ are pairs of morphisms
+from $\C$ and $\D$. One place that bifunctors come up often is in the
+context of monoidal categories; see~\pref{sec:monoids}.
 
 \paragraph{Natural transformations}
 
-To denote a natural transformation between functors $F, G : \C \to
-\D$, we use the notation $\nt F G$, or sometimes just $\mor F G$ when
+To denote a natural transformation $\eta$ between functors $F, G : \C \to
+\D$, we use the notation $\eta : \nt F G$, or sometimes just $\eta : \mor F G$ when
 it is clear that $F$ and $G$ are functors.  The notation $\eta : \all
 {A} {F A \to G A}$ will also be used, which meshes well with the
 intuition of Haskell programmers: naturality corresponds to
@@ -726,11 +729,12 @@ make the relevant diagram commute:
   & X }
 \]
 A good intuition is to think of the morphism $f : C \to X$ as giving a
-``weight'' or ``label'' to $C$.  The slice category $\C/X$ thus
-represents objects of $\C$ ``weighted'' or ``labelled'' by $X$, with
-``weight/label-preserving maps'' as morphisms.  For example, objects
-of $\Set/\R$ are sets where each element has been assigned a real
-number weight; morphisms in $\Set/\R$ are weight-preserving functions.
+``weighting'' or ``labelling'' to $C$.  The slice category $\C/X$ thus
+represents objects of $\C$ weighted or labelled by $X$, with
+weight/label-preserving maps as morphisms.  For example, objects
+of $\Set/\R$ are sets where each element has been assigned a
+real-number weight; morphisms in $\Set/\R$ are weight-preserving
+functions.
 
 % There is also a dual notion of \term{coslice} categories $X/\C$, but
 % they are not needed in this dissertation.
@@ -754,13 +758,13 @@ second isomorphism holds in any Cartesian closed category.)
 
 Given a set $X$, the functor category $\Set^X$ (considering $X$ as a
 discrete category) is equivalent to the slice category $\Set / X$. In
-particular, a functor $X \to \Set$ is an $X$-indexed collection of
-sets, whereas an object of $\Set / X$ is a set $S$ with a function $f
-: S \to X$ labelling each element of $S$ by some $x \in X$. Taking the
-preimage or \term{fiber} $f^{-1}(x)$ of each $x \in X$ recovers an
-$X$-indexed collection of sets; conversely, given an $X$-indexed
-collection of sets we may take their disjoint union and construct a
-function assigning each element of the disjoint union its
+particular, a functor of type $X \to \Set$ is an $X$-indexed
+collection of sets, whereas an object of $\Set / X$ is a set $S$ with
+a function $f : S \to X$ labelling each element of $S$ by some $x \in
+X$. Taking the preimage or \term{fiber} $f^{-1}(x)$ of each $x \in X$
+recovers an $X$-indexed collection of sets; conversely, given an
+$X$-indexed collection of sets we may take their disjoint union and
+construct a function assigning each element of the disjoint union its
 corresponding element of $X$. \pref{fig:discrete-slice} illustrates
 the situation for $X = \{\mathrm{red}, \mathrm{blue}, \mathrm{green},
 \mathrm{purple}\}$.  Following the arrows from bottom to top, the
@@ -813,7 +817,7 @@ aOpts = with & arrowTail .~ dart'
 
 When are two categories ``the same''?  In traditional category theory,
 founded on set theory, there are quite a few different definitions of
-``sameness'' for categories.  There are many different notions of
+sameness for categories.  There are many different notions of
 ``equality'' (isomorphism, equivalence, \dots), and they often do not
 correspond to the underlying equality on sets, so one must carefully
 pick and choose which notions of equality to use in which situations
@@ -842,38 +846,39 @@ the Haskell types
 data Rose a = Node a [Rose a]
 data Fork a = Leaf a | Fork (Fork a) (Fork a)
 \end{spec}
-These are obviously not \emph{equal}, but they are isomorphic, in the
-sense that there are natural transformations, \ie polymorphic
-functions, |rose2fork :: forall a. Rose a -> Fork a| and |fork2rose ::
-forall a. Fork a -> Rose a|, such that |rose2fork . fork2rose = id|
-and |fork2rose . rose2fork = id| \citep{yorgey-2010-species,
-  hinze2010reason}.
+These are obviously not \emph{equal}, but they are isomorphic (though
+not obviously so!), in the sense that there are natural
+transformations, \ie polymorphic functions, |rose2fork :: forall
+a. Rose a -> Fork a| and |fork2rose :: forall a. Fork a -> Rose a|,
+such that |rose2fork . fork2rose = id| and |fork2rose . rose2fork =
+id| \citep{yorgey-2010-species, hinze2010reason}.
 
 The above definition therefore violates the \term{principle of
   equivalence}---to be discussed in more detail in
 \pref{sec:AC}---which states that properties of mathematical
-structures should be invariant under isomorphism.
+structures should be invariant under isomorphism.  Here,
+then, is a better definition:
 
 \begin{defn} \label{defn:cat-equiv} Categories $\C$ and $\D$ are
   \term{equivalent} if there are functors $\BackForth \C F G \D$ which
   are inverse up to natural isomorphism, that is, there are natural
-  isomorphisms $GF \iso 1_\C$ and $FG \iso 1_\D$.
+  isomorphisms $1_\C \iso GF$ and $FG \iso 1_\D$.
 \end{defn}
 
-So the compositions of the functors $F$ and $G$ do not
+That is, the compositions of the functors $F$ and $G$ do not
 \emph{literally} have to be the identity functor, but only (naturally)
-\emph{isomorphic} to it.\footnote{The astute reader may have noted
-  that the stated definition of natural isomorphism of functors
-  mentioned \emph{equality} of natural isomorphism---do we also need
-  to replace this with some sort of isomorphism to avoid violating the
-  principle of equivalence?  Is it turtles all the way down (up)?
-  This is a subtle point, but it turns out that it's just fine to talk
-  about equality of natural transformations. For the usual notion of
+\emph{isomorphic} to it.\footnote{The astute reader may note that the
+  stated definition of natural isomorphism of functors mentions
+  \emph{equality} of natural isomorphism---do we also need to replace
+  this with some sort of isomorphism to avoid violating the principle
+  of equivalence?  Is it turtles all the way down (up)?  This is a
+  subtle point, but it turns out that there's nothing wrong with
+  equality of natural transformations. For the usual notion of
   category, there is no higher structure after natural
   transformations, \ie no nontrivial morphisms (and hence no
-  nontrivial isomorphisms) between natural transformations.}  Here,
-then, is a better definition: This does turn out to be a well-behaved
-notion of sameness for categories~\citet{nlab-equiv-cat}.
+  nontrivial isomorphisms) between natural transformations.}  This
+does turn out to be a well-behaved notion of sameness for
+categories~\citet{nlab-equiv-cat}.
 
 There is much more to say about equivalence of categories;
 \pref{sec:AC} picks up the thread with a much fuller discussion of the
@@ -885,11 +890,12 @@ choice, and classical versus constructive logic.
 The topic of \term{adjunctions} is much too large to adequately cover
 here.  For the purposes of this dissertation, the most important form
 of the definition to keep in mind is that a functor $F : \C \to \D$ is
-\term{left adjoint} to $G : \D \to \C$ (and $G$ \term{right adjoint}
-to $F$), notated $F \adj G$, if and only if \[ \all {A B} (\Hom[\D]{F
-  A}{B}) \iso (\Hom[\C]{A}{G B}), \] that is, if there is some natural
-isomorphism matching morphisms $F A \to B$ in the category $\D$ with
-morphisms $A \to G B$ in $\C$.
+\term{left adjoint} to $G : \D \to \C$, notated $F \adj G$, if and
+only if \[ \all {A B} (\Hom[\D]{F A}{B}) \iso (\Hom[\C]{A}{G B}), \]
+that is, if there is some natural isomorphism matching morphisms $F A
+\to B$ in the category $\D$ with morphisms $A \to G B$ in $\C$.  If
+$F$ is left adjoint to $G$, we also say, symmetrically, that $G$ is
+\term{right adjoint} to $F$.
 
 One example familiar to functional programmers is \emph{currying}, \[
 (\Hom{A \times B} C) \iso (\Hom A {(\Hom B C)}), \] which corresponds to
@@ -1070,21 +1076,21 @@ Elements of the indexed coproduct look like pairs $(C, t)$ where $C
 want to consider two pairs $(C,t)$ and $(C', t')$ equivalent if they
 are related by the functoriality of $T$.  In particular, for each
 arrow $f : C \to C'$ in $\C$ and each $x \in T(C',C)$, we set $(C,
-T(f,1)\ x) \eqrel (C', T(1,f)\ x)$.  That is, we can always ``swap out
-$(C,t)$ for $(C',t')$'' as long as we have some way to map from $C$ to
+T(f,1)\ x) \eqrel (C', T(1,f)\ x)$.  That is, we will consider
+$(C,t)$ and $(C',t')$ interchangeable as long as we have some way to map from $C$ to
 $C'$, and the associated values $t$ and $t'$ are related by the same
 mapping.  (More generally, even if the objects of $\D$ are not sets,
 the same thing can be accomplished using \term{coequalizers}.)
 
-Intuitively, the functor $T$ can be thought of as an ``interface'';
-$(C,t)$ is then a ``module'' with ``representation type'' $C$ and
-``implementation'' $t$.  The morphisms $\omega_X$ thus ``package up''
+Intuitively, the functor $T$ can be thought of as an interface;
+$(C,t)$ can then be thought of as a module with representation type
+$C$ and implementation $t$.  The morphisms $\omega_X$ thus package up
 a concrete representation type and implementation into a module, and
-the dinaturality condition ensures that one cannot directly
-``observe'' the concrete representation type, but can only distinguish
-values ``up to behavioral equivalence''.  Indeed, in Haskell, the
-coend of $T$ is given by the type \texttt{exists c.\ T c c}
-\citep{kmett2008kan}---or rather, by an isomorphic encoding such as
+the dinaturality condition ensures that one cannot directly observe
+the concrete representation type, but only distinguish values up to
+behavioral equivalence.  Indeed, in Haskell, the coend of $T$ is given
+by the type \texttt{exists c.\ T c c} \citep{kmett2008kan}---or
+rather, by an isomorphic encoding such as
 \begin{spec}
 data Coend t where
   Coend :: t c c -> Coend t
@@ -1124,12 +1130,12 @@ universal quantification, that is, |forall c. T c c|
 
 In fact, there is an even deeper connection between ends and Haskell's
 $\forall$ notation.  It is well-known in the Haskell community that
-polymorphic---\ie universally quantified---functions ``correspond'' to
+polymorphic---\ie universally quantified---functions somehow correspond to
 natural transformations, via parametricity; this correspondence can be
 made formally precise as follows.  Given two functors $F, G : \C \to
 \D$, consider the bifunctor \[ \Hom{F -}{G -} : \C^\op \times \C \to
 \Set, \] which sends objects $X, Y \in C$ to the set of morphisms
-$\Hom[\D] {F\ X}{G\ Y}$, and acts on morphisms $f : X' \to X$ and $g :
+$\Hom[\D] {F\ X}{G\ Y}$ and acts on morphisms $f : X' \to X$ and $g :
 Y \to Y'$ by \[ (\Hom{F\ f}{G\ g})\ h = G\ g \comp h \comp F\ f. \]
 Then an end $\eend C \Hom{F\ C}{G\ C}$ is a set with projections
 $\alpha_X : (\eend C \Hom{F\ C}{G\ C}) \to (\Hom{F\ X}{G\ X})$ such
@@ -1171,6 +1177,8 @@ For further reading and intuition about the Yoneda lemma, see, for
 example, \citet{baez1999yoneda}, \citet{piponi2006yoneda}, or
 \citet{kmett2011yoneda}.
 
+\later{Give more intuition for Yoneda.}
+
 \subsection{Groupoids}
 \label{sec:groupoids}
 
@@ -1190,10 +1198,11 @@ theories~\citep{Byrne2005, kock2012data}.
 \end{ex}
 
 \begin{ex}
-  The groupoid whose objects are natural numbers, and whose morphisms
-  $\mor m n$ are the invertible $m \times n$ matrices over some field,
-  with composition given by matrix multiplication. (Hence there are no
-  morphisms when $m \neq n$.)
+  There is a groupoid whose objects are natural numbers, and whose
+  morphisms $\mor m n$ are the invertible $m \times n$ matrices over
+  some field, with composition given by matrix multiplication. (Hence
+  there are no morphisms when $m \neq n$, since only square matrices
+  are invertible.)
 \end{ex}
 
 The next two examples will play important roles in the remainder of
@@ -1210,10 +1219,10 @@ the dissertation, so they merit the status of formal definitions.
 \end{defn}
 
 Note that there is exactly one order-preserving bijection between
-two linear orders of the same size, so $\L$ is rather impoverished as
+two linear orders of the same size, so $\L$ is rather impoverished
 compared with $\B$.  Nonetheless, there is a close relationship
 between them, which will be explored more in Chapters
-\ref{chap:equality} and \ref{chap:species}.
+\ref{chap:equality} and~\ref{chap:species}.
 
 It is worth pointing out that $\B$ is an instance of a more general
 phenomenon:
@@ -1238,22 +1247,20 @@ exercise.  Note in particular that $\B = \core{\FinSet}$.
   to itself, is denoted $\perm S$.
 \end{defn}
 
-\begin{rem}
-  Note that the set of morphisms $\mor m n$ is empty unless $m = n$,
-  and morphisms $\mor n n$ are permutations $\perm{\fin n}$.
+Note that the set of morphisms $\mor m n$ in $\P$ is empty unless $m =
+n$, and morphisms $\mor n n$ are permutations $\perm{\fin n}$.
 
-  $\P$ is called the \term{symmetric groupoid} since it is isomorphic
-  to an infinite coproduct $\coprod_{n \geq 0} \S_n$, where $\S_n$
-  denotes the symmetric \emph{group} of all permutations on $n$
-  elements, considered as a one-object groupoid.  In other words, $\P$
-  consists of a collection of non-interacting ``islands'', one for
-  each natural number, as illustrated in~\pref{fig:groupoid-P}.  In
-  particular, this means that any functor $F : \P \to \C$ is
-  equivalent to a collection of functors $\prod_{n \geq 0} \S_n \to
-  \C$, one for each natural number.  Each functor $\S_n \to \C$ is
-  entirely independent of the others, since there are no morphisms
-  between different $\S_n$ to introduce constraints.
-\end{rem}
+$\P$ is called the \term{symmetric groupoid} since it is isomorphic to
+an infinite coproduct $\coprod_{n \geq 0} \S_n$, where $\S_n$ denotes
+the symmetric \emph{group} of all permutations on $n$ elements,
+considered as a one-object groupoid.  In other words, $\P$ consists of
+a collection of non-interacting ``islands'', one for each natural
+number, as illustrated in~\pref{fig:groupoid-P}.  In particular, this
+means that any functor $F : \P \to \C$ is equivalent to a collection
+of functors $\prod_{n \geq 0} \S_n \to \C$, one for each natural
+number.  Each functor $\S_n \to \C$ is entirely independent of the
+others, since there are no morphisms between different $\S_n$ to
+introduce constraints.
 
 \begin{figure}
   \centering
@@ -1332,12 +1339,12 @@ dia = hcat' (with & sep .~ 2) (map flower [0..3] ++ [ellipsis]) # frame 0.5 # lw
 There is a close relationship between $\B$ and $\P$.  In the presence
 of the axiom of choice, they are equivalent; intuitively, $\P$ is what
 we get by noting that any two sets of the same size are isomorphic, so
-we ``might as well'' just forget about the elements of finite sets and
+we might as well just forget about the elements of finite sets and
 work directly with their sizes.  However, if the axiom of choice is
 rejected, the details become much more subtle; this is addressed
 in~\pref{sec:finiteness-sets}.
 
-$\B$ (and $\P$) do not have products or coproducts. For example, to
+$\B$ and $\P$ do not have products or coproducts. For example, to
 see that $\B$ does not have coproducts, let $A, B \in \B$ be arbitrary
 finite sets, and suppose they have some coproduct $A+B$. By definition
 this comes with a diagram $\xymatrix{A \ar[r]^-{\iota_1} & A+B & B
