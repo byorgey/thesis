@@ -172,14 +172,14 @@ construction in Haskell, using the type |Lan| defined above. This
 brings out the essential components of the proof without getting too
 bogged down in abstraction.  The code corresponding to the backwards
 direction of the proof is shown in \pref{fig:lan-coend-Hask} (note
-that it requires the |GADTs| and |RankNTypes| extensions~\citep{GADTs,
-  RankNTypes}).\footnote{As evidenced by the @kan-extensions@
-  package~\citep{kmett-kan-extensions}, the implementation of
-  this constructive proof in Haskell can be considerably simplified,
-  but at the expense of obscuring the connection to the original
-  abstract proof given above.} The code for the forward direction is
-similar, and it is the backwards direction which will be of particular
-use later.
+that it requires the |GADTs| and |RankNTypes| extensions).\footnote{As
+  evidenced by the @kan-extensions@
+  package~\citep{kmett-kan-extensions}, the implementation of this
+  constructive proof in Haskell can be considerably simplified, but at
+  the expense of obscuring the connection to the original abstract
+  proof given above.} The code for the forward direction is similar,
+and it is the backwards direction which will be of particular use
+later.
 \begin{figure}
   \centering
 \begin{spec}
@@ -230,11 +230,10 @@ definition is less useful in a generalized setting.
   left Kan extension of $F$ along the inclusion functor $\iota : \B
   \inj \Set$. A functor $\Set \to \Set$ is \term{analytic} when it
   arises in this way from some species.
-\end{defn}
 \[ \xymatrix{\B
   \ar[dr]^{F} \ar@@{_{(}->}[d]_\iota \\ \Set \ar[r]_{\analytic F} &
   \Set } \]
-
+\end{defn}
 We can think of $\analytic F$ as the polymorphic ``data type'' arising
 from the species $F$. The construction in \pref{prop:Lan-coend} tells
 us exactly what structures of such a data type look like: \[ \analytic
@@ -260,7 +259,7 @@ inclusion functor $\iota : \B \to \Set$ becomes the identity.  Let |h
 :: forall c. f c -> g c| be an arbitrary natural transformation from
 |f| to |g = g . iota|, which should be thought of as a morphism
 between species, that is, between functors $\B \to \Set$.
-|lanAdjoint| turns such species morphisms into polymorphic functions
+The |lanAdjoint| function turns such species morphisms into polymorphic functions
 (that is, natural transformations between $\Set \to \Set$ functors)
 from |Lan iota f a| to |g a|.  In particular, let |Lan (sp,m)| be a
 value of type |Lan iota f a|, containing, for some label type |c|, a

@@ -8,7 +8,7 @@
 The theory of \term{combinatorial species}, introduced by
 \citet{joyal}, is a unified, algebraic theory of \term{combinatorial
   structures} or \term{shapes}.  The algebraic nature of species is of
-particular interest in the context of data structures, and will be
+particular interest in the context of data structures and will be
 explored in depth in this chapter.  The theory can also be seen as a
 \term{categorification} of the theory of \term{generating functions}.
 
@@ -28,7 +28,7 @@ for the rest of the chapter, considering arbitrary functor categories
 in place of traditional species, and determining the properties
 necessary to support each species operation.  The rest of the chapter
 presents a collection of standard operations on species, with examples
-and discussion of each, along with analysis of the properties required
+and discussion, along with analysis of the properties required
 for each.
 
 \section{Intuition and examples}
@@ -114,7 +114,7 @@ listStructures
   will be made precise later. For now, its intuitive meaning should be
   clear to anyone familiar with recursive algebraic data types in a
   language such as Haskell or OCaml: a labelled list ($\List$) is
-  empty ($\One$), or ($+$) a single label ($\X$) together with
+  empty ($\One$) or ($+$) a single label ($\X$) together with
   ($\cdot$) another labelled list ($\List$).
 \end{ex}
 
@@ -192,7 +192,7 @@ dia =
 \begin{ex}
   The species $\msf{Mob}$ of \emph{mobiles} consists of non-empty
   binary trees where each node has exactly zero or two subtrees, and
-  sibling subtrees are considered to be ``unordered''.
+  sibling subtrees are considered unordered.
   \pref{fig:mobiles} shows a single example $\msf{Mob}$-shape, drawn
   in four (equivalent) ways.
   \begin{figure}
@@ -470,7 +470,7 @@ data; this will be made precise in~\pref{chap:labelled}.
 \label{sec:species-definition}
 
 Informally, as we have seen, a species is a family of labelled shapes.
-Crucially, the actual labels used ``shouldn't matter'': for example,
+Crucially, the actual labels used shouldn't matter: for example,
 we should get the ``same'' family of binary trees no matter what labels
 we want to use.  This intuition is made precise in the formal
 definition of combinatorial species as \emph{functors}.  In fact, one
@@ -484,12 +484,12 @@ language of categories.
 
 \begin{defn}[Species \citep{joyal}]
   \label{defn:species-cat}
-  A \term{species} is a functor $F : \B \to \Set$, where $\B$ is the
-  groupoid of finite sets whose morphisms are bijections, and $\Set$
-  is the category of sets and (total) functions.\footnote{Even more
-    abstractly, since $\B$ is self-dual, we may say that a species is
-    a \term{presheaf} on $\B$, that is, a functor $\B^\op \to \Set$.}
+  A \term{species} is a functor $F : \B \to \Set$.
 \end{defn}
+
+Recall that $\B$ is the groupoid of finite sets whose morphisms are
+bijections, and $\Set$ is the category of sets and (total)
+functions.
 
 It is worth spelling out this definition in more detail, which will
 also give an opportunity to explain some intuition and
@@ -580,15 +580,14 @@ context) just ``$F$-shapes''.\footnote{Margaret Readdy's translation
   structures contain \emph{data}, whereas species shapes contain only
   labels.  I try to consistently use the word ``shape'' to refer to
   the elements of a species, and reserve ``structure'' for the
-  labelled data structures to be introduced in \pref{chap:labelled},
-  though a few slip-ups are likely inevitable.}  $F\ \sigma$ is called
-the ``transport of $\sigma$ along $F$'', or sometimes the
-``relabelling of $F$-shapes by $\sigma$''.
+  labelled data structures to be introduced in \pref{chap:labelled}.}
+$F\ \sigma$ is called the ``transport of $\sigma$ along $F$'', or
+sometimes the ``relabelling of $F$-shapes by $\sigma$''.
 
 The functoriality of a species $F$ means that the actual labels used
-don't matter; the resulting family of shapes is ``independent'' of the
+don't matter; the resulting family of shapes is independent of the
 particular labels used.  We might say that species are
-\term{parametric} in the label sets of a given size. In particular,
+\term{parametric} in label sets of a given size. In particular,
 $F$'s action on all label sets of size $n$ is determined by its action
 on any particular such set: if $||L_1|| = ||L_2||$ and we know $F\
 L_1$, we can determine $F\ L_2$ by lifting an arbitrary bijection
@@ -600,7 +599,7 @@ guarantees that $F\ \sigma$ is a bijection as well. In particular,
 $(F\ \sigma)^{-1} = F\ (\sigma^{-1})$, since $F\ \sigma \comp F\
 (\sigma^{-1}) = F\ (\sigma \comp \sigma^{-1}) = F\ id = id$, and
 similarly $F\ (\sigma^{-1}) \comp F\ \sigma = id$.  Thus, \emph{up to
-  isomorphism}, a functor $F$ must ``do the same thing'' for any two
+  isomorphism}, a functor $F$ must do the same thing for any two
 label sets of the same size.
 
 We may therefore take the finite set of natural numbers $[n] = \{0,
@@ -620,7 +619,7 @@ which amounts to the same thing.
   simpler to drop it.
 
   It should be noted, however, that requiring finiteness in this way
-  is no great restriction: requiring each \emph{particular} set of
+  would be no great restriction: requiring each \emph{particular} set of
   shapes $F\ L$ to be finite is not at all the same thing as requiring
   the \emph{entire family} of shapes, $\uplus_{n \in \N} F\ n$, to be
   finite.  Typically, even in the cases that programmers care about,
@@ -684,7 +683,7 @@ For any species $F$ and natural number $n$, we may define \[ F_n\ L
   \text{otherwise} \end{cases}. \] That is, $F_n$ is the restriction
 of $F$ to label sets of size exactly $n$.  For example, $\Bag$ is the
 species of sets of any size; $\Bag_4$ is the species of sets of size
-$4$.  This is well-defined since the action of a species is determined
+$4$.  This is well defined since the action of a species is determined
 independently on label sets of each size.  More abstractly, as noted
 previously, $\B$ (and $\P$) are disconnected categories, so functors
 out of them are equivalent to a disjoint union of individual functors
@@ -757,11 +756,11 @@ exploring and generalizing this structure.
 \subsection{Species in HoTT}
 \label{sec:species-hott}
 
-We now turn to ``porting'' the category of species from set theory
+We now turn to porting the category of species from set theory
 into HoTT.  Recall that $\BT$ denotes the \hott{groupoid} with
 objects \[ \FinSetT \defeq (A : \Type) \times \isFinite(A), \]
 where \[ \isFinite(A) \defeq \ptrunc{(n : \N) \times (A \equiv \Fin
-  n)}, \] and with morphisms given by paths. \later{mention something
+  n)} \] and with morphisms given by paths. \later{mention something
   about $\PT$ here?}
 % Recall
 % also that $\PT$ denotes the \hott{groupoid} whose objects are natural
@@ -936,7 +935,7 @@ a \term{form}, or \term{unlabelled shape}.
 \end{defn}
 
 In other words, an $F$-form is a maximal class of labelled $F$-shapes
-which are all interconvertible by relabelling.  Note that as defined,
+which are all interconvertible by relabelling.  Note that, as defined,
 such classes are rather large, as they include labellings by \emph{all
   possible} sets of labels!  Typically, we consider only a
 single label set of each size, such as $\Fin n$.  For example,
@@ -1388,7 +1387,7 @@ as follows.
 \begin{ex}
   There is only one list form of each size, so \[ \unl \List(x) =
   \sum_{n \geq 0} x^n = \frac{1}{1-x} \] as well.  Species for which
-  $F(x) = \unl F(x)$ are called \term{regular}, and are discussed in
+  $F(x) = \unl F(x)$ are called \term{regular} and are discussed in
   more detail in \pref{sec:molecular-atomic}.  For an example of a non-regular
   species, the reader is invited to work out the egf and ogf for the
   species $\Cyc$ of cycles.
@@ -1442,8 +1441,10 @@ The general idea is to ``blow everything up'', replacing natural
 numbers by sets; addition by disjoint union; product by pairing; and
 so on.  In a way, one can see this process as ``imbuing everything
 with constructive significance''; this is one argument for the
-naturality of the theory of species being developed within a
+naturalness of the theory of species being developed within a
 constructive type theory, as attempted by this dissertation.
+
+\todo{Chapter break?}
 
 \section{Generalized species}
 \label{sec:generalized-species}
@@ -1500,10 +1501,9 @@ Two of the simplest operations on species are \emph{sum} and
 \emph{Cartesian product}.  These operations are structurally
 analogous: the only difference is that species sum arises from
 coproducts in $\Set$ (disjoint union), whereas the Cartesian product
-of species arises from products in $\Set$.  As will be a common
-pattern, we first define and give examples of these operations in the
-context of $\fc \B \Set$, and then generalize to other functor
-categories.
+of species arises from products in $\Set$.  We first define and give
+examples of these operations in the context of $\fc \B \Set$ and then
+generalize to other functor categories.
 
 \subsection{Species sum}
 
@@ -1677,7 +1677,7 @@ We evidently have \[ \Zero(x) = \unl \Zero(x) = 0 + 0x + 0x^2 + \dots
   composition of natural transformations.
 
   In this case it's enough simply to unfold definitions and follow the
-  types.  Given species $F$, $F'$, $G$, and $G'$, and natural
+  types.  Given species $F$, $F'$, $G$, and $G'$ and natural
   transformations $\phi : \nt F {F'}$ and $\psi : \nt G {G'}$, we
   should have $\phi + \psi : \nt {F+G} {F'+G'}$.  The component of
   $\phi + \psi$ at some $L \in \B$ should thus be a morphism in $\Set$
@@ -1727,8 +1727,9 @@ we will see it is not the most natural one from a combinatorial point
 of view.  Nonetheless, it is the simplest to define and is thus worth
 studying first.  The action of $(F \times G)$ on morphisms,
 functoriality, \etc are omitted; the details are exactly parallel to
-the definition of species sum, and are presented much more generally
-in the next subsection.
+the definition of species sum and are presented much more generally
+in the next subsection. \todo{Take this reference out if I make it
+  into an appendix}
 
 An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
 on \emph{the same set of labels}.  There are several ways to think
@@ -1933,7 +1934,7 @@ only inhabited when $m = n$.
 Being Cartesian closed means there is an adjunction $- \times G \adj
 -^G$ between products and exponentials, which yields a natural
 isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
-\ST^\PT]{F}{H^G}) \] Expanding morphisms of the functor category $\fc
+\ST^\PT]{F}{H^G}). \] Expanding morphisms of the functor category $\fc
 \PT \ST$ as natural transformations, and expanding the definition of
 $H^G$ derived above, this yields \[ \left( (n : \N) \to (F \times G)\
   n \to H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n
@@ -1945,7 +1946,7 @@ $G$-shape, \emph{and a permutation on $\Fin n$}, and yielding an
 $H$-shape.  The point is that an $(F \times G)$-shape consists not
 just of separate $F$- and $G$-shapes, but those shapes get to
 ``interact'': in particular we need a permutation to tell us how the
-labels on the separate $F$- and $G$-shapes ``line up''.  An $(F \times
+labels on the separate $F$- and $G$-shapes line up.  An $(F \times
 G)$-shape encodes this information implicitly, by the fact that the
 two shapes share the exact same set of labels.
 
@@ -1971,7 +1972,7 @@ mean on an intuitive level.
 
 Both these constructions generalize readily. In fact, any monoidal
 structure on a category $\Str$ can be lifted to one on $\fc \Lab \Str$
-where everything is done ``elementwise''.  The basic idea is exactly
+where everything is done elementwise.  The basic idea is exactly
 the same as the standard Haskell type class instance
 \begin{spec}
 instance Monoid a => Monoid (e -> a) where
@@ -2094,7 +2095,7 @@ high-level ideas of this construction seem to be ``folklore'', but I
 have been unable to find any detailed published account, so it seemed
 good to include some proofs here for completeness.  Unfortunately, the
 proof presented here is still incomplete; as future work I hope to
-completely understand the proof in detail.
+completely understand the proof in detail.  \todo{Split this into an appendix.}
 
 We must first develop some technical machinery regarding functor
 categories.  In particular, we show how to lift objects, functors, and
@@ -2157,7 +2158,7 @@ Natural transformations lift in the same way:
      }
   \]
   which commutes by naturality of $\alpha$: at any particular $C \in
-  \C$ the above diagram reduces to
+  \C$ the above diagram reduces to:
   \[ \xymatrix{
         FHC \ar[r]^{\alpha_{HC}} \ar[d]_{F\beta_C}
       & GHC \ar[d]^{G\beta_C}
@@ -2195,7 +2196,7 @@ clearer, although in common practice these would be left implicit.
   D) \ar[d]^{\alpha_{A,B,C \oplus D}} \\ A \oplus ((B \oplus C) \oplus
   D) \ar[rr]_{\id_A \oplus \alpha_{B,C,D}} & & A \oplus (B \oplus (C
   \oplus D)) } \] There are two important points to note.  The first
-is that any commutative diagram has a particular \emph{shape}, and can
+is that any commutative diagram has a particular \emph{shape} and can
 be represented as a functor from an ``index category'' representing
 the shape (in this case, a category having five objects and morphisms
 forming a pentagon, along with the required composites) into the
@@ -2385,9 +2386,9 @@ general account of their common abstraction.
 The partitional product $F \sprod G$ of two species $F$ and $G$
 consists of paired $F$- and $G$-shapes, as with the Cartesian product,
 but with the labels \emph{partitioned} between the two shapes instead
-of replicated (\pref{fig:product}).  Note that the sort of ``divided
-box'' with rounded corners used in \pref{fig:product} will often be
-used to schematically indicate a partitional product.
+of replicated (\pref{fig:product}).  The divided box with rounded
+corners used in \pref{fig:product} will often be used to schematically
+indicate a partitional product.
 
   \begin{figure}
     \centering
@@ -2468,8 +2469,8 @@ dia
   \biguplus_{L_F,L_G \partition L} F\ L_F \times G\ L_G \] where
   $\biguplus$ denotes an indexed coproduct (\ie disjoint union) of
   sets, and $L_F,L_G
-  \partition L$ denotes that $L_F$ and $L_G$ constitute a partition of
-  $L$, (\ie $L_F \union L_G = L$ and $L_F \intersect L_G =
+  \partition L$ indicates that $L_F$ and $L_G$ constitute a partition
+  of $L$, (\ie $L_F \union L_G = L$ and $L_F \intersect L_G =
   \varnothing$); note that $L_F$ and $L_G$ may be empty.  In words, an
   $(F \cdot G)$-shape with labels taken from $L$ consists of some
   partition of $L$ into two disjoint subsets, with an $F$-shape on one
@@ -2478,7 +2479,7 @@ dia
   On morphisms, $(F \cdot G)\ \sigma$ is the function \[
   (L_F,L_G, x, y) \mapsto (\sigma\ L_F, \sigma\ L_G, F\ (\sigma
   \vert_{L_F})\ x, G\ (\sigma \vert_{L_G})\ y), \] where $L_F,L_G
-  \partition L$, $x \in F\ L_F$, and $y \in G\ L_G$.  That is,
+  \partition L$ and $x \in F\ L_F$ and $y \in G\ L_G$.  That is,
   $\sigma$ acts independently on the two subsets of $L$.
 \end{defn}
 
@@ -2605,7 +2606,7 @@ dia = pair fps cycs # frame 0.5
 \begin{proof}
   We constructed $\One$ so as to be an identity for partitional
   product.  Associativity and symmetry of partitional product are not
-  hard to prove, and are left as an exercise for the reader.
+  hard to prove and are left as an exercise for the reader.
 \end{proof}
 
 In fact, $(\Spe, \cdot, \One)$ is closed as well, but a discussion of
@@ -2618,7 +2619,7 @@ species differentiation.
 
 \newcommand{\aprod}{\boxtimes}
 
-There is another, more recently discovered monoidal structre on
+There is another, more recently discovered monoidal structure on
 species known as \emph{arithmetic product} \citep{maia2008arithmetic}.
 The arithmetic product of the species $F$ and $G$, written $F \aprod
 G$, can intuitively be thought of as an ``$F$-assembly of cloned
@@ -2771,7 +2772,7 @@ dia = mkGrid [[0,2,5],[3,1,4]]
   label has no fixed ``position''; the only invariants on any given
   label are the sets of other labels which are in the same row or
   column.  \pref{fig:rect-shape} shows an illustration; each rounded
-  outline represents a \emph{set} of labels.  Note that one can also
+  outline represents a \emph{set} of labels. One can also
   take the species of rectangles as primitive and define arithmetic
   product in terms of it.
 \end{ex}
@@ -2906,7 +2907,7 @@ dia = pairs
 
   More generally, $\X^n = \underbrace{\X \cdot \dots \cdot \X}_n$ is the
   species of \term{ordered $n$-tuples}; there are exactly $n!$ many
-  $(\X^n)$-structures on $n$ labels, and none on label sets of any
+  $(\X^n)$-structures on $n$ labels and none on label sets of any
   other size.
 \end{ex}
 
@@ -2945,12 +2946,12 @@ dia = pairs
   (\pref{chap:labelled}).
 \end{ex}
 
-\begin{ex}
-  Likewise, $\Bag \cdot \Bag$ is the species of \term{binary
-    partitions}, whereas $\Bag \cdot \Rubbish$ is the species of
-  \term{subsets}; they are combinatorially equivalent but differ in
-  their realization as data structures.
-\end{ex}
+% \begin{ex}
+%   Likewise, $\Bag \cdot \Bag$ is the species of \term{binary
+%     partitions}, whereas $\Bag \cdot \Rubbish$ is the species of
+%   \term{subsets}; they are combinatorially equivalent but differ in
+%   their realization as data structures.
+% \end{ex}
 
 \subsection{Day convolution}
 \label{sec:day-convolution}
@@ -2990,7 +2991,7 @@ $\C$ \term{is enriched over} $\D$ if there exists some functor $\hom -
 - : \C^\op \times \C \to \D$ satisfying the above criteria.
 
 We can now give the definition of Day convolution.  The essential
-idea, first described by Brian Day~\cite{day1970closed}, is to
+idea, first described by \citet{day1970closed}, is to
 construct a monoidal structure on a functor category $[\Lab^\op,
 \Str]$ based primarily on a monoidal structure on the \emph{domain}
 category $\Lab$.  In particular, Day convolution requires
@@ -3115,7 +3116,7 @@ is the co-Yoneda embedding, that is, $j(L) = (\hom[\Lab] - L)$. See
 
 \begin{ex}
   Although $\B$ and $\P$ are equivalent, it is still instructive to
-  work out the general definition in the case of $\P$, particulary
+  work out the general definition in the case of $\P$, particularly
   because, as we have seen, proving $\B \iso \P$ requires the axiom
   of choice.
 
@@ -3251,7 +3252,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
 
     Neither is $\Omega$ surjective.  Consider the case where $m = n =
     2$, and the function $f : \perm{(\Fin 2)} \to \perm{(\Fin
-      2)} \to \perm{(\Fin 4)}$ given by the table
+      2)} \to \perm{(\Fin 4)}$ given by the table:
     \begin{center}
     \begin{tabular}{c||cc}
              & $\id$  & $(12)$ \\
@@ -3279,7 +3280,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
       \fix(\varphi \comp \psi \comp \varphi^{-1})$.
     \end{lem}
     \begin{proof}
-      We calculate as follows:
+      Calculate as follows:
       \begin{sproof}
         \stmt{\psi(x) = x}
         \reason{\iff}{apply $\psi^{-1}$ to both sides}
@@ -3322,7 +3323,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
   Unlike in the case of $\fc \B \Set$, we cannot really simplify this
   any further.  In particular, it is \emph{not} equivalent to \[
   \biguplus_{n_F + n_G = n} F\ n_F \times G\ n_G, \] since that does
-  not take into account the different ways the ``overall'' set of
+  not take into account the different ways the overall set of
   labels could be distributed between $F$ and $G$---that is, it
   throws away the information contained in the bijection $\Fin n \bij
   \Fin {(n_F + n_G)}$.  The reason we could ``get rid of'' the
@@ -3351,7 +3352,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
 
 \begin{ex}
   We now verify that $\BT$ and $\ST$ have the right properties, so
-  that partitional and arithmetic product are well-defined on
+  that partitional and arithmetic product are well defined on
   $(\fc \BT \ST)$-species.
   \begin{itemize}
   \item As with $\B$, there are monoidal structures on $\BT$
@@ -3596,8 +3597,8 @@ dia = tree # centerXY # frame 0.5 # lwO 0.7
 
   $\Sp{Plan} = \X \cdot (\Cyc \comp \Rose)$ is the species of
   \emph{planar embeddings} of rooted trees, where the top-level
-  subtrees of the root are ordered cyclically.  For all nodes other
-  than the root, on the other hand, there is still a linear order on
+  subtrees of the root are ordered cyclically.  Each node other
+  than the root, on the other hand, still has a linear order on
   its children, fixed by the distinguished edge from the node towards the
   root.
 \end{ex}
@@ -3608,7 +3609,7 @@ dia = tree # centerXY # frame 0.5 # lwO 0.7
   \X^2). \] That is, a perfect tree is either a single node, or a
   perfect tree containing \emph{pairs}.  Functional programmers will
   recognize this as a \term{non-regular} or \term{nested} recursive
-  type; it corresponds to the Haskell type
+  type; it corresponds to the Haskell type:
   \begin{spec}
     data P a = Leaf a | Branch (P (a,a))
   \end{spec}
@@ -3750,7 +3751,7 @@ depending on the exact setting in which we are working.
 \end{itemize}
 
 We can reformulate the definition of composition in a better way which
-naturally allows for empty parts, and which also makes for a clearer
+naturally allows for empty parts and which also makes for a clearer
 path to a generalized notion of composition (to be discussed in the
 next section).  In fact, \citet[p. 11]{joyal} already mentions this as
 an alternative defintion. The idea is to use another finite set $P$,
@@ -3778,7 +3779,7 @@ parts.
 \label{sec:generalized-composition}
 
 We first show how to carry out the definition of composition in $\fc
-\B \Set$ even more abstractly, and then discuss how it may be
+\B \Set$ even more abstractly, then discuss how it may be
 generalized to other functor categories $\fc \Lab \Str$.
 \citet{street2012monoidal} gives the following abstract definition of
 composition:
@@ -4084,9 +4085,9 @@ $H$. \pref{fig:internal-Hom-comp-example} illustrates an example: a
 species morphism from a binary tree of cycles to a rose tree is
 equivalent to a species morphism that takes the underlying tree shape
 on the label set $K$ and produces another species morphism, which
-itself expects a $K$-indexed partitional product of cycles, and
+itself expects a $K$-indexed partitional product of cycles and
 produces a rose tree.  One can see how the composition is
-``decomposed'' into its constituent parts, with a new label type $K$
+decomposed into its constituent parts, with a new label type $K$
 introduced to mediate the relationship between them.
 
 \begin{figure}
@@ -4265,7 +4266,8 @@ intuition for most purposes.
 
 \begin{ex}
   Denote by $\arbor$ the species of \emph{unrooted} trees, \ie
-  trees in the pure graph-theoretic sense.  Also let $\Arbor = \X
+  trees in the pure graph-theoretic sense of a collection of vertices
+  and unoriented edges with no cycles.  Also let $\Arbor = \X
   \cdot (\Bag \comp \Arbor)$ denote the species of rooted trees
   (where each node can have any number of children, which are
   unordered).  It is difficult to get a direct algebraic handle on
@@ -4401,7 +4403,8 @@ dia = listCycEquiv
 \begin{ex}
   Well-scoped terms of the (untyped) lambda calculus may be
   represented as shapes of the species \[ \Lambda = \elts + \Lambda^2
-  + \Lambda'. \] (This example appears implicitly---without an
+  + \Lambda'. \] Recall that $\elts = \X \cdot \Rubbish$ is the
+  species of elements.  (This example appears implicitly---without an
   explicit connection to species---in the work of
   \citet{altenkirch2010monads}, and earlier also in that of
   \citet{altenkirch1999monadic} and \citet{fiore2003abstract}.)
@@ -4411,9 +4414,7 @@ dia = listCycEquiv
   can thus be interpreted as saying that a lambda calculus term with
   free variables in $V$ is either
   \begin{itemize}
-    \item an element of $V$, \ie a variable
-      (recall that $\elts = \X \cdot \Rubbish$ is the
-      species of elements)
+    \item an element of $V$, \ie a variable,
     \item a pair of terms (application), or
     \item a lambda abstraction, represented by a term with free
       variables taken from the set $V \uplus \singleton$.  The new
@@ -4427,7 +4428,7 @@ dia = listCycEquiv
   $\Lambda(x) = \elts(x) + \Lambda^2(x) + \Lambda'(x)$ has no
   solution.  To do combinatorics with lambda terms one must also count
   applications and abstractions as contributing to the size, \eg using
-  a two-sort species (\pref{sec:multisort}) like \[ \Xi = \X \cdot
+  a two-sort species (\pref{sec:multisort}) such as \[ \Xi = \X \cdot
   \Bag + \Y \cdot \Xi^2 + \Y \cdot \frac{\partial}{\partial \X} \Xi \]
   which uses labels of sort $\Y$ to mark occurrences of applications
   and abstractions; see \citet{grygiel2013counting,
@@ -4467,10 +4468,11 @@ compute the ogf for a species defined via differentiation.
 \subsection{Up and down operators}
 \label{sec:up-down-operators}
 
-\citet[\Sect 8.12]{aguiar2010monoidal} define \term{up} and \term{down operators} on
-species; although the import or usefulness of up and down operators is
-not yet clear to me, my instinct tells me that they will be, so I
-include a brief disucssion of them here.
+\citet[\Sect 8.12]{aguiar2010monoidal} define \term{up} and \term{down
+  operators} on species; although the import or usefulness of up and
+down operators is not yet clear to me, my instinct tells me that they
+will indeed have important roles to play, so I include a brief
+discussion of them here.
 
 \begin{defn}
   An \term{up operator} on a species $F$ is a species morphism $u : F
@@ -4590,8 +4592,8 @@ dia =
   square cannot possibly commute.
 
   Generalizing from this example, one intuitively expects that there is
-  no up operator whenever taking the derivative ``breaks some
-  symmetry'', as in the case of $\Cyc$.  Formalizing this intuitive
+  no up operator whenever taking the derivative breaks some
+  symmetry, as in the case of $\Cyc$.  Formalizing this intuitive
   observation is left to future work.
 \end{ex}
 
@@ -4660,7 +4662,7 @@ dia = downCyc
   ``stacked'', with the first subtree added as the leftmost leaf of
   the remaining tree, and the other subtree added as \emph{its}
   leftmost leaf (\pref{fig:down-btree-stack}), or nodes could be
-  iteratively ``promoted'' to fill the hole, say, preferring the
+  iteratively promoted to fill the hole, say, preferring the
   left-hand node when one is available
   (\pref{fig:down-btree-promote}).
   \begin{figure}
@@ -4889,7 +4891,7 @@ K F\ L \defeq F\ (K \oplus L). \]
 \subsection{Internal Hom for partitional and arithmetic product}
 \label{sec:internal-Hom-pprod-aprod}
 
-As promised, we now return to considering the existence of an internal
+As promised, we now return to consider the existence of an internal
 Hom functor corresponding to partitional product.  We are looking for
 some \[ \phom - - : \Spe^\op \times \Spe \to \Spe \] for
 which \begin{equation} \label{eq:internal-Hom-pprod-adj}
@@ -4915,13 +4917,13 @@ $L$-derivative of $H$.  This definition is worth rereading a few times
 since it mixes levels in an initially surprising way---the
 \emph{shapes} of the species $\phom G H$ are \emph{species morphisms}
 between other species.  However, this should not ultimately be too
-surprising to anyone used to the idea of higher-order functions---that
-the output \emph{values} of a function can themselves be functions.
+surprising to anyone used to the idea of higher-order functions; it
+corresponds to the idea that functions can output other functions.
 
 Thus, a $(\phom G H)$-shape with labels from $L$ is a natural function
-that takes a $G$-shape as input, and produces an $H$-shape which uses
+that takes a $G$-shape as input and produces an $H$-shape which uses
 the disjoint union of $L$ and the labels from $G$.  This is precisely
-what is needed to effectively ``curry'' a species morphism out of a
+what is needed to effectively curry a species morphism out of a
 product while properly keeping track of the labels, as illustrated in
 \pref{fig:internal-Hom-pprod-example}.  The top row of the diagram
 illustrates a particular instance of a species morphism from $\List
@@ -4966,8 +4968,8 @@ dia =
 \end{figure}
 
 Formally, we have the adjunction \eqref{eq:internal-Hom-pprod-adj}.
-Note that the same result appears in \citet{kelly2005operads} in a
-slightly different guise.
+The same result appears in \citet{kelly2005operads} in a slightly
+different guise.
 
 This result hints at a close relationship between partitional product
 and higher derivatives.  In particular, both are defined using the
@@ -5192,7 +5194,7 @@ That species built from $\Zero$, $\One$, $\X$, sum, product, and fixed
 point have no symmetries is not hard to see intuitively; less obvious
 is the fact that up to isomorphism, every species with no symmetries
 can be expressed in this way.  To understand why this is so, we turn
-to consider molecular species.
+to molecular species.
 
 \begin{defn}
   A species \F\ is \term{molecular} if there is only a single
@@ -5231,7 +5233,7 @@ action:
   An \term{action} of a group $G$ on a set $S$ is a function \[ - \act
   - : G \times S \to S \] such that, for all $g,h \in G$ and $s \in S$,
   \begin{itemize}
-  \item $\id \act s = s$, and
+  \item $\id \act s = s$ and
   \item $g \act (h \act s) = (gh) \act s$.
   \end{itemize}
 \end{defn}
@@ -5484,10 +5486,10 @@ decomposed yet further.
 \label{sec:elim-species}
 
 With the molecular and atomic decompositions of species under our
-belt, we now turn to consider \term{eliminators} for
-species.  Generally speaking, this is not of much interest to
-combinatorialists, but will play an important role in using species as
-a basis for data types, to be explored in the next chapter.
+belt, we now turn to \term{eliminators} for species.  Generally
+speaking, this is not of much interest to combinatorialists, but it will
+play an important role in using species as a basis for data types, to
+be explored in the next chapter.
 
 The idea is to characterize outgoing species morphisms.  That is, for
 a given species $F$, what can one say about species morphisms $\hom F
@@ -5605,7 +5607,10 @@ case of atomic species.
 \section{Recursive species}
 \label{sec:recursive}
 
-We close out this chapter with a brief discussion of recursively
+\todo{move this to the section on multisort.  Make sure to define
+  partial derivatives.}
+
+We close this chapter with a brief discussion of recursively
 defined species, which have been used in examples throughout.  Given a
 recursive equation of the form \[ F = \dots F \dots, \] we can turn
 the right-hand side into a two-sort species $\H(\X,\Y)$, with $\Y$
@@ -5659,10 +5664,10 @@ Implicit Species Theorem only gives sufficient, but not necessary,
 conditions for well-foundedness; we would like to have a different
 theorem that tells us when equations such those governing $\List$ and
 $\Bin$ are well-founded. \citet{Pivoteau2012} prove quite a general
-theorem which is applicable to this case, and is moreover even
-applicable to mutually recursive systems of species equations.  Its
-very generality somewhat obscures the essential ideas, however, so we
-give a ``baby'' version of the theorem here.
+theorem which is applicable to this case, and is also applicable to
+mutually recursive systems.  Its very generality somewhat obscures the
+essential ideas, however, so we give a ``baby'' version of the theorem
+here.
 
 The basic idea can be seen by considering the case of $\List = \One +
 \X \cdot \List$.  Decompose $\List$ as $\List = \One + \List_+$, so
@@ -5690,7 +5695,7 @@ paper \citep{yorgey-2010-species}.
   that $\H_+(\Zero,\Y) \iso \Zero$ and $\partial \H/\partial \Y
   = \partial \H_+ / \partial \Y$.
 
-  Moreover, $\H(\Zero,\Y) \iso n$ means that other than the constant
+  Moreover, $\H(\Zero,\Y) \iso n$ means that, other than the constant
   term $n$, every term of the molecular decomposition of $\H$ must
   contain a factor of $\X$.  In other words, $\H_+(\X,\Y) \iso \X
   \cdot \mcal G(\X,\Y)$ for some species $\mcal G$.  Thus we have

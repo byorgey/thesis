@@ -11,7 +11,7 @@ operations on ``variant species'', \ie functors in some category $(\fc
 \Lab \Str)$.  We have seen a few variants already:
 \begin{itemize}
 \item $\fc \B \Set$
-\item $\fc \B \FinSet$, a slightly more traditional notion of species
+\item $\fc \B \FinSet$, a more traditional notion of species
   which is more appropriate for doing combinatorics.
 \item $\fc \P \Set$, species as families of shapes organized by
   \emph{size} instead of by labels.
@@ -70,7 +70,7 @@ rows are labelled by properties, to be elaborated below.
   \item The eliminator for $+$ assumes that it is derived from the
     actual coproduct in $\Str$.
   \item All the operations built on Day convolution or something
-    similar require the monoidal structure on $\Str$ to be symmetric,
+    similar require the monoidal structure on $\Str$ to be symmetric
     and to preserve colimits.  It suffices, but is not necessary, for
     the monoidal product to be a left adjoint.
   \item On the other hand, the eliminator for $\comp$ really does
@@ -103,8 +103,7 @@ a single shape containing a single label \emph{of sort $Y$} (and none
 of any other sort).  More generally, multisort species correspond to
 multivariate generating functions. See \citet[\Sect 4.2]{bll} for a
 precise, detailed definition.  For now, an intuitive sense is
-sufficient; we will give a more abstract (but no less precise)
-definition later.
+sufficient; we will give a more abstract definition later.
 
 \begin{ex}
   Consider \[ \frak{T} = \Y + \X \cdot \frak{T}^2, \] the two-sort
@@ -163,14 +162,14 @@ dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
   \pref{sec:basic-diff} suggested instead using the multisort
   species \[ \Xi = \X \cdot \Bag + \Y \cdot \Xi^2 + \Y \cdot
   \frac{\partial}{\partial \X} \Xi. \] An even better idea is to use a
-  three-sort species, as in \[ \Xi = \X \cdot \E + \Y \cdot \Xi^2 + \Z
+  three-sort species, as in \[ \Xi = \X \cdot \E + \Y \cdot \Xi^2 + \ZZ
   \cdot \frac{\partial}{\partial \X} \Xi, \] where $\X$ stands in for
-  variables, $\Y$ for applications, and $\Z$ for lambdas.
+  variables, $\Y$ for applications, and $\ZZ$ for lambdas.
 
   In general, any algebraic data type may be modelled by a multisort
   species, with one sort corresponding to each constructor.  The
   singletons of a given sort count occurrences of the corresponding
-  construct, and ensure that species structures of a finite size
+  construct and ensure that species structures of a finite size
   correspond to data structures that take only a finite amount of
   memory.
 \end{ex}
@@ -189,17 +188,17 @@ partitional product is straightforward: an $(F \cdot G)$-shape over a
 given collection of labels (of multiple sorts) corresponds to a pair
 of an $F$-shape and $G$-shape over a binary partition of the
 collection (which can also be thought of as a collection of binary
-partitions over each sort).  As another example, composition can also
-be extended to multisort species---although, as we will see, it does
-not follow quite as naturally from the single-sort setting.  If $F$ is
-an $m$-sort species, and $(G_1, \dots, G_m)$ is an $m$-tuple of
-$n$-sort species, then $F \comp (G_1, \dots, G_m)$ is an $n$-sort
-species whose shapes consist of a top-level $F$-shape with
-$G_i$-shapes substituted for each label of sort $i$.  Of course, this
-presentation assumes a linear ordering on the sorts of $F$; more
-generally, if the sorts of $F$ are indexed by some finite set $S$,
-then $F$ can be composed with an $S$-indexed tuple of $T$-sort
-species, resulting in a $T$-sort species.
+partitions over each sort).  Composition can also be extended to
+multisort species---although, as we will see, it does not follow quite
+as naturally from the single-sort setting.  If $F$ is an $m$-sort
+species, and $(G_1, \dots, G_m)$ is an $m$-tuple of $n$-sort species,
+then $F \comp (G_1, \dots, G_m)$ is an $n$-sort species whose shapes
+consist of a top-level $F$-shape with $G_i$-shapes substituted for
+each label of sort $i$.  Of course, this presentation assumes a linear
+ordering on the sorts of $F$; more generally, if the sorts of $F$ are
+indexed by some finite set $S$, then $F$ can be composed with an
+$S$-indexed tuple of $T$-sort species, resulting in a $T$-sort
+species.
 
 \later{Example of generalized composition?}
 % \begin{ex}
@@ -218,7 +217,7 @@ species, resulting in a $T$-sort species.
 \end{rem}
 
 Defining multisort species and all the operations on them (such as
-composition) ``from scratch'' is unnecessary; they can be defined
+composition) from scratch is unnecessary; they can be defined
 abstractly as objects in a certain functor category, and hence fit
 into the abstract framework developed in \pref{chap:species} and
 outlined in \pref{sec:generalized-species-properties}.  \citet{bll}
@@ -231,7 +230,7 @@ sorts; that is, each element $s \in S$ represents a different sort.
 Let $\Lab$ be a category, thought of as a category of labels (\eg
 $\B$).  Now consider the functor category $\Lab^S$ (with $S$
 considered as a discrete category, as usual).  Objects of $\Lab^S$ are
-functors $S \to \Lab$, that is, an assignment of an object from $\Lab$
+functors $S \to \Lab$, that is, assignments of an object from $\Lab$
 to each $s \in S$. Morphisms in $\Lab^S$ are natural transformations,
 that is, $S$-indexed families of $\Lab$-morphisms between
 corresponding objects of $\Lab$.  For example, in the case $\Lab =
@@ -331,6 +330,8 @@ future work.
 
 \section{Weighted species}
 \label{sec:weighted}
+
+\todo{remove this section?}
 
 \citet[\Sect 2.3]{bll} define a notion of \term{weighted species},
 where each shape is assigned a \term{weight} from some polynomial ring
@@ -446,7 +447,7 @@ example:
 \item $\Vect$-valued species, \ie
   functors $\B \to \Vect$, which send finite sets of labels to
   \emph{vector spaces} of shapes. Joyal had these in mind from the
-  beginning \citep{joyal86}, and they seem to play a central role in
+  beginning \citep{joyal86}, and they play a central role in
   more recent work as well (see, for example,
   \citet{aguiar2010monoidal}), though I do not yet have a good
   intuition for them.
@@ -494,8 +495,9 @@ must take care to distinguish them.
   functions. Recall that in general, this may not be the same as an
   \emph{equivalence}, although in the specific case of sets
   ($0$-types) the notions of bijection and equivalence do coincide.
-  The following discussion sticks mostly to the terminology of
-  ``bijections'' but may occasionally mention ``equivalences'' as well.
+  The following discussion sticks to the terminology of
+  ``bijections'', but the reader should bear in mind that
+  ``equivalences'' could also be used with no difference.
 \end{rem}
 
 The basic idea is to introduce a type of evidence witnessing the fact
@@ -516,9 +518,9 @@ ones.
   A \term{copartial bijection} $f : A \cpbij B$ between two sets $A$
   and $B$ is given by:
 \begin{itemize}
-\item an embedding function $\embed f : A \to B$ (in a slight abuse of
-  notation, we will often simply use $f$, rather than $\embed f$, to
-  refer to the embedding function),
+\item an embedding function $\embed f : A \to B$ (we will often simply
+  use $f$, rather than $\embed f$, to refer to the embedding
+  function),
 \item a projection function $\project f : B \to \TyOne + A$,
 \end{itemize}
 together with two round-trip laws:
@@ -746,7 +748,7 @@ dia = hcat' (with & sep .~ 2)
 Finally, we turn to the theory of copartial bijections on \emph{finite}
 sets. In the case of finite sets, it turns out that copartial bijections
 $A \cpbij B$ can be more simply characterized as injective
-functions $A \inj B$.  This might seem ``obvious'', and indeed, it is
+functions $A \inj B$.  This might seem obvious, and indeed, it is
 straightforward in a classical setting.  One direction, namely,
 converting a copartial bijection into an injection, is straightforward
 in HoTT as well (\pref{lem:pbij-is-inj}). However, to produce a
@@ -836,7 +838,7 @@ construction of a partial inverse (\pref{lem:inj-is-pbij}).
   \pref{lem:pinv-mere-prop}.  Thus, by the recursion principle for
   propositional truncation, we are justified in using the constructive
   evidence of $A$'s finiteness, that is, its cardinality $n : \N$ and
-  equivalence $\sigma : A \equiv \Fin n$.  We define $\project h : B \to
+  bijection $\sigma : A \equiv \Fin n$.  We define $\project h : B \to
   \TyOne + A$ on an input $b : B$ as follows: by recursion on $n$,
   find the smallest $k : \Fin n$ such that $\embed h\ (\sigma^{-1}\ k) =
   b$.  If such a $k$ exists, yield $\inr\ (\sigma^{-1}\ k)$; otherwise,
@@ -949,9 +951,9 @@ The case of strictly copartial bijections, that is, $K \cpbij L$ where
 $\size K < \size L$, is more interesting.  Each structure in the set
 $F\ K$, with labels in $K$, must map to a structure in $F\ L$, given
 an embedding of $K$ into $L$.  Intuitively, this can be thought of as
-introducing ``extra'' labels which must be incorporated into the
+introducing extra labels which must be incorporated into the
 structure in a suitably canonical way.  However, the copartial bijection
-$p : K \cpbij L$ affords no structure whatsoever on the ``extra''
+$p : K \cpbij L$ affords no structure whatsoever on the extra
 labels (that is, those $l \in L$ for which $\project p\ l = \inl\ 
 \unit$).  So it is not acceptable, for example, to prepend the extra
 labels to the front of a list structure, since there is no canonical
@@ -1006,7 +1008,7 @@ strictly copartial bijection results in some labels being added to the
 set.
 
 Intuitively, every normal species $F$ gives rise to a copartial species
-$\prt F$ which ``acts like'' the species $F \cdot \Bag$.  In fact,
+$\prt F$ which acts like the species $F \cdot \Bag$.  In fact,
 along these lines we can formally define a fully faithful embedding of
 \Spe into \PSpe.
 
@@ -1027,7 +1029,7 @@ along these lines we can formally define a fully faithful embedding of
     represents a $K_2$-labeled set, and $\sigma : K \bij K_1 + K_2$
     witnesses that $K_1$ and $K_2$ form a partition of the label set
     $K$.  As output, $\prt p$ yields \[ (L_1, L_2 + \extra p, F\
-    (\restr{K_1}{p_1})\ f, \unit, \psi), \] where
+    (\restr{K_1}{p_1})\ f, \unit, \psi), \] where:
     \begin{itemize}
     \item $p_1$ is the ``restriction of $p$ to $K_1$'', that is, the
       composite copartial bijection
@@ -1053,7 +1055,7 @@ along these lines we can formally define a fully faithful embedding of
   transformations $\varphi : \all L F\ L \to G\ L$ where $F$ and $G$
   are species.  Define $(\prt \varphi)_L : \prt F\ L \to \prt G\ L$
   by \[ (L_1, L_2, f, \unit, \sigma) \mapsto (L_1, L_2, \varphi_{L_1}\
-  f, \unit, \sigma). \] For this to be natural the following square
+  f, \unit, \sigma). \] For this to be natural, the following square
   must commute for all $F, G : \BT \to \ST$, all $\varphi : \all L F\
   L \to G\ L$, and all $p : K \cpbij L$:
   \[ \xymatrix
@@ -1112,7 +1114,7 @@ why, we consider the connection between species, copartial species,
 and generating functions.
 
 According to our intuition so far, a copartial species corresponds to
-a regular species with a set of ``extra labels'' possibly attached.
+a regular species with a set of extra labels possibly attached.
 Consider, therefore, the relationship of the species $F$ to the
 species $F \cdot \Bag$.  An $(F \cdot \Bag)$-shape of size $n$
 consists of an $F$-shape, of \emph{any} size from $0$ to $n$, paired
@@ -1191,11 +1193,11 @@ generating functions, this has an inverse, given by
 Consider, then, an attempted proof that $\prt - : \Spe \to \PSpe$ is
 essentially surjective.  Given a copartial species $S \in \PSpe$, this
 would require us to produce some $F \in \Spe$ such that $\prt F \iso
-S$.  Thinking of $\prt F$ as intuitively acting like $F \cdot \Bag$,
-\ie a So, if $S$ really corresponds to a ``prefix sum'' of some
-species $F$, then we should ideally be able to construct $F$ via an
-operation similar to \eqref{eq:prefix-sum-inverse}.  That is (passing
-to $\fc \P \Set$ and $\fc \PTSub \ST$), we would define
+S$.  If we think of $\prt F$ as intuitively acting like $F \cdot
+\Bag$, we see that $S$ should correspond to a ``prefix sum'' of $F$.
+Then we should ideally be able to construct $F$ via an operation
+similar to \eqref{eq:prefix-sum-inverse}.  That is (passing to $\fc \P
+\Set$ and $\fc \PTSub \ST$), we would define
 \begin{align*}
 F\ 0 &\defeq S\ 0 \\
 F\ (n+1) &\defeq S\ (n+1) - S\ n.
@@ -1259,10 +1261,10 @@ dia = (vcat' (with & sep .~ 1) . map centerX) [s # scale 1.5, collapse]
 \end{figure}
 
 One may verify that this does, in fact, describe a valid functor
-$\BTSub \to \ST$.  However, it does not ``preserve information'':
-above size $5$ the shapes all ``collapse'', and information about
+$\BTSub \to \ST$.  However, it does not preserve information:
+above size $5$ the shapes all collapse, and information about
 smaller shapes is lost.  The intuition that all copartial species
-shapes must ``come equipped with a set'' of labels is correct, in a
+shapes must come equipped with a set of labels is correct, in a
 sense, but there is some latitude in the way the rest of the shape is
 handled.
 
@@ -1302,7 +1304,7 @@ partially defined functions which are both injective and surjective.
 
 Species corresponding to $\fc {\BTSub^\op} \ST$ were studied by
 \citet{schmitt93hopfalgebras} (under the name ``species with
-restriction'', or ``$R$-species''), and correspond to species with a
+restriction'', or ``$R$-species'') and correspond to species with a
 natural notion of ``induced subspecies''.  That is, $F : \BTSub^\op
 \to \ST$ must lift morphisms of the form $K \supseteq L$ to functions
 $F\ K \to F\ L$.  Instead of adding more labels, this operation may
@@ -1317,5 +1319,5 @@ find in particular that $\BTSub^\op$ is not enriched over $\ST$, since
 coinjections are not, in general, total functions.  Instead of $\ST$,
 we actually want to consider the category $\STp$ of sets and
 \emph{partial} functions. One may check that $\STp$ is monoidal,
-complete, and Cartesian closed, has coends over $\BTSub^\op$, and that
-$\BTSub^\op$ is indeed enriched over $\STp$.
+complete, and Cartesian closed, that it has coends over $\BTSub^\op$,
+and that $\BTSub^\op$ is indeed enriched over $\STp$.

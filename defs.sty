@@ -385,7 +385,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Comments
 
-\newif\ifcomments\commentsfalse
+\newif\ifcomments\commentstrue
 \newif\ifallcomments\allcommentsfalse
 
 \newcounter{todocount}
@@ -445,8 +445,8 @@
 \newenvironment{sproof}{%
     \begin{tabbing}
     \phantom{$\equiv$} \= \qquad\qquad\qquad\qquad\qquad \= \kill
-}{
-    \end{tabbing}
+}{%
+    \end{tabbing}%
 }
 \newcommand{\stmt}[1]{\> \ensuremath{#1} \\}
 \newcommand{\lstmt}[1]{\> \ensuremath{#1} }
