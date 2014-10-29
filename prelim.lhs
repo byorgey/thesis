@@ -78,9 +78,9 @@ forgetfulness.
   \term{equivalence} of two types $A$ and $B$. Intuitively,
   equivalence can be thought of as a ``very well-behaved'' bijection,
   \ie a bijection with some extra coherence conditions.
-\item $A \lequiv B$ denotes that $A$ and $B$ are \term{logically
-    equivalent}, that is, that each logically implies the other; more
-  familiarly, it can also be read as ``if and only if''.  Via the logical
+\item $A \lequiv B$ denotes \term{logical equivalence} of $A$ and $B$,
+  that is, that each logically implies the other; more familiarly, it
+  can also be read as ``if and only if''.  Via the logical
   interpretation of types as propositions, this is also to say that
   there exist functions $A \to B$ and $B \to A$.  Logical equivalence
   is thus a weaker notion than bijection or equivalence, since there
@@ -187,7 +187,9 @@ We begin our brief tour of HoTT with its syntax.
 \subsection{Terms and types}
 \label{sec:HoTT-syntax}
 
-The theory includes standard constructions such as:
+Some familiarity with dependent type theory on the part of
+the reader is assumed; we simply note quickly the standard features of
+HoTT, including:
 \begin{itemize}
 \item an empty type \TyZero, with no inhabitants;
 \item a unit type \TyOne, with inhabitant $\unit$;
@@ -284,13 +286,12 @@ trying to prove a statement of the form
 \all {x,y} {(p : x = y) \to
   P(x,y,p)}.
 \end{equation}
-There is also an equivalent induction principle, \term{based path
-  induction}, which applies when proving a statement of the form \[
-\all x {(p : x = y) \to P(x, p)}, \] where $y$ is fixed.  Crucially,
-however, neither can be used to prove statements of the form $(p : x =
-y) \to P(p)$ where both $x$ and $y$ are fixed.
-
-For the precise details of (based) path induction, see the HoTT
+% There is also an equivalent induction principle, \term{based path
+%   induction}, which applies when proving a statement of the form \[
+% \all x {(p : x = y) \to P(x, p)}, \] where $y$ is fixed.  Crucially,
+% however, neither can be used to prove statements of the form $(p : x =
+% y) \to P(p)$ where both $x$ and $y$ are fixed.
+For the precise details of path induction, see the HoTT
 book~\citep{hottbook}. For this work, however, a simple intuition
 suffices: to prove \ref{eq:path-ind-form} it suffices to assume that
 $p$ is $\refl$ and that $x$ and $y$ are literally the same, \ie it
@@ -329,7 +330,7 @@ functions $f : A \to B$ and $g : B \to A$, along with an extra
 condition ensuring coherence of higher path structure.  The precise
 details are unimportant for the purposes of this dissertation, and can
 be found in the HoTT book~\citeyearpar[Chapter 4]{hottbook}. The
-important point to note is that equivalence and bijection are
+important point is that equivalence and bijection are
 logically equivalent---that is, each implies the other.  In
 particular, to prove an equivalence it suffices to exhibit a
 bijection.
@@ -362,9 +363,9 @@ As of yet, univalence has no direct computational
 interpretation\footnote{Though as of this writing there seems to be
   some good progress on this front via the theory of \term{cubical
     sets}~\citep{bezem2014model}.}, so using it to give a
-computational interpretation of species may seem suspect. Note,
-however, that $\ua$ satisfies the $\beta$ law \mbox{$\transport{X
-    \mapsto X}{\ua(f)} = f$}. So univalence introduces no
+computational interpretation of species may seem suspect.
+However, $\ua$ satisfies the $\beta$ law \mbox{$\transport{X
+    \mapsto X}{\ua(f)} = f$}, so univalence introduces no
 computational problems as long as applications of $\ua$ are only
 ultimately used via $\mathsf{transport}$.  In particular, sticking to
 this restricted usage of $\ua$ still allows a convenient shorthand:
@@ -410,7 +411,7 @@ counts is only whether or not the proposition is provable at all.
   is a path $p = q$.  Put another way, for any $x, y : A$, the type $x
   = y$ is a proposition.
 \end{defn}
-``Standard'' inductive types such as \N, \Fin n, and so on, are sets,
+Standard inductive types such as \N, \Fin n, and so on, are sets,
 although proving this takes a bit of work. Generally, one shows via
 induction that paths between elements of the type are equivalent to an
 indexed type given by $\TyZero$ when the elements are different and
