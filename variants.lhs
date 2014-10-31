@@ -331,7 +331,8 @@ future work.
 \section{Weighted species}
 \label{sec:weighted}
 
-\todo{remove this section?}
+\todo{remove this section.  Be sure to remove forward references as
+  well.}
 
 \citet[\Sect 2.3]{bll} define a notion of \term{weighted species},
 where each shape is assigned a \term{weight} from some polynomial ring
@@ -415,6 +416,8 @@ operations on weighted species, is left to future work.
 \section{$\L$-species}
 \label{sec:L-species}
 
+\todo{Combine with next section? Or expand a bit?}
+
 Consider the category $\L$ of linear orders and order-preserving
 bijections (discussed previously in \pref{sec:manifestly-finite}).  An
 \term{$L$-species} is defined as a functor $\L \to \Set$.  The theory
@@ -474,6 +477,8 @@ obtain definitions of the various operations.
 
 \section{Copartial species}
 \label{sec:copartial-species-sec}
+
+\todo{Move this section earlier.  More CS motivation.}
 
 As a final, larger example, which will also recur in
 \pref{chap:labelled}, we develop the theory of species based on
@@ -1314,6 +1319,7 @@ same order; similarly, the species of cycles; and the species of
 simple graphs, where the lifting operation corresponds to forming
 induced subgraphs. \later{make a picture}
 
+\todo{Expand this a bit.}
 When we consider the properties in \pref{tab:properties}, however, we
 find in particular that $\BTSub^\op$ is not enriched over $\ST$, since
 coinjections are not, in general, total functions.  Instead of $\ST$,

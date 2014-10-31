@@ -78,9 +78,9 @@ eliminate intermediate data structures through an optimization called
 deforestation~\citep{Wadler:1988,Gill93ashort}.
 
 An algebraic view of data types also enables \term{datatype-generic
-  programming}---writing functions which operate generically over
-\emph{any} algebraic data type by examining its algebraic structure.
-For example, the following function (defined using Generic
+  programming}---writing functions that operate generically over
+values of \emph{any} algebraic data type by examining its algebraic
+structure.  For example, the following function (defined using Generic
 Haskell-like
 syntax~\citep{Hinze-2000-generic-Haskell,generic-haskell}) finds the
 product of all the |Int| values contained in a value of \emph{any}
@@ -127,10 +127,11 @@ borrowing from pure mathematics, as, for example, in the case of
 category theory; so the fruit seems ripe for picking in the case of
 combinatorial species.
 
-The connection between species and computation was first explored by
+There has already been some initial progress in this direction. The
+connection between species and computation was first explored by
 Flajolet, Salvy, and Zimmermann, with their work on
 LUO~\citep{FlajoletSalvyZimmermann1989a,FlSa95}, allowing the use of
-species in automated algorithm analysis.  However, their work was all
+species in automated algorithm analysis.  However, their work was
 carried out in a dynamically typed setting.
 
 The first to think about species specifically in the context of
@@ -158,7 +159,7 @@ mathematical background that many PL researchers do not have.
 The investigations in this dissertation, therefore, all arise from
 considering the central question, \textbf{what is the connection
   between species and algebraic data types?}  A precise connection
-between the two could have many exciting implications.  It would allow
+between the two would have many exciting implications.  It would allow
 taking much of the mathematical theory developed on the basis of
 species---for example, enumeration, exhaustive generation, and uniform
 random generation of structures via Boltzmann sampling
@@ -262,20 +263,19 @@ Attempting to port species to a typed, constructive setting reveals
 many implicit assumptions that must be made explicit, as well as
 implicit uses of reasoning principles, such as the axiom of choice,
 which are incompatible with constructive foundations.  The bulk of
-\pref{chap:equality} is dedicated to this sort of foundational
-groundwork which makes it possible to talk about species in a typed,
-constructive setting.  In particular, the biggest issues are the
-difference between \term{equality} and \term{isomorphism}, and the
-constructive encoding of \term{finiteness} (which is itself related to
-issues to equality and isomorphism). The recently developed
-\term{homotopy type theory} \citep{hottbook} turns out to be exactly
-what is wanted to encode everything in a parsimonious way.  The
-development of cardinal-finite sets in HoTT (along with a related
-concept I term ``manifestly finite sets'') seems to be novel, as is
-the development of HoTT analogues of the set-theoretic groupoids $\B$
-and $\P$.
+\pref{chap:equality} defines the foundational groundwork which makes
+it possible to talk about species in a typed, constructive setting.
+In particular, the biggest issues are the difference between
+\term{equality} and \term{isomorphism}, and the constructive encoding
+of \term{finiteness} (which is itself related to issues to equality
+and isomorphism). The recently developed \term{homotopy type theory}
+\citep{hottbook} turns out to be exactly what is wanted to encode
+everything in a parsimonious way.  The development of cardinal-finite
+sets in HoTT (along with a related concept I term ``manifestly finite
+sets'') is novel, as is the development of HoTT analogues of
+the set-theoretic groupoids $\B$ and $\P$.
 
-\pref{chap:species} goes on to present the theory of species itself.
+\pref{chap:species} presents the theory of species itself.
 Much of the chapter is not novel in a technical sense.  One of the
 main contributions of the chapter, instead, is simply to organize and
 present some relevant aspects of the theory for a functional programming
@@ -297,28 +297,30 @@ on homotopy type theory---it ``bites the bullet'' and considers
 properties required to support each species operation.  Although many
 individual species generalizations have been considered in the past,
 this systematic consideration of the minimal features needed to
-support each operation seems novel.  This allows operations to be
+support each operation is novel.  This allows operations to be
 defined for whole classes of species-like things at once, and in some
 cases even allows for species-like things to be constructed in a
 modular way, by applying constructions known to preserve the required
 properties.
 
 \pref{chap:variants} goes on to explore particular species variants,
-evaluated through the grid constructed in \pref{chap:species}.  Some
+evaluated through the framework of \pref{chap:species}.  Some
 variants have already been considered in the literature; others, such
 as the notion of copartial species considered in
 \pref{sec:copartial-species-sec}, are novel.
 
 Finally, \pref{chap:labelled} considers extending species to
-\term{labelled data structures}.  The notion of \term{analytic
-  functors}, as introduced by \citet{joyal86}, turns out to be exactly
-the right framework in which to consider labelled data structures.
-Analytic functors can be most generally defined in terms of \term{Kan
+\term{labelled data structures}, which intuitively consist of a
+labelled shape, or species structure, paired with a mapping from
+labels to data elements.  The notion of \term{analytic functors}, as
+introduced by \citet{joyal86}, turns out to be exactly the right
+framework in which to consider labelled data structures.  Analytic
+functors can be most generally defined in terms of \term{Kan
   extensions}, and so the chapter opens with a presentation of Kan
 extensions, once again aimed at functional programmers.  Analytic
-functors are considered in the context of copartial species, which, it
-is hoped, can serve as a foundation for further work codifying data
-structures backed by memory storage (in applications where the memory
-layout really matters, \eg linear algebra libraries), and also for
-partial species, which may help model situations where data need not
-be associated to every label.
+functors are considered in the context of copartial species, which,
+can serve as a foundation for further work codifying data structures
+backed by memory storage (in applications where the memory layout
+really matters, \eg linear algebra libraries), and also for partial
+species, which may help model situations where data need not be
+associated to every label.

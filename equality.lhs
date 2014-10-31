@@ -1156,7 +1156,7 @@ Finally, we can assemble the foregoing material on anafunctors and
 category theory in HoTT into a coherent story about \term{finiteness},
 first using set-theoretic foundations, and then using HoTT.  The material
 in this section and the next (other than the lemmas and theorems cited
-from the HoTT book) is, to my knowledge, novel.
+from the HoTT book) is novel.
 
 Recall that $\B$ denotes the groupoid of finite sets and bijections,
 and $\P$ the groupoid of natural numbers and permutations.  In

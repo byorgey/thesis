@@ -10,6 +10,8 @@
 
 \later{Talk about bag vs rubbish}
 
+\todo{Be more clear about contributions}
+
 Now that we have a foundation for describing labelled shapes, the next
 step is to extend them into full-blown \emph{data structures} by
 adjoining mappings from labels to data.  For example,
@@ -179,7 +181,7 @@ that it requires the |GADTs| and |RankNTypes| extensions).\footnote{As
   the expense of obscuring the connection to the original abstract
   proof given above.} The code for the forward direction is similar,
 and it is the backwards direction which will be of particular use
-later.
+later. \todo{Cite Johann and Ghani, relation to GADTs and Kan extensions}
 \begin{figure}
   \centering
 \begin{spec}
@@ -203,7 +205,7 @@ lanAdjoint h = homL (uncurry (yoneda' h))
              ->  (forall c. f c ->  (forall a. (j c -> a) -> g a)  )
     yoneda' h fc = yoneda (h fc)
 \end{spec}
-  \caption{(One half of) proof of \pref{prop:Lan-coend} in Haskell}
+  \caption{(One half of) ``proof'' of \pref{prop:Lan-coend} in Haskell}
   \label{fig:lan-coend-Hask}
 \end{figure}
 
@@ -756,6 +758,8 @@ morphism $F \to B^{A^-}$.  We can therefore characterize labelled
 structure eliminators in terms of the species eliminators described in
 \pref{sec:elim-species}.
 
+\todo{example?}
+
 \subsection{Generalized analytic functors}
 \label{sec:gen-analytic-functors}
 
@@ -771,7 +775,7 @@ As a particular example, the definition of analytic functors ports
 almost unchanged into homotopy type theory: we merely replace the
 set-theoretic categories $\B$ and $\Set$ with the homotopy-theoretic
 $\BT$ and $\ST$, respectively, yielding \[ \analytic F\ A = \coend L
-(\hom[\ST] {\iota\ L} A) \times F\ L, \] where $\iota : \B \to \S$ is
+(\hom[\ST] {\iota\ L} A) \times F\ L, \] where $\iota : \BT \to \ST$ is
 the evident injection which acts on morphisms via transport.
 Recalling that coends in HoTT are just $\Sigma$-types, and that
 morphisms in $\ST$ are functions, we have \[ \analytic F\ A = \sum_{L
@@ -865,3 +869,6 @@ represent a pointed set, but it may also represent the species of
 the label of $\X$, and do not wish to associate data to all the labels
 contained in the set.
 
+\todo{conclusions.  Expand on how the match-up between analytic
+  functors and labelled data structures is gratifying etc. (see
+  conclusions chapter)}
