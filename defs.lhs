@@ -37,6 +37,7 @@
 \usepackage{footmisc}
 \usepackage{enumitem}
 \usepackage{verse}
+\usepackage[toc]{appendix}
 
 \usepackage[final]{showkeys}
 

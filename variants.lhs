@@ -18,14 +18,13 @@ operations on ``variant species'', \ie functors in some category $(\fc
 \item $\fc \BT \ST$, species as constructed in HoTT.
 \end{itemize}
 There are quite a few other possible variants, some of which we
-explore in this chapter.  Multisort species (\pref{sec:multisort}),
-weighted species (\pref{sec:weighted}), and $\L$-species
-(\pref{sec:L-species}) are all standard species variants which can be
+explore in this chapter.  Multisort species (\pref{sec:multisort}) and $\L$-species
+(\pref{sec:L-species}) are both standard species variants which can be
 seen as functors between certain categories other than $\B$ and
 $\Set$; yet more variants are mentioned in
 \pref{sec:other-species-variants}.  \pref{sec:copartial-species-sec}
 and \pref{sec:partial-species} develop a larger example of a novel
-species variant.
+species variant. \todo{Move this up, and say more about it}
 
 \section{Generalized species properties}
 \label{sec:generalized-species-properties}
@@ -92,394 +91,12 @@ In each of the following sections we describe a particular species
 variant, identifying the categories $\Lab$ and $\Str$, and verifying
 which of the above properties hold.
 
-\section{Multisort species}
-\label{sec:multisort}
-
-Multisort species are a generalization of species in which the labels
-are classified according to multiple \term{sorts}.  We often use $\X$,
-$\Y$, $\ZZ$ or $\X_1$, $\X_2$, \dots to denote sorts.  In particular,
-(say) $\Y$ denotes the species, analogous to $\X$, for which there is
-a single shape containing a single label \emph{of sort $Y$} (and none
-of any other sort).  More generally, multisort species correspond to
-multivariate generating functions. See \citet[\Sect 4.2]{bll} for a
-precise, detailed definition.  For now, an intuitive sense is
-sufficient; we will give a more abstract definition later.
-
-\begin{ex}
-  Consider \[ \frak{T} = \Y + \X \cdot \frak{T}^2, \] the two-sort
-  species of binary trees with internal nodes and leaves labelled by
-  distinct sorts.  \pref{fig:bin-two-sort} illustrates an example
-  shape of this species, with one label sort represented by blue
-  circles, and the other by green squares.
-  \begin{figure}
-    \centering
-    \begin{diagram}[width=200]
-import           Diagrams.TwoD.Layout.Tree
-import           SpeciesDiagrams
-
-t = nd 0 (nd 3 (lf 1) (nd 1 (lf 0) (lf 3))) (nd 2 (lf 2) (lf 4))
-  where
-    nd x l r = BNode (Left x) l r
-    lf x = BNode (Right x) Empty Empty
-
-drawSort (Left i) = mloc i
-drawSort (Right i) = text (show i) <> square 1.6 # fc (colors !! 2)
-
-dia = (drawBinTree' (with & slVSep .~ 3 & slHSep .~ 4) . fmap drawSort $ t) -- $
-  # frame 0.5
-  # lwO 0.7
-    \end{diagram}
-    \caption{A two-sort species of binary trees}
-    \label{fig:bin-two-sort}
-  \end{figure}
-\end{ex}
-
-\begin{ex}
-  $\Cyc \comp (\X + \Y)$ is the species of \term{bicolored cycles},
-  \ie cycles whose labels are colored with one of two colors
-  (\pref{fig:bicolored-cycle}).
-  \begin{figure}
-    \centering
-    \begin{diagram}[width=150]
-import           SpeciesDiagrams
-
-elts = [mlocColor, colors !! 2, mlocColor, colors !! 2, mlocColor]
-
-dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
-  # frame 0.5
-  # lwO 0.7
-    \end{diagram}
-    \caption{A bicolored cycle}
-    \label{fig:bicolored-cycle}
-  \end{figure}
-\end{ex}
-
-\begin{ex}
-  Recall the example from \pref{sec:basic-diff}, in which open terms
-  of the untyped lambda calculus are modeled using the species \[
-  \Lambda = \elts + \Lambda^2 + \Lambda'. \] However, this species
-  does not correctly model the size of lambda calculus terms.
-  \pref{sec:basic-diff} suggested instead using the multisort
-  species \[ \Xi = \X \cdot \Bag + \Y \cdot \Xi^2 + \Y \cdot
-  \frac{\partial}{\partial \X} \Xi. \] An even better idea is to use a
-  three-sort species, as in \[ \Xi = \X \cdot \E + \Y \cdot \Xi^2 + \ZZ
-  \cdot \frac{\partial}{\partial \X} \Xi, \] where $\X$ stands in for
-  variables, $\Y$ for applications, and $\ZZ$ for lambdas.
-
-  In general, any algebraic data type may be modelled by a multisort
-  species, with one sort corresponding to each constructor.  The
-  singletons of a given sort count occurrences of the corresponding
-  construct and ensure that species structures of a finite size
-  correspond to data structures that take only a finite amount of
-  memory.
-\end{ex}
-
-\later{Graphs with labelled vertices and edges. Not obvious how to
-  write down an algebraic expression for it; see BLL 2.4.}
-% \begin{ex}
-%   As another example, consider the two-sort species of simple graphs
-%   whose vertices are labelled by one sort, and edges by another
-%   (illustrated in ...)
-% \end{ex}
-
-\citet{bll} detail how to extend operations such as sum, partitional
-product, and composition to multisort species.  For example,
-partitional product is straightforward: an $(F \cdot G)$-shape over a
-given collection of labels (of multiple sorts) corresponds to a pair
-of an $F$-shape and $G$-shape over a binary partition of the
-collection (which can also be thought of as a collection of binary
-partitions over each sort).  Composition can also be extended to
-multisort species---although, as we will see, it does not follow quite
-as naturally from the single-sort setting.  If $F$ is an $m$-sort
-species, and $(G_1, \dots, G_m)$ is an $m$-tuple of $n$-sort species,
-then $F \comp (G_1, \dots, G_m)$ is an $n$-sort species whose shapes
-consist of a top-level $F$-shape with $G_i$-shapes substituted for
-each label of sort $i$.  Of course, this presentation assumes a linear
-ordering on the sorts of $F$; more generally, if the sorts of $F$ are
-indexed by some finite set $S$, then $F$ can be composed with an
-$S$-indexed tuple of $T$-sort species, resulting in a $T$-sort
-species.
-
-\later{Example of generalized composition?}
-% \begin{ex}
-%   \later{Need an example of generalized composition.}
-% \end{ex}
-
-\begin{rem}
-  Multisort species are often notated using ``multi-argument
-  function'' notation, for example, \[ \H(\X,\Y) = \X + \Y^2. \] This
-  makes clear which singleton species are being used to represent the
-  various sorts, and makes it possible to refer to them positionally
-  as well.  This notation also meshes well with the notion of
-  generalized composition just introduced: writing something like
-  $\H(F,G)$ can be interpreted as $\H \comp (F,G)$ and corresponds
-  exactly to the substitution of $F$ and $G$ for $\X$ and $\Y$.
-\end{rem}
-
-Defining multisort species and all the operations on them (such as
-composition) from scratch is unnecessary; they can be defined
-abstractly as objects in a certain functor category, and hence fit
-into the abstract framework developed in \pref{chap:species} and
-outlined in \pref{sec:generalized-species-properties}.  \citet{bll}
-acknowledge as much in Exercise 2.4.6, but only as something of an
-afterthought; the following development is yet more general than the
-intended solution to the exercise.
-
-Let $S$ be a finite set, thought of as a collection of names for
-sorts; that is, each element $s \in S$ represents a different sort.
-Let $\Lab$ be a category, thought of as a category of labels (\eg
-$\B$).  Now consider the functor category $\Lab^S$ (with $S$
-considered as a discrete category, as usual).  Objects of $\Lab^S$ are
-functors $S \to \Lab$, that is, assignments of an object from $\Lab$
-to each $s \in S$. Morphisms in $\Lab^S$ are natural transformations,
-that is, $S$-indexed families of $\Lab$-morphisms between
-corresponding objects of $\Lab$.  For example, in the case $\Lab =
-\B$, objects of $\B^S$ are just $S$-tuples of finite sets, and
-morphisms are $S$-tuples of bijections between them.
-
-\begin{rem}
-  Recall that $\Set^S \iso \Set/S$ (\pref{sec:ct-fundamentals}).  It
-  is not the case that $\B^S \iso \B/S$, since objects of $\B/S$
-  consist of a finite set $L$ paired with a \emph{bijection} $L \bij
-  S$, which only allows one label of each sort.  However, it is
-  possible to consider the category whose objects are finite sets $L$
-  paired with a \emph{function} $\chi : L \to S$, as in $\Set/S$, but
-  whose morphisms $(L_1,\chi_1) \to (L_2,\chi_2)$ are
-  \emph{bijections} $\sigma : L_1 \bij L_2$ such that $\chi_2 \comp
-  \sigma = \chi_1$.  In other words, the objects are finite sets with
-  sorts assigned to their elements, and the morphisms are
-  sort-preserving bijections. This category is indeed equivalent to
-  $\B^S$.
-
-  However, this construction only works because the objects of $\B$
-  are sets; in the general case we must stick with $\Lab^S$.
-\end{rem}
-
-\begin{defn}
-  For a finite set $S$, define \term{$S$-sort ($\Lab$,$\Str$)-species}
-  as functors \[ \Lab^S \to \Str. \]
-\end{defn}
-
-One can verify that taking $\Lab = \B$, $\Str = \Set$, and $S = \fin
-k$ for some $k \in \N$, we recover exactly the definition of $k$-sort
-species given by Bergeron \etal
-
-The payoff is that we can now check that $\Lab^S$ inherits the
-relevant properties from $\Lab$, and thus conclude that $(\Lab^S,
-\Str)$-species inherit operations from $(\Lab,\Str)$-species.  Simply
-unfolding definitions is then enough to describe the action of the
-operations on $S$-sort species.
-
-\begin{itemize}
-\item $\Lab^S$ inherits all the monoidal structure of $\Lab$, as seen
-  in \pref{sec:lifting-monoids}.
-\item $\Lab^S$ is a groupoid whenever $\Lab$ is.
-\item If $\Lab$ is enriched over $\Str$ and $\Str$ has finite
-  products, then $\Lab^S$ can be seen as enriched over $\Str$ as well:
-  morphisms in $\Lab^S$ are represented by $S$-indexed products of
-  morphisms in $\Lab$.
-\item $\Lab^S$ is locally small whenever $\Lab$ is.
-\item $\Str$ has coends over $\Lab^S$ as long as it has products and
-  coends over $\Lab$, which we can argue as follows. Since $S$
-  is discrete, everything in $\Lab^S$ naturally decomposes into
-  discrete $S$-indexed collections.  For example, a morphism in
-  $\Lab^S$ is isomorphic to an $S$-indexed collection of morphisms in
-  $\Lab$, a functor $\Lab^S \to \Str$ is isomorphic to an $S$-indexed
-  product of functors $\Lab \to \Str$, and so on.  Note that
-  $(\Lab^S)^\op \times \Lab^S \iso (\Lab^\op)^S \times \Lab^S \iso
-  (\Lab^\op \times \Lab)^S$, so a functor $T : (\Lab^S)^\op \times
-  \Lab^S \to \Str$ can also be decomposed in this way.  In particular,
-  this means that, as long as $\Str$ has $S$-indexed products, we may
-  construct the coend $\coend L T(L,L)$ componentwise, that is, \[
-  \coend L T(L,L) \defeq \prod_{s \in S} \coend K T_s(K,K), \] where
-  $T_s$ denotes the $s$-component of the decomposition of $T$.  One
-  can check that this defines a valid coend.
-\item By a similar argument, $\fc {\Lab^S} \Str$ is enriched over
-  itself as long as $\fc \Lab \Str$ is enriched over itself, and
-  $\Str$ (and hence $\fc \Lab \Str$) has products.
-\end{itemize}
-
-We can thus instantiate the generic definitions to obtain notions of
-sum, Cartesian, arithmetic, and partitional product, and
-differentiation (along with corresponding eliminators) for $S$-sort
-species.  For example, the notion of partitional product obtained in
-this way is precisely the definition given above.
-
-One operation that we do \emph{not} obtain quite so easily is
-composition: the generic definition relied on a definition of the
-``$K$-fold partitional product'' $G^K$ where, in this case, $G :
-\Lab^S \to \Str$ and $K \in \Lab^S$.  It is not \latin{a priori} clear
-what should be meant by the $K$-fold partitional product of $G$ where
-$K$ itself is a collection of labels of different sorts.  We could
-ignore the sorts on $K$, using a monoidal structure on $\Lab$ to
-reduce $K$ to an object of $\Lab$; for example, in $\fc {\B^S}{\Set}$,
-given some collection of finite sets $K$, each corresponding to a
-different sort, we can simply take their coproduct.  This results in a
-notion of composition $F \comp G$ where we simply ignore the sorts on
-the labels of $F$, replacing each with a (sorted) $G$-shape.  This
-certainly yields a monoid on $\fc {\Lab^S}{\Str}$, but one that does
-not really make use of the sorts at all.
-
-The generalized notion of composition defined earlier, on the other
-hand, is not a monoid on $\fc {\Lab^S}{\Str}$ (indeed, it is not a
-monoid at all).  Instead, it has the type \[ - \comp - : (\fc
-{\Lab^S}{\Str}) \to (\fc {\Lab^T} \Str)^S \to (\fc {\Lab^T}{\Str}). \]
-This seems somewhat reminiscent of a relative monad
-\citep{altenkirch2010monads}; exploring the connection is left to
-future work.
-
-\section{Weighted species}
-\label{sec:weighted}
-
-\todo{remove this section.  Be sure to remove forward references as
-  well.}
-
-\citet[\Sect 2.3]{bll} define a notion of \term{weighted species},
-where each shape is assigned a \term{weight} from some polynomial ring
-of weights $\W$.  For example, consider the weighted species of binary
-trees where the weight of each tree is its number of leaves.  This can
-be represented by the species $\Bin_\ell$,
-\begin{align*}
-\Bin_\ell &= \One + \Bin_{\ell+} \\
-\Bin_{\ell+} &= \X_\ell + \Sp{2} \cdot \X \cdot \Bin_{\ell+} + \X \cdot \Bin_{\ell+}^2.
-\end{align*}
-That is, a leaf-weighted tree is either empty, or a nonempty
-leaf-weighted tree; a nonempty leaf-weighted tree is either a single
-node with weight $\ell$ (here $\ell$ is a formal parameter
-representing the weight of a single leaf), or a node paired with a
-single nonempty leaf-weighted tree (in two ways---either as the left
-or right child), or a node paired with two nonempty leaf-weighted
-trees.  Given $\X_\ell(x) = \ell x$, one can compute the egf for
-$\Bin_\ell$ as \[ \Bin_\ell(x) = 1 + \ell x + 2\ell x^2 + (4 \ell +
-\ell^2) x^3 + (8\ell + 6 \ell^2) x^4 + \dots \] A term of the form
-$a_{i,n}\ell^i x^n$ indicates that there are $a_{i,n}$ labelled trees
-with $i$ leaves and size $n$.  One can verify that, for example, eight
-of the size-$4$ binary trees have only a single leaf (namely, the
-trees consisting of a single unbranching chain of nodes, with three
-binary choices of direction at the internal nodes for a total of $2^3
-= 8$), and six have two leaves.  Substituting $\ell = 1$ recovers the
-unweighted egf $\Bin(x) = 1 + 1 + 2x^2 + 5x^3 + 14x^4 + \dots$ In
-general, weighted species thus correspond to refinements of unweighted
-species.
-
-\newcommand{\A}{\bbb{A}}
-It seems that it should be possible to fit weighted species into the
-same framework, by considering a slice category $\Str/A$.
-We can interpret objects of $\Str/A$ as objects of $\Str$ paired with
-a ``weighting''; morphisms in $\Str/A$ are thus ``weight-preserving''
-morphisms of $\Str$.  Traditional weighted species would then correspond to
-functors $\fc \B {(\Set/\A)}$ for some polynomial ring $\A$; more
-generally, one can add weighting to any species variant $\fc \Lab
-\Str$ by passing to $\fc \Lab {(\Str/A)}$ for some appropriate choice
-of $A \in \Str$.  Verifying this construction, in particular the
-properties of $A$ which give rise to the appropriate species
-operations on weighted species, is left to future work.
-
-% The first thing to note is that $\Str/A$ inherits coproducts from
-% $\Str$: given two weighted objects $(X, \omega_X)$ and $(Y,
-% \omega_Y)$, we can uniquely construct a weighting $(X+Y, [\omega_X,
-% \omega_Y])$:
-% \[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
-%   \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
-%   \ar[dl]^{\omega_Y} \\ & A & } \] To see that this is indeed the
-% coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \later{finish}
-
-% Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
-% weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
-% categorical product in $\Set/A$ is the set $\{(x,y) \mid x \in X, y
-% \in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not a very
-% useful notion of product in this context: intuitively, taking a
-% product of weighted objects should yield a combined object with some
-% sort of combined weight, instead of limiting us to cases where the
-% weights match.
-
-% Instead of requiring $\Str$ to have pullbacks, we can define a
-% different sort of monoidal product on $\Str/A$ if we assume that
-% $\Str$ has products and $A$ is a monoid object, that is, there exist
-% morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
-% \later{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
-% \omega_Y)$ by
-% \[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
-%   \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
-% by $\eta$.
-% %% xymatrix{ \singleton \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
-% One can check that $\otimes$ inherits monoidal structure from
-% $A$. \later{Finish this proof.}
-
-% \later{Show that this gives the usual notion of weighted species.}
-
-% \later{Show that this construction preserves the properties we care
-%   about.}
-
-% \later{Give some examples.}
-
-\section{$\L$-species}
-\label{sec:L-species}
-
-\todo{Combine with next section? Or expand a bit?}
-
-Consider the category $\L$ of linear orders and order-preserving
-bijections (discussed previously in \pref{sec:manifestly-finite}).  An
-\term{$L$-species} is defined as a functor $\L \to \Set$.  The theory
-of $\L$-species is large and fascinating; for example, it allows one
-to solve differential equations over species, and to define a notion
-of intergration dual to differentiation.  More practically, it allows
-modelling data structures with ordering constraints, such as binary
-search trees and heaps.  Unfortunately there is not time or space to
-include more on the theory here.  For now, we simply note that $(\fc
-\L \Set)$ has many of the required properties:
-
-\begin{itemize}
-\item $\L$ is indeed monoidal; in fact, there are many interesting
-  choices regarding how to combine linear orders. \later{expand on this?}
-\item $\L$ is clearly a groupoid, locally small, and enriched over $\Set$.
-\item $\Set$ is cocomplete and hence has coends over $\L$.
-\item $(\fc \L \Set)$ is enriched over itself, for reasons similar to
-  $(\fc \B \Set)$.
-\item Since objects in $\L$ are finite sets, the indexed partitional
-  product $G^K$ can be defined in exactly the same way as in the case
-  of $\fc \B \Set$.
-\end{itemize}
-
-\section{Other species variants}
-\label{sec:other-species-variants}
-
-Many other examples of species variants appear in the literature. For
-example:
-\begin{itemize}
-\item $\Vect$-valued species, \ie
-  functors $\B \to \Vect$, which send finite sets of labels to
-  \emph{vector spaces} of shapes. Joyal had these in mind from the
-  beginning \citep{joyal86}, and they play a central role in
-  more recent work as well (see, for example,
-  \citet{aguiar2010monoidal}), though I do not yet have a good
-  intuition for them.
-\item $\Cat$-valued species, \ie functors $\B \to \Cat$ which send
-  finite sets of labels to \emph{categories} of shapes. Intriguingly,
-  in the case of groupoids in particular, a suitable notion of
-  cardinality/Euler characteristic can be defined for categories
-  \citep{baez2000finite}, allowing $\Cat$-valued species to be seen as
-  a categorification of generating functions with positive
-  \emph{rational} coefficients.
-\item \citet{Fiore08} define a generalized notion of species,
-  parameterized over arbitrary small categories $A$ and $B$, as
-  functors in the category \[ \fc {\B A} {(\Hom {B^\op} \Set)}. \] $\B
-  A$ is a generalization of $\B$ such that $\B \cat{1} \iso \B$; the
-  objects are tuples of objects from $A$, labelled by the elements of
-  some finite set from $\B$, and the morphisms permute the labelled
-  $A$-objects according to some bijection on the finite set elements.
-  They go on to show that this functor category has all the same
-  important properties as $\fc \B \Set$.
-\end{itemize}
-
-In each case, one can verify the required properties and automatically
-obtain definitions of the various operations.
-
 \section{Copartial species}
 \label{sec:copartial-species-sec}
 
-\todo{Move this section earlier.  More CS motivation.}
+\todo{More CS motivation? Talk about arrays etc.?}
 
+\todo{Edit after moving}
 As a final, larger example, which will also recur in
 \pref{chap:labelled}, we develop the theory of species based on
 injections (and their dual, coinjections, in the subsequent section).
@@ -1327,3 +944,520 @@ we actually want to consider the category $\STp$ of sets and
 \emph{partial} functions. One may check that $\STp$ is monoidal,
 complete, and Cartesian closed, that it has coends over $\BTSub^\op$,
 and that $\BTSub^\op$ is indeed enriched over $\STp$.
+
+\section{Multisort species}
+\label{sec:multisort}
+
+Multisort species are a generalization of species in which the labels
+are classified according to multiple \term{sorts}.  We often use $\X$,
+$\Y$, $\ZZ$ or $\X_1$, $\X_2$, \dots to denote sorts.  In particular,
+(say) $\Y$ denotes the species, analogous to $\X$, for which there is
+a single shape containing a single label \emph{of sort $Y$} (and none
+of any other sort).  More generally, multisort species correspond to
+multivariate generating functions. See \citet[\Sect 4.2]{bll} for a
+precise, detailed definition.  For now, an intuitive sense is
+sufficient; we will give a more abstract definition later.
+
+\begin{ex}
+  Consider \[ \frak{T} = \Y + \X \cdot \frak{T}^2, \] the two-sort
+  species of binary trees with internal nodes and leaves labelled by
+  distinct sorts.  \pref{fig:bin-two-sort} illustrates an example
+  shape of this species, with one label sort represented by blue
+  circles, and the other by green squares.
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=200]
+import           Diagrams.TwoD.Layout.Tree
+import           SpeciesDiagrams
+
+t = nd 0 (nd 3 (lf 1) (nd 1 (lf 0) (lf 3))) (nd 2 (lf 2) (lf 4))
+  where
+    nd x l r = BNode (Left x) l r
+    lf x = BNode (Right x) Empty Empty
+
+drawSort (Left i) = mloc i
+drawSort (Right i) = text (show i) <> square 1.6 # fc (colors !! 2)
+
+dia = (drawBinTree' (with & slVSep .~ 3 & slHSep .~ 4) . fmap drawSort $ t) -- $
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{A two-sort species of binary trees}
+    \label{fig:bin-two-sort}
+  \end{figure}
+\end{ex}
+
+\begin{ex}
+  $\Cyc \comp (\X + \Y)$ is the species of \term{bicolored cycles},
+  \ie cycles whose labels are colored with one of two colors
+  (\pref{fig:bicolored-cycle}).
+  \begin{figure}
+    \centering
+    \begin{diagram}[width=150]
+import           SpeciesDiagrams
+
+elts = [mlocColor, colors !! 2, mlocColor, colors !! 2, mlocColor]
+
+dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
+  # frame 0.5
+  # lwO 0.7
+    \end{diagram}
+    \caption{A bicolored cycle}
+    \label{fig:bicolored-cycle}
+  \end{figure}
+\end{ex}
+
+\begin{ex}
+  Recall the example from \pref{sec:basic-diff}, in which open terms
+  of the untyped lambda calculus are modeled using the species \[
+  \Lambda = \elts + \Lambda^2 + \Lambda'. \] However, this species
+  does not correctly model the size of lambda calculus terms.
+  \pref{sec:basic-diff} suggested instead using the multisort
+  species \[ \Xi = \X \cdot \Bag + \Y \cdot \Xi^2 + \Y \cdot
+  \frac{\partial}{\partial \X} \Xi. \] An even better idea is to use a
+  three-sort species, as in \[ \Xi = \X \cdot \E + \Y \cdot \Xi^2 + \ZZ
+  \cdot \frac{\partial}{\partial \X} \Xi, \] where $\X$ stands in for
+  variables, $\Y$ for applications, and $\ZZ$ for lambdas.
+
+  In general, any algebraic data type may be modelled by a multisort
+  species, with one sort corresponding to each constructor.  The
+  singletons of a given sort count occurrences of the corresponding
+  construct and ensure that species structures of a finite size
+  correspond to data structures that take only a finite amount of
+  memory.
+\end{ex}
+
+\later{Graphs with labelled vertices and edges. Not obvious how to
+  write down an algebraic expression for it; see BLL 2.4.}
+% \begin{ex}
+%   As another example, consider the two-sort species of simple graphs
+%   whose vertices are labelled by one sort, and edges by another
+%   (illustrated in ...)
+% \end{ex}
+
+\citet{bll} detail how to extend operations such as sum, partitional
+product, and composition to multisort species.  For example,
+partitional product is straightforward: an $(F \cdot G)$-shape over a
+given collection of labels (of multiple sorts) corresponds to a pair
+of an $F$-shape and $G$-shape over a binary partition of the
+collection (which can also be thought of as a collection of binary
+partitions over each sort).  Composition can also be extended to
+multisort species---although, as we will see, it does not follow quite
+as naturally from the single-sort setting.  If $F$ is an $m$-sort
+species, and $(G_1, \dots, G_m)$ is an $m$-tuple of $n$-sort species,
+then $F \comp (G_1, \dots, G_m)$ is an $n$-sort species whose shapes
+consist of a top-level $F$-shape with $G_i$-shapes substituted for
+each label of sort $i$.  Of course, this presentation assumes a linear
+ordering on the sorts of $F$; more generally, if the sorts of $F$ are
+indexed by some finite set $S$, then $F$ can be composed with an
+$S$-indexed tuple of $T$-sort species, resulting in a $T$-sort
+species.
+
+\later{Example of generalized composition?}
+% \begin{ex}
+%   \later{Need an example of generalized composition.}
+% \end{ex}
+
+\begin{rem}
+  Multisort species are often notated using ``multi-argument
+  function'' notation, for example, \[ \H(\X,\Y) = \X + \Y^2. \] This
+  makes clear which singleton species are being used to represent the
+  various sorts, and makes it possible to refer to them positionally
+  as well.  This notation also meshes well with the notion of
+  generalized composition just introduced: writing something like
+  $\H(F,G)$ can be interpreted as $\H \comp (F,G)$ and corresponds
+  exactly to the substitution of $F$ and $G$ for $\X$ and $\Y$.
+\end{rem}
+
+Defining multisort species and all the operations on them (such as
+composition) from scratch is unnecessary; they can be defined
+abstractly as objects in a certain functor category, and hence fit
+into the abstract framework developed in \pref{chap:species} and
+outlined in \pref{sec:generalized-species-properties}.  \citet{bll}
+acknowledge as much in Exercise 2.4.6, but only as something of an
+afterthought; the following development is yet more general than the
+intended solution to the exercise.
+
+Let $S$ be a finite set, thought of as a collection of names for
+sorts; that is, each element $s \in S$ represents a different sort.
+Let $\Lab$ be a category, thought of as a category of labels (\eg
+$\B$).  Now consider the functor category $\Lab^S$ (with $S$
+considered as a discrete category, as usual).  Objects of $\Lab^S$ are
+functors $S \to \Lab$, that is, assignments of an object from $\Lab$
+to each $s \in S$. Morphisms in $\Lab^S$ are natural transformations,
+that is, $S$-indexed families of $\Lab$-morphisms between
+corresponding objects of $\Lab$.  For example, in the case $\Lab =
+\B$, objects of $\B^S$ are just $S$-tuples of finite sets, and
+morphisms are $S$-tuples of bijections between them.
+
+\begin{rem}
+  Recall that $\Set^S \iso \Set/S$ (\pref{sec:ct-fundamentals}).  It
+  is not the case that $\B^S \iso \B/S$, since objects of $\B/S$
+  consist of a finite set $L$ paired with a \emph{bijection} $L \bij
+  S$, which only allows one label of each sort.  However, it is
+  possible to consider the category whose objects are finite sets $L$
+  paired with a \emph{function} $\chi : L \to S$, as in $\Set/S$, but
+  whose morphisms $(L_1,\chi_1) \to (L_2,\chi_2)$ are
+  \emph{bijections} $\sigma : L_1 \bij L_2$ such that $\chi_2 \comp
+  \sigma = \chi_1$.  In other words, the objects are finite sets with
+  sorts assigned to their elements, and the morphisms are
+  sort-preserving bijections. This category is indeed equivalent to
+  $\B^S$.
+
+  However, this construction only works because the objects of $\B$
+  are sets; in the general case we must stick with $\Lab^S$.
+\end{rem}
+
+\begin{defn}
+  For a finite set $S$, define \term{$S$-sort ($\Lab$,$\Str$)-species}
+  as functors \[ \Lab^S \to \Str. \]
+\end{defn}
+
+One can verify that taking $\Lab = \B$, $\Str = \Set$, and $S = \fin
+k$ for some $k \in \N$, we recover exactly the definition of $k$-sort
+species given by Bergeron \etal
+
+The payoff is that we can now check that $\Lab^S$ inherits the
+relevant properties from $\Lab$, and thus conclude that $(\Lab^S,
+\Str)$-species inherit operations from $(\Lab,\Str)$-species.  Simply
+unfolding definitions is then enough to describe the action of the
+operations on $S$-sort species.
+
+\begin{itemize}
+\item $\Lab^S$ inherits all the monoidal structure of $\Lab$, as seen
+  in \pref{sec:lifting-monoids}.
+\item $\Lab^S$ is a groupoid whenever $\Lab$ is.
+\item If $\Lab$ is enriched over $\Str$ and $\Str$ has finite
+  products, then $\Lab^S$ can be seen as enriched over $\Str$ as well:
+  morphisms in $\Lab^S$ are represented by $S$-indexed products of
+  morphisms in $\Lab$.
+\item $\Lab^S$ is locally small whenever $\Lab$ is.
+\item $\Str$ has coends over $\Lab^S$ as long as it has products and
+  coends over $\Lab$, which we can argue as follows. Since $S$
+  is discrete, everything in $\Lab^S$ naturally decomposes into
+  discrete $S$-indexed collections.  For example, a morphism in
+  $\Lab^S$ is isomorphic to an $S$-indexed collection of morphisms in
+  $\Lab$, a functor $\Lab^S \to \Str$ is isomorphic to an $S$-indexed
+  product of functors $\Lab \to \Str$, and so on.  Note that
+  $(\Lab^S)^\op \times \Lab^S \iso (\Lab^\op)^S \times \Lab^S \iso
+  (\Lab^\op \times \Lab)^S$, so a functor $T : (\Lab^S)^\op \times
+  \Lab^S \to \Str$ can also be decomposed in this way.  In particular,
+  this means that, as long as $\Str$ has $S$-indexed products, we may
+  construct the coend $\coend L T(L,L)$ componentwise, that is, \[
+  \coend L T(L,L) \defeq \prod_{s \in S} \coend K T_s(K,K), \] where
+  $T_s$ denotes the $s$-component of the decomposition of $T$.  One
+  can check that this defines a valid coend.
+\item By a similar argument, $\fc {\Lab^S} \Str$ is enriched over
+  itself as long as $\fc \Lab \Str$ is enriched over itself, and
+  $\Str$ (and hence $\fc \Lab \Str$) has products.
+\end{itemize}
+
+We can thus instantiate the generic definitions to obtain notions of
+sum, Cartesian, arithmetic, and partitional product, and
+differentiation (along with corresponding eliminators) for $S$-sort
+species.  For example, the notion of partitional product obtained in
+this way is precisely the definition given above.
+
+One operation that we do \emph{not} obtain quite so easily is
+composition: the generic definition relied on a definition of the
+``$K$-fold partitional product'' $G^K$ where, in this case, $G :
+\Lab^S \to \Str$ and $K \in \Lab^S$.  It is not \latin{a priori} clear
+what should be meant by the $K$-fold partitional product of $G$ where
+$K$ itself is a collection of labels of different sorts.  We could
+ignore the sorts on $K$, using a monoidal structure on $\Lab$ to
+reduce $K$ to an object of $\Lab$; for example, in $\fc {\B^S}{\Set}$,
+given some collection of finite sets $K$, each corresponding to a
+different sort, we can simply take their coproduct.  This results in a
+notion of composition $F \comp G$ where we simply ignore the sorts on
+the labels of $F$, replacing each with a (sorted) $G$-shape.  This
+certainly yields a monoid on $\fc {\Lab^S}{\Str}$, but one that does
+not really make use of the sorts at all.
+
+The generalized notion of composition defined earlier, on the other
+hand, is not a monoid on $\fc {\Lab^S}{\Str}$ (indeed, it is not a
+monoid at all).  Instead, it has the type \[ - \comp - : (\fc
+{\Lab^S}{\Str}) \to (\fc {\Lab^T} \Str)^S \to (\fc {\Lab^T}{\Str}). \]
+This seems somewhat reminiscent of a relative monad
+\citep{altenkirch2010monads}; exploring the connection is left to
+future work.
+
+\subsection{Recursive species}
+\label{sec:recursive}
+
+Multisort species make it possible to give a precise semantics to
+recursively defined species, which have been used in examples
+throughout this document.  Given a recursive equation of the
+form \[ F = \dots F \dots, \] we can turn the right-hand side into a
+two-sort species $\H(\X,\Y)$, with $\Y$ replacing the recursive
+occurrences of $F$.  For example, the recursive equation \[ \Rose \iso
+\X \cdot (\List \comp \Rose) \] corresponds to the two-sort species
+$\H(\X,\Y) = \X \cdot (\List \comp \Y)$.  We then define $\Rose$ as
+the least fixed point (if it exists) of $\H(\X,-)$, that is, a
+solution to $\Rose \iso \H(\X,\Rose)$. The following theorem expresses
+the conditions on $\H$ under which such fixed point solutions exist.
+\begin{thm}[Implicit Species Theorem, \citep{bll}]
+  Let $\H$ be a two-sort species satisfying
+  \begin{itemize}
+  \item $\H(\Zero,\Zero) \iso \Zero$
+  \item $\displaystyle \frac{\partial \H}{\partial \Y}(\Zero, \Zero) \iso \Zero$
+\end{itemize}
+Then there exists a species $F$, unique up to isomorphism,
+satisfying \[ F \iso \H(X,F), \] with $F(\Zero) \iso \Zero$.
+\end{thm}
+
+\begin{rem}
+  Recall that the notation $\H(\Zero,\Zero) = \H \comp (\Zero,\Zero)$
+  denotes the composition of the two-sort species $\H$ with the pair
+  of one-sort species $(\Zero,\Zero)$.  These criteria are thus
+  expressed in the form of species isomorphisms, but in this
+  particular case they could equally well be expressed in terms of the
+  action of $\H$ on empty label sets, \eg $\H(\varnothing,
+  \varnothing) = \varnothing$.
+\end{rem}
+
+The proof essentially proceeds by constructing $F$ as the infinite
+expansion \[ F = \H(\X, \H(\X, \H(\X, \dots))). \] The conditions on
+$\H$ ensure that this is well-defined.  In particular, since
+$(\partial \H / \partial \Y)$-shapes have a single hole in the place
+of a $\Y$, which is the placeholder for recursive occurrences of $F$,
+$\frac{\partial \H}{\partial \Y}(\Zero,\Zero) \iso \Zero$ means that
+there are no $\H(\X,\Y)$-shapes consisting solely of (some constant
+multiple of) a $\Y$.  Such shapes would allow a recursive step that
+did not ``use'' any $\X$'s, resulting in infinitely large shapes of
+size $0$.  For details of the proof, see \citet[\Sect 3.2]{bll}.  The
+implicit species theorem can also be suitably generalized to systems
+of mutually recursive equations; see \citet{bll} as well as
+\citet{Pivoteau2012}.
+
+Many common examples of recursively defined species, such as $\List =
+\One + \X \cdot \List$, or $\Bin = \One + \X \cdot \Bin^2$, do not
+actually satisfy the premises of the implicit species theorem, in
+particular the requirement that $\H(\Zero,\Zero) \iso \Zero$.  In both
+the above cases we instead have $\H(\Zero,\Zero) \iso \One$.  The
+Implicit Species Theorem only gives sufficient, but not necessary,
+conditions for well-foundedness; we would like to have a different
+theorem that tells us when equations such those governing $\List$ and
+$\Bin$ are well-founded. \citet{Pivoteau2012} prove quite a general
+theorem which is applicable to this case, and is also applicable to
+mutually recursive systems.  Its very generality somewhat obscures the
+essential ideas, however, so we give a ``baby'' version of the theorem
+here.
+
+The basic idea can be seen by considering the case of $\List = \One +
+\X \cdot \List$.  Decompose $\List$ as $\List = \One + \List_+$, so
+$\List_+ = \X \cdot \List \iso \X \cdot (\One + \List_+)$.  Then
+$\H(\X,\Y) = \X \cdot (\One + \Y)$ does satisfy the premises of the
+Implicit Species Theorem, so $\List_+$ is well-defined, and hence so
+is $\List = \One + \List_+$.  This approach is used, implicitly and in
+an ad-hoc manner, by \citet{bll}; see, for example, Example 3.2.3 on
+p. 195.  It also appears in a sketchy form in my Haskell Symposium
+paper \citep{yorgey-2010-species}.
+
+\begin{thm}[Implicit Species Theorem II]
+  Let $\H(\X,\Y)$ be a two-sort species satisfying \[ \H(\Zero,\Y)
+  \iso n, \] where $n \in \N$ represents the species $\underbrace{\One
+    + \dots + \One}_n$ with $n$ shapes of size $0$.  Then there exists
+  a species $F$, unique up to isomorphism, satisfying \[ F \iso
+  \H(\X,F) \] with $F(\Zero) \iso n$.
+\end{thm}
+
+\begin{proof}
+  Since $\H(\Zero,\Y) \iso n$, there is some two-sort species
+  $\H_+$ such that $\H$ can be uniquely decomposed as
+  \[ \H(\X,\Y) \iso n + \H_+(\X,\Y) \] (this follows from an analogue
+  of the molecular decomposition theorem for multisort species).  Note
+  that $\H_+(\Zero,\Y) \iso \Zero$ and $\partial \H/\partial \Y
+  = \partial \H_+ / \partial \Y$.
+
+  Moreover, $\H(\Zero,\Y) \iso n$ means that, other than the constant
+  term $n$, every term of the molecular decomposition of $\H$ must
+  contain a factor of $\X$.  In other words, $\H_+(\X,\Y) \iso \X
+  \cdot \mcal G(\X,\Y)$ for some species $\mcal G$.  Thus we have
+  $\frac{\partial \H}{\partial \Y}(\X,\Y) = \X \cdot \frac{\partial
+    \mcal G}{\partial \Y}(\X,\Y)$, and in particular $\frac{\partial
+    \H}{\partial \Y}(\Zero,\Y) \iso \Zero$ as well.
+
+  Now define \[ \H_{n+}(\X,\Y) \defeq \H_+(\X,n + \Y). \] Note that
+  \[ \frac{\partial \H_{n+}}{\partial \Y}(\X,\Y) = \frac{\partial
+    \H_+}{\partial \Y}(\X,n+\Y) = \frac{\partial \H}{\partial
+    \Y}(\X,n+\Y) \] (the first equality follows from the chain rule
+  for differentiation).  Thus \[ \frac{\partial \H_{n+}}{\partial
+    \Y}(\Zero,\Zero) = \frac{\partial \H}{\partial \Y}(\Zero, n) =
+  \Zero. \]
+
+  We also have \[ \H_{n+}(\Zero,\Zero) = \H_+(\Zero,n) \iso \Zero. \]
+  Thus, $\H_{n+}$ satisfies the criteria for the Implicit Species
+  Theorem, and we conclude there uniquely exists a species $F_+$
+  satisfying $F_+ \iso \H_{n+}(\X,F_+)$, with $F_+(\Zero) \iso \Zero$.
+
+  Finally, let $F \defeq n + F_+$, in which case
+  \begin{align*}
+    F &= n + F_+ \\
+    &\iso n + \H_{n+}(\X, F_+) \\
+    &= n + \H_+(\X, n + F_+) \\
+    &\iso \H(\X, n + F_+) \\
+    &= \H(\X,F).
+  \end{align*}
+
+  So $F = n + F_+$ is a solution to $F = \H(\X,F)$.  The uniqueness of
+  $F$ follows from the uniqueness of $F_+$: if $F_1$ and $F_2$ are
+  both solutions to $F = \H(\X,F)$, then they both decompose as $F_i =
+  n + F_i^+$, and the $F_i^+$ both satisfy $F_i^+ =
+  \H_{n+}(\X,F_i^+)$; hence $F_1^+ \iso F_2^+$ but then $F_1 \iso
+  F_2$.
+\end{proof}
+
+\begin{rem}
+  The condition $\H(\Zero,\Y) \iso n$, as opposed to the weaker
+  condition $\H(\Zero,\Zero) \iso n$, is critical.  For example,
+  consider the implicit equation \[ Q = \One + \X + Q^2. \] In this
+  case $\H(\X,\Y) = \One + \X + \Y^2$ satisfies $\frac{\partial
+    \H}{\partial \Y}(\Zero,\Zero) \iso \Zero$ and $\H(\Zero,\Zero)
+  \iso \One$, but $\H(\Zero,\Y) \iso \One + \Y^2 \not \iso n$.  In
+  fact, $Q$ is ill-defined: by always picking the $Q^2$ branch and
+  never $\X$, and putting $\One$ at the leaves, one can construct
+  infinitely many trees of size $0$.
+\end{rem}
+
+
+\section{$\L$-species}
+\label{sec:L-species}
+
+\todo{Combine with next section? Or expand a bit?}
+
+Consider the category $\L$ of linear orders and order-preserving
+bijections (discussed previously in \pref{sec:manifestly-finite}).  An
+\term{$L$-species} is defined as a functor $\L \to \Set$.  The theory
+of $\L$-species is large and fascinating; for example, it allows one
+to solve differential equations over species, and to define a notion
+of intergration dual to differentiation.  More practically, it allows
+modelling data structures with ordering constraints, such as binary
+search trees and heaps.  Unfortunately there is not time or space to
+include more on the theory here.  For now, we simply note that $(\fc
+\L \Set)$ has many of the required properties:
+
+\begin{itemize}
+\item $\L$ is indeed monoidal; in fact, there are many interesting
+  choices regarding how to combine linear orders. \later{expand on this?}
+\item $\L$ is clearly a groupoid, locally small, and enriched over $\Set$.
+\item $\Set$ is cocomplete and hence has coends over $\L$.
+\item $(\fc \L \Set)$ is enriched over itself, for reasons similar to
+  $(\fc \B \Set)$.
+\item Since objects in $\L$ are finite sets, the indexed partitional
+  product $G^K$ can be defined in exactly the same way as in the case
+  of $\fc \B \Set$.
+\end{itemize}
+
+\section{Other species variants}
+\label{sec:other-species-variants}
+
+Many other examples of species variants appear in the literature. For
+example:
+\begin{itemize}
+\item $\Vect$-valued species, \ie
+  functors $\B \to \Vect$, which send finite sets of labels to
+  \emph{vector spaces} of shapes. Joyal had these in mind from the
+  beginning \citep{joyal86}, and they play a central role in
+  more recent work as well (see, for example,
+  \citet{aguiar2010monoidal}), though I do not yet have a good
+  intuition for them.
+\item $\Cat$-valued species, \ie functors $\B \to \Cat$ which send
+  finite sets of labels to \emph{categories} of shapes. Intriguingly,
+  in the case of groupoids in particular, a suitable notion of
+  cardinality/Euler characteristic can be defined for categories
+  \citep{baez2000finite}, allowing $\Cat$-valued species to be seen as
+  a categorification of generating functions with positive
+  \emph{rational} coefficients.
+\item \citet{Fiore08} define a generalized notion of species,
+  parameterized over arbitrary small categories $A$ and $B$, as
+  functors in the category \[ \fc {\B A} {(\Hom {B^\op} \Set)}. \] $\B
+  A$ is a generalization of $\B$ such that $\B \cat{1} \iso \B$; the
+  objects are tuples of objects from $A$, labelled by the elements of
+  some finite set from $\B$, and the morphisms permute the labelled
+  $A$-objects according to some bijection on the finite set elements.
+  They go on to show that this functor category has all the same
+  important properties as $\fc \B \Set$.
+\item \citet[\Sect 2.3]{bll} define a notion of \term{weighted species},
+where each shape is assigned a \term{weight} from some polynomial ring
+of weights $\W$.
+%   For example, consider the weighted species of binary
+% trees where the weight of each tree is its number of leaves.  This can
+% be represented by the species $\Bin_\ell$,
+% \begin{align*}
+% \Bin_\ell &= \One + \Bin_{\ell+} \\
+% \Bin_{\ell+} &= \X_\ell + \Sp{2} \cdot \X \cdot \Bin_{\ell+} + \X \cdot \Bin_{\ell+}^2.
+% \end{align*}
+% That is, a leaf-weighted tree is either empty, or a nonempty
+% leaf-weighted tree; a nonempty leaf-weighted tree is either a single
+% node with weight $\ell$ (here $\ell$ is a formal parameter
+% representing the weight of a single leaf), or a node paired with a
+% single nonempty leaf-weighted tree (in two ways---either as the left
+% or right child), or a node paired with two nonempty leaf-weighted
+% trees.  Given $\X_\ell(x) = \ell x$, one can compute the egf for
+% $\Bin_\ell$ as \[ \Bin_\ell(x) = 1 + \ell x + 2\ell x^2 + (4 \ell +
+% \ell^2) x^3 + (8\ell + 6 \ell^2) x^4 + \dots \] A term of the form
+% $a_{i,n}\ell^i x^n$ indicates that there are $a_{i,n}$ labelled trees
+% with $i$ leaves and size $n$.  One can verify that, for example, eight
+% of the size-$4$ binary trees have only a single leaf (namely, the
+% trees consisting of a single unbranching chain of nodes, with three
+% binary choices of direction at the internal nodes for a total of $2^3
+% = 8$), and six have two leaves.  Substituting $\ell = 1$ recovers the
+% unweighted egf $\Bin(x) = 1 + 1 + 2x^2 + 5x^3 + 14x^4 + \dots$ In
+% general, weighted species thus correspond to refinements of unweighted
+% species.
+\newcommand{\A}{\bbb{A}}
+It seems that it should be possible to fit weighted species into this
+framework as well, by considering a slice category $\Str/A$.
+We can interpret objects of $\Str/A$ as objects of $\Str$ paired with
+a weighting; morphisms in $\Str/A$ are thus weight-preserving
+morphisms of $\Str$.  Traditional weighted species would then correspond to
+functors $\fc \B {(\Set/\A)}$ for some polynomial ring $\A$; more
+generally, one can add weighting to any species variant $\fc \Lab
+\Str$ by passing to $\fc \Lab {(\Str/A)}$ for some appropriate choice
+of $A \in \Str$.  Verifying this construction, in particular the
+properties of $A$ which give rise to the appropriate species
+operations on weighted species, is left to future work.
+
+% The first thing to note is that $\Str/A$ inherits coproducts from
+% $\Str$: given two weighted objects $(X, \omega_X)$ and $(Y,
+% \omega_Y)$, we can uniquely construct a weighting $(X+Y, [\omega_X,
+% \omega_Y])$:
+% \[ \xymatrix{ X \ar[dr]_{\omega_X} \ar[r]^-{\iota_1} & X + Y
+%   \ar[d]||{[\omega_X, \omega_Y]} & Y \ar[l]^-{\iota_2}
+%   \ar[dl]^{\omega_Y} \\ & A & } \] To see that this is indeed the
+% coproduct $(X,\omega_X) + (Y,\omega_Y)$ in $\Str/A$, \later{finish}
+
+% Products in $\Str/A$ are pullbacks in $\Str$.  For example, given two
+% weighted sets $(X, \omega_X)$ and $(Y, \omega_Y)$ in $\Set/A$, their
+% categorical product in $\Set/A$ is the set $\{(x,y) \mid x \in X, y
+% \in Y, \omega_X(x) = \omega_Y(y)\}$.  However, this is not a very
+% useful notion of product in this context: intuitively, taking a
+% product of weighted objects should yield a combined object with some
+% sort of combined weight, instead of limiting us to cases where the
+% weights match.
+
+% Instead of requiring $\Str$ to have pullbacks, we can define a
+% different sort of monoidal product on $\Str/A$ if we assume that
+% $\Str$ has products and $A$ is a monoid object, that is, there exist
+% morphisms $\eta : 1 \to A$ and $\mu : A \times A \to A$ satisfying
+% \later{finish}.  In this case, we may define $(X, \omega_X) \otimes (Y,
+% \omega_Y)$ by
+% \[\xymatrixcolsep{4pc} \xymatrix{ X \times Y \ar[r]^-{\omega_X \times \omega_Y} & A
+%   \times A \ar[r]^-\mu & A. } \]  The identity for $\otimes$ is given
+% by $\eta$.
+% %% xymatrix{ \singleton \ar[r]^{!} & 1 \ar[r]^\eta & A. } \]
+% One can check that $\otimes$ inherits monoidal structure from
+% $A$. \later{Finish this proof.}
+
+% \later{Show that this gives the usual notion of weighted species.}
+
+% \later{Show that this construction preserves the properties we care
+%   about.}
+
+% \later{Give some examples.}
+
+\end{itemize}
+
+In each case, one can verify the required properties and automatically
+obtain definitions of the various operations.
+

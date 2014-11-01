@@ -7,6 +7,14 @@
 
 \todo{Edit intro}
 
+and
+\pref{sec:generalized-species} lays out a program for the rest of the
+chapter, considering arbitrary functor categories in place of
+traditional species, and determining the properties necessary to
+support each species operation.  The rest of the chapter presents a
+collection of standard operations on species, with examples and
+discussion, along with analysis of the properties required for each.
+
 \section{Generalized species}
 \label{sec:generalized-species}
 
@@ -38,9 +46,8 @@ specific operations have been defined previously
 \citep{kelly2005operads, Fiore08, lack2014combinatorial}, I am not
 aware of any previous systematic generalization similar to this work.
 In particular, the general categorical treatments of arithmetic
-product (\pref{sec:arithmetic-product}), multisort species
-(\pref{sec:multisort}), and weighted species (\pref{sec:weighted}) are
-new. \todo{May take out weighted.}
+product (\pref{sec:arithmetic-product}) and multisort species
+(\pref{sec:multisort}) are new.
 
 Along the way, we will explore particular instantiations of the
 general framework. Each instantiation arises from considering
@@ -264,10 +271,12 @@ species arises straightforwardly from the corresponding monoidal
 structure on sets: the sum of two functors is defined as the pointwise
 coproduct of their outputs, and likewise \Zero, the identity for the
 sum of species, is defined as the functor which pointwise returns
-$\varnothing$, the identity for the coproduct of sets.  This general
-construction will be spelled out in \pref{sec:lifting-monoids}.
-First, however, we turn to the formally similar operation of
-\emph{Cartesian product}.
+$\varnothing$, the identity for the coproduct of sets.  More
+generally, any monoidal structure on a category $\Str$ lifts to a
+corresponding monoidal structure on a functor category $\fc \Lab \Str$
+(this construction is spelled out in \pref{sec:lifting-monoids}).
+This leads us naturally to consider another species operation which
+arises in the same way, but based on a different monoid.
 
 \subsection{Cartesian/Hadamard product}
 \label{sec:cartesian}
@@ -289,9 +298,8 @@ we will see it is not the most natural one from a combinatorial point
 of view.  Nonetheless, it is the simplest to define and is thus worth
 studying first.  The action of $(F \times G)$ on morphisms,
 functoriality, \etc are omitted; the details are exactly parallel to
-the definition of species sum and are presented much more generally
-in the next subsection. \todo{Take this reference out if I make it
-  into an appendix}
+the definition of species sum, and are presented much more generally
+in \pref{sec:lifting-monoids} and \pref{chap:lifting-monoids}.
 
 An $(F \times G)$-shape is both an $F$-shape \emph{and} a $G$-shape,
 on \emph{the same set of labels}.  There are several ways to think
@@ -462,74 +470,6 @@ dia = tag 0 (decoratePath (pentagon 1) (map labT [0..4]))
   Cartesian product of sets for disjoint union.
 \end{proof}
 
-In \pref{sec:lifting-monoids} we will see how to generalize both
-proofs.  First, we consider the internal Hom functor for Cartesian
-product.
-
-\subsection{Internal Hom for Cartesian product}
-\label{sec:internal-Hom-cprod}
-
-\todo{Transition.  Remind why CCC is important. Look back at
-  intro---did I say something about it there?}
-
-\begin{prop}
-  $\Spe$ is Cartesian closed.
-\end{prop}
-
-If $\Lab$ is locally small and $\Str$ is complete and Cartesian
-closed, then $\fc \Lab \Str$ is also complete and Cartesian closed
-\citep{cart-closed-functor-cat}.  In particular, the exponential of
-$F,G : \Lab \to \Str$ is given by \[ G^F\ L = \eend{K \in \Lab}
-\prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example, $\B$, $\P$, $\BT$, and
-$\PT$ are all locally small, and $\Set$ and $\ST$ are complete and
-Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$, $\fc \BT \ST$, and
-$\fc \PT \ST$ are all complete and Cartesian closed as well.
-
-Let's unpack this result a bit in the specific case of $\fc \PT \ST$.
-By a dual argument to the one given in \pref{sec:coends-hott}, ends in
-$\ST$ over the groupoid $\PT$ are given by $\Pi$-types, \ie universal
-quantification; hence, we have
-\begin{align*}
-(H^G)\ n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H\ n)^{G\ n} \\
-       &= (m : \N) \to (\Fin m \equiv \Fin n) \to G\ n \to H\ n \\
-       &\equiv (\Fin n \equiv \Fin n) \to G\ n \to H\ n
-\end{align*}
-where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
-only inhabited when $m = n$.
-
-Being Cartesian closed means there is an adjunction $- \times G \adj
--^G$ between products and exponentials, which yields a natural
-isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
-\ST^\PT]{F}{H^G}). \] Expanding morphisms of the functor category $\fc
-\PT \ST$ as natural transformations, and expanding the definition of
-$H^G$ derived above, this yields \[ \left( (n : \N) \to (F \times G)\
-  n \to H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n
-  \equiv \Fin n) \to G\ n \to H\ n \right). \] Intuitively, this says
-that a size-polymorphic function taking a Cartesian product shape $F
-\times G$ and yielding an $H$-shape of the same size is isomorphic to
-a size-polymorphic function taking a triple of an $F$-shape, a
-$G$-shape, \emph{and a permutation on $\Fin n$}, and yielding an
-$H$-shape.  The point is that an $(F \times G)$-shape consists not
-just of separate $F$- and $G$-shapes, but those shapes get to
-``interact'': in particular we need a permutation to tell us how the
-labels on the separate $F$- and $G$-shapes line up.  An $(F \times
-G)$-shape encodes this information implicitly, by the fact that the
-two shapes share the exact same set of labels.
-
-Practically speaking, this result tells us how to express an
-eliminator for $(F \times G)$-shapes.  That is, to be able to
-eliminate $(F \times G)$-shapes, it suffices to be able to eliminate
-$F$- and $G$-shapes individually, with an extra permutation supplied
-as an argument. Eliminators for species shapes are treated more
-generally and systematically in \pref{sec:elim-species}.
-
-On the surface, the fact that $\Spe$ is Cartesian closed only allows
-us to internalize \emph{species morphisms} as species, but not to
-interpret functions between data types.  $\Spe$ being Cartesian closed
-does mean that the simply typed lambda calculus can be interpreted
-internally to $\Spe$; but it is not yet clear to me what this would
-mean on an intuitive level.
-
 \subsection{Lifting monoids}
 \label{sec:lifting-monoids}
 
@@ -654,280 +594,73 @@ later. First, however, we consider some examples.
 \later{give some examples with other categories. $1/\Set$,
   \ie\ pointed sets with smash product? $\cat{Vect}$?}
 
-\todo{Split this into an appendix.  Be sure to appropriately edit
-  forward references to it.}
+A more detailed proof of the fact that any monoid on a category $\Str$
+lifts to a corresponding monoid on $\fc \Lab \Str$ can be found in
+\pref{chap:lifting-monoids}.
 
-We now turn to a detailed and fully general construction which shows
-how monoids (and many other structures of interest) can be lifted from
-a category $\Str$ to a functor category $\fc \Lab \Str$.  The
-high-level ideas of this construction seem to be ``folklore'', but I
-have been unable to find any detailed published account, so it seemed
-good to include some proofs here for completeness.  Unfortunately, the
-proof presented here is still incomplete; as future work I hope to
-completely understand the proof in detail.
+\subsection{Internal Hom for Cartesian product}
+\label{sec:internal-Hom-cprod}
 
-We must first develop some technical machinery regarding functor
-categories.  In particular, we show how to lift objects, functors, and
-natural transformations based on the category $\Str$ into related
-objects, functors, and natural transformations based on the functor
-category $\Str^\Lab$.
-
-\begin{lem} \label{lem:lift-object}
-  An object $D \in \D$ lifts to an object (\ie a functor) $D^\C \in
-  \D^\C$, defined as the constant functor $\Delta_D$.
-\end{lem}
-
-\begin{lem} \label{lem:lift-functor}
-  Any functor $F : \D \to \E$ lifts to a functor $F^\C : \D^\C \to
-  \E^\C$ given by postcomposition with $F$.  That is, $F^\C(G) = F
-  \comp G = FG$, and $F^\C(\alpha) = F\alpha$.
-\end{lem}
-
-\begin{proof}
-  $F\alpha$ denotes the ``right whiskering'' of $\alpha$ by $F$,
-  \[ \xymatrix{ \C \rtwocell^G_H{\alpha} & \D \ar[r]^F & \E. } \]
-  $F^\C$ preserves identities since
-  \[ \xymatrix{ \C \ar[r]^G & \D \ar[r]^F & \E } \]
-  can be seen as both $F \id_G$ and $\id_{FG}$, and it preserves
-  composition since
-  \[ \xymatrixrowsep{1pc}
-     \xymatrix{ \C \ruppertwocell{\alpha} \rlowertwocell{\beta} \ar[r]
-              & \D \ar[r]^F & \E }
-     =
-     \vcenter{
-     \xymatrix{ \C \ruppertwocell{\alpha} \ar[r] & \D \ar[r]^F & \E \\
-                \C \rlowertwocell{\beta} \ar[r] & \D \ar[r]_F & \E }
-     }
-  \] \later{Improve this picture with composition symbols?}
-  by the interchange law for horizontal and vertical composition.
-\end{proof}
-
-Natural transformations lift in the same way:
-
-\begin{lem} \label{lem:lift-nt} Given functors $F,G : \D \to \E$,
-  any natural transformation $\alpha : \nt F G$ lifts to a natural
-  transformation $\alpha^\C : \nt {F^\C} {G^\C} : \D^\C \to \E^\C$
-  given by postcomposition with $\alpha$.  That is, the component of
-  $\alpha^\C$ at $H :\C \to \D$ is $\alpha^\C_H = \alpha H$. Moreover,
-  if $\alpha$ is an isomorphism then so is $\alpha^\C$.
-\end{lem}
-
-\begin{proof}
-  Here $\alpha H$ denotes the ``left whiskering'' of $\alpha$ by $H$,
-  \[ \xymatrix{ \C \ar[r]^H & \D \rtwocell^F_G{\alpha} & \E. } \]
-  Note that $\alpha^\C_H$ should be a morphism $\mor {F^\C H} {G^\C
-    H}$ in $\E^\C$, that is, a natural transformation $\nt {FH} {GH}$,
-  so $\alpha H$ has the right type.  The naturality square for
-  $\alpha^\C$ is
-  \[ \xymatrix {
-        FH \ar[r]^{\alpha^\C_H} \ar[d]_{F\beta}
-      & GH \ar[d]^{G\beta}
-     \\ FJ \ar[r]_{\alpha^\C_J}
-      & GJ
-     }
-  \]
-  which commutes by naturality of $\alpha$: at any particular $C \in
-  \C$ the above diagram reduces to:
-  \[ \xymatrix{
-        FHC \ar[r]^{\alpha_{HC}} \ar[d]_{F\beta_C}
-      & GHC \ar[d]^{G\beta_C}
-     \\ FJC \ar[r]_{\alpha_{JC}}
-      & GJC
-     }
-  \]
-  If $\alpha$ is an isomorphism, then $(\alpha^{-1})^\C$ is the
-  inverse of $\alpha^\C$: for any $H$, $\alpha^{-1}H \cdot \alpha H =
-  (\alpha^{-1} \cdot \alpha) H = \id_{FH}$.
-  \[ {\xymatrixcolsep{5pc} \xymatrix{ \C \ar[r]^H & \D
-     \ruppertwocell^F{\mathrlap{\alpha}} \ar[r] \rlowertwocell_F{\mathrlap{\alpha^{-1}}} & \E
-     }}
-     =
-     \xymatrix{ \C \ar[r]^H & \D \ar[r]^F & \E }
-   \]
-\end{proof}
-
-Finally, we need to know that \emph{laws}---expressed as commutative
-diagrams---also lift appropriately from $\D$ to $\D^\C$.  For example,
-if we lift the functor and natural transformations defining a monoid
-in $\D$, we need to know that the resulting lifted functor and lifted
-natural transformations still define a valid monoid in $\D^\C$.
-
-The first step is to understand how to appropriately encode laws as
-categorical objects.  Consider a typical commutative diagram, such as
-the following diagram expressing the coherence of the associator for a
-monoidal category.  The parameters to all the instances of $\alpha$
-have been written out explicitly, to make the subsequent discussion
-clearer, although in common practice these would be left implicit.
-\[ \xymatrix{ & ((A \oplus B) \oplus C) \oplus D
-  \ar[dl]_{\alpha_{A,B,C} \oplus \id_D} \ar[dr]^{\alpha_{A \oplus
-      B,C,D}} & \\ (A \oplus (B \oplus C)) \oplus D
-  \ar[d]_{\alpha_{A,B \oplus C,D}} & & (A \oplus B) \oplus (C \oplus
-  D) \ar[d]^{\alpha_{A,B,C \oplus D}} \\ A \oplus ((B \oplus C) \oplus
-  D) \ar[rr]_{\id_A \oplus \alpha_{B,C,D}} & & A \oplus (B \oplus (C
-  \oplus D)) } \] There are two important points to note.  The first
-is that any commutative diagram has a particular \emph{shape} and can
-be represented as a functor from an ``index category'' representing
-the shape (in this case, a category having five objects and morphisms
-forming a pentagon, along with the required composites) into the
-category in which the diagram is supposed to live. Such a functor will
-pick out certain objects and morphisms of the right ``shape'' in the
-target category, and the functor laws will ensure that the target
-diagram commutes in the same ways as the index category. (This much
-should be familiar to anyone who has studied abstract limits and
-colimits.)  The second point is that this diagram, like many such
-diagrams, is really supposed to hold for \emph{all} objects $A$, $B$,
-$C$, $D$.  So instead of thinking of this diagram as living in a
-category $\C$, where the vertices of the diagram are objects of $\C$
-and the edges are morphisms, we can think of it as living in $\fc
-{\C^4} \C$, where the vertices are \emph{functors} $\C^4 \to \C$ (for
-example, the top vertex is the functor which takes the quadruple of
-objects $(A,B,C,D)$ and sends them to the object $((A \oplus B) \oplus
-C) \oplus D$), and the edges are natural transformations.
-
-All told, then, we can think of a typical diagram $D$ in $\C$ as a
-functor $D : J \to (\fc {\C^A} \C)$, where $A$ is some (discrete)
-category recording the arity of the diagram.
-
-\begin{lem}
-  Any diagram $D : J \to (\fc {\C^A} \C)$ in $\C$ lifts to a diagram
-  $D^\D : J \to (\fc {(\C^\D)^A} {\C^\D})$ in $\C^\D$.
-\end{lem}
-
-\begin{proof}
-  This amounts to implementing a higher-order function with the
-  type \[ (J \to (A \to \C) \to \C) \to J \to (A \to \D \to \C) \to \D
-  \to \C \] which can be easily done as follows: \[ \Phi\ D\ j\ g\ d =
-  D\ j\ (\fun a {g\ a\ d}). \] Of course there are some technical
-  conditions to check, but they all fall out easily.
-\end{proof}
-
-At this point there is a gap in the proof.  To know that this lifting
-does the right thing, one must show that the lifted diagram defined
-above is ``about'' (\ie has as its vertices and edges) the lifted
-versions of the vertices and edges of the original diagram.  Even this
-is still not quite enough; to really know that the lifted diagram
-``says the same thing'' as the unlifted diagram, we need to show not
-just that the vertices and edges of the lifted diagram are lifted
-versions of the original diagram's vertices and edges, but that these
-lifted vertices and edges are themselves composed of lifted versions
-of the components of the originals. For example, we want to ensure
-that the lifting of the example diagram shown above still expresses
-coherence of the lifted associator with respect to the lifted tensor
-product. It is not enough to have vertices like $(((A \oplus B) \oplus
-C) \oplus D)^\D$; we must show this is the same as $((A^\D \oplus^\D
-B^\D) \oplus^\D C^\D) \oplus^\D D^\D$, so that it says something about
-the lifted tensor product $\oplus^\D$.
-
-The basic idea would be to write down a formal syntax for the functors
-and natural transformations that may constitute a diagram, and show
-that the lifting of an expression is the same as the original
-expression with its atomic elements each replaced by their lifting.
-
-Assuming this result for now, we can go on to show how monoids lift
-into a functor category.
-
-\begin{thm} \label{thm:lift-monoid}
-  Any monoidal structure $(\otimes, I, \alpha, \lambda, \rho)$ on a
-  category $\Str$ lifts pointwise to a monoidal structure $(\otimes^\Lab,
-  I^\Lab, \alpha^\Lab, \lambda^\Lab, \rho^\Lab)$ on the functor category
-  $\fc \Lab \Str$.
-\end{thm}
-
-\begin{proof}
-  Immediate from Propositions \ref{lem:lift-object},
-  \ref{lem:lift-functor}, and \ref{lem:lift-nt}, and our assumed
-  result that diagrams lift to diagrams which ``say the same thing''
-  as the original, but say it ``about'' lifted things.
-\end{proof}
-
-In \pref{prop:lift-monoid-simple} it was claimed that this lifting
-preserves products, coproducts, symmetry, and distributivity.  We can
-already show that symmetry and distributivity are preserved:
+\todo{Transition.  Remind why CCC is important. Look back at
+  intro---did I say something about it there?}
 
 \begin{prop}
-  The lifting defined in \pref{thm:lift-monoid} preserves symmetry.
+  $\Spe$ is Cartesian closed.
 \end{prop}
 
-\begin{proof}
-  Symmetry is given by a natural isomorphism $\all {X Y} {X \otimes Y
-    \equiv Y \otimes X}$. By our previous assumption, this lifts to a
-  natural isomorphism $\all {F G} {F \otimes^\Lab G \equiv G
-    \otimes^\Lab F}$.
-\end{proof}
+If $\Lab$ is locally small and $\Str$ is complete and Cartesian
+closed, then $\fc \Lab \Str$ is also complete and Cartesian closed
+\citep{cart-closed-functor-cat}.  In particular, the exponential of
+$F,G : \Lab \to \Str$ is given by \[ G^F\ L = \eend{K \in \Lab}
+\prod_{\Lab(L,K)} G(K)^{F(K)}. \] For example, $\B$, $\P$, $\BT$, and
+$\PT$ are all locally small, and $\Set$ and $\ST$ are complete and
+Cartesian closed, so $\fc \B \Set$, $\fc \P \Set$, $\fc \BT \ST$, and
+$\fc \PT \ST$ are all complete and Cartesian closed as well.
 
-\begin{prop}
-  The lifting defined in \pref{thm:lift-monoid} preserves
-  distributivity.
-\end{prop}
+Let's unpack this result a bit in the specific case of $\fc \PT \ST$.
+By a dual argument to the one given in \pref{sec:coends-hott}, ends in
+$\ST$ over the groupoid $\PT$ are given by $\Pi$-types, \ie universal
+quantification; hence, we have
+\begin{align*}
+(H^G)\ n &= \eend{m \in \PT} \prod_{\PT(m,n)} (H\ n)^{G\ n} \\
+       &= (m : \N) \to (\Fin m \equiv \Fin n) \to G\ n \to H\ n \\
+       &\equiv (\Fin n \equiv \Fin n) \to G\ n \to H\ n
+\end{align*}
+where the final isomorphism follows since $(\Fin m \equiv \Fin n)$ is
+only inhabited when $m = n$.
 
-\begin{proof}
-  In any category with all products and coproducts, there is a natural
-  transformation $\all {X Y Z} {X \times Y + X \times Z \to X \times
-    (Y + Z)}$, given by
-  $\fork{\choice{\pi_1}{\pi_1}}{\choice{\pi_2}{\pi_2}}$.  The category
-  is \term{distributive} if this is an isomorphism.  Again by our
-  assumption about lifting, such an isomorphism lifts to another
-  natural isomorphism \[ \all {F G H} {(F \times^\Lab G) +^\Lab (F
-    \times^\Lab H) \to F \times^\Lab (G +^\Lab H)}. \]
-\end{proof}
+Being Cartesian closed means there is an adjunction $- \times G \adj
+-^G$ between products and exponentials, which yields a natural
+isomorphism \[ (\Hom[\ST^\PT]{F \times G}{H}) \equiv (\Hom[
+\ST^\PT]{F}{H^G}). \] Expanding morphisms of the functor category $\fc
+\PT \ST$ as natural transformations, and expanding the definition of
+$H^G$ derived above, this yields \[ \left( (n : \N) \to (F \times G)\
+  n \to H\ n \right) \equiv \left( (n : \N) \to F\ n \to (\Fin n
+  \equiv \Fin n) \to G\ n \to H\ n \right). \] Intuitively, this says
+that a size-polymorphic function taking a Cartesian product shape $F
+\times G$ and yielding an $H$-shape of the same size is isomorphic to
+a size-polymorphic function taking a triple of an $F$-shape, a
+$G$-shape, \emph{and a permutation on $\Fin n$}, and yielding an
+$H$-shape.  The point is that an $(F \times G)$-shape consists not
+just of separate $F$- and $G$-shapes, but those shapes get to
+``interact'': in particular we need a permutation to tell us how the
+labels on the separate $F$- and $G$-shapes line up.  An $(F \times
+G)$-shape encodes this information implicitly, by the fact that the
+two shapes share the exact same set of labels.
 
-To show that products and coproducts are preserved requires first
-showing that lifting preserves adjunctions.
+Practically speaking, this result tells us how to express an
+eliminator for $(F \times G)$-shapes.  That is, to be able to
+eliminate $(F \times G)$-shapes, it suffices to be able to eliminate
+$F$- and $G$-shapes individually, with an extra permutation supplied
+as an argument. Eliminators for species shapes are treated more
+generally and systematically in \pref{sec:elim-species}.
 
-\begin{lem} \label{lem:lift-adj}
-  Let $F : \D \to \E$ and $G : \D \leftarrow \E$ be functors.  If $F
-  \adj G$, then $F^\C \adj G^\C$.
-\end{lem}
-
-\begin{proof}
-  Since $F \adj G$, assume we have $\gamma_{A,B} : \E(FA, B) \iso
-  \D(A, GB)$.  To show $F^\C \adj G^\C$, we must define a natural
-  isomorphism $\gamma^\C_{H,J} : \E^\C(F \comp H, J) \iso \D^\C(H, G
-  \comp J)$.  Given $\phi \in \E^\C(FH,J)$, that is, $\phi : \nt {FH}
-  J : \C \to \E$, and an object $C \in \C$, define \[
-  \gamma^\C_{H,J}(\phi)_C = \gamma_{HC,JC}(\phi_C). \]  Note that
-  $\gamma_{HC,JC} : \E(FHC,JC) \iso \D(HC,GJC)$, so it sends $\phi_C
-  : FHC \to JC$ to a morphism $HC \to GJC$, as required.
-
-  From the fact that $\gamma$ is an isomorphism it thus follows
-  directly that $\gamma^\C$ is an isomorphism as well.  Naturality of
-  $\gamma^\C$ also follows straightforwardly from naturality of
-  $\gamma$. For a more detailed proof, see
-  \citet[pp. 17--18]{hinze2012kan}.
-\end{proof}
-
-\begin{prop}
-  The lifting defined in \pref{thm:lift-monoid} preserves coproducts
-  and products.
-\end{prop}
-
-\begin{proof}
-  Consider a category $\Str$ with coproducts, given by a bifunctor $+
-  : \Str \times \Str \to \Str$.  Lifting yields a functor $+^\Lab :
-  (\Str \times \Str)^\Lab \to \Str^\Lab$.  Note that $(\Str \times
-  \Str)^\Lab \iso \Str^\Lab \times \Str^\Lab$, so we may consider
-  $+^\Lab$ as a bifunctor $\Str^\Lab \times \Str^\Lab \to \Str^\Lab$.
-
-  There is \latin{a priori} no guarantee that $+^\Lab$ has any special
-  properties, but it turns out that $+^\Lab$ is a coproduct on
-  $\Str^\Lab$, which we demonstrate as follows.  The key idea is that
-  the property of being a coproduct can be described in terms of an
-  adjunction: in particular, $+$ is a coproduct if and only if it is
-  left adjoint to the diagonal functor $\Delta : \Str \to \Str \times
-  \Str$.\footnote{Proving this standard fact takes a bit of work but
-    mostly just involves unfolding definitions, and is left as a nice
-    exercise for the interested reader.}  Since lifting preserves
-  adjunctions (\pref{lem:lift-adj}), we must have $+^\Lab \adj
-  \Delta^\Lab$. But note we have $\Delta^\Lab : \Str^\Lab \to (\Str
-  \times \Str)^\Lab \iso \Str^\Lab \times \Str^\Lab$, with
-  $\Delta^\Lab (F) = \Delta \comp F \iso (F,F)$, so in fact
-  $\Delta^\Lab$ is the diagonal functor on $\Str^\Lab$.  Hence
-  $+^\Lab$, being left adjoint to the diagonal functor, is indeed a
-  coproduct on $\Str^\Lab$.
-
-  Of course, this dualizes to products as well, which are
-  characterized by being right adjoint to the diagonal functor.
-\end{proof}
+On the surface, the fact that $\Spe$ is Cartesian closed only allows
+us to internalize \emph{species morphisms} as species, but not to
+interpret functions between data types.  $\Spe$ being Cartesian closed
+does mean that the simply typed lambda calculus can be interpreted
+internally to $\Spe$; but it is not yet clear to me what this would
+mean on an intuitive level.
 
 \section{Day convolution}
 \label{sec:day}
@@ -4174,143 +3907,3 @@ case of atomic species.
 
 \later{eliminators via Conor ``down'' operator}
 
-\section{Recursive species}
-\label{sec:recursive}
-
-\todo{move this to the section on multisort.  Make sure to define
-  partial derivatives.}
-
-We close this chapter with a brief discussion of recursively
-defined species, which have been used in examples throughout.  Given a
-recursive equation of the form \[ F = \dots F \dots, \] we can turn
-the right-hand side into a two-sort species $\H(\X,\Y)$, with $\Y$
-replacing the recursive occurrences of $F$.  For example, the
-recursive equation \[ \Rose \iso \X \cdot (\List \comp \Rose) \]
-corresponds to the two-sort species $\H(\X,\Y) = \X \cdot (\List \comp
-\Y)$.  We then define $\Rose$ as the least fixed point (if it exists)
-of $\H(\X,-)$, that is, a solution to $\Rose \iso \H(\X,\Rose)$. The
-following theorem expresses the conditions on $\H$ under which such
-fixed point solutions exist.
-\begin{thm}[Implicit Species Theorem, \citep{bll}]
-  Let $\H$ be a two-sort species satisfying
-  \begin{itemize}
-  \item $\H(\Zero,\Zero) \iso \Zero$
-  \item $\displaystyle \frac{\partial \H}{\partial \Y}(\Zero, \Zero) \iso \Zero$
-\end{itemize}
-Then there exists a species $F$, unique up to isomorphism,
-satisfying \[ F \iso \H(X,F), \] with $F(\Zero) \iso \Zero$.
-\end{thm}
-
-\begin{rem}
-  Recall that the notation $\H(\Zero,\Zero) = \H \comp (\Zero,\Zero)$
-  denotes the composition of the two-sort species $\H$ with the pair
-  of one-sort species $(\Zero,\Zero)$.  These criteria are thus
-  expressed in the form of species isomorphisms, but in this
-  particular case they could equally well be expressed in terms of the
-  action of $\H$ on empty label sets, \eg $\H(\varnothing,
-  \varnothing) = \varnothing$.
-\end{rem}
-
-The proof essentially proceeds by constructing $F$ as the infinite
-expansion \[ F = \H(\X, \H(\X, \H(\X, \dots))). \] The conditions on
-$\H$ ensure that this is well-defined.  In particular, since
-$(\partial \H / \partial \Y)$-shapes have a single hole in the place
-of a $\Y$, which is the placeholder for recursive occurrences of $F$,
-$\frac{\partial \H}{\partial \Y}(\Zero,\Zero) \iso \Zero$ means that
-there are no $\H(\X,\Y)$-shapes consisting solely of (some constant
-multiple of) a $\Y$.  Such shapes would allow a recursive step that
-did not ``use'' any $\X$'s, resulting in infinitely large shapes of
-size $0$.  For details of the proof, see \citet[\Sect 3.2]{bll}.  The
-implicit species theorem can also be suitably generalized to systems
-of mutually recursive equations; see \citet{bll} as well as
-\citet{Pivoteau2012}.
-
-Many common examples of recursively defined species, such as $\List =
-\One + \X \cdot \List$, or $\Bin = \One + \X \cdot \Bin^2$, do not
-actually satisfy the premises of the implicit species theorem, in
-particular the requirement that $\H(\Zero,\Zero) \iso \Zero$.  In both
-the above cases we instead have $\H(\Zero,\Zero) \iso \One$.  The
-Implicit Species Theorem only gives sufficient, but not necessary,
-conditions for well-foundedness; we would like to have a different
-theorem that tells us when equations such those governing $\List$ and
-$\Bin$ are well-founded. \citet{Pivoteau2012} prove quite a general
-theorem which is applicable to this case, and is also applicable to
-mutually recursive systems.  Its very generality somewhat obscures the
-essential ideas, however, so we give a ``baby'' version of the theorem
-here.
-
-The basic idea can be seen by considering the case of $\List = \One +
-\X \cdot \List$.  Decompose $\List$ as $\List = \One + \List_+$, so
-$\List_+ = \X \cdot \List \iso \X \cdot (\One + \List_+)$.  Then
-$\H(\X,\Y) = \X \cdot (\One + \Y)$ does satisfy the premises of the
-Implicit Species Theorem, so $\List_+$ is well-defined, and hence so
-is $\List = \One + \List_+$.  This approach is used, implicitly and in
-an ad-hoc manner, by \citet{bll}; see, for example, Example 3.2.3 on
-p. 195.  It also appears in a sketchy form in my Haskell Symposium
-paper \citep{yorgey-2010-species}.
-
-\begin{thm}[Implicit Species Theorem II]
-  Let $\H(\X,\Y)$ be a two-sort species satisfying \[ \H(\Zero,\Y)
-  \iso n, \] where $n \in \N$ represents the species $\underbrace{\One
-    + \dots + \One}_n$ with $n$ shapes of size $0$.  Then there exists
-  a species $F$, unique up to isomorphism, satisfying \[ F \iso
-  \H(\X,F) \] with $F(\Zero) \iso n$.
-\end{thm}
-
-\begin{proof}
-  Since $\H(\Zero,\Y) \iso n$, there is some two-sort species
-  $\H_+$ such that $\H$ can be uniquely decomposed as
-  \[ \H(\X,\Y) \iso n + \H_+(\X,\Y) \] (this follows from an analogue
-  of the molecular decomposition theorem for multisort species).  Note
-  that $\H_+(\Zero,\Y) \iso \Zero$ and $\partial \H/\partial \Y
-  = \partial \H_+ / \partial \Y$.
-
-  Moreover, $\H(\Zero,\Y) \iso n$ means that, other than the constant
-  term $n$, every term of the molecular decomposition of $\H$ must
-  contain a factor of $\X$.  In other words, $\H_+(\X,\Y) \iso \X
-  \cdot \mcal G(\X,\Y)$ for some species $\mcal G$.  Thus we have
-  $\frac{\partial \H}{\partial \Y}(\X,\Y) = \X \cdot \frac{\partial
-    \mcal G}{\partial \Y}(\X,\Y)$, and in particular $\frac{\partial
-    \H}{\partial \Y}(\Zero,\Y) \iso \Zero$ as well.
-
-  Now define \[ \H_{n+}(\X,\Y) \defeq \H_+(\X,n + \Y). \] Note that
-  \[ \frac{\partial \H_{n+}}{\partial \Y}(\X,\Y) = \frac{\partial
-    \H_+}{\partial \Y}(\X,n+\Y) = \frac{\partial \H}{\partial
-    \Y}(\X,n+\Y) \] (the first equality follows from the chain rule
-  for differentiation).  Thus \[ \frac{\partial \H_{n+}}{\partial
-    \Y}(\Zero,\Zero) = \frac{\partial \H}{\partial \Y}(\Zero, n) =
-  \Zero. \]
-
-  We also have \[ \H_{n+}(\Zero,\Zero) = \H_+(\Zero,n) \iso \Zero. \]
-  Thus, $\H_{n+}$ satisfies the criteria for the Implicit Species
-  Theorem, and we conclude there uniquely exists a species $F_+$
-  satisfying $F_+ \iso \H_{n+}(\X,F_+)$, with $F_+(\Zero) \iso \Zero$.
-
-  Finally, let $F \defeq n + F_+$, in which case
-  \begin{align*}
-    F &= n + F_+ \\
-    &\iso n + \H_{n+}(\X, F_+) \\
-    &= n + \H_+(\X, n + F_+) \\
-    &\iso \H(\X, n + F_+) \\
-    &= \H(\X,F).
-  \end{align*}
-
-  So $F = n + F_+$ is a solution to $F = \H(\X,F)$.  The uniqueness of
-  $F$ follows from the uniqueness of $F_+$: if $F_1$ and $F_2$ are
-  both solutions to $F = \H(\X,F)$, then they both decompose as $F_i =
-  n + F_i^+$, and the $F_i^+$ both satisfy $F_i^+ =
-  \H_{n+}(\X,F_i^+)$; hence $F_1^+ \iso F_2^+$ but then $F_1 \iso
-  F_2$.
-\end{proof}
-
-\begin{rem}
-  The condition $\H(\Zero,\Y) \iso n$, as opposed to the weaker
-  condition $\H(\Zero,\Zero) \iso n$, is critical.  For example,
-  consider the implicit equation \[ Q = \One + \X + Q^2. \] In this
-  case $\H(\X,\Y) = \One + \X + \Y^2$ satisfies $\frac{\partial
-    \H}{\partial \Y}(\Zero,\Zero) \iso \Zero$ and $\H(\Zero,\Zero)
-  \iso \One$, but $\H(\Zero,\Y) \iso \One + \Y^2 \not \iso n$.  In
-  fact, $Q$ is ill-defined: by always picking the $Q^2$ branch and
-  never $\X$, and putting $\One$ at the leaves, one can construct
-  infinitely many trees of size $0$.
-\end{rem}

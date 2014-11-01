@@ -5,9 +5,6 @@
 \chapter{Combinatorial species}
 \label{chap:species}
 
-\todo{Split into multiple chapters, possibly delete some stuff, and
-  add a bit more conclusion/explanation stuff at the end of each?}
-
 The theory of \term{combinatorial species}, introduced by
 \citet{joyal}, is a unified, algebraic theory of \term{combinatorial
   structures} or \term{shapes}.  The algebraic nature of species is of
@@ -26,15 +23,9 @@ close follow-up to the formal definition, \pref{sec:iso-equipotence}
 presents two equivalence relations on species, \term{isomorphism} and
 \term{equipotence}, and in particular sheds some new light on
 equipotence via the encoding of species in
-HoTT. \pref{sec:generating-functions} introduces \term{generating
+HoTT. Finally, \pref{sec:generating-functions} introduces \term{generating
   functions}, which are in some sense the point of origin for the
-entire theory.\todo{Break the rest into a new chapter?} and
-\pref{sec:generalized-species} lays out a program for the rest of the
-chapter, considering arbitrary functor categories in place of
-traditional species, and determining the properties necessary to
-support each species operation.  The rest of the chapter presents a
-collection of standard operations on species, with examples and
-discussion, along with analysis of the properties required for each.
+entire theory.
 
 \section{Intuition and examples}
 \label{sec:species-intuition}
@@ -754,9 +745,9 @@ aOpts = with & gap .~ Local 3 & headLength .~ Local 1.5
 
 It turns out that functor categories have a lot of interesting
 structure.  For example, as we will see, $\fc \B \Set$ has (at least)
-six different monoidal structures!  \todo{Reword this with reorg} Much of the remainder of this
-chapter (\pref{sec:generalized-species} onward) is dedicated to
-exploring and generalizing this structure.
+six different monoidal structures!  Much of
+\pref{chap:generalized-species} is dedicated to exploring and
+generalizing this structure.
 
 \subsection{Species in HoTT}
 \label{sec:species-hott}
@@ -1455,3 +1446,5 @@ so on.  In a way, one can see this process as ``imbuing everything
 with constructive significance''; this is one argument for the
 naturalness of the theory of species being developed within a
 constructive type theory, as attempted by this dissertation.
+
+\todo{Write a conclusion?}
