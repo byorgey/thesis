@@ -1,0 +1,74 @@
+Questions during Brent's defense
+
+JC: What part turned out the most subtle?
+BAY: The contents of Chapter 2 about encoding in HoTT
+  - finiteness?
+  - axiom of choice?
+
+JC: What part was the most surprising?
+BAY: We had this idea that data structures are species + labels for a long time,
+but I was surprised to find that this was just analytic functors
+
+JC: New to me Definition 2.2.2 in HoTT turned out to be forall and exists. Is this known?
+BAY: People knew about it, but I can't find the citation.
+JC: There's more to mine about this idea.
+
+JC: What did you learn from early Haskell experiments?
+BAY: It doesn't show up in my dissertation, but formed my intuition about encoding in constructive type theory. "Obvious" way to encode finiteness in Haskell is too strong---you could do things you shouldn't be able to. Not sure that Haskell allows the right encoding....propositional truncation is exactly what you want.
+
+JC: Are F-forms the same as a clique?
+BAY: ...
+JC: clarify this in your thesis
+
+JC: Partitional and Arithmetic product are both complicated. Why is that?
+BAY: They come out of the same category theory operation, so they are closely related.
+
+JC: Have you seen Arthimetic derivative anywhere before? That's cool.
+BAY: No, that is novel to this work. Putting it in the larger
+framework made it clear. But, I don't know of any applications.
+
+JC: Generalized composition takes product/co-product from Set to B.
+Seems awkward that there isn't something more intrinsic.
+BAY: You are talking about the specific instance of B to Set.
+I don't know a way to generalize it to other categories.
+Essential idea is an indexed exponentiation, but I find it unsatisfying too.
+
+-*-
+
+BCP: Great job, really enjoyed reading it.
+
+BCP: Global architecture of the dissertation seems muddled. I expected that we'd define HoTT, port category theory, then build theory of species from there. But that is not what it was. Why did you do what you did?
+BAY: From technical point of view, would have been good to forget Set theory. But on pedagogical grounds, I wanted to explain the ideas in terms of Set theory (especially for people who already know the topic) and then explain how they connect over.
+BCP: That's what I guessed. But it's confusing sometimes.
+BAY: A second answer is that Set theory motivates the important problems in the port.
+BCP: You've done a lot work in Set theory (esp your characterizations of properties) is that also a primary contribution?
+BAY: Yes, I've never seen a systematic enumeration of properties before. And we had to have it to know that we've done the port correctly.
+
+BCP: Is there a prospect for a more formal bridge? Generating functions are simpler objects. Could they be used as a core of a rigorous correspondence?
+BAY: great idea!
+
+BCP: Analytic functors. I wasn't clear whether you were satisfied with your account for eliminators.
+BAY: I'm not satisfied. If you want to model datatypes with species, you need intro/elim forms. I've been thinking about it for a while and never made much progress. Fundamental stuff first. But I included it anyway. But didn't have time to get to what I wanted.
+BCP: How far away are you?
+BAY: Not far, but of course I don't know.
+
+BCP: Some places where parts of proofs are left as future work (page 90). Is this missing proof on the critical path?
+BAY: It's not. At least not that one in particular. I've seen people say this is true, and I have no doubts, but I've never seen a good proof.
+
+-*-
+
+VT: Can you bring something back from HoTT to theory of algebraic datatypes?
+BAY: Nothing specific, maybe generic programming, especially converting between datatypes.
+
+VT: What about memory layout?
+BAY: Jacques and I have ideas about this. Especially for linear algebra. Connecting high-level spec and low-level memory management.
+
+-*-
+
+SAZ: What is the next *immediate* step?
+BAY: good question. I'm most excited about continuing with memory layout, especially with practical applications. Also, going back to idea of generating functions to unify exhaustive/random generation.
+
+SAZ: Your dissertation is really broad and general, but could have benefitted by one deep exploration, for a non-algebraic species (like cycles). Could you work out an instance of the eliminators for this? How straightforward is it now?
+BAY: With molecular species, you are stuck and can't decompose any more. Not very fun.
+I had this idea to use an operation to break symmetry in all possible ways and then put it together. But, I haven't been able to describe it in an algebraic way. I have intuition, but no formalization.
+
