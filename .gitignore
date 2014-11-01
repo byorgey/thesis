@@ -50,3 +50,5 @@ defense/SpeciesDiagrams.hs
 defense/Structures.hs
 defense/diagrams
 defense/species.sty
+
+defense/feedback/BCP-*
