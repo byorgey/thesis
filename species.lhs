@@ -776,20 +776,31 @@ where \[ \isFinite(A) \defeq \ptrunc{(n : \N) \times (A \equiv \Fin
   species''.
 \end{defn}
 
-It is not necessarily clear at this point whether this is an
-appropriate encoding of species within homotopy type theory.  It
-cannot be directly justified by showing that $\fc \B \Set$ and $\fc
-\BT \ST$ are categorically equivalent; this does not even make sense
-since they live in entirely different foundational frameworks.
-Rather, a justification must be extensional, in the sense of showing
-that the two definitions have similar properties and support similar
-operations.  In a sense, much of the rest of this chapter is precisely
-such an extensional justification.
+The above definition corresponds directly to the definition of species
+in set theory.  However, it is more specific than necessary.  In fact,
+in HoTT, \emph{any} function of type $\BT \to \ST$ (that is, a
+function from objects of $\BT$ to objects of $\ST$) is automatically
+an \hott{functor}.  Since the morphisms in $\BT$ are just paths,
+functoriality corresponds to transport.  Thus, as hinted in
+\pref{chap:prelim}, within HoTT it is simply impossible to write down
+an invalid species.  This is a strong argument for working within type
+theory in general and HoTT in particular: it provides exactly the
+right sort of type system which allows expressing only valid species.
+
+Nevertheless, it is still not perfectly clear whether this is the
+right encoding of species within homotopy type theory.  It cannot be
+directly justified by showing that $\fc \B \Set$ and $\fc \BT \ST$ are
+categorically equivalent; this does not even make sense since they
+live in entirely different foundational frameworks.  Rather, a
+justification must be extensional, in the sense of showing that the
+two definitions have similar properties and support similar
+operations.  In a sense, much of \pref{chap:generalized-species} is
+precisely such an extensional justification.
 
 \section{Isomorphism and equipotence}
 \label{sec:iso-equipotence}
 
-Just as with HoTT itself, various issues of \emph{sameness} are also
+Just as with HoTT itself, \emph{sameness} and related notions are also
 at the heart of the theory of species.  In this section we explore
 isomorphism of species and of species shapes, as well as a coarser
 notion of equivalence on species known as \term{equipotence}.
@@ -931,7 +942,7 @@ a \term{form}, or \term{unlabelled shape}.
 \end{defn}
 
 In other words, an $F$-form is a maximal class of labelled $F$-shapes
-which are all interconvertible by relabelling.  Note that, as defined,
+which are all interconvertible by relabelling.  As defined,
 such classes are rather large, as they include labellings by \emph{all
   possible} sets of labels!  Typically, we consider only a
 single label set of each size, such as $\Fin n$.  For example,
@@ -1447,4 +1458,8 @@ with constructive significance''; this is one argument for the
 naturalness of the theory of species being developed within a
 constructive type theory, as attempted by this dissertation.
 
-\todo{Write a conclusion?}
+\section{Conclusion}
+\label{sec:species-conclusion}
+
+In this chapter we have seen the definition of species, both in set
+theory and type theory, and some related notions.  
