@@ -18,13 +18,13 @@ operations on ``variant species'', \ie functors in some category $(\fc
 \item $\fc \BT \ST$, species as constructed in HoTT.
 \end{itemize}
 There are quite a few other possible variants, some of which we
-explore in this chapter.  Multisort species (\pref{sec:multisort}) and $\L$-species
-(\pref{sec:L-species}) are both standard species variants which can be
-seen as functors between certain categories other than $\B$ and
-$\Set$; yet more variants are mentioned in
-\pref{sec:other-species-variants}.  \pref{sec:copartial-species-sec}
-and \pref{sec:partial-species} develop a larger example of a novel
-species variant. \todo{Move this up, and say more about it}
+explore in this chapter. First, \pref{sec:copartial-species-sec} and
+\pref{sec:partial-species} develop a larger example of a novel species
+variant \todo{say more about it}. Multisort species
+(\pref{sec:multisort}) and $\L$-species (\pref{sec:L-species}) are
+both standard species variants which can be seen as functors between
+certain categories other than $\B$ and $\Set$; yet more variants are
+mentioned in \pref{sec:other-species-variants}.
 
 \section{Generalized species properties}
 \label{sec:generalized-species-properties}

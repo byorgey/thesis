@@ -5,12 +5,14 @@
 \chapter{Generalized species and species operations}
 \label{chap:generalized-species}
 
-\todo{Edit intro}
+\todo{edit}
 
-and
-\pref{sec:generalized-species} lays out a program for the rest of the
-chapter, considering arbitrary functor categories in place of
-traditional species, and determining the properties necessary to
+In this chapter, 
+
+XXX species operations.  Many monoidal structures on species.
+
+In parallel, we consider arbitrary functor categories in place of
+traditional species, XXX and determining the properties necessary to
 support each species operation.  The rest of the chapter presents a
 collection of standard operations on species, with examples and
 discussion, along with analysis of the properties required for each.
@@ -601,8 +603,11 @@ lifts to a corresponding monoid on $\fc \Lab \Str$ can be found in
 \subsection{Internal Hom for Cartesian product}
 \label{sec:internal-Hom-cprod}
 
-\todo{Transition.  Remind why CCC is important. Look back at
-  intro---did I say something about it there?}
+Recall that a \term{Cartesian closed} category is one which is closed
+with respect to Cartesian product, that is, there exists some
+bifunctor $\expn B C$ such that \[ \all{ABC}{(\Hom {A \times B} C)
+  \iso (\Hom A {(\expn B C)})}. \]  Such categories allow morphisms to be
+``internalized'', that is, represented as objects.
 
 \begin{prop}
   $\Spe$ is Cartesian closed.

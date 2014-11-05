@@ -5,6 +5,8 @@
 \chapter{Lifting monoids}
 \label{chap:lifting-monoids}
 
+\numberwithin{thm}{chapter}
+
 \todo{Edit}
 
 We now turn to a detailed and fully general construction which shows

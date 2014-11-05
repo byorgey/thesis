@@ -758,7 +758,7 @@ morphism $F \to B^{A^-}$.  We can therefore characterize labelled
 structure eliminators in terms of the species eliminators described in
 \pref{sec:elim-species}.
 
-\todo{example?}
+\later{example?}
 
 \subsection{Generalized analytic functors}
 \label{sec:gen-analytic-functors}
