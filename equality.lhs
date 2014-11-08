@@ -1945,3 +1945,4 @@ $\size$ proceeds by first constructing a functor paired with a proof
 that, together with $\fin -$, it forms an equivalence---altogether a
 mere proposition---and then projecting out the functor.
 
+\todo{Add conclusion?}

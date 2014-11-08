@@ -1455,11 +1455,21 @@ The general idea is to ``blow everything up'', replacing natural
 numbers by sets; addition by disjoint union; product by pairing; and
 so on.  In a way, one can see this process as ``imbuing everything
 with constructive significance''; this is one argument for the
-naturalness of the theory of species being developed within a
-constructive type theory, as attempted by this dissertation.
+naturalness of developing the theory of species within a
+constructive type theory.
 
 \section{Conclusion}
 \label{sec:species-conclusion}
 
 In this chapter we have seen the definition of species, both in set
-theory and type theory, and some related notions.  
+theory and type theory, and related definitions such as isomorphism
+and equipotence of species and generating functions.  We have seen
+that defining species within homotopy type theory has some benefits:
+for example, it becomes impossible to write down invalid species
+within the type theory, and homotopy type theory sheds new light on
+some of the fundamental equivalence relations on species.  However, up
+to this point everything has been ``low-level'', in the sense of
+working directly with the definition of species.  In the next chapter
+we will see how to build a higher-level algebraic framework on top of
+species, and how this also gives us a framework for generalizing
+species to other categories.

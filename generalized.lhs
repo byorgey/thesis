@@ -5,42 +5,36 @@
 \chapter{Generalized species and species operations}
 \label{chap:generalized-species}
 
-\todo{edit}
+The definition of species, in either set theory or type theory, is
+straightforward: species are objects in a certain functor category.
+However, it is not the functors themselves which are fundamentally
+interesting, but the structure of the functor category.  As we will
+see in this chapter, the functor category $\fc \B \Set$ has at least
+six different monoidal structures, corresponding to combinatorially
+sensible operations on species.
 
-In this chapter, 
-
-XXX species operations.  Many monoidal structures on species.
-
-In parallel, we consider arbitrary functor categories in place of
-traditional species, XXX and determining the properties necessary to
-support each species operation.  The rest of the chapter presents a
-collection of standard operations on species, with examples and
-discussion, along with analysis of the properties required for each.
-
-\section{Generalized species}
-\label{sec:generalized-species}
-
-In many ways, $\fc \B \Set$ as the definition of species is too
-specific and restrictive. One of the main motivations for this work is
-to be able to use species as a basis for computation, and ideally this
-means working with shapes and labels corresponding to \emph{types},
-formalized in type theory, rather than sets.  Even within the realm of
-pure mathematics, there are many extensions to the basic theory of
+This also opens up the possibility of considering other functor
+categories with similar monoidal structures, instead of remaining tied
+to $\fc \B \Set$, which is too specific and restrictive.  In
+particular, we will consider arbitrary functor categories in place of
+traditional species, determining the properties necessary to support
+each species operation.  First of all, this allows us to justify $\fc
+\BT \ST$ as an analogue of species in HoTT.  Even within the realm of
+pure mathematics, however, there are extensions to the basic theory of
 species (\eg multisort species, weighted species, $\L$-species, vector
 species, \dots) which require generalizing from $\fc \B \Set$ to other
-functor categories. The rest of this chapter examines such generalized
-species in detail.
+functor categories.
 
-First, sections \pref{sec:lifted}--\pref{sec:differentiation} examine
-species operations---in particular, six monoidal structures along with
-differentiation---in the context of general functor categories $\fc
-\Lab \Str$ (where $\Lab$ and $\Str$ are arbitrary categories), in order
-to identify precisely what properties of $\Lab$ and $\Str$ are
-necessary to define each operation. That is, starting ``from
-scratch'', we will build up a generic notion of species that supports
-the operations we are interested in. In the process, we get a much
-clearer picture of where the operations ``come from''.  In particular,
-$\B$ and \Set enjoy many special properties as categories (for
+Sections \pref{sec:lifted}--\pref{sec:differentiation} examine species
+operations---in particular, the six monoidal structures referred to
+above, along with differentiation---in the context of general functor
+categories $\fc \Lab \Str$ (where $\Lab$ and $\Str$ are arbitrary
+categories), in order to identify precisely what properties of $\Lab$
+and $\Str$ are necessary to define each operation. That is, starting
+``from scratch'', we will build up a generic notion of species that
+supports the operations we are interested in. In the process, we get a
+much clearer picture of where the operations ``come from''.  In
+particular, $\B$ and \Set enjoy special properties as categories (for
 example, \Set is cartesian closed, has all limits and colimits, and so
 on), and it is enlightening to see precisely which of these properties
 are required in which situations.  Although more general versions of
@@ -54,7 +48,7 @@ product (\pref{sec:arithmetic-product}) and multisort species
 Along the way, we will explore particular instantiations of the
 general framework. Each instantiation arises from considering
 particular categories in place of $\B$ and $\Set$.  To keep these
-functor categories straight, the word ``species'' will be used for
+functor categories straight, we will use the word ``species'' for
 $\fc \B \Set$, and ``generalized species'' (or, more specifically,
 ``$(\fc \Lab \Str)$-species'')\footnote{Not to be confused with the
   generalized species of~\citet{Fiore08}, who define
@@ -64,6 +58,12 @@ $\fc \B \Set$, and ``generalized species'' (or, more specifically,
 defining a particular species operation in $\fc \B \Set$, then
 generalizes it to arbitrary functor categories $\fc \Lab \Str$, and
 exhibits examples in other functor categories.
+
+The chapter concludes with some comments on the relationship between
+symmetry and species operations (\pref{sec:molecular-atomic}) and on
+\emph{eliminators} for species (\pref{sec:elim-species}, which become
+important when considering species as a basis for data structures, as
+in \pref{chap:labelled}.
 
 \section{Lifted monoids: sum and Cartesian product}
 \label{sec:lifted}

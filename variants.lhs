@@ -5,10 +5,10 @@
 \chapter{Species variants}
 \label{chap:variants}
 
-As explained in \pref{sec:generalized-species}, one of the goals of
-the previous chapter was to determine the properties needed to define
-operations on ``variant species'', \ie functors in some category $(\fc
-\Lab \Str)$.  We have seen a few variants already:
+One of the goals of the previous chapter was to determine the
+properties needed to define operations on ``variant species'', \ie
+functors in some category $(\fc \Lab \Str)$.  We have seen a few
+variants already:
 \begin{itemize}
 \item $\fc \B \Set$
 \item $\fc \B \FinSet$, a more traditional notion of species
