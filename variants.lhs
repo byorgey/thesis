@@ -19,12 +19,15 @@ variants already:
 \end{itemize}
 There are quite a few other possible variants, some of which we
 explore in this chapter. First, \pref{sec:copartial-species-sec} and
-\pref{sec:partial-species} develop a larger example of a novel species
-variant \todo{say more about it}. Multisort species
-(\pref{sec:multisort}) and $\L$-species (\pref{sec:L-species}) are
-both standard species variants which can be seen as functors between
-certain categories other than $\B$ and $\Set$; yet more variants are
-mentioned in \pref{sec:other-species-variants}.
+\pref{sec:partial-species} develop two novel species variants based on
+the idea of replacing bijections between labels with injections (or
+coinjections). Such species variants are conjectured to be especially
+useful for modelling data structures that takes memory allocation and
+layout into account.  Multisort species (\pref{sec:multisort}) and
+$\L$-species (\pref{sec:L-species}) are both standard species variants
+which can be seen as functors between certain categories other than
+$\B$ and $\Set$; yet more variants are mentioned in
+\pref{sec:other-species-variants}.
 
 \section{Generalized species properties}
 \label{sec:generalized-species-properties}
@@ -94,14 +97,10 @@ which of the above properties hold.
 \section{Copartial species}
 \label{sec:copartial-species-sec}
 
-\todo{More CS motivation? Talk about arrays etc.?}
-
-\todo{Edit after moving}
-As a final, larger example, which will also recur in
-\pref{chap:labelled}, we develop the theory of species based on
-injections (and their dual, coinjections, in the subsequent section).
-The development will be carried out in HoTT, though it works equally
-well in set theory.
+As a larger example, which will also recur in \pref{chap:labelled}, we
+develop the theory of species based on injections (and their dual,
+coinjections, in the subsequent section).  The development will be
+carried out in HoTT, though it works equally well in set theory.
 
 \subsection{Copartial bijections}
 \label{sec:copartial-bijections}
@@ -936,14 +935,14 @@ same order; similarly, the species of cycles; and the species of
 simple graphs, where the lifting operation corresponds to forming
 induced subgraphs. \later{make a picture}
 
-\todo{Expand this a bit.}
 When we consider the properties in \pref{tab:properties}, however, we
-find in particular that $\BTSub^\op$ is not enriched over $\ST$, since
-coinjections are not, in general, total functions.  Instead of $\ST$,
-we actually want to consider the category $\STp$ of sets and
-\emph{partial} functions. One may check that $\STp$ is monoidal,
-complete, and Cartesian closed, that it has coends over $\BTSub^\op$,
-and that $\BTSub^\op$ is indeed enriched over $\STp$.
+find in particular that $\BTSub^\op$ is not enriched over $\ST$.
+Coinjections are not, in general, total functions, so there is no way
+to canonically treat morphisms in $\BTSub^\op$ as objects of $\ST$.
+Instead of $\ST$, we actually want to consider the category $\STp$ of
+sets and \emph{partial} functions. One may check that $\STp$ is
+monoidal, complete, and Cartesian closed, that it has coends over
+$\BTSub^\op$, and that $\BTSub^\op$ is indeed enriched over $\STp$.
 
 \section{Multisort species}
 \label{sec:multisort}
@@ -1322,8 +1321,6 @@ paper \citep{yorgey-2010-species}.
 
 \section{$\L$-species}
 \label{sec:L-species}
-
-\todo{Combine with next section? Or expand a bit?}
 
 Consider the category $\L$ of linear orders and order-preserving
 bijections (discussed previously in \pref{sec:manifestly-finite}).  An
