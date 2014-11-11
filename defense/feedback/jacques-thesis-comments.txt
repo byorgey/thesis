@@ -1,0 +1,178 @@
+[The page numbers are all on the official version sent in to the examiners]
+
+Note: I will use 'bb' to indicate 'bad break' below.
+
+General comments:
+- please review all your uses of "trivial", "trivially", "not hard",
+"easy", "easily", and so on.  First, there are too many.  Second, some
+of them are only 'easy' after proper understanding, but not so in the
+middle of introducing the concept.
+(ex: p.43)
+- section 2.2.2 (p.48).  This material feels really important to me --
+raise its profile, somehow?
+- I definitely think that 3.1-3.5 should be one chapter, 3.6-3.11 another.
+
+Chapter 0.
+- p.1 you use the word "container" which might lead to more confusion
+than help?
+- p.2 the use of 'treeProd' maybe assumes too much reader knowledge?
+- p.3 Carette and Uszkay reference not in bib
+- p.3 "[Duchon et al., 2002, Philippe Duchon and Chaeffer," - malformed
+bib ref
+- p.4 normally DAG, not dag.
+- p.4 "involv-ing" -- bad break.  You should review all your word
+breaks, I have seen a dozen awful ones.
+- p.4 nontermination or non-termination?
+- p.5 "itself related issues", missing 'to'
+
+Chapter 1.
+- p.8 use of judgmental before definition
+- p.9 axiomatic bb
+- p.11 you talk about x =_A y, then equality of A and B, which is
+confusing.  Stick to x and y, OR make it clear you have "moved up a
+level" by talking of type equality instead of element equality.
+- p.16 first full paragraph.  Is this used in the thesis?  If not, say
+so, if it is, say where.
+- p.16 "there constructively exists an A such that B" - I think you mean
+"an a in A" ?  Or maybe "there constructively exists an inhabitant of A
+such that B" ?
+- p.21 "The above definition".  I would add (1.4.1) to be even more precise.
+- p. 22 "categories nLab [2014c]" - the reference reads badly, format it
+differently?
+- p. 23 "replace by category", missing 'a'
+- p.23 you refer to MacLane twice on this page, one reference to VII.2
+has not \section symbol, the one to VII.7 does.  Be consistent!
+[Throughout the thesis]
+- p.24 cut definition 1.4.6 after the first sentence.  The rest is
+commentary, not definition.
+- p.24 give a reference/citation at the end of the commentary?
+- p.26 top: "Remark. Note that" - a bit too much redundancy...
+
+Chapter 2
+- p. 32 "this can be seen as one of the goals of the univalent
+foundations program" - I am not sure they would see it that way!
+- p. 33 When talking about AC, it is always better to differentiate
+finite AC, countable AC and 'larger' AC.
+- p. 33 (around distributivity discussion) shouldn't you mention
+Skolemization here?
+- p. 33 ex-ercize bb
+- p. 38 cat-egory bb
+- p.44 defin-ing bb
+- p.47 "2.2.1 Monoidal categories in HoTT\\ The first example is the
+theory of monoidal categories."  I had to read this twice - if this is a
+section on monoidal categories, why are they the first example?
+- p.52 proof of 2.4.3.  It is worth looking at NAD's Agda proof of this
+lemma.  And this proof is also in Joyal 81.
+- p.53 remark on remark: in reversible computation, the 'computational
+content' of this lemma appears to be crucial.
+- p.57 A lot of 2.4.3 has its genesis in our early Haskell experiments -
+is that worth a mention?
+- p.60 I think the very last paragraph on that page (about building a
+very specific functor) is quite important, and its profile should be raised.
+
+Chapter 3
+- p.65 Figure 3.8, that there are no labels (shape vs species) is
+confusing on first read
+- p.66 end of 3.1.  Interestingly the discussion here brought to mind
+the "environment map + memory map" distinction that Dowek uses in
+describing the semantics of Java in /Principles of Programming
+Languages/, Springer UTiCS, ISBN: 978-1-8482-031-9.
+- p. 70 I would have expected \mathcal{SPE} rather than bold in 3.2.3.
+- p.72 F-form seems highly related to clique, yet there seems to be no
+mention of this
+- p.90 "objects, functors and natural transformations" occur twice in
+the same sentence, which is awkward.
+- p.90 using superscripts for functor categories, and also for lifting a
+functor (3.6.9) confused me.  There has to be a less overloaded notation!
+- p.93 I think you need the 'theory of sketches' by Barr & Wells for
+lemma 3.6.12.
+- p.94 I would call 3.7 "Partitional Product and Day Convolution"
+- p.95 prod-ucts bb
+- p.104 Example.  "E.E is the species of binary partitions, whereas E.E
+is the species of subsets".  Uh??
+- p. 107 Do you mean "(Fin m)!" or "(Fin m!)" ?
+- p. 108 "for some particular choice of monoid in B" - don't you mean P
+here?
+- p.115 "rections" ?
+- p.115 "Joyal [1981, p.-11]" bb
+- p.115 "defintion" missing i
+- p.117 there has to be a better explanation to why we these adjoints
+exist for B !  Ask a category theorist?
+- p.118 "and (\frak{C}, \times) has to be monoidal" reads funny.  Of
+course it is monoidal, you just gave me the multiplication...  yet I
+know what you mean, it was just surprising.
+- p. 120 Fig-ure bb
+- p.121 consist-ing bb
+- p.121 prod-uct bb
+- p.122 "derivative twice results in two different, distinguishable
+holes" screams for a picture!
+- p.123 Figure 3.43 is awkwardly placed
+- p.123 The equation for the well-scoped terms of the (untyped) lambda
+calculus is a Riccati equation!!!
+- p.124 Are you sure that what Lescanne does is the same as this? It is
+related, definitely, but there are important differences in the details
+of the counting which might make the two approaches quite different.
+- p. 125 "disucssion"
+- p.129 "K \u+ L" would be much clearer as "L \u+ K" !
+- p.129 [This definition of derivative is exceedingly cool!  In the
+world of virtual species, this could give a nice interpretation to both
+negative derivative (aka integration) and fractional derivatives too]
+- p.130 Remind the reader that the rhs of the defining equation for (G
+=>_{\dot} H) L has to be a set ?
+- p.131 you should explicitly comment on L=>C species here.
+- p.139 molec-ular bb
+- p.140 char-acterized bb
+- p.141 thm 3.13.1 should really refer to Joyal, not just 'the book'
+
+Chapter 4
+- p. 145 the "." after 4.5 is really hard to see, which makes the
+sentence confusing (it could be a comma)
+- p. 146 "which correspond to Cartesian closure" - missing 'the'
+- p. 148 one equation has bold E, the other has blackboard E
+- p. 148 X, Y but blackboard Z ????
+- p.149 "S-sorted" instead of "S-sort" ?
+- p.152 cat-egories bb
+- p.159 "foregoing"  -> do you mean "that we will now introduce" or what
+was in the previous section? [I know what "foregoing" means, not sure if
+that's what you want to say]
+- p.160 Perfom-ing bb
+- p.160-161.  I hate 5-tuples (4 or more, really).  Amazingly hard to read.
+- p.162 "i.e. a So," ????
+- p. 164 At the end of 4.6, you really should summarize what all this
+implies!  I mean, we don't remember what all the assumptions are, so
+what kind of operations are supported on these species? spell it out.
+
+Chapter 5
+- p. 167 in defn 5.1.1 "functor K:E -> D, written ..." ?
+- p. 167 don't put a footnote in a formula, it looks too much like a
+superscript!
+- p. 167 defin 5.1.1, put the type annotation on G ?
+- p.167 put G in the commutative diagram?  And the Kan extension as a
+2-arrow too?
+- p.169 [??] reference
+- p.169 "latter definition is less useful" insert 'immediately' between
+less and useful?  To be useful, one really needs the full classification
+theorem for analytic functors (i.e. for molecular decomposition)
+- p.171 last formula: I would put A^n \times F n first, then ~= what you
+have
+- p.172 use ~~~ rather than = for the informal equality?
+- p.173 Cat-egories bb
+- p.174 (X and Y have no upper bound) -> insert 'necessarily'
+- p.175 last line of 5.2: you have used E.E, not E^2, up to now for the
+subsets species
+- p.176 oper-ations bb
+- p. 177 C is copowered over Set -- why Set?
+- p. 177 you have bold B where you mean script B (near end of page)
+- p. 179 Thus, \inject L ... missing (
+- p. 179 remark: isn't this immediately related to separation logic?
+
+Chapter 6
+- p.180 grat-ifying bb
+
+Bibl
+- p. 184 (for example).  Some references are "N. Fiore, N. Gambino" etc,
+while others "Philippe Flajolet, Bruno Salvy, " etc.  Actually, for two
+of the Flajolet-Salvy, you mix styles!  Pick one.
+- p. 186 Capitalization on Knuth's ACP
+
+Jacques

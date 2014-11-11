@@ -26,7 +26,7 @@ reasons that AC is used frequently in the context of category theory
 in particular has to do with the difference between equality and
 isomorphism. Several approaches to doing without AC are outlined,
 culminating in explaining (\pref{sec:ct-hott},
-\pref{sec:finiteness-hott}) why it is completely unnecessary when
+\pref{sec:finiteness-hott}) why it is unnecessary when
 formulating category theory inside of HoTT.
 
 Interwoven with the story of equality and the axiom of choice is a
@@ -233,7 +233,7 @@ gives some good insight into what is going on:
 says that we can ``turn a (dependent) product of sums into a
 (dependent) sum of products''.  This sounds a lot like distributivity,
 and indeed, the strange thing is that this is simply \emph{true}:
-implementing a function of this type is a simple exercise!  The
+implementing a function of this type is a simple \mbox{exercise}!  The
 intuitive idea can be grasped by implementing a non-dependent
 analogue, say, a Haskell function of type |(i -> (a,c)) -> (i -> a, i
 -> c)|.  This is quite easy to implement, and the dependent version is
@@ -490,7 +490,7 @@ explained in \pref{sec:anafunctors}.
 
 The theory of cliques (and of anafunctors) amounts to a way of doing
 (set-theoretic) category theory without using the axiom of choice.
-However, building category theory directly in homotopy type theory
+However, building \mbox{category} theory directly in homotopy type theory
 (\pref{sec:ct-hott}), instead of set theory, also obviates the need
 for the axiom of choice, but without the extra complication of
 anafunctors.  This subsection and the next, therefore, are not
@@ -837,7 +837,7 @@ may take $\{ (s,t) \mid s \in S, t \in T, \rana{F}(s) = \lana{G}(t)
 \}$ as the set of specifications for the composite $F \then G$, with
 $\lana{F \then G}(s,t) = \lana{F}(s)$ and $\rana{F \then G}(s,t) =
 \rana{G}(t)$. On morphisms, $(F \then G)_{(s,t),(u,v)}(f) =
-G_{t,v}(F_{s,u}(f))$.  It is not hard to check that this satisfies the
+G_{t,v}(F_{s,u}(f))$.  One can check that this satisfies the
 anafunctor laws.
 
 The same thing can also be defined at a higher level in terms of
@@ -860,7 +860,7 @@ $\mathbf{AnaCat}$, which moreover is an equivalence if AC holds.  See
 To work in category theory based on set theory and classical logic,
 while avoiding AC, one is therefore justified in ``mixing and
 matching'' functors and anafunctors as convenient, but discussing them
-all as if they were regular functors (except when defining a
+all as if they were regular functors (except when \mbox{defining} a
 particular anafunctor).  Such usage can be formalized by turning
 everything into an anafunctor, and translating functor operations and
 properties into corresponding operations and properties of

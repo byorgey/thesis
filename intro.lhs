@@ -10,10 +10,10 @@ the practice of programming, especially in functional languages.  The
 basic idea is that types can be built up \term{algebraically} from a
 small set of primitive types and combinators: a unit type, base types,
 sums (\ie\ tagged unions), products (\ie\ tupling), and recursion.
-Most languages with support for algebraic data types also add various
+Most languages with support for algebraic data types also add
 bells and whistles for convenience (such as labeled products and sums,
 convenient syntax for defining types as a ``sum of products'', and
-pattern matching), but the basic idea is unchanged.
+pattern matching), but the basic idea remains unchanged.
 
 For example, in Haskell~\citep{haskell} we can define a type of binary
 trees with integer values stored in the leaves as follows:
@@ -69,13 +69,13 @@ initial ``seed value''.  % For example, a fold for |Tree| can be
 % % \emph{visitor pattern}~\citep{GoF,palsberg:essence}, often used in
 % % object-oriented languages, can also be seen as a type of fold.
 
-Folds (and unfolds) satisfy many theorems which aid in transforming,
+Folds (and unfolds) satisfy theorems which aid in transforming,
 optimizing, and reasoning about programs defined in terms of them.  As
 a simple example, a map (\ie\ applying the same function to every
-element of a container) followed by a fold can always be rewritten as
-a single fold. These laws, and others, allow Haskell compilers to
-eliminate intermediate data structures through an optimization called
-deforestation~\citep{Wadler:1988,Gill93ashort}.
+element of a data structure) followed by a fold can always be
+rewritten as a single fold. These laws, and others, allow Haskell
+compilers to eliminate intermediate data structures through an
+optimization called deforestation~\citep{Wadler:1988,Gill93ashort}.
 
 An algebraic view of data types also enables \term{datatype-generic
   programming}---writing functions that operate generically over
@@ -84,8 +84,7 @@ structure.  For example, the following function (defined using Generic
 Haskell-like
 syntax~\citep{Hinze-2000-generic-Haskell,generic-haskell}) finds the
 product of all the |Int| values contained in a value of \emph{any}
-algebraic data type.  It gives the same result as |treeProd| on
-|Trees| but also works on lists or any other type.
+algebraic data type.
 \begin{spec}
 genProd {| Int         |} i        = i
 genProd {| Sum t1 t2   |} (Inl x)  = genProd {| t1 |} x
@@ -95,7 +94,7 @@ genProd {| _           |} _        = 1
 \end{spec}
 Datatype-generic programming is a powerful technique for reducing
 boilerplate, made possible by the algebraic view of data types, and
-supported by many Haskell libraries and
+supported by Haskell libraries and
 extensions~\citep{Jansson:PolyP,Lammel:SYB,Cheney:LIG,weirich:replib,weirich:erasure}.
 
 The theory of \term{combinatorial species} has been similarly
@@ -131,8 +130,8 @@ There has already been some initial progress in this direction. The
 connection between species and computation was first explored by
 Flajolet, Salvy, and Zimmermann, with their work on
 LUO~\citep{FlajoletSalvyZimmermann1989a,FlSa95}, allowing the use of
-species in automated algorithm analysis.  However, their work was
-carried out in a dynamically typed setting.
+species in automated algorithm analysis.  However, they carried out
+their work in a dynamically typed setting.
 
 The first to think about species specifically in the context of
 strongly typed functional programming were
@@ -140,7 +139,7 @@ strongly typed functional programming were
 species as a framework to extend the usual notion of algebraic data
 types, and described some preliminary work adding species types to
 Haskell.  More recently, Joachim Kock has done some theoretical work
-generalizing species, ``container types'', and several other notions
+generalizing species, ``container types'', and other notions
 of ``extended data type''~\citep{kock2012data}.  (Most interestingly,
 Kock's work points to the central relevance of homotopy type
 theory~\citep{hottbook}, which also emerges as a central player in
@@ -153,13 +152,13 @@ treatment of the theory of species, but their book is written
 primarily from a mathematical point of view and is only tangentially
 concerned with issues of computation.  It is also written in a style
 that makes it relatively inaccessible to researchers in the
-programming languages community---it assumes quite a bit of
-mathematical background that many PL researchers do not have.
+programming languages community---it assumes mathematical background
+that many PL researchers do not have.
 
 The investigations in this dissertation, therefore, all arise from
 considering the central question, \textbf{what is the connection
   between species and algebraic data types?}  A precise connection
-between the two would have many exciting implications.  It would allow
+between the two would have exciting implications.  It would allow
 taking much of the mathematical theory developed on the basis of
 species---for example, enumeration, exhaustive generation, and uniform
 random generation of structures via Boltzmann sampling
@@ -167,8 +166,7 @@ random generation of structures via Boltzmann sampling
   flajolet2007boltzmann, roussel2009boltzmann}---and applying it
 directly to algebraic data types.  It is also possible that exploring
 the theory of species in an explicitly computational setting will
-yield additional insights that can be contributed back into a
-combinatorial setting.
+yield additional insights into the combinatorial setting.
 
 There is also the promise of using species not just as a tool to
 understand and work with algebraic data types in better ways, but
@@ -222,14 +220,14 @@ nums = 1 : 2 : 3 : nums
 \end{spec}
 actually creates a cycle of three numbers in memory.
 
-Semantically, however, |t| is a tree, not a dag, and |nums| is an
+Semantically, however, |t| is a tree, not a DAG, and |nums| is an
 infinite list, not a cycle.  It is impossible to observe the sharing
 (without resorting to compiler-specific
 tricks~\citep{Gill-2009-sharing}) in either of these examples. Even
 worse, applying standard functions such as |fold| and |map| destroys
-any sharing that might have been present and risks nontermination.
+any sharing that might have been present and risks non-termination.
 
-When (as often) programmers wish to work with ``non-regular'' data
+When programmers wish to work with ``non-regular'' data
 types involving symmetry or sharing, they must instead work with
 suitable \emph{encodings} of them as regular data types.  For example,
 a bag may be represented as a list, or a graph as an adjacency matrix.
@@ -267,7 +265,7 @@ which are incompatible with constructive foundations.  The bulk of
 it possible to talk about species in a typed, constructive setting.
 In particular, the biggest issues are the difference between
 \term{equality} and \term{isomorphism}, and the constructive encoding
-of \term{finiteness} (which is itself related to issues to equality
+of \term{finiteness} (which is itself related to issues of equality
 and isomorphism). The recently developed \term{homotopy type theory}
 \citep{hottbook} turns out to be exactly what is wanted to encode
 everything in a parsimonious way.  The development of cardinal-finite

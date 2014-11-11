@@ -129,7 +129,7 @@ These notations are summarized in \pref{tab:sameness}.
 A grasp of basic set theory (the element-of ($\in$) and subset
 ($\subseteq$) relations, intersections ($\intersect$), unions
 ($\union$), and so on) is assumed.  However, no background is assumed
-in \emph{axiomatic} set theory, or in particular its role as a
+in \mbox{\emph{axiomatic}} set theory, or in particular its role as a
 foundation for mathematics.  Issues relating to axiomatic set theory
 are spelled out in detail as necessary (for example, the axiom of
 choice, in \pref{sec:AC}).
@@ -254,7 +254,7 @@ HoTT distinguishes between two different types of equality:
   clear from the context. Unlike judgmental equality, where $x \jeq y$
   is a \term{judgment}, the propositional equality $x = y$ is a
   \emph{type} (or a \emph{proposition}) whose inhabitants are evidence
-  or \emph{proofs} of the equality of $A$ and $B$.  Thus propositional
+  or \emph{proofs} of the equality of $x$ and $y$.  Thus propositional
   equalities can be constructed and reasoned about \emph{within} HoTT.
   Inhabitants of $x = y$ are often called \term{paths} from $x$ to
   $y$; the intuition, taken from homotopy theory, is to think of paths
@@ -265,7 +265,7 @@ HoTT distinguishes between two different types of equality:
   the other.  The analogue of this intuition in type theory is the
   fact that a path of type $x = y$ can have \emph{nontrivial
     computational content} specifying how to convert between $x$ and
-  $y$.  There is a special value $\refl_A : A = A$ which witnesses the
+  $y$.  There is a special value $\refl_x : x = x$ which witnesses the
   reflexivity of propositional equality, and corresponds to a
   ``trivial path with no computational content''; but, as the
   discussion above indicates, there can be other inhabitants of path
@@ -522,14 +522,15 @@ phenomenon.
 As in the HoTT book (see Chapter 3), the adjective ``mere'' will be
 used more generally to refer to truncated things.  In particular, an
 important example is the distinction between the type \[ (a : A)
-\times B(a), \] pronounced ``there \emph{constructively} exists an $A$
-such that $B$'', and its truncation \[ \ptrunc{(a : A) \times
-  B(a)}, \] pronounced ``there \emph{merely} exists an $A$ such that
-$B$''.  The latter more closely corresponds to the notion of existence
-in classical logic: classically, given a proof of an existence
-statement, it may not be possible to extract an actual witness. Given
-an inhabitant of $\ptrunc{(a:A) \times B(a)}$, we know only that some
-$(a:A)$ satisfying $B$ exists, without getting to know its identity.
+\times B(a), \] pronounced ``there \emph{constructively} exists an
+inhabitant of $A$ such that $B$'', and its truncation \[ \ptrunc{(a :
+  A) \times B(a)}, \] pronounced ``there \emph{merely} exists an
+inhabitant of $A$ such that $B$''.  The latter more closely
+corresponds to the notion of existence in classical logic:
+classically, given a proof of an existence statement, it may not be
+possible to extract an actual witness. Given an inhabitant of
+$\ptrunc{(a:A) \times B(a)}$, we know only that some $(a:A)$
+satisfying $B$ exists, without getting to know its identity.
 
 %% Don't think I make any use of this later.
 %
@@ -672,15 +673,17 @@ throughout this work.
 
 The concept of \term{bifunctors} can be formalized as a two-argument
 analogue of functors; bifunctors thus map from \emph{two} categories
-to a single category.  However, the obvious definition of a bifunctor
-$B : \C,\D \to \E$ turns out to be equivalent to a regular
-(one-argument) functor $B : \C \times \D \to \E$, where $\C \times \D$
-denotes the \term{product category} of $\C$ with $\D$.  Product
-categories are given by the usual universal product construction in
-$\Cat$; objects in $\C \times \D$ are pairs of objects from $\C$ and
-$\D$, and likewise morphisms in $\C \times \D$ are pairs of morphisms
-from $\C$ and $\D$. One place that bifunctors come up often is in the
-context of monoidal categories; see~\pref{sec:monoids}.
+to a single category.  One can define a bifunctor $B : \C,\D \to \E$
+as a function sending pairs of objects to a single object, pairs of
+morphisms to a single morphism, and so on, but this turns out to be
+equivalent to a regular (one-argument) functor $B : \C \times \D \to
+\E$, where $\C \times \D$ denotes the \term{product category} of $\C$
+with $\D$.  Product categories are given by the usual universal
+product construction in $\Cat$; objects in $\C \times \D$ are pairs of
+objects from $\C$ and $\D$, and likewise morphisms in $\C \times \D$
+are pairs of morphisms from $\C$ and $\D$. One place that bifunctors
+come up often is in the context of monoidal categories;
+see~\pref{sec:monoids}.
 
 \paragraph{Natural transformations}
 
@@ -854,7 +857,7 @@ a. Rose a -> Fork a| and |fork2rose :: forall a. Fork a -> Rose a|,
 such that |rose2fork . fork2rose = id| and |fork2rose . rose2fork =
 id| \citep{yorgey-2010-species, hinze2010reason}.
 
-The above definition therefore violates the \term{principle of
+\pref{defn:cat-iso} therefore violates the \term{principle of
   equivalence}---to be discussed in more detail in
 \pref{sec:AC}---which states that properties of mathematical
 structures should be invariant under isomorphism.  Here,
@@ -879,7 +882,7 @@ That is, the compositions of the functors $F$ and $G$ do not
   transformations, \ie no nontrivial morphisms (and hence no
   nontrivial isomorphisms) between natural transformations.}  This
 does turn out to be a well-behaved notion of sameness for
-categories~\citet{nlab-equiv-cat}.
+categories~\citep{nlab-equiv-cat}.
 
 There is much more to say about equivalence of categories;
 \pref{sec:AC} picks up the thread with a much fuller discussion of the
@@ -911,7 +914,7 @@ element $\mempty : S$ which is an identity for $\mappend$. (See, for
 example, \citet{yorgey2012monoids} for a discussion of monoids in the
 context of Haskell.)  A \term{monoidal category} is the appropriate
 ``categorification'' of the concept of a monoid, \ie with the set $S$
-replaced by category, the binary operation by a bifunctor, and the
+replaced by a category, the binary operation by a bifunctor, and the
 equational laws by natural isomorphisms.
 \begin{defn}
   Formally, a \term{monoidal category} is a category $\C$ equipped with
@@ -926,7 +929,7 @@ equational laws by natural isomorphisms.
   $\alpha$, $\lambda$, and $\rho$ must additionally satisfy some
   coherence axioms, which ensure that parallel isomorphisms
   constructed from $\alpha$, $\lambda$, and $\rho$ are always equal;
-  for details, see \citet[VII.2]{mac1998categories}.
+  for details, see \citet[\Sect VII.2]{mac1998categories}.
 
   We often write $(\C,\otimes,I)$ when we wish to emphasize the choice
   of a monoidal functor and identity object for a monoidal category $\C$.
@@ -1007,12 +1010,14 @@ language with first-class functions, the class of functions
 \begin{defn}
   A \term{strict} monoidal category is one in which $\alpha$,
   $\lambda$, and $\rho$ are \emph{equalities} rather than natural
-  isomorphisms.  It is often remarked that every monoidal category is
+  isomorphisms.
+\end{defn}
+
+It is often remarked that every monoidal category is
   equivalent to some strict one (for example, using the theory of
   cliques~\citep{joyal1991geometry}, explained in \pref{sec:cliques}),
   which is used to justify the pretense that every monoidal category
   is strict; however, proving this requires the axiom of choice.
-\end{defn}
 
 \later{How can we say that we are using ``the same'' ``product-like''
   monoidal structure in all these different categories?  Are they
@@ -1107,10 +1112,10 @@ where using integral notation actually helps with intuition---but only
 for coends.)
 
 \begin{rem}
-  Note that $\coend {L_1, L_2} \dots$ is used as an abbrevation for a
+  $\coend {L_1, L_2} \dots$ is used as an abbrevation for a
   coend over the product category $\Lab \times \Lab$. (Given
     suitable assumptions it is also equivalent to an iterated coend;
-    see \citet[IX.8]{mac1998categories}.)
+    see \citet[\Sect IX.8]{mac1998categories}.)
 \end{rem}
 
 \paragraph{Ends}
