@@ -1945,4 +1945,28 @@ $\size$ proceeds by first constructing a functor paired with a proof
 that, together with $\fin -$, it forms an equivalence---altogether a
 mere proposition---and then projecting out the functor.
 
-\todo{Add conclusion?}
+\section{Conclusion}
+\label{sec:equality-conclusion}
+
+In this chapter we have seen that encoding category theory and the
+notion of finiteness in a constructive type theory is more subtle than
+one might expect.  The difficulty with both---as often in type
+theory---can be traced back to the foundational notion of equality.
+Homotopy type theory, with its richer notion of equality, gives us
+exactly the framework we need in which to encode category theory
+without the use of the axiom of choice. Via propositional truncation,
+we can also constructively encode the notion of finiteness such that
+we can ``have our cake and eat it too''---with concrete,
+computationally relevant isomorphisms witnessing finiteness that
+nonetheless do not ``leak'' information inappropriately.  The close
+connection between the encodings of $\B$ and $\L$, when viewed via
+HoTT, came as a surprise, and yields new insight into equipotence as
+well as $\L$-species (discussed in \pref{sec:L-species}).  In fact,
+the work on homotopy type theory itself came as a fortuitous
+surprise---I had been grappling with some of the questions in this
+chapter, off and on, for several years before the publication of the
+HoTT book.
+
+The next chapter explains the formal definition of species, and puts
+together the tools developed in this chapter into an encoding of
+species within homotopy type theory.

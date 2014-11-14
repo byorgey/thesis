@@ -23,10 +23,13 @@ explore in this chapter. First, \pref{sec:copartial-species-sec} and
 the idea of replacing bijections between labels with injections (or
 coinjections). Such species variants are conjectured to be especially
 useful for modelling data structures that takes memory allocation and
-layout into account.  Multisort species (\pref{sec:multisort}) and
-$\L$-species (\pref{sec:L-species}) are both standard species variants
-which can be seen as functors between certain categories other than
-$\B$ and $\Set$; yet more variants are mentioned in
+layout into account.  Multisort species (\pref{sec:multisort}) are a
+standard species variant that can also be seen as functors between
+certain categories other than $\B$ and $\Set$.  Multisort species are
+discussed in some detail, and also enable a discussion of recursive
+species and the Implicit Species Theorem (\pref{sec:recursive}).
+Finally, some other standard species variants (such as $\L$-species)
+are mentioned in \pref{sec:L-species} and
 \pref{sec:other-species-variants}.
 
 \section{Generalized species properties}
@@ -79,7 +82,7 @@ rows are labelled by properties, to be elaborated below.
     require the monoidal product to be a left adjoint.
   \end{itemize}
 \item The eliminator for Cartesian product, which corresponds to
-  Cartesian closure of $(\fc \Lab \Str)$, requires that $\Lab$ be
+  the Cartesian closure of $(\fc \Lab \Str)$, requires that $\Lab$ be
   locally small and $\Str$ complete and Cartesian closed.
 \item Again, the operators defined via Day convolution and related
   operators require that $\Lab$ be monoidal and enriched over $\Str$,
@@ -540,7 +543,7 @@ $\BTSub$ also has a corresponding skeleton category, just like $\BT$:
 \subsection{Copartial species}
 \label{sec:copartial-species-subsec}
 
-The point of the foregoing machinery is that we can now use the
+The point of all this machinery is that we can now use the
 category $\BTSub$ as the category of labels for a new notion of
 species.
 
@@ -1014,7 +1017,7 @@ dia = cyc' (map (\c -> circle 0.3 # fc c) elts) 1
   \pref{sec:basic-diff} suggested instead using the multisort
   species \[ \Xi = \X \cdot \Bag + \Y \cdot \Xi^2 + \Y \cdot
   \frac{\partial}{\partial \X} \Xi. \] An even better idea is to use a
-  three-sort species, as in \[ \Xi = \X \cdot \E + \Y \cdot \Xi^2 + \ZZ
+  three-sort species, as in \[ \Xi = \X \cdot \Bag + \Y \cdot \Xi^2 + \ZZ
   \cdot \frac{\partial}{\partial \X} \Xi, \] where $\X$ stands in for
   variables, $\Y$ for applications, and $\ZZ$ for lambdas.
 
@@ -1108,7 +1111,7 @@ morphisms are $S$-tuples of bijections between them.
 \end{rem}
 
 \begin{defn}
-  For a finite set $S$, define \term{$S$-sort ($\Lab$,$\Str$)-species}
+  For a finite set $S$, define \term{$S$-sorted ($\Lab$,$\Str$)-species}
   as functors \[ \Lab^S \to \Str. \]
 \end{defn}
 
@@ -1120,7 +1123,7 @@ The payoff is that we can now check that $\Lab^S$ inherits the
 relevant properties from $\Lab$, and thus conclude that $(\Lab^S,
 \Str)$-species inherit operations from $(\Lab,\Str)$-species.  Simply
 unfolding definitions is then enough to describe the action of the
-operations on $S$-sort species.
+operations on $S$-sorted species.
 
 \begin{itemize}
 \item $\Lab^S$ inherits all the monoidal structure of $\Lab$, as seen
@@ -1153,7 +1156,7 @@ operations on $S$-sort species.
 
 We can thus instantiate the generic definitions to obtain notions of
 sum, Cartesian, arithmetic, and partitional product, and
-differentiation (along with corresponding eliminators) for $S$-sort
+differentiation (along with corresponding eliminators) for $S$-sorted
 species.  For example, the notion of partitional product obtained in
 this way is precisely the definition given above.
 
@@ -1194,7 +1197,7 @@ $\H(\X,\Y) = \X \cdot (\List \comp \Y)$.  We then define $\Rose$ as
 the least fixed point (if it exists) of $\H(\X,-)$, that is, a
 solution to $\Rose \iso \H(\X,\Rose)$. The following theorem expresses
 the conditions on $\H$ under which such fixed point solutions exist.
-\begin{thm}[Implicit Species Theorem, \citep{bll}]
+\begin{thm}[Implicit Species Theorem, \citep{joyal, bll}]
   Let $\H$ be a two-sort species satisfying
   \begin{itemize}
   \item $\H(\Zero,\Zero) \iso \Zero$

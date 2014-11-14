@@ -365,7 +365,7 @@ gr = mkGraph [(n,()) || n <- [0..numNodes-1]] [(n,endo n,()) || n <- [0..numNode
 
 colorFor n = colors !! (fromJust $ findIndex (==n) [8,7,9,10,13])  -- $
 
-dn n = circle 0.8 # fc c
+dn n = (text (show n) # scale 0.7) <> circle 0.8 # fc c
   where
     c = case endoStatus n endo of
           InLoop _ -> colorFor n
@@ -461,6 +461,12 @@ content''.  As a concrete example, the numbers in
 structures, but merely labels for the locations.  To talk about a data
 structure, one must additionally specify a mapping from labels to
 data; this will be made precise in~\pref{chap:labelled}.
+
+Such a distinction is also important when considering the semantics of
+imperative languages.  See, for example, \citet[\Sect 1.3.2]{dowek},
+who decomposes states mapping variables to values into pairs of a
+mapping from variables to \term{references} (\ie labels) and a mapping
+from references to values.
 
 \section{Definitions}
 \label{sec:species-definition}
@@ -942,18 +948,19 @@ a \term{form}, or \term{unlabelled shape}.
 \end{defn}
 
 In other words, an $F$-form is a maximal class of labelled $F$-shapes
-which are all interconvertible by relabelling.  As defined,
-such classes are rather large, as they include labellings by \emph{all
-  possible} sets of labels!  Typically, we consider only a
-single label set of each size, such as $\Fin n$.  For example,
-\pref{fig:perm-forms-four} shows all the $\Perm$-forms of size four,
-using two different representations: on the right are the literal
-equivalence classes of permutations on $\Fin 4$ which are equivalent
-up to relabelling.  On the left are schematic representations of each
-form, drawn by replacing labels with indistinguishable dots.  Note
-that the schematic representations, while convenient, can break down
-in more complex situations, so it is important to also keep in mind
-the underlying definition in terms of equivalence classes.
+which are all interconvertible by relabelling, that is, a maximal
+clique.  As defined, such classes are rather large, as they include
+labellings by \emph{all possible} sets of labels!  Typically, we
+consider only a single label set of each size, such as $\Fin n$.  For
+example, \pref{fig:perm-forms-four} shows all the $\Perm$-forms of
+size four, using two different representations: on the right are the
+literal equivalence classes of permutations on $\Fin 4$ which are
+equivalent up to relabelling.  On the left are schematic
+representations of each form, drawn by replacing labels with
+indistinguishable dots.  Note that the schematic representations,
+while convenient, can break down in more complex situations, so it is
+important to also keep in mind the underlying definition in terms of
+equivalence classes.
 
 \begin{figure}
   \centering

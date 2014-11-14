@@ -7,22 +7,19 @@
 
 \numberwithin{thm}{chapter}
 
-\todo{Edit}
-
-We now turn to a detailed and fully general construction which shows
-how monoids (and many other structures of interest) can be lifted from
-a category $\Str$ to a functor category $\fc \Lab \Str$.  The
-high-level ideas of this construction seem to be ``folklore'', but I
-have been unable to find any detailed published account, so it seemed
-good to include some proofs here for completeness.  Unfortunately, the
-proof presented here is still incomplete; as future work I hope to
-completely understand the proof in detail.
+This chapter contains a detailed proof showing how monoids (and many
+other structures of interest) can be lifted from a category $\Str$ to
+a functor category $\fc \Lab \Str$.  The high-level ideas of this
+construction seem to be ``folklore'', but I have been unable to find
+any detailed published account, so it seemed good to include some
+proofs here for completeness.  Unfortunately, the proof presented here
+is still incomplete; as future work I hope to completely understand
+the proof in detail.
 
 We must first develop some technical machinery regarding functor
 categories.  In particular, we show how to lift objects, functors, and
-natural transformations based on the category $\Str$ into related
-objects, functors, and natural transformations based on the functor
-category $\Str^\Lab$.
+natural transformations based on the category $\Str$ into related ones
+based on the functor category $\Str^\Lab$.
 
 \begin{lem} \label{lem:lift-object}
   An object $D \in \D$ lifts to an object (\ie a functor) $D^\C \in
@@ -145,6 +142,7 @@ category recording the arity of the diagram.
   $D^\D : J \to (\fc {(\C^\D)^A} {\C^\D})$ in $\C^\D$.
 \end{lem}
 
+\later{See Barr and Wells theory of sketches? (from Jacques)}
 \begin{proof}
   This amounts to implementing a higher-order function with the
   type \[ (J \to (A \to \C) \to \C) \to J \to (A \to \D \to \C) \to \D

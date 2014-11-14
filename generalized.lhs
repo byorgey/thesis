@@ -667,7 +667,7 @@ does mean that the simply typed lambda calculus can be interpreted
 internally to $\Spe$; but it is not yet clear to me what this would
 mean on an intuitive level.
 
-\section{Day convolution}
+\section{Partitional product and Day convolution}
 \label{sec:day}
 
 There is another notion of product for species, the \term{partitional}
@@ -680,7 +680,7 @@ referred to as ``product'', without any modifier.
 
 There is also another lesser-known product, \term{arithmetic
   product} \citep{maia2008arithmetic}, which can be thought of as a
-symmetric form of composition.  These two products arise in an
+symmetric form of composition.  These two \mbox{products} arise in an
 analogous way, via a categorical construction known as \emph{Day
   convolution}.
 
@@ -1615,7 +1615,7 @@ aOpts = with & gaps .~ (Local 0.2) & headLength .~ (Local 0.25)
   \end{rem}
 
   We may now instantiate the definition of Day convolution (for some
-  particular choice of monoid in $\B$), obtaining \[ (F \sprod G)\ n =
+  particular choice of monoid in $\P$), obtaining \[ (F \sprod G)\ n =
   \coend{n_F, n_G} F\ n_F \times G\ n_G \times (\Fin n \bij \Fin (n_F
   + n_G)). \]
 
@@ -2035,7 +2035,7 @@ dia =
   \label{fig:bin-comp-list-inf}
 \end{figure}
 
-There are several possible rections to \pref{fig:bin-comp-list-inf},
+There are several possible reactions to \pref{fig:bin-comp-list-inf},
 depending on the exact setting in which we are working.
 \begin{itemize}
 \item If we are working in $(\fc \B \Set)$, where the set of shapes on
@@ -2061,18 +2061,19 @@ depending on the exact setting in which we are working.
 We can reformulate the definition of composition in a better way which
 naturally allows for empty parts and which also makes for a clearer
 path to a generalized notion of composition (to be discussed in the
-next section).  In fact, \citet[p. 11]{joyal} already mentions this as
-an alternative defintion. The idea is to use another finite set $P$,
-representing parts of a partition, and a function $\chi : L \to P$
-which assigns each $l \in L$ to some $p \in P$.  The fibers of $\chi$,
-\ie the sets $\chi^{-1}(p)$ for $p \in P$, thus constitute a partition
-of $L$.  Note, however, that this naturally allows for empty parts,
-since $\chi$ may not be surjective.  We then say that an $(F \comp
-G)$-shape on the labels $L$ consists of some set $P$, a partition
-function $\chi : L \to P$, an $F$-shape on $P$, and $G$-shapes on the
-fibers of $\chi$.  However, we must also quotient out by bijections
-between $P$ and other finite sets; the precise identity of $P$ should
-not matter.  We can thus define $(F \comp G)$ using a coend:
+next section).  In fact, \mbox{\citet[p. 11]{joyal}} already mentions
+this as an alternative definition. The idea is to use another finite
+set $P$, representing parts of a partition, and a function $\chi : L
+\to P$ which assigns each $l \in L$ to some $p \in P$.  The fibers of
+$\chi$, \ie the sets $\chi^{-1}(p)$ for $p \in P$, thus constitute a
+partition of $L$.  Note, however, that this naturally allows for empty
+parts, since $\chi$ may not be surjective.  We then say that an $(F
+\comp G)$-shape on the labels $L$ consists of some set $P$, a
+partition function $\chi : L \to P$, an $F$-shape on $P$, and
+$G$-shapes on the fibers of $\chi$.  However, we must also quotient
+out by bijections between $P$ and other finite sets; the precise
+identity of $P$ should not matter.  We can thus define $(F \comp G)$
+using a coend:
 \begin{equation} \label{eq:composition-fibers}
 (F \comp G)\ L = \coend {P \in \B} \sum_{\chi : L \to P} F\ P \times \prod_{p \in P} G\
   (\chi^{-1}\ p).
@@ -2386,17 +2387,17 @@ show that it is monoidal closed. Indeed, we can compute as follows
 \end{sproof}
 
 Thus we have the adjunction \[ (\hom[\Spe]{F \comp G}{H}) \iso
-(\hom[\Spe]{F}{(\chom G H)}), \] where \[ (\chom G H)
-\defeq (\hom[\Spe]{G^-}{H}) \] is the species whose $K$-labelled
-shapes are species morphisms from $G^K$ to
-$H$. \pref{fig:internal-Hom-comp-example} illustrates an example: a
-species morphism from a binary tree of cycles to a rose tree is
-equivalent to a species morphism that takes the underlying tree shape
-on the label set $K$ and produces another species morphism, which
-itself expects a $K$-indexed partitional product of cycles and
-produces a rose tree.  One can see how the composition is
-decomposed into its constituent parts, with a new label type $K$
-introduced to mediate the relationship between them.
+(\hom[\Spe]{F}{(\chom G H)}), \] where \[ (\chom G H) \defeq
+(\hom[\Spe]{G^-}{H}) \] is the species whose $K$-labelled shapes are
+species morphisms from $G^K$ to $H$. An illustrated example is shown
+in \pref{fig:internal-Hom-comp-example}: a species morphism from a
+binary tree of cycles to a rose tree is equivalent to a species
+morphism that takes the underlying tree shape on the label set $K$ and
+produces another species morphism, which itself expects a $K$-indexed
+partitional product of cycles and produces a rose tree.  One can see
+how the composition is decomposed into its constituent parts, with a
+new label type $K$ introduced to mediate the relationship between
+them.
 
 \begin{figure}
   \centering
@@ -2464,11 +2465,11 @@ framework is left to future work, but it is worth describing briefly
 here.
 
 An $(F \fcomp G)$-shape on the set of labels $L$ can intuitively be
-thought of as consisting of \emph{all possible} $G$-shapes on the
+thought of as \mbox{consisting} of \emph{all possible} $G$-shapes on the
 labels $L$, with an $F$-shape on this collection of $G$-shapes as
 labels.  Functor composition thus has a similar relationship to
 partitional composition as Cartesian product has to partitional
-product.  With partitional product, the labels are partitioned into
+product.  With partitional \mbox{product}, the labels are partitioned into
 two disjoint sets, whereas with Cartesian product the labels are
 shared.  With partitional composition, the labels are partitioned into
 (any number of) subsets with a $G$-shape on each; with functor
@@ -2654,7 +2655,7 @@ dia =
 \begin{ex}
   $\Cyc' \iso \List$, as illustrated in \pref{fig:cycle-deriv}.
 
-  \begin{figure}
+  \begin{figure}[htp]
     \centering
     \begin{diagram}[width=250]
 import           SpeciesDiagrams
@@ -2739,7 +2740,7 @@ dia = listCycEquiv
   a two-sort species (\pref{sec:multisort}) such as \[ \Xi = \X \cdot
   \Bag + \Y \cdot \Xi^2 + \Y \cdot \frac{\partial}{\partial \X} \Xi \]
   which uses labels of sort $\Y$ to mark occurrences of applications
-  and abstractions; see \citet{grygiel2013counting,
+  and abstractions. For a similar approach see \citet{grygiel2013counting,
     lescanne2013counting}.
 \end{ex}
 
@@ -3757,7 +3758,7 @@ decomposition of $\List$ is \[ \List = \One + \X + \X^2 + \X^3 +
 \begin{rem}
   We can now see why the two definitions of regular species given
   previously are equivalent. Any regular species must be isomorphic to
-  a sum of regular molecular species; but regular molecular species
+  a sum of regular \mbox{molecular} species; but regular molecular species
   must be of the form $\X^n$.  Hence, up to isomorphism, regular
   species are always of the form $\sum_{n \geq 0} a_n \X^n$ with $a_n
   \in \N$.

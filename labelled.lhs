@@ -10,8 +10,6 @@
 
 \later{Talk about bag vs rubbish}
 
-\todo{Be more clear about contributions}
-
 Now that we have a foundation for describing labelled shapes, the next
 step is to extend them into full-blown \emph{data structures} by
 adjoining mappings from labels to data.  For example,
@@ -65,8 +63,8 @@ for some good intuition with a computational bent, see
 \citet{hinze2012kan}.
 
 \begin{defn} \label{defn:lan} Given functors $F : \C \to \D$ and $J :
-  \C \to \E$, the \term{left Kan extension of $F$ along $J$}, written
-  $\lan J F$\footnote{$\lan J F$ is traditionally notated $\Lan_J F$.
+  \C \to \E$, the \term{left Kan extension of $F$ along $J$} is a
+  functor $\E \to \D$, written\footnote{$\lan J F$ is traditionally notated $\Lan_J F$.
     Inspired by the corresponding notion in relational algebra, Roland
     Backhouse suggested the notation $\ran J F$ for the right Kan
     extension of $F$ along $J$, which was adopted by
@@ -79,10 +77,10 @@ for some good intuition with a computational bent, see
     adjoints to pre- and post-composition, respectively; whereas we
     want notations for the left and right adjoints of precomposition.
     I nevertheless adopt the notation $\lan J F$ for left Kan
-    extensions, and hope this does not cause confusion.}, is a functor
-  $\E \to \D$ characterized by the natural isomorphism
+    extensions, and hope this does not cause confusion.} $\lan J F$, and characterized by the
+  natural isomorphism
   \begin{equation} \label{eq:lan}
-    \all G (\nt {\lan{J}{F}} G) \iso (\nt F {G \comp J}),
+    \all {G : \E \to \D} (\nt {\lan{J}{F}} G) \iso (\nt F {G \comp J}).
   \end{equation}
   (Note that the left-hand side consists of natural transformations
   between functors $\E \to \D$, whereas the right-hand side are
@@ -181,7 +179,8 @@ that it requires the |GADTs| and |RankNTypes| extensions).\footnote{As
   the expense of obscuring the connection to the original abstract
   proof given above.} The code for the forward direction is similar,
 and it is the backwards direction which will be of particular use
-later. \todo{Cite Johann and Ghani, relation to GADTs and Kan extensions}
+later. \later{Cite Johann and Ghani, relation to GADTs and Kan
+  extensions.  Would have to figure out what the exact relationship is.}
 \begin{figure}
   \centering
 \begin{spec}
@@ -221,7 +220,7 @@ We are now ready to consider Joyal's definition of \term{analytic
 can also intuitively be characterized as those functors $\Set \to
 \Set$ which ``have a Taylor expansion''.  This will be made more
 precise in \pref{sec:analytic-generating}, although this latter
-definition is less useful in a generalized setting.
+definition is less immediately useful in a generalized setting.
 
 \subsection{Definition and intuition}
 \label{sec:analytic-definition}
@@ -322,13 +321,14 @@ by \[ \analytic F\ A = \coend{(n:\N)} (\iota n \to A) \times F\ n, \]
 where $\iota : \P \to \Set$ in this case sends the natural number $n$
 to the set $\fin n$.  Note that functions $\fin n \to A$ are in
 bijection with the $n$-fold product $A^n$, so $\analytic F\ A$ may
-equivalently be expressed as \[ \analytic F\ A \iso \coend{(n:\N)} F\ n
+equivalently be expressed as \[ \analytic F\ A \iso \coend{(n:\N)} A^n
+\times F\ n \iso \coend{(n:\N)} F\ n
 \times A^n. \] The coend, in this case, is a quotient by permutations
 on $\fin n$, which act on $F\ n \times A^n$ by permuting the elements
 of the $n$-fold product.  So each value of the coend is an equivalence
 class of $n!$ pairs, one for each possible permutation of $A^n$. We
 may therefore suggestively (if informally) write
-\[ \analytic F\ A = \sum_{n : \N} F\ n \times \frac{A^n}{n!} \] which
+\[ \analytic F\ A \approx \sum_{n : \N} F\ n \times \frac{A^n}{n!} \] which
 very strongly resembles the exponential generating function associated
 to the species $F$, \[ F(x) = \sum_{n \geq 0} ||F\ n|| \times
 \frac{x^n}{n!}. \] Of course, the resemblance is no accident! This
@@ -453,7 +453,7 @@ diagram.
 \begin{ex}
   Pushouts are an example of colimits which are \emph{not} filtered,
   since pushouts are colimits over a span $\Span X {} Z {} Y$, which
-  is not filtered ($X$ and $Y$ have no upper bound).
+  is not filtered ($X$ and $Y$ do not necessarily have an upper bound).
 \end{ex}
 
 \begin{ex}
@@ -538,7 +538,7 @@ $\colim P(\FinNSub)$ is the set of all \emph{finite} subsets of $\N$.
 Note, however, that the covariant finite powerset functor $FP : \Set
 \to \Set$, which sends each set $A$ to the set of all its
 \emph{finite} subsets, is analytic; it corresponds to the species
-$\Bag^2$.
+$\Bag \cdot \Bag$.
 
 % \section{Labelled structures}
 % \label{sec:labelled-structures}
@@ -853,7 +853,7 @@ coend looks almost identical to the one in
 \pref{fig:copartial-analytic-coend}, but is interpreted somewhat
 differently.  In particular, note that the arrows now represent
 \emph{partial} functions.  In addition, $\sigma : K \supseteq L$
-is a constructive witness that $K$ is a superset of $L$.  Thus, $\iota
+is a constructive witness that $K$ is a superset of $L$.  Thus, $(\iota
 L \to A) \times F\ K$ is a shape with labels taken from $K$ along with
 a partial mapping from only \emph{some} of those labels to data
 values.  Following the right-hand arrow amounts to taking a subshape
@@ -869,6 +869,6 @@ represent a pointed set, but it may also represent the species of
 the label of $\X$, and do not wish to associate data to all the labels
 contained in the set.
 
-\todo{conclusions.  Expand on how the match-up between analytic
+\later{conclusions.  Expand on how the match-up between analytic
   functors and labelled data structures is gratifying etc. (see
   conclusions chapter)}
