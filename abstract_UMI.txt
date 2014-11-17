@@ -1,0 +1,30 @@
+The theory of <italic>combinatorial species</italic> was developed in
+the 1980s as part of the mathematical subfield of enumerative
+combinatorics, unifying and putting on a firmer theoretical basis a
+collection of techniques centered around <italic>generating
+functions</italic>.  The theory of <italic>algebraic data
+types</italic> was developed, around the same time, in functional
+programming languages such as Hope and Miranda, and is still used
+today in languages such as Haskell, the ML family, and Scala.  Despite
+their disparate origins, the two theories have striking
+similarities. In particular, both constitute algebraic frameworks in
+which to construct structures of interest.  Though the similarity has
+not gone unnoticed, a link between combinatorial species and algebraic
+data types has never been systematically explored.  This dissertation
+lays the theoretical groundwork for a precise&mdash;and, hopefully,
+useful&mdash;bridge bewteen the two theories.  One of the key
+contributions is to port the theory of species from a classical,
+untyped set theory to a constructive type theory. This porting process
+is nontrivial, and involves fundamental issues related to equality and
+finiteness; the recently developed <italic>homotopy type
+theory</italic> is put to good use formalizing these issues in a
+satisfactory way.  In conjunction with this port, species as general
+functor categories are considered, systematically analyzing the
+categorical properties necessary to define each standard species
+operation.  Another key contribution is to clarify the role of species
+as <italic>labelled shapes</italic>, not containing any data, and to
+use the theory of <italic>analytic functors</italic> to model labelled
+data structures, which have both labelled shapes and data associated
+to the labels.  Finally, some novel species variants are considered,
+which may prove to be of use in explicitly modelling the memory layout
+used to store labelled data structures.
